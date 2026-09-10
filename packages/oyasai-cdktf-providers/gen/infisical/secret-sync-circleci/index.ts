@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci
+// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncCircleciConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#auto_sync_enabled SecretSyncCircleci#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#auto_sync_enabled SecretSyncCircleci#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the circleci Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#connection_id SecretSyncCircleci#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#connection_id SecretSyncCircleci#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the CircleCI sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#description SecretSyncCircleci#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#description SecretSyncCircleci#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#destination_config SecretSyncCircleci#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#destination_config SecretSyncCircleci#destination_config}
   */
   readonly destinationConfig: SecretSyncCircleciDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#environment SecretSyncCircleci#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#environment SecretSyncCircleci#environment}
   */
   readonly environment: string;
   /**
   * The name of the CircleCI sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#name SecretSyncCircleci#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#name SecretSyncCircleci#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#project_id SecretSyncCircleci#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#project_id SecretSyncCircleci#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#secret_path SecretSyncCircleci#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#secret_path SecretSyncCircleci#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#sync_options SecretSyncCircleci#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#sync_options SecretSyncCircleci#sync_options}
   */
   readonly syncOptions: SecretSyncCircleciSyncOptions;
 }
@@ -66,19 +66,19 @@ export interface SecretSyncCircleciDestinationConfig {
   /**
   * The name of the CircleCI organization to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#org_name SecretSyncCircleci#org_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#org_name SecretSyncCircleci#org_name}
   */
   readonly orgName: string;
   /**
   * The ID of the CircleCI project to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#project_id SecretSyncCircleci#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#project_id SecretSyncCircleci#project_id}
   */
   readonly projectId: string;
   /**
   * The name of the CircleCI project to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#project_name SecretSyncCircleci#project_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#project_name SecretSyncCircleci#project_name}
   */
   readonly projectName: string;
 }
@@ -223,19 +223,19 @@ export interface SecretSyncCircleciSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from CircleCI. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#disable_secret_deletion SecretSyncCircleci#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#disable_secret_deletion SecretSyncCircleci#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#initial_sync_behavior SecretSyncCircleci#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#initial_sync_behavior SecretSyncCircleci#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the CircleCI destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#key_schema SecretSyncCircleci#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#key_schema SecretSyncCircleci#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -384,7 +384,7 @@ export class SecretSyncCircleciSyncOptionsOutputReference extends cdktf.ComplexO
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci infisical_secret_sync_circleci}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci infisical_secret_sync_circleci}
 */
 export class SecretSyncCircleci extends cdktf.TerraformResource {
 
@@ -400,7 +400,7 @@ export class SecretSyncCircleci extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncCircleci resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncCircleci to import
-  * @param importFromId The id of the existing SecretSyncCircleci that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncCircleci that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncCircleci to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -412,7 +412,7 @@ export class SecretSyncCircleci extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_sync_circleci infisical_secret_sync_circleci} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_sync_circleci infisical_secret_sync_circleci} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -423,7 +423,7 @@ export class SecretSyncCircleci extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_circleci',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.26'
+        providerVersion: '0.19.31'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

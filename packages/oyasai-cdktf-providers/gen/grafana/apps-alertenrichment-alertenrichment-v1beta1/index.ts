@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1Config extends cdktf.T
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#metadata AppsAlertenrichmentAlertenrichmentV1Beta1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#metadata AppsAlertenrichmentAlertenrichmentV1Beta1#metadata}
   */
   readonly metadata?: AppsAlertenrichmentAlertenrichmentV1Beta1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#options AppsAlertenrichmentAlertenrichmentV1Beta1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#options AppsAlertenrichmentAlertenrichmentV1Beta1#options}
   */
   readonly options?: AppsAlertenrichmentAlertenrichmentV1Beta1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#spec AppsAlertenrichmentAlertenrichmentV1Beta1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#spec AppsAlertenrichmentAlertenrichmentV1Beta1#spec}
   */
   readonly spec?: AppsAlertenrichmentAlertenrichmentV1Beta1Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#folder_uid AppsAlertenrichmentAlertenrichmentV1Beta1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#folder_uid AppsAlertenrichmentAlertenrichmentV1Beta1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#uid AppsAlertenrichmentAlertenrichmentV1Beta1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#uid AppsAlertenrichmentAlertenrichmentV1Beta1#uid}
   */
   readonly uid: string;
 }
@@ -179,13 +179,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#manager_identity AppsAlertenrichmentAlertenrichmentV1Beta1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#manager_identity AppsAlertenrichmentAlertenrichmentV1Beta1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#overwrite AppsAlertenrichmentAlertenrichmentV1Beta1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#overwrite AppsAlertenrichmentAlertenrichmentV1Beta1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -308,15 +308,15 @@ export class AppsAlertenrichmentAlertenrichmentV1Beta1OptionsOutputReference ext
 }
 export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecAnnotationMatchers {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#name AppsAlertenrichmentAlertenrichmentV1Beta1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#name AppsAlertenrichmentAlertenrichmentV1Beta1#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#type AppsAlertenrichmentAlertenrichmentV1Beta1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#type AppsAlertenrichmentAlertenrichmentV1Beta1#type}
   */
   readonly type?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#value AppsAlertenrichmentAlertenrichmentV1Beta1#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#value AppsAlertenrichmentAlertenrichmentV1Beta1#value}
   */
   readonly value?: string;
 }
@@ -490,15 +490,15 @@ export class AppsAlertenrichmentAlertenrichmentV1Beta1SpecAnnotationMatchersList
 }
 export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecLabelMatchers {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#name AppsAlertenrichmentAlertenrichmentV1Beta1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#name AppsAlertenrichmentAlertenrichmentV1Beta1#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#type AppsAlertenrichmentAlertenrichmentV1Beta1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#type AppsAlertenrichmentAlertenrichmentV1Beta1#type}
   */
   readonly type?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#value AppsAlertenrichmentAlertenrichmentV1Beta1#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#value AppsAlertenrichmentAlertenrichmentV1Beta1#value}
   */
   readonly value?: string;
 }
@@ -674,7 +674,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepAsserts {
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -770,13 +770,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepAssign {
   /**
   * Map of annotation names to values to set on matching alerts.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotations AppsAlertenrichmentAlertenrichmentV1Beta1#annotations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotations AppsAlertenrichmentAlertenrichmentV1Beta1#annotations}
   */
   readonly annotations?: { [key: string]: string };
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -901,7 +901,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepAssistantInves
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -997,7 +997,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -1093,13 +1093,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Map of annotation names to values to set on matching alerts.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotations AppsAlertenrichmentAlertenrichmentV1Beta1#annotations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotations AppsAlertenrichmentAlertenrichmentV1Beta1#annotations}
   */
   readonly annotations?: { [key: string]: string };
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -1224,7 +1224,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -1320,25 +1320,25 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Data source type (e.g., 'loki').
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_type AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_type AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_type}
   */
   readonly dataSourceType?: string;
   /**
   * UID of the data source to query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_uid AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_uid AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_uid}
   */
   readonly dataSourceUid?: string;
   /**
   * Log query expression to execute.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#expr AppsAlertenrichmentAlertenrichmentV1Beta1#expr}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#expr AppsAlertenrichmentAlertenrichmentV1Beta1#expr}
   */
   readonly expr?: string;
   /**
   * Maximum number of log lines to include. Defaults to 3.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#max_lines AppsAlertenrichmentAlertenrichmentV1Beta1#max_lines}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#max_lines AppsAlertenrichmentAlertenrichmentV1Beta1#max_lines}
   */
   readonly maxLines?: number;
 }
@@ -1521,13 +1521,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Reference ID for correlating queries.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#ref_id AppsAlertenrichmentAlertenrichmentV1Beta1#ref_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#ref_id AppsAlertenrichmentAlertenrichmentV1Beta1#ref_id}
   */
   readonly refId?: string;
   /**
   * Raw request payload for the data source query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#request AppsAlertenrichmentAlertenrichmentV1Beta1#request}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#request AppsAlertenrichmentAlertenrichmentV1Beta1#request}
   */
   readonly request?: string;
 }
@@ -1652,19 +1652,19 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
   /**
   * logs_query block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#logs_query AppsAlertenrichmentAlertenrichmentV1Beta1#logs_query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#logs_query AppsAlertenrichmentAlertenrichmentV1Beta1#logs_query}
   */
   readonly logsQuery?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepDataSourceLogsQuery;
   /**
   * raw_query block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#raw_query AppsAlertenrichmentAlertenrichmentV1Beta1#raw_query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#raw_query AppsAlertenrichmentAlertenrichmentV1Beta1#raw_query}
   */
   readonly rawQuery?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepDataSourceRawQuery;
 }
@@ -1818,13 +1818,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Annotation name to set the explanation in. Defaults to 'ai_explanation'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation AppsAlertenrichmentAlertenrichmentV1Beta1#annotation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation AppsAlertenrichmentAlertenrichmentV1Beta1#annotation}
   */
   readonly annotation?: string;
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -1949,13 +1949,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
   /**
   * HTTP endpoint URL to call for enrichment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#url AppsAlertenrichmentAlertenrichmentV1Beta1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#url AppsAlertenrichmentAlertenrichmentV1Beta1#url}
   */
   readonly url?: string;
 }
@@ -2080,7 +2080,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -2176,43 +2176,43 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * asserts block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#asserts AppsAlertenrichmentAlertenrichmentV1Beta1#asserts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#asserts AppsAlertenrichmentAlertenrichmentV1Beta1#asserts}
   */
   readonly asserts?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepAsserts;
   /**
   * assign block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assign AppsAlertenrichmentAlertenrichmentV1Beta1#assign}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assign AppsAlertenrichmentAlertenrichmentV1Beta1#assign}
   */
   readonly assign?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepAssign;
   /**
   * assistant_investigations block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assistant_investigations AppsAlertenrichmentAlertenrichmentV1Beta1#assistant_investigations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assistant_investigations AppsAlertenrichmentAlertenrichmentV1Beta1#assistant_investigations}
   */
   readonly assistantInvestigations?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepAssistantInvestigations;
   /**
   * data_source block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source AppsAlertenrichmentAlertenrichmentV1Beta1#data_source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source AppsAlertenrichmentAlertenrichmentV1Beta1#data_source}
   */
   readonly dataSource?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepDataSource;
   /**
   * explain block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#explain AppsAlertenrichmentAlertenrichmentV1Beta1#explain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#explain AppsAlertenrichmentAlertenrichmentV1Beta1#explain}
   */
   readonly explain?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepExplain;
   /**
   * external block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#external AppsAlertenrichmentAlertenrichmentV1Beta1#external}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#external AppsAlertenrichmentAlertenrichmentV1Beta1#external}
   */
   readonly external?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepExternal;
   /**
   * sift block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#sift AppsAlertenrichmentAlertenrichmentV1Beta1#sift}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#sift AppsAlertenrichmentAlertenrichmentV1Beta1#sift}
   */
   readonly sift?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStepSift;
 }
@@ -2504,7 +2504,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalEls
   /**
   * step block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#step AppsAlertenrichmentAlertenrichmentV1Beta1#step}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#step AppsAlertenrichmentAlertenrichmentV1Beta1#step}
   */
   readonly step?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseStep[] | cdktf.IResolvable;
 }
@@ -2598,15 +2598,15 @@ export class AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElseOut
 }
 export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIfAnnotationMatchers {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#name AppsAlertenrichmentAlertenrichmentV1Beta1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#name AppsAlertenrichmentAlertenrichmentV1Beta1#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#type AppsAlertenrichmentAlertenrichmentV1Beta1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#type AppsAlertenrichmentAlertenrichmentV1Beta1#type}
   */
   readonly type?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#value AppsAlertenrichmentAlertenrichmentV1Beta1#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#value AppsAlertenrichmentAlertenrichmentV1Beta1#value}
   */
   readonly value?: string;
 }
@@ -2780,15 +2780,15 @@ export class AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIfAnnot
 }
 export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIfLabelMatchers {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#name AppsAlertenrichmentAlertenrichmentV1Beta1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#name AppsAlertenrichmentAlertenrichmentV1Beta1#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#type AppsAlertenrichmentAlertenrichmentV1Beta1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#type AppsAlertenrichmentAlertenrichmentV1Beta1#type}
   */
   readonly type?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#value AppsAlertenrichmentAlertenrichmentV1Beta1#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#value AppsAlertenrichmentAlertenrichmentV1Beta1#value}
   */
   readonly value?: string;
 }
@@ -2964,7 +2964,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIfD
   /**
   * Data source request payload.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#request AppsAlertenrichmentAlertenrichmentV1Beta1#request}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#request AppsAlertenrichmentAlertenrichmentV1Beta1#request}
   */
   readonly request?: string;
 }
@@ -3060,19 +3060,19 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIf 
   /**
   * Annotation matchers for the condition.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation_matchers AppsAlertenrichmentAlertenrichmentV1Beta1#annotation_matchers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation_matchers AppsAlertenrichmentAlertenrichmentV1Beta1#annotation_matchers}
   */
   readonly annotationMatchers?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIfAnnotationMatchers[] | cdktf.IResolvable;
   /**
   * Label matchers for the condition.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#label_matchers AppsAlertenrichmentAlertenrichmentV1Beta1#label_matchers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#label_matchers AppsAlertenrichmentAlertenrichmentV1Beta1#label_matchers}
   */
   readonly labelMatchers?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIfLabelMatchers[] | cdktf.IResolvable;
   /**
   * data_source_condition block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_condition AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_condition}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_condition AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_condition}
   */
   readonly dataSourceCondition?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIfDataSourceCondition;
 }
@@ -3226,7 +3226,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -3322,13 +3322,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Map of annotation names to values to set on matching alerts.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotations AppsAlertenrichmentAlertenrichmentV1Beta1#annotations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotations AppsAlertenrichmentAlertenrichmentV1Beta1#annotations}
   */
   readonly annotations?: { [key: string]: string };
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -3453,7 +3453,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -3549,25 +3549,25 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Data source type (e.g., 'loki').
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_type AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_type AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_type}
   */
   readonly dataSourceType?: string;
   /**
   * UID of the data source to query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_uid AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_uid AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_uid}
   */
   readonly dataSourceUid?: string;
   /**
   * Log query expression to execute.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#expr AppsAlertenrichmentAlertenrichmentV1Beta1#expr}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#expr AppsAlertenrichmentAlertenrichmentV1Beta1#expr}
   */
   readonly expr?: string;
   /**
   * Maximum number of log lines to include. Defaults to 3.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#max_lines AppsAlertenrichmentAlertenrichmentV1Beta1#max_lines}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#max_lines AppsAlertenrichmentAlertenrichmentV1Beta1#max_lines}
   */
   readonly maxLines?: number;
 }
@@ -3750,13 +3750,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Reference ID for correlating queries.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#ref_id AppsAlertenrichmentAlertenrichmentV1Beta1#ref_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#ref_id AppsAlertenrichmentAlertenrichmentV1Beta1#ref_id}
   */
   readonly refId?: string;
   /**
   * Raw request payload for the data source query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#request AppsAlertenrichmentAlertenrichmentV1Beta1#request}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#request AppsAlertenrichmentAlertenrichmentV1Beta1#request}
   */
   readonly request?: string;
 }
@@ -3881,19 +3881,19 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
   /**
   * logs_query block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#logs_query AppsAlertenrichmentAlertenrichmentV1Beta1#logs_query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#logs_query AppsAlertenrichmentAlertenrichmentV1Beta1#logs_query}
   */
   readonly logsQuery?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepDataSourceLogsQuery;
   /**
   * raw_query block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#raw_query AppsAlertenrichmentAlertenrichmentV1Beta1#raw_query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#raw_query AppsAlertenrichmentAlertenrichmentV1Beta1#raw_query}
   */
   readonly rawQuery?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepDataSourceRawQuery;
 }
@@ -4047,13 +4047,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Annotation name to set the explanation in. Defaults to 'ai_explanation'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation AppsAlertenrichmentAlertenrichmentV1Beta1#annotation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation AppsAlertenrichmentAlertenrichmentV1Beta1#annotation}
   */
   readonly annotation?: string;
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -4178,13 +4178,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
   /**
   * HTTP endpoint URL to call for enrichment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#url AppsAlertenrichmentAlertenrichmentV1Beta1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#url AppsAlertenrichmentAlertenrichmentV1Beta1#url}
   */
   readonly url?: string;
 }
@@ -4309,7 +4309,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -4405,43 +4405,43 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * asserts block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#asserts AppsAlertenrichmentAlertenrichmentV1Beta1#asserts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#asserts AppsAlertenrichmentAlertenrichmentV1Beta1#asserts}
   */
   readonly asserts?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepAsserts;
   /**
   * assign block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assign AppsAlertenrichmentAlertenrichmentV1Beta1#assign}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assign AppsAlertenrichmentAlertenrichmentV1Beta1#assign}
   */
   readonly assign?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepAssign;
   /**
   * assistant_investigations block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assistant_investigations AppsAlertenrichmentAlertenrichmentV1Beta1#assistant_investigations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assistant_investigations AppsAlertenrichmentAlertenrichmentV1Beta1#assistant_investigations}
   */
   readonly assistantInvestigations?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepAssistantInvestigations;
   /**
   * data_source block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source AppsAlertenrichmentAlertenrichmentV1Beta1#data_source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source AppsAlertenrichmentAlertenrichmentV1Beta1#data_source}
   */
   readonly dataSource?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepDataSource;
   /**
   * explain block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#explain AppsAlertenrichmentAlertenrichmentV1Beta1#explain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#explain AppsAlertenrichmentAlertenrichmentV1Beta1#explain}
   */
   readonly explain?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepExplain;
   /**
   * external block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#external AppsAlertenrichmentAlertenrichmentV1Beta1#external}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#external AppsAlertenrichmentAlertenrichmentV1Beta1#external}
   */
   readonly external?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepExternal;
   /**
   * sift block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#sift AppsAlertenrichmentAlertenrichmentV1Beta1#sift}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#sift AppsAlertenrichmentAlertenrichmentV1Beta1#sift}
   */
   readonly sift?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStepSift;
 }
@@ -4733,7 +4733,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThe
   /**
   * step block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#step AppsAlertenrichmentAlertenrichmentV1Beta1#step}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#step AppsAlertenrichmentAlertenrichmentV1Beta1#step}
   */
   readonly step?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThenStep[] | cdktf.IResolvable;
 }
@@ -4829,25 +4829,25 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditional {
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
   /**
   * else block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#else AppsAlertenrichmentAlertenrichmentV1Beta1#else}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#else AppsAlertenrichmentAlertenrichmentV1Beta1#else}
   */
   readonly else?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalElse;
   /**
   * if block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#if AppsAlertenrichmentAlertenrichmentV1Beta1#if}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#if AppsAlertenrichmentAlertenrichmentV1Beta1#if}
   */
   readonly if?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalIf;
   /**
   * then block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#then AppsAlertenrichmentAlertenrichmentV1Beta1#then}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#then AppsAlertenrichmentAlertenrichmentV1Beta1#then}
   */
   readonly then?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditionalThen;
 }
@@ -5030,25 +5030,25 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepDataSourceLogs
   /**
   * Data source type (e.g., 'loki').
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_type AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_type AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_type}
   */
   readonly dataSourceType?: string;
   /**
   * UID of the data source to query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_uid AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source_uid AppsAlertenrichmentAlertenrichmentV1Beta1#data_source_uid}
   */
   readonly dataSourceUid?: string;
   /**
   * Log query expression to execute.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#expr AppsAlertenrichmentAlertenrichmentV1Beta1#expr}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#expr AppsAlertenrichmentAlertenrichmentV1Beta1#expr}
   */
   readonly expr?: string;
   /**
   * Maximum number of log lines to include. Defaults to 3.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#max_lines AppsAlertenrichmentAlertenrichmentV1Beta1#max_lines}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#max_lines AppsAlertenrichmentAlertenrichmentV1Beta1#max_lines}
   */
   readonly maxLines?: number;
 }
@@ -5231,13 +5231,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepDataSourceRawQ
   /**
   * Reference ID for correlating queries.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#ref_id AppsAlertenrichmentAlertenrichmentV1Beta1#ref_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#ref_id AppsAlertenrichmentAlertenrichmentV1Beta1#ref_id}
   */
   readonly refId?: string;
   /**
   * Raw request payload for the data source query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#request AppsAlertenrichmentAlertenrichmentV1Beta1#request}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#request AppsAlertenrichmentAlertenrichmentV1Beta1#request}
   */
   readonly request?: string;
 }
@@ -5362,19 +5362,19 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepDataSource {
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
   /**
   * logs_query block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#logs_query AppsAlertenrichmentAlertenrichmentV1Beta1#logs_query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#logs_query AppsAlertenrichmentAlertenrichmentV1Beta1#logs_query}
   */
   readonly logsQuery?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepDataSourceLogsQuery;
   /**
   * raw_query block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#raw_query AppsAlertenrichmentAlertenrichmentV1Beta1#raw_query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#raw_query AppsAlertenrichmentAlertenrichmentV1Beta1#raw_query}
   */
   readonly rawQuery?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepDataSourceRawQuery;
 }
@@ -5528,13 +5528,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepExplain {
   /**
   * Annotation name to set the explanation in. Defaults to 'ai_explanation'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation AppsAlertenrichmentAlertenrichmentV1Beta1#annotation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation AppsAlertenrichmentAlertenrichmentV1Beta1#annotation}
   */
   readonly annotation?: string;
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -5659,13 +5659,13 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepExternal {
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
   /**
   * HTTP endpoint URL to call for enrichment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#url AppsAlertenrichmentAlertenrichmentV1Beta1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#url AppsAlertenrichmentAlertenrichmentV1Beta1#url}
   */
   readonly url?: string;
 }
@@ -5790,7 +5790,7 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepSift {
   /**
   * Maximum execution time (e.g., '30s', '1m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#timeout AppsAlertenrichmentAlertenrichmentV1Beta1#timeout}
   */
   readonly timeout?: string;
 }
@@ -5886,49 +5886,49 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1SpecStep {
   /**
   * asserts block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#asserts AppsAlertenrichmentAlertenrichmentV1Beta1#asserts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#asserts AppsAlertenrichmentAlertenrichmentV1Beta1#asserts}
   */
   readonly asserts?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepAsserts;
   /**
   * assign block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assign AppsAlertenrichmentAlertenrichmentV1Beta1#assign}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assign AppsAlertenrichmentAlertenrichmentV1Beta1#assign}
   */
   readonly assign?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepAssign;
   /**
   * assistant_investigations block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assistant_investigations AppsAlertenrichmentAlertenrichmentV1Beta1#assistant_investigations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#assistant_investigations AppsAlertenrichmentAlertenrichmentV1Beta1#assistant_investigations}
   */
   readonly assistantInvestigations?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepAssistantInvestigations;
   /**
   * conditional block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#conditional AppsAlertenrichmentAlertenrichmentV1Beta1#conditional}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#conditional AppsAlertenrichmentAlertenrichmentV1Beta1#conditional}
   */
   readonly conditional?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepConditional;
   /**
   * data_source block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source AppsAlertenrichmentAlertenrichmentV1Beta1#data_source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#data_source AppsAlertenrichmentAlertenrichmentV1Beta1#data_source}
   */
   readonly dataSource?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepDataSource;
   /**
   * explain block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#explain AppsAlertenrichmentAlertenrichmentV1Beta1#explain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#explain AppsAlertenrichmentAlertenrichmentV1Beta1#explain}
   */
   readonly explain?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepExplain;
   /**
   * external block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#external AppsAlertenrichmentAlertenrichmentV1Beta1#external}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#external AppsAlertenrichmentAlertenrichmentV1Beta1#external}
   */
   readonly external?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepExternal;
   /**
   * sift block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#sift AppsAlertenrichmentAlertenrichmentV1Beta1#sift}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#sift AppsAlertenrichmentAlertenrichmentV1Beta1#sift}
   */
   readonly sift?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStepSift;
 }
@@ -6249,49 +6249,49 @@ export interface AppsAlertenrichmentAlertenrichmentV1Beta1Spec {
   /**
   * UIDs of alert rules this enrichment applies to. If empty, applies to all alert rules.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#alert_rule_uids AppsAlertenrichmentAlertenrichmentV1Beta1#alert_rule_uids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#alert_rule_uids AppsAlertenrichmentAlertenrichmentV1Beta1#alert_rule_uids}
   */
   readonly alertRuleUids?: string[];
   /**
   * Annotation matchers that an alert must satisfy for this enrichment to apply. Each matcher is an object with: 'type' (string, one of: =, !=, =~, !~), 'name' (string, annotation key to match), 'value' (string, annotation value to compare against, supports regex for =~/!~ operators).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation_matchers AppsAlertenrichmentAlertenrichmentV1Beta1#annotation_matchers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#annotation_matchers AppsAlertenrichmentAlertenrichmentV1Beta1#annotation_matchers}
   */
   readonly annotationMatchers?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecAnnotationMatchers[] | cdktf.IResolvable;
   /**
   * Description of the alert enrichment.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#description AppsAlertenrichmentAlertenrichmentV1Beta1#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#description AppsAlertenrichmentAlertenrichmentV1Beta1#description}
   */
   readonly description?: string;
   /**
   * Allow modifying alert enrichment outside of Terraform
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#disable_provenance AppsAlertenrichmentAlertenrichmentV1Beta1#disable_provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#disable_provenance AppsAlertenrichmentAlertenrichmentV1Beta1#disable_provenance}
   */
   readonly disableProvenance?: boolean | cdktf.IResolvable;
   /**
   * Label matchers that an alert must satisfy for this enrichment to apply. Each matcher is an object with: 'type' (string, one of: =, !=, =~, !~), 'name' (string, label key to match), 'value' (string, label value to compare against, supports regex for =~/!~ operators).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#label_matchers AppsAlertenrichmentAlertenrichmentV1Beta1#label_matchers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#label_matchers AppsAlertenrichmentAlertenrichmentV1Beta1#label_matchers}
   */
   readonly labelMatchers?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecLabelMatchers[] | cdktf.IResolvable;
   /**
   * Receiver names to match. If empty, applies to all receivers.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#receivers AppsAlertenrichmentAlertenrichmentV1Beta1#receivers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#receivers AppsAlertenrichmentAlertenrichmentV1Beta1#receivers}
   */
   readonly receivers?: string[];
   /**
   * The title of the alert enrichment.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#title AppsAlertenrichmentAlertenrichmentV1Beta1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#title AppsAlertenrichmentAlertenrichmentV1Beta1#title}
   */
   readonly title: string;
   /**
   * step block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#step AppsAlertenrichmentAlertenrichmentV1Beta1#step}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#step AppsAlertenrichmentAlertenrichmentV1Beta1#step}
   */
   readonly step?: AppsAlertenrichmentAlertenrichmentV1Beta1SpecStep[] | cdktf.IResolvable;
 }
@@ -6585,7 +6585,7 @@ export class AppsAlertenrichmentAlertenrichmentV1Beta1SpecOutputReference extend
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1 grafana_apps_alertenrichment_alertenrichment_v1beta1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1 grafana_apps_alertenrichment_alertenrichment_v1beta1}
 */
 export class AppsAlertenrichmentAlertenrichmentV1Beta1 extends cdktf.TerraformResource {
 
@@ -6601,7 +6601,7 @@ export class AppsAlertenrichmentAlertenrichmentV1Beta1 extends cdktf.TerraformRe
   * Generates CDKTF code for importing a AppsAlertenrichmentAlertenrichmentV1Beta1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsAlertenrichmentAlertenrichmentV1Beta1 to import
-  * @param importFromId The id of the existing AppsAlertenrichmentAlertenrichmentV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsAlertenrichmentAlertenrichmentV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsAlertenrichmentAlertenrichmentV1Beta1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -6613,7 +6613,7 @@ export class AppsAlertenrichmentAlertenrichmentV1Beta1 extends cdktf.TerraformRe
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_alertenrichment_alertenrichment_v1beta1 grafana_apps_alertenrichment_alertenrichment_v1beta1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_alertenrichment_alertenrichment_v1beta1 grafana_apps_alertenrichment_alertenrichment_v1beta1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -6624,7 +6624,7 @@ export class AppsAlertenrichmentAlertenrichmentV1Beta1 extends cdktf.TerraformRe
       terraformResourceType: 'grafana_apps_alertenrichment_alertenrichment_v1beta1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

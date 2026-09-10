@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface OncallIntegrationConfig extends cdktf.TerraformMetaArguments {
   /**
   * A list of string-to-string mappings for dynamic labels. Each map must include one key named "key" and one key named "value" (using the `grafana_oncall_label` datasource).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#dynamic_labels OncallIntegration#dynamic_labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#dynamic_labels OncallIntegration#dynamic_labels}
   */
   readonly dynamicLabels?: { [key: string]: string }[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#id OncallIntegration#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#id OncallIntegration#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,37 +23,37 @@ export interface OncallIntegrationConfig extends cdktf.TerraformMetaArguments {
   /**
   * A list of string-to-string mappings for static labels. Each map must include one key named "key" and one key named "value" (using the `grafana_oncall_label` datasource).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#labels OncallIntegration#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#labels OncallIntegration#labels}
   */
   readonly labels?: { [key: string]: string }[] | cdktf.IResolvable;
   /**
   * The name of the service integration.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#name OncallIntegration#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#name OncallIntegration#name}
   */
   readonly name: string;
   /**
   * The ID of the OnCall team (using the `grafana_oncall_team` datasource).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#team_id OncallIntegration#team_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#team_id OncallIntegration#team_id}
   */
   readonly teamId?: string;
   /**
   * The type of integration. Can be grafana, grafana_alerting, webhook, alertmanager, kapacitor, fabric, newrelic, datadog, pagerduty, pingdom, elastalert, amazon_sns, curler, sentry, formatted_webhook, stackdriver, uptimerobot, sentry, zabbix, prtg, inbound_email, direct_paging, jira, zendesk.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#type OncallIntegration#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#type OncallIntegration#type}
   */
   readonly type: string;
   /**
   * default_route block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#default_route OncallIntegration#default_route}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#default_route OncallIntegration#default_route}
   */
   readonly defaultRoute: OncallIntegrationDefaultRoute;
   /**
   * templates block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#templates OncallIntegration#templates}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#templates OncallIntegration#templates}
   */
   readonly templates?: OncallIntegrationTemplates;
 }
@@ -61,13 +61,13 @@ export interface OncallIntegrationDefaultRouteMsteams {
   /**
   * Enable notification in MS teams. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#enabled OncallIntegration#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#enabled OncallIntegration#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * MS teams channel id. Alerts will be directed to this channel in Microsoft teams.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#id OncallIntegration#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#id OncallIntegration#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -185,13 +185,13 @@ export interface OncallIntegrationDefaultRouteSlack {
   /**
   * Slack channel id. Alerts will be directed to this channel in Slack.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#channel_id OncallIntegration#channel_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#channel_id OncallIntegration#channel_id}
   */
   readonly channelId?: string;
   /**
   * Enable notification in Slack. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#enabled OncallIntegration#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#enabled OncallIntegration#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
 }
@@ -306,13 +306,13 @@ export interface OncallIntegrationDefaultRouteTelegram {
   /**
   * Enable notification in Telegram. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#enabled OncallIntegration#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#enabled OncallIntegration#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Telegram channel id. Alerts will be directed to this channel in Telegram.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#id OncallIntegration#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#id OncallIntegration#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -430,25 +430,25 @@ export interface OncallIntegrationDefaultRoute {
   /**
   * The ID of the escalation chain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#escalation_chain_id OncallIntegration#escalation_chain_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#escalation_chain_id OncallIntegration#escalation_chain_id}
   */
   readonly escalationChainId?: string;
   /**
   * msteams block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#msteams OncallIntegration#msteams}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#msteams OncallIntegration#msteams}
   */
   readonly msteams?: OncallIntegrationDefaultRouteMsteams;
   /**
   * slack block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#slack OncallIntegration#slack}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#slack OncallIntegration#slack}
   */
   readonly slack?: OncallIntegrationDefaultRouteSlack;
   /**
   * telegram block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#telegram OncallIntegration#telegram}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#telegram OncallIntegration#telegram}
   */
   readonly telegram?: OncallIntegrationDefaultRouteTelegram;
 }
@@ -626,13 +626,13 @@ export interface OncallIntegrationTemplatesEmail {
   /**
   * Template for Alert message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#message OncallIntegration#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#message OncallIntegration#message}
   */
   readonly message?: string;
   /**
   * Template for Alert title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#title OncallIntegration#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#title OncallIntegration#title}
   */
   readonly title?: string;
 }
@@ -747,19 +747,19 @@ export interface OncallIntegrationTemplatesMicrosoftTeams {
   /**
   * Template for Alert image url.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#image_url OncallIntegration#image_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#image_url OncallIntegration#image_url}
   */
   readonly imageUrl?: string;
   /**
   * Template for Alert message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#message OncallIntegration#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#message OncallIntegration#message}
   */
   readonly message?: string;
   /**
   * Template for Alert title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#title OncallIntegration#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#title OncallIntegration#title}
   */
   readonly title?: string;
 }
@@ -903,13 +903,13 @@ export interface OncallIntegrationTemplatesMobileApp {
   /**
   * Template for Alert message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#message OncallIntegration#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#message OncallIntegration#message}
   */
   readonly message?: string;
   /**
   * Template for Alert title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#title OncallIntegration#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#title OncallIntegration#title}
   */
   readonly title?: string;
 }
@@ -1024,7 +1024,7 @@ export interface OncallIntegrationTemplatesPhoneCall {
   /**
   * Template for Alert title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#title OncallIntegration#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#title OncallIntegration#title}
   */
   readonly title?: string;
 }
@@ -1110,19 +1110,19 @@ export interface OncallIntegrationTemplatesSlack {
   /**
   * Template for Alert image url.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#image_url OncallIntegration#image_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#image_url OncallIntegration#image_url}
   */
   readonly imageUrl?: string;
   /**
   * Template for Alert message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#message OncallIntegration#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#message OncallIntegration#message}
   */
   readonly message?: string;
   /**
   * Template for Alert title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#title OncallIntegration#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#title OncallIntegration#title}
   */
   readonly title?: string;
 }
@@ -1266,7 +1266,7 @@ export interface OncallIntegrationTemplatesSms {
   /**
   * Template for Alert title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#title OncallIntegration#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#title OncallIntegration#title}
   */
   readonly title?: string;
 }
@@ -1352,19 +1352,19 @@ export interface OncallIntegrationTemplatesTelegram {
   /**
   * Template for Alert image url.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#image_url OncallIntegration#image_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#image_url OncallIntegration#image_url}
   */
   readonly imageUrl?: string;
   /**
   * Template for Alert message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#message OncallIntegration#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#message OncallIntegration#message}
   */
   readonly message?: string;
   /**
   * Template for Alert title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#title OncallIntegration#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#title OncallIntegration#title}
   */
   readonly title?: string;
 }
@@ -1508,19 +1508,19 @@ export interface OncallIntegrationTemplatesWeb {
   /**
   * Template for Alert image url.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#image_url OncallIntegration#image_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#image_url OncallIntegration#image_url}
   */
   readonly imageUrl?: string;
   /**
   * Template for Alert message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#message OncallIntegration#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#message OncallIntegration#message}
   */
   readonly message?: string;
   /**
   * Template for Alert title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#title OncallIntegration#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#title OncallIntegration#title}
   */
   readonly title?: string;
 }
@@ -1664,73 +1664,73 @@ export interface OncallIntegrationTemplates {
   /**
   * Template for sending a signal to acknowledge the Incident.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#acknowledge_signal OncallIntegration#acknowledge_signal}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#acknowledge_signal OncallIntegration#acknowledge_signal}
   */
   readonly acknowledgeSignal?: string;
   /**
   * Template for the key by which alerts are grouped.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#grouping_key OncallIntegration#grouping_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#grouping_key OncallIntegration#grouping_key}
   */
   readonly groupingKey?: string;
   /**
   * Template for sending a signal to resolve the Incident.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#resolve_signal OncallIntegration#resolve_signal}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#resolve_signal OncallIntegration#resolve_signal}
   */
   readonly resolveSignal?: string;
   /**
   * Template for a source link.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#source_link OncallIntegration#source_link}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#source_link OncallIntegration#source_link}
   */
   readonly sourceLink?: string;
   /**
   * email block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#email OncallIntegration#email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#email OncallIntegration#email}
   */
   readonly email?: OncallIntegrationTemplatesEmail;
   /**
   * microsoft_teams block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#microsoft_teams OncallIntegration#microsoft_teams}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#microsoft_teams OncallIntegration#microsoft_teams}
   */
   readonly microsoftTeams?: OncallIntegrationTemplatesMicrosoftTeams;
   /**
   * mobile_app block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#mobile_app OncallIntegration#mobile_app}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#mobile_app OncallIntegration#mobile_app}
   */
   readonly mobileApp?: OncallIntegrationTemplatesMobileApp;
   /**
   * phone_call block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#phone_call OncallIntegration#phone_call}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#phone_call OncallIntegration#phone_call}
   */
   readonly phoneCall?: OncallIntegrationTemplatesPhoneCall;
   /**
   * slack block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#slack OncallIntegration#slack}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#slack OncallIntegration#slack}
   */
   readonly slack?: OncallIntegrationTemplatesSlack;
   /**
   * sms block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#sms OncallIntegration#sms}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#sms OncallIntegration#sms}
   */
   readonly sms?: OncallIntegrationTemplatesSms;
   /**
   * telegram block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#telegram OncallIntegration#telegram}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#telegram OncallIntegration#telegram}
   */
   readonly telegram?: OncallIntegrationTemplatesTelegram;
   /**
   * web block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#web OncallIntegration#web}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#web OncallIntegration#web}
   */
   readonly web?: OncallIntegrationTemplatesWeb;
 }
@@ -2133,7 +2133,7 @@ export class OncallIntegrationTemplatesOutputReference extends cdktf.ComplexObje
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration grafana_oncall_integration}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration grafana_oncall_integration}
 */
 export class OncallIntegration extends cdktf.TerraformResource {
 
@@ -2149,7 +2149,7 @@ export class OncallIntegration extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OncallIntegration resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OncallIntegration to import
-  * @param importFromId The id of the existing OncallIntegration that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OncallIntegration that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OncallIntegration to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -2161,7 +2161,7 @@ export class OncallIntegration extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_integration grafana_oncall_integration} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_integration grafana_oncall_integration} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -2172,7 +2172,7 @@ export class OncallIntegration extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_oncall_integration',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

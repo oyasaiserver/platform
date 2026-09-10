@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,61 +10,61 @@ export interface ConnectionsMetricsEndpointScrapeJobConfig extends cdktf.Terrafo
   /**
   * Password for basic authentication, use if scrape job is using basic authentication method
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#authentication_basic_password ConnectionsMetricsEndpointScrapeJob#authentication_basic_password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#authentication_basic_password ConnectionsMetricsEndpointScrapeJob#authentication_basic_password}
   */
   readonly authenticationBasicPassword?: string;
   /**
   * Username for basic authentication, use if scrape job is using basic authentication method
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#authentication_basic_username ConnectionsMetricsEndpointScrapeJob#authentication_basic_username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#authentication_basic_username ConnectionsMetricsEndpointScrapeJob#authentication_basic_username}
   */
   readonly authenticationBasicUsername?: string;
   /**
   * Bearer token used for authentication, use if scrape job is using bearer authentication method
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#authentication_bearer_token ConnectionsMetricsEndpointScrapeJob#authentication_bearer_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#authentication_bearer_token ConnectionsMetricsEndpointScrapeJob#authentication_bearer_token}
   */
   readonly authenticationBearerToken?: string;
   /**
   * Method to pass authentication credentials: basic or bearer.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#authentication_method ConnectionsMetricsEndpointScrapeJob#authentication_method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#authentication_method ConnectionsMetricsEndpointScrapeJob#authentication_method}
   */
   readonly authenticationMethod: string;
   /**
   * Whether the metrics endpoint scrape job is enabled or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#enabled ConnectionsMetricsEndpointScrapeJob#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#enabled ConnectionsMetricsEndpointScrapeJob#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The name of the metrics endpoint scrape job. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#name ConnectionsMetricsEndpointScrapeJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#name ConnectionsMetricsEndpointScrapeJob#name}
   */
   readonly name: string;
   /**
   * Frequency for scraping the metrics endpoint: 30, 60, or 120 seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#scrape_interval_seconds ConnectionsMetricsEndpointScrapeJob#scrape_interval_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#scrape_interval_seconds ConnectionsMetricsEndpointScrapeJob#scrape_interval_seconds}
   */
   readonly scrapeIntervalSeconds?: number;
   /**
   * The Stack ID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#stack_id ConnectionsMetricsEndpointScrapeJob#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#stack_id ConnectionsMetricsEndpointScrapeJob#stack_id}
   */
   readonly stackId: string;
   /**
   * The url to scrape metrics from; a valid HTTPs URL is required.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#url ConnectionsMetricsEndpointScrapeJob#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#url ConnectionsMetricsEndpointScrapeJob#url}
   */
   readonly url: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job grafana_connections_metrics_endpoint_scrape_job}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job grafana_connections_metrics_endpoint_scrape_job}
 */
 export class ConnectionsMetricsEndpointScrapeJob extends cdktf.TerraformResource {
 
@@ -80,7 +80,7 @@ export class ConnectionsMetricsEndpointScrapeJob extends cdktf.TerraformResource
   * Generates CDKTF code for importing a ConnectionsMetricsEndpointScrapeJob resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ConnectionsMetricsEndpointScrapeJob to import
-  * @param importFromId The id of the existing ConnectionsMetricsEndpointScrapeJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ConnectionsMetricsEndpointScrapeJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ConnectionsMetricsEndpointScrapeJob to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -92,7 +92,7 @@ export class ConnectionsMetricsEndpointScrapeJob extends cdktf.TerraformResource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/connections_metrics_endpoint_scrape_job grafana_connections_metrics_endpoint_scrape_job} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/connections_metrics_endpoint_scrape_job grafana_connections_metrics_endpoint_scrape_job} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -103,7 +103,7 @@ export class ConnectionsMetricsEndpointScrapeJob extends cdktf.TerraformResource
       terraformResourceType: 'grafana_connections_metrics_endpoint_scrape_job',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

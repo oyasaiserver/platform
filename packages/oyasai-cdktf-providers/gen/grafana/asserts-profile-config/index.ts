@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,23 +10,23 @@ export interface AssertsProfileConfigConfig extends cdktf.TerraformMetaArguments
   /**
   * DataSource to be queried (e.g., a Pyroscope instance).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#data_source_uid AssertsProfileConfig#data_source_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#data_source_uid AssertsProfileConfig#data_source_uid}
   */
   readonly dataSourceUid: string;
   /**
   * Is it the default config, therefore undeletable?
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#default_config AssertsProfileConfig#default_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#default_config AssertsProfileConfig#default_config}
   */
   readonly defaultConfig: boolean | cdktf.IResolvable;
   /**
   * Mapping of entity properties to profile labels.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#entity_property_to_profile_label_mapping AssertsProfileConfig#entity_property_to_profile_label_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#entity_property_to_profile_label_mapping AssertsProfileConfig#entity_property_to_profile_label_mapping}
   */
   readonly entityPropertyToProfileLabelMapping?: { [key: string]: string };
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#id AssertsProfileConfig#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#id AssertsProfileConfig#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -35,25 +35,25 @@ export interface AssertsProfileConfigConfig extends cdktf.TerraformMetaArguments
   /**
   * The name of the profile configuration.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#name AssertsProfileConfig#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#name AssertsProfileConfig#name}
   */
   readonly name: string;
   /**
   * Priority of the profile configuration. A lower number means a higher priority.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#priority AssertsProfileConfig#priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#priority AssertsProfileConfig#priority}
   */
   readonly priority: number;
   /**
   * match block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#match AssertsProfileConfig#match}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#match AssertsProfileConfig#match}
   */
   readonly match?: AssertsProfileConfigMatch[] | cdktf.IResolvable;
   /**
   * timeouts block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#timeouts AssertsProfileConfig#timeouts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#timeouts AssertsProfileConfig#timeouts}
   */
   readonly timeouts?: AssertsProfileConfigTimeouts;
 }
@@ -61,19 +61,19 @@ export interface AssertsProfileConfigMatch {
   /**
   * Operation to use for matching. One of: =, <>, <, >, <=, >=, IS NULL, IS NOT NULL, STARTS WITH, CONTAINS.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#op AssertsProfileConfig#op}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#op AssertsProfileConfig#op}
   */
   readonly op: string;
   /**
   * Entity property to match.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#property AssertsProfileConfig#property}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#property AssertsProfileConfig#property}
   */
   readonly property: string;
   /**
   * Values to match against. Required for all operators except "IS NULL" and "IS NOT NULL", which must not have any values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#values AssertsProfileConfig#values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#values AssertsProfileConfig#values}
   */
   readonly values?: string[];
 }
@@ -241,19 +241,19 @@ export class AssertsProfileConfigMatchList extends cdktf.ComplexList {
 }
 export interface AssertsProfileConfigTimeouts {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#create AssertsProfileConfig#create}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#create AssertsProfileConfig#create}
   */
   readonly create?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#delete AssertsProfileConfig#delete}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#delete AssertsProfileConfig#delete}
   */
   readonly delete?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#read AssertsProfileConfig#read}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#read AssertsProfileConfig#read}
   */
   readonly read?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#update AssertsProfileConfig#update}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#update AssertsProfileConfig#update}
   */
   readonly update?: string;
 }
@@ -434,7 +434,7 @@ export class AssertsProfileConfigTimeoutsOutputReference extends cdktf.ComplexOb
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config grafana_asserts_profile_config}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config grafana_asserts_profile_config}
 */
 export class AssertsProfileConfig extends cdktf.TerraformResource {
 
@@ -450,7 +450,7 @@ export class AssertsProfileConfig extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssertsProfileConfig resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssertsProfileConfig to import
-  * @param importFromId The id of the existing AssertsProfileConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssertsProfileConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssertsProfileConfig to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -462,7 +462,7 @@ export class AssertsProfileConfig extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_profile_config grafana_asserts_profile_config} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_profile_config grafana_asserts_profile_config} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -473,7 +473,7 @@ export class AssertsProfileConfig extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_asserts_profile_config',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/scim_config
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/scim_config
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface ScimConfigConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether group synchronization is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/scim_config#enable_group_sync ScimConfig#enable_group_sync}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/scim_config#enable_group_sync ScimConfig#enable_group_sync}
   */
   readonly enableGroupSync: boolean | cdktf.IResolvable;
   /**
   * Whether user synchronization is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/scim_config#enable_user_sync ScimConfig#enable_user_sync}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/scim_config#enable_user_sync ScimConfig#enable_user_sync}
   */
   readonly enableUserSync: boolean | cdktf.IResolvable;
   /**
   * The Organization ID. If not set, the default organization is used for basic authentication, or the one that owns your service account for token authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/scim_config#org_id ScimConfig#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/scim_config#org_id ScimConfig#org_id}
   */
   readonly orgId?: string;
   /**
   * Whether to block non-provisioned user access to Grafana. Cloud Portal users will always be able to access Grafana, regardless of this setting.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/scim_config#reject_non_provisioned_users ScimConfig#reject_non_provisioned_users}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/scim_config#reject_non_provisioned_users ScimConfig#reject_non_provisioned_users}
   */
   readonly rejectNonProvisionedUsers: boolean | cdktf.IResolvable;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/scim_config grafana_scim_config}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/scim_config grafana_scim_config}
 */
 export class ScimConfig extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class ScimConfig extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ScimConfig resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ScimConfig to import
-  * @param importFromId The id of the existing ScimConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/scim_config#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ScimConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/scim_config#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ScimConfig to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class ScimConfig extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/scim_config grafana_scim_config} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/scim_config grafana_scim_config} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class ScimConfig extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_scim_config',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/frontend_o11y_app
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/frontend_o11y_app
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataGrafanaFrontendO11YAppConfig extends cdktf.TerraformMetaArg
   /**
   * The name of the Frontend Observability App. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/frontend_o11y_app#name DataGrafanaFrontendO11YApp#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/frontend_o11y_app#name DataGrafanaFrontendO11YApp#name}
   */
   readonly name: string;
   /**
   * The Stack ID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/frontend_o11y_app#stack_id DataGrafanaFrontendO11YApp#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/frontend_o11y_app#stack_id DataGrafanaFrontendO11YApp#stack_id}
   */
   readonly stackId: number;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/frontend_o11y_app grafana_frontend_o11y_app}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/frontend_o11y_app grafana_frontend_o11y_app}
 */
 export class DataGrafanaFrontendO11YApp extends cdktf.TerraformDataSource {
 
@@ -38,7 +38,7 @@ export class DataGrafanaFrontendO11YApp extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaFrontendO11YApp resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaFrontendO11YApp to import
-  * @param importFromId The id of the existing DataGrafanaFrontendO11YApp that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/frontend_o11y_app#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaFrontendO11YApp that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/frontend_o11y_app#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaFrontendO11YApp to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class DataGrafanaFrontendO11YApp extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/frontend_o11y_app grafana_frontend_o11y_app} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/frontend_o11y_app grafana_frontend_o11y_app} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class DataGrafanaFrontendO11YApp extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_frontend_o11y_app',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

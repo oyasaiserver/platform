@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface ReportConfig extends cdktf.TerraformMetaArguments {
   /**
   * Specifies what kind of attachment to generate for the report. Allowed values: `pdf`, `csv`, `image`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#formats Report#formats}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#formats Report#formats}
   */
   readonly formats?: string[];
   /**
   * Whether to include a link to the dashboard in the report.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#include_dashboard_link Report#include_dashboard_link}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#include_dashboard_link Report#include_dashboard_link}
   */
   readonly includeDashboardLink?: boolean | cdktf.IResolvable;
   /**
   * Whether to include a CSV file of table panel data.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#include_table_csv Report#include_table_csv}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#include_table_csv Report#include_table_csv}
   */
   readonly includeTableCsv?: boolean | cdktf.IResolvable;
   /**
   * Layout of the report. Allowed values: `simple`, `grid`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#layout Report#layout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#layout Report#layout}
   */
   readonly layout?: string;
   /**
   * Message to be sent in the report.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#message Report#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#message Report#message}
   */
   readonly message?: string;
   /**
   * Name of the report.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#name Report#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#name Report#name}
   */
   readonly name: string;
   /**
   * The Organization ID. If not set, the default organization is used for basic authentication, or the one that owns your service account for token authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#org_id Report#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#org_id Report#org_id}
   */
   readonly orgId?: string;
   /**
   * Orientation of the report. Allowed values: `landscape`, `portrait`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#orientation Report#orientation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#orientation Report#orientation}
   */
   readonly orientation?: string;
   /**
   * List of recipients of the report.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#recipients Report#recipients}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#recipients Report#recipients}
   */
   readonly recipients: string[];
   /**
   * Reply-to email address of the report.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#reply_to Report#reply_to}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#reply_to Report#reply_to}
   */
   readonly replyTo?: string;
   /**
   * dashboards block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#dashboards Report#dashboards}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#dashboards Report#dashboards}
   */
   readonly dashboards?: ReportDashboards[] | cdktf.IResolvable;
   /**
   * schedule block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#schedule Report#schedule}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#schedule Report#schedule}
   */
   readonly schedule?: ReportSchedule[] | cdktf.IResolvable;
 }
@@ -84,13 +84,13 @@ export interface ReportDashboardsTimeRange {
   /**
   * Start of the time range.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#from Report#from}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#from Report#from}
   */
   readonly from?: string;
   /**
   * End of the time range.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#to Report#to}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#to Report#to}
   */
   readonly to?: string;
 }
@@ -237,19 +237,19 @@ export interface ReportDashboards {
   /**
   * Add report variables to the dashboard. Values should be separated by commas.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#report_variables Report#report_variables}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#report_variables Report#report_variables}
   */
   readonly reportVariables?: { [key: string]: string };
   /**
   * Dashboard uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#uid Report#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#uid Report#uid}
   */
   readonly uid: string;
   /**
   * time_range block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#time_range Report#time_range}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#time_range Report#time_range}
   */
   readonly timeRange?: ReportDashboardsTimeRange[] | cdktf.IResolvable;
 }
@@ -423,43 +423,43 @@ export interface ReportSchedule {
   * Custom interval of the report.
   * **Note:** This field is only available when frequency is set to `custom`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#custom_interval Report#custom_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#custom_interval Report#custom_interval}
   */
   readonly customInterval?: string;
   /**
   * End time of the report. If empty, the report will be sent indefinitely (according to frequency). Note that times will be saved as UTC in Grafana. Use 2006-01-02T15:04:05 format if you want to set a custom timezone
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#end_time Report#end_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#end_time Report#end_time}
   */
   readonly endTime?: string;
   /**
   * Frequency of the report. Allowed values: `never`, `once`, `hourly`, `daily`, `weekly`, `monthly`, `custom`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#frequency Report#frequency}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#frequency Report#frequency}
   */
   readonly frequency: string;
   /**
   * Send the report on the last day of the month
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#last_day_of_month Report#last_day_of_month}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#last_day_of_month Report#last_day_of_month}
   */
   readonly lastDayOfMonth?: boolean | cdktf.IResolvable;
   /**
   * Start time of the report. If empty, the start date will be set to the creation time. Note that times will be saved as UTC in Grafana. Use 2006-01-02T15:04:05 format if you want to set a custom timezone
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#start_time Report#start_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#start_time Report#start_time}
   */
   readonly startTime?: string;
   /**
   * Set the report time zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#timezone Report#timezone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#timezone Report#timezone}
   */
   readonly timezone?: string;
   /**
   * Whether to send the report only on work days.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#workdays_only Report#workdays_only}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#workdays_only Report#workdays_only}
   */
   readonly workdaysOnly?: boolean | cdktf.IResolvable;
 }
@@ -746,7 +746,7 @@ export class ReportScheduleList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report grafana_report}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report grafana_report}
 */
 export class Report extends cdktf.TerraformResource {
 
@@ -762,7 +762,7 @@ export class Report extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Report resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Report to import
-  * @param importFromId The id of the existing Report that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Report that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Report to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -774,7 +774,7 @@ export class Report extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/report grafana_report} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/report grafana_report} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -785,7 +785,7 @@ export class Report extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_report',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

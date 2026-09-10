@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_collection
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_collection
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface Agento11YCollectionConfig extends cdktf.TerraformMetaArguments 
   /**
   * Description of the collection. Remove this attribute to clear the stored description; an empty string is not accepted.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_collection#description Agento11YCollection#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_collection#description Agento11YCollection#description}
   */
   readonly description?: string;
   /**
   * Display name of the collection. Names are not unique.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_collection#name Agento11YCollection#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_collection#name Agento11YCollection#name}
   */
   readonly name: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_collection grafana_agento11y_collection}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_collection grafana_agento11y_collection}
 */
 export class Agento11YCollection extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class Agento11YCollection extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Agento11YCollection resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Agento11YCollection to import
-  * @param importFromId The id of the existing Agento11YCollection that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_collection#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Agento11YCollection that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_collection#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Agento11YCollection to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class Agento11YCollection extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_collection grafana_agento11y_collection} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_collection grafana_agento11y_collection} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class Agento11YCollection extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_agento11y_collection',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

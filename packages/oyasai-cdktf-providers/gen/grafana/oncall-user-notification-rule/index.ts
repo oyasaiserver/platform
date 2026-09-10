@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface OncallUserNotificationRuleConfig extends cdktf.TerraformMetaArg
   /**
   * A time in seconds to wait (when `type=wait`). Can be 60, 300, 900, 1800, 3600
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule#duration OncallUserNotificationRule#duration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule#duration OncallUserNotificationRule#duration}
   */
   readonly duration?: number;
   /**
   * Boolean value which indicates if a rule is “important”
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule#important OncallUserNotificationRule#important}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule#important OncallUserNotificationRule#important}
   */
   readonly important?: boolean | cdktf.IResolvable;
   /**
   * Personal notification rules execute one after another starting from position=0. A new escalation policy created with a position of an existing escalation policy will move the old one (and all following) down on the list.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule#position OncallUserNotificationRule#position}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule#position OncallUserNotificationRule#position}
   */
   readonly position?: number;
   /**
   * The type of notification rule. Can be wait, notify_by_slack, notify_by_msteams, notify_by_sms, notify_by_phone_call, notify_by_telegram, notify_by_email, notify_by_mobile_app, notify_by_mobile_app_critical. NOTE: `notify_by_msteams` is only available for Grafana Cloud customers.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule#type OncallUserNotificationRule#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule#type OncallUserNotificationRule#type}
   */
   readonly type: string;
   /**
   * User ID
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule#user_id OncallUserNotificationRule#user_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule#user_id OncallUserNotificationRule#user_id}
   */
   readonly userId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule grafana_oncall_user_notification_rule}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule grafana_oncall_user_notification_rule}
 */
 export class OncallUserNotificationRule extends cdktf.TerraformResource {
 
@@ -56,7 +56,7 @@ export class OncallUserNotificationRule extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OncallUserNotificationRule resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OncallUserNotificationRule to import
-  * @param importFromId The id of the existing OncallUserNotificationRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OncallUserNotificationRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OncallUserNotificationRule to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -68,7 +68,7 @@ export class OncallUserNotificationRule extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_user_notification_rule grafana_oncall_user_notification_rule} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_user_notification_rule grafana_oncall_user_notification_rule} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -79,7 +79,7 @@ export class OncallUserNotificationRule extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_oncall_user_notification_rule',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

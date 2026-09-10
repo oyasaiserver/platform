@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,23 +10,23 @@ export interface OncallScheduleConfig extends cdktf.TerraformMetaArguments {
   /**
   * Enable overrides via web UI (it will ignore ical_url_overrides).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#enable_web_overrides OncallSchedule#enable_web_overrides}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#enable_web_overrides OncallSchedule#enable_web_overrides}
   */
   readonly enableWebOverrides?: boolean | cdktf.IResolvable;
   /**
   * The URL of external iCal calendar which override primary events.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#ical_url_overrides OncallSchedule#ical_url_overrides}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#ical_url_overrides OncallSchedule#ical_url_overrides}
   */
   readonly icalUrlOverrides?: string;
   /**
   * The URL of the external calendar iCal file.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#ical_url_primary OncallSchedule#ical_url_primary}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#ical_url_primary OncallSchedule#ical_url_primary}
   */
   readonly icalUrlPrimary?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#id OncallSchedule#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#id OncallSchedule#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -35,37 +35,37 @@ export interface OncallScheduleConfig extends cdktf.TerraformMetaArguments {
   /**
   * The schedule's name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#name OncallSchedule#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#name OncallSchedule#name}
   */
   readonly name: string;
   /**
   * The list of ID's of on-call shifts.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#shifts OncallSchedule#shifts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#shifts OncallSchedule#shifts}
   */
   readonly shifts?: string[];
   /**
   * The ID of the OnCall team (using the `grafana_oncall_team` datasource).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#team_id OncallSchedule#team_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#team_id OncallSchedule#team_id}
   */
   readonly teamId?: string;
   /**
   * The schedule's time zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#time_zone OncallSchedule#time_zone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#time_zone OncallSchedule#time_zone}
   */
   readonly timeZone?: string;
   /**
   * The schedule's type. Valid values are `ical`, `calendar`, `web`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#type OncallSchedule#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#type OncallSchedule#type}
   */
   readonly type: string;
   /**
   * slack block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#slack OncallSchedule#slack}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#slack OncallSchedule#slack}
   */
   readonly slack?: OncallScheduleSlack;
 }
@@ -73,13 +73,13 @@ export interface OncallScheduleSlack {
   /**
   * Slack channel id. Reminder about schedule shifts will be directed to this channel in Slack.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#channel_id OncallSchedule#channel_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#channel_id OncallSchedule#channel_id}
   */
   readonly channelId?: string;
   /**
   * Slack user group id. Members of user group will be updated when on-call users change.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#user_group_id OncallSchedule#user_group_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#user_group_id OncallSchedule#user_group_id}
   */
   readonly userGroupId?: string;
 }
@@ -192,7 +192,7 @@ export class OncallScheduleSlackOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule grafana_oncall_schedule}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule grafana_oncall_schedule}
 */
 export class OncallSchedule extends cdktf.TerraformResource {
 
@@ -208,7 +208,7 @@ export class OncallSchedule extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OncallSchedule resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OncallSchedule to import
-  * @param importFromId The id of the existing OncallSchedule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OncallSchedule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OncallSchedule to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -220,7 +220,7 @@ export class OncallSchedule extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_schedule grafana_oncall_schedule} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_schedule grafana_oncall_schedule} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -231,7 +231,7 @@ export class OncallSchedule extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_oncall_schedule',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

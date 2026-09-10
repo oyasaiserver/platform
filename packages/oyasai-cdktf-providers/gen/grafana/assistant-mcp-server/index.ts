@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface AssistantMcpServerConfig extends cdktf.TerraformMetaArguments {
   /**
   * Applications where this resource applies. Valid values: `assistant`, `loop`, `all`. Defaults to all applications when unset.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#applications AssistantMcpServer#applications}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#applications AssistantMcpServer#applications}
   */
   readonly applications?: string[];
   /**
   * Custom HTTP headers sent to the MCP server. Values are write-only and not returned by the API.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#custom_headers AssistantMcpServer#custom_headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#custom_headers AssistantMcpServer#custom_headers}
   */
   readonly customHeaders?: { [key: string]: string };
   /**
   * Optional description.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#description AssistantMcpServer#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#description AssistantMcpServer#description}
   */
   readonly description?: string;
   /**
   * Whether the resource is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#enabled AssistantMcpServer#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#enabled AssistantMcpServer#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The MCP server integration name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#name AssistantMcpServer#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#name AssistantMcpServer#name}
   */
   readonly name: string;
   /**
   * Whether the resource is visible to the whole tenant (`tenant`) or only the creating user (`user`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#scope AssistantMcpServer#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#scope AssistantMcpServer#scope}
   */
   readonly scope: string;
   /**
   * configuration block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#configuration AssistantMcpServer#configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#configuration AssistantMcpServer#configuration}
   */
   readonly configuration?: AssistantMcpServerConfiguration;
 }
@@ -54,25 +54,25 @@ export interface AssistantMcpServerConfiguration {
   /**
   * Built-in provider ID (e.g. cursor). When set, tools are provided locally.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#builtin_id AssistantMcpServer#builtin_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#builtin_id AssistantMcpServer#builtin_id}
   */
   readonly builtinId?: string;
   /**
   * Tool approval policies keyed by tool name (`auto_approve`, `always_ask`, or empty for default).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#tool_approval_policies AssistantMcpServer#tool_approval_policies}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#tool_approval_policies AssistantMcpServer#tool_approval_policies}
   */
   readonly toolApprovalPolicies?: { [key: string]: string };
   /**
   * Tool preferences keyed by tool name (`enabled` or `disabled`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#tool_preferences AssistantMcpServer#tool_preferences}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#tool_preferences AssistantMcpServer#tool_preferences}
   */
   readonly toolPreferences?: { [key: string]: string };
   /**
   * MCP server URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#url AssistantMcpServer#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#url AssistantMcpServer#url}
   */
   readonly url?: string;
 }
@@ -253,7 +253,7 @@ export class AssistantMcpServerConfigurationOutputReference extends cdktf.Comple
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server grafana_assistant_mcp_server}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server grafana_assistant_mcp_server}
 */
 export class AssistantMcpServer extends cdktf.TerraformResource {
 
@@ -269,7 +269,7 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssistantMcpServer resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssistantMcpServer to import
-  * @param importFromId The id of the existing AssistantMcpServer that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssistantMcpServer that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssistantMcpServer to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -281,7 +281,7 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_mcp_server grafana_assistant_mcp_server} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server grafana_assistant_mcp_server} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -292,7 +292,7 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_assistant_mcp_server',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

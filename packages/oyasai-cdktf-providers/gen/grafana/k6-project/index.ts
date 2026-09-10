@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface K6ProjectConfig extends cdktf.TerraformMetaArguments {
   /**
   * Human-friendly identifier of the project.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project#name K6Project#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project#name K6Project#name}
   */
   readonly name: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project grafana_k6_project}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project grafana_k6_project}
 */
 export class K6Project extends cdktf.TerraformResource {
 
@@ -32,7 +32,7 @@ export class K6Project extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a K6Project resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the K6Project to import
-  * @param importFromId The id of the existing K6Project that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing K6Project that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the K6Project to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class K6Project extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project grafana_k6_project} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project grafana_k6_project} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class K6Project extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_k6_project',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collectors
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collectors
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -107,7 +107,7 @@ export class DataGrafanaFleetManagementCollectorsCollectorsList extends cdktf.Co
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collectors grafana_fleet_management_collectors}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collectors grafana_fleet_management_collectors}
 */
 export class DataGrafanaFleetManagementCollectors extends cdktf.TerraformDataSource {
 
@@ -123,7 +123,7 @@ export class DataGrafanaFleetManagementCollectors extends cdktf.TerraformDataSou
   * Generates CDKTF code for importing a DataGrafanaFleetManagementCollectors resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaFleetManagementCollectors to import
-  * @param importFromId The id of the existing DataGrafanaFleetManagementCollectors that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collectors#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaFleetManagementCollectors that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collectors#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaFleetManagementCollectors to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -135,7 +135,7 @@ export class DataGrafanaFleetManagementCollectors extends cdktf.TerraformDataSou
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collectors grafana_fleet_management_collectors} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collectors grafana_fleet_management_collectors} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -146,7 +146,7 @@ export class DataGrafanaFleetManagementCollectors extends cdktf.TerraformDataSou
       terraformResourceType: 'grafana_fleet_management_collectors',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

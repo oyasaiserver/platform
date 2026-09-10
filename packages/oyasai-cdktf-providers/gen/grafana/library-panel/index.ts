@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface LibraryPanelConfig extends cdktf.TerraformMetaArguments {
   /**
   * Unique ID (UID) of the folder containing the library panel.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel#folder_uid LibraryPanel#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel#folder_uid LibraryPanel#folder_uid}
   */
   readonly folderUid?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel#id LibraryPanel#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel#id LibraryPanel#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,31 +23,31 @@ export interface LibraryPanelConfig extends cdktf.TerraformMetaArguments {
   /**
   * The JSON model for the library panel.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel#model_json LibraryPanel#model_json}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel#model_json LibraryPanel#model_json}
   */
   readonly modelJson: string;
   /**
   * Name of the library panel.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel#name LibraryPanel#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel#name LibraryPanel#name}
   */
   readonly name: string;
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel#org_id LibraryPanel#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel#org_id LibraryPanel#org_id}
   */
   readonly orgId?: string;
   /**
   * The unique identifier (UID) of a library panel uniquely identifies library panels between multiple Grafana installs. It’s automatically generated unless you specify it during library panel creation.The UID provides consistent URLs for accessing library panels and when syncing library panels between multiple Grafana installs.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel#uid LibraryPanel#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel#uid LibraryPanel#uid}
   */
   readonly uid?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel grafana_library_panel}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel grafana_library_panel}
 */
 export class LibraryPanel extends cdktf.TerraformResource {
 
@@ -63,7 +63,7 @@ export class LibraryPanel extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a LibraryPanel resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the LibraryPanel to import
-  * @param importFromId The id of the existing LibraryPanel that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing LibraryPanel that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the LibraryPanel to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -75,7 +75,7 @@ export class LibraryPanel extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/library_panel grafana_library_panel} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/library_panel grafana_library_panel} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -86,7 +86,7 @@ export class LibraryPanel extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_library_panel',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

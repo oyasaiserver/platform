@@ -12,6 +12,7 @@ Object.defineProperty(exports, 'appConnectionCircleci', { get: function () { ret
 Object.defineProperty(exports, 'appConnectionCloudflare', { get: function () { return require('./app-connection-cloudflare'); } });
 Object.defineProperty(exports, 'appConnectionDatabricks', { get: function () { return require('./app-connection-databricks'); } });
 Object.defineProperty(exports, 'appConnectionDatadog', { get: function () { return require('./app-connection-datadog'); } });
+Object.defineProperty(exports, 'appConnectionDigicert', { get: function () { return require('./app-connection-digicert'); } });
 Object.defineProperty(exports, 'appConnectionFlyio', { get: function () { return require('./app-connection-flyio'); } });
 Object.defineProperty(exports, 'appConnectionGcp', { get: function () { return require('./app-connection-gcp'); } });
 Object.defineProperty(exports, 'appConnectionGithub', { get: function () { return require('./app-connection-github'); } });
@@ -35,6 +36,7 @@ Object.defineProperty(exports, 'certManagerCertificatePolicy', { get: function (
 Object.defineProperty(exports, 'certManagerCertificateProfile', { get: function () { return require('./cert-manager-certificate-profile'); } });
 Object.defineProperty(exports, 'certManagerExternalCaAcme', { get: function () { return require('./cert-manager-external-ca-acme'); } });
 Object.defineProperty(exports, 'certManagerExternalCaAdcs', { get: function () { return require('./cert-manager-external-ca-adcs'); } });
+Object.defineProperty(exports, 'certManagerExternalCaDigicert', { get: function () { return require('./cert-manager-external-ca-digicert'); } });
 Object.defineProperty(exports, 'certManagerGroup', { get: function () { return require('./cert-manager-group'); } });
 Object.defineProperty(exports, 'certManagerIdentity', { get: function () { return require('./cert-manager-identity'); } });
 Object.defineProperty(exports, 'certManagerInternalCa', { get: function () { return require('./cert-manager-internal-ca'); } });
@@ -81,8 +83,10 @@ Object.defineProperty(exports, 'secret', { get: function () { return require('./
 Object.defineProperty(exports, 'secretApprovalPolicy', { get: function () { return require('./secret-approval-policy'); } });
 Object.defineProperty(exports, 'secretFolder', { get: function () { return require('./secret-folder'); } });
 Object.defineProperty(exports, 'secretImport', { get: function () { return require('./secret-import'); } });
+Object.defineProperty(exports, 'secretRotationAuth0ClientSecret', { get: function () { return require('./secret-rotation-auth0-client-secret'); } });
 Object.defineProperty(exports, 'secretRotationAwsIamUserSecret', { get: function () { return require('./secret-rotation-aws-iam-user-secret'); } });
 Object.defineProperty(exports, 'secretRotationAzureClientSecret', { get: function () { return require('./secret-rotation-azure-client-secret'); } });
+Object.defineProperty(exports, 'secretRotationDatadogApiKey', { get: function () { return require('./secret-rotation-datadog-api-key'); } });
 Object.defineProperty(exports, 'secretRotationLdapPassword', { get: function () { return require('./secret-rotation-ldap-password'); } });
 Object.defineProperty(exports, 'secretRotationMssqlCredentials', { get: function () { return require('./secret-rotation-mssql-credentials'); } });
 Object.defineProperty(exports, 'secretRotationMysqlCredentials', { get: function () { return require('./secret-rotation-mysql-credentials'); } });

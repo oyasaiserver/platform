@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface AppsGenericResourceConfig extends cdktf.TerraformMetaArguments 
   /**
   * Whether the resource can be edited from the Grafana UI. Defaults to `false` — Terraform-managed resources are locked from UI edits unless you opt in. Set to `true` to allow UI modifications; not supported by all resources.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource#allow_ui_updates AppsGenericResource#allow_ui_updates}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource#allow_ui_updates AppsGenericResource#allow_ui_updates}
   */
   readonly allowUiUpdates?: boolean | cdktf.IResolvable;
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource#manager_identity AppsGenericResource#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource#manager_identity AppsGenericResource#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Kubernetes-style manifest, typically from `yamldecode(file(...))` or `jsondecode(file(...))`. Must contain `apiVersion`, `kind`, `metadata` (with `name` or `uid`), and `spec`. Use HCL `merge()` to inject Terraform variables. If you start from an exported manifest, remove noisy server-managed metadata such as `resourceVersion`, `generation`, and `managedFields`, or import the resource first and use the normalized state shape. If `metadata.namespace` is set, it must match the namespace selected from provider `org_id` or `stack_id` / autodiscovery. Top-level manifest fields are limited to `apiVersion`, `kind`, `metadata`, `spec`, and the ignored `status` field. The `secure` field must not be set here; use the top-level `secure` argument instead.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource#manifest AppsGenericResource#manifest}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource#manifest AppsGenericResource#manifest}
   */
   readonly manifest?: { [key: string]: any };
   /**
   * Write-only secure values map. Each key must contain exactly one of `create` or `name`; empty objects are invalid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource#secure AppsGenericResource#secure}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource#secure AppsGenericResource#secure}
   */
   readonly secure?: { [key: string]: any };
   /**
   * Set this to 1 when using `secure`, then increment it whenever you want Terraform to re-apply secure values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource#secure_version AppsGenericResource#secure_version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource#secure_version AppsGenericResource#secure_version}
   */
   readonly secureVersion?: number;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource grafana_apps_generic_resource}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource grafana_apps_generic_resource}
 */
 export class AppsGenericResource extends cdktf.TerraformResource {
 
@@ -56,7 +56,7 @@ export class AppsGenericResource extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsGenericResource resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsGenericResource to import
-  * @param importFromId The id of the existing AppsGenericResource that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsGenericResource that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsGenericResource to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -68,7 +68,7 @@ export class AppsGenericResource extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_generic_resource grafana_apps_generic_resource} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_generic_resource grafana_apps_generic_resource} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -79,7 +79,7 @@ export class AppsGenericResource extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_generic_resource',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

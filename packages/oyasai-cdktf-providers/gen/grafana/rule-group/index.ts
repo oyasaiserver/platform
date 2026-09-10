@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface RuleGroupConfig extends cdktf.TerraformMetaArguments {
   /**
   * Allow modifying the rule group from other sources than Terraform or the Grafana API. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#disable_provenance RuleGroup#disable_provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#disable_provenance RuleGroup#disable_provenance}
   */
   readonly disableProvenance?: boolean | cdktf.IResolvable;
   /**
   * The UID of the folder that the group belongs to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#folder_uid RuleGroup#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#folder_uid RuleGroup#folder_uid}
   */
   readonly folderUid: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#id RuleGroup#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#id RuleGroup#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -29,25 +29,25 @@ export interface RuleGroupConfig extends cdktf.TerraformMetaArguments {
   /**
   * The interval, in seconds, at which all rules in the group are evaluated. If a group contains many rules, the rules are evaluated sequentially.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#interval_seconds RuleGroup#interval_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#interval_seconds RuleGroup#interval_seconds}
   */
   readonly intervalSeconds: number;
   /**
   * The name of the rule group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#name RuleGroup#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#name RuleGroup#name}
   */
   readonly name: string;
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#org_id RuleGroup#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#org_id RuleGroup#org_id}
   */
   readonly orgId?: string;
   /**
   * rule block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#rule RuleGroup#rule}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#rule RuleGroup#rule}
   */
   readonly rule: RuleGroupRule[] | cdktf.IResolvable;
 }
@@ -55,13 +55,13 @@ export interface RuleGroupRuleDataRelativeTimeRange {
   /**
   * The number of seconds in the past, relative to when the rule is evaluated, at which the time range begins.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#from RuleGroup#from}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#from RuleGroup#from}
   */
   readonly from: number;
   /**
   * The number of seconds in the past, relative to when the rule is evaluated, at which the time range ends.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#to RuleGroup#to}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#to RuleGroup#to}
   */
   readonly to: number;
 }
@@ -170,31 +170,31 @@ export interface RuleGroupRuleData {
   /**
   * The UID of the datasource being queried, or "-100" if this stage is an expression stage.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#datasource_uid RuleGroup#datasource_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#datasource_uid RuleGroup#datasource_uid}
   */
   readonly datasourceUid: string;
   /**
   * Custom JSON data to send to the specified datasource when querying.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#model RuleGroup#model}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#model RuleGroup#model}
   */
   readonly model: string;
   /**
   * An optional identifier for the type of query being executed. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#query_type RuleGroup#query_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#query_type RuleGroup#query_type}
   */
   readonly queryType?: string;
   /**
   * A unique string to identify this query stage within a rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#ref_id RuleGroup#ref_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#ref_id RuleGroup#ref_id}
   */
   readonly refId: string;
   /**
   * relative_time_range block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#relative_time_range RuleGroup#relative_time_range}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#relative_time_range RuleGroup#relative_time_range}
   */
   readonly relativeTimeRange: RuleGroupRuleDataRelativeTimeRange;
 }
@@ -416,43 +416,43 @@ export interface RuleGroupRuleNotificationSettings {
   /**
   * A list of time interval names to apply to alerts that match this policy to suppress them unless they are sent at the specified time. Supported in Grafana 12.1.0 and later
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#active_timings RuleGroup#active_timings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#active_timings RuleGroup#active_timings}
   */
   readonly activeTimings?: string[];
   /**
   * The contact point to route notifications that match this rule to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#contact_point RuleGroup#contact_point}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#contact_point RuleGroup#contact_point}
   */
   readonly contactPoint: string;
   /**
   * A list of alert labels to group alerts into notifications by. Use the special label `...` to group alerts by all labels, effectively disabling grouping. If empty, no grouping is used. If specified, requires labels 'alertname' and 'grafana_folder' to be included.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#group_by RuleGroup#group_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#group_by RuleGroup#group_by}
   */
   readonly groupBy?: string[];
   /**
   * Minimum time interval between two notifications for the same group. Default is 5 minutes.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#group_interval RuleGroup#group_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#group_interval RuleGroup#group_interval}
   */
   readonly groupInterval?: string;
   /**
   * Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#group_wait RuleGroup#group_wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#group_wait RuleGroup#group_wait}
   */
   readonly groupWait?: string;
   /**
   * A list of mute timing names to apply to alerts that match this policy.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#mute_timings RuleGroup#mute_timings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#mute_timings RuleGroup#mute_timings}
   */
   readonly muteTimings?: string[];
   /**
   * Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#repeat_interval RuleGroup#repeat_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#repeat_interval RuleGroup#repeat_interval}
   */
   readonly repeatInterval?: string;
 }
@@ -709,19 +709,19 @@ export interface RuleGroupRuleRecord {
   /**
   * The ref id of the query node in the data field to use as the source of the metric.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#from RuleGroup#from}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#from RuleGroup#from}
   */
   readonly from: string;
   /**
   * The name of the metric to write to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#metric RuleGroup#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#metric RuleGroup#metric}
   */
   readonly metric: string;
   /**
   * The UID of the datasource to write the metric to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#target_datasource_uid RuleGroup#target_datasource_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#target_datasource_uid RuleGroup#target_datasource_uid}
   */
   readonly targetDatasourceUid?: string;
 }
@@ -859,85 +859,85 @@ export interface RuleGroupRule {
   /**
   * Key-value pairs of metadata to attach to the alert rule. They add additional information, such as a `summary` or `runbook_url`, to help identify and investigate alerts. The `__dashboardUid__` and `__panelId__` annotations, which link alerts to a panel, must be set together. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#annotations RuleGroup#annotations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#annotations RuleGroup#annotations}
   */
   readonly annotations?: { [key: string]: string };
   /**
   * The `ref_id` of the query node in the `data` field to use as the alert condition.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#condition RuleGroup#condition}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#condition RuleGroup#condition}
   */
   readonly condition?: string;
   /**
   * Describes what state to enter when the rule's query is invalid and the rule cannot be executed. Options are OK, Error, KeepLast, and Alerting.  Defaults to Alerting if not set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#exec_err_state RuleGroup#exec_err_state}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#exec_err_state RuleGroup#exec_err_state}
   */
   readonly execErrState?: string;
   /**
   * The amount of time for which the rule must be breached for the rule to be considered to be Firing. Before this time has elapsed, the rule is only considered to be Pending. Defaults to `0`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#for RuleGroup#for}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#for RuleGroup#for}
   */
   readonly for?: string;
   /**
   * Sets whether the alert should be paused or not. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#is_paused RuleGroup#is_paused}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#is_paused RuleGroup#is_paused}
   */
   readonly isPaused?: boolean | cdktf.IResolvable;
   /**
   * The amount of time for which the rule will considered to be Recovering after initially Firing. Before this time has elapsed, the rule will continue to fire once it's been triggered.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#keep_firing_for RuleGroup#keep_firing_for}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#keep_firing_for RuleGroup#keep_firing_for}
   */
   readonly keepFiringFor?: string;
   /**
   * Key-value pairs to attach to the alert rule that can be used in matching, grouping, and routing. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#labels RuleGroup#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#labels RuleGroup#labels}
   */
   readonly labels?: { [key: string]: string };
   /**
   * The number of missing series evaluations that must occur before the rule is considered to be resolved.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#missing_series_evals_to_resolve RuleGroup#missing_series_evals_to_resolve}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#missing_series_evals_to_resolve RuleGroup#missing_series_evals_to_resolve}
   */
   readonly missingSeriesEvalsToResolve?: number;
   /**
   * The name of the alert rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#name RuleGroup#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#name RuleGroup#name}
   */
   readonly name: string;
   /**
   * Describes what state to enter when the rule's query returns No Data. Options are OK, NoData, KeepLast, and Alerting. Defaults to NoData if not set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#no_data_state RuleGroup#no_data_state}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#no_data_state RuleGroup#no_data_state}
   */
   readonly noDataState?: string;
   /**
   * The unique identifier of the alert rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#uid RuleGroup#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#uid RuleGroup#uid}
   */
   readonly uid?: string;
   /**
   * data block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#data RuleGroup#data}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#data RuleGroup#data}
   */
   readonly data: RuleGroupRuleData[] | cdktf.IResolvable;
   /**
   * notification_settings block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#notification_settings RuleGroup#notification_settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#notification_settings RuleGroup#notification_settings}
   */
   readonly notificationSettings?: RuleGroupRuleNotificationSettings;
   /**
   * record block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#record RuleGroup#record}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#record RuleGroup#record}
   */
   readonly record?: RuleGroupRuleRecord;
 }
@@ -1424,7 +1424,7 @@ export class RuleGroupRuleList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group grafana_rule_group}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group grafana_rule_group}
 */
 export class RuleGroup extends cdktf.TerraformResource {
 
@@ -1440,7 +1440,7 @@ export class RuleGroup extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a RuleGroup resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the RuleGroup to import
-  * @param importFromId The id of the existing RuleGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing RuleGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the RuleGroup to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1452,7 +1452,7 @@ export class RuleGroup extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/rule_group grafana_rule_group} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/rule_group grafana_rule_group} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1463,7 +1463,7 @@ export class RuleGroup extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_rule_group',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

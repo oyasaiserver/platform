@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,47 +10,47 @@ export interface MachineLearningHolidayConfig extends cdktf.TerraformMetaArgumen
   /**
   * A description of the holiday.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#description MachineLearningHoliday#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#description MachineLearningHoliday#description}
   */
   readonly description?: string;
   /**
   * The timezone to use for events in the iCal file pointed to by ical_url.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#ical_timezone MachineLearningHoliday#ical_timezone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#ical_timezone MachineLearningHoliday#ical_timezone}
   */
   readonly icalTimezone?: string;
   /**
   * A URL to an iCal file containing all occurrences of the holiday.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#ical_url MachineLearningHoliday#ical_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#ical_url MachineLearningHoliday#ical_url}
   */
   readonly icalUrl?: string;
   /**
   * The name of the holiday.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#name MachineLearningHoliday#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#name MachineLearningHoliday#name}
   */
   readonly name: string;
   /**
   * custom_periods block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#custom_periods MachineLearningHoliday#custom_periods}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#custom_periods MachineLearningHoliday#custom_periods}
   */
   readonly customPeriods?: MachineLearningHolidayCustomPeriods[] | cdktf.IResolvable;
 }
 export interface MachineLearningHolidayCustomPeriods {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#end_time MachineLearningHoliday#end_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#end_time MachineLearningHoliday#end_time}
   */
   readonly endTime: string;
   /**
   * The name of the custom period.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#name MachineLearningHoliday#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#name MachineLearningHoliday#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#start_time MachineLearningHoliday#start_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#start_time MachineLearningHoliday#start_time}
   */
   readonly startTime: string;
 }
@@ -218,7 +218,7 @@ export class MachineLearningHolidayCustomPeriodsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday grafana_machine_learning_holiday}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday grafana_machine_learning_holiday}
 */
 export class MachineLearningHoliday extends cdktf.TerraformResource {
 
@@ -234,7 +234,7 @@ export class MachineLearningHoliday extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a MachineLearningHoliday resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the MachineLearningHoliday to import
-  * @param importFromId The id of the existing MachineLearningHoliday that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing MachineLearningHoliday that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the MachineLearningHoliday to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -246,7 +246,7 @@ export class MachineLearningHoliday extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_holiday grafana_machine_learning_holiday} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_holiday grafana_machine_learning_holiday} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -257,7 +257,7 @@ export class MachineLearningHoliday extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_machine_learning_holiday',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

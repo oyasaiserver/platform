@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface ContactPointConfig extends cdktf.TerraformMetaArguments {
   /**
   * Allow modifying the contact point from other sources than Terraform or the Grafana API. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_provenance ContactPoint#disable_provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_provenance ContactPoint#disable_provenance}
   */
   readonly disableProvenance?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#id ContactPoint#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#id ContactPoint#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,145 +23,145 @@ export interface ContactPointConfig extends cdktf.TerraformMetaArguments {
   /**
   * The name of the contact point.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#name ContactPoint#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#name ContactPoint#name}
   */
   readonly name: string;
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#org_id ContactPoint#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#org_id ContactPoint#org_id}
   */
   readonly orgId?: string;
   /**
   * alertmanager block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#alertmanager ContactPoint#alertmanager}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#alertmanager ContactPoint#alertmanager}
   */
   readonly alertmanager?: ContactPointAlertmanager[] | cdktf.IResolvable;
   /**
   * dingding block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#dingding ContactPoint#dingding}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#dingding ContactPoint#dingding}
   */
   readonly dingding?: ContactPointDingding[] | cdktf.IResolvable;
   /**
   * discord block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#discord ContactPoint#discord}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#discord ContactPoint#discord}
   */
   readonly discord?: ContactPointDiscord[] | cdktf.IResolvable;
   /**
   * email block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#email ContactPoint#email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#email ContactPoint#email}
   */
   readonly email?: ContactPointEmail[] | cdktf.IResolvable;
   /**
   * googlechat block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#googlechat ContactPoint#googlechat}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#googlechat ContactPoint#googlechat}
   */
   readonly googlechat?: ContactPointGooglechat[] | cdktf.IResolvable;
   /**
   * jira block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#jira ContactPoint#jira}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#jira ContactPoint#jira}
   */
   readonly jira?: ContactPointJira[] | cdktf.IResolvable;
   /**
   * kafka block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#kafka ContactPoint#kafka}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#kafka ContactPoint#kafka}
   */
   readonly kafka?: ContactPointKafka[] | cdktf.IResolvable;
   /**
   * line block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#line ContactPoint#line}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#line ContactPoint#line}
   */
   readonly line?: ContactPointLine[] | cdktf.IResolvable;
   /**
   * oncall block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#oncall ContactPoint#oncall}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#oncall ContactPoint#oncall}
   */
   readonly oncall?: ContactPointOncall[] | cdktf.IResolvable;
   /**
   * opsgenie block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#opsgenie ContactPoint#opsgenie}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#opsgenie ContactPoint#opsgenie}
   */
   readonly opsgenie?: ContactPointOpsgenie[] | cdktf.IResolvable;
   /**
   * pagerduty block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#pagerduty ContactPoint#pagerduty}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#pagerduty ContactPoint#pagerduty}
   */
   readonly pagerduty?: ContactPointPagerduty[] | cdktf.IResolvable;
   /**
   * pushover block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#pushover ContactPoint#pushover}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#pushover ContactPoint#pushover}
   */
   readonly pushover?: ContactPointPushover[] | cdktf.IResolvable;
   /**
   * sensugo block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#sensugo ContactPoint#sensugo}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#sensugo ContactPoint#sensugo}
   */
   readonly sensugo?: ContactPointSensugo[] | cdktf.IResolvable;
   /**
   * slack block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#slack ContactPoint#slack}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#slack ContactPoint#slack}
   */
   readonly slack?: ContactPointSlack[] | cdktf.IResolvable;
   /**
   * sns block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#sns ContactPoint#sns}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#sns ContactPoint#sns}
   */
   readonly sns?: ContactPointSns[] | cdktf.IResolvable;
   /**
   * teams block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#teams ContactPoint#teams}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#teams ContactPoint#teams}
   */
   readonly teams?: ContactPointTeams[] | cdktf.IResolvable;
   /**
   * telegram block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#telegram ContactPoint#telegram}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#telegram ContactPoint#telegram}
   */
   readonly telegram?: ContactPointTelegram[] | cdktf.IResolvable;
   /**
   * threema block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#threema ContactPoint#threema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#threema ContactPoint#threema}
   */
   readonly threema?: ContactPointThreema[] | cdktf.IResolvable;
   /**
   * victorops block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#victorops ContactPoint#victorops}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#victorops ContactPoint#victorops}
   */
   readonly victorops?: ContactPointVictorops[] | cdktf.IResolvable;
   /**
   * webex block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#webex ContactPoint#webex}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#webex ContactPoint#webex}
   */
   readonly webex?: ContactPointWebex[] | cdktf.IResolvable;
   /**
   * webhook block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#webhook ContactPoint#webhook}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#webhook ContactPoint#webhook}
   */
   readonly webhook?: ContactPointWebhook[] | cdktf.IResolvable;
   /**
   * wecom block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#wecom ContactPoint#wecom}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#wecom ContactPoint#wecom}
   */
   readonly wecom?: ContactPointWecom[] | cdktf.IResolvable;
 }
@@ -169,31 +169,31 @@ export interface ContactPointAlertmanager {
   /**
   * The password component of the basic auth credentials to use.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#basic_auth_password ContactPoint#basic_auth_password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#basic_auth_password ContactPoint#basic_auth_password}
   */
   readonly basicAuthPassword?: string;
   /**
   * The username component of the basic auth credentials to use.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#basic_auth_user ContactPoint#basic_auth_user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#basic_auth_user ContactPoint#basic_auth_user}
   */
   readonly basicAuthUser?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The URL of the Alertmanager instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
 }
@@ -429,37 +429,37 @@ export interface ContactPointDingding {
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The templated content of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * The format of message to send - either 'link' or 'actionCard'
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message_type ContactPoint#message_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message_type ContactPoint#message_type}
   */
   readonly messageType?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The templated title of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * The DingDing webhook URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
 }
@@ -724,43 +724,43 @@ export interface ContactPointDiscord {
   /**
   * The URL of a custom avatar image to use. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#avatar_url ContactPoint#avatar_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#avatar_url ContactPoint#avatar_url}
   */
   readonly avatarUrl?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The templated content of the message. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The templated content of the title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * The discord webhook URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
   /**
   * Whether to use the bot account's plain username instead of "Grafana." Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#use_discord_username ContactPoint#use_discord_username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#use_discord_username ContactPoint#use_discord_username}
   */
   readonly useDiscordUsername?: boolean | cdktf.IResolvable;
 }
@@ -1054,37 +1054,37 @@ export interface ContactPointEmail {
   /**
   * The addresses to send emails to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#addresses ContactPoint#addresses}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#addresses ContactPoint#addresses}
   */
   readonly addresses: string[];
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The templated content of the email. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * Whether to send a single email CC'ing all addresses, rather than a separate email to each address. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#single_email ContactPoint#single_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#single_email ContactPoint#single_email}
   */
   readonly singleEmail?: boolean | cdktf.IResolvable;
   /**
   * The templated subject line of the email. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#subject ContactPoint#subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#subject ContactPoint#subject}
   */
   readonly subject?: string;
 }
@@ -1349,43 +1349,43 @@ export interface ContactPointGooglechat {
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * Whether to hide the Open URL button in the message. This feature requires Grafana 12.4.0 or later.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#hide_open_button ContactPoint#hide_open_button}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#hide_open_button ContactPoint#hide_open_button}
   */
   readonly hideOpenButton?: boolean | cdktf.IResolvable;
   /**
   * Whether to hide the version info in the message. This feature requires Grafana 12.4.0 or later. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#hide_version_info ContactPoint#hide_version_info}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#hide_version_info ContactPoint#hide_version_info}
   */
   readonly hideVersionInfo?: boolean | cdktf.IResolvable;
   /**
   * The templated content of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The templated content of the title.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * The Google Chat webhook URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
 }
@@ -1679,109 +1679,109 @@ export interface ContactPointJira {
   /**
   * Personal Access Token that is used as a bearer authorization header.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#api_token ContactPoint#api_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#api_token ContactPoint#api_token}
   */
   readonly apiToken?: string;
   /**
   * The URL of the Jira REST API (v2 or v3).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#api_url ContactPoint#api_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#api_url ContactPoint#api_url}
   */
   readonly apiUrl: string;
   /**
   * Custom field ID for storing deduplication keys. Must be numeric.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#dedup_key_field ContactPoint#dedup_key_field}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#dedup_key_field ContactPoint#dedup_key_field}
   */
   readonly dedupKeyField?: string;
   /**
   * The templated description of the Jira issue. Maximum length is 32767 characters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#description ContactPoint#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#description ContactPoint#description}
   */
   readonly description?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * Custom Jira issue fields.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#fields ContactPoint#fields}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#fields ContactPoint#fields}
   */
   readonly fields?: { [key: string]: string };
   /**
   * The type of issue to create (e.g., Bug, Task, Story).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#issue_type ContactPoint#issue_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#issue_type ContactPoint#issue_type}
   */
   readonly issueType: string;
   /**
   * Labels to assign to the Jira issue.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#labels ContactPoint#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#labels ContactPoint#labels}
   */
   readonly labels?: string[];
   /**
   * Password to use for Jira authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#password ContactPoint#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#password ContactPoint#password}
   */
   readonly password?: string;
   /**
   * The priority level of the issue (e.g., High, Medium, Low).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#priority ContactPoint#priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#priority ContactPoint#priority}
   */
   readonly priority?: string;
   /**
   * The project key in Jira.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#project ContactPoint#project}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#project ContactPoint#project}
   */
   readonly project: string;
   /**
   * Duration to consider reopening issues (e.g., '10m').
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#reopen_duration ContactPoint#reopen_duration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#reopen_duration ContactPoint#reopen_duration}
   */
   readonly reopenDuration?: string;
   /**
   * The name of the workflow transition to reopen an issue.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#reopen_transition ContactPoint#reopen_transition}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#reopen_transition ContactPoint#reopen_transition}
   */
   readonly reopenTransition?: string;
   /**
   * The name of the workflow transition to resolve an issue.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#resolve_transition ContactPoint#resolve_transition}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#resolve_transition ContactPoint#resolve_transition}
   */
   readonly resolveTransition?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The templated summary of the Jira issue. Maximum length is 255 characters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#summary ContactPoint#summary}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#summary ContactPoint#summary}
   */
   readonly summary?: string;
   /**
   * Username to use for Jira authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#user ContactPoint#user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#user ContactPoint#user}
   */
   readonly user?: string;
   /**
   * Resolution status to exclude from reopening/updating.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#wont_fix_resolution ContactPoint#wont_fix_resolution}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#wont_fix_resolution ContactPoint#wont_fix_resolution}
   */
   readonly wontFixResolution?: string;
 }
@@ -2388,61 +2388,61 @@ export interface ContactPointKafka {
   /**
   * The API version to use when contacting the Kafka REST Server. Supported: v2 (default) and v3. Defaults to `v2`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#api_version ContactPoint#api_version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#api_version ContactPoint#api_version}
   */
   readonly apiVersion?: string;
   /**
   * The Id of cluster to use when contacting the Kafka REST Server. Required api_version to be 'v3'
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#cluster_id ContactPoint#cluster_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#cluster_id ContactPoint#cluster_id}
   */
   readonly clusterId?: string;
   /**
   * The templated description of the Kafka message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#description ContactPoint#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#description ContactPoint#description}
   */
   readonly description?: string;
   /**
   * The templated details to include with the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#details ContactPoint#details}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#details ContactPoint#details}
   */
   readonly details?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The password to use when making a call to the Kafka REST Proxy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#password ContactPoint#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#password ContactPoint#password}
   */
   readonly password?: string;
   /**
   * The URL of the Kafka REST proxy to send requests to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#rest_proxy_url ContactPoint#rest_proxy_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#rest_proxy_url ContactPoint#rest_proxy_url}
   */
   readonly restProxyUrl: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The name of the Kafka topic to publish to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#topic ContactPoint#topic}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#topic ContactPoint#topic}
   */
   readonly topic: string;
   /**
   * The user name to use when making a call to the Kafka REST Proxy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#username ContactPoint#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#username ContactPoint#username}
   */
   readonly username?: string;
 }
@@ -2820,31 +2820,31 @@ export interface ContactPointLine {
   /**
   * The templated description of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#description ContactPoint#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#description ContactPoint#description}
   */
   readonly description?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The templated title of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * The bearer token used to authorize the client.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#token ContactPoint#token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#token ContactPoint#token}
   */
   readonly token: string;
 }
@@ -3080,67 +3080,67 @@ export interface ContactPointOncall {
   /**
   * Allows a custom authorization scheme - attaches an auth header with this value. Do not use in conjunction with basic auth parameters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#authorization_credentials ContactPoint#authorization_credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#authorization_credentials ContactPoint#authorization_credentials}
   */
   readonly authorizationCredentials?: string;
   /**
   * Allows a custom authorization scheme - attaches an auth header with this name. Do not use in conjunction with basic auth parameters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#authorization_scheme ContactPoint#authorization_scheme}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#authorization_scheme ContactPoint#authorization_scheme}
   */
   readonly authorizationScheme?: string;
   /**
   * The username to use in basic auth headers attached to the request. If omitted, basic auth will not be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#basic_auth_password ContactPoint#basic_auth_password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#basic_auth_password ContactPoint#basic_auth_password}
   */
   readonly basicAuthPassword?: string;
   /**
   * The username to use in basic auth headers attached to the request. If omitted, basic auth will not be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#basic_auth_user ContactPoint#basic_auth_user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#basic_auth_user ContactPoint#basic_auth_user}
   */
   readonly basicAuthUser?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The HTTP method to use in the request. Defaults to `POST`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#http_method ContactPoint#http_method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#http_method ContactPoint#http_method}
   */
   readonly httpMethod?: string;
   /**
   * The maximum number of alerts to send in a single request. This can be helpful in limiting the size of the request body. The default is 0, which indicates no limit.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#max_alerts ContactPoint#max_alerts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#max_alerts ContactPoint#max_alerts}
   */
   readonly maxAlerts?: number;
   /**
   * Custom message. You can use template variables.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * Templated title of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * The URL to send webhook requests to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
 }
@@ -3550,7 +3550,7 @@ export interface ContactPointOpsgenieResponders {
   /**
   * ID of the responder. Must be specified if name and username are empty.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#id ContactPoint#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#id ContactPoint#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -3559,19 +3559,19 @@ export interface ContactPointOpsgenieResponders {
   /**
   * Name of the responder. Must be specified if username and id are empty.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#name ContactPoint#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#name ContactPoint#name}
   */
   readonly name?: string;
   /**
   * Type of the responder. Supported: team, teams, user, escalation, schedule or a template that is expanded to one of these values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#type ContactPoint#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#type ContactPoint#type}
   */
   readonly type: string;
   /**
   * User name of the responder. Must be specified if name and id are empty.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#username ContactPoint#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#username ContactPoint#username}
   */
   readonly username?: string;
 }
@@ -3773,61 +3773,61 @@ export interface ContactPointOpsgenie {
   /**
   * The OpsGenie API key to use.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#api_key ContactPoint#api_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#api_key ContactPoint#api_key}
   */
   readonly apiKey: string;
   /**
   * Whether to auto-close alerts in OpsGenie when they resolve in the Alertmanager.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#auto_close ContactPoint#auto_close}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#auto_close ContactPoint#auto_close}
   */
   readonly autoClose?: boolean | cdktf.IResolvable;
   /**
   * A templated high-level description to use for the alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#description ContactPoint#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#description ContactPoint#description}
   */
   readonly description?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The templated content of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * Whether to allow the alert priority to be configured via the value of the `og_priority` annotation on the alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#override_priority ContactPoint#override_priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#override_priority ContactPoint#override_priority}
   */
   readonly overridePriority?: boolean | cdktf.IResolvable;
   /**
   * Whether to send annotations to OpsGenie as Tags, Details, or both. Supported values are `tags`, `details`, `both`, or empty to use the default behavior of Tags.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#send_tags_as ContactPoint#send_tags_as}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#send_tags_as ContactPoint#send_tags_as}
   */
   readonly sendTagsAs?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * Allows customization of the OpsGenie API URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url?: string;
   /**
   * responders block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#responders ContactPoint#responders}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#responders ContactPoint#responders}
   */
   readonly responders?: ContactPointOpsgenieResponders[] | cdktf.IResolvable;
 }
@@ -4208,79 +4208,79 @@ export interface ContactPointPagerduty {
   /**
   * The class or type of event, for example `ping failure`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#class ContactPoint#class}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#class ContactPoint#class}
   */
   readonly class?: string;
   /**
   * The name of the monitoring client that is triggering this event.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#client ContactPoint#client}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#client ContactPoint#client}
   */
   readonly client?: string;
   /**
   * The URL of the monitoring client that is triggering this event.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#client_url ContactPoint#client_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#client_url ContactPoint#client_url}
   */
   readonly clientUrl?: string;
   /**
   * The component being affected by the event.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#component ContactPoint#component}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#component ContactPoint#component}
   */
   readonly component?: string;
   /**
   * A set of arbitrary key/value pairs that provide further detail about the incident.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#details ContactPoint#details}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#details ContactPoint#details}
   */
   readonly details?: { [key: string]: string };
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The group to which the provided component belongs to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#group ContactPoint#group}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#group ContactPoint#group}
   */
   readonly group?: string;
   /**
   * The PagerDuty API key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#integration_key ContactPoint#integration_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#integration_key ContactPoint#integration_key}
   */
   readonly integrationKey: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The PagerDuty event severity level. Default is `critical`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#severity ContactPoint#severity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#severity ContactPoint#severity}
   */
   readonly severity?: string;
   /**
   * The unique location of the affected system.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#source ContactPoint#source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#source ContactPoint#source}
   */
   readonly source?: string;
   /**
   * The templated summary message of the event.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#summary ContactPoint#summary}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#summary ContactPoint#summary}
   */
   readonly summary?: string;
   /**
   * The URL to send API requests to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url?: string;
 }
@@ -4748,85 +4748,85 @@ export interface ContactPointPushover {
   /**
   * The Pushover API token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#api_token ContactPoint#api_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#api_token ContactPoint#api_token}
   */
   readonly apiToken: string;
   /**
   * Comma-separated list of devices to which the event is associated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#device ContactPoint#device}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#device ContactPoint#device}
   */
   readonly device?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * How many seconds for which the notification will continue to be retried by Pushover.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#expire ContactPoint#expire}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#expire ContactPoint#expire}
   */
   readonly expire?: number;
   /**
   * The templated notification message content.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * The priority level of the resolved event.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#ok_priority ContactPoint#ok_priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#ok_priority ContactPoint#ok_priority}
   */
   readonly okPriority?: number;
   /**
   * The sound associated with the resolved notification.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#ok_sound ContactPoint#ok_sound}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#ok_sound ContactPoint#ok_sound}
   */
   readonly okSound?: string;
   /**
   * The priority level of the event.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#priority ContactPoint#priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#priority ContactPoint#priority}
   */
   readonly priority?: number;
   /**
   * How often, in seconds, the Pushover servers will send the same notification to the user.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#retry ContactPoint#retry}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#retry ContactPoint#retry}
   */
   readonly retry?: number;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The sound associated with the notification.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#sound ContactPoint#sound}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#sound ContactPoint#sound}
   */
   readonly sound?: string;
   /**
   * The templated title of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * Whether to send images in the notification or not. Default is true. Requires Grafana to be configured to send images in notifications.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#upload_image ContactPoint#upload_image}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#upload_image ContactPoint#upload_image}
   */
   readonly uploadImage?: boolean | cdktf.IResolvable;
   /**
   * The Pushover user key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#user_key ContactPoint#user_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#user_key ContactPoint#user_key}
   */
   readonly userKey: string;
 }
@@ -5320,55 +5320,55 @@ export interface ContactPointSensugo {
   /**
   * The SensuGo API key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#api_key ContactPoint#api_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#api_key ContactPoint#api_key}
   */
   readonly apiKey: string;
   /**
   * The SensuGo check to which the event should be routed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#check ContactPoint#check}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#check ContactPoint#check}
   */
   readonly check?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The entity being monitored.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#entity ContactPoint#entity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#entity ContactPoint#entity}
   */
   readonly entity?: string;
   /**
   * A custom handler to execute in addition to the check.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#handler ContactPoint#handler}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#handler ContactPoint#handler}
   */
   readonly handler?: string;
   /**
   * Templated message content describing the alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * The namespace in which the check resides.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#namespace ContactPoint#namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#namespace ContactPoint#namespace}
   */
   readonly namespace?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The SensuGo URL to send requests to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
 }
@@ -5717,91 +5717,91 @@ export interface ContactPointSlack {
   /**
   * Templated color of the slack message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#color ContactPoint#color}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#color ContactPoint#color}
   */
   readonly color?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * Use this to override the Slack API endpoint URL to send requests to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#endpoint_url ContactPoint#endpoint_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#endpoint_url ContactPoint#endpoint_url}
   */
   readonly endpointUrl?: string;
   /**
   * The name of a Slack workspace emoji to use as the bot icon.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#icon_emoji ContactPoint#icon_emoji}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#icon_emoji ContactPoint#icon_emoji}
   */
   readonly iconEmoji?: string;
   /**
   * A URL of an image to use as the bot icon.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#icon_url ContactPoint#icon_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#icon_url ContactPoint#icon_url}
   */
   readonly iconUrl?: string;
   /**
   * Describes how to ping the slack channel that messages are being sent to. Options are `here` for an @here ping, `channel` for @channel, or empty for no ping.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#mention_channel ContactPoint#mention_channel}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#mention_channel ContactPoint#mention_channel}
   */
   readonly mentionChannel?: string;
   /**
   * Comma-separated list of groups to mention in the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#mention_groups ContactPoint#mention_groups}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#mention_groups ContactPoint#mention_groups}
   */
   readonly mentionGroups?: string;
   /**
   * Comma-separated list of users to mention in the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#mention_users ContactPoint#mention_users}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#mention_users ContactPoint#mention_users}
   */
   readonly mentionUsers?: string;
   /**
   * Channel, private group, or IM channel (can be an encoded ID or a name) to send messages to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#recipient ContactPoint#recipient}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#recipient ContactPoint#recipient}
   */
   readonly recipient?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * Templated content of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#text ContactPoint#text}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#text ContactPoint#text}
   */
   readonly text?: string;
   /**
   * Templated title of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * A Slack API token,for sending messages directly without the webhook method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#token ContactPoint#token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#token ContactPoint#token}
   */
   readonly token?: string;
   /**
   * A Slack webhook URL,for sending messages via the webhook method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url?: string;
   /**
   * Username for the bot to use.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#username ContactPoint#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#username ContactPoint#username}
   */
   readonly username?: string;
 }
@@ -6330,63 +6330,63 @@ export interface ContactPointSns {
   /**
   * AWS access key ID used to authenticate with Amazon SNS.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#access_key ContactPoint#access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#access_key ContactPoint#access_key}
   */
   readonly accessKey?: string;
   /**
   * The Amazon Resource Name (ARN) of the role to assume to send notifications to Amazon SNS.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#assume_role_arn ContactPoint#assume_role_arn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#assume_role_arn ContactPoint#assume_role_arn}
   */
   readonly assumeRoleArn?: string;
   /**
   * The authentication provider to use. Valid values are `default`, `arn` and `keys`. Default is `default`. Defaults to `default`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#auth_provider ContactPoint#auth_provider}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#auth_provider ContactPoint#auth_provider}
   */
   readonly authProvider?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#body ContactPoint#body}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#body ContactPoint#body}
   */
   readonly body?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The external ID to use when assuming the role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#external_id ContactPoint#external_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#external_id ContactPoint#external_id}
   */
   readonly externalId?: string;
   /**
   * The format of the message to send. Valid values are `text`, `body` and `json`. Default is `text`. Defaults to `text`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message_format ContactPoint#message_format}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message_format ContactPoint#message_format}
   */
   readonly messageFormat?: string;
   /**
   * AWS secret access key used to authenticate with Amazon SNS.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#secret_key ContactPoint#secret_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#secret_key ContactPoint#secret_key}
   */
   readonly secretKey?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#subject ContactPoint#subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#subject ContactPoint#subject}
   */
   readonly subject?: string;
   /**
   * The Amazon SNS topic to send notifications to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#topic ContactPoint#topic}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#topic ContactPoint#topic}
   */
   readonly topic: string;
 }
@@ -6796,37 +6796,37 @@ export interface ContactPointTeams {
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The templated message content to send.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * The templated subtitle for each message section.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#section_title ContactPoint#section_title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#section_title ContactPoint#section_title}
   */
   readonly sectionTitle?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The templated title of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * A Teams webhook URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
 }
@@ -7091,61 +7091,61 @@ export interface ContactPointTelegram {
   /**
   * The chat ID to send messages to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#chat_id ContactPoint#chat_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#chat_id ContactPoint#chat_id}
   */
   readonly chatId: string;
   /**
   * When set users will receive a notification with no sound.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_notifications ContactPoint#disable_notifications}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_notifications ContactPoint#disable_notifications}
   */
   readonly disableNotifications?: boolean | cdktf.IResolvable;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * When set it disables link previews for links in the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_web_page_preview ContactPoint#disable_web_page_preview}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_web_page_preview ContactPoint#disable_web_page_preview}
   */
   readonly disableWebPagePreview?: boolean | cdktf.IResolvable;
   /**
   * The templated content of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * The ID of the message thread to send the message to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message_thread_id ContactPoint#message_thread_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message_thread_id ContactPoint#message_thread_id}
   */
   readonly messageThreadId?: string;
   /**
   * Mode for parsing entities in the message text. Supported: None, Markdown, MarkdownV2, and HTML. HTML is the default.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#parse_mode ContactPoint#parse_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#parse_mode ContactPoint#parse_mode}
   */
   readonly parseMode?: string;
   /**
   * When set it protects the contents of the message from forwarding and saving.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#protect_content ContactPoint#protect_content}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#protect_content ContactPoint#protect_content}
   */
   readonly protectContent?: boolean | cdktf.IResolvable;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The Telegram bot token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#token ContactPoint#token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#token ContactPoint#token}
   */
   readonly token: string;
 }
@@ -7523,43 +7523,43 @@ export interface ContactPointThreema {
   /**
   * The Threema API key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#api_secret ContactPoint#api_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#api_secret ContactPoint#api_secret}
   */
   readonly apiSecret: string;
   /**
   * The templated description of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#description ContactPoint#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#description ContactPoint#description}
   */
   readonly description?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The Threema gateway ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#gateway_id ContactPoint#gateway_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#gateway_id ContactPoint#gateway_id}
   */
   readonly gatewayId: string;
   /**
   * The ID of the recipient of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#recipient_id ContactPoint#recipient_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#recipient_id ContactPoint#recipient_id}
   */
   readonly recipientId: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The templated title of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
 }
@@ -7847,37 +7847,37 @@ export interface ContactPointVictorops {
   /**
   * Templated description of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#description ContactPoint#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#description ContactPoint#description}
   */
   readonly description?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The VictorOps alert state - typically either `CRITICAL` or `RECOVERY`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message_type ContactPoint#message_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message_type ContactPoint#message_type}
   */
   readonly messageType?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * Templated title to display.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * The VictorOps webhook URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
 }
@@ -8142,37 +8142,37 @@ export interface ContactPointWebex {
   /**
   * The URL to send webhook requests to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#api_url ContactPoint#api_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#api_url ContactPoint#api_url}
   */
   readonly apiUrl?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The templated title of the message to send.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * ID of the Webex Teams room where to send the messages.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#room_id ContactPoint#room_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#room_id ContactPoint#room_id}
   */
   readonly roomId: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The bearer token used to authorize the client.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#token ContactPoint#token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#token ContactPoint#token}
   */
   readonly token: string;
 }
@@ -8434,19 +8434,19 @@ export interface ContactPointWebhookHmacConfig {
   /**
   * The header in which the HMAC signature will be included. Defaults to `X-Grafana-Alerting-Signature`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#header ContactPoint#header}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#header ContactPoint#header}
   */
   readonly header?: string;
   /**
   * The secret key used to generate the HMAC signature.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#secret ContactPoint#secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#secret ContactPoint#secret}
   */
   readonly secret: string;
   /**
   * If set, the timestamp will be included in the HMAC signature. The value should be the name of the header to use.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#timestamp_header ContactPoint#timestamp_header}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#timestamp_header ContactPoint#timestamp_header}
   */
   readonly timestampHeader?: string;
 }
@@ -8587,25 +8587,25 @@ export interface ContactPointWebhookHttpConfigOauth2ProxyConfig {
   /**
   * Comma-separated list of addresses that should not use a proxy.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#no_proxy ContactPoint#no_proxy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#no_proxy ContactPoint#no_proxy}
   */
   readonly noProxy?: string;
   /**
   * Optional headers to send to proxies during CONNECT requests.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#proxy_connect_header ContactPoint#proxy_connect_header}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#proxy_connect_header ContactPoint#proxy_connect_header}
   */
   readonly proxyConnectHeader?: { [key: string]: string };
   /**
   * Use environment HTTP_PROXY, HTTPS_PROXY and NO_PROXY to determine proxies. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#proxy_from_environment ContactPoint#proxy_from_environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#proxy_from_environment ContactPoint#proxy_from_environment}
   */
   readonly proxyFromEnvironment?: boolean | cdktf.IResolvable;
   /**
   * HTTP proxy server to use to connect to the targets.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#proxy_url ContactPoint#proxy_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#proxy_url ContactPoint#proxy_url}
   */
   readonly proxyUrl?: string;
 }
@@ -8778,25 +8778,25 @@ export interface ContactPointWebhookHttpConfigOauth2TlsConfig {
   /**
   * Certificate in PEM format to use when verifying the server's certificate chain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#ca_certificate ContactPoint#ca_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#ca_certificate ContactPoint#ca_certificate}
   */
   readonly caCertificate?: string;
   /**
   * Client certificate in PEM format to use when connecting to the server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#client_certificate ContactPoint#client_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#client_certificate ContactPoint#client_certificate}
   */
   readonly clientCertificate?: string;
   /**
   * Client key in PEM format to use when connecting to the server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#client_key ContactPoint#client_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#client_key ContactPoint#client_key}
   */
   readonly clientKey?: string;
   /**
   * Do not verify the server's certificate chain and host name. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#insecure_skip_verify ContactPoint#insecure_skip_verify}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#insecure_skip_verify ContactPoint#insecure_skip_verify}
   */
   readonly insecureSkipVerify?: boolean | cdktf.IResolvable;
 }
@@ -8969,43 +8969,43 @@ export interface ContactPointWebhookHttpConfigOauth2 {
   /**
   * Client ID to use when authenticating.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#client_id ContactPoint#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#client_id ContactPoint#client_id}
   */
   readonly clientId: string;
   /**
   * Client secret to use when authenticating.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#client_secret ContactPoint#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#client_secret ContactPoint#client_secret}
   */
   readonly clientSecret: string;
   /**
   * Optional parameters to append to the access token request.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#endpoint_params ContactPoint#endpoint_params}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#endpoint_params ContactPoint#endpoint_params}
   */
   readonly endpointParams?: { [key: string]: string };
   /**
   * Optional scopes to request when obtaining an access token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#scopes ContactPoint#scopes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#scopes ContactPoint#scopes}
   */
   readonly scopes?: string[];
   /**
   * URL for the access token endpoint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#token_url ContactPoint#token_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#token_url ContactPoint#token_url}
   */
   readonly tokenUrl: string;
   /**
   * proxy_config block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#proxy_config ContactPoint#proxy_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#proxy_config ContactPoint#proxy_config}
   */
   readonly proxyConfig?: ContactPointWebhookHttpConfigOauth2ProxyConfig;
   /**
   * tls_config block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#tls_config ContactPoint#tls_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#tls_config ContactPoint#tls_config}
   */
   readonly tlsConfig?: ContactPointWebhookHttpConfigOauth2TlsConfig;
 }
@@ -9256,7 +9256,7 @@ export interface ContactPointWebhookHttpConfig {
   /**
   * oauth2 block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#oauth2 ContactPoint#oauth2}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#oauth2 ContactPoint#oauth2}
   */
   readonly oauth2?: ContactPointWebhookHttpConfigOauth2;
 }
@@ -9342,13 +9342,13 @@ export interface ContactPointWebhookPayload {
   /**
   * Custom payload template.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#template ContactPoint#template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#template ContactPoint#template}
   */
   readonly template: string;
   /**
   * Optionally provide a variables to be used in the payload template. They will be available in the template as `.Vars.<variable_name>`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#vars ContactPoint#vars}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#vars ContactPoint#vars}
   */
   readonly vars?: { [key: string]: string };
 }
@@ -9460,97 +9460,97 @@ export interface ContactPointWebhook {
   /**
   * Allows a custom authorization scheme - attaches an auth header with this value. Do not use in conjunction with basic auth parameters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#authorization_credentials ContactPoint#authorization_credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#authorization_credentials ContactPoint#authorization_credentials}
   */
   readonly authorizationCredentials?: string;
   /**
   * Allows a custom authorization scheme - attaches an auth header with this name. Do not use in conjunction with basic auth parameters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#authorization_scheme ContactPoint#authorization_scheme}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#authorization_scheme ContactPoint#authorization_scheme}
   */
   readonly authorizationScheme?: string;
   /**
   * The username to use in basic auth headers attached to the request. If omitted, basic auth will not be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#basic_auth_password ContactPoint#basic_auth_password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#basic_auth_password ContactPoint#basic_auth_password}
   */
   readonly basicAuthPassword?: string;
   /**
   * The username to use in basic auth headers attached to the request. If omitted, basic auth will not be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#basic_auth_user ContactPoint#basic_auth_user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#basic_auth_user ContactPoint#basic_auth_user}
   */
   readonly basicAuthUser?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * Custom headers to attach to the request.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#headers ContactPoint#headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#headers ContactPoint#headers}
   */
   readonly headers?: { [key: string]: string };
   /**
   * The HTTP method to use in the request. Defaults to `POST`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#http_method ContactPoint#http_method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#http_method ContactPoint#http_method}
   */
   readonly httpMethod?: string;
   /**
   * The maximum number of alerts to send in a single request. This can be helpful in limiting the size of the request body. The default is 0, which indicates no limit.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#max_alerts ContactPoint#max_alerts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#max_alerts ContactPoint#max_alerts}
   */
   readonly maxAlerts?: number;
   /**
   * Custom message. You can use template variables.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * Templated title of the message.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * Allows configuring TLS for the webhook notifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#tls_config ContactPoint#tls_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#tls_config ContactPoint#tls_config}
   */
   readonly tlsConfig?: { [key: string]: string };
   /**
   * The URL to send webhook requests to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url: string;
   /**
   * hmac_config block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#hmac_config ContactPoint#hmac_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#hmac_config ContactPoint#hmac_config}
   */
   readonly hmacConfig?: ContactPointWebhookHmacConfig;
   /**
   * http_config block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#http_config ContactPoint#http_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#http_config ContactPoint#http_config}
   */
   readonly httpConfig?: ContactPointWebhookHttpConfig;
   /**
   * payload block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#payload ContactPoint#payload}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#payload ContactPoint#payload}
   */
   readonly payload?: ContactPointWebhookPayload;
 }
@@ -10105,61 +10105,61 @@ export interface ContactPointWecom {
   /**
   * Agent ID added to the request payload when using APIAPP.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#agent_id ContactPoint#agent_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#agent_id ContactPoint#agent_id}
   */
   readonly agentId?: string;
   /**
   * Corp ID used to get token when using APIAPP.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#corp_id ContactPoint#corp_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#corp_id ContactPoint#corp_id}
   */
   readonly corpId?: string;
   /**
   * Whether to disable sending resolve messages. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#disable_resolve_message ContactPoint#disable_resolve_message}
   */
   readonly disableResolveMessage?: boolean | cdktf.IResolvable;
   /**
   * The templated content of the message to send.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#message ContactPoint#message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#message ContactPoint#message}
   */
   readonly message?: string;
   /**
   * The type of them message. Supported: markdown, text. Default: text.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#msg_type ContactPoint#msg_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#msg_type ContactPoint#msg_type}
   */
   readonly msgType?: string;
   /**
   * The secret key required to obtain access token when using APIAPP. See https://work.weixin.qq.com/wework_admin/frame#apps to create APIAPP.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#secret ContactPoint#secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#secret ContactPoint#secret}
   */
   readonly secret?: string;
   /**
   * Additional custom properties to attach to the notifier. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#settings ContactPoint#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#settings ContactPoint#settings}
   */
   readonly settings?: { [key: string]: string };
   /**
   * The templated title of the message to send.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#title ContactPoint#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#title ContactPoint#title}
   */
   readonly title?: string;
   /**
   * The ID of user that should receive the message. Multiple entries should be separated by '|'. Default: @all.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#to_user ContactPoint#to_user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#to_user ContactPoint#to_user}
   */
   readonly toUser?: string;
   /**
   * The WeCom webhook URL. Required if using GroupRobot.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#url ContactPoint#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#url ContactPoint#url}
   */
   readonly url?: string;
 }
@@ -10541,7 +10541,7 @@ export class ContactPointWecomList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point grafana_contact_point}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point grafana_contact_point}
 */
 export class ContactPoint extends cdktf.TerraformResource {
 
@@ -10557,7 +10557,7 @@ export class ContactPoint extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ContactPoint resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ContactPoint to import
-  * @param importFromId The id of the existing ContactPoint that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ContactPoint that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ContactPoint to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -10569,7 +10569,7 @@ export class ContactPoint extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/contact_point grafana_contact_point} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/contact_point grafana_contact_point} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -10580,7 +10580,7 @@ export class ContactPoint extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_contact_point',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

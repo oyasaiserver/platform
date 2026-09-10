@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/organization
+// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/organization
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataInfisicalOrganizationConfig extends cdktf.TerraformMetaArgu
   /**
   * The slug of the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/organization#slug DataInfisicalOrganization#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/organization#slug DataInfisicalOrganization#slug}
   */
   readonly slug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/organization infisical_organization}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/organization infisical_organization}
 */
 export class DataInfisicalOrganization extends cdktf.TerraformDataSource {
 
@@ -32,7 +32,7 @@ export class DataInfisicalOrganization extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalOrganization resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalOrganization to import
-  * @param importFromId The id of the existing DataInfisicalOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/organization#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/organization#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalOrganization to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class DataInfisicalOrganization extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/organization infisical_organization} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/organization infisical_organization} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class DataInfisicalOrganization extends cdktf.TerraformDataSource {
       terraformResourceType: 'infisical_organization',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.26'
+        providerVersion: '0.19.31'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

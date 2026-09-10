@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,41 +10,41 @@ export interface AssertsLogConfigConfig extends cdktf.TerraformMetaArguments {
   /**
   * DataSource to be queried (e.g., a Loki instance).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#data_source_uid AssertsLogConfig#data_source_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#data_source_uid AssertsLogConfig#data_source_uid}
   */
   readonly dataSourceUid: string;
   /**
   * Is it the default config, therefore undeletable?
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#default_config AssertsLogConfig#default_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#default_config AssertsLogConfig#default_config}
   */
   readonly defaultConfig: boolean | cdktf.IResolvable;
   /**
   * Mapping of entity properties to log labels.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#entity_property_to_log_label_mapping AssertsLogConfig#entity_property_to_log_label_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#entity_property_to_log_label_mapping AssertsLogConfig#entity_property_to_log_label_mapping}
   */
   readonly entityPropertyToLogLabelMapping?: { [key: string]: string };
   /**
   * Error label to filter logs.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#error_label AssertsLogConfig#error_label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#error_label AssertsLogConfig#error_label}
   */
   readonly errorLabel?: string;
   /**
   * Filter logs by span ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#filter_by_span_id AssertsLogConfig#filter_by_span_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#filter_by_span_id AssertsLogConfig#filter_by_span_id}
   */
   readonly filterBySpanId?: boolean | cdktf.IResolvable;
   /**
   * Filter logs by trace ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#filter_by_trace_id AssertsLogConfig#filter_by_trace_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#filter_by_trace_id AssertsLogConfig#filter_by_trace_id}
   */
   readonly filterByTraceId?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#id AssertsLogConfig#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#id AssertsLogConfig#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -53,25 +53,25 @@ export interface AssertsLogConfigConfig extends cdktf.TerraformMetaArguments {
   /**
   * The name of the log configuration.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#name AssertsLogConfig#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#name AssertsLogConfig#name}
   */
   readonly name: string;
   /**
   * Priority of the log configuration. A lower number means a higher priority.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#priority AssertsLogConfig#priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#priority AssertsLogConfig#priority}
   */
   readonly priority: number;
   /**
   * match block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#match AssertsLogConfig#match}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#match AssertsLogConfig#match}
   */
   readonly match?: AssertsLogConfigMatch[] | cdktf.IResolvable;
   /**
   * timeouts block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#timeouts AssertsLogConfig#timeouts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#timeouts AssertsLogConfig#timeouts}
   */
   readonly timeouts?: AssertsLogConfigTimeouts;
 }
@@ -79,19 +79,19 @@ export interface AssertsLogConfigMatch {
   /**
   * Operation to use for matching. One of: =, <>, <, >, <=, >=, IS NULL, IS NOT NULL, STARTS WITH, CONTAINS.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#op AssertsLogConfig#op}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#op AssertsLogConfig#op}
   */
   readonly op: string;
   /**
   * Entity property to match.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#property AssertsLogConfig#property}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#property AssertsLogConfig#property}
   */
   readonly property: string;
   /**
   * Values to match against. Required for all operators except "IS NULL" and "IS NOT NULL", which must not have any values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#values AssertsLogConfig#values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#values AssertsLogConfig#values}
   */
   readonly values?: string[];
 }
@@ -259,19 +259,19 @@ export class AssertsLogConfigMatchList extends cdktf.ComplexList {
 }
 export interface AssertsLogConfigTimeouts {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#create AssertsLogConfig#create}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#create AssertsLogConfig#create}
   */
   readonly create?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#delete AssertsLogConfig#delete}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#delete AssertsLogConfig#delete}
   */
   readonly delete?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#read AssertsLogConfig#read}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#read AssertsLogConfig#read}
   */
   readonly read?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#update AssertsLogConfig#update}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#update AssertsLogConfig#update}
   */
   readonly update?: string;
 }
@@ -452,7 +452,7 @@ export class AssertsLogConfigTimeoutsOutputReference extends cdktf.ComplexObject
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config grafana_asserts_log_config}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config grafana_asserts_log_config}
 */
 export class AssertsLogConfig extends cdktf.TerraformResource {
 
@@ -468,7 +468,7 @@ export class AssertsLogConfig extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssertsLogConfig resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssertsLogConfig to import
-  * @param importFromId The id of the existing AssertsLogConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssertsLogConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssertsLogConfig to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -480,7 +480,7 @@ export class AssertsLogConfig extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_log_config grafana_asserts_log_config} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_log_config grafana_asserts_log_config} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -491,7 +491,7 @@ export class AssertsLogConfig extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_asserts_log_config',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

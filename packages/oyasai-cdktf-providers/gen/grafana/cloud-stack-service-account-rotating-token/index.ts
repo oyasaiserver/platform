@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface CloudStackServiceAccountRotatingTokenConfig extends cdktf.Terra
   /**
   * Deletes the service account token in Grafana when the resource is destroyed in Terraform, instead of leaving it to expire at its `expiration` time. Use it with `lifecycle { create_before_destroy = true }` to make sure that the new token is created before the old one is deleted. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token#delete_on_destroy CloudStackServiceAccountRotatingToken#delete_on_destroy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token#delete_on_destroy CloudStackServiceAccountRotatingToken#delete_on_destroy}
   */
   readonly deleteOnDestroy?: boolean | cdktf.IResolvable;
   /**
   * Duration of the time window before expiring where the token can be rotated, in seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token#early_rotation_window_seconds CloudStackServiceAccountRotatingToken#early_rotation_window_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token#early_rotation_window_seconds CloudStackServiceAccountRotatingToken#early_rotation_window_seconds}
   */
   readonly earlyRotationWindowSeconds: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token#id CloudStackServiceAccountRotatingToken#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token#id CloudStackServiceAccountRotatingToken#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -29,29 +29,29 @@ export interface CloudStackServiceAccountRotatingTokenConfig extends cdktf.Terra
   /**
   * Prefix for the name of the service account tokens created by this resource. The actual name will be stored in the computed field `name`, which will be in the format `<name_prefix>-<additional_characters>`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token#name_prefix CloudStackServiceAccountRotatingToken#name_prefix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token#name_prefix CloudStackServiceAccountRotatingToken#name_prefix}
   */
   readonly namePrefix: string;
   /**
   * The token expiration in seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token#seconds_to_live CloudStackServiceAccountRotatingToken#seconds_to_live}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token#seconds_to_live CloudStackServiceAccountRotatingToken#seconds_to_live}
   */
   readonly secondsToLive: number;
   /**
   * The ID of the service account to which the token belongs.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token#service_account_id CloudStackServiceAccountRotatingToken#service_account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token#service_account_id CloudStackServiceAccountRotatingToken#service_account_id}
   */
   readonly serviceAccountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token#stack_slug CloudStackServiceAccountRotatingToken#stack_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token#stack_slug CloudStackServiceAccountRotatingToken#stack_slug}
   */
   readonly stackSlug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token grafana_cloud_stack_service_account_rotating_token}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token grafana_cloud_stack_service_account_rotating_token}
 */
 export class CloudStackServiceAccountRotatingToken extends cdktf.TerraformResource {
 
@@ -67,7 +67,7 @@ export class CloudStackServiceAccountRotatingToken extends cdktf.TerraformResour
   * Generates CDKTF code for importing a CloudStackServiceAccountRotatingToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudStackServiceAccountRotatingToken to import
-  * @param importFromId The id of the existing CloudStackServiceAccountRotatingToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudStackServiceAccountRotatingToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudStackServiceAccountRotatingToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -79,7 +79,7 @@ export class CloudStackServiceAccountRotatingToken extends cdktf.TerraformResour
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack_service_account_rotating_token grafana_cloud_stack_service_account_rotating_token} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack_service_account_rotating_token grafana_cloud_stack_service_account_rotating_token} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -90,7 +90,7 @@ export class CloudStackServiceAccountRotatingToken extends cdktf.TerraformResour
       terraformResourceType: 'grafana_cloud_stack_service_account_rotating_token',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_org_member
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_org_member
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface CloudOrgMemberConfig extends cdktf.TerraformMetaArguments {
   /**
   * The slug or ID of the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_org_member#org CloudOrgMember#org}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_org_member#org CloudOrgMember#org}
   */
   readonly org: string;
   /**
   * Whether the user should receive billing emails.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_org_member#receive_billing_emails CloudOrgMember#receive_billing_emails}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_org_member#receive_billing_emails CloudOrgMember#receive_billing_emails}
   */
   readonly receiveBillingEmails?: boolean | cdktf.IResolvable;
   /**
   * The role to assign to the user in the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_org_member#role CloudOrgMember#role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_org_member#role CloudOrgMember#role}
   */
   readonly role: string;
   /**
   * Username or ID of the user to add to the org's members.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_org_member#user CloudOrgMember#user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_org_member#user CloudOrgMember#user}
   */
   readonly user: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_org_member grafana_cloud_org_member}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_org_member grafana_cloud_org_member}
 */
 export class CloudOrgMember extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class CloudOrgMember extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudOrgMember resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudOrgMember to import
-  * @param importFromId The id of the existing CloudOrgMember that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_org_member#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudOrgMember that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_org_member#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudOrgMember to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class CloudOrgMember extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_org_member grafana_cloud_org_member} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_org_member grafana_cloud_org_member} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class CloudOrgMember extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_org_member',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

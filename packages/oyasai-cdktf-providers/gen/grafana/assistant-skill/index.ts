@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface AssistantSkillConfig extends cdktf.TerraformMetaArguments {
   /**
   * The skill content.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#body AssistantSkill#body}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#body AssistantSkill#body}
   */
   readonly body: string;
   /**
   * The slash command name that invokes the skill. Setting this enables the skill as a command.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#command_name AssistantSkill#command_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#command_name AssistantSkill#command_name}
   */
   readonly commandName?: string;
   /**
   * Optional JSON array of context items referenced by the skill.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#context_items AssistantSkill#context_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#context_items AssistantSkill#context_items}
   */
   readonly contextItems?: string;
   /**
   * Whether the skill is included in the knowledgebase.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#include_in_knowledgebase AssistantSkill#include_in_knowledgebase}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#include_in_knowledgebase AssistantSkill#include_in_knowledgebase}
   */
   readonly includeInKnowledgebase?: boolean | cdktf.IResolvable;
   /**
   * The skill name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#name AssistantSkill#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#name AssistantSkill#name}
   */
   readonly name: string;
   /**
   * Whether the resource is visible to the whole tenant (`tenant`) or only the creating user (`user`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#scope AssistantSkill#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#scope AssistantSkill#scope}
   */
   readonly scope: string;
   /**
   * allowed_tools block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#allowed_tools AssistantSkill#allowed_tools}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#allowed_tools AssistantSkill#allowed_tools}
   */
   readonly allowedTools?: AssistantSkillAllowedTools[] | cdktf.IResolvable;
 }
@@ -54,13 +54,13 @@ export interface AssistantSkillAllowedTools {
   /**
   * Integration UUID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#integration_id AssistantSkill#integration_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#integration_id AssistantSkill#integration_id}
   */
   readonly integrationId: string;
   /**
   * MCP tool name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#tool_name AssistantSkill#tool_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#tool_name AssistantSkill#tool_name}
   */
   readonly toolName: string;
 }
@@ -199,7 +199,7 @@ export class AssistantSkillAllowedToolsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill grafana_assistant_skill}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill grafana_assistant_skill}
 */
 export class AssistantSkill extends cdktf.TerraformResource {
 
@@ -215,7 +215,7 @@ export class AssistantSkill extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssistantSkill resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssistantSkill to import
-  * @param importFromId The id of the existing AssistantSkill that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssistantSkill that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssistantSkill to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -227,7 +227,7 @@ export class AssistantSkill extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_skill grafana_assistant_skill} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_skill grafana_assistant_skill} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -238,7 +238,7 @@ export class AssistantSkill extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_assistant_skill',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

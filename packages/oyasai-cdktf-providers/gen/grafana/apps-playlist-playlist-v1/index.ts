@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsPlaylistPlaylistV1Config extends cdktf.TerraformMetaArgumen
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#metadata AppsPlaylistPlaylistV1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#metadata AppsPlaylistPlaylistV1#metadata}
   */
   readonly metadata?: AppsPlaylistPlaylistV1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#options AppsPlaylistPlaylistV1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#options AppsPlaylistPlaylistV1#options}
   */
   readonly options?: AppsPlaylistPlaylistV1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#spec AppsPlaylistPlaylistV1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#spec AppsPlaylistPlaylistV1#spec}
   */
   readonly spec?: AppsPlaylistPlaylistV1Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsPlaylistPlaylistV1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#folder_uid AppsPlaylistPlaylistV1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#folder_uid AppsPlaylistPlaylistV1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#uid AppsPlaylistPlaylistV1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#uid AppsPlaylistPlaylistV1#uid}
   */
   readonly uid: string;
 }
@@ -179,13 +179,13 @@ export interface AppsPlaylistPlaylistV1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#manager_identity AppsPlaylistPlaylistV1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#manager_identity AppsPlaylistPlaylistV1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#overwrite AppsPlaylistPlaylistV1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#overwrite AppsPlaylistPlaylistV1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -308,11 +308,11 @@ export class AppsPlaylistPlaylistV1OptionsOutputReference extends cdktf.ComplexO
 }
 export interface AppsPlaylistPlaylistV1SpecItems {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#type AppsPlaylistPlaylistV1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#type AppsPlaylistPlaylistV1#type}
   */
   readonly type: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#value AppsPlaylistPlaylistV1#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#value AppsPlaylistPlaylistV1#value}
   */
   readonly value: string;
 }
@@ -453,19 +453,19 @@ export interface AppsPlaylistPlaylistV1Spec {
   /**
   * The interval of the playlist.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#interval AppsPlaylistPlaylistV1#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#interval AppsPlaylistPlaylistV1#interval}
   */
   readonly interval?: string;
   /**
   * The items of the playlist.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#items AppsPlaylistPlaylistV1#items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#items AppsPlaylistPlaylistV1#items}
   */
   readonly items: AppsPlaylistPlaylistV1SpecItems[] | cdktf.IResolvable;
   /**
   * The title of the playlist.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#title AppsPlaylistPlaylistV1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#title AppsPlaylistPlaylistV1#title}
   */
   readonly title: string;
 }
@@ -611,7 +611,7 @@ export class AppsPlaylistPlaylistV1SpecOutputReference extends cdktf.ComplexObje
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1 grafana_apps_playlist_playlist_v1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1 grafana_apps_playlist_playlist_v1}
 */
 export class AppsPlaylistPlaylistV1 extends cdktf.TerraformResource {
 
@@ -627,7 +627,7 @@ export class AppsPlaylistPlaylistV1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsPlaylistPlaylistV1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsPlaylistPlaylistV1 to import
-  * @param importFromId The id of the existing AppsPlaylistPlaylistV1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsPlaylistPlaylistV1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsPlaylistPlaylistV1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -639,7 +639,7 @@ export class AppsPlaylistPlaylistV1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_playlist_playlist_v1 grafana_apps_playlist_playlist_v1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_playlist_playlist_v1 grafana_apps_playlist_playlist_v1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -650,7 +650,7 @@ export class AppsPlaylistPlaylistV1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_playlist_playlist_v1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

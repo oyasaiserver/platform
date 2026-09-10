@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_plugin_installation
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_plugin_installation
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface CloudPluginInstallationConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_plugin_installation#id CloudPluginInstallation#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_plugin_installation#id CloudPluginInstallation#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,25 +17,25 @@ export interface CloudPluginInstallationConfig extends cdktf.TerraformMetaArgume
   /**
   * Slug of the plugin to be installed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_plugin_installation#slug CloudPluginInstallation#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_plugin_installation#slug CloudPluginInstallation#slug}
   */
   readonly slug: string;
   /**
   * The stack id to which the plugin should be installed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_plugin_installation#stack_slug CloudPluginInstallation#stack_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_plugin_installation#stack_slug CloudPluginInstallation#stack_slug}
   */
   readonly stackSlug: string;
   /**
   * Version of the plugin to be installed. Defaults to 'latest' and installs the most recent version. Terraform will detect new version as drift for plan/apply. Defaults to `latest`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_plugin_installation#version CloudPluginInstallation#version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_plugin_installation#version CloudPluginInstallation#version}
   */
   readonly version?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_plugin_installation grafana_cloud_plugin_installation}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_plugin_installation grafana_cloud_plugin_installation}
 */
 export class CloudPluginInstallation extends cdktf.TerraformResource {
 
@@ -51,7 +51,7 @@ export class CloudPluginInstallation extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudPluginInstallation resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudPluginInstallation to import
-  * @param importFromId The id of the existing CloudPluginInstallation that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_plugin_installation#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudPluginInstallation that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_plugin_installation#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudPluginInstallation to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -63,7 +63,7 @@ export class CloudPluginInstallation extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_plugin_installation grafana_cloud_plugin_installation} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_plugin_installation grafana_cloud_plugin_installation} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -74,7 +74,7 @@ export class CloudPluginInstallation extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_plugin_installation',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

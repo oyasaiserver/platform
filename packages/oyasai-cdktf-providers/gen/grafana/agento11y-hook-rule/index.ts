@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,67 +10,67 @@ export interface Agento11YHookRuleConfig extends cdktf.TerraformMetaArguments {
   /**
   * Action taken when the hook fails. One of `deny`, `warn`. Defaults to `deny`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#action_on_fail Agento11YHookRule#action_on_fail}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#action_on_fail Agento11YHookRule#action_on_fail}
   */
   readonly actionOnFail?: string;
   /**
   * Glob patterns of tool call names to block (for example `["delete_*"]`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#blocked_tools Agento11YHookRule#blocked_tools}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#blocked_tools Agento11YHookRule#blocked_tools}
   */
   readonly blockedTools?: string[];
   /**
   * Whether the hook rule is enabled. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#enabled Agento11YHookRule#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#enabled Agento11YHookRule#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * IDs of the evaluators to run synchronously. Optional when `blocked_tools` or `redact` is set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#evaluator_ids Agento11YHookRule#evaluator_ids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#evaluator_ids Agento11YHookRule#evaluator_ids}
   */
   readonly evaluatorIds?: string[];
   /**
   * Optional JSON object of match filters (for example `{"agent_name":"checkout-*"}`). Omit to match everything.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#match Agento11YHookRule#match}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#match Agento11YHookRule#match}
   */
   readonly match?: string;
   /**
   * When the hook runs. One of `preflight`, `postflight`. Defaults to `preflight`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#phase Agento11YHookRule#phase}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#phase Agento11YHookRule#phase}
   */
   readonly phase?: string;
   /**
   * Evaluation priority; lower priority rules run first. Defaults to `0`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#priority Agento11YHookRule#priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#priority Agento11YHookRule#priority}
   */
   readonly priority?: number;
   /**
   * Tenant-unique identifier of the hook rule. Changing this forces a new resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#rule_id Agento11YHookRule#rule_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#rule_id Agento11YHookRule#rule_id}
   */
   readonly ruleId: string;
   /**
   * Which generations the hook applies to. One of `all`, `user_visible_turn`, `all_assistant_generations`, `tool_call_steps`, `errored_generations`. Defaults to `all`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#selector Agento11YHookRule#selector}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#selector Agento11YHookRule#selector}
   */
   readonly selector?: string;
   /**
   * When `true` (default), stop at the first failed rule. When `false`, run all evaluators and deny if any failed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#short_circuit Agento11YHookRule#short_circuit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#short_circuit Agento11YHookRule#short_circuit}
   */
   readonly shortCircuit?: boolean | cdktf.IResolvable;
   /**
   * redact block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#redact Agento11YHookRule#redact}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#redact Agento11YHookRule#redact}
   */
   readonly redact?: Agento11YHookRuleRedact[] | cdktf.IResolvable;
 }
@@ -78,7 +78,7 @@ export interface Agento11YHookRuleRedact {
   /**
   * Optional stable identifier for the pattern.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#id Agento11YHookRule#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#id Agento11YHookRule#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -87,7 +87,7 @@ export interface Agento11YHookRuleRedact {
   /**
   * Regular expression to redact.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#regex Agento11YHookRule#regex}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#regex Agento11YHookRule#regex}
   */
   readonly regex: string;
 }
@@ -229,7 +229,7 @@ export class Agento11YHookRuleRedactList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule grafana_agento11y_hook_rule}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule grafana_agento11y_hook_rule}
 */
 export class Agento11YHookRule extends cdktf.TerraformResource {
 
@@ -245,7 +245,7 @@ export class Agento11YHookRule extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Agento11YHookRule resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Agento11YHookRule to import
-  * @param importFromId The id of the existing Agento11YHookRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Agento11YHookRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Agento11YHookRule to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -257,7 +257,7 @@ export class Agento11YHookRule extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_hook_rule grafana_agento11y_hook_rule} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_hook_rule grafana_agento11y_hook_rule} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -268,7 +268,7 @@ export class Agento11YHookRule extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_agento11y_hook_rule',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

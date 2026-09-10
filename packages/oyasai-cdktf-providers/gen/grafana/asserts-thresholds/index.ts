@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface AssertsThresholdsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#id AssertsThresholds#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#id AssertsThresholds#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,19 +17,19 @@ export interface AssertsThresholdsConfig extends cdktf.TerraformMetaArguments {
   /**
   * health_thresholds block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#health_thresholds AssertsThresholds#health_thresholds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#health_thresholds AssertsThresholds#health_thresholds}
   */
   readonly healthThresholds?: AssertsThresholdsHealthThresholds[] | cdktf.IResolvable;
   /**
   * request_thresholds block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#request_thresholds AssertsThresholds#request_thresholds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#request_thresholds AssertsThresholds#request_thresholds}
   */
   readonly requestThresholds?: AssertsThresholdsRequestThresholds[] | cdktf.IResolvable;
   /**
   * resource_thresholds block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#resource_thresholds AssertsThresholds#resource_thresholds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#resource_thresholds AssertsThresholds#resource_thresholds}
   */
   readonly resourceThresholds?: AssertsThresholdsResourceThresholds[] | cdktf.IResolvable;
 }
@@ -37,25 +37,25 @@ export interface AssertsThresholdsHealthThresholds {
   /**
   * Optional alert category label for the health threshold.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#alert_category AssertsThresholds#alert_category}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#alert_category AssertsThresholds#alert_category}
   */
   readonly alertCategory?: string;
   /**
   * Assertion name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#assertion_name AssertsThresholds#assertion_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#assertion_name AssertsThresholds#assertion_name}
   */
   readonly assertionName: string;
   /**
   * Entity type for the health threshold (e.g., Service, Pod, Namespace, Volume).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#entity_type AssertsThresholds#entity_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#entity_type AssertsThresholds#entity_type}
   */
   readonly entityType: string;
   /**
   * Prometheus expression.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#expression AssertsThresholds#expression}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#expression AssertsThresholds#expression}
   */
   readonly expression: string;
 }
@@ -251,31 +251,31 @@ export interface AssertsThresholdsRequestThresholds {
   /**
   * Assertion name (e.g., RequestRateAnomaly, ErrorRatioBreach).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#assertion_name AssertsThresholds#assertion_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#assertion_name AssertsThresholds#assertion_name}
   */
   readonly assertionName: string;
   /**
   * Entity name the threshold applies to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#entity_name AssertsThresholds#entity_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#entity_name AssertsThresholds#entity_name}
   */
   readonly entityName: string;
   /**
   * Request context (e.g., path or context identifier).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#request_context AssertsThresholds#request_context}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#request_context AssertsThresholds#request_context}
   */
   readonly requestContext: string;
   /**
   * Request type (e.g., inbound/outbound).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#request_type AssertsThresholds#request_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#request_type AssertsThresholds#request_type}
   */
   readonly requestType: string;
   /**
   * Threshold value.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#value AssertsThresholds#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#value AssertsThresholds#value}
   */
   readonly value: number;
 }
@@ -494,37 +494,37 @@ export interface AssertsThresholdsResourceThresholds {
   /**
   * Assertion name (e.g., Saturation, ResourceRateBreach).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#assertion_name AssertsThresholds#assertion_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#assertion_name AssertsThresholds#assertion_name}
   */
   readonly assertionName: string;
   /**
   * Container name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#container_name AssertsThresholds#container_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#container_name AssertsThresholds#container_name}
   */
   readonly containerName: string;
   /**
   * Resource type (e.g., container/pod/node).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#resource_type AssertsThresholds#resource_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#resource_type AssertsThresholds#resource_type}
   */
   readonly resourceType: string;
   /**
   * Severity (warning or critical).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#severity AssertsThresholds#severity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#severity AssertsThresholds#severity}
   */
   readonly severity: string;
   /**
   * Data source for the threshold (e.g., metrics/logs).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#source AssertsThresholds#source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#source AssertsThresholds#source}
   */
   readonly source: string;
   /**
   * Threshold value.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#value AssertsThresholds#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#value AssertsThresholds#value}
   */
   readonly value: number;
 }
@@ -767,7 +767,7 @@ export class AssertsThresholdsResourceThresholdsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds grafana_asserts_thresholds}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds grafana_asserts_thresholds}
 */
 export class AssertsThresholds extends cdktf.TerraformResource {
 
@@ -783,7 +783,7 @@ export class AssertsThresholds extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssertsThresholds resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssertsThresholds to import
-  * @param importFromId The id of the existing AssertsThresholds that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssertsThresholds that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssertsThresholds to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -795,7 +795,7 @@ export class AssertsThresholds extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_thresholds grafana_asserts_thresholds} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_thresholds grafana_asserts_thresholds} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -806,7 +806,7 @@ export class AssertsThresholds extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_asserts_thresholds',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

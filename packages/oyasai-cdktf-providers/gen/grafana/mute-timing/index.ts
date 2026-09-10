@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface MuteTimingConfig extends cdktf.TerraformMetaArguments {
   /**
   * Allow modifying the mute timing from other sources than Terraform or the Grafana API. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#disable_provenance MuteTiming#disable_provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#disable_provenance MuteTiming#disable_provenance}
   */
   readonly disableProvenance?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#id MuteTiming#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#id MuteTiming#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,19 +23,19 @@ export interface MuteTimingConfig extends cdktf.TerraformMetaArguments {
   /**
   * The name of the mute timing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#name MuteTiming#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#name MuteTiming#name}
   */
   readonly name: string;
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#org_id MuteTiming#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#org_id MuteTiming#org_id}
   */
   readonly orgId?: string;
   /**
   * intervals block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#intervals MuteTiming#intervals}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#intervals MuteTiming#intervals}
   */
   readonly intervals?: MuteTimingIntervals[] | cdktf.IResolvable;
 }
@@ -43,13 +43,13 @@ export interface MuteTimingIntervalsTimes {
   /**
   * The time, in hh:mm format, of when the interval should end exclusively.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#end MuteTiming#end}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#end MuteTiming#end}
   */
   readonly end: string;
   /**
   * The time, in hh:mm format, of when the interval should begin inclusively.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#start MuteTiming#start}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#start MuteTiming#start}
   */
   readonly start: string;
 }
@@ -190,37 +190,37 @@ export interface MuteTimingIntervals {
   /**
   * An inclusive range of days, 1-31, within a month, e.g. "1" or "14:16". Negative values can be used to represent days counting from the end of a month, e.g. "-1".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#days_of_month MuteTiming#days_of_month}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#days_of_month MuteTiming#days_of_month}
   */
   readonly daysOfMonth?: string[];
   /**
   * Provides the time zone for the time interval. Must be a location in the IANA time zone database, e.g "America/New_York"
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#location MuteTiming#location}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#location MuteTiming#location}
   */
   readonly location?: string;
   /**
   * An inclusive range of months, either numerical or full calendar month, e.g. "1:3", "december", or "may:august".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#months MuteTiming#months}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#months MuteTiming#months}
   */
   readonly months?: string[];
   /**
   * An inclusive range of weekdays, e.g. "monday" or "tuesday:thursday".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#weekdays MuteTiming#weekdays}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#weekdays MuteTiming#weekdays}
   */
   readonly weekdays?: string[];
   /**
   * A positive inclusive range of years, e.g. "2030" or "2025:2026".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#years MuteTiming#years}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#years MuteTiming#years}
   */
   readonly years?: string[];
   /**
   * times block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#times MuteTiming#times}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#times MuteTiming#times}
   */
   readonly times?: MuteTimingIntervalsTimes[] | cdktf.IResolvable;
 }
@@ -481,7 +481,7 @@ export class MuteTimingIntervalsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing grafana_mute_timing}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing grafana_mute_timing}
 */
 export class MuteTiming extends cdktf.TerraformResource {
 
@@ -497,7 +497,7 @@ export class MuteTiming extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a MuteTiming resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the MuteTiming to import
-  * @param importFromId The id of the existing MuteTiming that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing MuteTiming that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the MuteTiming to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -509,7 +509,7 @@ export class MuteTiming extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/mute_timing grafana_mute_timing} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/mute_timing grafana_mute_timing} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -520,7 +520,7 @@ export class MuteTiming extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_mute_timing',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

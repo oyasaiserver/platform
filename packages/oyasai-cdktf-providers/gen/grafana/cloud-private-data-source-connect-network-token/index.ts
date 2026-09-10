@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface CloudPrivateDataSourceConnectNetworkTokenConfig extends cdktf.T
   /**
   * Display name of the private data source network token. Defaults to the name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token#display_name CloudPrivateDataSourceConnectNetworkToken#display_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token#display_name CloudPrivateDataSourceConnectNetworkToken#display_name}
   */
   readonly displayName?: string;
   /**
   * Expiration date of the private data source network token. Does not expire by default.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token#expires_at CloudPrivateDataSourceConnectNetworkToken#expires_at}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token#expires_at CloudPrivateDataSourceConnectNetworkToken#expires_at}
   */
   readonly expiresAt?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token#id CloudPrivateDataSourceConnectNetworkToken#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token#id CloudPrivateDataSourceConnectNetworkToken#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -29,25 +29,25 @@ export interface CloudPrivateDataSourceConnectNetworkTokenConfig extends cdktf.T
   /**
   * Name of the private data source network token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token#name CloudPrivateDataSourceConnectNetworkToken#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token#name CloudPrivateDataSourceConnectNetworkToken#name}
   */
   readonly name: string;
   /**
   * ID of the private data source network for which to create a token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token#pdc_network_id CloudPrivateDataSourceConnectNetworkToken#pdc_network_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token#pdc_network_id CloudPrivateDataSourceConnectNetworkToken#pdc_network_id}
   */
   readonly pdcNetworkId: string;
   /**
   * Region of the private data source network. Should be set to the same region as the private data source network. Use the region list API to get the list of available regions: https://grafana.com/docs/grafana-cloud/developer-resources/api-reference/cloud-api/#list-regions.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token#region CloudPrivateDataSourceConnectNetworkToken#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token#region CloudPrivateDataSourceConnectNetworkToken#region}
   */
   readonly region: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token grafana_cloud_private_data_source_connect_network_token}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token grafana_cloud_private_data_source_connect_network_token}
 */
 export class CloudPrivateDataSourceConnectNetworkToken extends cdktf.TerraformResource {
 
@@ -63,7 +63,7 @@ export class CloudPrivateDataSourceConnectNetworkToken extends cdktf.TerraformRe
   * Generates CDKTF code for importing a CloudPrivateDataSourceConnectNetworkToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudPrivateDataSourceConnectNetworkToken to import
-  * @param importFromId The id of the existing CloudPrivateDataSourceConnectNetworkToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudPrivateDataSourceConnectNetworkToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudPrivateDataSourceConnectNetworkToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -75,7 +75,7 @@ export class CloudPrivateDataSourceConnectNetworkToken extends cdktf.TerraformRe
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network_token grafana_cloud_private_data_source_connect_network_token} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network_token grafana_cloud_private_data_source_connect_network_token} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -86,7 +86,7 @@ export class CloudPrivateDataSourceConnectNetworkToken extends cdktf.TerraformRe
       terraformResourceType: 'grafana_cloud_private_data_source_connect_network_token',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

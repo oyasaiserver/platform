@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface ServiceAccountPermissionConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission#id ServiceAccountPermission#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission#id ServiceAccountPermission#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,19 +17,19 @@ export interface ServiceAccountPermissionConfig extends cdktf.TerraformMetaArgum
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission#org_id ServiceAccountPermission#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission#org_id ServiceAccountPermission#org_id}
   */
   readonly orgId?: string;
   /**
   * The id of the service account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission#service_account_id ServiceAccountPermission#service_account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission#service_account_id ServiceAccountPermission#service_account_id}
   */
   readonly serviceAccountId: string;
   /**
   * permissions block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission#permissions ServiceAccountPermission#permissions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission#permissions ServiceAccountPermission#permissions}
   */
   readonly permissions?: ServiceAccountPermissionPermissions[] | cdktf.IResolvable;
 }
@@ -37,19 +37,19 @@ export interface ServiceAccountPermissionPermissions {
   /**
   * Permission to associate with item. Must be one of `View`, `Edit`, or `Admin`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission#permission ServiceAccountPermission#permission}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission#permission ServiceAccountPermission#permission}
   */
   readonly permission: string;
   /**
   * ID of the team to manage permissions for. Defaults to `0`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission#team_id ServiceAccountPermission#team_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission#team_id ServiceAccountPermission#team_id}
   */
   readonly teamId?: string;
   /**
   * ID of the user or service account to manage permissions for. Defaults to `0`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission#user_id ServiceAccountPermission#user_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission#user_id ServiceAccountPermission#user_id}
   */
   readonly userId?: string;
 }
@@ -220,7 +220,7 @@ export class ServiceAccountPermissionPermissionsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission grafana_service_account_permission}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission grafana_service_account_permission}
 */
 export class ServiceAccountPermission extends cdktf.TerraformResource {
 
@@ -236,7 +236,7 @@ export class ServiceAccountPermission extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ServiceAccountPermission resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ServiceAccountPermission to import
-  * @param importFromId The id of the existing ServiceAccountPermission that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ServiceAccountPermission that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ServiceAccountPermission to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -248,7 +248,7 @@ export class ServiceAccountPermission extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_permission grafana_service_account_permission} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_permission grafana_service_account_permission} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -259,7 +259,7 @@ export class ServiceAccountPermission extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_service_account_permission',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

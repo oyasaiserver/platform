@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsConfig extends c
   /**
   * The Stack ID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#stack_id DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#stack_id DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#stack_id}
   */
   readonly stackId: string;
   /**
   * scrape_job block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#scrape_job DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#scrape_job}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#scrape_job DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#scrape_job}
   */
   readonly scrapeJob?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJob[] | cdktf.IResolvable;
 }
@@ -115,7 +115,7 @@ export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomN
   /**
   * metric block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#metric}
   */
   readonly metric?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomNamespaceMetric[] | cdktf.IResolvable;
 }
@@ -425,13 +425,13 @@ export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobService
   /**
   * metric block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#metric}
   */
   readonly metric?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceMetric[] | cdktf.IResolvable;
   /**
   * resource_discovery_tag_filter block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#resource_discovery_tag_filter DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#resource_discovery_tag_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#resource_discovery_tag_filter DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#resource_discovery_tag_filter}
   */
   readonly resourceDiscoveryTagFilter?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceResourceDiscoveryTagFilter[] | cdktf.IResolvable;
 }
@@ -593,13 +593,13 @@ export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJob {
   /**
   * custom_namespace block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#custom_namespace DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#custom_namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#custom_namespace DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#custom_namespace}
   */
   readonly customNamespace?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomNamespace[] | cdktf.IResolvable;
   /**
   * service block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#service DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#service}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#service DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#service}
   */
   readonly service?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobService[] | cdktf.IResolvable;
 }
@@ -800,7 +800,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobList extend
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs grafana_cloud_provider_aws_cloudwatch_scrape_jobs}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs grafana_cloud_provider_aws_cloudwatch_scrape_jobs}
 */
 export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobs extends cdktf.TerraformDataSource {
 
@@ -816,7 +816,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobs extends cdktf.Terra
   * Generates CDKTF code for importing a DataGrafanaCloudProviderAwsCloudwatchScrapeJobs resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaCloudProviderAwsCloudwatchScrapeJobs to import
-  * @param importFromId The id of the existing DataGrafanaCloudProviderAwsCloudwatchScrapeJobs that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaCloudProviderAwsCloudwatchScrapeJobs that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaCloudProviderAwsCloudwatchScrapeJobs to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -828,7 +828,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobs extends cdktf.Terra
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs grafana_cloud_provider_aws_cloudwatch_scrape_jobs} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs grafana_cloud_provider_aws_cloudwatch_scrape_jobs} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -839,7 +839,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobs extends cdktf.Terra
       terraformResourceType: 'grafana_cloud_provider_aws_cloudwatch_scrape_jobs',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

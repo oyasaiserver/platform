@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_token
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface ServiceAccountTokenConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_token#id ServiceAccountToken#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_token#id ServiceAccountToken#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,25 +17,25 @@ export interface ServiceAccountTokenConfig extends cdktf.TerraformMetaArguments 
   /**
   * The name of the service account token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_token#name ServiceAccountToken#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_token#name ServiceAccountToken#name}
   */
   readonly name: string;
   /**
   * The key expiration in seconds. It is optional. If it is a positive number an expiration date for the key is set. If it is null, zero or is omitted completely (unless `api_key_max_seconds_to_live` configuration option is set) the key will never expire.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_token#seconds_to_live ServiceAccountToken#seconds_to_live}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_token#seconds_to_live ServiceAccountToken#seconds_to_live}
   */
   readonly secondsToLive?: number;
   /**
   * The ID of the service account to which the token belongs.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_token#service_account_id ServiceAccountToken#service_account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_token#service_account_id ServiceAccountToken#service_account_id}
   */
   readonly serviceAccountId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_token grafana_service_account_token}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_token grafana_service_account_token}
 */
 export class ServiceAccountToken extends cdktf.TerraformResource {
 
@@ -51,7 +51,7 @@ export class ServiceAccountToken extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ServiceAccountToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ServiceAccountToken to import
-  * @param importFromId The id of the existing ServiceAccountToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ServiceAccountToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ServiceAccountToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -63,7 +63,7 @@ export class ServiceAccountToken extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/service_account_token grafana_service_account_token} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/service_account_token grafana_service_account_token} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -74,7 +74,7 @@ export class ServiceAccountToken extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_service_account_token',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

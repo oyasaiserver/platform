@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -15,7 +15,7 @@ export interface OrganizationConfig extends cdktf.TerraformMetaArguments {
   * organizations.
   *  Defaults to `admin`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#admin_user Organization#admin_user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#admin_user Organization#admin_user}
   */
   readonly adminUser?: string;
   /**
@@ -23,7 +23,7 @@ export interface OrganizationConfig extends cdktf.TerraformMetaArguments {
   * access to the organization. Note: users specified here must already exist in
   * Grafana unless 'create_users' is set to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#admins Organization#admins}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#admins Organization#admins}
   */
   readonly admins?: string[];
   /**
@@ -35,7 +35,7 @@ export interface OrganizationConfig extends cdktf.TerraformMetaArguments {
   * already exist in Grafana.
   *  Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#create_users Organization#create_users}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#create_users Organization#create_users}
   */
   readonly createUsers?: boolean | cdktf.IResolvable;
   /**
@@ -43,11 +43,11 @@ export interface OrganizationConfig extends cdktf.TerraformMetaArguments {
   * access to the organization. Note: users specified here must already exist in
   * Grafana unless 'create_users' is set to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#editors Organization#editors}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#editors Organization#editors}
   */
   readonly editors?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#id Organization#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#id Organization#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -56,7 +56,7 @@ export interface OrganizationConfig extends cdktf.TerraformMetaArguments {
   /**
   * The display name for the Grafana organization created.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#name Organization#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#name Organization#name}
   */
   readonly name: string;
   /**
@@ -64,7 +64,7 @@ export interface OrganizationConfig extends cdktf.TerraformMetaArguments {
   * Note: users specified here must already exist in Grafana, unless 'create_users' is
   * set to true. This feature is only available in Grafana 10.2+.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#users_without_access Organization#users_without_access}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#users_without_access Organization#users_without_access}
   */
   readonly usersWithoutAccess?: string[];
   /**
@@ -72,13 +72,13 @@ export interface OrganizationConfig extends cdktf.TerraformMetaArguments {
   * access to the organization. Note: users specified here must already exist in
   * Grafana unless 'create_users' is set to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#viewers Organization#viewers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#viewers Organization#viewers}
   */
   readonly viewers?: string[];
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization grafana_organization}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization grafana_organization}
 */
 export class Organization extends cdktf.TerraformResource {
 
@@ -94,7 +94,7 @@ export class Organization extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Organization resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Organization to import
-  * @param importFromId The id of the existing Organization that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Organization that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Organization to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -106,7 +106,7 @@ export class Organization extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization grafana_organization} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization grafana_organization} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -117,7 +117,7 @@ export class Organization extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_organization',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

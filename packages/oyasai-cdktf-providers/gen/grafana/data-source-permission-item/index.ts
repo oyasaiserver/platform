@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,49 +10,49 @@ export interface DataSourcePermissionItemConfig extends cdktf.TerraformMetaArgum
   /**
   * The plugin type of the datasource (e.g. "prometheus"). If set, skips the lookup of the datasource type from the API.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item#datasource_type DataSourcePermissionItem#datasource_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item#datasource_type DataSourcePermissionItem#datasource_type}
   */
   readonly datasourceType?: string;
   /**
   * The UID of the datasource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item#datasource_uid DataSourcePermissionItem#datasource_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item#datasource_uid DataSourcePermissionItem#datasource_uid}
   */
   readonly datasourceUid: string;
   /**
   * The Organization ID. If not set, the default organization is used for basic authentication, or the one that owns your service account for token authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item#org_id DataSourcePermissionItem#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item#org_id DataSourcePermissionItem#org_id}
   */
   readonly orgId?: string;
   /**
   * the permission to be assigned
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item#permission DataSourcePermissionItem#permission}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item#permission DataSourcePermissionItem#permission}
   */
   readonly permission: string;
   /**
   * the role onto which the permission is to be assigned
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item#role DataSourcePermissionItem#role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item#role DataSourcePermissionItem#role}
   */
   readonly role?: string;
   /**
   * the team onto which the permission is to be assigned
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item#team DataSourcePermissionItem#team}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item#team DataSourcePermissionItem#team}
   */
   readonly team?: string;
   /**
   * the user or service account onto which the permission is to be assigned
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item#user DataSourcePermissionItem#user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item#user DataSourcePermissionItem#user}
   */
   readonly user?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item grafana_data_source_permission_item}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item grafana_data_source_permission_item}
 */
 export class DataSourcePermissionItem extends cdktf.TerraformResource {
 
@@ -68,7 +68,7 @@ export class DataSourcePermissionItem extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DataSourcePermissionItem resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataSourcePermissionItem to import
-  * @param importFromId The id of the existing DataSourcePermissionItem that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataSourcePermissionItem that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataSourcePermissionItem to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -80,7 +80,7 @@ export class DataSourcePermissionItem extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_permission_item grafana_data_source_permission_item} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_permission_item grafana_data_source_permission_item} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -91,7 +91,7 @@ export class DataSourcePermissionItem extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_data_source_permission_item',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

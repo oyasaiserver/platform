@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci
+// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionCircleciConfig extends cdktf.TerraformMetaArgument
   /**
   * The credentials for the CircleCI App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci#credentials AppConnectionCircleci#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci#credentials AppConnectionCircleci#credentials}
   */
   readonly credentials: AppConnectionCircleciCredentials;
   /**
   * An optional description for the CircleCI App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci#description AppConnectionCircleci#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci#description AppConnectionCircleci#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with CircleCI. Possible values are: api-token
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci#method AppConnectionCircleci#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci#method AppConnectionCircleci#method}
   */
   readonly method: string;
   /**
   * The name of the CircleCI App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci#name AppConnectionCircleci#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci#name AppConnectionCircleci#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci#project_id AppConnectionCircleci#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci#project_id AppConnectionCircleci#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,13 +42,13 @@ export interface AppConnectionCircleciCredentials {
   /**
   * The CircleCI API token for authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci#api_token AppConnectionCircleci#api_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci#api_token AppConnectionCircleci#api_token}
   */
   readonly apiToken: string;
   /**
   * The CircleCI host to connect with, for self-hosted instances. (default: https://circleci.com)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci#host AppConnectionCircleci#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci#host AppConnectionCircleci#host}
   */
   readonly host?: string;
 }
@@ -168,7 +168,7 @@ export class AppConnectionCircleciCredentialsOutputReference extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci infisical_app_connection_circleci}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci infisical_app_connection_circleci}
 */
 export class AppConnectionCircleci extends cdktf.TerraformResource {
 
@@ -184,7 +184,7 @@ export class AppConnectionCircleci extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionCircleci resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionCircleci to import
-  * @param importFromId The id of the existing AppConnectionCircleci that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionCircleci that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionCircleci to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -196,7 +196,7 @@ export class AppConnectionCircleci extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_circleci infisical_app_connection_circleci} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_circleci infisical_app_connection_circleci} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -207,7 +207,7 @@ export class AppConnectionCircleci extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_circleci',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.26'
+        providerVersion: '0.19.31'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

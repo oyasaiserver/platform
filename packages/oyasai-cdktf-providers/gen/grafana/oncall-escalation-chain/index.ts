@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation_chain
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation_chain
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface OncallEscalationChainConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation_chain#id OncallEscalationChain#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation_chain#id OncallEscalationChain#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,19 +17,19 @@ export interface OncallEscalationChainConfig extends cdktf.TerraformMetaArgument
   /**
   * The name of the escalation chain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation_chain#name OncallEscalationChain#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation_chain#name OncallEscalationChain#name}
   */
   readonly name: string;
   /**
   * The ID of the OnCall team (using the `grafana_oncall_team` datasource).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation_chain#team_id OncallEscalationChain#team_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation_chain#team_id OncallEscalationChain#team_id}
   */
   readonly teamId?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation_chain grafana_oncall_escalation_chain}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation_chain grafana_oncall_escalation_chain}
 */
 export class OncallEscalationChain extends cdktf.TerraformResource {
 
@@ -45,7 +45,7 @@ export class OncallEscalationChain extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OncallEscalationChain resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OncallEscalationChain to import
-  * @param importFromId The id of the existing OncallEscalationChain that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation_chain#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OncallEscalationChain that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation_chain#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OncallEscalationChain to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -57,7 +57,7 @@ export class OncallEscalationChain extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation_chain grafana_oncall_escalation_chain} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation_chain grafana_oncall_escalation_chain} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -68,7 +68,7 @@ export class OncallEscalationChain extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_oncall_escalation_chain',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

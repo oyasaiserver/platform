@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppsProvisioningConnectionV0Alpha1Config extends cdktf.Terrafor
   /**
   * Set this to 1 when using `secure`, then increment it to trigger re-application of secure values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#secure_version AppsProvisioningConnectionV0Alpha1#secure_version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#secure_version AppsProvisioningConnectionV0Alpha1#secure_version}
   */
   readonly secureVersion?: number;
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#metadata AppsProvisioningConnectionV0Alpha1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#metadata AppsProvisioningConnectionV0Alpha1#metadata}
   */
   readonly metadata?: AppsProvisioningConnectionV0Alpha1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#options AppsProvisioningConnectionV0Alpha1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#options AppsProvisioningConnectionV0Alpha1#options}
   */
   readonly options?: AppsProvisioningConnectionV0Alpha1Options;
   /**
   * secure block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#secure AppsProvisioningConnectionV0Alpha1#secure}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#secure AppsProvisioningConnectionV0Alpha1#secure}
   */
   readonly secure?: AppsProvisioningConnectionV0Alpha1Secure;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#spec AppsProvisioningConnectionV0Alpha1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#spec AppsProvisioningConnectionV0Alpha1#spec}
   */
   readonly spec?: AppsProvisioningConnectionV0Alpha1Spec;
 }
@@ -42,13 +42,13 @@ export interface AppsProvisioningConnectionV0Alpha1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#folder_uid AppsProvisioningConnectionV0Alpha1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#folder_uid AppsProvisioningConnectionV0Alpha1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#uid AppsProvisioningConnectionV0Alpha1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#uid AppsProvisioningConnectionV0Alpha1#uid}
   */
   readonly uid: string;
 }
@@ -191,13 +191,13 @@ export interface AppsProvisioningConnectionV0Alpha1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#manager_identity AppsProvisioningConnectionV0Alpha1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#manager_identity AppsProvisioningConnectionV0Alpha1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#overwrite AppsProvisioningConnectionV0Alpha1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#overwrite AppsProvisioningConnectionV0Alpha1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -322,13 +322,13 @@ export interface AppsProvisioningConnectionV0Alpha1Secure {
   /**
   * Private key for GitHub App authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#private_key AppsProvisioningConnectionV0Alpha1#private_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#private_key AppsProvisioningConnectionV0Alpha1#private_key}
   */
   readonly privateKey?: { [key: string]: string };
   /**
   * Access token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#token AppsProvisioningConnectionV0Alpha1#token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#token AppsProvisioningConnectionV0Alpha1#token}
   */
   readonly token?: { [key: string]: string };
 }
@@ -453,13 +453,13 @@ export interface AppsProvisioningConnectionV0Alpha1SpecGithub {
   /**
   * GitHub App ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#app_id AppsProvisioningConnectionV0Alpha1#app_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#app_id AppsProvisioningConnectionV0Alpha1#app_id}
   */
   readonly appId: string;
   /**
   * GitHub App installation ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#installation_id AppsProvisioningConnectionV0Alpha1#installation_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#installation_id AppsProvisioningConnectionV0Alpha1#installation_id}
   */
   readonly installationId: string;
 }
@@ -578,31 +578,31 @@ export interface AppsProvisioningConnectionV0Alpha1Spec {
   /**
   * Connection description.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#description AppsProvisioningConnectionV0Alpha1#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#description AppsProvisioningConnectionV0Alpha1#description}
   */
   readonly description?: string;
   /**
   * Display name shown in the UI.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#title AppsProvisioningConnectionV0Alpha1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#title AppsProvisioningConnectionV0Alpha1#title}
   */
   readonly title: string;
   /**
   * Connection provider type.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#type AppsProvisioningConnectionV0Alpha1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#type AppsProvisioningConnectionV0Alpha1#type}
   */
   readonly type: string;
   /**
   * Provider URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#url AppsProvisioningConnectionV0Alpha1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#url AppsProvisioningConnectionV0Alpha1#url}
   */
   readonly url?: string;
   /**
   * github block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#github AppsProvisioningConnectionV0Alpha1#github}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#github AppsProvisioningConnectionV0Alpha1#github}
   */
   readonly github: AppsProvisioningConnectionV0Alpha1SpecGithub;
 }
@@ -803,7 +803,7 @@ export class AppsProvisioningConnectionV0Alpha1SpecOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1 grafana_apps_provisioning_connection_v0alpha1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1 grafana_apps_provisioning_connection_v0alpha1}
 */
 export class AppsProvisioningConnectionV0Alpha1 extends cdktf.TerraformResource {
 
@@ -819,7 +819,7 @@ export class AppsProvisioningConnectionV0Alpha1 extends cdktf.TerraformResource 
   * Generates CDKTF code for importing a AppsProvisioningConnectionV0Alpha1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsProvisioningConnectionV0Alpha1 to import
-  * @param importFromId The id of the existing AppsProvisioningConnectionV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsProvisioningConnectionV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsProvisioningConnectionV0Alpha1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -831,7 +831,7 @@ export class AppsProvisioningConnectionV0Alpha1 extends cdktf.TerraformResource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_connection_v0alpha1 grafana_apps_provisioning_connection_v0alpha1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_connection_v0alpha1 grafana_apps_provisioning_connection_v0alpha1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -842,7 +842,7 @@ export class AppsProvisioningConnectionV0Alpha1 extends cdktf.TerraformResource 
       terraformResourceType: 'grafana_apps_provisioning_connection_v0alpha1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

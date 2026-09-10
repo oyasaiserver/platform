@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface K6ScheduleConfig extends cdktf.TerraformMetaArguments {
   /**
   * The identifier of the load test to schedule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#load_test_id K6Schedule#load_test_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#load_test_id K6Schedule#load_test_id}
   */
   readonly loadTestId: string;
   /**
   * The start time for the schedule (RFC3339 format).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#starts K6Schedule#starts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#starts K6Schedule#starts}
   */
   readonly starts: string;
   /**
   * cron block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#cron K6Schedule#cron}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#cron K6Schedule#cron}
   */
   readonly cron?: K6ScheduleCron;
   /**
   * recurrence_rule block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#recurrence_rule K6Schedule#recurrence_rule}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#recurrence_rule K6Schedule#recurrence_rule}
   */
   readonly recurrenceRule?: K6ScheduleRecurrenceRule;
 }
@@ -36,13 +36,13 @@ export interface K6ScheduleCron {
   /**
   * A cron expression with exactly 5 entries, or an alias. The allowed aliases are: `@yearly`, `@annually`, `@monthly`, `@weekly`, `@daily`, `@hourly`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#schedule K6Schedule#schedule}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#schedule K6Schedule#schedule}
   */
   readonly schedule?: string;
   /**
   * The timezone of the cron expression. For example, `UTC` or `Europe/London`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#timezone K6Schedule#timezone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#timezone K6Schedule#timezone}
   */
   readonly timezone?: string;
 }
@@ -167,31 +167,31 @@ export interface K6ScheduleRecurrenceRule {
   /**
   * The weekdays when the 'WEEKLY' recurrence will be applied (e.g., ['MO', 'WE', 'FR']). Cannot be set for other frequencies.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#byday K6Schedule#byday}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#byday K6Schedule#byday}
   */
   readonly byday?: string[];
   /**
   * How many times the recurrence will repeat.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#count K6Schedule#count}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#count K6Schedule#count}
   */
   readonly count?: number;
   /**
   * The frequency of the schedule (HOURLY, DAILY, WEEKLY, MONTHLY, YEARLY).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#frequency K6Schedule#frequency}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#frequency K6Schedule#frequency}
   */
   readonly frequency?: string;
   /**
   * The interval between each frequency iteration (e.g., 2 = every 2 hours for HOURLY). Defaults to 1.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#interval K6Schedule#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#interval K6Schedule#interval}
   */
   readonly interval?: number;
   /**
   * The end time for the recurrence (RFC3339 format).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#until K6Schedule#until}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#until K6Schedule#until}
   */
   readonly until?: string;
 }
@@ -401,7 +401,7 @@ export class K6ScheduleRecurrenceRuleOutputReference extends cdktf.ComplexObject
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule grafana_k6_schedule}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule grafana_k6_schedule}
 */
 export class K6Schedule extends cdktf.TerraformResource {
 
@@ -417,7 +417,7 @@ export class K6Schedule extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a K6Schedule resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the K6Schedule to import
-  * @param importFromId The id of the existing K6Schedule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing K6Schedule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the K6Schedule to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -429,7 +429,7 @@ export class K6Schedule extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_schedule grafana_k6_schedule} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_schedule grafana_k6_schedule} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -440,7 +440,7 @@ export class K6Schedule extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_k6_schedule',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

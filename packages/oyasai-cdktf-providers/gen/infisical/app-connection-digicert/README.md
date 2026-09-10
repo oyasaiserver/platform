@@ -1,0 +1,3 @@
+# `infisical_app_connection_digicert`
+
+Refer to the Terraform Registry for docs: [`infisical_app_connection_digicert`](https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert).

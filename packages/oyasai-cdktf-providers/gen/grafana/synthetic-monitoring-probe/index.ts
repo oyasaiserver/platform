@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SyntheticMonitoringProbeConfig extends cdktf.TerraformMetaArgum
   /**
   * Disables browser checks for this probe. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#disable_browser_checks SyntheticMonitoringProbe#disable_browser_checks}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#disable_browser_checks SyntheticMonitoringProbe#disable_browser_checks}
   */
   readonly disableBrowserChecks?: boolean | cdktf.IResolvable;
   /**
   * Disables scripted checks for this probe. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#disable_scripted_checks SyntheticMonitoringProbe#disable_scripted_checks}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#disable_scripted_checks SyntheticMonitoringProbe#disable_scripted_checks}
   */
   readonly disableScriptedChecks?: boolean | cdktf.IResolvable;
   /**
   * Custom labels to be included with collected metrics and logs. The maximum number of labels for private probes is 3.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#labels SyntheticMonitoringProbe#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#labels SyntheticMonitoringProbe#labels}
   */
   readonly labels?: { [key: string]: string };
   /**
   * Latitude coordinates.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#latitude SyntheticMonitoringProbe#latitude}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#latitude SyntheticMonitoringProbe#latitude}
   */
   readonly latitude: number;
   /**
   * Longitude coordinates.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#longitude SyntheticMonitoringProbe#longitude}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#longitude SyntheticMonitoringProbe#longitude}
   */
   readonly longitude: number;
   /**
   * Name of the probe.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#name SyntheticMonitoringProbe#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#name SyntheticMonitoringProbe#name}
   */
   readonly name: string;
   /**
   * Public probes are run by Grafana Labs and can be used by all users. Only Grafana Labs managed public probes will be set to `true`. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#public SyntheticMonitoringProbe#public}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#public SyntheticMonitoringProbe#public}
   */
   readonly public?: boolean | cdktf.IResolvable;
   /**
   * Region of the probe.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#region SyntheticMonitoringProbe#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#region SyntheticMonitoringProbe#region}
   */
   readonly region: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe grafana_synthetic_monitoring_probe}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe grafana_synthetic_monitoring_probe}
 */
 export class SyntheticMonitoringProbe extends cdktf.TerraformResource {
 
@@ -74,7 +74,7 @@ export class SyntheticMonitoringProbe extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SyntheticMonitoringProbe resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SyntheticMonitoringProbe to import
-  * @param importFromId The id of the existing SyntheticMonitoringProbe that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SyntheticMonitoringProbe that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SyntheticMonitoringProbe to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -86,7 +86,7 @@ export class SyntheticMonitoringProbe extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_probe grafana_synthetic_monitoring_probe} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_probe grafana_synthetic_monitoring_probe} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -97,7 +97,7 @@ export class SyntheticMonitoringProbe extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_synthetic_monitoring_probe',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

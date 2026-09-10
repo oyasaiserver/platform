@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,49 +10,49 @@ export interface AssistantRuleConfig extends cdktf.TerraformMetaArguments {
   /**
   * Applications where this resource applies. Valid values: `assistant`, `loop`, `infrastructure_memory` (rules only), `all`. Defaults to all applications when unset.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule#applications AssistantRule#applications}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule#applications AssistantRule#applications}
   */
   readonly applications?: string[];
   /**
   * Optional description of the rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule#description AssistantRule#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule#description AssistantRule#description}
   */
   readonly description?: string;
   /**
   * Whether the resource is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule#enabled AssistantRule#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule#enabled AssistantRule#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The rule name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule#name AssistantRule#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule#name AssistantRule#name}
   */
   readonly name: string;
   /**
   * Rule priority (lower values apply first).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule#priority AssistantRule#priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule#priority AssistantRule#priority}
   */
   readonly priority?: number;
   /**
   * The rule text included in the assistant system prompt.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule#rule_content AssistantRule#rule_content}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule#rule_content AssistantRule#rule_content}
   */
   readonly ruleContent: string;
   /**
   * Whether the resource is visible to the whole tenant (`tenant`) or only the creating user (`user`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule#scope AssistantRule#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule#scope AssistantRule#scope}
   */
   readonly scope: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule grafana_assistant_rule}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule grafana_assistant_rule}
 */
 export class AssistantRule extends cdktf.TerraformResource {
 
@@ -68,7 +68,7 @@ export class AssistantRule extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssistantRule resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssistantRule to import
-  * @param importFromId The id of the existing AssistantRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssistantRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssistantRule to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -80,7 +80,7 @@ export class AssistantRule extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_rule grafana_assistant_rule} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_rule grafana_assistant_rule} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -91,7 +91,7 @@ export class AssistantRule extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_assistant_rule',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

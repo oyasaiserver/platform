@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,75 +10,75 @@ export interface CloudProviderAzureCredentialConfig extends cdktf.TerraformMetaA
   /**
   * The client ID of the Azure Credential.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#client_id CloudProviderAzureCredential#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#client_id CloudProviderAzureCredential#client_id}
   */
   readonly clientId: string;
   /**
   * The client secret of the Azure Credential.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#client_secret CloudProviderAzureCredential#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#client_secret CloudProviderAzureCredential#client_secret}
   */
   readonly clientSecret: string;
   /**
   * Whether the Azure Credential is enabled or not. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#enabled CloudProviderAzureCredential#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#enabled CloudProviderAzureCredential#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The name of the Azure Credential.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#name CloudProviderAzureCredential#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#name CloudProviderAzureCredential#name}
   */
   readonly name: string;
   /**
   * The list of resource tags to add to metrics.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#resource_tags_to_add_to_metrics CloudProviderAzureCredential#resource_tags_to_add_to_metrics}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#resource_tags_to_add_to_metrics CloudProviderAzureCredential#resource_tags_to_add_to_metrics}
   */
   readonly resourceTagsToAddToMetrics?: string[];
   /**
   * The StackID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#stack_id CloudProviderAzureCredential#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#stack_id CloudProviderAzureCredential#stack_id}
   */
   readonly stackId: string;
   /**
   * A set of static labels to add to all metrics exported using this credential.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#static_labels CloudProviderAzureCredential#static_labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#static_labels CloudProviderAzureCredential#static_labels}
   */
   readonly staticLabels?: { [key: string]: string };
   /**
   * The tenant ID of the Azure Credential.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#tenant_id CloudProviderAzureCredential#tenant_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#tenant_id CloudProviderAzureCredential#tenant_id}
   */
   readonly tenantId: string;
   /**
   * auto_discovery_configuration block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#auto_discovery_configuration CloudProviderAzureCredential#auto_discovery_configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#auto_discovery_configuration CloudProviderAzureCredential#auto_discovery_configuration}
   */
   readonly autoDiscoveryConfiguration?: CloudProviderAzureCredentialAutoDiscoveryConfiguration[] | cdktf.IResolvable;
   /**
   * resource_discovery_tag_filter block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#resource_discovery_tag_filter CloudProviderAzureCredential#resource_discovery_tag_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#resource_discovery_tag_filter CloudProviderAzureCredential#resource_discovery_tag_filter}
   */
   readonly resourceDiscoveryTagFilter?: CloudProviderAzureCredentialResourceDiscoveryTagFilter[] | cdktf.IResolvable;
 }
 export interface CloudProviderAzureCredentialAutoDiscoveryConfigurationResourceTypeConfigurationsMetricConfiguration {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#aggregations CloudProviderAzureCredential#aggregations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#aggregations CloudProviderAzureCredential#aggregations}
   */
   readonly aggregations: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#dimensions CloudProviderAzureCredential#dimensions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#dimensions CloudProviderAzureCredential#dimensions}
   */
   readonly dimensions: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#name CloudProviderAzureCredential#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#name CloudProviderAzureCredential#name}
   */
   readonly name: string;
 }
@@ -243,11 +243,11 @@ export class CloudProviderAzureCredentialAutoDiscoveryConfigurationResourceTypeC
 }
 export interface CloudProviderAzureCredentialAutoDiscoveryConfigurationResourceTypeConfigurations {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#metric_configuration CloudProviderAzureCredential#metric_configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#metric_configuration CloudProviderAzureCredential#metric_configuration}
   */
   readonly metricConfiguration: CloudProviderAzureCredentialAutoDiscoveryConfigurationResourceTypeConfigurationsMetricConfiguration[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#resource_type_name CloudProviderAzureCredential#resource_type_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#resource_type_name CloudProviderAzureCredential#resource_type_name}
   */
   readonly resourceTypeName: string;
 }
@@ -388,13 +388,13 @@ export interface CloudProviderAzureCredentialAutoDiscoveryConfiguration {
   /**
   * The list of resource type configurations.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#resource_type_configurations CloudProviderAzureCredential#resource_type_configurations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#resource_type_configurations CloudProviderAzureCredential#resource_type_configurations}
   */
   readonly resourceTypeConfigurations: CloudProviderAzureCredentialAutoDiscoveryConfigurationResourceTypeConfigurations[] | cdktf.IResolvable;
   /**
   * The subscription ID of the Azure account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#subscription_id CloudProviderAzureCredential#subscription_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#subscription_id CloudProviderAzureCredential#subscription_id}
   */
   readonly subscriptionId: string;
 }
@@ -535,13 +535,13 @@ export interface CloudProviderAzureCredentialResourceDiscoveryTagFilter {
   /**
   * The key of the tag filter.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#key CloudProviderAzureCredential#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#key CloudProviderAzureCredential#key}
   */
   readonly key: string;
   /**
   * The value of the tag filter.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#value CloudProviderAzureCredential#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#value CloudProviderAzureCredential#value}
   */
   readonly value: string;
 }
@@ -680,7 +680,7 @@ export class CloudProviderAzureCredentialResourceDiscoveryTagFilterList extends 
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential grafana_cloud_provider_azure_credential}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential grafana_cloud_provider_azure_credential}
 */
 export class CloudProviderAzureCredential extends cdktf.TerraformResource {
 
@@ -696,7 +696,7 @@ export class CloudProviderAzureCredential extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudProviderAzureCredential resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudProviderAzureCredential to import
-  * @param importFromId The id of the existing CloudProviderAzureCredential that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudProviderAzureCredential that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudProviderAzureCredential to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -708,7 +708,7 @@ export class CloudProviderAzureCredential extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_azure_credential grafana_cloud_provider_azure_credential} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_azure_credential grafana_cloud_provider_azure_credential} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -719,7 +719,7 @@ export class CloudProviderAzureCredential extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_provider_azure_credential',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

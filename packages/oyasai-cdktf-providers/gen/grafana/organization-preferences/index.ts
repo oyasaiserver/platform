@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface OrganizationPreferencesConfig extends cdktf.TerraformMetaArgume
   /**
   * The Organization home dashboard UID. This is only available in Grafana 9.0+.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences#home_dashboard_uid OrganizationPreferences#home_dashboard_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences#home_dashboard_uid OrganizationPreferences#home_dashboard_uid}
   */
   readonly homeDashboardUid?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences#id OrganizationPreferences#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences#id OrganizationPreferences#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,31 +23,31 @@ export interface OrganizationPreferencesConfig extends cdktf.TerraformMetaArgume
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences#org_id OrganizationPreferences#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences#org_id OrganizationPreferences#org_id}
   */
   readonly orgId?: string;
   /**
   * The Organization theme. Any string value is supported, including custom themes. Common values are `light`, `dark`, `system`, or an empty string for the default.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences#theme OrganizationPreferences#theme}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences#theme OrganizationPreferences#theme}
   */
   readonly theme?: string;
   /**
   * The Organization timezone. Any string value is supported, including IANA timezone names. Common values are `utc`, `browser`, or an empty string for the default.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences#timezone OrganizationPreferences#timezone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences#timezone OrganizationPreferences#timezone}
   */
   readonly timezone?: string;
   /**
   * The Organization week start day. Available values are `sunday`, `monday`, `saturday`, or an empty string for the default. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences#week_start OrganizationPreferences#week_start}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences#week_start OrganizationPreferences#week_start}
   */
   readonly weekStart?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences grafana_organization_preferences}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences grafana_organization_preferences}
 */
 export class OrganizationPreferences extends cdktf.TerraformResource {
 
@@ -63,7 +63,7 @@ export class OrganizationPreferences extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OrganizationPreferences resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OrganizationPreferences to import
-  * @param importFromId The id of the existing OrganizationPreferences that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OrganizationPreferences that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OrganizationPreferences to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -75,7 +75,7 @@ export class OrganizationPreferences extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/organization_preferences grafana_organization_preferences} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/organization_preferences grafana_organization_preferences} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -86,7 +86,7 @@ export class OrganizationPreferences extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_organization_preferences',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

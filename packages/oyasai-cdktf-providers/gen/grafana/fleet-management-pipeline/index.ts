@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface FleetManagementPipelineConfig extends cdktf.TerraformMetaArgume
   /**
   * Type of the config. Must be one of: ALLOY, OTEL. Defaults to ALLOY if not specified.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline#config_type FleetManagementPipeline#config_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline#config_type FleetManagementPipeline#config_type}
   */
   readonly configType?: string;
   /**
   * Configuration contents of the pipeline to be used by collectors (can be Alloy config syntax or OTel YAML)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline#contents FleetManagementPipeline#contents}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline#contents FleetManagementPipeline#contents}
   */
   readonly contents: string;
   /**
   * Whether the pipeline is enabled for collectors
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline#enabled FleetManagementPipeline#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline#enabled FleetManagementPipeline#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Used to match against collectors and assign pipelines to them; follows the syntax of Prometheus Alertmanager matchers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline#matchers FleetManagementPipeline#matchers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline#matchers FleetManagementPipeline#matchers}
   */
   readonly matchers?: string[];
   /**
   * Name of the pipeline which is the unique identifier for the pipeline
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline#name FleetManagementPipeline#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline#name FleetManagementPipeline#name}
   */
   readonly name: string;
   /**
   * Namespace sent with the pipeline source (always `SOURCE_TYPE_TERRAFORM` in the Fleet Management API). Use a stable value per Terraform root or workspace so the UI shows Terraform as the source and API sync semantics stay consistent. If omitted, the namespace `default` is used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline#terraform_source_namespace FleetManagementPipeline#terraform_source_namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline#terraform_source_namespace FleetManagementPipeline#terraform_source_namespace}
   */
   readonly terraformSourceNamespace?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline grafana_fleet_management_pipeline}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline grafana_fleet_management_pipeline}
 */
 export class FleetManagementPipeline extends cdktf.TerraformResource {
 
@@ -62,7 +62,7 @@ export class FleetManagementPipeline extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a FleetManagementPipeline resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the FleetManagementPipeline to import
-  * @param importFromId The id of the existing FleetManagementPipeline that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing FleetManagementPipeline that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the FleetManagementPipeline to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +74,7 @@ export class FleetManagementPipeline extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_pipeline grafana_fleet_management_pipeline} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_pipeline grafana_fleet_management_pipeline} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +85,7 @@ export class FleetManagementPipeline extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_fleet_management_pipeline',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

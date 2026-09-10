@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_integration
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_integration
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface CloudIntegrationConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether alerts are enabled for this integration.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_integration#alerts_enabled CloudIntegration#alerts_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_integration#alerts_enabled CloudIntegration#alerts_enabled}
   */
   readonly alertsEnabled?: boolean | cdktf.IResolvable;
   /**
   * The slug of the integration to install (e.g., 'docker', 'linux-node').
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_integration#slug CloudIntegration#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_integration#slug CloudIntegration#slug}
   */
   readonly slug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_integration grafana_cloud_integration}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_integration grafana_cloud_integration}
 */
 export class CloudIntegration extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class CloudIntegration extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudIntegration resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudIntegration to import
-  * @param importFromId The id of the existing CloudIntegration that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_integration#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudIntegration that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_integration#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudIntegration to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class CloudIntegration extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_integration grafana_cloud_integration} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_integration grafana_cloud_integration} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class CloudIntegration extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_integration',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

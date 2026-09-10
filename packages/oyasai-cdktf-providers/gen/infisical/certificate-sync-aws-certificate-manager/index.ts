@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager
+// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface CertificateSyncAwsCertificateManagerConfig extends cdktf.Terraf
   /**
   * The ID of the Certificate Manager application to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#application_id CertificateSyncAwsCertificateManager#application_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#application_id CertificateSyncAwsCertificateManager#application_id}
   */
   readonly applicationId: string;
   /**
   * Whether certificates should be automatically synced to the destination when they are added or renewed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#auto_sync_enabled CertificateSyncAwsCertificateManager#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#auto_sync_enabled CertificateSyncAwsCertificateManager#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the aws Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#connection_id CertificateSyncAwsCertificateManager#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#connection_id CertificateSyncAwsCertificateManager#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the AWS Certificate Manager sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#description CertificateSyncAwsCertificateManager#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#description CertificateSyncAwsCertificateManager#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the certificate sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#destination_config CertificateSyncAwsCertificateManager#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#destination_config CertificateSyncAwsCertificateManager#destination_config}
   */
   readonly destinationConfig: CertificateSyncAwsCertificateManagerDestinationConfig;
   /**
   * The name of the AWS Certificate Manager sync to create.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#name CertificateSyncAwsCertificateManager#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#name CertificateSyncAwsCertificateManager#name}
   */
   readonly name: string;
   /**
   * Parameters to modify how certificates are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#sync_options CertificateSyncAwsCertificateManager#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#sync_options CertificateSyncAwsCertificateManager#sync_options}
   */
   readonly syncOptions: CertificateSyncAwsCertificateManagerSyncOptions;
 }
@@ -54,7 +54,7 @@ export interface CertificateSyncAwsCertificateManagerDestinationConfig {
   /**
   * The AWS region to sync certificates to (e.g. us-east-1).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#aws_region CertificateSyncAwsCertificateManager#aws_region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#aws_region CertificateSyncAwsCertificateManager#aws_region}
   */
   readonly awsRegion: string;
 }
@@ -147,25 +147,25 @@ export interface CertificateSyncAwsCertificateManagerSyncOptions {
   /**
   * Whether Infisical should remove certificates from AWS Certificate Manager when they are no longer managed in Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#can_remove_certificates CertificateSyncAwsCertificateManager#can_remove_certificates}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#can_remove_certificates CertificateSyncAwsCertificateManager#can_remove_certificates}
   */
   readonly canRemoveCertificates?: boolean | cdktf.IResolvable;
   /**
   * The naming scheme for synced certificates. Must include the {{certificateId}} or {{shortCertificateId}} placeholder. Available placeholders: {{certificateId}}, {{shortCertificateId}}, {{profileId}}, {{applicationId}}, {{applicationName}}, {{commonName}}.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#certificate_name_schema CertificateSyncAwsCertificateManager#certificate_name_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#certificate_name_schema CertificateSyncAwsCertificateManager#certificate_name_schema}
   */
   readonly certificateNameSchema: string;
   /**
   * Whether to include the root CA certificate in the synced certificate chain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#include_root_ca CertificateSyncAwsCertificateManager#include_root_ca}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#include_root_ca CertificateSyncAwsCertificateManager#include_root_ca}
   */
   readonly includeRootCa?: boolean | cdktf.IResolvable;
   /**
   * Whether to preserve the AWS Certificate Manager ARN when a certificate is renewed, reimporting into the existing certificate instead of creating a new one.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#preserve_arn CertificateSyncAwsCertificateManager#preserve_arn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#preserve_arn CertificateSyncAwsCertificateManager#preserve_arn}
   */
   readonly preserveArn?: boolean | cdktf.IResolvable;
 }
@@ -343,7 +343,7 @@ export class CertificateSyncAwsCertificateManagerSyncOptionsOutputReference exte
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager infisical_certificate_sync_aws_certificate_manager}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager infisical_certificate_sync_aws_certificate_manager}
 */
 export class CertificateSyncAwsCertificateManager extends cdktf.TerraformResource {
 
@@ -359,7 +359,7 @@ export class CertificateSyncAwsCertificateManager extends cdktf.TerraformResourc
   * Generates CDKTF code for importing a CertificateSyncAwsCertificateManager resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertificateSyncAwsCertificateManager to import
-  * @param importFromId The id of the existing CertificateSyncAwsCertificateManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertificateSyncAwsCertificateManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertificateSyncAwsCertificateManager to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -371,7 +371,7 @@ export class CertificateSyncAwsCertificateManager extends cdktf.TerraformResourc
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/certificate_sync_aws_certificate_manager infisical_certificate_sync_aws_certificate_manager} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/certificate_sync_aws_certificate_manager infisical_certificate_sync_aws_certificate_manager} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -382,7 +382,7 @@ export class CertificateSyncAwsCertificateManager extends cdktf.TerraformResourc
       terraformResourceType: 'infisical_certificate_sync_aws_certificate_manager',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.26'
+        providerVersion: '0.19.31'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

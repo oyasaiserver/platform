@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/message_template
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/message_template
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface MessageTemplateConfig extends cdktf.TerraformMetaArguments {
   /**
   * Allow modifying the message template from other sources than Terraform or the Grafana API. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/message_template#disable_provenance MessageTemplate#disable_provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/message_template#disable_provenance MessageTemplate#disable_provenance}
   */
   readonly disableProvenance?: boolean | cdktf.IResolvable;
   /**
   * The name of the notification template group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/message_template#name MessageTemplate#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/message_template#name MessageTemplate#name}
   */
   readonly name: string;
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/message_template#org_id MessageTemplate#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/message_template#org_id MessageTemplate#org_id}
   */
   readonly orgId?: string;
   /**
   * The content of the notification template group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/message_template#template MessageTemplate#template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/message_template#template MessageTemplate#template}
   */
   readonly template: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/message_template grafana_message_template}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/message_template grafana_message_template}
 */
 export class MessageTemplate extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class MessageTemplate extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a MessageTemplate resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the MessageTemplate to import
-  * @param importFromId The id of the existing MessageTemplate that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/message_template#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing MessageTemplate that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/message_template#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the MessageTemplate to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class MessageTemplate extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/message_template grafana_message_template} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/message_template grafana_message_template} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class MessageTemplate extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_message_template',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

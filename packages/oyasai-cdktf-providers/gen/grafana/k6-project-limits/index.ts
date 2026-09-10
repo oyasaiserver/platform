@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface K6ProjectLimitsConfig extends cdktf.TerraformMetaArguments {
   /**
   * Maximum duration of a test in seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits#duration_max_per_test K6ProjectLimits#duration_max_per_test}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits#duration_max_per_test K6ProjectLimits#duration_max_per_test}
   */
   readonly durationMaxPerTest?: number;
   /**
   * The identifier of the project to manage limits for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits#project_id K6ProjectLimits#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits#project_id K6ProjectLimits#project_id}
   */
   readonly projectId: string;
   /**
   * Maximum number of concurrent browser virtual users (VUs) used in one test.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits#vu_browser_max_per_test K6ProjectLimits#vu_browser_max_per_test}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits#vu_browser_max_per_test K6ProjectLimits#vu_browser_max_per_test}
   */
   readonly vuBrowserMaxPerTest?: number;
   /**
   * Maximum number of concurrent virtual users (VUs) used in one test.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits#vu_max_per_test K6ProjectLimits#vu_max_per_test}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits#vu_max_per_test K6ProjectLimits#vu_max_per_test}
   */
   readonly vuMaxPerTest?: number;
   /**
   * Maximum amount of virtual user hours (VU/h) used per one calendar month.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits#vuh_max_per_month K6ProjectLimits#vuh_max_per_month}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits#vuh_max_per_month K6ProjectLimits#vuh_max_per_month}
   */
   readonly vuhMaxPerMonth?: number;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits grafana_k6_project_limits}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits grafana_k6_project_limits}
 */
 export class K6ProjectLimits extends cdktf.TerraformResource {
 
@@ -56,7 +56,7 @@ export class K6ProjectLimits extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a K6ProjectLimits resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the K6ProjectLimits to import
-  * @param importFromId The id of the existing K6ProjectLimits that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing K6ProjectLimits that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the K6ProjectLimits to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -68,7 +68,7 @@ export class K6ProjectLimits extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/k6_project_limits grafana_k6_project_limits} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/k6_project_limits grafana_k6_project_limits} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -79,7 +79,7 @@ export class K6ProjectLimits extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_k6_project_limits',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

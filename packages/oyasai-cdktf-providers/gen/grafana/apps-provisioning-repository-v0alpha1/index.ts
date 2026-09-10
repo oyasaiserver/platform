@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppsProvisioningRepositoryV0Alpha1Config extends cdktf.Terrafor
   /**
   * Set this to 1 when using `secure`, then increment it to trigger re-application of secure values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#secure_version AppsProvisioningRepositoryV0Alpha1#secure_version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#secure_version AppsProvisioningRepositoryV0Alpha1#secure_version}
   */
   readonly secureVersion?: number;
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#metadata AppsProvisioningRepositoryV0Alpha1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#metadata AppsProvisioningRepositoryV0Alpha1#metadata}
   */
   readonly metadata?: AppsProvisioningRepositoryV0Alpha1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#options AppsProvisioningRepositoryV0Alpha1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#options AppsProvisioningRepositoryV0Alpha1#options}
   */
   readonly options?: AppsProvisioningRepositoryV0Alpha1Options;
   /**
   * secure block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#secure AppsProvisioningRepositoryV0Alpha1#secure}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#secure AppsProvisioningRepositoryV0Alpha1#secure}
   */
   readonly secure?: AppsProvisioningRepositoryV0Alpha1Secure;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#spec AppsProvisioningRepositoryV0Alpha1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#spec AppsProvisioningRepositoryV0Alpha1#spec}
   */
   readonly spec?: AppsProvisioningRepositoryV0Alpha1Spec;
 }
@@ -42,13 +42,13 @@ export interface AppsProvisioningRepositoryV0Alpha1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#folder_uid AppsProvisioningRepositoryV0Alpha1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#folder_uid AppsProvisioningRepositoryV0Alpha1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#uid AppsProvisioningRepositoryV0Alpha1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#uid AppsProvisioningRepositoryV0Alpha1#uid}
   */
   readonly uid: string;
 }
@@ -191,13 +191,13 @@ export interface AppsProvisioningRepositoryV0Alpha1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#manager_identity AppsProvisioningRepositoryV0Alpha1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#manager_identity AppsProvisioningRepositoryV0Alpha1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#overwrite AppsProvisioningRepositoryV0Alpha1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#overwrite AppsProvisioningRepositoryV0Alpha1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -322,19 +322,19 @@ export interface AppsProvisioningRepositoryV0Alpha1Secure {
   /**
   * Private key used to sign commits the repository writes back. The format is selected by `spec.commit.signing_method`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#commit_signing_key AppsProvisioningRepositoryV0Alpha1#commit_signing_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#commit_signing_key AppsProvisioningRepositoryV0Alpha1#commit_signing_key}
   */
   readonly commitSigningKey?: { [key: string]: string };
   /**
   * Token for repository authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#token AppsProvisioningRepositoryV0Alpha1#token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#token AppsProvisioningRepositoryV0Alpha1#token}
   */
   readonly token?: { [key: string]: string };
   /**
   * Webhook secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#webhook_secret AppsProvisioningRepositoryV0Alpha1#webhook_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#webhook_secret AppsProvisioningRepositoryV0Alpha1#webhook_secret}
   */
   readonly webhookSecret?: { [key: string]: string };
 }
@@ -488,25 +488,25 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecBitbucket {
   /**
   * Branch to sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
   */
   readonly branch?: string;
   /**
   * Optional subdirectory path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
   */
   readonly path?: string;
   /**
   * Username for PAT auth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#token_user AppsProvisioningRepositoryV0Alpha1#token_user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#token_user AppsProvisioningRepositoryV0Alpha1#token_user}
   */
   readonly tokenUser?: string;
   /**
   * Repository URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
   */
   readonly url?: string;
 }
@@ -689,13 +689,13 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecBranch {
   /**
   * When true, the branch name field in Save drawers is read-only.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#enforce_template AppsProvisioningRepositoryV0Alpha1#enforce_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#enforce_template AppsProvisioningRepositoryV0Alpha1#enforce_template}
   */
   readonly enforceTemplate?: boolean | cdktf.IResolvable;
   /**
   * Template for the branch name created in the branch workflow.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#name_template AppsProvisioningRepositoryV0Alpha1#name_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#name_template AppsProvisioningRepositoryV0Alpha1#name_template}
   */
   readonly nameTemplate?: string;
 }
@@ -820,37 +820,37 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecCommit {
   /**
   * When true, the commit message field in Save drawers is pre-filled from the template and rendered read-only.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#enforce_template AppsProvisioningRepositoryV0Alpha1#enforce_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#enforce_template AppsProvisioningRepositoryV0Alpha1#enforce_template}
   */
   readonly enforceTemplate?: boolean | cdktf.IResolvable;
   /**
   * Email used as the commit signer. Defaults to "noreply@grafana.com" when empty.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#signer_email AppsProvisioningRepositoryV0Alpha1#signer_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#signer_email AppsProvisioningRepositoryV0Alpha1#signer_email}
   */
   readonly signerEmail?: string;
   /**
   * Name used as the commit signer. Defaults to "Grafana" when empty.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#signer_name AppsProvisioningRepositoryV0Alpha1#signer_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#signer_name AppsProvisioningRepositoryV0Alpha1#signer_name}
   */
   readonly signerName?: string;
   /**
   * Method used to sign commits with the key in `secure.commit_signing_key`: gpg, ssh, or smime. When empty, commits are not signed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#signing_method AppsProvisioningRepositoryV0Alpha1#signing_method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#signing_method AppsProvisioningRepositoryV0Alpha1#signing_method}
   */
   readonly signingMethod?: string;
   /**
   * Template for commit messages produced by single-resource UI operations.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#single_resource_message_template AppsProvisioningRepositoryV0Alpha1#single_resource_message_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#single_resource_message_template AppsProvisioningRepositoryV0Alpha1#single_resource_message_template}
   */
   readonly singleResourceMessageTemplate?: string;
   /**
   * PEM-encoded X.509 certificate paired with `secure.commit_signing_key` when `signing_method` is smime. This is public, not a secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#smime_certificate AppsProvisioningRepositoryV0Alpha1#smime_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#smime_certificate AppsProvisioningRepositoryV0Alpha1#smime_certificate}
   */
   readonly smimeCertificate?: string;
 }
@@ -1091,7 +1091,7 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecConnection {
   /**
   * Connection resource name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#name AppsProvisioningRepositoryV0Alpha1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#name AppsProvisioningRepositoryV0Alpha1#name}
   */
   readonly name?: string;
 }
@@ -1187,25 +1187,25 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecGit {
   /**
   * Branch to sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
   */
   readonly branch?: string;
   /**
   * Optional subdirectory path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
   */
   readonly path?: string;
   /**
   * Username for PAT auth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#token_user AppsProvisioningRepositoryV0Alpha1#token_user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#token_user AppsProvisioningRepositoryV0Alpha1#token_user}
   */
   readonly tokenUser?: string;
   /**
   * Repository URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
   */
   readonly url?: string;
 }
@@ -1388,25 +1388,25 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecGithub {
   /**
   * Branch to sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
   */
   readonly branch?: string;
   /**
   * Whether to generate dashboard previews.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#generate_dashboard_previews AppsProvisioningRepositoryV0Alpha1#generate_dashboard_previews}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#generate_dashboard_previews AppsProvisioningRepositoryV0Alpha1#generate_dashboard_previews}
   */
   readonly generateDashboardPreviews?: boolean | cdktf.IResolvable;
   /**
   * Optional subdirectory path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
   */
   readonly path?: string;
   /**
   * Repository URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
   */
   readonly url?: string;
 }
@@ -1589,31 +1589,31 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecGithubEnterprise {
   /**
   * Branch to sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
   */
   readonly branch?: string;
   /**
   * Whether to generate dashboard previews.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#generate_dashboard_previews AppsProvisioningRepositoryV0Alpha1#generate_dashboard_previews}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#generate_dashboard_previews AppsProvisioningRepositoryV0Alpha1#generate_dashboard_previews}
   */
   readonly generateDashboardPreviews?: boolean | cdktf.IResolvable;
   /**
   * Optional subdirectory path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
   */
   readonly path?: string;
   /**
   * Base URL of the self-managed GitHub Enterprise Server instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#server_url AppsProvisioningRepositoryV0Alpha1#server_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#server_url AppsProvisioningRepositoryV0Alpha1#server_url}
   */
   readonly serverUrl?: string;
   /**
   * Repository URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
   */
   readonly url?: string;
 }
@@ -1825,19 +1825,19 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecGitlab {
   /**
   * Branch to sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
   */
   readonly branch?: string;
   /**
   * Optional subdirectory path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
   */
   readonly path?: string;
   /**
   * Repository URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#url AppsProvisioningRepositoryV0Alpha1#url}
   */
   readonly url?: string;
 }
@@ -1991,7 +1991,7 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecLocal {
   /**
   * Filesystem path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#path AppsProvisioningRepositoryV0Alpha1#path}
   */
   readonly path?: string;
 }
@@ -2087,13 +2087,13 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecPullRequest {
   /**
   * When true, the pull request title field in Save drawers is read-only.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#enforce_template AppsProvisioningRepositoryV0Alpha1#enforce_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#enforce_template AppsProvisioningRepositoryV0Alpha1#enforce_template}
   */
   readonly enforceTemplate?: boolean | cdktf.IResolvable;
   /**
   * Template for pull request titles.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#title_template AppsProvisioningRepositoryV0Alpha1#title_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#title_template AppsProvisioningRepositoryV0Alpha1#title_template}
   */
   readonly titleTemplate?: string;
 }
@@ -2218,19 +2218,19 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecSync {
   /**
   * Whether sync is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#enabled AppsProvisioningRepositoryV0Alpha1#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#enabled AppsProvisioningRepositoryV0Alpha1#enabled}
   */
   readonly enabled: boolean | cdktf.IResolvable;
   /**
   * Sync interval in seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#interval_seconds AppsProvisioningRepositoryV0Alpha1#interval_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#interval_seconds AppsProvisioningRepositoryV0Alpha1#interval_seconds}
   */
   readonly intervalSeconds?: number;
   /**
   * Sync target: instance, folder, or folderless.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#target AppsProvisioningRepositoryV0Alpha1#target}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#target AppsProvisioningRepositoryV0Alpha1#target}
   */
   readonly target: string;
 }
@@ -2378,7 +2378,7 @@ export interface AppsProvisioningRepositoryV0Alpha1SpecWebhook {
   /**
   * Optional public webhook base URL override used when incoming webhook delivery must target a different host than the Grafana UI URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#base_url AppsProvisioningRepositoryV0Alpha1#base_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#base_url AppsProvisioningRepositoryV0Alpha1#base_url}
   */
   readonly baseUrl?: string;
 }
@@ -2474,97 +2474,97 @@ export interface AppsProvisioningRepositoryV0Alpha1Spec {
   /**
   * Repository description.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#description AppsProvisioningRepositoryV0Alpha1#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#description AppsProvisioningRepositoryV0Alpha1#description}
   */
   readonly description?: string;
   /**
   * Display name shown in the UI.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#title AppsProvisioningRepositoryV0Alpha1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#title AppsProvisioningRepositoryV0Alpha1#title}
   */
   readonly title: string;
   /**
   * Repository provider type: local, github, githubEnterprise, git, bitbucket, or gitlab.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#type AppsProvisioningRepositoryV0Alpha1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#type AppsProvisioningRepositoryV0Alpha1#type}
   */
   readonly type: string;
   /**
   * Allowed change workflows: write, branch.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#workflows AppsProvisioningRepositoryV0Alpha1#workflows}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#workflows AppsProvisioningRepositoryV0Alpha1#workflows}
   */
   readonly workflows?: string[];
   /**
   * bitbucket block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#bitbucket AppsProvisioningRepositoryV0Alpha1#bitbucket}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#bitbucket AppsProvisioningRepositoryV0Alpha1#bitbucket}
   */
   readonly bitbucket?: AppsProvisioningRepositoryV0Alpha1SpecBitbucket;
   /**
   * branch block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#branch AppsProvisioningRepositoryV0Alpha1#branch}
   */
   readonly branch?: AppsProvisioningRepositoryV0Alpha1SpecBranch;
   /**
   * commit block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#commit AppsProvisioningRepositoryV0Alpha1#commit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#commit AppsProvisioningRepositoryV0Alpha1#commit}
   */
   readonly commit?: AppsProvisioningRepositoryV0Alpha1SpecCommit;
   /**
   * connection block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#connection AppsProvisioningRepositoryV0Alpha1#connection}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#connection AppsProvisioningRepositoryV0Alpha1#connection}
   */
   readonly connection?: AppsProvisioningRepositoryV0Alpha1SpecConnection;
   /**
   * git block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#git AppsProvisioningRepositoryV0Alpha1#git}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#git AppsProvisioningRepositoryV0Alpha1#git}
   */
   readonly git?: AppsProvisioningRepositoryV0Alpha1SpecGit;
   /**
   * github block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#github AppsProvisioningRepositoryV0Alpha1#github}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#github AppsProvisioningRepositoryV0Alpha1#github}
   */
   readonly github?: AppsProvisioningRepositoryV0Alpha1SpecGithub;
   /**
   * github_enterprise block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#github_enterprise AppsProvisioningRepositoryV0Alpha1#github_enterprise}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#github_enterprise AppsProvisioningRepositoryV0Alpha1#github_enterprise}
   */
   readonly githubEnterprise?: AppsProvisioningRepositoryV0Alpha1SpecGithubEnterprise;
   /**
   * gitlab block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#gitlab AppsProvisioningRepositoryV0Alpha1#gitlab}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#gitlab AppsProvisioningRepositoryV0Alpha1#gitlab}
   */
   readonly gitlab?: AppsProvisioningRepositoryV0Alpha1SpecGitlab;
   /**
   * local block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#local AppsProvisioningRepositoryV0Alpha1#local}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#local AppsProvisioningRepositoryV0Alpha1#local}
   */
   readonly local?: AppsProvisioningRepositoryV0Alpha1SpecLocal;
   /**
   * pull_request block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#pull_request AppsProvisioningRepositoryV0Alpha1#pull_request}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#pull_request AppsProvisioningRepositoryV0Alpha1#pull_request}
   */
   readonly pullRequest?: AppsProvisioningRepositoryV0Alpha1SpecPullRequest;
   /**
   * sync block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#sync AppsProvisioningRepositoryV0Alpha1#sync}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#sync AppsProvisioningRepositoryV0Alpha1#sync}
   */
   readonly sync?: AppsProvisioningRepositoryV0Alpha1SpecSync;
   /**
   * webhook block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#webhook AppsProvisioningRepositoryV0Alpha1#webhook}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#webhook AppsProvisioningRepositoryV0Alpha1#webhook}
   */
   readonly webhook?: AppsProvisioningRepositoryV0Alpha1SpecWebhook;
 }
@@ -3087,7 +3087,7 @@ export class AppsProvisioningRepositoryV0Alpha1SpecOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1 grafana_apps_provisioning_repository_v0alpha1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1 grafana_apps_provisioning_repository_v0alpha1}
 */
 export class AppsProvisioningRepositoryV0Alpha1 extends cdktf.TerraformResource {
 
@@ -3103,7 +3103,7 @@ export class AppsProvisioningRepositoryV0Alpha1 extends cdktf.TerraformResource 
   * Generates CDKTF code for importing a AppsProvisioningRepositoryV0Alpha1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsProvisioningRepositoryV0Alpha1 to import
-  * @param importFromId The id of the existing AppsProvisioningRepositoryV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsProvisioningRepositoryV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsProvisioningRepositoryV0Alpha1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -3115,7 +3115,7 @@ export class AppsProvisioningRepositoryV0Alpha1 extends cdktf.TerraformResource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_provisioning_repository_v0alpha1 grafana_apps_provisioning_repository_v0alpha1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_provisioning_repository_v0alpha1 grafana_apps_provisioning_repository_v0alpha1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -3126,7 +3126,7 @@ export class AppsProvisioningRepositoryV0Alpha1 extends cdktf.TerraformResource 
       terraformResourceType: 'grafana_apps_provisioning_repository_v0alpha1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

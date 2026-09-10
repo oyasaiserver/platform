@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface AssistantQuickstartConfig extends cdktf.TerraformMetaArguments 
   /**
   * Optional JSON-encoded array of context items pre-attached to the quickstart. Each element is an Assistant `ChatContextItem`; only `node.id`, `node.name`, and `node.data` (`{"type": ..., "data": {...}}`) are required, e.g. `{"node": {"id": ..., "name": ..., "data": {"type": ..., "data": {...}}}}`. This is an advanced, internal-format field. The most reliable way to produce a valid value is to create a quickstart with the desired context through the Assistant UI, then copy the resulting `contextItems` JSON. Omit this field if no pre-attached context is needed. See the example for a typical datasource context item.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart#context_items AssistantQuickstart#context_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart#context_items AssistantQuickstart#context_items}
   */
   readonly contextItems?: string;
   /**
   * Whether the resource is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart#enabled AssistantQuickstart#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart#enabled AssistantQuickstart#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The quickstart question text.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart#prompt AssistantQuickstart#prompt}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart#prompt AssistantQuickstart#prompt}
   */
   readonly prompt: string;
   /**
   * Whether the resource is visible to the whole tenant (`tenant`) or only the creating user (`user`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart#scope AssistantQuickstart#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart#scope AssistantQuickstart#scope}
   */
   readonly scope: string;
   /**
   * Optional title for the quickstart.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart#title AssistantQuickstart#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart#title AssistantQuickstart#title}
   */
   readonly title?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart grafana_assistant_quickstart}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart grafana_assistant_quickstart}
 */
 export class AssistantQuickstart extends cdktf.TerraformResource {
 
@@ -56,7 +56,7 @@ export class AssistantQuickstart extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssistantQuickstart resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssistantQuickstart to import
-  * @param importFromId The id of the existing AssistantQuickstart that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssistantQuickstart that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssistantQuickstart to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -68,7 +68,7 @@ export class AssistantQuickstart extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_quickstart grafana_assistant_quickstart} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_quickstart grafana_assistant_quickstart} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -79,7 +79,7 @@ export class AssistantQuickstart extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_assistant_quickstart',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,35 +10,35 @@ export interface DataSourceConfig extends cdktf.TerraformMetaArguments {
   /**
   * The method by which Grafana will access the data source: `proxy` or `direct`. Defaults to `proxy`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#access_mode DataSource#access_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#access_mode DataSource#access_mode}
   */
   readonly accessMode?: string;
   /**
   * Whether to enable basic auth for the data source. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#basic_auth_enabled DataSource#basic_auth_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#basic_auth_enabled DataSource#basic_auth_enabled}
   */
   readonly basicAuthEnabled?: boolean | cdktf.IResolvable;
   /**
   * Basic auth username. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#basic_auth_username DataSource#basic_auth_username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#basic_auth_username DataSource#basic_auth_username}
   */
   readonly basicAuthUsername?: string;
   /**
   * (Required by some data source types) The name of the database to use on the selected data source server. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#database_name DataSource#database_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#database_name DataSource#database_name}
   */
   readonly databaseName?: string;
   /**
   * Custom HTTP headers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#http_headers DataSource#http_headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#http_headers DataSource#http_headers}
   */
   readonly httpHeaders?: { [key: string]: string };
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#id DataSource#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#id DataSource#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -47,67 +47,67 @@ export interface DataSourceConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether to set the data source as default. This should only be `true` to a single data source. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#is_default DataSource#is_default}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#is_default DataSource#is_default}
   */
   readonly isDefault?: boolean | cdktf.IResolvable;
   /**
   * Serialized JSON string containing the json data. This attribute can be used to pass configuration options to the data source. To figure out what options a datasource has available, see its docs or inspect the network data when saving it from the Grafana UI. Note that keys in this map are usually camelCased.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#json_data_encoded DataSource#json_data_encoded}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#json_data_encoded DataSource#json_data_encoded}
   */
   readonly jsonDataEncoded?: string;
   /**
   * A unique name for the data source.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#name DataSource#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#name DataSource#name}
   */
   readonly name: string;
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#org_id DataSource#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#org_id DataSource#org_id}
   */
   readonly orgId?: string;
   /**
   * (Can only be used with data sources in Grafana Cloud) The ID of the Private Data source Connect network to use with this data source. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#private_data_source_connect_network_id DataSource#private_data_source_connect_network_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#private_data_source_connect_network_id DataSource#private_data_source_connect_network_id}
   */
   readonly privateDataSourceConnectNetworkId?: string;
   /**
   * Serialized JSON string containing the secure json data. This attribute can be used to pass secure configuration options to the data source. To figure out what options a datasource has available, see its docs or inspect the network data when saving it from the Grafana UI. Note that keys in this map are usually camelCased.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#secure_json_data_encoded DataSource#secure_json_data_encoded}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#secure_json_data_encoded DataSource#secure_json_data_encoded}
   */
   readonly secureJsonDataEncoded?: string;
   /**
   * The data source type. Must be one of the supported data source keywords.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#type DataSource#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#type DataSource#type}
   */
   readonly type: string;
   /**
   * Unique identifier. If unset, this will be automatically generated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#uid DataSource#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#uid DataSource#uid}
   */
   readonly uid?: string;
   /**
   * The URL for the data source. The type of URL required varies depending on the chosen data source type.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#url DataSource#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#url DataSource#url}
   */
   readonly url?: string;
   /**
   * (Required by some data source types) The username to use to authenticate to the data source. Defaults to ``.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#username DataSource#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#username DataSource#username}
   */
   readonly username?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source grafana_data_source}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source grafana_data_source}
 */
 export class DataSource extends cdktf.TerraformResource {
 
@@ -123,7 +123,7 @@ export class DataSource extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DataSource resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataSource to import
-  * @param importFromId The id of the existing DataSource that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataSource that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataSource to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -135,7 +135,7 @@ export class DataSource extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source grafana_data_source} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source grafana_data_source} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -146,7 +146,7 @@ export class DataSource extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_data_source',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

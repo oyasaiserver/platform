@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsRulesAlertruleV0Alpha1Config extends cdktf.TerraformMetaArg
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#metadata AppsRulesAlertruleV0Alpha1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#metadata AppsRulesAlertruleV0Alpha1#metadata}
   */
   readonly metadata?: AppsRulesAlertruleV0Alpha1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#options AppsRulesAlertruleV0Alpha1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#options AppsRulesAlertruleV0Alpha1#options}
   */
   readonly options?: AppsRulesAlertruleV0Alpha1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#spec AppsRulesAlertruleV0Alpha1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#spec AppsRulesAlertruleV0Alpha1#spec}
   */
   readonly spec?: AppsRulesAlertruleV0Alpha1Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsRulesAlertruleV0Alpha1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#folder_uid AppsRulesAlertruleV0Alpha1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#folder_uid AppsRulesAlertruleV0Alpha1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#uid AppsRulesAlertruleV0Alpha1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#uid AppsRulesAlertruleV0Alpha1#uid}
   */
   readonly uid: string;
 }
@@ -179,13 +179,13 @@ export interface AppsRulesAlertruleV0Alpha1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#manager_identity AppsRulesAlertruleV0Alpha1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#manager_identity AppsRulesAlertruleV0Alpha1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#overwrite AppsRulesAlertruleV0Alpha1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#overwrite AppsRulesAlertruleV0Alpha1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -310,7 +310,7 @@ export interface AppsRulesAlertruleV0Alpha1SpecNotificationSettingsNamedRoutingT
   /**
   * The name of the routing tree to use.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#routing_tree AppsRulesAlertruleV0Alpha1#routing_tree}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#routing_tree AppsRulesAlertruleV0Alpha1#routing_tree}
   */
   readonly routingTree?: string;
 }
@@ -406,43 +406,43 @@ export interface AppsRulesAlertruleV0Alpha1SpecNotificationSettingsSimplifiedRou
   /**
   * A list of time interval names to apply to alerts that match this policy to suppress them unless they are sent at the specified time.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#active_timings AppsRulesAlertruleV0Alpha1#active_timings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#active_timings AppsRulesAlertruleV0Alpha1#active_timings}
   */
   readonly activeTimings?: string[];
   /**
   * The contact point to route notifications that match this rule to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#contact_point AppsRulesAlertruleV0Alpha1#contact_point}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#contact_point AppsRulesAlertruleV0Alpha1#contact_point}
   */
   readonly contactPoint?: string;
   /**
   * A list of alert labels to group alerts into notifications by.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#group_by AppsRulesAlertruleV0Alpha1#group_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#group_by AppsRulesAlertruleV0Alpha1#group_by}
   */
   readonly groupBy?: string[];
   /**
   * Minimum time interval between two notifications for the same group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#group_interval AppsRulesAlertruleV0Alpha1#group_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#group_interval AppsRulesAlertruleV0Alpha1#group_interval}
   */
   readonly groupInterval?: string;
   /**
   * Time to wait to buffer alerts of the same group before sending a notification.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#group_wait AppsRulesAlertruleV0Alpha1#group_wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#group_wait AppsRulesAlertruleV0Alpha1#group_wait}
   */
   readonly groupWait?: string;
   /**
   * A list of mute timing names to apply to alerts that match this policy.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#mute_timings AppsRulesAlertruleV0Alpha1#mute_timings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#mute_timings AppsRulesAlertruleV0Alpha1#mute_timings}
   */
   readonly muteTimings?: string[];
   /**
   * Minimum time interval for re-sending a notification if an alert is still firing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#repeat_interval AppsRulesAlertruleV0Alpha1#repeat_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#repeat_interval AppsRulesAlertruleV0Alpha1#repeat_interval}
   */
   readonly repeatInterval?: string;
 }
@@ -712,55 +712,55 @@ export interface AppsRulesAlertruleV0Alpha1SpecNotificationSettings {
   /**
   * Deprecated. A list of time interval names to apply to alerts that match this policy.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#active_timings AppsRulesAlertruleV0Alpha1#active_timings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#active_timings AppsRulesAlertruleV0Alpha1#active_timings}
   */
   readonly activeTimings?: string[];
   /**
   * Deprecated. The contact point to route notifications that match this rule to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#contact_point AppsRulesAlertruleV0Alpha1#contact_point}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#contact_point AppsRulesAlertruleV0Alpha1#contact_point}
   */
   readonly contactPoint?: string;
   /**
   * Deprecated. A list of alert labels to group alerts into notifications by.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#group_by AppsRulesAlertruleV0Alpha1#group_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#group_by AppsRulesAlertruleV0Alpha1#group_by}
   */
   readonly groupBy?: string[];
   /**
   * Deprecated. Minimum time interval between two notifications for the same group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#group_interval AppsRulesAlertruleV0Alpha1#group_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#group_interval AppsRulesAlertruleV0Alpha1#group_interval}
   */
   readonly groupInterval?: string;
   /**
   * Deprecated. Time to wait to buffer alerts of the same group before sending a notification.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#group_wait AppsRulesAlertruleV0Alpha1#group_wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#group_wait AppsRulesAlertruleV0Alpha1#group_wait}
   */
   readonly groupWait?: string;
   /**
   * Deprecated. A list of mute timing names to apply to alerts that match this policy.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#mute_timings AppsRulesAlertruleV0Alpha1#mute_timings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#mute_timings AppsRulesAlertruleV0Alpha1#mute_timings}
   */
   readonly muteTimings?: string[];
   /**
   * Deprecated. Minimum time interval for re-sending a notification if an alert is still firing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#repeat_interval AppsRulesAlertruleV0Alpha1#repeat_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#repeat_interval AppsRulesAlertruleV0Alpha1#repeat_interval}
   */
   readonly repeatInterval?: string;
   /**
   * named_routing_tree block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#named_routing_tree AppsRulesAlertruleV0Alpha1#named_routing_tree}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#named_routing_tree AppsRulesAlertruleV0Alpha1#named_routing_tree}
   */
   readonly namedRoutingTree?: AppsRulesAlertruleV0Alpha1SpecNotificationSettingsNamedRoutingTree;
   /**
   * simplified_routing block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#simplified_routing AppsRulesAlertruleV0Alpha1#simplified_routing}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#simplified_routing AppsRulesAlertruleV0Alpha1#simplified_routing}
   */
   readonly simplifiedRouting?: AppsRulesAlertruleV0Alpha1SpecNotificationSettingsSimplifiedRouting;
 }
@@ -1088,7 +1088,7 @@ export interface AppsRulesAlertruleV0Alpha1SpecTrigger {
   /**
   * The interval at which the alert rule should be evaluated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#interval AppsRulesAlertruleV0Alpha1#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#interval AppsRulesAlertruleV0Alpha1#interval}
   */
   readonly interval: string;
 }
@@ -1181,79 +1181,79 @@ export interface AppsRulesAlertruleV0Alpha1Spec {
   /**
   * Key-value pairs of metadata to attach to the alert rule. They add additional information, such as a `summary` or `runbook_url`, to help identify and investigate alerts.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#annotations AppsRulesAlertruleV0Alpha1#annotations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#annotations AppsRulesAlertruleV0Alpha1#annotations}
   */
   readonly annotations?: { [key: string]: string };
   /**
   * Describes what state to enter when the rule's query is invalid and the rule cannot be executed. Options are OK, Error, KeepLast, and Alerting.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#exec_err_state AppsRulesAlertruleV0Alpha1#exec_err_state}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#exec_err_state AppsRulesAlertruleV0Alpha1#exec_err_state}
   */
   readonly execErrState: string;
   /**
   * A sequence of stages that describe the contents of the rule. Each value is a JSON string representing an expression object.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#expressions AppsRulesAlertruleV0Alpha1#expressions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#expressions AppsRulesAlertruleV0Alpha1#expressions}
   */
   readonly expressions: { [key: string]: string };
   /**
   * The amount of time for which the rule must be breached for the rule to be considered to be Firing. Before this time has elapsed, the rule is only considered to be Pending.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#for AppsRulesAlertruleV0Alpha1#for}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#for AppsRulesAlertruleV0Alpha1#for}
   */
   readonly for?: string;
   /**
   * The amount of time for which the rule will considered to be Recovering after initially Firing. Before this time has elapsed, the rule will continue to fire once it's been triggered.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#keep_firing_for AppsRulesAlertruleV0Alpha1#keep_firing_for}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#keep_firing_for AppsRulesAlertruleV0Alpha1#keep_firing_for}
   */
   readonly keepFiringFor?: string;
   /**
   * Key-value pairs to attach to the alert rule that can be used in matching, grouping, and routing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#labels AppsRulesAlertruleV0Alpha1#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#labels AppsRulesAlertruleV0Alpha1#labels}
   */
   readonly labels?: { [key: string]: string };
   /**
   * The number of missing series evaluations that must occur before the rule is considered to be resolved.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#missing_series_evals_to_resolve AppsRulesAlertruleV0Alpha1#missing_series_evals_to_resolve}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#missing_series_evals_to_resolve AppsRulesAlertruleV0Alpha1#missing_series_evals_to_resolve}
   */
   readonly missingSeriesEvalsToResolve?: number;
   /**
   * Describes what state to enter when the rule's query returns No Data. Options are OK, NoData, KeepLast, and Alerting.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#no_data_state AppsRulesAlertruleV0Alpha1#no_data_state}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#no_data_state AppsRulesAlertruleV0Alpha1#no_data_state}
   */
   readonly noDataState: string;
   /**
   * Reference to a panel that this alert rule is associated with. Should be an object with 'dashboard_uid' (string) and 'panel_id' (number) fields.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#panel_ref AppsRulesAlertruleV0Alpha1#panel_ref}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#panel_ref AppsRulesAlertruleV0Alpha1#panel_ref}
   */
   readonly panelRef?: { [key: string]: string };
   /**
   * Sets whether the rule should be paused or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#paused AppsRulesAlertruleV0Alpha1#paused}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#paused AppsRulesAlertruleV0Alpha1#paused}
   */
   readonly paused?: boolean | cdktf.IResolvable;
   /**
   * The title of the alert rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#title AppsRulesAlertruleV0Alpha1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#title AppsRulesAlertruleV0Alpha1#title}
   */
   readonly title: string;
   /**
   * notification_settings block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#notification_settings AppsRulesAlertruleV0Alpha1#notification_settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#notification_settings AppsRulesAlertruleV0Alpha1#notification_settings}
   */
   readonly notificationSettings?: AppsRulesAlertruleV0Alpha1SpecNotificationSettings;
   /**
   * trigger block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#trigger AppsRulesAlertruleV0Alpha1#trigger}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#trigger AppsRulesAlertruleV0Alpha1#trigger}
   */
   readonly trigger: AppsRulesAlertruleV0Alpha1SpecTrigger;
 }
@@ -1680,7 +1680,7 @@ export class AppsRulesAlertruleV0Alpha1SpecOutputReference extends cdktf.Complex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1 grafana_apps_rules_alertrule_v0alpha1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1 grafana_apps_rules_alertrule_v0alpha1}
 */
 export class AppsRulesAlertruleV0Alpha1 extends cdktf.TerraformResource {
 
@@ -1696,7 +1696,7 @@ export class AppsRulesAlertruleV0Alpha1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsRulesAlertruleV0Alpha1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsRulesAlertruleV0Alpha1 to import
-  * @param importFromId The id of the existing AppsRulesAlertruleV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsRulesAlertruleV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsRulesAlertruleV0Alpha1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1708,7 +1708,7 @@ export class AppsRulesAlertruleV0Alpha1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_alertrule_v0alpha1 grafana_apps_rules_alertrule_v0alpha1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_alertrule_v0alpha1 grafana_apps_rules_alertrule_v0alpha1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1719,7 +1719,7 @@ export class AppsRulesAlertruleV0Alpha1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_rules_alertrule_v0alpha1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

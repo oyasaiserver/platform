@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface Agento11YEvaluatorConfig extends cdktf.TerraformMetaArguments {
   /**
   * Kind-specific evaluator configuration, encoded as a JSON object string. The server normalizes this payload, so it is managed from configuration and not refreshed from the API.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator#config Agento11YEvaluator#config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator#config Agento11YEvaluator#config}
   */
   readonly config: string;
   /**
   * Optional human-readable description of the evaluator.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator#description Agento11YEvaluator#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator#description Agento11YEvaluator#description}
   */
   readonly description?: string;
   /**
   * Tenant-unique identifier of the evaluator. Changing this forces a new resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator#evaluator_id Agento11YEvaluator#evaluator_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator#evaluator_id Agento11YEvaluator#evaluator_id}
   */
   readonly evaluatorId: string;
   /**
   * The evaluator kind. One of `llm_judge`, `json_schema`, `regex`, `heuristic`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator#kind Agento11YEvaluator#kind}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator#kind Agento11YEvaluator#kind}
   */
   readonly kind: string;
   /**
   * JSON array of output key definitions produced by the evaluator (for example `[{"key":"score","type":"number","pass_threshold":0.5}]`). Managed from configuration and not refreshed from the API.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator#output_keys Agento11YEvaluator#output_keys}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator#output_keys Agento11YEvaluator#output_keys}
   */
   readonly outputKeys: string;
   /**
   * Version label of the evaluator definition.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator#version Agento11YEvaluator#version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator#version Agento11YEvaluator#version}
   */
   readonly version: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator grafana_agento11y_evaluator}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator grafana_agento11y_evaluator}
 */
 export class Agento11YEvaluator extends cdktf.TerraformResource {
 
@@ -62,7 +62,7 @@ export class Agento11YEvaluator extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Agento11YEvaluator resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Agento11YEvaluator to import
-  * @param importFromId The id of the existing Agento11YEvaluator that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Agento11YEvaluator that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Agento11YEvaluator to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +74,7 @@ export class Agento11YEvaluator extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluator grafana_agento11y_evaluator} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluator grafana_agento11y_evaluator} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +85,7 @@ export class Agento11YEvaluator extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_agento11y_evaluator',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

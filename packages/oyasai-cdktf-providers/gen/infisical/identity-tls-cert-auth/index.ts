@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,61 +10,61 @@ export interface IdentityTlsCertAuthConfig extends cdktf.TerraformMetaArguments 
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#access_token_max_ttl IdentityTlsCertAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#access_token_max_ttl IdentityTlsCertAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#access_token_num_uses_limit IdentityTlsCertAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#access_token_num_uses_limit IdentityTlsCertAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address..
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#access_token_trusted_ips IdentityTlsCertAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#access_token_trusted_ips IdentityTlsCertAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityTlsCertAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#access_token_ttl IdentityTlsCertAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#access_token_ttl IdentityTlsCertAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * List of trusted common names that client certificates must have to authenticate with Infisical. When omitted, any common name is accepted.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#allowed_common_names IdentityTlsCertAuth#allowed_common_names}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#allowed_common_names IdentityTlsCertAuth#allowed_common_names}
   */
   readonly allowedCommonNames?: string[];
   /**
   * List of trusted subject alternative names that client certificates must have to authenticate with Infisical. Non-DNS entries must be prefixed with their type (e.g. `URI:spiffe://example.org/service`, `IP:10.0.0.1`, `EMAIL:svc@example.com`). When omitted, any subject alternative name is accepted.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#allowed_subject_alt_names IdentityTlsCertAuth#allowed_subject_alt_names}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#allowed_subject_alt_names IdentityTlsCertAuth#allowed_subject_alt_names}
   */
   readonly allowedSubjectAltNames?: string[];
   /**
   * The PEM-encoded CA certificate that client certificates must be issued by to authenticate with Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#ca_certificate IdentityTlsCertAuth#ca_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#ca_certificate IdentityTlsCertAuth#ca_certificate}
   */
   readonly caCertificate: string;
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#identity_id IdentityTlsCertAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#identity_id IdentityTlsCertAuth#identity_id}
   */
   readonly identityId: string;
   /**
   * Whether to build and verify the full certificate chain presented by the client up to the configured CA certificate, instead of requiring the client certificate to be signed directly by it. Default: false
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#verify_client_certificate_chain IdentityTlsCertAuth#verify_client_certificate_chain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#verify_client_certificate_chain IdentityTlsCertAuth#verify_client_certificate_chain}
   */
   readonly verifyClientCertificateChain?: boolean | cdktf.IResolvable;
 }
 export interface IdentityTlsCertAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#ip_address IdentityTlsCertAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#ip_address IdentityTlsCertAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -180,7 +180,7 @@ export class IdentityTlsCertAuthAccessTokenTrustedIpsList extends cdktf.ComplexL
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth infisical_identity_tls_cert_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth infisical_identity_tls_cert_auth}
 */
 export class IdentityTlsCertAuth extends cdktf.TerraformResource {
 
@@ -196,7 +196,7 @@ export class IdentityTlsCertAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityTlsCertAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityTlsCertAuth to import
-  * @param importFromId The id of the existing IdentityTlsCertAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityTlsCertAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityTlsCertAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -208,7 +208,7 @@ export class IdentityTlsCertAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_tls_cert_auth infisical_identity_tls_cert_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/identity_tls_cert_auth infisical_identity_tls_cert_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -219,7 +219,7 @@ export class IdentityTlsCertAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_tls_cert_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.26'
+        providerVersion: '0.19.31'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

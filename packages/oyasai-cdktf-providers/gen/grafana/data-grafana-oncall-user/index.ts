@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_user
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_user
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataGrafanaOncallUserConfig extends cdktf.TerraformMetaArgument
   /**
   * The username of the user.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_user#username DataGrafanaOncallUser#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_user#username DataGrafanaOncallUser#username}
   */
   readonly username: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_user grafana_oncall_user}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_user grafana_oncall_user}
 */
 export class DataGrafanaOncallUser extends cdktf.TerraformDataSource {
 
@@ -32,7 +32,7 @@ export class DataGrafanaOncallUser extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaOncallUser resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaOncallUser to import
-  * @param importFromId The id of the existing DataGrafanaOncallUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_user#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaOncallUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_user#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaOncallUser to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class DataGrafanaOncallUser extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_user grafana_oncall_user} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_user grafana_oncall_user} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class DataGrafanaOncallUser extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_oncall_user',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface DataGrafanaDashboardsConfig extends cdktf.TerraformMetaArgument
   /**
   * UIDs of Grafana folders containing dashboards. Specify to filter for dashboards by folder (eg. `["General"]` for General folder), or leave blank to get all dashboards in all folders.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards#folder_uids DataGrafanaDashboards#folder_uids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards#folder_uids DataGrafanaDashboards#folder_uids}
   */
   readonly folderUids?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards#id DataGrafanaDashboards#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards#id DataGrafanaDashboards#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,19 +23,19 @@ export interface DataGrafanaDashboardsConfig extends cdktf.TerraformMetaArgument
   /**
   * Maximum number of dashboard search results to return. Defaults to `5000`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards#limit DataGrafanaDashboards#limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards#limit DataGrafanaDashboards#limit}
   */
   readonly limit?: number;
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards#org_id DataGrafanaDashboards#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards#org_id DataGrafanaDashboards#org_id}
   */
   readonly orgId?: string;
   /**
   * List of string Grafana dashboard tags to search for, eg. `["prod"]`. Used only as search input, i.e., attribute value will remain unchanged.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards#tags DataGrafanaDashboards#tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards#tags DataGrafanaDashboards#tags}
   */
   readonly tags?: string[];
 }
@@ -126,7 +126,7 @@ export class DataGrafanaDashboardsDashboardsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards grafana_dashboards}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards grafana_dashboards}
 */
 export class DataGrafanaDashboards extends cdktf.TerraformDataSource {
 
@@ -142,7 +142,7 @@ export class DataGrafanaDashboards extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaDashboards resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaDashboards to import
-  * @param importFromId The id of the existing DataGrafanaDashboards that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaDashboards that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaDashboards to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -154,7 +154,7 @@ export class DataGrafanaDashboards extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/dashboards grafana_dashboards} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/dashboards grafana_dashboards} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -165,7 +165,7 @@ export class DataGrafanaDashboards extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_dashboards',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

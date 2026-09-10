@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,35 +10,35 @@ export interface CloudAccessPolicyRotatingTokenConfig extends cdktf.TerraformMet
   /**
   * ID of the access policy for which to create a token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#access_policy_id CloudAccessPolicyRotatingToken#access_policy_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#access_policy_id CloudAccessPolicyRotatingToken#access_policy_id}
   */
   readonly accessPolicyId: string;
   /**
   * Deletes the token in Grafana Cloud when the resource is destroyed in Terraform, instead of leaving it to expire at its `expires_at` time. Use it with `lifecycle { create_before_destroy = true }` to make sure that the new token is created before the old one is deleted. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#delete_on_destroy CloudAccessPolicyRotatingToken#delete_on_destroy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#delete_on_destroy CloudAccessPolicyRotatingToken#delete_on_destroy}
   */
   readonly deleteOnDestroy?: boolean | cdktf.IResolvable;
   /**
   * Display name of the access policy token. Defaults to the name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#display_name CloudAccessPolicyRotatingToken#display_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#display_name CloudAccessPolicyRotatingToken#display_name}
   */
   readonly displayName?: string;
   /**
   * Duration of the window before expiring where the token can be rotated (e.g. '24h', '30m', '1h30m'). Valid units are 's' (seconds), 'm' (minutes) and 'h' (hours).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#early_rotation_window CloudAccessPolicyRotatingToken#early_rotation_window}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#early_rotation_window CloudAccessPolicyRotatingToken#early_rotation_window}
   */
   readonly earlyRotationWindow: string;
   /**
   * Duration after which the token will expire (e.g. '24h', '30m', '1h30m'). Valid units are 's' (seconds), 'm' (minutes) and 'h' (hours).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#expire_after CloudAccessPolicyRotatingToken#expire_after}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#expire_after CloudAccessPolicyRotatingToken#expire_after}
   */
   readonly expireAfter: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#id CloudAccessPolicyRotatingToken#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#id CloudAccessPolicyRotatingToken#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -47,19 +47,19 @@ export interface CloudAccessPolicyRotatingTokenConfig extends cdktf.TerraformMet
   /**
   * Prefix for the name of the access policy token. The actual name will be stored in the computed field `name`, which will be in the format '<name_prefix>-<expiration_timestamp>'
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#name_prefix CloudAccessPolicyRotatingToken#name_prefix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#name_prefix CloudAccessPolicyRotatingToken#name_prefix}
   */
   readonly namePrefix: string;
   /**
   * Region of the access policy. Should be set to the same region as the access policy. Use the region list API to get the list of available regions: https://grafana.com/docs/grafana-cloud/developer-resources/api-reference/cloud-api/#list-regions.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#region CloudAccessPolicyRotatingToken#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#region CloudAccessPolicyRotatingToken#region}
   */
   readonly region: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token grafana_cloud_access_policy_rotating_token}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token grafana_cloud_access_policy_rotating_token}
 */
 export class CloudAccessPolicyRotatingToken extends cdktf.TerraformResource {
 
@@ -75,7 +75,7 @@ export class CloudAccessPolicyRotatingToken extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudAccessPolicyRotatingToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudAccessPolicyRotatingToken to import
-  * @param importFromId The id of the existing CloudAccessPolicyRotatingToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudAccessPolicyRotatingToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudAccessPolicyRotatingToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -87,7 +87,7 @@ export class CloudAccessPolicyRotatingToken extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_rotating_token grafana_cloud_access_policy_rotating_token} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_rotating_token grafana_cloud_access_policy_rotating_token} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -98,7 +98,7 @@ export class CloudAccessPolicyRotatingToken extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_access_policy_rotating_token',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

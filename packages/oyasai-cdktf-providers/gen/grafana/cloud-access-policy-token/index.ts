@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,23 +10,23 @@ export interface CloudAccessPolicyTokenConfig extends cdktf.TerraformMetaArgumen
   /**
   * ID of the access policy for which to create a token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token#access_policy_id CloudAccessPolicyToken#access_policy_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token#access_policy_id CloudAccessPolicyToken#access_policy_id}
   */
   readonly accessPolicyId: string;
   /**
   * Display name of the access policy token. Defaults to the name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token#display_name CloudAccessPolicyToken#display_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token#display_name CloudAccessPolicyToken#display_name}
   */
   readonly displayName?: string;
   /**
   * Expiration date of the access policy token. Does not expire by default.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token#expires_at CloudAccessPolicyToken#expires_at}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token#expires_at CloudAccessPolicyToken#expires_at}
   */
   readonly expiresAt?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token#id CloudAccessPolicyToken#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token#id CloudAccessPolicyToken#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -35,19 +35,19 @@ export interface CloudAccessPolicyTokenConfig extends cdktf.TerraformMetaArgumen
   /**
   * Name of the access policy token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token#name CloudAccessPolicyToken#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token#name CloudAccessPolicyToken#name}
   */
   readonly name: string;
   /**
   * Region of the access policy. Should be set to the same region as the access policy. Use the region list API to get the list of available regions: https://grafana.com/docs/grafana-cloud/developer-resources/api-reference/cloud-api/#list-regions.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token#region CloudAccessPolicyToken#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token#region CloudAccessPolicyToken#region}
   */
   readonly region: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token grafana_cloud_access_policy_token}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token grafana_cloud_access_policy_token}
 */
 export class CloudAccessPolicyToken extends cdktf.TerraformResource {
 
@@ -63,7 +63,7 @@ export class CloudAccessPolicyToken extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudAccessPolicyToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudAccessPolicyToken to import
-  * @param importFromId The id of the existing CloudAccessPolicyToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudAccessPolicyToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudAccessPolicyToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -75,7 +75,7 @@ export class CloudAccessPolicyToken extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy_token grafana_cloud_access_policy_token} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy_token grafana_cloud_access_policy_token} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -86,7 +86,7 @@ export class CloudAccessPolicyToken extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_access_policy_token',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

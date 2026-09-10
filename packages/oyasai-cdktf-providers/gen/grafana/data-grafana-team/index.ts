@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface DataGrafanaTeamConfig extends cdktf.TerraformMetaArguments {
   /**
   * The name of the Grafana team.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team#name DataGrafanaTeam#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team#name DataGrafanaTeam#name}
   */
   readonly name: string;
   /**
   * The Organization ID. If not set, the default organization is used for basic authentication, or the one that owns your service account for token authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team#org_id DataGrafanaTeam#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team#org_id DataGrafanaTeam#org_id}
   */
   readonly orgId?: string;
   /**
   * Whether to read the team sync settings. This is only available in Grafana Enterprise.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team#read_team_sync DataGrafanaTeam#read_team_sync}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team#read_team_sync DataGrafanaTeam#read_team_sync}
   */
   readonly readTeamSync?: boolean | cdktf.IResolvable;
   /**
   * preferences block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team#preferences DataGrafanaTeam#preferences}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team#preferences DataGrafanaTeam#preferences}
   */
   readonly preferences?: DataGrafanaTeamPreferences[] | cdktf.IResolvable;
   /**
   * team_sync block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team#team_sync DataGrafanaTeam#team_sync}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team#team_sync DataGrafanaTeam#team_sync}
   */
   readonly teamSync?: DataGrafanaTeamTeamSync[] | cdktf.IResolvable;
 }
@@ -227,7 +227,7 @@ export class DataGrafanaTeamTeamSyncList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team grafana_team}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team grafana_team}
 */
 export class DataGrafanaTeam extends cdktf.TerraformDataSource {
 
@@ -243,7 +243,7 @@ export class DataGrafanaTeam extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaTeam resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaTeam to import
-  * @param importFromId The id of the existing DataGrafanaTeam that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaTeam that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaTeam to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -255,7 +255,7 @@ export class DataGrafanaTeam extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/team grafana_team} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/team grafana_team} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -266,7 +266,7 @@ export class DataGrafanaTeam extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_team',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

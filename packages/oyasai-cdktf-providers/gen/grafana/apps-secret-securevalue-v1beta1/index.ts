@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsSecretSecurevalueV1Beta1Config extends cdktf.TerraformMetaA
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#metadata AppsSecretSecurevalueV1Beta1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#metadata AppsSecretSecurevalueV1Beta1#metadata}
   */
   readonly metadata?: AppsSecretSecurevalueV1Beta1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#options AppsSecretSecurevalueV1Beta1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#options AppsSecretSecurevalueV1Beta1#options}
   */
   readonly options?: AppsSecretSecurevalueV1Beta1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#spec AppsSecretSecurevalueV1Beta1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#spec AppsSecretSecurevalueV1Beta1#spec}
   */
   readonly spec?: AppsSecretSecurevalueV1Beta1Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsSecretSecurevalueV1Beta1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#folder_uid AppsSecretSecurevalueV1Beta1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#folder_uid AppsSecretSecurevalueV1Beta1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#uid AppsSecretSecurevalueV1Beta1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#uid AppsSecretSecurevalueV1Beta1#uid}
   */
   readonly uid: string;
 }
@@ -179,13 +179,13 @@ export interface AppsSecretSecurevalueV1Beta1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#manager_identity AppsSecretSecurevalueV1Beta1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#manager_identity AppsSecretSecurevalueV1Beta1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#overwrite AppsSecretSecurevalueV1Beta1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#overwrite AppsSecretSecurevalueV1Beta1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -310,25 +310,25 @@ export interface AppsSecretSecurevalueV1Beta1Spec {
   /**
   * List of decrypters allowed to read this secure value.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#decrypters AppsSecretSecurevalueV1Beta1#decrypters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#decrypters AppsSecretSecurevalueV1Beta1#decrypters}
   */
   readonly decrypters?: string[];
   /**
   * Secure value description.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#description AppsSecretSecurevalueV1Beta1#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#description AppsSecretSecurevalueV1Beta1#description}
   */
   readonly description?: string;
   /**
   * Reference to an existing secret managed by the keeper.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#ref AppsSecretSecurevalueV1Beta1#ref}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#ref AppsSecretSecurevalueV1Beta1#ref}
   */
   readonly ref?: string;
   /**
   * Plaintext value to store. This value is write-only.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#value AppsSecretSecurevalueV1Beta1#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#value AppsSecretSecurevalueV1Beta1#value}
   */
   readonly value?: string;
 }
@@ -514,7 +514,7 @@ export class AppsSecretSecurevalueV1Beta1SpecOutputReference extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1 grafana_apps_secret_securevalue_v1beta1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1 grafana_apps_secret_securevalue_v1beta1}
 */
 export class AppsSecretSecurevalueV1Beta1 extends cdktf.TerraformResource {
 
@@ -530,7 +530,7 @@ export class AppsSecretSecurevalueV1Beta1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsSecretSecurevalueV1Beta1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsSecretSecurevalueV1Beta1 to import
-  * @param importFromId The id of the existing AppsSecretSecurevalueV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsSecretSecurevalueV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsSecretSecurevalueV1Beta1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -542,7 +542,7 @@ export class AppsSecretSecurevalueV1Beta1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_secret_securevalue_v1beta1 grafana_apps_secret_securevalue_v1beta1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_securevalue_v1beta1 grafana_apps_secret_securevalue_v1beta1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -553,7 +553,7 @@ export class AppsSecretSecurevalueV1Beta1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_secret_securevalue_v1beta1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

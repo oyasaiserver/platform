@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface DashboardPermissionItemConfig extends cdktf.TerraformMetaArgume
   /**
   * The UID of the dashboard.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item#dashboard_uid DashboardPermissionItem#dashboard_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item#dashboard_uid DashboardPermissionItem#dashboard_uid}
   */
   readonly dashboardUid: string;
   /**
   * The Organization ID. If not set, the default organization is used for basic authentication, or the one that owns your service account for token authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item#org_id DashboardPermissionItem#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item#org_id DashboardPermissionItem#org_id}
   */
   readonly orgId?: string;
   /**
   * the permission to be assigned
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item#permission DashboardPermissionItem#permission}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item#permission DashboardPermissionItem#permission}
   */
   readonly permission: string;
   /**
   * the role onto which the permission is to be assigned
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item#role DashboardPermissionItem#role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item#role DashboardPermissionItem#role}
   */
   readonly role?: string;
   /**
   * the team onto which the permission is to be assigned
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item#team DashboardPermissionItem#team}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item#team DashboardPermissionItem#team}
   */
   readonly team?: string;
   /**
   * the user or service account onto which the permission is to be assigned
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item#user DashboardPermissionItem#user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item#user DashboardPermissionItem#user}
   */
   readonly user?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item grafana_dashboard_permission_item}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item grafana_dashboard_permission_item}
 */
 export class DashboardPermissionItem extends cdktf.TerraformResource {
 
@@ -62,7 +62,7 @@ export class DashboardPermissionItem extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DashboardPermissionItem resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DashboardPermissionItem to import
-  * @param importFromId The id of the existing DashboardPermissionItem that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DashboardPermissionItem that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DashboardPermissionItem to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +74,7 @@ export class DashboardPermissionItem extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/dashboard_permission_item grafana_dashboard_permission_item} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/dashboard_permission_item grafana_dashboard_permission_item} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +85,7 @@ export class DashboardPermissionItem extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_dashboard_permission_item',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

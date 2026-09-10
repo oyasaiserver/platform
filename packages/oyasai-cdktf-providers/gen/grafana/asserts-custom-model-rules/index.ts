@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface AssertsCustomModelRulesConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#id AssertsCustomModelRules#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#id AssertsCustomModelRules#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,13 +17,13 @@ export interface AssertsCustomModelRulesConfig extends cdktf.TerraformMetaArgume
   /**
   * The name of the custom model rules.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#name AssertsCustomModelRules#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#name AssertsCustomModelRules#name}
   */
   readonly name: string;
   /**
   * rules block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#rules AssertsCustomModelRules#rules}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#rules AssertsCustomModelRules#rules}
   */
   readonly rules: AssertsCustomModelRulesRules;
 }
@@ -31,31 +31,31 @@ export interface AssertsCustomModelRulesRulesEntityDefinedBy {
   /**
   * Whether this rule is disabled. When true, only the 'query' field is used to match an existing rule to disable; other fields are ignored.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#disabled AssertsCustomModelRules#disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#disabled AssertsCustomModelRules#disabled}
   */
   readonly disabled?: boolean | cdktf.IResolvable;
   /**
   * Label value mappings for the query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#label_values AssertsCustomModelRules#label_values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#label_values AssertsCustomModelRules#label_values}
   */
   readonly labelValues?: { [key: string]: string };
   /**
   * Literal value mappings for the query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#literals AssertsCustomModelRules#literals}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#literals AssertsCustomModelRules#literals}
   */
   readonly literals?: { [key: string]: string };
   /**
   * Metric value for the query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#metric_value AssertsCustomModelRules#metric_value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#metric_value AssertsCustomModelRules#metric_value}
   */
   readonly metricValue?: string;
   /**
   * The Prometheus query that defines this entity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#query AssertsCustomModelRules#query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#query AssertsCustomModelRules#query}
   */
   readonly query: string;
 }
@@ -286,43 +286,43 @@ export interface AssertsCustomModelRulesRulesEntity {
   /**
   * Whether this entity is disabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#disabled AssertsCustomModelRules#disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#disabled AssertsCustomModelRules#disabled}
   */
   readonly disabled?: boolean | cdktf.IResolvable;
   /**
   * List of enrichment sources for the entity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#enriched_by AssertsCustomModelRules#enriched_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#enriched_by AssertsCustomModelRules#enriched_by}
   */
   readonly enrichedBy?: string[];
   /**
   * Lookup mappings for the entity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#lookup AssertsCustomModelRules#lookup}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#lookup AssertsCustomModelRules#lookup}
   */
   readonly lookup?: { [key: string]: string };
   /**
   * The name of the entity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#name AssertsCustomModelRules#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#name AssertsCustomModelRules#name}
   */
   readonly name: string;
   /**
   * Scope labels for the entity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#scope AssertsCustomModelRules#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#scope AssertsCustomModelRules#scope}
   */
   readonly scope?: { [key: string]: string };
   /**
   * The type of the entity (e.g., Service, Pod, Namespace).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#type AssertsCustomModelRules#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#type AssertsCustomModelRules#type}
   */
   readonly type: string;
   /**
   * defined_by block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#defined_by AssertsCustomModelRules#defined_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#defined_by AssertsCustomModelRules#defined_by}
   */
   readonly definedBy: AssertsCustomModelRulesRulesEntityDefinedBy[] | cdktf.IResolvable;
 }
@@ -605,7 +605,7 @@ export interface AssertsCustomModelRulesRules {
   /**
   * entity block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#entity AssertsCustomModelRules#entity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#entity AssertsCustomModelRules#entity}
   */
   readonly entity: AssertsCustomModelRulesRulesEntity[] | cdktf.IResolvable;
 }
@@ -686,7 +686,7 @@ export class AssertsCustomModelRulesRulesOutputReference extends cdktf.ComplexOb
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules grafana_asserts_custom_model_rules}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules grafana_asserts_custom_model_rules}
 */
 export class AssertsCustomModelRules extends cdktf.TerraformResource {
 
@@ -702,7 +702,7 @@ export class AssertsCustomModelRules extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssertsCustomModelRules resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssertsCustomModelRules to import
-  * @param importFromId The id of the existing AssertsCustomModelRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssertsCustomModelRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssertsCustomModelRules to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -714,7 +714,7 @@ export class AssertsCustomModelRules extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_custom_model_rules grafana_asserts_custom_model_rules} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_custom_model_rules grafana_asserts_custom_model_rules} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -725,7 +725,7 @@ export class AssertsCustomModelRules extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_asserts_custom_model_rules',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

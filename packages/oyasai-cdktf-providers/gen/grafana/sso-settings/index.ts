@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface SsoSettingsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#id SsoSettings#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#id SsoSettings#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,25 +17,25 @@ export interface SsoSettingsConfig extends cdktf.TerraformMetaArguments {
   /**
   * The name of the SSO provider. Supported values: github, gitlab, google, azuread, okta, generic_oauth, saml, ldap.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#provider_name SsoSettings#provider_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#provider_name SsoSettings#provider_name}
   */
   readonly providerName: string;
   /**
   * ldap_settings block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#ldap_settings SsoSettings#ldap_settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#ldap_settings SsoSettings#ldap_settings}
   */
   readonly ldapSettings?: SsoSettingsLdapSettings;
   /**
   * oauth2_settings block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#oauth2_settings SsoSettings#oauth2_settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#oauth2_settings SsoSettings#oauth2_settings}
   */
   readonly oauth2Settings?: SsoSettingsOauth2Settings;
   /**
   * saml_settings block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#saml_settings SsoSettings#saml_settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#saml_settings SsoSettings#saml_settings}
   */
   readonly samlSettings?: SsoSettingsSamlSettings;
 }
@@ -43,25 +43,25 @@ export interface SsoSettingsLdapSettingsConfigServersGroupMappings {
   /**
   * If set to true, it makes the user of group_dn Grafana server admin.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#grafana_admin SsoSettings#grafana_admin}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#grafana_admin SsoSettings#grafana_admin}
   */
   readonly grafanaAdmin?: boolean | cdktf.IResolvable;
   /**
   * LDAP distinguished name (DN) of LDAP group. If you want to match all (or no LDAP groups) then you can use wildcard ("*").
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#group_dn SsoSettings#group_dn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#group_dn SsoSettings#group_dn}
   */
   readonly groupDn: string;
   /**
   * The Grafana organization database id.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#org_id SsoSettings#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#org_id SsoSettings#org_id}
   */
   readonly orgId?: number;
   /**
   * Assign users of group_dn the organization role Admin, Editor, or Viewer.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#org_role SsoSettings#org_role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#org_role SsoSettings#org_role}
   */
   readonly orgRole: string;
 }
@@ -260,139 +260,139 @@ export interface SsoSettingsLdapSettingsConfigServers {
   /**
   * The LDAP server attributes. The following attributes can be configured: email, member_of, name, surname, username.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#attributes SsoSettings#attributes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#attributes SsoSettings#attributes}
   */
   readonly attributes?: { [key: string]: string };
   /**
   * The search user bind DN.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#bind_dn SsoSettings#bind_dn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#bind_dn SsoSettings#bind_dn}
   */
   readonly bindDn?: string;
   /**
   * The search user bind password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#bind_password SsoSettings#bind_password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#bind_password SsoSettings#bind_password}
   */
   readonly bindPassword?: string;
   /**
   * The path to the client certificate.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#client_cert SsoSettings#client_cert}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#client_cert SsoSettings#client_cert}
   */
   readonly clientCert?: string;
   /**
   * The Base64 encoded value of the client certificate.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#client_cert_value SsoSettings#client_cert_value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#client_cert_value SsoSettings#client_cert_value}
   */
   readonly clientCertValue?: string;
   /**
   * The path to the client private key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#client_key SsoSettings#client_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#client_key SsoSettings#client_key}
   */
   readonly clientKey?: string;
   /**
   * The Base64 encoded value of the client private key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#client_key_value SsoSettings#client_key_value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#client_key_value SsoSettings#client_key_value}
   */
   readonly clientKeyValue?: string;
   /**
   * An array of the base DNs to search through for groups. Typically uses ou=groups.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#group_search_base_dns SsoSettings#group_search_base_dns}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#group_search_base_dns SsoSettings#group_search_base_dns}
   */
   readonly groupSearchBaseDns?: string[];
   /**
   * Group search filter, to retrieve the groups of which the user is a member (only set if memberOf attribute is not available).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#group_search_filter SsoSettings#group_search_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#group_search_filter SsoSettings#group_search_filter}
   */
   readonly groupSearchFilter?: string;
   /**
   * The %s in the search filter will be replaced with the attribute defined in this field.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#group_search_filter_user_attribute SsoSettings#group_search_filter_user_attribute}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#group_search_filter_user_attribute SsoSettings#group_search_filter_user_attribute}
   */
   readonly groupSearchFilterUserAttribute?: string;
   /**
   * The LDAP server host.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#host SsoSettings#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#host SsoSettings#host}
   */
   readonly host: string;
   /**
   * Minimum TLS version allowed. Accepted values are: TLS1.2, TLS1.3.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#min_tls_version SsoSettings#min_tls_version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#min_tls_version SsoSettings#min_tls_version}
   */
   readonly minTlsVersion?: string;
   /**
   * The LDAP server port.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#port SsoSettings#port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#port SsoSettings#port}
   */
   readonly port?: number;
   /**
   * The path to the root CA certificate.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#root_ca_cert SsoSettings#root_ca_cert}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#root_ca_cert SsoSettings#root_ca_cert}
   */
   readonly rootCaCert?: string;
   /**
   * The Base64 encoded values of the root CA certificates.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#root_ca_cert_value SsoSettings#root_ca_cert_value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#root_ca_cert_value SsoSettings#root_ca_cert_value}
   */
   readonly rootCaCertValue?: string[];
   /**
   * An array of base DNs to search through.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#search_base_dns SsoSettings#search_base_dns}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#search_base_dns SsoSettings#search_base_dns}
   */
   readonly searchBaseDns: string[];
   /**
   * The user search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#search_filter SsoSettings#search_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#search_filter SsoSettings#search_filter}
   */
   readonly searchFilter: string;
   /**
   * If set to true, the SSL cert validation will be skipped.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#ssl_skip_verify SsoSettings#ssl_skip_verify}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#ssl_skip_verify SsoSettings#ssl_skip_verify}
   */
   readonly sslSkipVerify?: boolean | cdktf.IResolvable;
   /**
   * If set to true, use LDAP with STARTTLS instead of LDAPS.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#start_tls SsoSettings#start_tls}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#start_tls SsoSettings#start_tls}
   */
   readonly startTls?: boolean | cdktf.IResolvable;
   /**
   * The timeout in seconds for connecting to the LDAP host.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#timeout SsoSettings#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#timeout SsoSettings#timeout}
   */
   readonly timeout?: number;
   /**
   * Accepted TLS ciphers. For a complete list of supported ciphers, refer to: https://go.dev/src/crypto/tls/cipher_suites.go.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#tls_ciphers SsoSettings#tls_ciphers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#tls_ciphers SsoSettings#tls_ciphers}
   */
   readonly tlsCiphers?: string[];
   /**
   * Set to true if LDAP server should use an encrypted TLS connection (either with STARTTLS or LDAPS).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#use_ssl SsoSettings#use_ssl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#use_ssl SsoSettings#use_ssl}
   */
   readonly useSsl?: boolean | cdktf.IResolvable;
   /**
   * group_mappings block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#group_mappings SsoSettings#group_mappings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#group_mappings SsoSettings#group_mappings}
   */
   readonly groupMappings?: SsoSettingsLdapSettingsConfigServersGroupMappings[] | cdktf.IResolvable;
 }
@@ -1139,7 +1139,7 @@ export interface SsoSettingsLdapSettingsConfig {
   /**
   * servers block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#servers SsoSettings#servers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#servers SsoSettings#servers}
   */
   readonly servers: SsoSettingsLdapSettingsConfigServers[] | cdktf.IResolvable;
 }
@@ -1222,25 +1222,25 @@ export interface SsoSettingsLdapSettings {
   /**
   * Whether to allow new Grafana user creation through LDAP login. If set to false, then only existing Grafana users can log in with LDAP.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allow_sign_up SsoSettings#allow_sign_up}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allow_sign_up SsoSettings#allow_sign_up}
   */
   readonly allowSignUp?: boolean | cdktf.IResolvable;
   /**
   * Define whether this configuration is enabled for LDAP. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#enabled SsoSettings#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#enabled SsoSettings#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Prevent synchronizing users’ organization roles from LDAP.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#skip_org_role_sync SsoSettings#skip_org_role_sync}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#skip_org_role_sync SsoSettings#skip_org_role_sync}
   */
   readonly skipOrgRoleSync?: boolean | cdktf.IResolvable;
   /**
   * config block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#config SsoSettings#config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#config SsoSettings#config}
   */
   readonly config: SsoSettingsLdapSettingsConfig;
 }
@@ -1410,247 +1410,247 @@ export interface SsoSettingsOauth2Settings {
   /**
   * If enabled, it will automatically sync the Grafana server administrator role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allow_assign_grafana_admin SsoSettings#allow_assign_grafana_admin}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allow_assign_grafana_admin SsoSettings#allow_assign_grafana_admin}
   */
   readonly allowAssignGrafanaAdmin?: boolean | cdktf.IResolvable;
   /**
   * If not enabled, only existing Grafana users can log in using OAuth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allow_sign_up SsoSettings#allow_sign_up}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allow_sign_up SsoSettings#allow_sign_up}
   */
   readonly allowSignUp?: boolean | cdktf.IResolvable;
   /**
   * List of comma- or space-separated domains. The user should belong to at least one domain to log in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allowed_domains SsoSettings#allowed_domains}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allowed_domains SsoSettings#allowed_domains}
   */
   readonly allowedDomains?: string;
   /**
   * List of comma- or space-separated groups. The user should be a member of at least one group to log in. For Generic OAuth, if you configure allowed_groups, you must also configure groups_attribute_path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allowed_groups SsoSettings#allowed_groups}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allowed_groups SsoSettings#allowed_groups}
   */
   readonly allowedGroups?: string;
   /**
   * List of comma- or space-separated organizations. The user should be a member of at least one organization to log in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allowed_organizations SsoSettings#allowed_organizations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allowed_organizations SsoSettings#allowed_organizations}
   */
   readonly allowedOrganizations?: string;
   /**
   * The user information endpoint of your OAuth2 provider. Required for okta and generic_oauth providers.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#api_url SsoSettings#api_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#api_url SsoSettings#api_url}
   */
   readonly apiUrl?: string;
   /**
   * It determines how client_id and client_secret are sent to Oauth2 provider. Possible values are AutoDetect, InParams, InHeader. Default is AutoDetect.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#auth_style SsoSettings#auth_style}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#auth_style SsoSettings#auth_style}
   */
   readonly authStyle?: string;
   /**
   * The authorization endpoint of your OAuth2 provider. Required for azuread, okta and generic_oauth providers.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#auth_url SsoSettings#auth_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#auth_url SsoSettings#auth_url}
   */
   readonly authUrl?: string;
   /**
   * Log in automatically, skipping the login screen.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#auto_login SsoSettings#auto_login}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#auto_login SsoSettings#auto_login}
   */
   readonly autoLogin?: boolean | cdktf.IResolvable;
   /**
   * The client Id of your OAuth2 app.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#client_id SsoSettings#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#client_id SsoSettings#client_id}
   */
   readonly clientId: string;
   /**
   * The client secret of your OAuth2 app.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#client_secret SsoSettings#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#client_secret SsoSettings#client_secret}
   */
   readonly clientSecret?: string;
   /**
   * Custom fields to configure for OAuth2 such as the [force_use_graph_api](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/azuread/#force-fetching-groups-from-microsoft-graph-api) field.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#custom SsoSettings#custom}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#custom SsoSettings#custom}
   */
   readonly custom?: { [key: string]: string };
   /**
   * Define allowed groups.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#define_allowed_groups SsoSettings#define_allowed_groups}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#define_allowed_groups SsoSettings#define_allowed_groups}
   */
   readonly defineAllowedGroups?: boolean | cdktf.IResolvable;
   /**
   * Define allowed teams ids.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#define_allowed_teams_ids SsoSettings#define_allowed_teams_ids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#define_allowed_teams_ids SsoSettings#define_allowed_teams_ids}
   */
   readonly defineAllowedTeamsIds?: boolean | cdktf.IResolvable;
   /**
   * Name of the key to use for user email lookup within the attributes map of OAuth2 ID token. Only applicable to Generic OAuth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#email_attribute_name SsoSettings#email_attribute_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#email_attribute_name SsoSettings#email_attribute_name}
   */
   readonly emailAttributeName?: string;
   /**
   * JMESPath expression to use for user email lookup from the user information. Only applicable to Generic OAuth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#email_attribute_path SsoSettings#email_attribute_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#email_attribute_path SsoSettings#email_attribute_path}
   */
   readonly emailAttributePath?: string;
   /**
   * If enabled, no scopes will be sent to the OAuth2 provider.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#empty_scopes SsoSettings#empty_scopes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#empty_scopes SsoSettings#empty_scopes}
   */
   readonly emptyScopes?: boolean | cdktf.IResolvable;
   /**
   * Define whether this configuration is enabled for the specified provider. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#enabled SsoSettings#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#enabled SsoSettings#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * JMESPath expression to use for user group lookup. If you configure allowed_groups, you must also configure groups_attribute_path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#groups_attribute_path SsoSettings#groups_attribute_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#groups_attribute_path SsoSettings#groups_attribute_path}
   */
   readonly groupsAttributePath?: string;
   /**
   * The name of the key used to extract the ID token from the returned OAuth2 token. Only applicable to Generic OAuth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#id_token_attribute_name SsoSettings#id_token_attribute_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#id_token_attribute_name SsoSettings#id_token_attribute_name}
   */
   readonly idTokenAttributeName?: string;
   /**
   * JMESPath expression to use for user login lookup from the user ID token. Only applicable to Generic OAuth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#login_attribute_path SsoSettings#login_attribute_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#login_attribute_path SsoSettings#login_attribute_path}
   */
   readonly loginAttributePath?: string;
   /**
   * Indicates the type of user interaction when the user logs in with the IdP. Available values are `login`, `consent` and `select_account`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#login_prompt SsoSettings#login_prompt}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#login_prompt SsoSettings#login_prompt}
   */
   readonly loginPrompt?: string;
   /**
   * Helpful if you use more than one identity providers or SSO protocols.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#name SsoSettings#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#name SsoSettings#name}
   */
   readonly name?: string;
   /**
   * JMESPath expression to use for user name lookup from the user ID token. This name will be used as the user’s display name. Only applicable to Generic OAuth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#name_attribute_path SsoSettings#name_attribute_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#name_attribute_path SsoSettings#name_attribute_path}
   */
   readonly nameAttributePath?: string;
   /**
   * JMESPath expression to use for the organization mapping lookup from the user ID token. The extracted list will be used for the organization mapping (to match "Organization" in the "org_mapping"). Only applicable to Generic OAuth and Okta.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#org_attribute_path SsoSettings#org_attribute_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#org_attribute_path SsoSettings#org_attribute_path}
   */
   readonly orgAttributePath?: string;
   /**
   * List of comma- or space-separated Organization:OrgIdOrOrgName:Role mappings. Organization can be * meaning “All users”. Role is optional and can have the following values: None, Viewer, Editor or Admin.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#org_mapping SsoSettings#org_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#org_mapping SsoSettings#org_mapping}
   */
   readonly orgMapping?: string;
   /**
   * JMESPath expression to use for Grafana role lookup.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#role_attribute_path SsoSettings#role_attribute_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#role_attribute_path SsoSettings#role_attribute_path}
   */
   readonly roleAttributePath?: string;
   /**
   * If enabled, denies user login if the Grafana role cannot be extracted using Role attribute path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#role_attribute_strict SsoSettings#role_attribute_strict}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#role_attribute_strict SsoSettings#role_attribute_strict}
   */
   readonly roleAttributeStrict?: boolean | cdktf.IResolvable;
   /**
   * List of comma- or space-separated OAuth2 scopes.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#scopes SsoSettings#scopes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#scopes SsoSettings#scopes}
   */
   readonly scopes?: string;
   /**
   * The URL to redirect the user to after signing out from Grafana.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#signout_redirect_url SsoSettings#signout_redirect_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#signout_redirect_url SsoSettings#signout_redirect_url}
   */
   readonly signoutRedirectUrl?: string;
   /**
   * Prevent synchronizing users’ organization roles from your IdP.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#skip_org_role_sync SsoSettings#skip_org_role_sync}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#skip_org_role_sync SsoSettings#skip_org_role_sync}
   */
   readonly skipOrgRoleSync?: boolean | cdktf.IResolvable;
   /**
   * String list of Team Ids. If set, the user must be a member of one of the given teams to log in. If you configure team_ids, you must also configure teams_url and team_ids_attribute_path.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#team_ids SsoSettings#team_ids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#team_ids SsoSettings#team_ids}
   */
   readonly teamIds?: string;
   /**
   * The JMESPath expression to use for Grafana Team Id lookup within the results returned by the teams_url endpoint. Only applicable to Generic OAuth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#team_ids_attribute_path SsoSettings#team_ids_attribute_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#team_ids_attribute_path SsoSettings#team_ids_attribute_path}
   */
   readonly teamIdsAttributePath?: string;
   /**
   * The URL used to query for Team Ids. If not set, the default value is /teams. If you configure teams_url, you must also configure team_ids_attribute_path. Only applicable to Generic OAuth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#teams_url SsoSettings#teams_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#teams_url SsoSettings#teams_url}
   */
   readonly teamsUrl?: string;
   /**
   * The path to the trusted certificate authority list. Is not applicable on Grafana Cloud.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#tls_client_ca SsoSettings#tls_client_ca}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#tls_client_ca SsoSettings#tls_client_ca}
   */
   readonly tlsClientCa?: string;
   /**
   * The path to the certificate. Is not applicable on Grafana Cloud.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#tls_client_cert SsoSettings#tls_client_cert}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#tls_client_cert SsoSettings#tls_client_cert}
   */
   readonly tlsClientCert?: string;
   /**
   * The path to the key. Is not applicable on Grafana Cloud.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#tls_client_key SsoSettings#tls_client_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#tls_client_key SsoSettings#tls_client_key}
   */
   readonly tlsClientKey?: string;
   /**
   * If enabled, the client accepts any certificate presented by the server and any host name in that certificate. You should only use this for testing, because this mode leaves SSL/TLS susceptible to man-in-the-middle attacks.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#tls_skip_verify_insecure SsoSettings#tls_skip_verify_insecure}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#tls_skip_verify_insecure SsoSettings#tls_skip_verify_insecure}
   */
   readonly tlsSkipVerifyInsecure?: boolean | cdktf.IResolvable;
   /**
   * The token endpoint of your OAuth2 provider. Required for azuread, okta and generic_oauth providers.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#token_url SsoSettings#token_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#token_url SsoSettings#token_url}
   */
   readonly tokenUrl?: string;
   /**
   * If enabled, Grafana will use Proof Key for Code Exchange (PKCE) with the OAuth2 Authorization Code Grant.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#use_pkce SsoSettings#use_pkce}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#use_pkce SsoSettings#use_pkce}
   */
   readonly usePkce?: boolean | cdktf.IResolvable;
   /**
   * If enabled, Grafana will fetch a new access token using the refresh token provided by the OAuth2 provider.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#use_refresh_token SsoSettings#use_refresh_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#use_refresh_token SsoSettings#use_refresh_token}
   */
   readonly useRefreshToken?: boolean | cdktf.IResolvable;
 }
@@ -2893,229 +2893,229 @@ export interface SsoSettingsSamlSettings {
   /**
   * Whether SAML IdP-initiated login is allowed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allow_idp_initiated SsoSettings#allow_idp_initiated}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allow_idp_initiated SsoSettings#allow_idp_initiated}
   */
   readonly allowIdpInitiated?: boolean | cdktf.IResolvable;
   /**
   * Whether to allow new Grafana user creation through SAML login. If set to false, then only existing Grafana users can log in with SAML.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allow_sign_up SsoSettings#allow_sign_up}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allow_sign_up SsoSettings#allow_sign_up}
   */
   readonly allowSignUp?: boolean | cdktf.IResolvable;
   /**
   * List of comma- or space-separated organizations. User should be a member of at least one organization to log in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#allowed_organizations SsoSettings#allowed_organizations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#allowed_organizations SsoSettings#allowed_organizations}
   */
   readonly allowedOrganizations?: string;
   /**
   * Friendly name or name of the attribute within the SAML assertion to use as the user email.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#assertion_attribute_email SsoSettings#assertion_attribute_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#assertion_attribute_email SsoSettings#assertion_attribute_email}
   */
   readonly assertionAttributeEmail?: string;
   /**
   * Friendly name of the attribute within the SAML assertion to use as the external user ID. Only used for SCIM provisioned users.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#assertion_attribute_external_uid SsoSettings#assertion_attribute_external_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#assertion_attribute_external_uid SsoSettings#assertion_attribute_external_uid}
   */
   readonly assertionAttributeExternalUid?: string;
   /**
   * Friendly name or name of the attribute within the SAML assertion to use as the user groups.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#assertion_attribute_groups SsoSettings#assertion_attribute_groups}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#assertion_attribute_groups SsoSettings#assertion_attribute_groups}
   */
   readonly assertionAttributeGroups?: string;
   /**
   * Friendly name or name of the attribute within the SAML assertion to use as the user login handle.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#assertion_attribute_login SsoSettings#assertion_attribute_login}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#assertion_attribute_login SsoSettings#assertion_attribute_login}
   */
   readonly assertionAttributeLogin?: string;
   /**
   * Friendly name or name of the attribute within the SAML assertion to use as the user name. Alternatively, this can be a template with variables that match the names of attributes within the SAML assertion.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#assertion_attribute_name SsoSettings#assertion_attribute_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#assertion_attribute_name SsoSettings#assertion_attribute_name}
   */
   readonly assertionAttributeName?: string;
   /**
   * Friendly name or name of the attribute within the SAML assertion to use as the user organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#assertion_attribute_org SsoSettings#assertion_attribute_org}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#assertion_attribute_org SsoSettings#assertion_attribute_org}
   */
   readonly assertionAttributeOrg?: string;
   /**
   * Friendly name or name of the attribute within the SAML assertion to use as the user roles.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#assertion_attribute_role SsoSettings#assertion_attribute_role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#assertion_attribute_role SsoSettings#assertion_attribute_role}
   */
   readonly assertionAttributeRole?: string;
   /**
   * Whether SAML auto login is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#auto_login SsoSettings#auto_login}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#auto_login SsoSettings#auto_login}
   */
   readonly autoLogin?: boolean | cdktf.IResolvable;
   /**
   * Base64-encoded string for the SP X.509 certificate.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#certificate SsoSettings#certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#certificate SsoSettings#certificate}
   */
   readonly certificate?: string;
   /**
   * Path for the SP X.509 certificate.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#certificate_path SsoSettings#certificate_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#certificate_path SsoSettings#certificate_path}
   */
   readonly certificatePath?: string;
   /**
   * The client Id of your OAuth2 app.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#client_id SsoSettings#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#client_id SsoSettings#client_id}
   */
   readonly clientId?: string;
   /**
   * The client secret of your OAuth2 app.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#client_secret SsoSettings#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#client_secret SsoSettings#client_secret}
   */
   readonly clientSecret?: string;
   /**
   * Define whether this configuration is enabled for SAML. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#enabled SsoSettings#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#enabled SsoSettings#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The entity ID is a globally unique identifier for the service provider. It is used to identify the service provider to the identity provider. Defaults to the URL of the Grafana instance if not set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#entity_id SsoSettings#entity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#entity_id SsoSettings#entity_id}
   */
   readonly entityId?: string;
   /**
   * If enabled, Grafana will fetch groups from Microsoft Graph API instead of using the groups claim from the ID token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#force_use_graph_api SsoSettings#force_use_graph_api}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#force_use_graph_api SsoSettings#force_use_graph_api}
   */
   readonly forceUseGraphApi?: boolean | cdktf.IResolvable;
   /**
   * Base64-encoded string for the IdP SAML metadata XML.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#idp_metadata SsoSettings#idp_metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#idp_metadata SsoSettings#idp_metadata}
   */
   readonly idpMetadata?: string;
   /**
   * Path for the IdP SAML metadata XML.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#idp_metadata_path SsoSettings#idp_metadata_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#idp_metadata_path SsoSettings#idp_metadata_path}
   */
   readonly idpMetadataPath?: string;
   /**
   * URL for the IdP SAML metadata XML.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#idp_metadata_url SsoSettings#idp_metadata_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#idp_metadata_url SsoSettings#idp_metadata_url}
   */
   readonly idpMetadataUrl?: string;
   /**
   * Duration, since the IdP issued a response and the SP is allowed to process it. For example: 90s, 1h.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#max_issue_delay SsoSettings#max_issue_delay}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#max_issue_delay SsoSettings#max_issue_delay}
   */
   readonly maxIssueDelay?: string;
   /**
   * Duration, for how long the SP metadata is valid. For example: 48h, 5d.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#metadata_valid_duration SsoSettings#metadata_valid_duration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#metadata_valid_duration SsoSettings#metadata_valid_duration}
   */
   readonly metadataValidDuration?: string;
   /**
   * Name used to refer to the SAML authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#name SsoSettings#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#name SsoSettings#name}
   */
   readonly name?: string;
   /**
   * The Name ID Format to request within the SAML assertion. Defaults to urn:oasis:names:tc:SAML:2.0:nameid-format:transient
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#name_id_format SsoSettings#name_id_format}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#name_id_format SsoSettings#name_id_format}
   */
   readonly nameIdFormat?: string;
   /**
   * List of comma- or space-separated Organization:OrgId:Role mappings. Organization can be * meaning “All users”. Role is optional and can have the following values: Viewer, Editor or Admin.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#org_mapping SsoSettings#org_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#org_mapping SsoSettings#org_mapping}
   */
   readonly orgMapping?: string;
   /**
   * Base64-encoded string for the SP private key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#private_key SsoSettings#private_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#private_key SsoSettings#private_key}
   */
   readonly privateKey?: string;
   /**
   * Path for the SP private key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#private_key_path SsoSettings#private_key_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#private_key_path SsoSettings#private_key_path}
   */
   readonly privateKeyPath?: string;
   /**
   * Relay state for IdP-initiated login. Should match relay state configured in IdP.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#relay_state SsoSettings#relay_state}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#relay_state SsoSettings#relay_state}
   */
   readonly relayState?: string;
   /**
   * List of comma- or space-separated roles which will be mapped into the Admin role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#role_values_admin SsoSettings#role_values_admin}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#role_values_admin SsoSettings#role_values_admin}
   */
   readonly roleValuesAdmin?: string;
   /**
   * List of comma- or space-separated roles which will be mapped into the Editor role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#role_values_editor SsoSettings#role_values_editor}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#role_values_editor SsoSettings#role_values_editor}
   */
   readonly roleValuesEditor?: string;
   /**
   * List of comma- or space-separated roles which will be mapped into the Grafana Admin (Super Admin) role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#role_values_grafana_admin SsoSettings#role_values_grafana_admin}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#role_values_grafana_admin SsoSettings#role_values_grafana_admin}
   */
   readonly roleValuesGrafanaAdmin?: string;
   /**
   * List of comma- or space-separated roles which will be mapped into the None role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#role_values_none SsoSettings#role_values_none}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#role_values_none SsoSettings#role_values_none}
   */
   readonly roleValuesNone?: string;
   /**
   * List of comma- or space-separated roles which will be mapped into the Viewer role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#role_values_viewer SsoSettings#role_values_viewer}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#role_values_viewer SsoSettings#role_values_viewer}
   */
   readonly roleValuesViewer?: string;
   /**
   * Signature algorithm used for signing requests to the IdP. Supported values are rsa-sha1, rsa-sha256, rsa-sha512.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#signature_algorithm SsoSettings#signature_algorithm}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#signature_algorithm SsoSettings#signature_algorithm}
   */
   readonly signatureAlgorithm?: string;
   /**
   * Whether SAML Single Logout is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#single_logout SsoSettings#single_logout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#single_logout SsoSettings#single_logout}
   */
   readonly singleLogout?: boolean | cdktf.IResolvable;
   /**
   * Prevent synchronizing users’ organization roles from your IdP.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#skip_org_role_sync SsoSettings#skip_org_role_sync}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#skip_org_role_sync SsoSettings#skip_org_role_sync}
   */
   readonly skipOrgRoleSync?: boolean | cdktf.IResolvable;
   /**
   * The token endpoint of your OAuth2 provider. Required for Azure AD providers.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#token_url SsoSettings#token_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#token_url SsoSettings#token_url}
   */
   readonly tokenUrl?: string;
 }
@@ -4272,7 +4272,7 @@ export class SsoSettingsSamlSettingsOutputReference extends cdktf.ComplexObject 
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings grafana_sso_settings}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings grafana_sso_settings}
 */
 export class SsoSettings extends cdktf.TerraformResource {
 
@@ -4288,7 +4288,7 @@ export class SsoSettings extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SsoSettings resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SsoSettings to import
-  * @param importFromId The id of the existing SsoSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SsoSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SsoSettings to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -4300,7 +4300,7 @@ export class SsoSettings extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/sso_settings grafana_sso_settings} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/sso_settings grafana_sso_settings} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -4311,7 +4311,7 @@ export class SsoSettings extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_sso_settings',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

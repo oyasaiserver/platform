@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface AssertsStackConfig extends cdktf.TerraformMetaArguments {
   /**
   * A Grafana Cloud Access Policy token with the following scopes: `stacks:read`, `metrics:read`, `metrics:write`. This token is used for GCom API access, Mimir authentication, and assertion detector webhook authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#cloud_access_policy_token AssertsStack#cloud_access_policy_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#cloud_access_policy_token AssertsStack#cloud_access_policy_token}
   */
   readonly cloudAccessPolicyToken: string;
   /**
   * A Grafana Service Account token for installing dashboards and Grafana Managed Alerts. Required permissions: `dashboards:create`, `dashboards:write`, `dashboards:read`, `folders:create`, `folders:write`, `folders:read`, `folders:delete`, `datasources:read`, `datasources:query`, `alert.provisioning:write`, `alert.notifications.provisioning:write`, `alert.notifications:write`, `alert.rules:read`, `alert.rules:create`, `alert.rules:delete`. Create using `grafana_cloud_stack_service_account_token` resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#grafana_token AssertsStack#grafana_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#grafana_token AssertsStack#grafana_token}
   */
   readonly grafanaToken?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#id AssertsStack#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#id AssertsStack#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -29,13 +29,13 @@ export interface AssertsStackConfig extends cdktf.TerraformMetaArguments {
   /**
   * dataset block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#dataset AssertsStack#dataset}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#dataset AssertsStack#dataset}
   */
   readonly dataset?: AssertsStackDataset[] | cdktf.IResolvable;
   /**
   * timeouts block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#timeouts AssertsStack#timeouts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#timeouts AssertsStack#timeouts}
   */
   readonly timeouts?: AssertsStackTimeouts;
 }
@@ -43,19 +43,19 @@ export interface AssertsStackDatasetFilterGroupFilter {
   /**
   * The label name to filter on.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#name AssertsStack#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#name AssertsStack#name}
   */
   readonly name: string;
   /**
   * The filter operator (e.g., `=`, `!=`, `=~`, `!~`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#operator AssertsStack#operator}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#operator AssertsStack#operator}
   */
   readonly operator: string;
   /**
   * The values to match.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#values AssertsStack#values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#values AssertsStack#values}
   */
   readonly values: string[];
 }
@@ -222,37 +222,37 @@ export interface AssertsStackDatasetFilterGroup {
   /**
   * The metric label name used for environment (e.g., `env`, `environment`, `deployment_environment`). Defaults to standard labels if not set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#env_label AssertsStack#env_label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#env_label AssertsStack#env_label}
   */
   readonly envLabel?: string;
   /**
   * Specific values of the environment label to match.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#env_label_values AssertsStack#env_label_values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#env_label_values AssertsStack#env_label_values}
   */
   readonly envLabelValues?: string[];
   /**
   * A friendly name for the environment.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#env_name AssertsStack#env_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#env_name AssertsStack#env_name}
   */
   readonly envName?: string;
   /**
   * The metric label name used for site/cluster.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#site_label AssertsStack#site_label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#site_label AssertsStack#site_label}
   */
   readonly siteLabel?: string;
   /**
   * Specific values of the site label to match.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#site_label_values AssertsStack#site_label_values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#site_label_values AssertsStack#site_label_values}
   */
   readonly siteLabelValues?: string[];
   /**
   * filter block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#filter AssertsStack#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#filter AssertsStack#filter}
   */
   readonly filter?: AssertsStackDatasetFilterGroupFilter[] | cdktf.IResolvable;
 }
@@ -515,19 +515,19 @@ export interface AssertsStackDataset {
   /**
   * List of vendors to disable for this dataset.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#disabled_vendors AssertsStack#disabled_vendors}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#disabled_vendors AssertsStack#disabled_vendors}
   */
   readonly disabledVendors?: string[];
   /**
   * The dataset type. Available types: `kubernetes`, `otel` (App O11y), `prometheus`, `aws`. Note: `kubernetes` requires K8s Monitoring to be enabled, and `otel` requires Application Observability to be enabled on the stack.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#type AssertsStack#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#type AssertsStack#type}
   */
   readonly type: string;
   /**
   * filter_group block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#filter_group AssertsStack#filter_group}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#filter_group AssertsStack#filter_group}
   */
   readonly filterGroup?: AssertsStackDatasetFilterGroup[] | cdktf.IResolvable;
 }
@@ -698,19 +698,19 @@ export class AssertsStackDatasetList extends cdktf.ComplexList {
 }
 export interface AssertsStackTimeouts {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#create AssertsStack#create}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#create AssertsStack#create}
   */
   readonly create?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#delete AssertsStack#delete}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#delete AssertsStack#delete}
   */
   readonly delete?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#read AssertsStack#read}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#read AssertsStack#read}
   */
   readonly read?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#update AssertsStack#update}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#update AssertsStack#update}
   */
   readonly update?: string;
 }
@@ -891,7 +891,7 @@ export class AssertsStackTimeoutsOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack grafana_asserts_stack}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack grafana_asserts_stack}
 */
 export class AssertsStack extends cdktf.TerraformResource {
 
@@ -907,7 +907,7 @@ export class AssertsStack extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssertsStack resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssertsStack to import
-  * @param importFromId The id of the existing AssertsStack that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssertsStack that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssertsStack to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -919,7 +919,7 @@ export class AssertsStack extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_stack grafana_asserts_stack} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_stack grafana_asserts_stack} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -930,7 +930,7 @@ export class AssertsStack extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_asserts_stack',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

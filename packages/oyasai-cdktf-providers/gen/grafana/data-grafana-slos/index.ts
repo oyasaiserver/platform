@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface DataGrafanaSlosConfig extends cdktf.TerraformMetaArguments {
   /**
   * slos block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#slos DataGrafanaSlos#slos}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#slos DataGrafanaSlos#slos}
   */
   readonly slos?: DataGrafanaSlosSlos[] | cdktf.IResolvable;
 }
@@ -463,19 +463,19 @@ export interface DataGrafanaSlosSlosAlertingFastburn {
   /**
   * annotation block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#annotation DataGrafanaSlos#annotation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#annotation DataGrafanaSlos#annotation}
   */
   readonly annotation?: DataGrafanaSlosSlosAlertingFastburnAnnotation[] | cdktf.IResolvable;
   /**
   * enrichment block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#enrichment DataGrafanaSlos#enrichment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#enrichment DataGrafanaSlos#enrichment}
   */
   readonly enrichment?: DataGrafanaSlosSlosAlertingFastburnEnrichment[] | cdktf.IResolvable;
   /**
   * label block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#label DataGrafanaSlos#label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#label DataGrafanaSlos#label}
   */
   readonly label?: DataGrafanaSlosSlosAlertingFastburnLabel[] | cdktf.IResolvable;
 }
@@ -1010,19 +1010,19 @@ export interface DataGrafanaSlosSlosAlertingSlowburn {
   /**
   * annotation block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#annotation DataGrafanaSlos#annotation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#annotation DataGrafanaSlos#annotation}
   */
   readonly annotation?: DataGrafanaSlosSlosAlertingSlowburnAnnotation[] | cdktf.IResolvable;
   /**
   * enrichment block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#enrichment DataGrafanaSlos#enrichment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#enrichment DataGrafanaSlos#enrichment}
   */
   readonly enrichment?: DataGrafanaSlosSlosAlertingSlowburnEnrichment[] | cdktf.IResolvable;
   /**
   * label block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#label DataGrafanaSlos#label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#label DataGrafanaSlos#label}
   */
   readonly label?: DataGrafanaSlosSlosAlertingSlowburnLabel[] | cdktf.IResolvable;
 }
@@ -1198,31 +1198,31 @@ export interface DataGrafanaSlosSlosAlerting {
   /**
   * advanced_options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#advanced_options DataGrafanaSlos#advanced_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#advanced_options DataGrafanaSlos#advanced_options}
   */
   readonly advancedOptions?: DataGrafanaSlosSlosAlertingAdvancedOptions[] | cdktf.IResolvable;
   /**
   * annotation block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#annotation DataGrafanaSlos#annotation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#annotation DataGrafanaSlos#annotation}
   */
   readonly annotation?: DataGrafanaSlosSlosAlertingAnnotation[] | cdktf.IResolvable;
   /**
   * fastburn block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#fastburn DataGrafanaSlos#fastburn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#fastburn DataGrafanaSlos#fastburn}
   */
   readonly fastburn?: DataGrafanaSlosSlosAlertingFastburn[] | cdktf.IResolvable;
   /**
   * label block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#label DataGrafanaSlos#label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#label DataGrafanaSlos#label}
   */
   readonly label?: DataGrafanaSlosSlosAlertingLabel[] | cdktf.IResolvable;
   /**
   * slowburn block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#slowburn DataGrafanaSlos#slowburn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#slowburn DataGrafanaSlos#slowburn}
   */
   readonly slowburn?: DataGrafanaSlosSlosAlertingSlowburn[] | cdktf.IResolvable;
 }
@@ -1785,6 +1785,11 @@ export class DataGrafanaSlosSlosQueryFreeformOutputReference extends cdktf.Compl
   public get query() {
     return this.getStringAttribute('query');
   }
+
+  // source_datasource_uid - computed: true, optional: false, required: false
+  public get sourceDatasourceUid() {
+    return this.getStringAttribute('source_datasource_uid');
+  }
 }
 
 export class DataGrafanaSlosSlosQueryFreeformList extends cdktf.ComplexList {
@@ -1958,6 +1963,11 @@ export class DataGrafanaSlosSlosQueryRatioOutputReference extends cdktf.ComplexO
     return this.getListAttribute('group_by_labels');
   }
 
+  // source_datasource_uid - computed: true, optional: false, required: false
+  public get sourceDatasourceUid() {
+    return this.getStringAttribute('source_datasource_uid');
+  }
+
   // success_metric - computed: true, optional: false, required: false
   public get successMetric() {
     return this.getStringAttribute('success_metric');
@@ -1992,19 +2002,19 @@ export interface DataGrafanaSlosSlosQuery {
   /**
   * freeform block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#freeform DataGrafanaSlos#freeform}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#freeform DataGrafanaSlos#freeform}
   */
   readonly freeform?: DataGrafanaSlosSlosQueryFreeform[] | cdktf.IResolvable;
   /**
   * grafana_queries block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#grafana_queries DataGrafanaSlos#grafana_queries}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#grafana_queries DataGrafanaSlos#grafana_queries}
   */
   readonly grafanaQueries?: DataGrafanaSlosSlosQueryGrafanaQueries[] | cdktf.IResolvable;
   /**
   * ratio block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#ratio DataGrafanaSlos#ratio}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#ratio DataGrafanaSlos#ratio}
   */
   readonly ratio?: DataGrafanaSlosSlosQueryRatio[] | cdktf.IResolvable;
 }
@@ -2185,31 +2195,31 @@ export interface DataGrafanaSlosSlos {
   /**
   * alerting block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#alerting DataGrafanaSlos#alerting}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#alerting DataGrafanaSlos#alerting}
   */
   readonly alerting?: DataGrafanaSlosSlosAlerting[] | cdktf.IResolvable;
   /**
   * destination_datasource block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#destination_datasource DataGrafanaSlos#destination_datasource}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#destination_datasource DataGrafanaSlos#destination_datasource}
   */
   readonly destinationDatasource?: DataGrafanaSlosSlosDestinationDatasource[] | cdktf.IResolvable;
   /**
   * label block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#label DataGrafanaSlos#label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#label DataGrafanaSlos#label}
   */
   readonly label?: DataGrafanaSlosSlosLabel[] | cdktf.IResolvable;
   /**
   * objectives block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#objectives DataGrafanaSlos#objectives}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#objectives DataGrafanaSlos#objectives}
   */
   readonly objectives?: DataGrafanaSlosSlosObjectives[] | cdktf.IResolvable;
   /**
   * query block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#query DataGrafanaSlos#query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#query DataGrafanaSlos#query}
   */
   readonly query?: DataGrafanaSlosSlosQuery[] | cdktf.IResolvable;
 }
@@ -2461,7 +2471,7 @@ export class DataGrafanaSlosSlosList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos grafana_slos}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos grafana_slos}
 */
 export class DataGrafanaSlos extends cdktf.TerraformDataSource {
 
@@ -2477,7 +2487,7 @@ export class DataGrafanaSlos extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaSlos resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaSlos to import
-  * @param importFromId The id of the existing DataGrafanaSlos that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaSlos that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaSlos to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -2489,7 +2499,7 @@ export class DataGrafanaSlos extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/slos grafana_slos} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/slos grafana_slos} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -2500,7 +2510,7 @@ export class DataGrafanaSlos extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_slos',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

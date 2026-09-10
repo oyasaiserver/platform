@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,49 +10,49 @@ export interface MachineLearningOutlierDetectorConfig extends cdktf.TerraformMet
   /**
   * The type of datasource being queried. Currently allowed values are prometheus, grafana-prometheus-datasource, grafana-amazonprometheus-datasource, loki, grafana-loki-datasource, graphite, grafana-graphite-datasource, grafana-datadog-datasource, postgres, grafana-postgresql-datasource, doitintl-bigquery-datasource, grafana-bigquery-datasource, grafana-snowflake-datasource, influxdb, grafana-influxdb-datasource, grafana-splunk-datasource, elasticsearch, grafana-elasticsearch-datasource, and grafana-mongodb-datasource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#datasource_type MachineLearningOutlierDetector#datasource_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#datasource_type MachineLearningOutlierDetector#datasource_type}
   */
   readonly datasourceType: string;
   /**
   * The uid of the datasource to query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#datasource_uid MachineLearningOutlierDetector#datasource_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#datasource_uid MachineLearningOutlierDetector#datasource_uid}
   */
   readonly datasourceUid: string;
   /**
   * A description of the outlier detector.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#description MachineLearningOutlierDetector#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#description MachineLearningOutlierDetector#description}
   */
   readonly description?: string;
   /**
   * The data interval in seconds to monitor. Defaults to `300`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#interval MachineLearningOutlierDetector#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#interval MachineLearningOutlierDetector#interval}
   */
   readonly interval?: number;
   /**
   * The metric used to query the outlier detector results.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#metric MachineLearningOutlierDetector#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#metric MachineLearningOutlierDetector#metric}
   */
   readonly metric: string;
   /**
   * The name of the outlier detector.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#name MachineLearningOutlierDetector#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#name MachineLearningOutlierDetector#name}
   */
   readonly name: string;
   /**
   * An object representing the query params to query Grafana with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#query_params MachineLearningOutlierDetector#query_params}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#query_params MachineLearningOutlierDetector#query_params}
   */
   readonly queryParams: { [key: string]: string };
   /**
   * algorithm block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#algorithm MachineLearningOutlierDetector#algorithm}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#algorithm MachineLearningOutlierDetector#algorithm}
   */
   readonly algorithm: MachineLearningOutlierDetectorAlgorithm;
 }
@@ -60,7 +60,7 @@ export interface MachineLearningOutlierDetectorAlgorithmConfig {
   /**
   * Specify the epsilon parameter (positive float)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#epsilon MachineLearningOutlierDetector#epsilon}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#epsilon MachineLearningOutlierDetector#epsilon}
   */
   readonly epsilon: number;
 }
@@ -143,19 +143,19 @@ export interface MachineLearningOutlierDetectorAlgorithm {
   /**
   * The name of the algorithm to use ('mad' or 'dbscan').
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#name MachineLearningOutlierDetector#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#name MachineLearningOutlierDetector#name}
   */
   readonly name: string;
   /**
   * Specify the sensitivity of the detector (in range [0,1]).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#sensitivity MachineLearningOutlierDetector#sensitivity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#sensitivity MachineLearningOutlierDetector#sensitivity}
   */
   readonly sensitivity: number;
   /**
   * config block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#config MachineLearningOutlierDetector#config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#config MachineLearningOutlierDetector#config}
   */
   readonly config?: MachineLearningOutlierDetectorAlgorithmConfig;
 }
@@ -291,7 +291,7 @@ export class MachineLearningOutlierDetectorAlgorithmOutputReference extends cdkt
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector grafana_machine_learning_outlier_detector}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector grafana_machine_learning_outlier_detector}
 */
 export class MachineLearningOutlierDetector extends cdktf.TerraformResource {
 
@@ -307,7 +307,7 @@ export class MachineLearningOutlierDetector extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a MachineLearningOutlierDetector resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the MachineLearningOutlierDetector to import
-  * @param importFromId The id of the existing MachineLearningOutlierDetector that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing MachineLearningOutlierDetector that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the MachineLearningOutlierDetector to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -319,7 +319,7 @@ export class MachineLearningOutlierDetector extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_outlier_detector grafana_machine_learning_outlier_detector} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_outlier_detector grafana_machine_learning_outlier_detector} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -330,7 +330,7 @@ export class MachineLearningOutlierDetector extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_machine_learning_outlier_detector',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

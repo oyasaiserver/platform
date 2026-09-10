@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsQueriesQueryV1Config extends cdktf.TerraformMetaArguments {
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#metadata AppsQueriesQueryV1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#metadata AppsQueriesQueryV1#metadata}
   */
   readonly metadata?: AppsQueriesQueryV1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#options AppsQueriesQueryV1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#options AppsQueriesQueryV1#options}
   */
   readonly options?: AppsQueriesQueryV1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#spec AppsQueriesQueryV1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#spec AppsQueriesQueryV1#spec}
   */
   readonly spec?: AppsQueriesQueryV1Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsQueriesQueryV1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#folder_uid AppsQueriesQueryV1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#folder_uid AppsQueriesQueryV1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#uid AppsQueriesQueryV1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#uid AppsQueriesQueryV1#uid}
   */
   readonly uid: string;
 }
@@ -179,13 +179,13 @@ export interface AppsQueriesQueryV1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#manager_identity AppsQueriesQueryV1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#manager_identity AppsQueriesQueryV1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#overwrite AppsQueriesQueryV1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#overwrite AppsQueriesQueryV1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -310,19 +310,19 @@ export interface AppsQueriesQueryV1SpecTargets {
   /**
   * The returned Dataplane frame type for the target.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#data_type AppsQueriesQueryV1#data_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#data_type AppsQueriesQueryV1#data_type}
   */
   readonly dataType?: string;
   /**
   * The datasource query for the target, as a JSON string (use jsonencode()).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#properties_json AppsQueriesQueryV1#properties_json}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#properties_json AppsQueriesQueryV1#properties_json}
   */
   readonly propertiesJson: string;
   /**
   * The variable replacements to apply to the target, as a JSON string (use jsonencode()).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#variables_json AppsQueriesQueryV1#variables_json}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#variables_json AppsQueriesQueryV1#variables_json}
   */
   readonly variablesJson?: string;
 }
@@ -495,19 +495,19 @@ export interface AppsQueriesQueryV1SpecVars {
   /**
   * The values used when no value is selected during render.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#default_values AppsQueriesQueryV1#default_values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#default_values AppsQueriesQueryV1#default_values}
   */
   readonly defaultValues?: string[];
   /**
   * The name of the variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#key AppsQueriesQueryV1#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#key AppsQueriesQueryV1#key}
   */
   readonly key: string;
   /**
   * The definition (as a JSON string) used by the frontend to fetch the list of selectable values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#value_list_definition_json AppsQueriesQueryV1#value_list_definition_json}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#value_list_definition_json AppsQueriesQueryV1#value_list_definition_json}
   */
   readonly valueListDefinitionJson?: string;
 }
@@ -680,43 +680,43 @@ export interface AppsQueriesQueryV1Spec {
   /**
   * A longer description of the saved query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#description AppsQueriesQueryV1#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#description AppsQueriesQueryV1#description}
   */
   readonly description?: string;
   /**
   * Whether the saved query is locked and cannot be edited in the UI. This is purely for UI display purposes and not for security.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#is_locked AppsQueriesQueryV1#is_locked}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#is_locked AppsQueriesQueryV1#is_locked}
   */
   readonly isLocked?: boolean | cdktf.IResolvable;
   /**
   * Whether the saved query is visible in the query library.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#is_visible AppsQueriesQueryV1#is_visible}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#is_visible AppsQueriesQueryV1#is_visible}
   */
   readonly isVisible?: boolean | cdktf.IResolvable;
   /**
   * The tags used to filter the saved query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#tags AppsQueriesQueryV1#tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#tags AppsQueriesQueryV1#tags}
   */
   readonly tags?: string[];
   /**
   * The display name of the saved query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#title AppsQueriesQueryV1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#title AppsQueriesQueryV1#title}
   */
   readonly title: string;
   /**
   * targets block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#targets AppsQueriesQueryV1#targets}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#targets AppsQueriesQueryV1#targets}
   */
   readonly targets?: AppsQueriesQueryV1SpecTargets[] | cdktf.IResolvable;
   /**
   * vars block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#vars AppsQueriesQueryV1#vars}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#vars AppsQueriesQueryV1#vars}
   */
   readonly vars?: AppsQueriesQueryV1SpecVars[] | cdktf.IResolvable;
 }
@@ -981,7 +981,7 @@ export class AppsQueriesQueryV1SpecOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1 grafana_apps_queries_query_v1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1 grafana_apps_queries_query_v1}
 */
 export class AppsQueriesQueryV1 extends cdktf.TerraformResource {
 
@@ -997,7 +997,7 @@ export class AppsQueriesQueryV1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsQueriesQueryV1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsQueriesQueryV1 to import
-  * @param importFromId The id of the existing AppsQueriesQueryV1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsQueriesQueryV1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsQueriesQueryV1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1009,7 +1009,7 @@ export class AppsQueriesQueryV1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_queries_query_v1 grafana_apps_queries_query_v1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_queries_query_v1 grafana_apps_queries_query_v1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1020,7 +1020,7 @@ export class AppsQueriesQueryV1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_queries_query_v1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

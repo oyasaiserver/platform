@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsDashboardDashboardV2Config extends cdktf.TerraformMetaArgum
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#metadata AppsDashboardDashboardV2#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#metadata AppsDashboardDashboardV2#metadata}
   */
   readonly metadata?: AppsDashboardDashboardV2Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#options AppsDashboardDashboardV2#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#options AppsDashboardDashboardV2#options}
   */
   readonly options?: AppsDashboardDashboardV2Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#spec AppsDashboardDashboardV2#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#spec AppsDashboardDashboardV2#spec}
   */
   readonly spec?: AppsDashboardDashboardV2Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsDashboardDashboardV2Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#folder_uid AppsDashboardDashboardV2#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#folder_uid AppsDashboardDashboardV2#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#uid AppsDashboardDashboardV2#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#uid AppsDashboardDashboardV2#uid}
   */
   readonly uid: string;
 }
@@ -179,19 +179,19 @@ export interface AppsDashboardDashboardV2Options {
   /**
   * Set to true to allow editing the resource from the Grafana UI. By default, resources managed by Terraform cannot be edited in the UI. Enabling this option will cause divergence between the Terraform configuration and the resource in Grafana.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#allow_ui_updates AppsDashboardDashboardV2#allow_ui_updates}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#allow_ui_updates AppsDashboardDashboardV2#allow_ui_updates}
   */
   readonly allowUiUpdates?: boolean | cdktf.IResolvable;
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#manager_identity AppsDashboardDashboardV2#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#manager_identity AppsDashboardDashboardV2#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#overwrite AppsDashboardDashboardV2#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#overwrite AppsDashboardDashboardV2#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -345,19 +345,19 @@ export interface AppsDashboardDashboardV2Spec {
   /**
   * The JSON representation of the dashboard v2 spec. Must be the spec object only — not the full Kubernetes envelope. Use: json = jsonencode(jsondecode(file("dashboard.json")).spec)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#json AppsDashboardDashboardV2#json}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#json AppsDashboardDashboardV2#json}
   */
   readonly json: string;
   /**
   * The tags of the dashboard. If not set, the tags will be derived from the JSON spec.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#tags AppsDashboardDashboardV2#tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#tags AppsDashboardDashboardV2#tags}
   */
   readonly tags?: string[];
   /**
   * The title of the dashboard. If not set, the title will be derived from the JSON spec.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#title AppsDashboardDashboardV2#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#title AppsDashboardDashboardV2#title}
   */
   readonly title?: string;
 }
@@ -506,7 +506,7 @@ export class AppsDashboardDashboardV2SpecOutputReference extends cdktf.ComplexOb
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2 grafana_apps_dashboard_dashboard_v2}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2 grafana_apps_dashboard_dashboard_v2}
 */
 export class AppsDashboardDashboardV2 extends cdktf.TerraformResource {
 
@@ -522,7 +522,7 @@ export class AppsDashboardDashboardV2 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsDashboardDashboardV2 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsDashboardDashboardV2 to import
-  * @param importFromId The id of the existing AppsDashboardDashboardV2 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsDashboardDashboardV2 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsDashboardDashboardV2 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -534,7 +534,7 @@ export class AppsDashboardDashboardV2 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_dashboard_dashboard_v2 grafana_apps_dashboard_dashboard_v2} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v2 grafana_apps_dashboard_dashboard_v2} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -545,7 +545,7 @@ export class AppsDashboardDashboardV2 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_dashboard_dashboard_v2',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

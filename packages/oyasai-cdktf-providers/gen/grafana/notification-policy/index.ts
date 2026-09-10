@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,35 +10,35 @@ export interface NotificationPolicyConfig extends cdktf.TerraformMetaArguments {
   /**
   * The default contact point to route all unmatched notifications to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#contact_point NotificationPolicy#contact_point}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#contact_point NotificationPolicy#contact_point}
   */
   readonly contactPoint: string;
   /**
   * Allow modifying the notification policy from other sources than Terraform or the Grafana API. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#disable_provenance NotificationPolicy#disable_provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#disable_provenance NotificationPolicy#disable_provenance}
   */
   readonly disableProvenance?: boolean | cdktf.IResolvable;
   /**
   * A list of alert labels to group alerts into notifications by. Use the special label `...` to group alerts by all labels, effectively disabling grouping.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#group_by NotificationPolicy#group_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#group_by NotificationPolicy#group_by}
   */
   readonly groupBy: string[];
   /**
   * Minimum time interval between two notifications for the same group. Default is 5 minutes.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#group_interval NotificationPolicy#group_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#group_interval NotificationPolicy#group_interval}
   */
   readonly groupInterval?: string;
   /**
   * Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#group_wait NotificationPolicy#group_wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#group_wait NotificationPolicy#group_wait}
   */
   readonly groupWait?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#id NotificationPolicy#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#id NotificationPolicy#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -47,19 +47,19 @@ export interface NotificationPolicyConfig extends cdktf.TerraformMetaArguments {
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#org_id NotificationPolicy#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#org_id NotificationPolicy#org_id}
   */
   readonly orgId?: string;
   /**
   * Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#repeat_interval NotificationPolicy#repeat_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#repeat_interval NotificationPolicy#repeat_interval}
   */
   readonly repeatInterval?: string;
   /**
   * policy block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#policy NotificationPolicy#policy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#policy NotificationPolicy#policy}
   */
   readonly policy?: NotificationPolicyPolicy[] | cdktf.IResolvable;
 }
@@ -67,19 +67,19 @@ export interface NotificationPolicyPolicyMatcher {
   /**
   * The name of the label to match against.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#label NotificationPolicy#label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#label NotificationPolicy#label}
   */
   readonly label: string;
   /**
   * The operator to apply when matching values of the given label. Allowed operators are `=` for equality, `!=` for negated equality, `=~` for regex equality, and `!~` for negated regex equality.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#match NotificationPolicy#match}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#match NotificationPolicy#match}
   */
   readonly match: string;
   /**
   * The label value to match against.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#value NotificationPolicy#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#value NotificationPolicy#value}
   */
   readonly value: string;
 }
@@ -246,61 +246,61 @@ export interface NotificationPolicyPolicy {
   /**
   * A list of time interval names to apply to alerts that match this policy to suppress them unless they are sent at the specified time. Supported in Grafana 12.1.0 and later
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#active_timings NotificationPolicy#active_timings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#active_timings NotificationPolicy#active_timings}
   */
   readonly activeTimings?: string[];
   /**
   * The contact point to route notifications that match this rule to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#contact_point NotificationPolicy#contact_point}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#contact_point NotificationPolicy#contact_point}
   */
   readonly contactPoint?: string;
   /**
   * Whether to continue matching subsequent rules if an alert matches the current rule. Otherwise, the rule will be 'consumed' by the first policy to match it.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#continue NotificationPolicy#continue}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#continue NotificationPolicy#continue}
   */
   readonly continue?: boolean | cdktf.IResolvable;
   /**
   * A list of alert labels to group alerts into notifications by. Use the special label `...` to group alerts by all labels, effectively disabling grouping. Required for root policy only. If empty, the parent grouping is used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#group_by NotificationPolicy#group_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#group_by NotificationPolicy#group_by}
   */
   readonly groupBy?: string[];
   /**
   * Minimum time interval between two notifications for the same group. Default is 5 minutes.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#group_interval NotificationPolicy#group_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#group_interval NotificationPolicy#group_interval}
   */
   readonly groupInterval?: string;
   /**
   * Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#group_wait NotificationPolicy#group_wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#group_wait NotificationPolicy#group_wait}
   */
   readonly groupWait?: string;
   /**
   * A list of time intervals to apply to alerts that match this policy to mute them for the specified time.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#mute_timings NotificationPolicy#mute_timings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#mute_timings NotificationPolicy#mute_timings}
   */
   readonly muteTimings?: string[];
   /**
   * Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#repeat_interval NotificationPolicy#repeat_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#repeat_interval NotificationPolicy#repeat_interval}
   */
   readonly repeatInterval?: string;
   /**
   * matcher block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#matcher NotificationPolicy#matcher}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#matcher NotificationPolicy#matcher}
   */
   readonly matcher?: NotificationPolicyPolicyMatcher[] | cdktf.IResolvable;
   /**
   * policy block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#policy NotificationPolicy#policy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#policy NotificationPolicy#policy}
   */
   readonly policy?: NotificationPolicyPolicy[] | cdktf.IResolvable;
 }
@@ -677,7 +677,7 @@ export class NotificationPolicyPolicyList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy grafana_notification_policy}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy grafana_notification_policy}
 */
 export class NotificationPolicy extends cdktf.TerraformResource {
 
@@ -693,7 +693,7 @@ export class NotificationPolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a NotificationPolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the NotificationPolicy to import
-  * @param importFromId The id of the existing NotificationPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing NotificationPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the NotificationPolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -705,7 +705,7 @@ export class NotificationPolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/notification_policy grafana_notification_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/notification_policy grafana_notification_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -716,7 +716,7 @@ export class NotificationPolicy extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_notification_policy',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_collector
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_collector
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface FleetManagementCollectorConfig extends cdktf.TerraformMetaArgum
   /**
   * Type of the collector. Must be one of: ALLOY, OTEL. Defaults to ALLOY if not specified.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_collector#collector_type FleetManagementCollector#collector_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_collector#collector_type FleetManagementCollector#collector_type}
   */
   readonly collectorType?: string;
   /**
   * Whether remote configuration for the collector is enabled or not. If the collector is disabled, it will receive empty configurations from the Fleet Management service
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_collector#enabled FleetManagementCollector#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_collector#enabled FleetManagementCollector#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * ID of the collector
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_collector#id FleetManagementCollector#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_collector#id FleetManagementCollector#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -31,13 +31,13 @@ export interface FleetManagementCollectorConfig extends cdktf.TerraformMetaArgum
   /**
   * Remote attributes for the collector
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_collector#remote_attributes FleetManagementCollector#remote_attributes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_collector#remote_attributes FleetManagementCollector#remote_attributes}
   */
   readonly remoteAttributes?: { [key: string]: string };
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_collector grafana_fleet_management_collector}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_collector grafana_fleet_management_collector}
 */
 export class FleetManagementCollector extends cdktf.TerraformResource {
 
@@ -53,7 +53,7 @@ export class FleetManagementCollector extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a FleetManagementCollector resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the FleetManagementCollector to import
-  * @param importFromId The id of the existing FleetManagementCollector that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_collector#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing FleetManagementCollector that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_collector#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the FleetManagementCollector to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -65,7 +65,7 @@ export class FleetManagementCollector extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/fleet_management_collector grafana_fleet_management_collector} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/fleet_management_collector grafana_fleet_management_collector} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -76,7 +76,7 @@ export class FleetManagementCollector extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_fleet_management_collector',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

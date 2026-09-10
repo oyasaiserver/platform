@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface AssertsPromRuleFileConfig extends cdktf.TerraformMetaArguments 
   /**
   * Whether the rules file is active. Inactive rules are not evaluated. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#active AssertsPromRuleFile#active}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#active AssertsPromRuleFile#active}
   */
   readonly active?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#id AssertsPromRuleFile#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#id AssertsPromRuleFile#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,13 +23,13 @@ export interface AssertsPromRuleFileConfig extends cdktf.TerraformMetaArguments 
   /**
   * The name of the Prometheus rules file. This will be stored with a .custom extension. Must follow naming validation rules (alphanumeric, hyphens, underscores).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#name AssertsPromRuleFile#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#name AssertsPromRuleFile#name}
   */
   readonly name: string;
   /**
   * group block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#group AssertsPromRuleFile#group}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#group AssertsPromRuleFile#group}
   */
   readonly group: AssertsPromRuleFileGroup[] | cdktf.IResolvable;
 }
@@ -37,49 +37,49 @@ export interface AssertsPromRuleFileGroupRule {
   /**
   * Whether this specific rule is active. This field is read-only and controlled by the API.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#active AssertsPromRuleFile#active}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#active AssertsPromRuleFile#active}
   */
   readonly active?: boolean | cdktf.IResolvable;
   /**
   * The name of the alert for alerting rules. Either 'record' or 'alert' must be specified, but not both.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#alert AssertsPromRuleFile#alert}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#alert AssertsPromRuleFile#alert}
   */
   readonly alert?: string;
   /**
   * Annotations to add to alerts (e.g., summary, description).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#annotations AssertsPromRuleFile#annotations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#annotations AssertsPromRuleFile#annotations}
   */
   readonly annotations?: { [key: string]: string };
   /**
   * List of group names where this rule should be disabled. Useful for conditional rule enablement.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#disable_in_groups AssertsPromRuleFile#disable_in_groups}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#disable_in_groups AssertsPromRuleFile#disable_in_groups}
   */
   readonly disableInGroups?: string[];
   /**
   * How long the condition must be true before firing the alert (e.g., '5m'). Only applicable for alerting rules. Maps to 'for' in Prometheus.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#duration AssertsPromRuleFile#duration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#duration AssertsPromRuleFile#duration}
   */
   readonly duration?: string;
   /**
   * The PromQL expression to evaluate.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#expr AssertsPromRuleFile#expr}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#expr AssertsPromRuleFile#expr}
   */
   readonly expr: string;
   /**
   * Labels to attach to the resulting time series or alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#labels AssertsPromRuleFile#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#labels AssertsPromRuleFile#labels}
   */
   readonly labels?: { [key: string]: string };
   /**
   * The name of the time series to output for recording rules. Either 'record' or 'alert' must be specified, but not both.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#record AssertsPromRuleFile#record}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#record AssertsPromRuleFile#record}
   */
   readonly record?: string;
 }
@@ -397,19 +397,19 @@ export interface AssertsPromRuleFileGroup {
   /**
   * Evaluation interval for this group (e.g., '30s', '1m'). If not specified, uses the global evaluation interval.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#interval AssertsPromRuleFile#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#interval AssertsPromRuleFile#interval}
   */
   readonly interval?: string;
   /**
   * The name of the rule group (e.g., 'latency_monitoring').
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#name AssertsPromRuleFile#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#name AssertsPromRuleFile#name}
   */
   readonly name: string;
   /**
   * rule block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#rule AssertsPromRuleFile#rule}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#rule AssertsPromRuleFile#rule}
   */
   readonly rule: AssertsPromRuleFileGroupRule[] | cdktf.IResolvable;
 }
@@ -577,7 +577,7 @@ export class AssertsPromRuleFileGroupList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file grafana_asserts_prom_rule_file}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file grafana_asserts_prom_rule_file}
 */
 export class AssertsPromRuleFile extends cdktf.TerraformResource {
 
@@ -593,7 +593,7 @@ export class AssertsPromRuleFile extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssertsPromRuleFile resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssertsPromRuleFile to import
-  * @param importFromId The id of the existing AssertsPromRuleFile that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssertsPromRuleFile that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssertsPromRuleFile to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -605,7 +605,7 @@ export class AssertsPromRuleFile extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_prom_rule_file grafana_asserts_prom_rule_file} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_prom_rule_file grafana_asserts_prom_rule_file} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -616,7 +616,7 @@ export class AssertsPromRuleFile extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_asserts_prom_rule_file',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

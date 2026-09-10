@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsRulesRecordingruleV0Alpha1Config extends cdktf.TerraformMet
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#metadata AppsRulesRecordingruleV0Alpha1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#metadata AppsRulesRecordingruleV0Alpha1#metadata}
   */
   readonly metadata?: AppsRulesRecordingruleV0Alpha1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#options AppsRulesRecordingruleV0Alpha1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#options AppsRulesRecordingruleV0Alpha1#options}
   */
   readonly options?: AppsRulesRecordingruleV0Alpha1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#spec AppsRulesRecordingruleV0Alpha1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#spec AppsRulesRecordingruleV0Alpha1#spec}
   */
   readonly spec?: AppsRulesRecordingruleV0Alpha1Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsRulesRecordingruleV0Alpha1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#folder_uid AppsRulesRecordingruleV0Alpha1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#folder_uid AppsRulesRecordingruleV0Alpha1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#uid AppsRulesRecordingruleV0Alpha1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#uid AppsRulesRecordingruleV0Alpha1#uid}
   */
   readonly uid: string;
 }
@@ -179,13 +179,13 @@ export interface AppsRulesRecordingruleV0Alpha1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#manager_identity AppsRulesRecordingruleV0Alpha1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#manager_identity AppsRulesRecordingruleV0Alpha1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#overwrite AppsRulesRecordingruleV0Alpha1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#overwrite AppsRulesRecordingruleV0Alpha1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -310,7 +310,7 @@ export interface AppsRulesRecordingruleV0Alpha1SpecTrigger {
   /**
   * The interval at which the recording rule should be evaluated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#interval AppsRulesRecordingruleV0Alpha1#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#interval AppsRulesRecordingruleV0Alpha1#interval}
   */
   readonly interval: string;
 }
@@ -403,43 +403,43 @@ export interface AppsRulesRecordingruleV0Alpha1Spec {
   /**
   * A sequence of stages that describe the contents of the rule. Each value is a JSON string representing an expression object.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#expressions AppsRulesRecordingruleV0Alpha1#expressions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#expressions AppsRulesRecordingruleV0Alpha1#expressions}
   */
   readonly expressions: { [key: string]: string };
   /**
   * Key-value pairs to attach to the recorded metric.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#labels AppsRulesRecordingruleV0Alpha1#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#labels AppsRulesRecordingruleV0Alpha1#labels}
   */
   readonly labels?: { [key: string]: string };
   /**
   * The name of the metric to write to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#metric AppsRulesRecordingruleV0Alpha1#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#metric AppsRulesRecordingruleV0Alpha1#metric}
   */
   readonly metric: string;
   /**
   * Sets whether the recording rule should be paused or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#paused AppsRulesRecordingruleV0Alpha1#paused}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#paused AppsRulesRecordingruleV0Alpha1#paused}
   */
   readonly paused?: boolean | cdktf.IResolvable;
   /**
   * The UID of the datasource to write the metric to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#target_datasource_uid AppsRulesRecordingruleV0Alpha1#target_datasource_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#target_datasource_uid AppsRulesRecordingruleV0Alpha1#target_datasource_uid}
   */
   readonly targetDatasourceUid: string;
   /**
   * The title of the recording rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#title AppsRulesRecordingruleV0Alpha1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#title AppsRulesRecordingruleV0Alpha1#title}
   */
   readonly title: string;
   /**
   * trigger block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#trigger AppsRulesRecordingruleV0Alpha1#trigger}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#trigger AppsRulesRecordingruleV0Alpha1#trigger}
   */
   readonly trigger: AppsRulesRecordingruleV0Alpha1SpecTrigger;
 }
@@ -692,7 +692,7 @@ export class AppsRulesRecordingruleV0Alpha1SpecOutputReference extends cdktf.Com
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1 grafana_apps_rules_recordingrule_v0alpha1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1 grafana_apps_rules_recordingrule_v0alpha1}
 */
 export class AppsRulesRecordingruleV0Alpha1 extends cdktf.TerraformResource {
 
@@ -708,7 +708,7 @@ export class AppsRulesRecordingruleV0Alpha1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsRulesRecordingruleV0Alpha1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsRulesRecordingruleV0Alpha1 to import
-  * @param importFromId The id of the existing AppsRulesRecordingruleV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsRulesRecordingruleV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsRulesRecordingruleV0Alpha1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -720,7 +720,7 @@ export class AppsRulesRecordingruleV0Alpha1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_recordingrule_v0alpha1 grafana_apps_rules_recordingrule_v0alpha1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_recordingrule_v0alpha1 grafana_apps_rules_recordingrule_v0alpha1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -731,7 +731,7 @@ export class AppsRulesRecordingruleV0Alpha1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_rules_recordingrule_v0alpha1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,35 +10,35 @@ export interface OncallOutgoingWebhookConfig extends cdktf.TerraformMetaArgument
   /**
   * The auth data of the webhook. Used in Authorization header instead of user/password auth.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#authorization_header OncallOutgoingWebhook#authorization_header}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#authorization_header OncallOutgoingWebhook#authorization_header}
   */
   readonly authorizationHeader?: string;
   /**
   * The data of the webhook.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#data OncallOutgoingWebhook#data}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#data OncallOutgoingWebhook#data}
   */
   readonly data?: string;
   /**
   * Toggle to send the entire webhook payload instead of using the values in the Data field.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#forward_whole_payload OncallOutgoingWebhook#forward_whole_payload}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#forward_whole_payload OncallOutgoingWebhook#forward_whole_payload}
   */
   readonly forwardWholePayload?: boolean | cdktf.IResolvable;
   /**
   * Headers to add to the outgoing webhook request.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#headers OncallOutgoingWebhook#headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#headers OncallOutgoingWebhook#headers}
   */
   readonly headers?: string;
   /**
   * The HTTP method used in the request made by the outgoing webhook. Defaults to `POST`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#http_method OncallOutgoingWebhook#http_method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#http_method OncallOutgoingWebhook#http_method}
   */
   readonly httpMethod?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#id OncallOutgoingWebhook#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#id OncallOutgoingWebhook#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -47,67 +47,67 @@ export interface OncallOutgoingWebhookConfig extends cdktf.TerraformMetaArgument
   /**
   * Restricts the outgoing webhook to only trigger if the event came from a selected integration. If no integrations are selected the outgoing webhook will trigger for any integration.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#integration_filter OncallOutgoingWebhook#integration_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#integration_filter OncallOutgoingWebhook#integration_filter}
   */
   readonly integrationFilter?: string[];
   /**
   * Controls whether the outgoing webhook will trigger or is ignored. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#is_webhook_enabled OncallOutgoingWebhook#is_webhook_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#is_webhook_enabled OncallOutgoingWebhook#is_webhook_enabled}
   */
   readonly isWebhookEnabled?: boolean | cdktf.IResolvable;
   /**
   * The name of the outgoing webhook.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#name OncallOutgoingWebhook#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#name OncallOutgoingWebhook#name}
   */
   readonly name: string;
   /**
   * The auth data of the webhook. Used for Basic authentication
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#password OncallOutgoingWebhook#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#password OncallOutgoingWebhook#password}
   */
   readonly password?: string;
   /**
   * The preset of the outgoing webhook. Possible values are: `simple_webhook`, `advanced_webhook`, `grafana_sift`, `grafana_assistant`, `incident_webhook`. If no preset is set, the default preset is `advanced_webhook`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#preset OncallOutgoingWebhook#preset}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#preset OncallOutgoingWebhook#preset}
   */
   readonly preset?: string;
   /**
   * The ID of the OnCall team (using the `grafana_oncall_team` datasource).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#team_id OncallOutgoingWebhook#team_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#team_id OncallOutgoingWebhook#team_id}
   */
   readonly teamId?: string;
   /**
   * A template used to dynamically determine whether the webhook should execute based on the content of the payload.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#trigger_template OncallOutgoingWebhook#trigger_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#trigger_template OncallOutgoingWebhook#trigger_template}
   */
   readonly triggerTemplate?: string;
   /**
   * The type of event that will cause this outgoing webhook to execute. The events available will depend on the preset used. For alert group webhooks, the possible triggers are: `escalation`, `alert group created`, `status change`, `acknowledge`, `resolve`, `silence`, `unsilence`, `unresolve`, `unacknowledge`, `resolution note added`, `personal notification`; for incident webhooks: `incident declared`, `incident changed`, `incident resolved`. Defaults to `escalation`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#trigger_type OncallOutgoingWebhook#trigger_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#trigger_type OncallOutgoingWebhook#trigger_type}
   */
   readonly triggerType?: string;
   /**
   * The webhook URL. Required when not using a preset that controls this field.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#url OncallOutgoingWebhook#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#url OncallOutgoingWebhook#url}
   */
   readonly url?: string;
   /**
   * Username to use when making the outgoing webhook request.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#user OncallOutgoingWebhook#user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#user OncallOutgoingWebhook#user}
   */
   readonly user?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook grafana_oncall_outgoing_webhook}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook grafana_oncall_outgoing_webhook}
 */
 export class OncallOutgoingWebhook extends cdktf.TerraformResource {
 
@@ -123,7 +123,7 @@ export class OncallOutgoingWebhook extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OncallOutgoingWebhook resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OncallOutgoingWebhook to import
-  * @param importFromId The id of the existing OncallOutgoingWebhook that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OncallOutgoingWebhook that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OncallOutgoingWebhook to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -135,7 +135,7 @@ export class OncallOutgoingWebhook extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_outgoing_webhook grafana_oncall_outgoing_webhook} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_outgoing_webhook grafana_oncall_outgoing_webhook} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -146,7 +146,7 @@ export class OncallOutgoingWebhook extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_oncall_outgoing_webhook',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

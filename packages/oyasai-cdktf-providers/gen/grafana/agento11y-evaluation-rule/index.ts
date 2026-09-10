@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,67 +10,67 @@ export interface Agento11YEvaluationRuleConfig extends cdktf.TerraformMetaArgume
   /**
   * Optional Grafana alert rule UIDs associated with this evaluation rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#alert_rule_uids Agento11YEvaluationRule#alert_rule_uids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#alert_rule_uids Agento11YEvaluationRule#alert_rule_uids}
   */
   readonly alertRuleUids?: string[];
   /**
   * Whether the rule is enabled. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#enabled Agento11YEvaluationRule#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#enabled Agento11YEvaluationRule#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * IDs of the evaluators to run against matching generations. Must be non-empty.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#evaluator_ids Agento11YEvaluationRule#evaluator_ids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#evaluator_ids Agento11YEvaluationRule#evaluator_ids}
   */
   readonly evaluatorIds: string[];
   /**
   * How evaluators execute. `parallel` runs all evaluators independently; `sequential` treats `evaluator_ids` as an ordered gate chain. Defaults to `parallel`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#execution_mode Agento11YEvaluationRule#execution_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#execution_mode Agento11YEvaluationRule#execution_mode}
   */
   readonly executionMode?: string;
   /**
   * Generation tag keys to promote to Prometheus labels on evaluation metrics. Supports at most 10 unique, non-empty keys and cannot be set when `selector` is `conversation`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#filterable_tag_keys Agento11YEvaluationRule#filterable_tag_keys}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#filterable_tag_keys Agento11YEvaluationRule#filterable_tag_keys}
   */
   readonly filterableTagKeys?: string[];
   /**
   * Optional JSON object of match filters (for example `{"agent_name":"checkout-*"}`). Omit to match everything.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#match Agento11YEvaluationRule#match}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#match Agento11YEvaluationRule#match}
   */
   readonly match?: string;
   /**
   * Idle window, in seconds, before a conversation-scope rule runs. Required when `selector` is `conversation`; must be unset otherwise.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#min_idle_seconds Agento11YEvaluationRule#min_idle_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#min_idle_seconds Agento11YEvaluationRule#min_idle_seconds}
   */
   readonly minIdleSeconds?: number;
   /**
   * Tenant-unique identifier of the rule. Changing this forces a new resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#rule_id Agento11YEvaluationRule#rule_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#rule_id Agento11YEvaluationRule#rule_id}
   */
   readonly ruleId: string;
   /**
   * Fraction of matching generations to evaluate, in `[0,1]`. Defaults to `0.01`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#sample_rate Agento11YEvaluationRule#sample_rate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#sample_rate Agento11YEvaluationRule#sample_rate}
   */
   readonly sampleRate?: number;
   /**
   * Which generations the rule applies to. One of `user_visible_turn`, `all_assistant_generations`, `tool_call_steps`, `errored_generations`, `conversation`. Defaults to `user_visible_turn`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#selector Agento11YEvaluationRule#selector}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#selector Agento11YEvaluationRule#selector}
   */
   readonly selector?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule grafana_agento11y_evaluation_rule}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule grafana_agento11y_evaluation_rule}
 */
 export class Agento11YEvaluationRule extends cdktf.TerraformResource {
 
@@ -86,7 +86,7 @@ export class Agento11YEvaluationRule extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Agento11YEvaluationRule resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Agento11YEvaluationRule to import
-  * @param importFromId The id of the existing Agento11YEvaluationRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Agento11YEvaluationRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Agento11YEvaluationRule to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -98,7 +98,7 @@ export class Agento11YEvaluationRule extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_evaluation_rule grafana_agento11y_evaluation_rule} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_evaluation_rule grafana_agento11y_evaluation_rule} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -109,7 +109,7 @@ export class Agento11YEvaluationRule extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_agento11y_evaluation_rule',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

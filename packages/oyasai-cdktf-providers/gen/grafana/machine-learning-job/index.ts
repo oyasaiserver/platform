@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface MachineLearningJobConfig extends cdktf.TerraformMetaArguments {
   /**
   * An object representing the custom labels added on the forecast.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#custom_labels MachineLearningJob#custom_labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#custom_labels MachineLearningJob#custom_labels}
   */
   readonly customLabels?: { [key: string]: string };
   /**
   * The type of datasource being queried. Currently allowed values are prometheus, grafana-prometheus-datasource, grafana-amazonprometheus-datasource, loki, grafana-loki-datasource, graphite, grafana-graphite-datasource, grafana-datadog-datasource, postgres, grafana-postgresql-datasource, doitintl-bigquery-datasource, grafana-bigquery-datasource, grafana-snowflake-datasource, influxdb, grafana-influxdb-datasource, grafana-splunk-datasource, elasticsearch, grafana-elasticsearch-datasource, and grafana-mongodb-datasource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#datasource_type MachineLearningJob#datasource_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#datasource_type MachineLearningJob#datasource_type}
   */
   readonly datasourceType: string;
   /**
   * The uid of the datasource to query.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#datasource_uid MachineLearningJob#datasource_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#datasource_uid MachineLearningJob#datasource_uid}
   */
   readonly datasourceUid: string;
   /**
   * A description of the job.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#description MachineLearningJob#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#description MachineLearningJob#description}
   */
   readonly description?: string;
   /**
   * A list of holiday IDs or names to take into account when training the model.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#holidays MachineLearningJob#holidays}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#holidays MachineLearningJob#holidays}
   */
   readonly holidays?: string[];
   /**
   * The hyperparameters used to fine tune the algorithm. See https://grafana.com/docs/grafana-cloud/alerting-and-irm/machine-learning/forecasts/models/ for the full list of available hyperparameters. Defaults to `map[]`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#hyper_params MachineLearningJob#hyper_params}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#hyper_params MachineLearningJob#hyper_params}
   */
   readonly hyperParams?: { [key: string]: string };
   /**
   * The data interval in seconds to train the data on. Defaults to `300`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#interval MachineLearningJob#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#interval MachineLearningJob#interval}
   */
   readonly interval?: number;
   /**
   * The metric used to query the job results.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#metric MachineLearningJob#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#metric MachineLearningJob#metric}
   */
   readonly metric: string;
   /**
   * The name of the job.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#name MachineLearningJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#name MachineLearningJob#name}
   */
   readonly name: string;
   /**
   * An object representing the query params to query Grafana with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#query_params MachineLearningJob#query_params}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#query_params MachineLearningJob#query_params}
   */
   readonly queryParams: { [key: string]: string };
   /**
   * The data interval in seconds to train the data on. Defaults to `7776000`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#training_window MachineLearningJob#training_window}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#training_window MachineLearningJob#training_window}
   */
   readonly trainingWindow?: number;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job grafana_machine_learning_job}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job grafana_machine_learning_job}
 */
 export class MachineLearningJob extends cdktf.TerraformResource {
 
@@ -92,7 +92,7 @@ export class MachineLearningJob extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a MachineLearningJob resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the MachineLearningJob to import
-  * @param importFromId The id of the existing MachineLearningJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing MachineLearningJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the MachineLearningJob to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -104,7 +104,7 @@ export class MachineLearningJob extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_job grafana_machine_learning_job} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_job grafana_machine_learning_job} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -115,7 +115,7 @@ export class MachineLearningJob extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_machine_learning_job',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

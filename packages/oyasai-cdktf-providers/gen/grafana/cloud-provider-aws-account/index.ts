@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_account
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_account
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface CloudProviderAwsAccountConfig extends cdktf.TerraformMetaArgume
   /**
   * An optional human-readable name for this AWS Account resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_account#name CloudProviderAwsAccount#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_account#name CloudProviderAwsAccount#name}
   */
   readonly name?: string;
   /**
   * A set of regions that this AWS Account resource applies to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_account#regions CloudProviderAwsAccount#regions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_account#regions CloudProviderAwsAccount#regions}
   */
   readonly regions: string[];
   /**
   * An IAM Role ARN string to represent with this AWS Account resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_account#role_arn CloudProviderAwsAccount#role_arn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_account#role_arn CloudProviderAwsAccount#role_arn}
   */
   readonly roleArn: string;
   /**
   * The StackID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_account#stack_id CloudProviderAwsAccount#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_account#stack_id CloudProviderAwsAccount#stack_id}
   */
   readonly stackId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_account grafana_cloud_provider_aws_account}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_account grafana_cloud_provider_aws_account}
 */
 export class CloudProviderAwsAccount extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class CloudProviderAwsAccount extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudProviderAwsAccount resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudProviderAwsAccount to import
-  * @param importFromId The id of the existing CloudProviderAwsAccount that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_account#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudProviderAwsAccount that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_account#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudProviderAwsAccount to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class CloudProviderAwsAccount extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_account grafana_cloud_provider_aws_account} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_account grafana_cloud_provider_aws_account} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class CloudProviderAwsAccount extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_provider_aws_account',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

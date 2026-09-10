@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert
+// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,49 +10,49 @@ export interface AlertConfig extends cdktf.TerraformMetaArguments {
   /**
   * The channels the alert is delivered to, keyed by a name of your choosing. The key is what identifies a channel to Terraform and is never sent to Infisical, so renaming a channel updates it in place and it keeps the deliveries it has already made. Changing a key, on the other hand, deletes the channel and creates a new one, so the new channel notifies about everything that is still expiring, even if the old one already did. Each channel carries exactly one configuration block, and that block is what gives the channel its type. At least one and at most 10 channels are allowed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#channels Alert#channels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#channels Alert#channels}
   */
   readonly channels: { [key: string]: AlertChannels } | cdktf.IResolvable;
   /**
   * An optional description of the alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#description Alert#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#description Alert#description}
   */
   readonly description?: string;
   /**
   * Whether the alert is evaluated. Defaults to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#enabled Alert#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#enabled Alert#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Fires before the watched resource expires. Only for alerts on these resource types: identity.authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#expiry Alert#expiry}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#expiry Alert#expiry}
   */
   readonly expiry?: AlertExpiry;
   /**
   * The name of the alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#name Alert#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#name Alert#name}
   */
   readonly name: string;
   /**
   * The ID of the project the resource belongs to. Required for project level resources, and must be omitted for organization level ones.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#project_id Alert#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#project_id Alert#project_id}
   */
   readonly projectId?: string;
   /**
   * The ID of the resource to watch. For the identity.authentication resource type this is a machine identity's ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#resource_id Alert#resource_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#resource_id Alert#resource_id}
   */
   readonly resourceId: string;
   /**
   * The type of the resource to watch. Options: identity.authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#resource_type Alert#resource_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#resource_type Alert#resource_type}
   */
   readonly resourceType: string;
 }
@@ -60,7 +60,7 @@ export interface AlertChannelsEmailRecipients {
   /**
   * The ID of the recipient user or group. The principal must belong to the scope the alert is created in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#id Alert#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#id Alert#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -69,7 +69,7 @@ export interface AlertChannelsEmailRecipients {
   /**
   * The type of the recipient. Options: user, group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#type Alert#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#type Alert#type}
   */
   readonly type: string;
 }
@@ -210,7 +210,7 @@ export interface AlertChannelsEmail {
   /**
   * The principals to notify. At least one and at most 20 are allowed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#recipients Alert#recipients}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#recipients Alert#recipients}
   */
   readonly recipients: AlertChannelsEmailRecipients[] | cdktf.IResolvable;
 }
@@ -303,7 +303,7 @@ export interface AlertChannelsPagerduty {
   /**
   * The PagerDuty Events API v2 integration key incidents are created with, a 32 character hex string. Write-only: it is never returned by the API, so it cannot be imported.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#integration_key Alert#integration_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#integration_key Alert#integration_key}
   */
   readonly integrationKey: string;
 }
@@ -396,7 +396,7 @@ export interface AlertChannelsSlack {
   /**
   * The Slack incoming webhook URL notifications are posted to. Must be a https://hooks.slack.com URL. Write-only: it is never returned by the API, so it cannot be imported.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#webhook_url Alert#webhook_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#webhook_url Alert#webhook_url}
   */
   readonly webhookUrl: string;
 }
@@ -489,13 +489,13 @@ export interface AlertChannelsWebhook {
   /**
   * The secret used to sign the payload so the receiver can verify it. Write-only: it is never returned by the API, so an imported channel keeps the secret it was created with until one is set here.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#signing_secret Alert#signing_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#signing_secret Alert#signing_secret}
   */
   readonly signingSecret?: string;
   /**
   * The HTTPS URL the CloudEvents payload is sent to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#url Alert#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#url Alert#url}
   */
   readonly url: string;
 }
@@ -617,37 +617,37 @@ export interface AlertChannels {
   /**
   * Notifies principals of your organization or project by email.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#email Alert#email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#email Alert#email}
   */
   readonly email?: AlertChannelsEmail;
   /**
   * Whether the channel delivers notifications. Defaults to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#enabled Alert#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#enabled Alert#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The name the channel is shown under in Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#name Alert#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#name Alert#name}
   */
   readonly name: string;
   /**
   * Creates PagerDuty incidents through the Events API v2.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#pagerduty Alert#pagerduty}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#pagerduty Alert#pagerduty}
   */
   readonly pagerduty?: AlertChannelsPagerduty;
   /**
   * Posts notifications to a Slack channel through an incoming webhook.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#slack Alert#slack}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#slack Alert#slack}
   */
   readonly slack?: AlertChannelsSlack;
   /**
   * Sends notifications to an HTTPS endpoint as a CloudEvents payload.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#webhook Alert#webhook}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#webhook Alert#webhook}
   */
   readonly webhook?: AlertChannelsWebhook;
 }
@@ -910,13 +910,13 @@ export interface AlertExpiry {
   /**
   * How many days before the watched resource expires the alert fires. Must be between 1 and 90.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#alert_before_days Alert#alert_before_days}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#alert_before_days Alert#alert_before_days}
   */
   readonly alertBeforeDays: number;
   /**
   * Whether to keep notifying once a day until the watched resource expires, instead of notifying once. Defaults to false.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#daily_reminder Alert#daily_reminder}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#daily_reminder Alert#daily_reminder}
   */
   readonly dailyReminder?: boolean | cdktf.IResolvable;
 }
@@ -1036,7 +1036,7 @@ export class AlertExpiryOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert infisical_alert}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert infisical_alert}
 */
 export class Alert extends cdktf.TerraformResource {
 
@@ -1052,7 +1052,7 @@ export class Alert extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Alert resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Alert to import
-  * @param importFromId The id of the existing Alert that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Alert that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Alert to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1064,7 +1064,7 @@ export class Alert extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/alert infisical_alert} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/alert infisical_alert} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1075,7 +1075,7 @@ export class Alert extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_alert',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.26'
+        providerVersion: '0.19.31'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

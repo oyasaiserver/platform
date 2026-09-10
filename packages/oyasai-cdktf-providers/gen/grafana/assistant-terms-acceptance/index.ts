@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_terms_acceptance
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_terms_acceptance
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface AssistantTermsAcceptanceConfig extends cdktf.TerraformMetaArgum
   /**
   * Whether the current Grafana Assistant terms are accepted for the stack. Setting this to `false` withdraws acceptance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_terms_acceptance#accepted AssistantTermsAcceptance#accepted}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_terms_acceptance#accepted AssistantTermsAcceptance#accepted}
   */
   readonly accepted: boolean | cdktf.IResolvable;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_terms_acceptance grafana_assistant_terms_acceptance}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_terms_acceptance grafana_assistant_terms_acceptance}
 */
 export class AssistantTermsAcceptance extends cdktf.TerraformResource {
 
@@ -32,7 +32,7 @@ export class AssistantTermsAcceptance extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssistantTermsAcceptance resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssistantTermsAcceptance to import
-  * @param importFromId The id of the existing AssistantTermsAcceptance that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_terms_acceptance#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssistantTermsAcceptance that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_terms_acceptance#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssistantTermsAcceptance to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class AssistantTermsAcceptance extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/assistant_terms_acceptance grafana_assistant_terms_acceptance} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_terms_acceptance grafana_assistant_terms_acceptance} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class AssistantTermsAcceptance extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_assistant_terms_acceptance',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

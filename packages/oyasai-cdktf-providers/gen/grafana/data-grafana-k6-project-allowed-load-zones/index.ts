@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_allowed_load_zones
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_allowed_load_zones
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataGrafanaK6ProjectAllowedLoadZonesConfig extends cdktf.Terraf
   /**
   * The identifier of the project to retrieve private allowed load zones for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_allowed_load_zones#project_id DataGrafanaK6ProjectAllowedLoadZones#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_allowed_load_zones#project_id DataGrafanaK6ProjectAllowedLoadZones#project_id}
   */
   readonly projectId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_allowed_load_zones grafana_k6_project_allowed_load_zones}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_allowed_load_zones grafana_k6_project_allowed_load_zones}
 */
 export class DataGrafanaK6ProjectAllowedLoadZones extends cdktf.TerraformDataSource {
 
@@ -32,7 +32,7 @@ export class DataGrafanaK6ProjectAllowedLoadZones extends cdktf.TerraformDataSou
   * Generates CDKTF code for importing a DataGrafanaK6ProjectAllowedLoadZones resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaK6ProjectAllowedLoadZones to import
-  * @param importFromId The id of the existing DataGrafanaK6ProjectAllowedLoadZones that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_allowed_load_zones#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaK6ProjectAllowedLoadZones that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_allowed_load_zones#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaK6ProjectAllowedLoadZones to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class DataGrafanaK6ProjectAllowedLoadZones extends cdktf.TerraformDataSou
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_allowed_load_zones grafana_k6_project_allowed_load_zones} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_allowed_load_zones grafana_k6_project_allowed_load_zones} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class DataGrafanaK6ProjectAllowedLoadZones extends cdktf.TerraformDataSou
       terraformResourceType: 'grafana_k6_project_allowed_load_zones',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

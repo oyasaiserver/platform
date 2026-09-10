@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,67 +10,67 @@ export interface MachineLearningAlertConfig extends cdktf.TerraformMetaArguments
   /**
   * Annotations to add to the alert generated in Grafana.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#annotations MachineLearningAlert#annotations}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#annotations MachineLearningAlert#annotations}
   */
   readonly annotations?: { [key: string]: string };
   /**
   * The condition for when to consider a point as anomalous.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#anomaly_condition MachineLearningAlert#anomaly_condition}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#anomaly_condition MachineLearningAlert#anomaly_condition}
   */
   readonly anomalyCondition?: string;
   /**
   * How long values must be anomalous before firing an alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#for MachineLearningAlert#for}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#for MachineLearningAlert#for}
   */
   readonly for?: string;
   /**
   * The forecast this alert belongs to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#job_id MachineLearningAlert#job_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#job_id MachineLearningAlert#job_id}
   */
   readonly jobId?: string;
   /**
   * Labels to add to the alert generated in Grafana.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#labels MachineLearningAlert#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#labels MachineLearningAlert#labels}
   */
   readonly labels?: { [key: string]: string };
   /**
   * How the alert should be processed when no data is returned by the underlying series
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#no_data_state MachineLearningAlert#no_data_state}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#no_data_state MachineLearningAlert#no_data_state}
   */
   readonly noDataState?: string;
   /**
   * The forecast this alert belongs to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#outlier_id MachineLearningAlert#outlier_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#outlier_id MachineLearningAlert#outlier_id}
   */
   readonly outlierId?: string;
   /**
   * The threshold of points over the window that need to be anomalous to alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#threshold MachineLearningAlert#threshold}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#threshold MachineLearningAlert#threshold}
   */
   readonly threshold?: string;
   /**
   * The title of the alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#title MachineLearningAlert#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#title MachineLearningAlert#title}
   */
   readonly title: string;
   /**
   * How much time to average values over
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#window MachineLearningAlert#window}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#window MachineLearningAlert#window}
   */
   readonly window?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert grafana_machine_learning_alert}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert grafana_machine_learning_alert}
 */
 export class MachineLearningAlert extends cdktf.TerraformResource {
 
@@ -86,7 +86,7 @@ export class MachineLearningAlert extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a MachineLearningAlert resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the MachineLearningAlert to import
-  * @param importFromId The id of the existing MachineLearningAlert that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing MachineLearningAlert that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the MachineLearningAlert to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -98,7 +98,7 @@ export class MachineLearningAlert extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/machine_learning_alert grafana_machine_learning_alert} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/machine_learning_alert grafana_machine_learning_alert} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -109,7 +109,7 @@ export class MachineLearningAlert extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_machine_learning_alert',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

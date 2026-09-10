@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/identity
+// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/identity
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,14 +8,20 @@ import * as cdktf from 'cdktf';
 
 export interface DataInfisicalIdentityConfig extends cdktf.TerraformMetaArguments {
   /**
-  * The ID of the identity to look up
+  * The ID of the identity to look up. Exactly one of id or name must be set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/identity#id DataInfisicalIdentity#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/identity#id DataInfisicalIdentity#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
-  readonly id: string;
+  readonly id?: string;
+  /**
+  * The name of the identity to look up. Exactly one of id or name must be set. Identity names are not unique, so the lookup fails if more than one identity has this name; use id to select a specific one.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/identity#name DataInfisicalIdentity#name}
+  */
+  readonly name?: string;
 }
 export interface DataInfisicalIdentityMetadata {
 }
@@ -99,7 +105,7 @@ export class DataInfisicalIdentityMetadataList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/identity infisical_identity}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/identity infisical_identity}
 */
 export class DataInfisicalIdentity extends cdktf.TerraformDataSource {
 
@@ -115,7 +121,7 @@ export class DataInfisicalIdentity extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalIdentity resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalIdentity to import
-  * @param importFromId The id of the existing DataInfisicalIdentity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/identity#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalIdentity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/identity#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalIdentity to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -127,18 +133,18 @@ export class DataInfisicalIdentity extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/identity infisical_identity} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/identity infisical_identity} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataInfisicalIdentityConfig
+  * @param options DataInfisicalIdentityConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataInfisicalIdentityConfig) {
+  public constructor(scope: Construct, id: string, config: DataInfisicalIdentityConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'infisical_identity',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.26'
+        providerVersion: '0.19.31'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -149,6 +155,7 @@ export class DataInfisicalIdentity extends cdktf.TerraformDataSource {
       forEach: config.forEach
     });
     this._id = config.id;
+    this._name = config.name;
   }
 
   // ==========
@@ -170,13 +177,16 @@ export class DataInfisicalIdentity extends cdktf.TerraformDataSource {
     return this.getBooleanAttribute('has_delete_protection');
   }
 
-  // id - computed: false, optional: false, required: true
+  // id - computed: true, optional: true, required: false
   private _id?: string; 
   public get id() {
     return this.getStringAttribute('id');
   }
   public set id(value: string) {
     this._id = value;
+  }
+  public resetId() {
+    this._id = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get idInput() {
@@ -189,9 +199,20 @@ export class DataInfisicalIdentity extends cdktf.TerraformDataSource {
     return this._metadata;
   }
 
-  // name - computed: true, optional: false, required: false
+  // name - computed: true, optional: true, required: false
+  private _name?: string; 
   public get name() {
     return this.getStringAttribute('name');
+  }
+  public set name(value: string) {
+    this._name = value;
+  }
+  public resetName() {
+    this._name = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get nameInput() {
+    return this._name;
   }
 
   // org_id - computed: true, optional: false, required: false
@@ -211,6 +232,7 @@ export class DataInfisicalIdentity extends cdktf.TerraformDataSource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       id: cdktf.stringToTerraform(this._id),
+      name: cdktf.stringToTerraform(this._name),
     };
   }
 
@@ -218,6 +240,12 @@ export class DataInfisicalIdentity extends cdktf.TerraformDataSource {
     const attrs = {
       id: {
         value: cdktf.stringToHclTerraform(this._id),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      name: {
+        value: cdktf.stringToHclTerraform(this._name),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

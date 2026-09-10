@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,35 +10,35 @@ export interface OncallOnCallShiftConfig extends cdktf.TerraformMetaArguments {
   /**
   * This parameter takes a list of days in iCal format. Can be MO, TU, WE, TH, FR, SA, SU
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#by_day OncallOnCallShift#by_day}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#by_day OncallOnCallShift#by_day}
   */
   readonly byDay?: string[];
   /**
   * This parameter takes a list of months. Valid values are 1 to 12
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#by_month OncallOnCallShift#by_month}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#by_month OncallOnCallShift#by_month}
   */
   readonly byMonth?: number[];
   /**
   * This parameter takes a list of days of the month.  Valid values are 1 to 31 or -31 to -1
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#by_monthday OncallOnCallShift#by_monthday}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#by_monthday OncallOnCallShift#by_monthday}
   */
   readonly byMonthday?: number[];
   /**
   * The duration of the event.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#duration OncallOnCallShift#duration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#duration OncallOnCallShift#duration}
   */
   readonly duration: number;
   /**
   * The frequency of the event. Can be hourly, daily, weekly, monthly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#frequency OncallOnCallShift#frequency}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#frequency OncallOnCallShift#frequency}
   */
   readonly frequency?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#id OncallOnCallShift#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#id OncallOnCallShift#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -47,79 +47,79 @@ export interface OncallOnCallShiftConfig extends cdktf.TerraformMetaArguments {
   /**
   * The positive integer representing at which intervals the recurrence rule repeats.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#interval OncallOnCallShift#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#interval OncallOnCallShift#interval}
   */
   readonly interval?: number;
   /**
   * The priority level. The higher the value, the higher the priority.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#level OncallOnCallShift#level}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#level OncallOnCallShift#level}
   */
   readonly level?: number;
   /**
   * The shift's name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#name OncallOnCallShift#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#name OncallOnCallShift#name}
   */
   readonly name: string;
   /**
   * The list of lists with on-call users (for rolling_users event type)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#rolling_users OncallOnCallShift#rolling_users}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#rolling_users OncallOnCallShift#rolling_users}
   */
   readonly rollingUsers?: string[][] | cdktf.IResolvable;
   /**
   * The start time of the on-call shift. This parameter takes a date format as yyyy-MM-dd'T'HH:mm:ss (for example "2020-09-05T08:00:00")
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#start OncallOnCallShift#start}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#start OncallOnCallShift#start}
   */
   readonly start: string;
   /**
   * The index of the list of users in rolling_users, from which on-call rotation starts.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#start_rotation_from_user_index OncallOnCallShift#start_rotation_from_user_index}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#start_rotation_from_user_index OncallOnCallShift#start_rotation_from_user_index}
   */
   readonly startRotationFromUserIndex?: number;
   /**
   * The ID of the OnCall team (using the `grafana_oncall_team` datasource).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#team_id OncallOnCallShift#team_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#team_id OncallOnCallShift#team_id}
   */
   readonly teamId?: string;
   /**
   * The shift's timezone.  Overrides schedule's timezone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#time_zone OncallOnCallShift#time_zone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#time_zone OncallOnCallShift#time_zone}
   */
   readonly timeZone?: string;
   /**
   * The shift's type. Can be rolling_users, recurrent_event, single_event
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#type OncallOnCallShift#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#type OncallOnCallShift#type}
   */
   readonly type: string;
   /**
   * The end time of recurrent on-call shifts (endless if null). This parameter takes a date format as yyyy-MM-dd'T'HH:mm:ss (for example "2020-09-05T08:00:00")
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#until OncallOnCallShift#until}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#until OncallOnCallShift#until}
   */
   readonly until?: string;
   /**
   * The list of on-call users (for single_event and recurrent_event event type).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#users OncallOnCallShift#users}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#users OncallOnCallShift#users}
   */
   readonly users?: string[];
   /**
   * Start day of the week in iCal format. Can be MO, TU, WE, TH, FR, SA, SU
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#week_start OncallOnCallShift#week_start}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#week_start OncallOnCallShift#week_start}
   */
   readonly weekStart?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift grafana_oncall_on_call_shift}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift grafana_oncall_on_call_shift}
 */
 export class OncallOnCallShift extends cdktf.TerraformResource {
 
@@ -135,7 +135,7 @@ export class OncallOnCallShift extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OncallOnCallShift resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OncallOnCallShift to import
-  * @param importFromId The id of the existing OncallOnCallShift that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OncallOnCallShift that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OncallOnCallShift to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -147,7 +147,7 @@ export class OncallOnCallShift extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_on_call_shift grafana_oncall_on_call_shift} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_on_call_shift grafana_oncall_on_call_shift} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -158,7 +158,7 @@ export class OncallOnCallShift extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_oncall_on_call_shift',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,187 +10,187 @@ export interface GrafanaProviderConfig {
   /**
   * API token, basic auth in the `username:password` format or `anonymous` (string literal). May alternatively be set via the `GRAFANA_AUTH` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#auth GrafanaProvider#auth}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#auth GrafanaProvider#auth}
   */
   readonly auth?: string;
   /**
   * Certificate CA bundle (file path or literal value) to use to verify the Grafana server's certificate. May alternatively be set via the `GRAFANA_CA_CERT` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#ca_cert GrafanaProvider#ca_cert}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#ca_cert GrafanaProvider#ca_cert}
   */
   readonly caCert?: string;
   /**
   * Access Policy Token for Grafana Cloud. May alternatively be set via the `GRAFANA_CLOUD_ACCESS_POLICY_TOKEN` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#cloud_access_policy_token GrafanaProvider#cloud_access_policy_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#cloud_access_policy_token GrafanaProvider#cloud_access_policy_token}
   */
   readonly cloudAccessPolicyToken?: string;
   /**
   * Grafana Cloud's API URL. May alternatively be set via the `GRAFANA_CLOUD_API_URL` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#cloud_api_url GrafanaProvider#cloud_api_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#cloud_api_url GrafanaProvider#cloud_api_url}
   */
   readonly cloudApiUrl?: string;
   /**
   * A Grafana Cloud Provider access token. May alternatively be set via the `GRAFANA_CLOUD_PROVIDER_ACCESS_TOKEN` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#cloud_provider_access_token GrafanaProvider#cloud_provider_access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#cloud_provider_access_token GrafanaProvider#cloud_provider_access_token}
   */
   readonly cloudProviderAccessToken?: string;
   /**
   * A Grafana Cloud Provider backend address. May alternatively be set via the `GRAFANA_CLOUD_PROVIDER_URL` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#cloud_provider_url GrafanaProvider#cloud_provider_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#cloud_provider_url GrafanaProvider#cloud_provider_url}
   */
   readonly cloudProviderUrl?: string;
   /**
   * A Grafana Connections API access token. May alternatively be set via the `GRAFANA_CONNECTIONS_API_ACCESS_TOKEN` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#connections_api_access_token GrafanaProvider#connections_api_access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#connections_api_access_token GrafanaProvider#connections_api_access_token}
   */
   readonly connectionsApiAccessToken?: string;
   /**
   * A Grafana Connections API address. May alternatively be set via the `GRAFANA_CONNECTIONS_API_URL` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#connections_api_url GrafanaProvider#connections_api_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#connections_api_url GrafanaProvider#connections_api_url}
   */
   readonly connectionsApiUrl?: string;
   /**
   * A Grafana Fleet Management basic auth in the `username:password` format. May alternatively be set via the `GRAFANA_FLEET_MANAGEMENT_AUTH` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#fleet_management_auth GrafanaProvider#fleet_management_auth}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#fleet_management_auth GrafanaProvider#fleet_management_auth}
   */
   readonly fleetManagementAuth?: string;
   /**
   * A Grafana Fleet Management API address. May alternatively be set via the `GRAFANA_FLEET_MANAGEMENT_URL` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#fleet_management_url GrafanaProvider#fleet_management_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#fleet_management_url GrafanaProvider#fleet_management_url}
   */
   readonly fleetManagementUrl?: string;
   /**
   * A Grafana Frontend Observability API access token. May alternatively be set via the `GRAFANA_FRONTEND_O11Y_API_ACCESS_TOKEN` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#frontend_o11y_api_access_token GrafanaProvider#frontend_o11y_api_access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#frontend_o11y_api_access_token GrafanaProvider#frontend_o11y_api_access_token}
   */
   readonly frontendO11YApiAccessToken?: string;
   /**
   * The Grafana Frontend Observability API URL. This is optional, and should only be set to override the default API. May alternatively be set via the `GRAFANA_FRONTEND_O11Y_API_URL` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#frontend_o11y_api_url GrafanaProvider#frontend_o11y_api_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#frontend_o11y_api_url GrafanaProvider#frontend_o11y_api_url}
   */
   readonly frontendO11YApiUrl?: string;
   /**
   * Optional. HTTP headers mapping keys to values used for accessing the Grafana and Grafana Cloud APIs. May alternatively be set via the `GRAFANA_HTTP_HEADERS` environment variable in JSON format.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#http_headers GrafanaProvider#http_headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#http_headers GrafanaProvider#http_headers}
   */
   readonly httpHeaders?: { [key: string]: string };
   /**
   * Skip TLS certificate verification. May alternatively be set via the `GRAFANA_INSECURE_SKIP_VERIFY` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#insecure_skip_verify GrafanaProvider#insecure_skip_verify}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#insecure_skip_verify GrafanaProvider#insecure_skip_verify}
   */
   readonly insecureSkipVerify?: boolean | cdktf.IResolvable;
   /**
   * The k6 Cloud API token. May alternatively be set via the `GRAFANA_K6_ACCESS_TOKEN` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#k6_access_token GrafanaProvider#k6_access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#k6_access_token GrafanaProvider#k6_access_token}
   */
   readonly k6AccessToken?: string;
   /**
   * The k6 Cloud API url. May alternatively be set via the `GRAFANA_K6_URL` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#k6_url GrafanaProvider#k6_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#k6_url GrafanaProvider#k6_url}
   */
   readonly k6Url?: string;
   /**
   * A Grafana OnCall access token. May alternatively be set via the `GRAFANA_ONCALL_ACCESS_TOKEN` environment variable. This is only required when using a dedicated OnCall API token. When using Grafana Cloud, OnCall can be accessed through the `auth` and `url` provider attributes instead.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#oncall_access_token GrafanaProvider#oncall_access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#oncall_access_token GrafanaProvider#oncall_access_token}
   */
   readonly oncallAccessToken?: string;
   /**
   * A Grafana OnCall backend address. May alternatively be set via the `GRAFANA_ONCALL_URL` environment variable. This is only required when using Grafana OnCall OSS. In Grafana Cloud, the OnCall URL is automatically inferred from the Grafana instance URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#oncall_url GrafanaProvider#oncall_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#oncall_url GrafanaProvider#oncall_url}
   */
   readonly oncallUrl?: string;
   /**
   * The Grafana org ID, if you are using a self-hosted OSS or enterprise Grafana instance. May alternatively be set via the `GRAFANA_ORG_ID` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#org_id GrafanaProvider#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#org_id GrafanaProvider#org_id}
   */
   readonly orgId?: number;
   /**
   * The amount of retries to use for Grafana API and Grafana Cloud API calls. May alternatively be set via the `GRAFANA_RETRIES` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#retries GrafanaProvider#retries}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#retries GrafanaProvider#retries}
   */
   readonly retries?: number;
   /**
   * The status codes to retry on for Grafana API and Grafana Cloud API calls. Use `x` as a digit wildcard. Defaults to 429 and 5xx. May alternatively be set via the `GRAFANA_RETRY_STATUS_CODES` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#retry_status_codes GrafanaProvider#retry_status_codes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#retry_status_codes GrafanaProvider#retry_status_codes}
   */
   readonly retryStatusCodes?: string[];
   /**
   * The amount of time in seconds to wait between retries for Grafana API and Grafana Cloud API calls. May alternatively be set via the `GRAFANA_RETRY_WAIT` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#retry_wait GrafanaProvider#retry_wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#retry_wait GrafanaProvider#retry_wait}
   */
   readonly retryWait?: number;
   /**
   * A Synthetic Monitoring access token. May alternatively be set via the `GRAFANA_SM_ACCESS_TOKEN` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#sm_access_token GrafanaProvider#sm_access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#sm_access_token GrafanaProvider#sm_access_token}
   */
   readonly smAccessToken?: string;
   /**
   * Synthetic monitoring backend address. May alternatively be set via the `GRAFANA_SM_URL` environment variable. The correct value for each service region is cited in the [Synthetic Monitoring documentation](https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/set-up/set-up-private-probes/#probe-api-server-url). Note the `sm_url` value is optional, but it must correspond with the value specified as the `region_slug` in the `grafana_cloud_stack` resource. Also note that when a Terraform configuration contains multiple provider instances managing SM resources associated with the same Grafana stack, specifying an explicit `sm_url` set to the same value for each provider ensures all providers interact with the same SM API.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#sm_url GrafanaProvider#sm_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#sm_url GrafanaProvider#sm_url}
   */
   readonly smUrl?: string;
   /**
   * The Grafana stack ID, if you are using a Grafana Cloud stack. May alternatively be set via the `GRAFANA_STACK_ID` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#stack_id GrafanaProvider#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#stack_id GrafanaProvider#stack_id}
   */
   readonly stackId?: number;
   /**
   * Set to true if you want to save only the sha256sum instead of complete dashboard model JSON in the tfstate.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#store_dashboard_sha256 GrafanaProvider#store_dashboard_sha256}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#store_dashboard_sha256 GrafanaProvider#store_dashboard_sha256}
   */
   readonly storeDashboardSha256?: boolean | cdktf.IResolvable;
   /**
   * Client TLS certificate (file path or literal value) to use to authenticate to the Grafana server. May alternatively be set via the `GRAFANA_TLS_CERT` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#tls_cert GrafanaProvider#tls_cert}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#tls_cert GrafanaProvider#tls_cert}
   */
   readonly tlsCert?: string;
   /**
   * Client TLS key (file path or literal value) to use to authenticate to the Grafana server. May alternatively be set via the `GRAFANA_TLS_KEY` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#tls_key GrafanaProvider#tls_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#tls_key GrafanaProvider#tls_key}
   */
   readonly tlsKey?: string;
   /**
   * The root URL of a Grafana server. May alternatively be set via the `GRAFANA_URL` environment variable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#url GrafanaProvider#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#url GrafanaProvider#url}
   */
   readonly url?: string;
   /**
   * Alias name
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#alias GrafanaProvider#alias}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#alias GrafanaProvider#alias}
   */
   readonly alias?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs grafana}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs grafana}
 */
 export class GrafanaProvider extends cdktf.TerraformProvider {
 
@@ -206,7 +206,7 @@ export class GrafanaProvider extends cdktf.TerraformProvider {
   * Generates CDKTF code for importing a GrafanaProvider resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the GrafanaProvider to import
-  * @param importFromId The id of the existing GrafanaProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing GrafanaProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the GrafanaProvider to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -218,7 +218,7 @@ export class GrafanaProvider extends cdktf.TerraformProvider {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs grafana} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs grafana} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -229,7 +229,7 @@ export class GrafanaProvider extends cdktf.TerraformProvider {
       terraformResourceType: 'grafana',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       terraformProviderSource: 'grafana/grafana'
     });

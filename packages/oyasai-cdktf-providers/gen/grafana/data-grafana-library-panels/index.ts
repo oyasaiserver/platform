@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/library_panels
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/library_panels
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface DataGrafanaLibraryPanelsConfig extends cdktf.TerraformMetaArgum
   /**
   * The Organization ID. If not set, the default organization is used for basic authentication, or the one that owns your service account for token authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/library_panels#org_id DataGrafanaLibraryPanels#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/library_panels#org_id DataGrafanaLibraryPanels#org_id}
   */
   readonly orgId?: string;
 }
@@ -111,7 +111,7 @@ export class DataGrafanaLibraryPanelsPanelsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/library_panels grafana_library_panels}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/library_panels grafana_library_panels}
 */
 export class DataGrafanaLibraryPanels extends cdktf.TerraformDataSource {
 
@@ -127,7 +127,7 @@ export class DataGrafanaLibraryPanels extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaLibraryPanels resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaLibraryPanels to import
-  * @param importFromId The id of the existing DataGrafanaLibraryPanels that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/library_panels#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaLibraryPanels that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/library_panels#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaLibraryPanels to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -139,7 +139,7 @@ export class DataGrafanaLibraryPanels extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/library_panels grafana_library_panels} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/library_panels grafana_library_panels} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -150,7 +150,7 @@ export class DataGrafanaLibraryPanels extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_library_panels',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsRulesRulesequenceV0Alpha1Config extends cdktf.TerraformMeta
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#metadata AppsRulesRulesequenceV0Alpha1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#metadata AppsRulesRulesequenceV0Alpha1#metadata}
   */
   readonly metadata?: AppsRulesRulesequenceV0Alpha1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#options AppsRulesRulesequenceV0Alpha1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#options AppsRulesRulesequenceV0Alpha1#options}
   */
   readonly options?: AppsRulesRulesequenceV0Alpha1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#spec AppsRulesRulesequenceV0Alpha1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#spec AppsRulesRulesequenceV0Alpha1#spec}
   */
   readonly spec?: AppsRulesRulesequenceV0Alpha1Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsRulesRulesequenceV0Alpha1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#folder_uid AppsRulesRulesequenceV0Alpha1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#folder_uid AppsRulesRulesequenceV0Alpha1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#uid AppsRulesRulesequenceV0Alpha1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#uid AppsRulesRulesequenceV0Alpha1#uid}
   */
   readonly uid: string;
 }
@@ -179,13 +179,13 @@ export interface AppsRulesRulesequenceV0Alpha1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#manager_identity AppsRulesRulesequenceV0Alpha1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#manager_identity AppsRulesRulesequenceV0Alpha1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#overwrite AppsRulesRulesequenceV0Alpha1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#overwrite AppsRulesRulesequenceV0Alpha1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -308,7 +308,7 @@ export class AppsRulesRulesequenceV0Alpha1OptionsOutputReference extends cdktf.C
 }
 export interface AppsRulesRulesequenceV0Alpha1SpecAlertingRules {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#name AppsRulesRulesequenceV0Alpha1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#name AppsRulesRulesequenceV0Alpha1#name}
   */
   readonly name?: string;
 }
@@ -424,7 +424,7 @@ export class AppsRulesRulesequenceV0Alpha1SpecAlertingRulesList extends cdktf.Co
 }
 export interface AppsRulesRulesequenceV0Alpha1SpecRecordingRules {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#name AppsRulesRulesequenceV0Alpha1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#name AppsRulesRulesequenceV0Alpha1#name}
   */
   readonly name: string;
 }
@@ -539,7 +539,7 @@ export interface AppsRulesRulesequenceV0Alpha1SpecTrigger {
   /**
   * The interval at which the rules in the sequence should be evaluated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#interval AppsRulesRulesequenceV0Alpha1#interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#interval AppsRulesRulesequenceV0Alpha1#interval}
   */
   readonly interval: string;
 }
@@ -632,19 +632,19 @@ export interface AppsRulesRulesequenceV0Alpha1Spec {
   /**
   * The alert rules that belong to this sequence, evaluated in the order listed. Each entry references an alert rule by its `name` (the rule's UID).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#alerting_rules AppsRulesRulesequenceV0Alpha1#alerting_rules}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#alerting_rules AppsRulesRulesequenceV0Alpha1#alerting_rules}
   */
   readonly alertingRules?: AppsRulesRulesequenceV0Alpha1SpecAlertingRules[] | cdktf.IResolvable;
   /**
   * The recording rules that belong to this sequence, evaluated in the order listed. At least one recording rule is required. Each entry references a recording rule by its `name` (the rule's UID).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#recording_rules AppsRulesRulesequenceV0Alpha1#recording_rules}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#recording_rules AppsRulesRulesequenceV0Alpha1#recording_rules}
   */
   readonly recordingRules: AppsRulesRulesequenceV0Alpha1SpecRecordingRules[] | cdktf.IResolvable;
   /**
   * trigger block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#trigger AppsRulesRulesequenceV0Alpha1#trigger}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#trigger AppsRulesRulesequenceV0Alpha1#trigger}
   */
   readonly trigger: AppsRulesRulesequenceV0Alpha1SpecTrigger;
 }
@@ -790,7 +790,7 @@ export class AppsRulesRulesequenceV0Alpha1SpecOutputReference extends cdktf.Comp
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1 grafana_apps_rules_rulesequence_v0alpha1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1 grafana_apps_rules_rulesequence_v0alpha1}
 */
 export class AppsRulesRulesequenceV0Alpha1 extends cdktf.TerraformResource {
 
@@ -806,7 +806,7 @@ export class AppsRulesRulesequenceV0Alpha1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsRulesRulesequenceV0Alpha1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsRulesRulesequenceV0Alpha1 to import
-  * @param importFromId The id of the existing AppsRulesRulesequenceV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsRulesRulesequenceV0Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsRulesRulesequenceV0Alpha1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -818,7 +818,7 @@ export class AppsRulesRulesequenceV0Alpha1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_rules_rulesequence_v0alpha1 grafana_apps_rules_rulesequence_v0alpha1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_rules_rulesequence_v0alpha1 grafana_apps_rules_rulesequence_v0alpha1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -829,7 +829,7 @@ export class AppsRulesRulesequenceV0Alpha1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_rules_rulesequence_v0alpha1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

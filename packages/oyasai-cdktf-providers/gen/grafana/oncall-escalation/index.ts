@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,29 +10,29 @@ export interface OncallEscalationConfig extends cdktf.TerraformMetaArguments {
   /**
   * The ID of an Action for trigger_webhook type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#action_to_trigger OncallEscalation#action_to_trigger}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#action_to_trigger OncallEscalation#action_to_trigger}
   */
   readonly actionToTrigger?: string;
   /**
   * The duration of delay for wait type step. (60-86400) seconds
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#duration OncallEscalation#duration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#duration OncallEscalation#duration}
   */
   readonly duration?: number;
   /**
   * The ID of the escalation chain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#escalation_chain_id OncallEscalation#escalation_chain_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#escalation_chain_id OncallEscalation#escalation_chain_id}
   */
   readonly escalationChainId: string;
   /**
   * The ID of a User Group for notify_user_group type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#group_to_notify OncallEscalation#group_to_notify}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#group_to_notify OncallEscalation#group_to_notify}
   */
   readonly groupToNotify?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#id OncallEscalation#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#id OncallEscalation#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -41,79 +41,79 @@ export interface OncallEscalationConfig extends cdktf.TerraformMetaArguments {
   /**
   * Will activate "important" personal notification rules. Actual for steps: notify_persons, notify_person_next_each_time, notify_on_call_from_schedule, notify_next_on_call_from_schedule, notify_user_group and notify_team_members
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#important OncallEscalation#important}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#important OncallEscalation#important}
   */
   readonly important?: boolean | cdktf.IResolvable;
   /**
   * The beginning of the time interval for notify_if_time_from_to type step in UTC (for example 08:00:00Z).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#notify_if_time_from OncallEscalation#notify_if_time_from}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#notify_if_time_from OncallEscalation#notify_if_time_from}
   */
   readonly notifyIfTimeFrom?: string;
   /**
   * The end of the time interval for notify_if_time_from_to type step in UTC (for example 18:00:00Z).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#notify_if_time_to OncallEscalation#notify_if_time_to}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#notify_if_time_to OncallEscalation#notify_if_time_to}
   */
   readonly notifyIfTimeTo?: string;
   /**
   * ID of a Schedule for notify_on_call_from_schedule or notify_next_on_call_from_schedule type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#notify_on_call_from_schedule OncallEscalation#notify_on_call_from_schedule}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#notify_on_call_from_schedule OncallEscalation#notify_on_call_from_schedule}
   */
   readonly notifyOnCallFromSchedule?: string;
   /**
   * The ID of a Team for a notify_team_members type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#notify_to_team_members OncallEscalation#notify_to_team_members}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#notify_to_team_members OncallEscalation#notify_to_team_members}
   */
   readonly notifyToTeamMembers?: string;
   /**
   * Number of alerts that must occur within the time window to continue escalation for notify_if_num_alerts_in_window type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#num_alerts_in_window OncallEscalation#num_alerts_in_window}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#num_alerts_in_window OncallEscalation#num_alerts_in_window}
   */
   readonly numAlertsInWindow?: number;
   /**
   * Time window in minutes to count alerts for notify_if_num_alerts_in_window type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#num_minutes_in_window OncallEscalation#num_minutes_in_window}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#num_minutes_in_window OncallEscalation#num_minutes_in_window}
   */
   readonly numMinutesInWindow?: number;
   /**
   * The list of ID's of users for notify_persons type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#persons_to_notify OncallEscalation#persons_to_notify}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#persons_to_notify OncallEscalation#persons_to_notify}
   */
   readonly personsToNotify?: string[];
   /**
   * The list of ID's of users for notify_person_next_each_time type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#persons_to_notify_next_each_time OncallEscalation#persons_to_notify_next_each_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#persons_to_notify_next_each_time OncallEscalation#persons_to_notify_next_each_time}
   */
   readonly personsToNotifyNextEachTime?: string[];
   /**
   * The position of the escalation step (starts from 0).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#position OncallEscalation#position}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#position OncallEscalation#position}
   */
   readonly position: number;
   /**
   * The severity of the incident for declare_incident type step.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#severity OncallEscalation#severity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#severity OncallEscalation#severity}
   */
   readonly severity?: string;
   /**
   * The type of escalation policy. Can be wait, notify_persons, notify_person_next_each_time, notify_on_call_from_schedule, notify_next_on_call_from_schedule, trigger_webhook, notify_user_group, resolve, notify_whole_channel, notify_if_time_from_to, notify_if_num_alerts_in_window, repeat_escalation, notify_team_members, declare_incident
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#type OncallEscalation#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#type OncallEscalation#type}
   */
   readonly type: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation grafana_oncall_escalation}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation grafana_oncall_escalation}
 */
 export class OncallEscalation extends cdktf.TerraformResource {
 
@@ -129,7 +129,7 @@ export class OncallEscalation extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OncallEscalation resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OncallEscalation to import
-  * @param importFromId The id of the existing OncallEscalation that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OncallEscalation that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OncallEscalation to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -141,7 +141,7 @@ export class OncallEscalation extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_escalation grafana_oncall_escalation} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_escalation grafana_oncall_escalation} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -152,7 +152,7 @@ export class OncallEscalation extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_oncall_escalation',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

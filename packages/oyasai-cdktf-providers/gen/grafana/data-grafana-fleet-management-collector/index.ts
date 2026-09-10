@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collector
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collector
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface DataGrafanaFleetManagementCollectorConfig extends cdktf.Terrafo
   /**
   * ID of the collector
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collector#id DataGrafanaFleetManagementCollector#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collector#id DataGrafanaFleetManagementCollector#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -19,7 +19,7 @@ export interface DataGrafanaFleetManagementCollectorConfig extends cdktf.Terrafo
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collector grafana_fleet_management_collector}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collector grafana_fleet_management_collector}
 */
 export class DataGrafanaFleetManagementCollector extends cdktf.TerraformDataSource {
 
@@ -35,7 +35,7 @@ export class DataGrafanaFleetManagementCollector extends cdktf.TerraformDataSour
   * Generates CDKTF code for importing a DataGrafanaFleetManagementCollector resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaFleetManagementCollector to import
-  * @param importFromId The id of the existing DataGrafanaFleetManagementCollector that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collector#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaFleetManagementCollector that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collector#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaFleetManagementCollector to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -47,7 +47,7 @@ export class DataGrafanaFleetManagementCollector extends cdktf.TerraformDataSour
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/fleet_management_collector grafana_fleet_management_collector} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/fleet_management_collector grafana_fleet_management_collector} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -58,7 +58,7 @@ export class DataGrafanaFleetManagementCollector extends cdktf.TerraformDataSour
       terraformResourceType: 'grafana_fleet_management_collector',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

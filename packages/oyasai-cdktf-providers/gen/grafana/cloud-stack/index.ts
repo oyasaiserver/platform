@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,61 +10,61 @@ export interface CloudStackConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether to enable delete protection for the stack, preventing accidental deletion. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#delete_protection CloudStack#delete_protection}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#delete_protection CloudStack#delete_protection}
   */
   readonly deleteProtection?: boolean | cdktf.IResolvable;
   /**
   * Description of stack.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#description CloudStack#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#description CloudStack#description}
   */
   readonly description?: string;
   /**
   * A map of labels to assign to the stack. Label keys and values must match the following regexp: "^[a-zA-Z0-9/\\-._]+$" and stacks cannot have more than 10 labels.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#labels CloudStack#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#labels CloudStack#labels}
   */
   readonly labels?: { [key: string]: string };
   /**
   * Name of stack. Conventionally matches the url of the instance (e.g. `<stack_slug>.grafana.net`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#name CloudStack#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#name CloudStack#name}
   */
   readonly name: string;
   /**
   * Region slug to assign to this stack. Changing region will destroy the existing stack and create a new one in the desired region. Use the region list API to get the list of available regions: https://grafana.com/docs/grafana-cloud/developer-resources/api-reference/cloud-api/#list-regions.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#region_slug CloudStack#region_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#region_slug CloudStack#region_slug}
   */
   readonly regionSlug?: string;
   /**
   * Subdomain that the Grafana instance will be available at. Setting slug to `<stack_slug>` will make the instance available at `https://<stack_slug>.grafana.net`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#slug CloudStack#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#slug CloudStack#slug}
   */
   readonly slug: string;
   /**
   * Custom URL for the Grafana instance. Must have a CNAME setup to point to `.grafana.net` before creating the stack
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#url CloudStack#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#url CloudStack#url}
   */
   readonly url?: string;
   /**
   * Whether to wait for readiness of the stack after creating it. The check is a HEAD request to the stack URL (Grafana instance). Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#wait_for_readiness CloudStack#wait_for_readiness}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#wait_for_readiness CloudStack#wait_for_readiness}
   */
   readonly waitForReadiness?: boolean | cdktf.IResolvable;
   /**
   * How long to wait for readiness (if enabled). Defaults to `10m0s`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#wait_for_readiness_timeout CloudStack#wait_for_readiness_timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#wait_for_readiness_timeout CloudStack#wait_for_readiness_timeout}
   */
   readonly waitForReadinessTimeout?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack grafana_cloud_stack}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack grafana_cloud_stack}
 */
 export class CloudStack extends cdktf.TerraformResource {
 
@@ -80,7 +80,7 @@ export class CloudStack extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudStack resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudStack to import
-  * @param importFromId The id of the existing CloudStack that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudStack that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudStack to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -92,7 +92,7 @@ export class CloudStack extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_stack grafana_cloud_stack} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_stack grafana_cloud_stack} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -103,7 +103,7 @@ export class CloudStack extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_stack',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

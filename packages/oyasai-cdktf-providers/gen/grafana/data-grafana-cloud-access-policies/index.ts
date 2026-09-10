@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_access_policies
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_access_policies
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataGrafanaCloudAccessPoliciesConfig extends cdktf.TerraformMet
   /**
   * If set, only access policies with the specified name will be returned. This is faster than filtering in Terraform.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_access_policies#name_filter DataGrafanaCloudAccessPolicies#name_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_access_policies#name_filter DataGrafanaCloudAccessPolicies#name_filter}
   */
   readonly nameFilter?: string;
   /**
   * If set, only access policies in the specified region will be returned. Otherwise, fetches from all available regions (more resource intensive).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_access_policies#region_filter DataGrafanaCloudAccessPolicies#region_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_access_policies#region_filter DataGrafanaCloudAccessPolicies#region_filter}
   */
   readonly regionFilter?: string;
 }
@@ -117,7 +117,7 @@ export class DataGrafanaCloudAccessPoliciesAccessPoliciesList extends cdktf.Comp
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_access_policies grafana_cloud_access_policies}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_access_policies grafana_cloud_access_policies}
 */
 export class DataGrafanaCloudAccessPolicies extends cdktf.TerraformDataSource {
 
@@ -133,7 +133,7 @@ export class DataGrafanaCloudAccessPolicies extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaCloudAccessPolicies resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaCloudAccessPolicies to import
-  * @param importFromId The id of the existing DataGrafanaCloudAccessPolicies that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_access_policies#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaCloudAccessPolicies that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_access_policies#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaCloudAccessPolicies to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -145,7 +145,7 @@ export class DataGrafanaCloudAccessPolicies extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_access_policies grafana_cloud_access_policies} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_access_policies grafana_cloud_access_policies} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -156,7 +156,7 @@ export class DataGrafanaCloudAccessPolicies extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_cloud_access_policies',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

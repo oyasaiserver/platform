@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_limits
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_limits
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataGrafanaK6ProjectLimitsConfig extends cdktf.TerraformMetaArg
   /**
   * The identifier of the project to get limits for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_limits#project_id DataGrafanaK6ProjectLimits#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_limits#project_id DataGrafanaK6ProjectLimits#project_id}
   */
   readonly projectId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_limits grafana_k6_project_limits}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_limits grafana_k6_project_limits}
 */
 export class DataGrafanaK6ProjectLimits extends cdktf.TerraformDataSource {
 
@@ -32,7 +32,7 @@ export class DataGrafanaK6ProjectLimits extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaK6ProjectLimits resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaK6ProjectLimits to import
-  * @param importFromId The id of the existing DataGrafanaK6ProjectLimits that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_limits#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaK6ProjectLimits that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_limits#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaK6ProjectLimits to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class DataGrafanaK6ProjectLimits extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_project_limits grafana_k6_project_limits} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_project_limits grafana_k6_project_limits} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class DataGrafanaK6ProjectLimits extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_k6_project_limits',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

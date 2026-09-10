@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface OncallRouteConfig extends cdktf.TerraformMetaArguments {
   /**
   * The ID of the escalation chain. Omit or set to null for a route with no escalation chain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#escalation_chain_id OncallRoute#escalation_chain_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#escalation_chain_id OncallRoute#escalation_chain_id}
   */
   readonly escalationChainId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#id OncallRoute#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#id OncallRoute#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,43 +23,43 @@ export interface OncallRouteConfig extends cdktf.TerraformMetaArguments {
   /**
   * The ID of the integration.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#integration_id OncallRoute#integration_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#integration_id OncallRoute#integration_id}
   */
   readonly integrationId: string;
   /**
   * The position of the route (starts from 0).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#position OncallRoute#position}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#position OncallRoute#position}
   */
   readonly position: number;
   /**
   * Python Regex query. Route is chosen for an alert if there is a match inside the alert payload.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#routing_regex OncallRoute#routing_regex}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#routing_regex OncallRoute#routing_regex}
   */
   readonly routingRegex: string;
   /**
   * The type of route. Can be jinja2, regex Defaults to `regex`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#routing_type OncallRoute#routing_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#routing_type OncallRoute#routing_type}
   */
   readonly routingType?: string;
   /**
   * msteams block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#msteams OncallRoute#msteams}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#msteams OncallRoute#msteams}
   */
   readonly msteams?: OncallRouteMsteams;
   /**
   * slack block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#slack OncallRoute#slack}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#slack OncallRoute#slack}
   */
   readonly slack?: OncallRouteSlack;
   /**
   * telegram block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#telegram OncallRoute#telegram}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#telegram OncallRoute#telegram}
   */
   readonly telegram?: OncallRouteTelegram;
 }
@@ -67,13 +67,13 @@ export interface OncallRouteMsteams {
   /**
   * Enable notification in MS teams. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#enabled OncallRoute#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#enabled OncallRoute#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * MS teams channel id. Alerts will be directed to this channel in Microsoft teams.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#id OncallRoute#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#id OncallRoute#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -191,13 +191,13 @@ export interface OncallRouteSlack {
   /**
   * Slack channel id. Alerts will be directed to this channel in Slack.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#channel_id OncallRoute#channel_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#channel_id OncallRoute#channel_id}
   */
   readonly channelId?: string;
   /**
   * Enable notification in Slack. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#enabled OncallRoute#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#enabled OncallRoute#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
 }
@@ -312,13 +312,13 @@ export interface OncallRouteTelegram {
   /**
   * Enable notification in Telegram. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#enabled OncallRoute#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#enabled OncallRoute#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Telegram channel id. Alerts will be directed to this channel in Telegram.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#id OncallRoute#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#id OncallRoute#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -434,7 +434,7 @@ export class OncallRouteTelegramOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route grafana_oncall_route}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route grafana_oncall_route}
 */
 export class OncallRoute extends cdktf.TerraformResource {
 
@@ -450,7 +450,7 @@ export class OncallRoute extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OncallRoute resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OncallRoute to import
-  * @param importFromId The id of the existing OncallRoute that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OncallRoute that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OncallRoute to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -462,7 +462,7 @@ export class OncallRoute extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/oncall_route grafana_oncall_route} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/oncall_route grafana_oncall_route} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -473,7 +473,7 @@ export class OncallRoute extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_oncall_route',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

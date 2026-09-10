@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface CloudProviderAwsCloudwatchScrapeJobConfig extends cdktf.Terrafo
   /**
   * The ID assigned by the Grafana Cloud Provider API to an AWS Account resource that should be associated with this CloudWatch Scrape Job. This can be provided by the `resource_id` attribute of the `grafana_cloud_provider_aws_account` resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#aws_account_resource_id CloudProviderAwsCloudwatchScrapeJob#aws_account_resource_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#aws_account_resource_id CloudProviderAwsCloudwatchScrapeJob#aws_account_resource_id}
   */
   readonly awsAccountResourceId: string;
   /**
   * Whether the AWS CloudWatch Scrape Job is enabled or not. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#enabled CloudProviderAwsCloudwatchScrapeJob#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#enabled CloudProviderAwsCloudwatchScrapeJob#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * When enabled, AWS resource tags are exported as Prometheus labels to metrics formatted as `aws_<service_name>_info`. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#export_tags CloudProviderAwsCloudwatchScrapeJob#export_tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#export_tags CloudProviderAwsCloudwatchScrapeJob#export_tags}
   */
   readonly exportTags?: boolean | cdktf.IResolvable;
   /**
   * The name of the AWS CloudWatch Scrape Job. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
   */
   readonly name: string;
   /**
   * A subset of the regions that are configured in the associated AWS Account resource to apply to this scrape job. If not set or empty, all of the Account resource's regions are scraped.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#regions_subset_override CloudProviderAwsCloudwatchScrapeJob#regions_subset_override}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#regions_subset_override CloudProviderAwsCloudwatchScrapeJob#regions_subset_override}
   */
   readonly regionsSubsetOverride?: string[];
   /**
   * The Stack ID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#stack_id CloudProviderAwsCloudwatchScrapeJob#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#stack_id CloudProviderAwsCloudwatchScrapeJob#stack_id}
   */
   readonly stackId: string;
   /**
   * A set of static labels to add to all metrics exported by this scrape job.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#static_labels CloudProviderAwsCloudwatchScrapeJob#static_labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#static_labels CloudProviderAwsCloudwatchScrapeJob#static_labels}
   */
   readonly staticLabels?: { [key: string]: string };
   /**
   * custom_namespace block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#custom_namespace CloudProviderAwsCloudwatchScrapeJob#custom_namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#custom_namespace CloudProviderAwsCloudwatchScrapeJob#custom_namespace}
   */
   readonly customNamespace?: CloudProviderAwsCloudwatchScrapeJobCustomNamespace[] | cdktf.IResolvable;
   /**
   * service block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#service CloudProviderAwsCloudwatchScrapeJob#service}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#service CloudProviderAwsCloudwatchScrapeJob#service}
   */
   readonly service?: CloudProviderAwsCloudwatchScrapeJobService[] | cdktf.IResolvable;
 }
@@ -66,13 +66,13 @@ export interface CloudProviderAwsCloudwatchScrapeJobCustomNamespaceMetric {
   /**
   * The name of the metric to scrape.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
   */
   readonly name: string;
   /**
   * A set of statistics to scrape.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#statistics CloudProviderAwsCloudwatchScrapeJob#statistics}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#statistics CloudProviderAwsCloudwatchScrapeJob#statistics}
   */
   readonly statistics: string[];
 }
@@ -213,19 +213,19 @@ export interface CloudProviderAwsCloudwatchScrapeJobCustomNamespace {
   /**
   * The name of the custom namespace to scrape.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
   */
   readonly name: string;
   /**
   * The interval in seconds to scrape the custom namespace. Defaults to `300`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#scrape_interval_seconds CloudProviderAwsCloudwatchScrapeJob#scrape_interval_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#scrape_interval_seconds CloudProviderAwsCloudwatchScrapeJob#scrape_interval_seconds}
   */
   readonly scrapeIntervalSeconds?: number;
   /**
   * metric block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#metric CloudProviderAwsCloudwatchScrapeJob#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#metric CloudProviderAwsCloudwatchScrapeJob#metric}
   */
   readonly metric?: CloudProviderAwsCloudwatchScrapeJobCustomNamespaceMetric[] | cdktf.IResolvable;
 }
@@ -398,13 +398,13 @@ export interface CloudProviderAwsCloudwatchScrapeJobServiceMetric {
   /**
   * The name of the metric to scrape.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
   */
   readonly name: string;
   /**
   * A set of statistics to scrape.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#statistics CloudProviderAwsCloudwatchScrapeJob#statistics}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#statistics CloudProviderAwsCloudwatchScrapeJob#statistics}
   */
   readonly statistics: string[];
 }
@@ -545,13 +545,13 @@ export interface CloudProviderAwsCloudwatchScrapeJobServiceResourceDiscoveryTagF
   /**
   * The key of the tag filter.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#key CloudProviderAwsCloudwatchScrapeJob#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#key CloudProviderAwsCloudwatchScrapeJob#key}
   */
   readonly key: string;
   /**
   * The value of the tag filter.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#value CloudProviderAwsCloudwatchScrapeJob#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#value CloudProviderAwsCloudwatchScrapeJob#value}
   */
   readonly value: string;
 }
@@ -692,31 +692,31 @@ export interface CloudProviderAwsCloudwatchScrapeJobService {
   /**
   * The name of the service to scrape. See https://grafana.com/docs/grafana-cloud/monitor-infrastructure/monitor-cloud-provider/aws/cloudwatch-metrics/services/ for supported services.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#name CloudProviderAwsCloudwatchScrapeJob#name}
   */
   readonly name: string;
   /**
   * The interval in seconds to scrape the service. See https://grafana.com/docs/grafana-cloud/monitor-infrastructure/monitor-cloud-provider/aws/cloudwatch-metrics/services/ for supported scrape intervals. Defaults to `300`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#scrape_interval_seconds CloudProviderAwsCloudwatchScrapeJob#scrape_interval_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#scrape_interval_seconds CloudProviderAwsCloudwatchScrapeJob#scrape_interval_seconds}
   */
   readonly scrapeIntervalSeconds?: number;
   /**
   * A set of tags to add to all metrics exported by this scrape job, for use in PromQL queries.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#tags_to_add_to_metrics CloudProviderAwsCloudwatchScrapeJob#tags_to_add_to_metrics}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#tags_to_add_to_metrics CloudProviderAwsCloudwatchScrapeJob#tags_to_add_to_metrics}
   */
   readonly tagsToAddToMetrics?: string[];
   /**
   * metric block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#metric CloudProviderAwsCloudwatchScrapeJob#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#metric CloudProviderAwsCloudwatchScrapeJob#metric}
   */
   readonly metric?: CloudProviderAwsCloudwatchScrapeJobServiceMetric[] | cdktf.IResolvable;
   /**
   * resource_discovery_tag_filter block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#resource_discovery_tag_filter CloudProviderAwsCloudwatchScrapeJob#resource_discovery_tag_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#resource_discovery_tag_filter CloudProviderAwsCloudwatchScrapeJob#resource_discovery_tag_filter}
   */
   readonly resourceDiscoveryTagFilter?: CloudProviderAwsCloudwatchScrapeJobServiceResourceDiscoveryTagFilter[] | cdktf.IResolvable;
 }
@@ -945,7 +945,7 @@ export class CloudProviderAwsCloudwatchScrapeJobServiceList extends cdktf.Comple
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job grafana_cloud_provider_aws_cloudwatch_scrape_job}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job grafana_cloud_provider_aws_cloudwatch_scrape_job}
 */
 export class CloudProviderAwsCloudwatchScrapeJob extends cdktf.TerraformResource {
 
@@ -961,7 +961,7 @@ export class CloudProviderAwsCloudwatchScrapeJob extends cdktf.TerraformResource
   * Generates CDKTF code for importing a CloudProviderAwsCloudwatchScrapeJob resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudProviderAwsCloudwatchScrapeJob to import
-  * @param importFromId The id of the existing CloudProviderAwsCloudwatchScrapeJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudProviderAwsCloudwatchScrapeJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudProviderAwsCloudwatchScrapeJob to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -973,7 +973,7 @@ export class CloudProviderAwsCloudwatchScrapeJob extends cdktf.TerraformResource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_cloudwatch_scrape_job grafana_cloud_provider_aws_cloudwatch_scrape_job} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_cloudwatch_scrape_job grafana_cloud_provider_aws_cloudwatch_scrape_job} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -984,7 +984,7 @@ export class CloudProviderAwsCloudwatchScrapeJob extends cdktf.TerraformResource
       terraformResourceType: 'grafana_cloud_provider_aws_cloudwatch_scrape_job',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

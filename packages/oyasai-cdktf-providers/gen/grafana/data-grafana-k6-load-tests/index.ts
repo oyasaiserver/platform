@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_load_tests
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_load_tests
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataGrafanaK6LoadTestsConfig extends cdktf.TerraformMetaArgumen
   /**
   * Human-friendly identifier of the load test.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_load_tests#name DataGrafanaK6LoadTests#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_load_tests#name DataGrafanaK6LoadTests#name}
   */
   readonly name?: string;
   /**
   * The identifier of the project the load tests belong to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_load_tests#project_id DataGrafanaK6LoadTests#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_load_tests#project_id DataGrafanaK6LoadTests#project_id}
   */
   readonly projectId: string;
 }
@@ -132,7 +132,7 @@ export class DataGrafanaK6LoadTestsLoadTestsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_load_tests grafana_k6_load_tests}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_load_tests grafana_k6_load_tests}
 */
 export class DataGrafanaK6LoadTests extends cdktf.TerraformDataSource {
 
@@ -148,7 +148,7 @@ export class DataGrafanaK6LoadTests extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaK6LoadTests resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaK6LoadTests to import
-  * @param importFromId The id of the existing DataGrafanaK6LoadTests that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_load_tests#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaK6LoadTests that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_load_tests#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaK6LoadTests to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -160,7 +160,7 @@ export class DataGrafanaK6LoadTests extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/k6_load_tests grafana_k6_load_tests} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/k6_load_tests grafana_k6_load_tests} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -171,7 +171,7 @@ export class DataGrafanaK6LoadTests extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_k6_load_tests',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

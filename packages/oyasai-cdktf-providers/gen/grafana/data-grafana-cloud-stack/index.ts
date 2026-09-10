@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_stack
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_stack
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -11,13 +11,13 @@ export interface DataGrafanaCloudStackConfig extends cdktf.TerraformMetaArgument
   * Subdomain that the Grafana instance will be available at (i.e. setting slug to “<stack_slug>” will make the instance
   * available at “https://<stack_slug>.grafana.net".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_stack#slug DataGrafanaCloudStack#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_stack#slug DataGrafanaCloudStack#slug}
   */
   readonly slug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_stack grafana_cloud_stack}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_stack grafana_cloud_stack}
 */
 export class DataGrafanaCloudStack extends cdktf.TerraformDataSource {
 
@@ -33,7 +33,7 @@ export class DataGrafanaCloudStack extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaCloudStack resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaCloudStack to import
-  * @param importFromId The id of the existing DataGrafanaCloudStack that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_stack#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaCloudStack that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_stack#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaCloudStack to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -45,7 +45,7 @@ export class DataGrafanaCloudStack extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_stack grafana_cloud_stack} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_stack grafana_cloud_stack} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -56,7 +56,7 @@ export class DataGrafanaCloudStack extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_cloud_stack',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

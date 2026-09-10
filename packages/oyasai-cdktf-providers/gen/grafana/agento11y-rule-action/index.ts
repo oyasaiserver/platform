@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_rule_action
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_rule_action
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface Agento11YRuleActionConfig extends cdktf.TerraformMetaArguments 
   /**
   * IDs of the collections that matching conversations are added to. Must be non-empty.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_rule_action#collection_ids Agento11YRuleAction#collection_ids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_rule_action#collection_ids Agento11YRuleAction#collection_ids}
   */
   readonly collectionIds: string[];
   /**
   * Aggregate verdict that triggers the action. One of `all_evaluators_pass`, `all_evaluators_fail`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_rule_action#condition Agento11YRuleAction#condition}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_rule_action#condition Agento11YRuleAction#condition}
   */
   readonly condition: string;
   /**
   * Whether the action is enabled. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_rule_action#enabled Agento11YRuleAction#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_rule_action#enabled Agento11YRuleAction#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * ID of the evaluation rule this action is attached to. Changing this forces a new resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_rule_action#rule_id Agento11YRuleAction#rule_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_rule_action#rule_id Agento11YRuleAction#rule_id}
   */
   readonly ruleId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_rule_action grafana_agento11y_rule_action}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_rule_action grafana_agento11y_rule_action}
 */
 export class Agento11YRuleAction extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class Agento11YRuleAction extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Agento11YRuleAction resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Agento11YRuleAction to import
-  * @param importFromId The id of the existing Agento11YRuleAction that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_rule_action#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Agento11YRuleAction that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_rule_action#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Agento11YRuleAction to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class Agento11YRuleAction extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/agento11y_rule_action grafana_agento11y_rule_action} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/agento11y_rule_action grafana_agento11y_rule_action} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class Agento11YRuleAction extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_agento11y_rule_action',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

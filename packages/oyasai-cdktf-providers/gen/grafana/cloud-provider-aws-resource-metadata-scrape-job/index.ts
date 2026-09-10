@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface CloudProviderAwsResourceMetadataScrapeJobConfig extends cdktf.T
   /**
   * The ID assigned by the Grafana Cloud Provider API to an AWS Account resource that should be associated with this Resource Metadata Scrape Job. This can be provided by the `resource_id` attribute of the `grafana_cloud_provider_aws_account` resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#aws_account_resource_id CloudProviderAwsResourceMetadataScrapeJob#aws_account_resource_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#aws_account_resource_id CloudProviderAwsResourceMetadataScrapeJob#aws_account_resource_id}
   */
   readonly awsAccountResourceId: string;
   /**
   * Whether the AWS Resource Metadata Scrape Job is enabled or not. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#enabled CloudProviderAwsResourceMetadataScrapeJob#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#enabled CloudProviderAwsResourceMetadataScrapeJob#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The name of the AWS Resource Metadata Scrape Job. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#name CloudProviderAwsResourceMetadataScrapeJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#name CloudProviderAwsResourceMetadataScrapeJob#name}
   */
   readonly name: string;
   /**
   * A subset of the regions that are configured in the associated AWS Account resource to apply to this scrape job. If not set or empty, all of the Account resource's regions are scraped.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#regions_subset_override CloudProviderAwsResourceMetadataScrapeJob#regions_subset_override}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#regions_subset_override CloudProviderAwsResourceMetadataScrapeJob#regions_subset_override}
   */
   readonly regionsSubsetOverride?: string[];
   /**
   * The Stack ID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#stack_id CloudProviderAwsResourceMetadataScrapeJob#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#stack_id CloudProviderAwsResourceMetadataScrapeJob#stack_id}
   */
   readonly stackId: string;
   /**
   * A set of static labels to add to all metrics exported by this scrape job.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#static_labels CloudProviderAwsResourceMetadataScrapeJob#static_labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#static_labels CloudProviderAwsResourceMetadataScrapeJob#static_labels}
   */
   readonly staticLabels?: { [key: string]: string };
   /**
   * service block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#service CloudProviderAwsResourceMetadataScrapeJob#service}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#service CloudProviderAwsResourceMetadataScrapeJob#service}
   */
   readonly service?: CloudProviderAwsResourceMetadataScrapeJobService[] | cdktf.IResolvable;
 }
@@ -54,13 +54,13 @@ export interface CloudProviderAwsResourceMetadataScrapeJobServiceResourceDiscove
   /**
   * The key of the tag filter.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#key CloudProviderAwsResourceMetadataScrapeJob#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#key CloudProviderAwsResourceMetadataScrapeJob#key}
   */
   readonly key: string;
   /**
   * The value of the tag filter.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#value CloudProviderAwsResourceMetadataScrapeJob#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#value CloudProviderAwsResourceMetadataScrapeJob#value}
   */
   readonly value: string;
 }
@@ -201,19 +201,19 @@ export interface CloudProviderAwsResourceMetadataScrapeJobService {
   /**
   * The name of the service to scrape. See https://grafana.com/docs/grafana-cloud/monitor-infrastructure/monitor-cloud-provider/aws/cloudwatch-metrics/services/ for supported services.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#name CloudProviderAwsResourceMetadataScrapeJob#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#name CloudProviderAwsResourceMetadataScrapeJob#name}
   */
   readonly name: string;
   /**
   * The interval in seconds to scrape the service. See https://grafana.com/docs/grafana-cloud/monitor-infrastructure/monitor-cloud-provider/aws/cloudwatch-metrics/services/ for supported scrape intervals. Defaults to `300`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#scrape_interval_seconds CloudProviderAwsResourceMetadataScrapeJob#scrape_interval_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#scrape_interval_seconds CloudProviderAwsResourceMetadataScrapeJob#scrape_interval_seconds}
   */
   readonly scrapeIntervalSeconds?: number;
   /**
   * resource_discovery_tag_filter block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#resource_discovery_tag_filter CloudProviderAwsResourceMetadataScrapeJob#resource_discovery_tag_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#resource_discovery_tag_filter CloudProviderAwsResourceMetadataScrapeJob#resource_discovery_tag_filter}
   */
   readonly resourceDiscoveryTagFilter?: CloudProviderAwsResourceMetadataScrapeJobServiceResourceDiscoveryTagFilter[] | cdktf.IResolvable;
 }
@@ -384,7 +384,7 @@ export class CloudProviderAwsResourceMetadataScrapeJobServiceList extends cdktf.
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job grafana_cloud_provider_aws_resource_metadata_scrape_job}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job grafana_cloud_provider_aws_resource_metadata_scrape_job}
 */
 export class CloudProviderAwsResourceMetadataScrapeJob extends cdktf.TerraformResource {
 
@@ -400,7 +400,7 @@ export class CloudProviderAwsResourceMetadataScrapeJob extends cdktf.TerraformRe
   * Generates CDKTF code for importing a CloudProviderAwsResourceMetadataScrapeJob resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudProviderAwsResourceMetadataScrapeJob to import
-  * @param importFromId The id of the existing CloudProviderAwsResourceMetadataScrapeJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudProviderAwsResourceMetadataScrapeJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudProviderAwsResourceMetadataScrapeJob to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -412,7 +412,7 @@ export class CloudProviderAwsResourceMetadataScrapeJob extends cdktf.TerraformRe
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_provider_aws_resource_metadata_scrape_job grafana_cloud_provider_aws_resource_metadata_scrape_job} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_provider_aws_resource_metadata_scrape_job grafana_cloud_provider_aws_resource_metadata_scrape_job} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -423,7 +423,7 @@ export class CloudProviderAwsResourceMetadataScrapeJob extends cdktf.TerraformRe
       terraformResourceType: 'grafana_cloud_provider_aws_resource_metadata_scrape_job',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

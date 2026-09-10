@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_installation
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_installation
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface SyntheticMonitoringInstallationConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_installation#id SyntheticMonitoringInstallation#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_installation#id SyntheticMonitoringInstallation#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,25 +17,25 @@ export interface SyntheticMonitoringInstallationConfig extends cdktf.TerraformMe
   /**
   * The [Grafana Cloud access policy](https://grafana.com/docs/grafana-cloud/security-and-account-management/authentication-and-permissions/access-policies/) with the following scopes: `stacks:read`, `metrics:write`, `logs:write`, `traces:write`. This is used to publish metrics and logs to Grafana Cloud stack.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_installation#metrics_publisher_key SyntheticMonitoringInstallation#metrics_publisher_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_installation#metrics_publisher_key SyntheticMonitoringInstallation#metrics_publisher_key}
   */
   readonly metricsPublisherKey: string;
   /**
   * The ID or slug of the stack to install SM on.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_installation#stack_id SyntheticMonitoringInstallation#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_installation#stack_id SyntheticMonitoringInstallation#stack_id}
   */
   readonly stackId: string;
   /**
   * The URL of the SM API to install SM on. This depends on the stack region, find the list of API URLs here: https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/set-up/set-up-private-probes/#probe-api-server-url. A static mapping exists in the provider but it may not contain all the regions. If it does contain the stack's region, this field is computed automatically and readable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_installation#stack_sm_api_url SyntheticMonitoringInstallation#stack_sm_api_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_installation#stack_sm_api_url SyntheticMonitoringInstallation#stack_sm_api_url}
   */
   readonly stackSmApiUrl?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_installation grafana_synthetic_monitoring_installation}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_installation grafana_synthetic_monitoring_installation}
 */
 export class SyntheticMonitoringInstallation extends cdktf.TerraformResource {
 
@@ -51,7 +51,7 @@ export class SyntheticMonitoringInstallation extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SyntheticMonitoringInstallation resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SyntheticMonitoringInstallation to import
-  * @param importFromId The id of the existing SyntheticMonitoringInstallation that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_installation#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SyntheticMonitoringInstallation that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_installation#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SyntheticMonitoringInstallation to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -63,7 +63,7 @@ export class SyntheticMonitoringInstallation extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/synthetic_monitoring_installation grafana_synthetic_monitoring_installation} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/synthetic_monitoring_installation grafana_synthetic_monitoring_installation} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -74,7 +74,7 @@ export class SyntheticMonitoringInstallation extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_synthetic_monitoring_installation',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

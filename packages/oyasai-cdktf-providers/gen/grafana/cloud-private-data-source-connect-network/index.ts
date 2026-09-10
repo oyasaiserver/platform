@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface CloudPrivateDataSourceConnectNetworkConfig extends cdktf.Terraf
   /**
   * Display name of the PDC network. Defaults to the name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network#display_name CloudPrivateDataSourceConnectNetwork#display_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network#display_name CloudPrivateDataSourceConnectNetwork#display_name}
   */
   readonly displayName?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network#id CloudPrivateDataSourceConnectNetwork#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network#id CloudPrivateDataSourceConnectNetwork#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,25 +23,25 @@ export interface CloudPrivateDataSourceConnectNetworkConfig extends cdktf.Terraf
   /**
   * Name of the PDC network.**Note:** The name must be lowercase and can contain hyphens or underscores. See full requirements here: https://grafana.com/docs/grafana-cloud/developer-resources/api-reference/cloud-api/#request-body
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network#name CloudPrivateDataSourceConnectNetwork#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network#name CloudPrivateDataSourceConnectNetwork#name}
   */
   readonly name: string;
   /**
   * The region where your stack is deployed. Use the instances list API to get the region for your instance - use the regionSlug property: https://grafana.com/docs/grafana-cloud/developer-resources/api-reference/cloud-api/#list-stacks
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network#region CloudPrivateDataSourceConnectNetwork#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network#region CloudPrivateDataSourceConnectNetwork#region}
   */
   readonly region: string;
   /**
   * The identifier of the stack.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network#stack_identifier CloudPrivateDataSourceConnectNetwork#stack_identifier}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network#stack_identifier CloudPrivateDataSourceConnectNetwork#stack_identifier}
   */
   readonly stackIdentifier: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network grafana_cloud_private_data_source_connect_network}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network grafana_cloud_private_data_source_connect_network}
 */
 export class CloudPrivateDataSourceConnectNetwork extends cdktf.TerraformResource {
 
@@ -57,7 +57,7 @@ export class CloudPrivateDataSourceConnectNetwork extends cdktf.TerraformResourc
   * Generates CDKTF code for importing a CloudPrivateDataSourceConnectNetwork resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudPrivateDataSourceConnectNetwork to import
-  * @param importFromId The id of the existing CloudPrivateDataSourceConnectNetwork that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudPrivateDataSourceConnectNetwork that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudPrivateDataSourceConnectNetwork to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -69,7 +69,7 @@ export class CloudPrivateDataSourceConnectNetwork extends cdktf.TerraformResourc
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_private_data_source_connect_network grafana_cloud_private_data_source_connect_network} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_private_data_source_connect_network grafana_cloud_private_data_source_connect_network} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -80,7 +80,7 @@ export class CloudPrivateDataSourceConnectNetwork extends cdktf.TerraformResourc
       terraformResourceType: 'grafana_cloud_private_data_source_connect_network',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

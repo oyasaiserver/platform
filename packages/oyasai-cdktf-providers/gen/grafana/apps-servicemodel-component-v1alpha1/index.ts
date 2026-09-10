@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsServicemodelComponentV1Alpha1Config extends cdktf.Terraform
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#metadata AppsServicemodelComponentV1Alpha1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#metadata AppsServicemodelComponentV1Alpha1#metadata}
   */
   readonly metadata?: AppsServicemodelComponentV1Alpha1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#options AppsServicemodelComponentV1Alpha1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#options AppsServicemodelComponentV1Alpha1#options}
   */
   readonly options?: AppsServicemodelComponentV1Alpha1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#spec AppsServicemodelComponentV1Alpha1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#spec AppsServicemodelComponentV1Alpha1#spec}
   */
   readonly spec?: AppsServicemodelComponentV1Alpha1Spec;
 }
@@ -30,13 +30,13 @@ export interface AppsServicemodelComponentV1Alpha1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#folder_uid AppsServicemodelComponentV1Alpha1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#folder_uid AppsServicemodelComponentV1Alpha1#folder_uid}
   */
   readonly folderUid?: string;
   /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#uid AppsServicemodelComponentV1Alpha1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#uid AppsServicemodelComponentV1Alpha1#uid}
   */
   readonly uid: string;
 }
@@ -179,13 +179,13 @@ export interface AppsServicemodelComponentV1Alpha1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#manager_identity AppsServicemodelComponentV1Alpha1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#manager_identity AppsServicemodelComponentV1Alpha1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#overwrite AppsServicemodelComponentV1Alpha1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#overwrite AppsServicemodelComponentV1Alpha1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -310,19 +310,19 @@ export interface AppsServicemodelComponentV1Alpha1SpecDependsOnRefs {
   /**
   * API version of the referenced object. Defaults to `servicemodel.ext.grafana.com/v1alpha1`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#api_version AppsServicemodelComponentV1Alpha1#api_version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#api_version AppsServicemodelComponentV1Alpha1#api_version}
   */
   readonly apiVersion?: string;
   /**
   * Kind of the referenced object. Defaults to `Component`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#kind AppsServicemodelComponentV1Alpha1#kind}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#kind AppsServicemodelComponentV1Alpha1#kind}
   */
   readonly kind?: string;
   /**
   * Name (`metadata.uid`) of the component this service depends on.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#name AppsServicemodelComponentV1Alpha1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#name AppsServicemodelComponentV1Alpha1#name}
   */
   readonly name: string;
 }
@@ -495,13 +495,13 @@ export interface AppsServicemodelComponentV1Alpha1SpecIdentifiers {
   /**
   * Identifier key.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#key AppsServicemodelComponentV1Alpha1#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#key AppsServicemodelComponentV1Alpha1#key}
   */
   readonly key: string;
   /**
   * Identifier value.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#value AppsServicemodelComponentV1Alpha1#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#value AppsServicemodelComponentV1Alpha1#value}
   */
   readonly value: string;
 }
@@ -642,25 +642,25 @@ export interface AppsServicemodelComponentV1Alpha1SpecLinks {
   /**
   * Icon of the link.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#icon AppsServicemodelComponentV1Alpha1#icon}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#icon AppsServicemodelComponentV1Alpha1#icon}
   */
   readonly icon?: string;
   /**
   * Display title of the link.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#title AppsServicemodelComponentV1Alpha1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#title AppsServicemodelComponentV1Alpha1#title}
   */
   readonly title?: string;
   /**
   * Type of the link. The Service Center UI uses `documentation`, `repository`, `backlog` and `custom`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#type AppsServicemodelComponentV1Alpha1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#type AppsServicemodelComponentV1Alpha1#type}
   */
   readonly type?: string;
   /**
   * URL of the link.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#url AppsServicemodelComponentV1Alpha1#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#url AppsServicemodelComponentV1Alpha1#url}
   */
   readonly url: string;
 }
@@ -862,19 +862,19 @@ export interface AppsServicemodelComponentV1Alpha1SpecOwnerRef {
   /**
   * API version of the referenced object. Defaults to `iam.grafana.app/v0alpha1`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#api_version AppsServicemodelComponentV1Alpha1#api_version}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#api_version AppsServicemodelComponentV1Alpha1#api_version}
   */
   readonly apiVersion?: string;
   /**
   * Kind of the referenced object. Defaults to `Team`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#kind AppsServicemodelComponentV1Alpha1#kind}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#kind AppsServicemodelComponentV1Alpha1#kind}
   */
   readonly kind?: string;
   /**
   * Name of the referenced object. For the default team reference, this is the Grafana team UID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#name AppsServicemodelComponentV1Alpha1#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#name AppsServicemodelComponentV1Alpha1#name}
   */
   readonly name?: string;
 }
@@ -1028,43 +1028,43 @@ export interface AppsServicemodelComponentV1Alpha1Spec {
   /**
   * Description of the service.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#description AppsServicemodelComponentV1Alpha1#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#description AppsServicemodelComponentV1Alpha1#description}
   */
   readonly description?: string;
   /**
   * Display name of the service.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#title AppsServicemodelComponentV1Alpha1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#title AppsServicemodelComponentV1Alpha1#title}
   */
   readonly title: string;
   /**
   * Component type. Defaults to `service`, the only type currently displayed by Service Center.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#type AppsServicemodelComponentV1Alpha1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#type AppsServicemodelComponentV1Alpha1#type}
   */
   readonly type?: string;
   /**
   * depends_on_refs block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#depends_on_refs AppsServicemodelComponentV1Alpha1#depends_on_refs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#depends_on_refs AppsServicemodelComponentV1Alpha1#depends_on_refs}
   */
   readonly dependsOnRefs?: AppsServicemodelComponentV1Alpha1SpecDependsOnRefs[] | cdktf.IResolvable;
   /**
   * identifiers block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#identifiers AppsServicemodelComponentV1Alpha1#identifiers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#identifiers AppsServicemodelComponentV1Alpha1#identifiers}
   */
   readonly identifiers?: AppsServicemodelComponentV1Alpha1SpecIdentifiers[] | cdktf.IResolvable;
   /**
   * links block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#links AppsServicemodelComponentV1Alpha1#links}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#links AppsServicemodelComponentV1Alpha1#links}
   */
   readonly links?: AppsServicemodelComponentV1Alpha1SpecLinks[] | cdktf.IResolvable;
   /**
   * owner_ref block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#owner_ref AppsServicemodelComponentV1Alpha1#owner_ref}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#owner_ref AppsServicemodelComponentV1Alpha1#owner_ref}
   */
   readonly ownerRef?: AppsServicemodelComponentV1Alpha1SpecOwnerRef;
 }
@@ -1329,7 +1329,7 @@ export class AppsServicemodelComponentV1Alpha1SpecOutputReference extends cdktf.
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1 grafana_apps_servicemodel_component_v1alpha1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1 grafana_apps_servicemodel_component_v1alpha1}
 */
 export class AppsServicemodelComponentV1Alpha1 extends cdktf.TerraformResource {
 
@@ -1345,7 +1345,7 @@ export class AppsServicemodelComponentV1Alpha1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsServicemodelComponentV1Alpha1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsServicemodelComponentV1Alpha1 to import
-  * @param importFromId The id of the existing AppsServicemodelComponentV1Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsServicemodelComponentV1Alpha1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsServicemodelComponentV1Alpha1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1357,7 +1357,7 @@ export class AppsServicemodelComponentV1Alpha1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/apps_servicemodel_component_v1alpha1 grafana_apps_servicemodel_component_v1alpha1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_servicemodel_component_v1alpha1 grafana_apps_servicemodel_component_v1alpha1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1368,7 +1368,7 @@ export class AppsServicemodelComponentV1Alpha1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_servicemodel_component_v1alpha1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_account
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_account
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataGrafanaCloudProviderAwsAccountConfig extends cdktf.Terrafor
   /**
   * The ID given by the Grafana Cloud Provider API to this AWS Account resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_account#resource_id DataGrafanaCloudProviderAwsAccount#resource_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_account#resource_id DataGrafanaCloudProviderAwsAccount#resource_id}
   */
   readonly resourceId: string;
   /**
   * The StackID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_account#stack_id DataGrafanaCloudProviderAwsAccount#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_account#stack_id DataGrafanaCloudProviderAwsAccount#stack_id}
   */
   readonly stackId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_account grafana_cloud_provider_aws_account}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_account grafana_cloud_provider_aws_account}
 */
 export class DataGrafanaCloudProviderAwsAccount extends cdktf.TerraformDataSource {
 
@@ -38,7 +38,7 @@ export class DataGrafanaCloudProviderAwsAccount extends cdktf.TerraformDataSourc
   * Generates CDKTF code for importing a DataGrafanaCloudProviderAwsAccount resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaCloudProviderAwsAccount to import
-  * @param importFromId The id of the existing DataGrafanaCloudProviderAwsAccount that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_account#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaCloudProviderAwsAccount that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_account#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaCloudProviderAwsAccount to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class DataGrafanaCloudProviderAwsAccount extends cdktf.TerraformDataSourc
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/cloud_provider_aws_account grafana_cloud_provider_aws_account} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_account grafana_cloud_provider_aws_account} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class DataGrafanaCloudProviderAwsAccount extends cdktf.TerraformDataSourc
       terraformResourceType: 'grafana_cloud_provider_aws_account',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

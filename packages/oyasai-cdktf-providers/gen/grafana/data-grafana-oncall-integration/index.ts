@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_integration
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_integration
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface DataGrafanaOncallIntegrationConfig extends cdktf.TerraformMetaA
   /**
   * The integration ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_integration#id DataGrafanaOncallIntegration#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_integration#id DataGrafanaOncallIntegration#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -19,7 +19,7 @@ export interface DataGrafanaOncallIntegrationConfig extends cdktf.TerraformMetaA
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_integration grafana_oncall_integration}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_integration grafana_oncall_integration}
 */
 export class DataGrafanaOncallIntegration extends cdktf.TerraformDataSource {
 
@@ -35,7 +35,7 @@ export class DataGrafanaOncallIntegration extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaOncallIntegration resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaOncallIntegration to import
-  * @param importFromId The id of the existing DataGrafanaOncallIntegration that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_integration#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaOncallIntegration that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_integration#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaOncallIntegration to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -47,7 +47,7 @@ export class DataGrafanaOncallIntegration extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/data-sources/oncall_integration grafana_oncall_integration} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_integration grafana_oncall_integration} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -58,7 +58,7 @@ export class DataGrafanaOncallIntegration extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_oncall_integration',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

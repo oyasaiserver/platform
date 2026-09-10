@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,23 +10,23 @@ export interface AssertsTraceConfigConfig extends cdktf.TerraformMetaArguments {
   /**
   * DataSource to be queried (e.g., a Tempo instance).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#data_source_uid AssertsTraceConfig#data_source_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#data_source_uid AssertsTraceConfig#data_source_uid}
   */
   readonly dataSourceUid: string;
   /**
   * Is it the default config, therefore undeletable?
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#default_config AssertsTraceConfig#default_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#default_config AssertsTraceConfig#default_config}
   */
   readonly defaultConfig: boolean | cdktf.IResolvable;
   /**
   * Mapping of entity properties to trace labels.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#entity_property_to_trace_label_mapping AssertsTraceConfig#entity_property_to_trace_label_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#entity_property_to_trace_label_mapping AssertsTraceConfig#entity_property_to_trace_label_mapping}
   */
   readonly entityPropertyToTraceLabelMapping?: { [key: string]: string };
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#id AssertsTraceConfig#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#id AssertsTraceConfig#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -35,25 +35,25 @@ export interface AssertsTraceConfigConfig extends cdktf.TerraformMetaArguments {
   /**
   * The name of the trace configuration.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#name AssertsTraceConfig#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#name AssertsTraceConfig#name}
   */
   readonly name: string;
   /**
   * Priority of the trace configuration. A lower number means a higher priority.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#priority AssertsTraceConfig#priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#priority AssertsTraceConfig#priority}
   */
   readonly priority: number;
   /**
   * match block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#match AssertsTraceConfig#match}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#match AssertsTraceConfig#match}
   */
   readonly match?: AssertsTraceConfigMatch[] | cdktf.IResolvable;
   /**
   * timeouts block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#timeouts AssertsTraceConfig#timeouts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#timeouts AssertsTraceConfig#timeouts}
   */
   readonly timeouts?: AssertsTraceConfigTimeouts;
 }
@@ -61,19 +61,19 @@ export interface AssertsTraceConfigMatch {
   /**
   * Operation to use for matching. One of: =, <>, <, >, <=, >=, IS NULL, IS NOT NULL, STARTS WITH, CONTAINS.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#op AssertsTraceConfig#op}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#op AssertsTraceConfig#op}
   */
   readonly op: string;
   /**
   * Entity property to match.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#property AssertsTraceConfig#property}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#property AssertsTraceConfig#property}
   */
   readonly property: string;
   /**
   * Values to match against. Required for all operators except "IS NULL" and "IS NOT NULL", which must not have any values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#values AssertsTraceConfig#values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#values AssertsTraceConfig#values}
   */
   readonly values?: string[];
 }
@@ -241,19 +241,19 @@ export class AssertsTraceConfigMatchList extends cdktf.ComplexList {
 }
 export interface AssertsTraceConfigTimeouts {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#create AssertsTraceConfig#create}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#create AssertsTraceConfig#create}
   */
   readonly create?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#delete AssertsTraceConfig#delete}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#delete AssertsTraceConfig#delete}
   */
   readonly delete?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#read AssertsTraceConfig#read}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#read AssertsTraceConfig#read}
   */
   readonly read?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#update AssertsTraceConfig#update}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#update AssertsTraceConfig#update}
   */
   readonly update?: string;
 }
@@ -434,7 +434,7 @@ export class AssertsTraceConfigTimeoutsOutputReference extends cdktf.ComplexObje
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config grafana_asserts_trace_config}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config grafana_asserts_trace_config}
 */
 export class AssertsTraceConfig extends cdktf.TerraformResource {
 
@@ -450,7 +450,7 @@ export class AssertsTraceConfig extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssertsTraceConfig resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssertsTraceConfig to import
-  * @param importFromId The id of the existing AssertsTraceConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssertsTraceConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssertsTraceConfig to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -462,7 +462,7 @@ export class AssertsTraceConfig extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/asserts_trace_config grafana_asserts_trace_config} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/asserts_trace_config grafana_asserts_trace_config} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -473,7 +473,7 @@ export class AssertsTraceConfig extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_asserts_trace_config',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

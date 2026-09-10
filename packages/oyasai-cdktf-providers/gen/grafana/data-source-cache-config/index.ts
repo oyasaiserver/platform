@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface DataSourceCacheConfigConfig extends cdktf.TerraformMetaArgument
   /**
   * UID of the data source to configure.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config#datasource_uid DataSourceCacheConfig#datasource_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config#datasource_uid DataSourceCacheConfig#datasource_uid}
   */
   readonly datasourceUid: string;
   /**
   * Whether caching is enabled for this data source.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config#enabled DataSourceCacheConfig#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config#enabled DataSourceCacheConfig#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config#id DataSourceCacheConfig#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config#id DataSourceCacheConfig#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -29,31 +29,31 @@ export interface DataSourceCacheConfigConfig extends cdktf.TerraformMetaArgument
   /**
   * The Organization ID. If not set, the Org ID defined in the provider block will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config#org_id DataSourceCacheConfig#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config#org_id DataSourceCacheConfig#org_id}
   */
   readonly orgId?: string;
   /**
   * TTL for query caching, in milliseconds. Ignored if use_default_ttl is true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config#ttl_queries_ms DataSourceCacheConfig#ttl_queries_ms}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config#ttl_queries_ms DataSourceCacheConfig#ttl_queries_ms}
   */
   readonly ttlQueriesMs?: number;
   /**
   * TTL for resource caching, in milliseconds. Ignored if use_default_ttl is true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config#ttl_resources_ms DataSourceCacheConfig#ttl_resources_ms}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config#ttl_resources_ms DataSourceCacheConfig#ttl_resources_ms}
   */
   readonly ttlResourcesMs?: number;
   /**
   * If true, use Grafana's default TTLs instead of custom values. Defaults to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config#use_default_ttl DataSourceCacheConfig#use_default_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config#use_default_ttl DataSourceCacheConfig#use_default_ttl}
   */
   readonly useDefaultTtl?: boolean | cdktf.IResolvable;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config grafana_data_source_cache_config}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config grafana_data_source_cache_config}
 */
 export class DataSourceCacheConfig extends cdktf.TerraformResource {
 
@@ -69,7 +69,7 @@ export class DataSourceCacheConfig extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DataSourceCacheConfig resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataSourceCacheConfig to import
-  * @param importFromId The id of the existing DataSourceCacheConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataSourceCacheConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataSourceCacheConfig to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -81,7 +81,7 @@ export class DataSourceCacheConfig extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/data_source_cache_config grafana_data_source_cache_config} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/data_source_cache_config grafana_data_source_cache_config} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -92,7 +92,7 @@ export class DataSourceCacheConfig extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_data_source_cache_config',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

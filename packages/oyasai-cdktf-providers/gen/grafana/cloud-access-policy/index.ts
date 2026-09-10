@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy
+// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface CloudAccessPolicyConfig extends cdktf.TerraformMetaArguments {
   /**
   * Display name of the access policy. Defaults to the name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#display_name CloudAccessPolicy#display_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#display_name CloudAccessPolicy#display_name}
   */
   readonly displayName?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#id CloudAccessPolicy#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#id CloudAccessPolicy#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,31 +23,31 @@ export interface CloudAccessPolicyConfig extends cdktf.TerraformMetaArguments {
   /**
   * Name of the access policy.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#name CloudAccessPolicy#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#name CloudAccessPolicy#name}
   */
   readonly name: string;
   /**
   * Region where the API is deployed. Generally where the stack is deployed. Use the region list API to get the list of available regions: https://grafana.com/docs/grafana-cloud/developer-resources/api-reference/cloud-api/#list-regions.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#region CloudAccessPolicy#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#region CloudAccessPolicy#region}
   */
   readonly region: string;
   /**
   * Scopes of the access policy. See https://grafana.com/docs/grafana-cloud/security-and-account-management/authentication-and-permissions/access-policies/#scopes for possible values.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#scopes CloudAccessPolicy#scopes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#scopes CloudAccessPolicy#scopes}
   */
   readonly scopes: string[];
   /**
   * conditions block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#conditions CloudAccessPolicy#conditions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#conditions CloudAccessPolicy#conditions}
   */
   readonly conditions?: CloudAccessPolicyConditions[] | cdktf.IResolvable;
   /**
   * realm block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#realm CloudAccessPolicy#realm}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#realm CloudAccessPolicy#realm}
   */
   readonly realm: CloudAccessPolicyRealm[] | cdktf.IResolvable;
 }
@@ -55,7 +55,7 @@ export interface CloudAccessPolicyConditions {
   /**
   * Conditions that apply to the access policy,such as IP Allow lists.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#allowed_subnets CloudAccessPolicy#allowed_subnets}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#allowed_subnets CloudAccessPolicy#allowed_subnets}
   */
   readonly allowedSubnets: string[];
 }
@@ -170,7 +170,7 @@ export interface CloudAccessPolicyRealmLabelPolicy {
   /**
   * The label selector to match in metrics or logs query. Should be in PromQL or LogQL format.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#selector CloudAccessPolicy#selector}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#selector CloudAccessPolicy#selector}
   */
   readonly selector: string;
 }
@@ -285,19 +285,19 @@ export interface CloudAccessPolicyRealm {
   /**
   * The identifier of the org or stack. For orgs, this is the slug, for stacks, this is the stack ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#identifier CloudAccessPolicy#identifier}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#identifier CloudAccessPolicy#identifier}
   */
   readonly identifier: string;
   /**
   * Whether a policy applies to a Cloud org or a specific stack. Should be one of `org` or `stack`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#type CloudAccessPolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#type CloudAccessPolicy#type}
   */
   readonly type: string;
   /**
   * label_policy block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#label_policy CloudAccessPolicy#label_policy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#label_policy CloudAccessPolicy#label_policy}
   */
   readonly labelPolicy?: CloudAccessPolicyRealmLabelPolicy[] | cdktf.IResolvable;
 }
@@ -465,7 +465,7 @@ export class CloudAccessPolicyRealmList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy grafana_cloud_access_policy}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy grafana_cloud_access_policy}
 */
 export class CloudAccessPolicy extends cdktf.TerraformResource {
 
@@ -481,7 +481,7 @@ export class CloudAccessPolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudAccessPolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudAccessPolicy to import
-  * @param importFromId The id of the existing CloudAccessPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudAccessPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudAccessPolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -493,7 +493,7 @@ export class CloudAccessPolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.45.2/docs/resources/cloud_access_policy grafana_cloud_access_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/cloud_access_policy grafana_cloud_access_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -504,7 +504,7 @@ export class CloudAccessPolicy extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_cloud_access_policy',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.45.2'
+        providerVersion: '4.46.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
