@@ -54,6 +54,7 @@ jobs:
           secrets: |
             CLOUDFLARE_ACCESS_KEY_ID
             CLOUDFLARE_SECRET_ACCESS_KEY
+            GRAFANA_CLOUD_ACCESS_POLICY_TOKEN
             TF_API_TOKEN
             TF_TOKEN_app_terraform_io
             CLOUDFLARE_API_TOKEN

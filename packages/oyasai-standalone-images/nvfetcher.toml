@@ -1,3 +1,9 @@
+[alloy]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "grafana/alloy"
+src.container = "grafana/alloy"
+
 [caddy]
 docker.os = "linux"
 docker.arch = "amd64"
