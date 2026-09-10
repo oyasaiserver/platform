@@ -157,7 +157,7 @@ loki.source.docker "platform" {
         "--storage.path=/var/lib/alloy/data",
       ],
       env: envs({
-        GRAFANA_LOKI_URL: commonInfra.platformCloudGrafanaStack.logsUrl,
+        GRAFANA_LOKI_URL: `${commonInfra.platformCloudGrafanaStack.logsUrl}/loki/api/v1/push`,
         GRAFANA_LOKI_USERNAME: commonInfra.platformCloudGrafanaStack.logsUserId,
         GRAFANA_CLOUD_API_KEY: commonInfra.platformAllServicesToken.token,
       }),
