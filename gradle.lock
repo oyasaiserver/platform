@@ -2745,15 +2745,15 @@
   },
   "org.geysermc.geyser:api:2.11.2-SNAPSHOT": {
     "api-2.11.2-SNAPSHOT.jar": {
-      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260902.202549-8.jar",
+      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260910.131131-9.jar",
       "hash": "sha256-vxoOjMjW88D1PFXm6vhYTelpZIY3RTsLkBceewAL8BM="
     },
     "api-2.11.2-SNAPSHOT.module": {
-      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260902.202549-8.module",
+      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260910.131131-9.module",
       "hash": "sha256-c/sGcJySPbQ7C9KqjRj+GoXyIi6fN6FUpv7TlkfCgto="
     },
     "api-2.11.2-SNAPSHOT.pom": {
-      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260902.202549-8.pom",
+      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260910.131131-9.pom",
       "hash": "sha256-h9gDXZ36acfXmANoPttuwuGoKYhytfuttfkjhv4WC38="
     }
   },
