@@ -18,6 +18,7 @@ let
         with (inputs.nixpkgs-terraform-providers-bin.legacyPackages.${system}.providers); [
           # keep-sorted start
           cloudflare.cloudflare
+          grafana.grafana
           hashicorp.random
           infisical.infisical
           integrations.github
