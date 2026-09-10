@@ -23,7 +23,22 @@ internal class DirectStateCommand(
     private val markTool: (ItemStack, ToolItems.Kind) -> Unit,
 ) : TabExecutor {
   private val menu =
-      SettingsMenu({ playerSettings.get(it.uniqueId) }) { player, slot ->
+      SettingsMenu(
+          { playerSettings.get(it.uniqueId) },
+          { player, slot ->
+            when (slot) {
+              10 -> Permissions.has(player, Permissions.HAND)
+              12 -> Permissions.has(player, Permissions.UPDATE)
+              14,
+              16 -> Permissions.has(player, Permissions.REPLACE)
+              22 ->
+                  Permissions.has(player, Permissions.HAND) &&
+                      Permissions.has(player, Permissions.UPDATE) &&
+                      Permissions.has(player, Permissions.REPLACE)
+              else -> false
+            }
+          },
+      ) { player, slot ->
         when (slot) {
           10 -> writeHandMode(player, !playerSettings.get(player.uniqueId).handEnabled)
           12 -> updateMode.setPersonal(player, !playerSettings.get(player.uniqueId).updateEnabled)
@@ -74,9 +89,11 @@ internal class DirectStateCommand(
           "stick",
           "sstick",
           "hstick" -> Permissions.GET_TOOL
+          null,
+          "gui" -> null
           else -> Permissions.ALL
         }
-    if (sender !is Player || !Permissions.has(sender, permission)) {
+    if (sender !is Player || permission != null && !Permissions.has(sender, permission)) {
       sender.sendMessage("権限がありません。")
       return true
     }
@@ -87,7 +104,8 @@ internal class DirectStateCommand(
     // 操作名を含む個数。短縮コマンドでも /ds と同じ引数判定を使う。
     val argumentCount = commandArgs.size + 1
     when (operation) {
-      null -> menu.open(sender)
+      null,
+      "gui" -> menu.open(sender)
       "toggle" -> toggleItemlessModes(sender)
       "update" -> setUpdateMode(sender, commandArgs.firstOrNull(), argumentCount)
       "hand" -> setHandMode(sender, commandArgs.firstOrNull(), argumentCount)
@@ -151,6 +169,7 @@ internal class DirectStateCommand(
       args.size == 1 ->
           matches(
               args[0],
+              "gui",
               "help",
               "toggle",
               "tgl",
