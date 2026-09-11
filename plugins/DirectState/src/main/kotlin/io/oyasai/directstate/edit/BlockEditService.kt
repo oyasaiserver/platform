@@ -1,5 +1,6 @@
 package io.oyasai.directstate.edit
 
+import io.oyasai.directstate.integration.BlockEntityAccess
 import io.oyasai.directstate.update.UpdateMode
 import java.util.UUID
 import net.kyori.adventure.text.Component
@@ -17,7 +18,11 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
 /** どのブロックを、どの状態へ変更するかを表す一件の編集要求。 */
-internal data class BlockEdit(val block: Block, val data: BlockData)
+internal data class BlockEdit(
+    val block: Block,
+    val data: BlockData,
+    val blockEntityPresent: Boolean? = null,
+)
 
 /** 編集の適用、更新抑制との連携、連続操作ログの集約。 */
 internal class BlockEditService(
@@ -58,11 +63,18 @@ internal class BlockEditService(
     val edits =
         requested
             .distinctBy { edit -> edit.block.location }
-            .filter { edit -> edit.block.blockData.asString != edit.data.asString }
+            .filter { edit ->
+              edit.block.blockData.asString != edit.data.asString ||
+                  edit.blockEntityPresent?.let { it != BlockEntityAccess.hasBody(edit.block) } ==
+                      true
+            }
     if (edits.isEmpty()) return
     updateMode.beforeEdit(player, edits.map { edit -> edit.block })
     val before = edits.associate { edit -> edit.block to edit.block.state }
-    edits.forEach { edit -> edit.block.setBlockData(edit.data, false) }
+    edits.forEach { edit ->
+      if (edit.blockEntityPresent == null) edit.block.setBlockData(edit.data, false)
+      else BlockEntityAccess.setBody(edit.block, edit.data, edit.blockEntityPresent)
+    }
     edits.forEach { edit ->
       queueEdit(player, before.getValue(edit.block), edit.block, edit.block.blockData.clone())
     }
