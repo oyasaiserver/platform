@@ -18,8 +18,8 @@
   "bluemap": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/K5U1ASjn/bluemap-5.23-paper.jar",
-        "hash": "sha256-M5VU11ztqzVON2Z3z8cwjEmZUpFYSejimUcY5KFT1k4="
+        "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/zjZDXCw6/bluemap-5.24-paper.jar",
+        "hash": "sha256-I1kq810Sif+SUTAZlJSPHWno2BtWlRXOgakcuk2qvHg="
       }
     }
   },
@@ -93,8 +93,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1234/downloads/velocity",
-      "hash": "sha256-KNeW5ntGb9mDLrEtC0obcqUEbKrh+2xnCZ8qXRRCNXE="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1235/downloads/velocity",
+      "hash": "sha256-HWqxR3BJTFnhLPAZzCY1aCRyX/opjv0k4hBMYgmyoJg="
     }
   },
   "gsit": {
@@ -208,8 +208,8 @@
   "sba": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/lJPKRQLl/versions/d12OWoXE/SBA-1.5.20.2-all.jar",
-        "hash": "sha256-aoXVmWUQuMjRGyDGCArXQSY398sV79yIdZ4W++8x/Gg="
+        "url": "https://cdn.modrinth.com/data/lJPKRQLl/versions/B1rNdznk/SBA-1.5.21-all.jar",
+        "hash": "sha256-18q3tJnrY4lysGIuAw7vvdEIqOcga0B+Fo+1kTwq1oo="
       }
     }
   },
