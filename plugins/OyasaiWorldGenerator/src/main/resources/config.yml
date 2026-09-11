@@ -1,0 +1,11 @@
+worlds:
+  cosmic:
+    generator: void
+    min-y: 0
+    height: 2032
+    logical-height: 256
+    spawn-y: 64
+    gamemode: adventure
+    allow-flight: true
+self-test: true
+clear-force-loaded-chunks: false

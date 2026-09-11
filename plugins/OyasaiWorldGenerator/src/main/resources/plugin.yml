@@ -1,0 +1,17 @@
+name: OyasaiWorldGenerator
+version: "${version}"
+main: io.oyasai.worldgen.OyasaiWorldGenerator
+api-version: "1.21"
+description: 展示用ワールドの生成と高度制御
+authors: [takucan]
+load: STARTUP
+softdepend: [Multiverse-Core]
+commands:
+  owg:
+    description: "ワールドの生成・高度・状態の管理"
+    permission: oyasai.owg.use
+permissions:
+  oyasai.owg.use:
+    default: op
+  oyasai.owg.admin:
+    default: op
