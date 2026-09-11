@@ -6,5 +6,5 @@ dependencies {
   paperweightDevelopmentBundle(libs.purpur.dev.bundle)
   implementation(libs.kotlin.stdlib)
   implementation(libs.sqlite.jdbc)
-  compileOnly(libs.tab.api)
+  compileOnly(libs.placeholderapi)
 }

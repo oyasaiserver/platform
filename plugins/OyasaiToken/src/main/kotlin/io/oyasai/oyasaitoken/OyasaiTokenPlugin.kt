@@ -60,7 +60,7 @@ class OyasaiTokenPlugin :
   private lateinit var persistenceExecutor: ThreadPoolExecutor
   private lateinit var ledger: TokenLedger
   @Volatile private var notificationSettings = NotificationSettings.disabled()
-  private var tabPlaceholderIntegration: TabPlaceholderIntegration? = null
+  private var placeholderExpansion: OyasaiTokenPlaceholderExpansion? = null
 
   override fun onEnable() {
     registerCompatInstance()
@@ -111,7 +111,7 @@ class OyasaiTokenPlugin :
         ServicePriority.Normal,
     )
     server.pluginManager.registerEvents(this, this)
-    enableTabPlaceholderIntegration()
+    enablePlaceholderExpansion()
     getCommand("token")?.setExecutor(this)
     getCommand("token")?.tabCompleter = this
 
@@ -152,8 +152,8 @@ class OyasaiTokenPlugin :
       }
     }
     server.servicesManager.unregisterAll(this)
-    tabPlaceholderIntegration?.disable()
-    tabPlaceholderIntegration = null
+    placeholderExpansion?.unregister()
+    placeholderExpansion = null
     unregisterCompatInstance()
   }
 
@@ -1139,14 +1139,15 @@ class OyasaiTokenPlugin :
     }
   }
 
-  private fun enableTabPlaceholderIntegration() {
-    if (!Bukkit.getPluginManager().isPluginEnabled("TAB")) return
+  private fun enablePlaceholderExpansion() {
+    if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) return
 
-    tabPlaceholderIntegration =
-        TabPlaceholderIntegration(this).also { integration ->
-          server.pluginManager.registerEvents(integration, this)
-          integration.enable()
-        }
+    val expansion = OyasaiTokenPlaceholderExpansion(this)
+    if (expansion.register()) {
+      placeholderExpansion = expansion
+    } else {
+      logger.warning("Failed to register PlaceholderAPI expansion ${expansion.identifier}.")
+    }
   }
 
   private fun importTokenManagerDataYml(): ImportResult {
