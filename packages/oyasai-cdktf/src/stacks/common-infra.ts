@@ -164,7 +164,7 @@ export class CommonInfra extends OyasaiTerraformStack {
         provider: grafanaCloudProvider,
         name: "terraform-all-services",
         region: this.platformCloudGrafanaStack.regionSlug,
-        scopes: ["logs:read", "logs:write"],
+        scopes: ["logs:read", "logs:write", "metrics:read", "metrics:write"],
         realm: [
           {
             type: "stack",
@@ -203,12 +203,27 @@ export class CommonInfra extends OyasaiTerraformStack {
       }),
     });
 
-    const lokiDataSourceJson = pick(lokiDatasource, "type", "uid");
+const lokiDataSourceJson = pick(lokiDatasource, "type", "uid");
+
+    const prometheusDatasource = new DataSource(this, "prometheus-datasource", {
+      uid: "oyasai-prometheus",
+      name: "Oyasai Prometheus",
+      type: "prometheus",
+      url: this.platformCloudGrafanaStack.prometheusUrl,
+      accessMode: "proxy",
+      basicAuthEnabled: true,
+      basicAuthUsername: `${this.platformCloudGrafanaStack.prometheusUserId}`,
+      secureJsonDataEncoded: JSON.stringify({
+        basicAuthPassword: this.platformAllServicesToken.token,
+      }),
+    });
+
+    const prometheusDataSourceJson = pick(prometheusDatasource, "type", "uid");
 
     new Dashboard(this, "platform-dashboard", {
       overwrite: true,
       configJson: JSON.stringify({
-        title: "Oyasai Platform",
+        title: "Logs",
         uid: "oyasai-platform",
         panels: [
           {
@@ -303,6 +318,49 @@ export class CommonInfra extends OyasaiTerraformStack {
             },
           ],
         },
+      }),
+    });
+
+    new Dashboard(this, "mc-status-dashboard", {
+      overwrite: true,
+      configJson: JSON.stringify({
+        title: "Minecraft Status",
+        uid: "oyasai-mc-status",
+        panels: [
+          {
+            title: "Players Online",
+            type: "stat",
+            gridPos: { h: 4, w: 8, x: 0, y: 0 },
+            datasource: prometheusDataSourceJson,
+            targets: [{ expr: "minecraft_status_players_online_count", datasource: prometheusDataSourceJson }],
+            options: { colorMode: "value", graphMode: "area", justifyMode: "auto", orientation: "auto" },
+          },
+          {
+            title: "Max Players",
+            type: "stat",
+            gridPos: { h: 4, w: 8, x: 8, y: 0 },
+            datasource: prometheusDataSourceJson,
+            targets: [{ expr: "minecraft_status_players_max_count", datasource: prometheusDataSourceJson }],
+            options: { colorMode: "value", graphMode: "none", justifyMode: "auto", orientation: "auto" },
+          },
+          {
+            title: "Response Time",
+            type: "stat",
+            gridPos: { h: 4, w: 8, x: 16, y: 0 },
+            datasource: prometheusDataSourceJson,
+            targets: [{ expr: "minecraft_status_response_time_seconds", datasource: prometheusDataSourceJson }],
+            options: { colorMode: "value", graphMode: "none", justifyMode: "auto", orientation: "auto" },
+            fieldConfig: { defaults: { unit: "s" }, overrides: [] },
+          },
+          {
+            title: "Response Time History",
+            type: "timeseries",
+            gridPos: { h: 8, w: 24, x: 0, y: 4 },
+            datasource: prometheusDataSourceJson,
+            targets: [{ expr: "minecraft_status_response_time_seconds", datasource: prometheusDataSourceJson }],
+            fieldConfig: { defaults: { unit: "s", custom: { lineWidth: 1, fillOpacity: 30 } }, overrides: [] },
+          },
+        ],
       }),
     });
   }
