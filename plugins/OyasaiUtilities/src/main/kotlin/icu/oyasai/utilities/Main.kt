@@ -16,6 +16,7 @@ import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
 import icu.oyasai.utilities.tpath.BackForwardCmd
 import icu.oyasai.utilities.tpath.TeleportListener
+import icu.oyasai.utilities.veinminer.VeinminerEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {
@@ -24,6 +25,7 @@ class Main : JavaPlugin() {
   override fun onEnable() {
     server.pluginManager.registerEvents(NotNBTEvent, this) // NotNBTのイベント登録
     server.pluginManager.registerEvents(OreSmelterEvent, this) // OreSmelterのイベント登録
+    server.pluginManager.registerEvents(VeinminerEvent, this)
     server.pluginManager.registerEvents(TimerBarEvent, this) // TimerBar用のイベント登録
     server.pluginManager.registerEvents(TeleportListener, this) // TPathのイベント登録
     server.pluginManager.registerEvents(Pita, this) // Pitaのイベント

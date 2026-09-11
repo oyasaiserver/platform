@@ -1,6 +1,6 @@
 package icu.oyasai.utilities.oresmelter
 
-import de.miraculixx.veinminer.VeinMinerEvent.VeinminerDropEvent
+import icu.oyasai.utilities.veinminer.VeinmineDropEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -23,7 +23,7 @@ object OreSmelterEvent : Listener {
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  fun onVeinminerDrop(e: VeinminerDropEvent) {
+  fun onVeinmineDrop(e: VeinmineDropEvent) {
     if (!e.player.inventory.itemInMainHand.type.toString().contains("PICKAXE")) return
     if (!OreSmelter.toggled.contains(e.player.uniqueId)) return
     val iterator = e.items.listIterator()
