@@ -6,6 +6,7 @@ import io.oyasai.directstate.edit.hold.HoldEditor
 import io.oyasai.directstate.edit.replace.BlockReplacement
 import io.oyasai.directstate.edit.replace.TypeReplaceMode
 import io.oyasai.directstate.edit.shape.ShapeEditor
+import io.oyasai.directstate.integration.BlockEntityAccess
 import io.oyasai.directstate.settings.PlayerSettingsStore
 import io.papermc.paper.event.player.PlayerStopUsingItemEvent
 import net.kyori.adventure.text.Component
@@ -154,7 +155,11 @@ internal class EditInteractionListener(
     holdEditor.stop(player.uniqueId)
     val hitInsideBlock = ray.hitPosition.clone().subtract(block.location.toVector())
     if (handEditing) {
-      val result = handEditor.edit(data, hitInsideBlock, ray.hitBlockFace)
+      val blockEntityPresent = when (data.material.name) {
+        "BELL", "ENCHANTING_TABLE" -> BlockEntityAccess.hasBody(block)
+        else -> true
+      }
+      val result = handEditor.edit(data, hitInsideBlock, ray.hitBlockFace, blockEntityPresent)
       if (result != null) {
         applyHandEdit(player, block, result)
         player.swingHand(EquipmentSlot.HAND)
@@ -191,7 +196,7 @@ internal class EditInteractionListener(
         } else {
           blockReplacement.convert(result.data, result.material, TypeReplaceMode.OFF)
         }
-    val changedBlocks = mutableListOf(BlockEdit(block, data))
+    val changedBlocks = mutableListOf(BlockEdit(block, data, result.blockEntityPresent))
     if (data is Door) {
       val other = blockReplacement.counterpart(block)
       if (other != null) {

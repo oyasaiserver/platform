@@ -187,7 +187,7 @@ internal object BlockStateEditor {
       data is Directional && isFacingMaterial(name) -> true
       data is EndPortalFrame && name == "END_PORTAL_FRAME" -> true
       data is Chest && name == "CHEST" -> true
-      data is Bell && name == "BELL" -> true
+      data is Bell && name == "BELL" || name == "ENCHANTING_TABLE" -> true
       data is Scaffolding && name == "SCAFFOLDING" -> true
       data is Bisected && name in twoBlockPlantMaterials -> true
       data is MultipleFacing && name in mushroomFaceMaterials -> true
@@ -197,7 +197,12 @@ internal object BlockStateEditor {
   }
 
   /** 最初に一致した専用操作を試す。nullなら共通状態や材質切替へ処理を譲る。 */
-  fun edit(data: BlockData, face: BlockFace?, hit: Vector = Vector(0.5, 0.5, 0.5)): Result? {
+  fun edit(
+      data: BlockData,
+      face: BlockFace?,
+      hit: Vector = Vector(0.5, 0.5, 0.5),
+      blockEntityPresent: Boolean = true,
+  ): Result? {
     val name = data.material.name
     val click = BlockClick(hit, face)
     val geometryRule = geometryRules.firstOrNull { it.matches(data) }
@@ -362,9 +367,20 @@ internal object BlockStateEditor {
           val attachments = Bell.Attachment.entries
           data.attachment =
               attachments[(attachments.indexOf(data.attachment) + 1) % attachments.size]
+          if (!blockEntityPresent) return Result(data, blockEntityPresent = false)
+        } else if (face in horizontalFaces) {
+          if (click.position.y >= 13.0 / 16.0) {
+            cycleFacing(data)
+            if (!blockEntityPresent) return Result(data, blockEntityPresent = false)
+          } else {
+            return Result(data, blockEntityPresent = !blockEntityPresent)
+          }
         } else {
           cycleFacing(data)
         }
+      }
+      name == "ENCHANTING_TABLE" -> {
+        return Result(data, blockEntityPresent = !blockEntityPresent)
       }
       data is Orientable && name in bambooBlocks -> {
         if (click.isVertical)
