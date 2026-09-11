@@ -6,6 +6,12 @@ version = "0.1.0"
 
 dependencies { paperweightDevelopmentBundle(libs.purpur.dev.bundle) }
 
+tasks.processResources {
+  val properties = mapOf("version" to project.version.toString())
+  inputs.properties(properties)
+  filesMatching("plugin.yml") { expand(properties) }
+}
+
 val failureTestProvider =
     layout.buildDirectory.file(
         "generated/failureTest/kotlin/io/oyasai/worldgen/height/NmsHeightProviderFailureBuild.kt"

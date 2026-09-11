@@ -1,11 +1,9 @@
 package io.oyasai.worldgen.height
 
-import java.nio.file.Files
-import java.nio.file.Path
-
 /** Integration-test-only failure injection. This source set is absent from the production jar. */
 object OwgFailureTestControl {
-  private val controlFile: Path = Path.of(".owg-failure-test")
+  private const val STAGE_PROPERTY = "oyasai.owg.failureTest.stage"
+  private const val WORLD_PROPERTY = "oyasai.owg.failureTest.world"
 
   fun fail(stage: String, worldName: String) {
     if (shouldFail(stage, worldName)) {
@@ -14,8 +12,8 @@ object OwgFailureTestControl {
   }
 
   fun shouldFail(stage: String, worldName: String): Boolean {
-    if (!Files.isRegularFile(controlFile)) return false
-    val parts = Files.readString(controlFile).trim().split(':', limit = 2)
-    return parts.size == 2 && parts[0] == stage && parts[1] == worldName
+    return worldName != "cosmic" &&
+        System.getProperty(STAGE_PROPERTY) == stage &&
+        System.getProperty(WORLD_PROPERTY) == worldName
   }
 }

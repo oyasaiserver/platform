@@ -297,10 +297,10 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
         )
 
     writeObject(level, holderField, holder)
-    fields.zip(values.toTypedArray()).forEach { (field, value) -> writeInt(level, field, value) }
+    values.indices.forEach { writeInt(level, fields[it], values[it]) }
     check(holderField.get(level) === holder) { "dimensionTypeRegistration write did not stick" }
-    fields.zip(values.toTypedArray()).forEach { (field, value) ->
-      check(field.getInt(level) == value) { "${field.name} readback mismatch" }
+    values.indices.forEach {
+      check(fields[it].getInt(level) == values[it]) { "${fields[it].name} readback mismatch" }
     }
     check(
         level.minY == spec.minY && level.height == spec.height && level.maxY == spec.maxHeight - 1
@@ -319,10 +319,10 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     val light = level.lightEngine.`starlight$getLightEngine`()
     val values =
         intArrayOf(
-            levelHeightBeforePatch(light, "minSection"),
-            levelHeightBeforePatch(light, "maxSection"),
-            levelHeightBeforePatch(light, "minLightSection"),
-            levelHeightBeforePatch(light, "maxLightSection"),
+            readInt(light, "minSection"),
+            readInt(light, "maxSection"),
+            readInt(light, "minLightSection"),
+            readInt(light, "maxLightSection"),
         )
     return StarlightSnapshot(light, resolveStarlightFields(light, values), values)
   }
@@ -337,9 +337,11 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     val minSection = spec.minY shr 4
     val maxSection = (spec.maxHeight - 1) shr 4
     val values = intArrayOf(minSection, maxSection, minSection - 1, maxSection + 1)
-    fields.zip(values.toTypedArray()).forEach { (field, value) -> writeInt(light, field, value) }
-    fields.zip(values.toTypedArray()).forEach { (field, value) ->
-      check(field.getInt(light) == value) { "Starlight ${field.name} readback mismatch" }
+    values.indices.forEach { writeInt(light, fields[it], values[it]) }
+    values.indices.forEach {
+      check(fields[it].getInt(light) == values[it]) {
+        "Starlight ${fields[it].name} readback mismatch"
+      }
     }
     logger.info(
         "[OWG][height] Starlight fields patched and verified: minSection=$minSection maxSection=$maxSection minLight=${minSection - 1} maxLight=${maxSection + 1}"
@@ -479,8 +481,6 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
 
   private fun readInt(target: Any, name: String): Int =
       findField(target.javaClass, name, Int::class.javaPrimitiveType!!).getInt(target)
-
-  private fun levelHeightBeforePatch(target: Any, name: String): Int = readInt(target, name)
 
   private fun captureRegistry(registry: MappedRegistry<DimensionType>): RegistrySnapshot {
     val byIdField = findField(registry.javaClass, "byId", List::class.java)

@@ -43,8 +43,9 @@ class OyasaiWorldGenerator : JavaPlugin() {
 
     try {
       val command = OwgCommand(checkNotNull(lifecycle) { "lifecycle is unavailable" })
-      getCommand("owg")?.setExecutor(command) ?: error("owg command is missing from plugin.yml")
-      getCommand("owg")?.tabCompleter = command
+      val owgCommand = getCommand("owg") ?: error("owg command is missing from plugin.yml")
+      owgCommand.setExecutor(command)
+      owgCommand.tabCompleter = command
       logger.info("[OWG] Command registered")
     } catch (throwable: Throwable) {
       logger.log(Level.SEVERE, "[OWG] Command registration failed", throwable)
