@@ -121,6 +121,10 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           file: "/etc/alloy/config.alloy",
         },
       ],
+      command: [
+        "run",
+        "/etc/alloy/config.alloy",
+      ],
       volumes: [
         {
           containerPath: "/var/run/docker.sock",
