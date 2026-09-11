@@ -1,4 +1,9 @@
-{ prettier-plugins }: {
+{
+  prettier-plugins,
+  lib,
+  grafana-alloy,
+}:
+{
   programs = {
     # keep-sorted start block=yes
     actionlint.enable = true;
@@ -65,9 +70,22 @@
     };
     # keep-sorted end
   };
-  settings.global.excludes = [
-    "*/gen/*"
-    "*/generated.*"
-    "docs/*"
-  ];
+  settings = {
+    formatter = {
+      alloy = {
+        command = lib.getExe grafana-alloy;
+        options = [
+          "fmt"
+          "--write"
+        ];
+        includes = [ "*.alloy" ];
+      };
+    };
+
+    global.excludes = [
+      "*/gen/*"
+      "*/generated.*"
+      "docs/*"
+    ];
+  };
 }
