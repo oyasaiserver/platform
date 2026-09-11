@@ -11,6 +11,7 @@ let
     caddy
     mariadb
     mc-backup
+    mc-monitor
     mysql-backup
     # keep-sorted end
     ;
@@ -47,6 +48,13 @@ runCommandLocal "oyasai-standalone-images"
         config = {
           Entrypoint = [ "/usr/bin/backup" ];
           Cmd = [ "loop" ];
+        };
+      };
+      mc-monitor = oyasaiDockerTools.buildImage {
+        name = mc-monitor.pname;
+        fromImage = mc-monitor.src;
+        config = {
+          Entrypoint = [ "/mc-monitor" ];
         };
       };
       mysql-backup = oyasaiDockerTools.buildImage {

@@ -54,6 +54,18 @@
       arch = "amd64";
     };
   };
+  mc-monitor = {
+    pname = "mc-monitor";
+    version = "0.17.1";
+    src = dockerTools.pullImage {
+      imageName = "itzg/mc-monitor";
+      imageDigest = "sha256:f0667f713856e953dc82c70a608b986b943b33f4b65a9dd55a8ede17fe48f34e";
+      sha256 = "sha256-qtaPWj90wazHAY7JmysKRSKaZhD7OLV1PSP1w9dPjAc=";
+      finalImageTag = "0.17.1";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
   mysql-backup = {
     pname = "mysql-backup";
     version = "1.4.0";
