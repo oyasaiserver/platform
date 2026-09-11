@@ -29,6 +29,7 @@ import icu.oyasai.citiesskymine.road.RoadSettings
 import icu.oyasai.citiesskymine.road.WaypointListener
 import icu.oyasai.citiesskymine.schematic.SchematicCommand
 import icu.oyasai.citiesskymine.selection.SelectionCommand
+import icu.oyasai.citiesskymine.selection.WorldEditSelectionPreview
 import icu.oyasai.citiesskymine.slabstairs.SlabStairsCommand
 import icu.oyasai.citiesskymine.stack.StackCommand
 import icu.oyasai.citiesskymine.storage.PlayerDataStore
@@ -39,6 +40,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.scheduler.BukkitTask
 
 class Main : JavaPlugin() {
   lateinit var playerDataStore: PlayerDataStore
@@ -53,6 +55,7 @@ class Main : JavaPlugin() {
   private val sessions = HashMap<UUID, RoadSession>()
   private val intersectionSessions = HashMap<UUID, IntersectionSession>()
   private val bezierSessions = HashMap<UUID, BezierSession>()
+  private var selectionParticleTask: BukkitTask? = null
   private lateinit var cloudHandler: CloudCommand
   private var debugStickMemoryStore: DebugStickMemoryStore? = null
 
@@ -193,6 +196,7 @@ class Main : JavaPlugin() {
     getCommand(".hud")?.tabCompleter = hudHandler
     server.pluginManager.registerEvents(WorldEditHudListener(this), this)
     worldEditHud.start()
+    startSelectionParticles()
 
     logger.info("CitiesSkyMine enabled")
   }
@@ -208,6 +212,8 @@ class Main : JavaPlugin() {
     if (::worldEditHud.isInitialized) {
       worldEditHud.stop()
     }
+    selectionParticleTask?.cancel()
+    selectionParticleTask = null
     sessions.values.forEach { it.previewTask?.cancel() }
     intersectionSessions.values.forEach { it.previewTask?.cancel() }
     bezierSessions.values.forEach { it.previewTask?.cancel() }
@@ -223,6 +229,16 @@ class Main : JavaPlugin() {
       return false
     }
     return true
+  }
+
+  private fun startSelectionParticles() {
+    selectionParticleTask =
+        server.scheduler.runTaskTimer(
+            this,
+            Runnable { server.onlinePlayers.forEach(WorldEditSelectionPreview::showOnce) },
+            0L,
+            12L,
+        )
   }
 
   // ──────────────────────────────────────────────────
