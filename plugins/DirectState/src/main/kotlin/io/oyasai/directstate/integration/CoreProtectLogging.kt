@@ -28,10 +28,11 @@ private constructor(
   /** 一つの編集を、除去・設置・DirectState印の三つのCoreProtectログとして残す。 */
   override fun record(user: String, before: BlockState, location: Location, after: BlockData) {
     val block = location.block
-    val hiddenBody = block.blockData.takeIf {
-      (it.material == Material.BELL || it.material == Material.ENCHANTING_TABLE) &&
-          !BlockEntityAccess.hasBody(block)
-    }
+    val hiddenBody =
+        block.blockData.takeIf {
+          (it.material == Material.BELL || it.material == Material.ENCHANTING_TABLE) &&
+              !BlockEntityAccess.hasBody(block)
+        }
     try {
       if (!coreProtect.isEnabled || !api.isEnabled) {
         warn("CoreProtect logging is unavailable; shape changes are not being logged.")
