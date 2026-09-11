@@ -76,6 +76,7 @@ oyasaiPurpur rec {
     oyasaitoken
     oyasaiutilities
     oyasaivehicles
+    oyasaiworldgenerator
     painttools
     placeholderapi
     plugmanx
