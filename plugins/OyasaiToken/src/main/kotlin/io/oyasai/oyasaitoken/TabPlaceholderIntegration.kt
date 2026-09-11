@@ -52,14 +52,16 @@ internal class TabPlaceholderIntegration(private val plugin: OyasaiTokenPlugin) 
     runOnPrimaryThread {
       runCatching {
             val tabApi = TabAPI.getInstance()
-            tabApi.placeholderManager.unregisterPlaceholder(PLACEHOLDER_IDENTIFIER)
-            placeholder =
-                tabApi.placeholderManager.registerPlayerPlaceholder(PLACEHOLDER_IDENTIFIER, -1) {
-                    player ->
-                  formatTokens(plugin.getBalance(player.uniqueId))
-                }
+            if (placeholder == null) {
+              tabApi.placeholderManager.unregisterPlaceholder(PLACEHOLDER_IDENTIFIER)
+              placeholder =
+                  tabApi.placeholderManager.registerPlayerPlaceholder(PLACEHOLDER_IDENTIFIER, -1) {
+                      player ->
+                    formatTokens(plugin.getBalance(player.uniqueId))
+                  }
+              plugin.logger.info("Registered TAB placeholder $PLACEHOLDER_IDENTIFIER.")
+            }
             tabApi.onlinePlayers.forEach(::updatePlayer)
-            plugin.logger.info("Registered TAB placeholder $PLACEHOLDER_IDENTIFIER.")
           }
           .onFailure { throwable ->
             plugin.logger.warning(
