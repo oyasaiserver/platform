@@ -214,7 +214,7 @@ export class CommonInfra extends OyasaiTerraformStack {
           {
             title: "Log Volume",
             type: "timeseries",
-            gridPos: { h: 4, w: 24, x: 0, y: 0 },
+            gridPos: { h: 5, w: 24, x: 0, y: 0 },
             datasource: lokiDataSourceJson,
             targets: [
               {
@@ -228,22 +228,29 @@ export class CommonInfra extends OyasaiTerraformStack {
                 unit: "short",
                 custom: {
                   stacking: { mode: "normal", group: "A" },
-                  fillOpacity: 50,
-                  lineWidth: 1,
+                  fillOpacity: 100,
+                  lineWidth: 0,
                   pointSize: 0,
+                  drawStyle: "bars",
+                  barAlignment: 0,
+                  barWidthFactor: 1,
                 },
               },
               overrides: [],
             },
             options: {
-              legend: { displayMode: "list", placement: "bottom", showLegend: true },
+              legend: {
+                displayMode: "list",
+                placement: "bottom",
+                showLegend: true,
+              },
               tooltip: { mode: "multi" },
             },
           },
           {
             title: "All Logs",
             type: "logs",
-            gridPos: { h: 20, w: 24, x: 0, y: 4 },
+            gridPos: { h: 20, w: 24, x: 0, y: 5 },
             datasource: lokiDataSourceJson,
             targets: [
               {
@@ -268,7 +275,7 @@ export class CommonInfra extends OyasaiTerraformStack {
             {
               name: "service",
               type: "query",
-              query: 'label_values(service)',
+              query: "label_values(service)",
               datasource: lokiDataSourceJson,
               multi: true,
               includeAll: true,
@@ -279,7 +286,7 @@ export class CommonInfra extends OyasaiTerraformStack {
             {
               name: "environment",
               type: "query",
-              query: 'label_values(environment)',
+              query: "label_values(environment)",
               datasource: lokiDataSourceJson,
               multi: true,
               includeAll: true,
