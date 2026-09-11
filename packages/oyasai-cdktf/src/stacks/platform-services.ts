@@ -1,7 +1,4 @@
-import {
-  Container,
-  type ContainerLabels,
-} from "@oyasaiserver/cdktf-providers/docker/container";
+import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
 import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
 import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
@@ -11,7 +8,7 @@ import { RandomProvider } from "@oyasaiserver/cdktf-providers/random/provider";
 import { LocalBackend } from "cdktf";
 import { Construct } from "constructs";
 import { join } from "node:path";
-import { envs, labels, mustEnv, ports } from "../helpers.ts";
+import { envs, mustEnv, ports } from "../helpers.ts";
 import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
@@ -23,14 +20,6 @@ type Props = Readonly<{
 }>;
 
 export class PlatformServices extends OyasaiPlatformTerraformStack {
-  private grafanaLogLabels(serviceName: string): ContainerLabels[] {
-    return labels({
-      logging: true,
-      service_name: serviceName,
-      environment: this.environment,
-    });
-  }
-
   constructor(
     scope: Construct,
     id: string,
@@ -116,54 +105,19 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       name: "network",
     });
 
-    const alloyConfig = `discovery.docker "platform" {
-  host = "unix:///var/run/docker.sock"
-}
-
-discovery.relabel "platform" {
-  targets = discovery.docker.platform.targets
-  rule {
-    source_labels = ["__meta_docker_container_label_logging"]
-    regex = "true"
-    action = "keep"
-  }
-}
-
-loki.write "default" {
-  endpoint {
-    url = env("GRAFANA_LOKI_URL")
-    basic_auth {
-      username = env("GRAFANA_LOKI_USERNAME")
-      password = env("GRAFANA_CLOUD_API_KEY")
-    }
-  }
-}
-
-loki.source.docker "platform" {
-  host        = "unix:///var/run/docker.sock"
-  targets    = discovery.relabel.platform.output
-  forward_to = [loki.write.default.receiver]
-}
-`;
-
     new Container(this, this.t("alloy-container"), {
       name: "alloy",
       image: images.alloy,
       restart: "unless-stopped",
-      command: [
-        "run",
-        "/etc/alloy/config.alloy",
-        "--server.http.listen-addr=0.0.0.0:12345",
-        "--storage.path=/var/lib/alloy/data",
-      ],
       env: envs({
+        ENVIRONMENT: this.environment,
         GRAFANA_LOKI_URL: `${commonInfra.platformCloudGrafanaStack.logsUrl}/loki/api/v1/push`,
         GRAFANA_LOKI_USERNAME: commonInfra.platformCloudGrafanaStack.logsUserId,
         GRAFANA_CLOUD_API_KEY: commonInfra.platformAllServicesToken.token,
       }),
       upload: [
         {
-          content: alloyConfig,
+          content: this.assets("config.alloy"),
           file: "/etc/alloy/config.alloy",
         },
       ],
@@ -174,18 +128,13 @@ loki.source.docker "platform" {
           readOnly: true,
         },
       ],
-      ports: ports({
-        tcp: [12345],
-      }),
       networksAdvanced: [network],
-      labels: this.grafanaLogLabels("alloy"),
     });
 
     const mariadbContainer = new Container(this, this.t("mariadb-container"), {
       image: images.mariadb,
       name: "mariadb",
       restart: "unless-stopped",
-      labels: this.grafanaLogLabels("mariadb"),
       env: envs({
         MARIADB_ROOT_PASSWORD: secrets.get("MARIADB_PASSWORD"),
       }),
@@ -214,7 +163,6 @@ loki.source.docker "platform" {
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
         init: true,
-        labels: this.grafanaLogLabels("oyasai-minecraft-main"),
         networksAdvanced: [network],
         ports: ports({
           tcp: [
@@ -263,7 +211,6 @@ loki.source.docker "platform" {
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
         init: true,
-        labels: this.grafanaLogLabels("oyasai-minecraft-lobby"),
         networksAdvanced: [network],
         env: envs({
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
@@ -291,7 +238,6 @@ loki.source.docker "platform" {
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
         init: true,
-        labels: this.grafanaLogLabels("oyasai-minecraft-axiom"),
         networksAdvanced: [network],
         env: envs({
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
@@ -311,7 +257,6 @@ loki.source.docker "platform" {
       image: images.velocity,
       name: "oyasai-velocity",
       restart: "unless-stopped",
-      labels: this.grafanaLogLabels("oyasai-velocity"),
       networksAdvanced: [network],
       ports: ports({
         tcp: [25565], // Java
@@ -337,7 +282,6 @@ loki.source.docker "platform" {
         image: images.oyasaiWeb,
         name: "oyasai-web",
         restart: "unless-stopped",
-        labels: this.grafanaLogLabels("oyasai-web"),
         networksAdvanced: [network],
         env: envs({
           OYASAI_LISTEN_PORT: 80,
@@ -349,7 +293,6 @@ loki.source.docker "platform" {
       image: images.caddy,
       name: "caddy",
       restart: "unless-stopped",
-      labels: this.grafanaLogLabels("caddy"),
       networksAdvanced: [network],
       ports: ports({
         tcp: [

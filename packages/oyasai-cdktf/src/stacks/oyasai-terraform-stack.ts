@@ -1,5 +1,7 @@
 import { CloudBackend, NamedCloudWorkspace, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
+import { readFileSync, type PathLike } from "node:fs";
+import { join } from "node:path";
 
 /**
  * An opinionated stack for managing Oyasai infrastructure.
@@ -14,6 +16,11 @@ export abstract class OyasaiTerraformStack extends TerraformStack {
 
   t(...fragments: string[]): string {
     return fragments.join("-");
+  }
+
+  protected assets(name: string) {
+    const path = join(import.meta.dirname, "../..", "assets", name);
+    return readFileSync(path, "utf-8");
   }
 
   protected createCloudBackend(): CloudBackend {

@@ -1,0 +1,37 @@
+discovery.docker "platform" {
+	host = "unix:///var/run/docker.sock"
+}
+
+discovery.relabel "platform" {
+	targets = discovery.docker.platform.targets
+
+	rule {
+		source_labels = ["__meta_docker_container_name"]
+		target_label  = "service_name"
+
+		// Docker API prefixes container names with "/"
+		regex       = "^/(.*)"
+		replacement = "$1"
+		action      = "replace"
+	}
+}
+
+loki.write "default" {
+	endpoint {
+		url = env("GRAFANA_LOKI_URL")
+
+		basic_auth {
+			username = env("GRAFANA_LOKI_USERNAME")
+			password = env("GRAFANA_CLOUD_API_KEY")
+		}
+	}
+}
+
+loki.source.docker "platform" {
+	host       = "unix:///var/run/docker.sock"
+	targets    = discovery.relabel.platform.output
+	forward_to = [loki.write.default.receiver]
+	labels     = {
+		environment = env("ENVIRONMENT"),
+	}
+}
