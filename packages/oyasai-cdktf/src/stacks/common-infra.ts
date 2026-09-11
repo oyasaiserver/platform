@@ -212,33 +212,42 @@ export class CommonInfra extends OyasaiTerraformStack {
         uid: "oyasai-platform",
         panels: [
           {
-            title: "Log Volume by Service",
-            type: "barchart",
-            gridPos: { h: 6, w: 24, x: 0, y: 0 },
+            title: "Log Volume",
+            type: "timeseries",
+            gridPos: { h: 4, w: 24, x: 0, y: 0 },
             datasource: lokiDataSourceJson,
             targets: [
               {
-                expr: 'sum by(service_name) (count_over_time({service_name=~".+"} [$__interval]))',
+                expr: 'sum by(service) (count_over_time({service=~"$service", environment=~"$environment"} [$__interval]))',
                 datasource: lokiDataSourceJson,
-                legendFormat: "{{service_name}}",
+                legendFormat: "{{service}}",
               },
             ],
             fieldConfig: {
               defaults: {
                 unit: "short",
-                custom: { axisCenteredZero: false, axisColorMode: "text" },
+                custom: {
+                  stacking: { mode: "normal", group: "A" },
+                  fillOpacity: 50,
+                  lineWidth: 1,
+                  pointSize: 0,
+                },
               },
               overrides: [],
+            },
+            options: {
+              legend: { displayMode: "list", placement: "bottom", showLegend: true },
+              tooltip: { mode: "multi" },
             },
           },
           {
             title: "All Logs",
             type: "logs",
-            gridPos: { h: 18, w: 24, x: 0, y: 6 },
+            gridPos: { h: 20, w: 24, x: 0, y: 4 },
             datasource: lokiDataSourceJson,
             targets: [
               {
-                expr: '{service_name=~".+"}',
+                expr: '{service=~"$service", environment=~"$environment"} |= "$search"',
                 datasource: lokiDataSourceJson,
               },
             ],
@@ -254,6 +263,39 @@ export class CommonInfra extends OyasaiTerraformStack {
             },
           },
         ],
+        templating: {
+          list: [
+            {
+              name: "service",
+              type: "query",
+              query: 'label_values(service)',
+              datasource: lokiDataSourceJson,
+              multi: true,
+              includeAll: true,
+              allValue: ".+",
+              refresh: 2,
+              sort: 1,
+            },
+            {
+              name: "environment",
+              type: "query",
+              query: 'label_values(environment)',
+              datasource: lokiDataSourceJson,
+              multi: true,
+              includeAll: true,
+              allValue: ".+",
+              refresh: 2,
+              sort: 1,
+              value: "master",
+            },
+            {
+              name: "search",
+              type: "textbox",
+              query: "",
+              hide: 0,
+            },
+          ],
+        },
       }),
     });
   }
