@@ -155,10 +155,12 @@ internal class EditInteractionListener(
     holdEditor.stop(player.uniqueId)
     val hitInsideBlock = ray.hitPosition.clone().subtract(block.location.toVector())
     if (handEditing) {
-      val blockEntityPresent = when (data.material.name) {
-        "BELL", "ENCHANTING_TABLE" -> BlockEntityAccess.hasBody(block)
-        else -> true
-      }
+      val blockEntityPresent =
+          when (data.material.name) {
+            "BELL",
+            "ENCHANTING_TABLE" -> BlockEntityAccess.hasBody(block)
+            else -> true
+          }
       val result = handEditor.edit(data, hitInsideBlock, ray.hitBlockFace, blockEntityPresent)
       if (result != null) {
         applyHandEdit(player, block, result)

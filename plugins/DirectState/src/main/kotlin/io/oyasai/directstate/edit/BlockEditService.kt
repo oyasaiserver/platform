@@ -18,7 +18,11 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
 /** どのブロックを、どの状態へ変更するかを表す一件の編集要求。 */
-internal data class BlockEdit(val block: Block, val data: BlockData, val blockEntityPresent: Boolean? = null)
+internal data class BlockEdit(
+    val block: Block,
+    val data: BlockData,
+    val blockEntityPresent: Boolean? = null,
+)
 
 /** 編集の適用、更新抑制との連携、連続操作ログの集約。 */
 internal class BlockEditService(
@@ -61,7 +65,8 @@ internal class BlockEditService(
             .distinctBy { edit -> edit.block.location }
             .filter {
               edit.block.blockData.asString != edit.data.asString ||
-                  edit.blockEntityPresent?.let { it != BlockEntityAccess.hasBody(edit.block) } == true
+                  edit.blockEntityPresent?.let { it != BlockEntityAccess.hasBody(edit.block) } ==
+                      true
             }
     if (edits.isEmpty()) return
     updateMode.beforeEdit(player, edits.map { edit -> edit.block })
