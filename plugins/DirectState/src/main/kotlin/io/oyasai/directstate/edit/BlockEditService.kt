@@ -63,7 +63,7 @@ internal class BlockEditService(
     val edits =
         requested
             .distinctBy { edit -> edit.block.location }
-            .filter {
+            .filter { edit ->
               edit.block.blockData.asString != edit.data.asString ||
                   edit.blockEntityPresent?.let { it != BlockEntityAccess.hasBody(edit.block) } ==
                       true

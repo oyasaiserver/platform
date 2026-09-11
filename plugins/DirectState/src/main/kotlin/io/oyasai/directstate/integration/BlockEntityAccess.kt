@@ -31,3 +31,5 @@ internal object BlockEntityAccess {
     }
     chunk.javaClass.getMethod("markUnsaved").invoke(chunk)
     block.world.refreshChunk(block.x shr 4, block.z shr 4)
+  }
+}
