@@ -22,6 +22,12 @@ docker.arch = "amd64"
 fetch.docker = "itzg/mc-backup"
 src.container = "itzg/mc-backup"
 
+[mc-monitor]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "itzg/mc-monitor"
+src.container = "itzg/mc-monitor"
+
 [mysql-backup]
 docker.os = "linux"
 docker.arch = "amd64"
