@@ -10,72 +10,65 @@ import org.bukkit.entity.Player
 object MainMenuScreens {
 
   fun mySongs(plugin: OyasaiMusic, menuManager: MenuManager, viewer: Player): SongListMenu =
-      SongListMenu(
-          plugin,
-          menuManager,
-          viewer,
-          title = "自作楽曲一覧",
-          availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.TITLE_ASC),
-          initialSort = SongSort.CREATED_AT_DESC,
-          ownTab = NavTab.MY_SONGS,
-      ) { sort, limit, offset ->
-        plugin.songRepository
-            .findByAuthor(viewer.uniqueId, includeDrafts = true)
-            .sortedWith(sortComparator(sort))
-            .drop(offset)
-            .take(limit)
-      }
+    SongListMenu(
+      plugin,
+      menuManager,
+      viewer,
+      title = "自作楽曲一覧",
+      availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
+      initialSort = SongSort.CREATED_AT_DESC,
+      ownTab = NavTab.MY_SONGS,
+    ) { sort, limit, offset ->
+      plugin.songRepository
+        .findByAuthor(viewer.uniqueId, includeDrafts = true)
+        .sortedWith(sort.comparator())
+        .drop(offset)
+        .take(limit)
+    }
 
   fun allSongs(plugin: OyasaiMusic, menuManager: MenuManager, viewer: Player): SongListMenu =
-      SongListMenu(
-          plugin,
-          menuManager,
-          viewer,
-          title = "全楽曲一覧",
-          availableSorts =
-              listOf(
-                  SongSort.CREATED_AT_DESC,
-                  SongSort.TITLE_ASC,
-                  SongSort.LIKES_DESC,
-                  SongSort.VIEWS_DESC,
-              ),
-          initialSort = SongSort.CREATED_AT_DESC,
-          ownTab = NavTab.ALL_SONGS,
-      ) { sort, limit, offset ->
-        mergeOwnDrafts(plugin, viewer, offset, limit, titleFilter = null) { o, l ->
-          plugin.songRepository.searchPublished(sort = sort, limit = l, offset = o)
-        }
+    SongListMenu(
+      plugin,
+      menuManager,
+      viewer,
+      title = "全楽曲一覧",
+      availableSorts =
+        listOf(
+          SongSort.CREATED_AT_DESC,
+          SongSort.ID_ASC,
+          SongSort.TITLE_ASC,
+          SongSort.LIKES_DESC,
+          SongSort.VIEWS_DESC,
+        ),
+      initialSort = SongSort.CREATED_AT_DESC,
+      ownTab = NavTab.ALL_SONGS,
+    ) { sort, limit, offset ->
+      mergeOwnDrafts(plugin, viewer, offset, limit, titleFilter = null, sort = sort) { o, l ->
+        plugin.songRepository.searchPublished(sort = sort, limit = l, offset = o)
       }
+    }
 
   fun authorWorks(
-      plugin: OyasaiMusic,
-      menuManager: MenuManager,
-      viewer: Player,
-      authorUuid: UUID,
-      authorName: String,
+    plugin: OyasaiMusic,
+    menuManager: MenuManager,
+    viewer: Player,
+    authorUuid: UUID,
+    authorName: String,
   ): SongListMenu =
-      SongListMenu(
-          plugin,
-          menuManager,
-          viewer,
-          title = "$authorName の作品",
-          availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.TITLE_ASC),
-          initialSort = SongSort.CREATED_AT_DESC,
-      ) { sort, limit, offset ->
-        plugin.songRepository
-            .findByAuthor(authorUuid, includeDrafts = false)
-            .sortedWith(sortComparator(sort))
-            .drop(offset)
-            .take(limit)
-      }
-
-  private fun sortComparator(sort: SongSort): Comparator<Song> =
-      when (sort) {
-        SongSort.TITLE_ASC -> compareBy { it.title }
-        SongSort.LIKES_DESC -> compareByDescending { it.likes }
-        SongSort.VIEWS_DESC -> compareByDescending { it.views }
-        else -> compareByDescending { it.createdAt }
-      }
+    SongListMenu(
+      plugin,
+      menuManager,
+      viewer,
+      title = "$authorName の作品",
+      availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
+      initialSort = SongSort.CREATED_AT_DESC,
+    ) { sort, limit, offset ->
+      plugin.songRepository
+        .findByAuthor(authorUuid, includeDrafts = false)
+        .sortedWith(sort.comparator())
+        .drop(offset)
+        .take(limit)
+    }
 
   /**
    * 公開楽曲を表示する一覧へ、閲覧者本人の下書きだけを先頭に追加する。 下書きは録音直後の設定画面へ移動しやすくするためで、アイコンの描画は
@@ -84,23 +77,24 @@ object MainMenuScreens {
    * 下書きと公開曲を単一の仮想リストとしてページングするため、下書きがページを埋めても 次ページの公開曲を飛ばさない。
    */
   fun mergeOwnDrafts(
-      plugin: OyasaiMusic,
-      viewer: Player,
-      offset: Int,
-      limit: Int,
-      titleFilter: String?,
-      publishedLoader: (offset: Int, limit: Int) -> List<Song>,
+    plugin: OyasaiMusic,
+    viewer: Player,
+    offset: Int,
+    limit: Int,
+    titleFilter: String?,
+    sort: SongSort = SongSort.CREATED_AT_DESC,
+    publishedLoader: (offset: Int, limit: Int) -> List<Song>,
   ): List<Song> {
     val myDrafts =
-        plugin.songRepository
-            .findByAuthor(viewer.uniqueId, includeDrafts = true)
-            .filter { !it.published }
-            .let { drafts ->
-              if (titleFilter != null)
-                  drafts.filter { it.title.contains(titleFilter, ignoreCase = true) }
-              else drafts
-            }
-            .sortedByDescending { it.createdAt }
+      plugin.songRepository
+        .findByAuthor(viewer.uniqueId, includeDrafts = true)
+        .filter { !it.published }
+        .let { drafts ->
+          if (titleFilter != null)
+            drafts.filter { it.title.contains(titleFilter, ignoreCase = true) }
+          else drafts
+        }
+        .sortedWith(sort.comparator())
 
     val draftsForPage = myDrafts.drop(offset).take(limit)
     val remaining = (limit - draftsForPage.size).coerceAtLeast(0)
