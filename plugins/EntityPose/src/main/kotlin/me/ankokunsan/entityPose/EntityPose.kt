@@ -80,6 +80,7 @@ class EntityPose : JavaPlugin() {
     server.pluginManager.registerEvents(EntityClick(), this)
     server.pluginManager.registerEvents(GUIClick(), this)
     server.pluginManager.registerEvents(EntityCopyClick(), this)
+    server.pluginManager.registerEvents(EntityTeamEntryCleanupListener(), this)
   }
 
   override fun onDisable() {
