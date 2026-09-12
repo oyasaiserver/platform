@@ -3,14 +3,13 @@ package com.github.sahyuya.oyasaiMusic.audio
 import com.github.sahyuya.oyasaiMusic.model.Song
 import java.util.UUID
 import java.util.concurrent.CopyOnWriteArraySet
-import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.atomic.AtomicBoolean
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitTask
 
 /**
  * 1回の再生（個人プレイヤー再生 or 環境BGM等の複数人再生）を表すセッション。 [PlaybackEngine.stop] で全スケジュール済みタスクをキャンセルできるよう、
- * スケジュールしたFutureを保持する。
+ * 再生タスクと転送タスクを保持する。
  *
  * 一時停止していない実質再生時間を [elapsedPlaybackMs] で追跡する。実際の スケジュール操作（タスクのキャンセル・再スケジュール）は [PlaybackEngine]
  * 側が行う。
@@ -30,7 +29,7 @@ class PlaybackSession(
   /** Candidates remain vanilla until their exact hash-bound READY acknowledgement succeeds. */
   internal val bufferCandidates: MutableSet<UUID> = CopyOnWriteArraySet()
   internal val ackDeadlinesMillis: MutableMap<UUID, Long> = java.util.concurrent.ConcurrentHashMap()
-  internal val scheduledTasks: MutableList<ScheduledFuture<*>> = mutableListOf()
+  internal var playbackTask: BukkitTask? = null
   internal val outboundTasks: MutableList<BukkitTask> = mutableListOf()
   private val cancelled = AtomicBoolean(false)
 
@@ -41,8 +40,7 @@ class PlaybackSession(
   var isPaused: Boolean = false
     internal set
 
-  private var accumulatedPlayMs: Long = 0
-  private var segmentStartMillis: Long = System.currentTimeMillis()
+  private val clock = PlaybackClock()
   internal var initialDelayMs: Long = 0
   internal var startDeadlineMillis: Long = System.currentTimeMillis()
   internal var routeDecisionDeadlineMillis: Long = System.currentTimeMillis()
@@ -56,30 +54,30 @@ class PlaybackSession(
         (startDeadlineMillis - routeDecisionLeadMs.coerceAtLeast(0)).coerceAtLeast(
             System.currentTimeMillis()
         )
-    segmentStartMillis = startDeadlineMillis
+    clock.startAfter(initialDelayMs)
   }
 
   /** 現在の再生位置（ミリ秒）。一時停止中はその時点の値のまま変化しない。 */
-  fun elapsedPlaybackMs(): Long =
-      (accumulatedPlayMs + if (!isPaused) (System.currentTimeMillis() - segmentStartMillis) else 0)
-          .coerceAtLeast(0)
+  fun elapsedPlaybackMs(): Long = clock.positionMs()
+
+  internal fun hasStarted(): Boolean = clock.hasStarted()
 
   internal fun markPaused() {
     if (isPaused) return
-    accumulatedPlayMs += System.currentTimeMillis() - segmentStartMillis
+    clock.pause()
     isPaused = true
   }
 
-  internal fun markResumed() {
+  internal fun markResumed(delayMs: Long = 500L) {
     if (!isPaused) return
-    segmentStartMillis = System.currentTimeMillis()
+    clock.resumeAfter(delayMs)
     isPaused = false
   }
 
   fun cancel() {
     if (cancelled.compareAndSet(false, true)) {
-      scheduledTasks.forEach { it.cancel(false) }
-      scheduledTasks.clear()
+      playbackTask?.cancel()
+      playbackTask = null
       outboundTasks.forEach { it.cancel() }
       outboundTasks.clear()
     }

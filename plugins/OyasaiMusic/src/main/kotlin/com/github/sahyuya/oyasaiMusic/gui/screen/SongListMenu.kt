@@ -47,6 +47,7 @@ class SongListMenu(
   private var page = 0
   private var pageSongs: List<Song> = emptyList()
   private var hasNextPage = false
+  private var reloadGeneration = 0L
 
   init {
     reload()
@@ -57,15 +58,19 @@ class SongListMenu(
   private fun currentSort(): SongSort = availableSorts[sortIndex]
 
   private fun reload() {
+    val generation = ++reloadGeneration
+    val requestedSort = currentSort()
+    val requestedPage = page
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val songs = loader(currentSort(), PAGE_SIZE + 1, page * PAGE_SIZE)
+              val songs = loader(requestedSort, PAGE_SIZE + 1, requestedPage * PAGE_SIZE)
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
+                        if (generation != reloadGeneration) return@Runnable
                         hasNextPage = songs.size > PAGE_SIZE
                         pageSongs = songs.take(PAGE_SIZE)
                         render()
@@ -162,6 +167,7 @@ class SongListMenu(
       when (sort) {
         SongSort.CREATED_AT_DESC -> "作成日(新しい順)"
         SongSort.CREATED_AT_ASC -> "作成日(古い順)"
+        SongSort.ID_ASC -> "ID順(昇順)"
         SongSort.TITLE_ASC -> "題名(昇順)"
         SongSort.LIKES_DESC -> "総いいね順"
         SongSort.VIEWS_DESC -> "総再生回数順"

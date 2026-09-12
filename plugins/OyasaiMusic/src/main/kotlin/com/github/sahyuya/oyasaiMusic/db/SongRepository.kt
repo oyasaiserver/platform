@@ -308,11 +308,23 @@ class SongRepository(private val db: DatabaseManager) {
 
 /** 全楽曲一覧・検索等で使うソート順。UI/UX設計書 4章の「動的ソート順」に対応。 */
 enum class SongSort(val orderBy: String) {
-  CREATED_AT_DESC("created_at DESC"),
-  CREATED_AT_ASC("created_at ASC"),
+  CREATED_AT_DESC("created_at DESC, id ASC"),
+  CREATED_AT_ASC("created_at ASC, id ASC"),
+  ID_ASC("id ASC"),
   TITLE_ASC("title ASC"),
   LIKES_DESC("likes DESC"),
   VIEWS_DESC("views DESC"),
+  ;
+
+  fun comparator(): Comparator<Song> =
+      when (this) {
+        CREATED_AT_DESC -> compareByDescending<Song> { it.createdAt }.thenBy { it.id }
+        CREATED_AT_ASC -> compareBy<Song> { it.createdAt }.thenBy { it.id }
+        ID_ASC -> compareBy { it.id }
+        TITLE_ASC -> compareBy { it.title }
+        LIKES_DESC -> compareByDescending { it.likes }
+        VIEWS_DESC -> compareByDescending { it.views }
+      }
 }
 
 /**

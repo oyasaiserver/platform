@@ -125,8 +125,12 @@ class SongDetailScreen(
     return GuiItemBuilder(Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13)
         .name(songTitle(song))
         .lore(
-            SongLoreComponents.statistics(song.likes, song.views),
+            *SongLoreComponents.detailStatistics(song.likes, song.views),
             Component.text("BPM: ${song.bpm}", NamedTextColor.GRAY),
+            Component.text(
+                "作成日時: ${SongLoreComponents.creationTime(song.createdAt)} (JST)",
+                NamedTextColor.GRAY,
+            ),
             Component.text("クリックで再生", NamedTextColor.DARK_GRAY),
             *(if (nowPlaying) arrayOf(Component.text("♪ 再生中", NamedTextColor.GREEN))
             else emptyArray()),

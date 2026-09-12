@@ -7,31 +7,11 @@ import com.github.sahyuya.oyasaiMusic.model.Song
 import com.github.sahyuya.oyasaiMusic.util.BedrockUtil
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ThreadFactory
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 
-/**
- * オーディオエンジン（データ・システム設計書 4章）。
- *
- * メインスレッドとは独立した [ScheduledExecutorService] で音符ごとのタイミングを 高精度にスケジュールし、実際の音送信（Bukkit API呼び出し）だけを
- * メインスレッドへ折り返して実行する。
- *
- * デフォルトの再生方式は [PlaybackMode.DEFAULT]（Adventure APIの`Sound.Emitter`）で、
- * 音源をプレイヤー自身に追従させることで移動による音響の乱れを防いでいる。 ステレオ定位(Pan)付きの [PlaybackMode.POSITIONAL]（立体音響再生）は、リスナーごとに
- * 個別選択できるオプション再生として提供する（[modeResolver] 参照）。
- *
- * 再生に必要な文脈（スケール済み音符・Bedrock向け間引き結果・各種コールバック等）を [PlaybackContext] としてセッションIDごとに保持し、[pause]
- * では未発火のタスクを全て キャンセルするだけ、[resume] ではその時点の経過時間から残りの音符・コールバックを 再スケジュールする、という形で実現している。
- *
- * 注意: `Player#playSound` はPaper上で非同期スレッドから呼び出すと `IllegalStateException: Asynchronous play sound!`
- * で例外になることを確認しているため、 メインスレッドへのホップ自体は省略できない。
- */
+/** One bounded game-thread cursor per session; buffered clients dispatch their own notes. */
 class PlaybackEngine(
     private val plugin: Plugin,
     private val bedrockPrefix: String,
@@ -40,17 +20,6 @@ class PlaybackEngine(
     private val lookaheadMs: Long = 35L,
     private val defaultMode: PlaybackMode = PlaybackMode.DEFAULT,
 ) {
-
-  private val threadCounter = AtomicInteger(1)
-  private val executor: ScheduledExecutorService =
-      Executors.newScheduledThreadPool(
-          4,
-          ThreadFactory { r ->
-            Thread(r, "OyasaiMusic-Playback-${threadCounter.getAndIncrement()}").apply {
-              isDaemon = true
-            }
-          },
-      )
 
   /** [pause]/[resume] による再スケジュールに必要な、セッションごとの再生文脈。 */
   private data class PlaybackContext(
@@ -62,6 +31,8 @@ class PlaybackEngine(
       val modeResolver: ((Player) -> PlaybackMode?)?,
       val onListenThresholdReached: ((Player, Song) -> Unit)?,
       val onCompletion: ((PlaybackSession) -> Unit)?,
+      var cursor: Int = 0,
+      var thresholdDelivered: Boolean = false,
   )
 
   private val contexts = ConcurrentHashMap<UUID, PlaybackContext>()
@@ -97,9 +68,11 @@ class PlaybackEngine(
 
     val scale = if (playbackBpm > 0) song.bpm.toDouble() / playbackBpm else 1.0
     val scaledNotes: List<Pair<Int, NoteEvent>> =
-        notes.mapIndexed { index, note ->
-          index to note.copy(timeMs = (note.timeMs * scale).toInt())
-        }
+        notes
+            .mapIndexed { index, note ->
+              index to note.copy(timeMs = (note.timeMs * scale).toInt())
+            }
+            .sortedBy { it.second.timeMs }
     val bedrockSurvivingIndices = computeBedrockSurvivingIndices(scaledNotes)
     val totalDurationMs = scaledNotes.maxOfOrNull { (_, n) -> n.timeMs } ?: 0
 
@@ -126,6 +99,9 @@ class PlaybackEngine(
       // chord from being sent early and then repeated by an already-started client buffer.
       session.startAfter(transferLeadMs, lookaheadMs + 100L)
       queueBuffered(session, buffered, preparedPayload)
+    } else {
+      // Start the clock after preparation, not before sorting/validating a large song.
+      session.startAfter(0L, 0L)
     }
 
     contexts[session.sessionId] =
@@ -140,7 +116,7 @@ class PlaybackEngine(
             onCompletion = onCompletion,
         )
 
-    scheduleFrom(session, fromElapsedMs = 0)
+    schedulePlayback(session)
     return session
   }
 
@@ -148,8 +124,23 @@ class PlaybackEngine(
   fun pause(session: PlaybackSession) {
     if (session.isCancelled || session.isPaused) return
     session.markPaused()
-    session.scheduledTasks.forEach { it.cancel(false) }
-    session.scheduledTasks.clear()
+    session.playbackTask?.cancel()
+    session.playbackTask = null
+    // A not-yet-started buffer has no PAUSE state on the client. Invalidate it so
+    // READY arriving during pause cannot launch audio; resume uses ordinary Paper.
+    session.bufferCandidates.forEach { playerId ->
+      Bukkit.getPlayer(playerId)
+          ?.takeIf { it.isOnline }
+          ?.sendPluginMessage(
+              plugin,
+              PlaybackBuffer.CHANNEL,
+              PlaybackBuffer.envelope(PlaybackBuffer.TYPE_STOP, session.sessionId) { writeByte(0) },
+          )
+      (plugin as? OyasaiMusic)
+          ?.ommtPlaybackClientRegistry
+          ?.removeExpected(playerId, session.sessionId)
+    }
+    session.bufferCandidates.clear()
     sendControl(session, PlaybackBuffer.TYPE_PAUSE) {
       writeInt(session.elapsedPlaybackMs().coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
     }
@@ -164,6 +155,7 @@ class PlaybackEngine(
     session.ackPendingRecipients.forEach { playerId ->
       val deadline =
           System.currentTimeMillis() +
+              500L +
               (session.bufferedFirstNoteMs - resumedPosition).coerceAtLeast(0) +
               START_ACK_GRACE_MS
       session.ackDeadlinesMillis[playerId] = deadline
@@ -175,7 +167,7 @@ class PlaybackEngine(
       writeInt(500)
       writeInt(resumedPosition)
     }
-    scheduleFrom(session, fromElapsedMs = session.elapsedPlaybackMs())
+    schedulePlayback(session)
   }
 
   fun stop(session: PlaybackSession) {
@@ -208,103 +200,70 @@ class PlaybackEngine(
     }
     liveSessions.clear()
     contexts.clear()
-    executor.shutdownNow()
   }
 
-  /**
-   * [fromElapsedMs] 時点以降に鳴るべき音符・コールバックだけを対象にスケジュールする。 初回再生は fromElapsedMs=0 で呼ばれ、[resume]
-   * は一時停止した時点の経過時間で呼ばれる。 同一ミリ秒の音符（和音）は1回のスケジュール/メインスレッドホップにまとめる
-   * （音符ごとに個別スケジュールすると和音のタイミングがズレて聞こえることがあったため）。
-   */
-  private fun scheduleFrom(session: PlaybackSession, fromElapsedMs: Long) {
+  /** Constant task count; cursor and once-only threshold survive pause/resume. */
+  private fun schedulePlayback(session: PlaybackSession) {
     val ctx = contexts[session.sessionId] ?: return
-
-    val groupedByTime: Map<Int, List<Pair<Int, NoteEvent>>> =
-        ctx.scaledNotes
-            .filter { (_, note) -> note.timeMs >= fromElapsedMs }
-            .groupBy { (_, note) -> note.timeMs }
-
-    for ((timeMs, group) in groupedByTime) {
-      val playbackDelay =
-          (timeMs - fromElapsedMs).coerceAtLeast(0) +
-              if (fromElapsedMs == 0L) session.initialDelayMs else 0L
-      // 音の送信自体はメインスレッド必須で、クライアントへ未来時刻を指定するAPIはない。
-      // MODバッファ受信者はdispatchで除外されるため、この先読みはvanilla経路だけに届く。
-      val schedulingDelay = (playbackDelay - lookaheadMs).coerceAtLeast(0)
-      val future =
-          executor.schedule(
-              Runnable {
-                if (session.isCancelled || session.isPaused) return@Runnable
-                Bukkit.getScheduler()
-                    .runTask(
-                        plugin,
-                        Runnable {
-                          for ((index, note) in group) {
-                            dispatch(
-                                note,
-                                index in ctx.bedrockSurvivingIndices,
-                                session,
-                                ctx.mode,
-                                ctx.modeResolver,
-                            )
-                          }
-                        },
-                    )
-              },
-              schedulingDelay,
-              TimeUnit.MILLISECONDS,
-          )
-      session.scheduledTasks.add(future)
-    }
-
-    if (ctx.onListenThresholdReached != null) {
-      val thresholdMs = (ctx.totalDurationMs * 0.8).toLong()
-      if (thresholdMs >= fromElapsedMs) {
-        val delay =
-            thresholdMs - fromElapsedMs + if (fromElapsedMs == 0L) session.initialDelayMs else 0L
-        val future =
-            executor.schedule(
+    session.playbackTask?.cancel()
+    session.playbackTask =
+        Bukkit.getScheduler()
+            .runTaskTimer(
+                plugin,
                 Runnable {
+                  if (
+                      session.isCancelled ||
+                          session.isPaused ||
+                          contexts[session.sessionId] !== ctx ||
+                          !session.hasStarted()
+                  )
+                      return@Runnable
+                  val elapsed = session.elapsedPlaybackMs()
+                  var examined = 0
+                  while (
+                      ctx.cursor < ctx.scaledNotes.size &&
+                          ctx.scaledNotes[ctx.cursor].second.timeMs <= elapsed &&
+                          examined < 4096
+                  ) {
+                    val (index, note) = ctx.scaledNotes[ctx.cursor++]
+                    examined++
+                    if (note.volume > 0)
+                        dispatch(
+                            note,
+                            index in ctx.bedrockSurvivingIndices,
+                            session,
+                            ctx.mode,
+                            ctx.modeResolver,
+                        )
+                  }
+                  if (!ctx.thresholdDelivered && elapsed >= (ctx.totalDurationMs * 0.8).toLong()) {
+                    ctx.thresholdDelivered = true
+                    session.recipients.forEach { uuid ->
+                      Bukkit.getPlayer(uuid)
+                          ?.takeIf { it.isOnline }
+                          ?.let { ctx.onListenThresholdReached?.invoke(it, ctx.song) }
+                    }
+                  }
                   if (session.isCancelled || session.isPaused) return@Runnable
-                  Bukkit.getScheduler()
-                      .runTask(
-                          plugin,
-                          Runnable {
-                            for (uuid in session.recipients) {
-                              val player = Bukkit.getPlayer(uuid) ?: continue
-                              if (player.isOnline)
-                                  ctx.onListenThresholdReached.invoke(player, ctx.song)
-                            }
-                          },
-                      )
+                  if (
+                      ctx.cursor == ctx.scaledNotes.size &&
+                          elapsed >= ctx.totalDurationMs.toLong() + 50L
+                  ) {
+                    session.playbackTask?.cancel()
+                    session.playbackTask = null
+                    contexts.remove(session.sessionId)
+                    liveSessions.remove(session.sessionId)
+                    (plugin as? OyasaiMusic)
+                        ?.ommtPlaybackClientRegistry
+                        ?.removeExpected(session.sessionId)
+                    session.outboundTasks.forEach { it.cancel() }
+                    session.outboundTasks.clear()
+                    ctx.onCompletion?.invoke(session)
+                  }
                 },
-                delay,
-                TimeUnit.MILLISECONDS,
+                0L,
+                1L,
             )
-        session.scheduledTasks.add(future)
-      }
-    }
-
-    // onCompletion が無い再生でも文脈を必ず解放する。解放しないと単発再生のたびに
-    // contexts が残り続け、長時間稼働時にメモリリークとなる。
-    val delay =
-        (ctx.totalDurationMs.toLong() + 50L - fromElapsedMs).coerceAtLeast(0) +
-            if (fromElapsedMs == 0L) session.initialDelayMs else 0L
-    val future =
-        executor.schedule(
-            Runnable {
-              if (session.isCancelled || session.isPaused) return@Runnable
-              contexts.remove(session.sessionId)
-              liveSessions.remove(session.sessionId)
-              (plugin as? OyasaiMusic)
-                  ?.ommtPlaybackClientRegistry
-                  ?.removeExpected(session.sessionId)
-              Bukkit.getScheduler().runTask(plugin, Runnable { ctx.onCompletion?.invoke(session) })
-            },
-            delay,
-            TimeUnit.MILLISECONDS,
-        )
-    session.scheduledTasks.add(future)
   }
 
   private fun dispatch(
@@ -314,6 +273,7 @@ class PlaybackEngine(
       fallbackMode: PlaybackMode,
       modeResolver: ((Player) -> PlaybackMode?)?,
   ) {
+    if (session.isCancelled || session.isPaused) return
     for (uuid in session.recipients) {
       val player = Bukkit.getPlayer(uuid) ?: continue
       if (!player.isOnline) continue
@@ -331,37 +291,6 @@ class PlaybackEngine(
       val isBedrockPlayer = BedrockUtil.isBedrock(player, bedrockPrefix)
       if (isBedrockPlayer && !bedrock) continue // 和音間引きでこのプレイヤー種別からは間引かれた音
       val mode = modeResolver?.invoke(player) ?: fallbackMode
-      if (uuid in session.paperFallbackRecipients) {
-        val remaining = note.timeMs.toLong() - session.elapsedPlaybackMs()
-        if (remaining > 0L) {
-          val future =
-              executor.schedule(
-                  Runnable {
-                    if (session.isCancelled || session.isPaused) return@Runnable
-                    Bukkit.getScheduler()
-                        .runTask(
-                            plugin,
-                            Runnable {
-                              val current = Bukkit.getPlayer(uuid) ?: return@Runnable
-                              if (current.isOnline && uuid in session.paperFallbackRecipients) {
-                                playRecipient(
-                                    current,
-                                    note,
-                                    mode,
-                                    isBedrockPlayer,
-                                    allowExtended = false,
-                                )
-                              }
-                            },
-                        )
-                  },
-                  remaining,
-                  TimeUnit.MILLISECONDS,
-              )
-          session.scheduledTasks.add(future)
-          continue
-        }
-      }
       playRecipient(
           player,
           note,

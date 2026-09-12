@@ -15,13 +15,13 @@ object MainMenuScreens {
           menuManager,
           viewer,
           title = "自作楽曲一覧",
-          availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.TITLE_ASC),
+          availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
           initialSort = SongSort.CREATED_AT_DESC,
           ownTab = NavTab.MY_SONGS,
       ) { sort, limit, offset ->
         plugin.songRepository
             .findByAuthor(viewer.uniqueId, includeDrafts = true)
-            .sortedWith(sortComparator(sort))
+            .sortedWith(sort.comparator())
             .drop(offset)
             .take(limit)
       }
@@ -35,6 +35,7 @@ object MainMenuScreens {
           availableSorts =
               listOf(
                   SongSort.CREATED_AT_DESC,
+                  SongSort.ID_ASC,
                   SongSort.TITLE_ASC,
                   SongSort.LIKES_DESC,
                   SongSort.VIEWS_DESC,
@@ -42,7 +43,7 @@ object MainMenuScreens {
           initialSort = SongSort.CREATED_AT_DESC,
           ownTab = NavTab.ALL_SONGS,
       ) { sort, limit, offset ->
-        mergeOwnDrafts(plugin, viewer, offset, limit, titleFilter = null) { o, l ->
+        mergeOwnDrafts(plugin, viewer, offset, limit, titleFilter = null, sort = sort) { o, l ->
           plugin.songRepository.searchPublished(sort = sort, limit = l, offset = o)
         }
       }
@@ -59,22 +60,14 @@ object MainMenuScreens {
           menuManager,
           viewer,
           title = "$authorName の作品",
-          availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.TITLE_ASC),
+          availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
           initialSort = SongSort.CREATED_AT_DESC,
       ) { sort, limit, offset ->
         plugin.songRepository
             .findByAuthor(authorUuid, includeDrafts = false)
-            .sortedWith(sortComparator(sort))
+            .sortedWith(sort.comparator())
             .drop(offset)
             .take(limit)
-      }
-
-  private fun sortComparator(sort: SongSort): Comparator<Song> =
-      when (sort) {
-        SongSort.TITLE_ASC -> compareBy { it.title }
-        SongSort.LIKES_DESC -> compareByDescending { it.likes }
-        SongSort.VIEWS_DESC -> compareByDescending { it.views }
-        else -> compareByDescending { it.createdAt }
       }
 
   /**
@@ -89,6 +82,7 @@ object MainMenuScreens {
       offset: Int,
       limit: Int,
       titleFilter: String?,
+      sort: SongSort = SongSort.CREATED_AT_DESC,
       publishedLoader: (offset: Int, limit: Int) -> List<Song>,
   ): List<Song> {
     val myDrafts =
@@ -100,7 +94,7 @@ object MainMenuScreens {
                   drafts.filter { it.title.contains(titleFilter, ignoreCase = true) }
               else drafts
             }
-            .sortedByDescending { it.createdAt }
+            .sortedWith(sort.comparator())
 
     val draftsForPage = myDrafts.drop(offset).take(limit)
     val remaining = (limit - draftsForPage.size).coerceAtLeast(0)

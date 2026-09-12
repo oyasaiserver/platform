@@ -93,7 +93,8 @@ class SearchMenuScreen(
                         menuManager,
                         viewer,
                         title = "題名検索: $text",
-                        availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.TITLE_ASC),
+                        availableSorts =
+                            listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
                         initialSort = SongSort.CREATED_AT_DESC,
                     ) { sort, limit, offset ->
                       MainMenuScreens.mergeOwnDrafts(
@@ -102,6 +103,7 @@ class SearchMenuScreen(
                           offset,
                           limit,
                           titleFilter = text,
+                          sort = sort,
                       ) { o, l ->
                         plugin.songRepository.searchPublished(
                             titleLike = text,

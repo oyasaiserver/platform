@@ -339,7 +339,15 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       nowPlayingBars[player.uniqueId]?.let { bar ->
         val style = bossBarStyle(updatedSong.recordMaterial)
         val authorName = Bukkit.getOfflinePlayer(updatedSong.authorUuid).name ?: "不明"
-        bar.name(nowPlayingName(updatedSong.title, authorName, style.textColor))
+        bar.name(
+            nowPlayingName(
+                updatedSong.title,
+                authorName,
+                style.textColor,
+                state.activeSession?.elapsedPlaybackMs() ?: 0,
+                (nowPlayingDurations[player.uniqueId] ?: 0).toLong(),
+            )
+        )
         bar.color(style.barColor)
       }
     }
@@ -407,7 +415,13 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     val authorName = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     val bar =
         BossBar.bossBar(
-            nowPlayingName(song.title, authorName, style.textColor),
+            nowPlayingName(
+                song.title,
+                authorName,
+                style.textColor,
+                session.elapsedPlaybackMs(),
+                durationMs.toLong(),
+            ),
             0f,
             style.barColor,
             BossBar.Overlay.PROGRESS,
@@ -415,6 +429,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     nowPlayingBars[viewer.uniqueId] = bar
     viewer.showBossBar(bar)
     val safeDuration = durationMs.coerceAtLeast(1).toLong()
+    var lastSecond = -1L
     bossBarTasks[viewer.uniqueId] =
         Bukkit.getScheduler()
             .runTaskTimer(
@@ -430,6 +445,23 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                   ) {
                     hideNowPlayingBar(viewer)
                     return@Runnable
+                  }
+                  val elapsed = session.elapsedPlaybackMs().coerceIn(0L, safeDuration)
+                  if (elapsed / 1000L != lastSecond) {
+                    lastSecond = elapsed / 1000L
+                    val currentSong =
+                        plugin.controllerStateService.stateFor(viewer.uniqueId).nowPlayingSong
+                            ?: song
+                    val currentStyle = bossBarStyle(currentSong.recordMaterial)
+                    bar.name(
+                        nowPlayingName(
+                            currentSong.title,
+                            authorName,
+                            currentStyle.textColor,
+                            elapsed,
+                            durationMs.toLong(),
+                        )
+                    )
                   }
                   bar.progress(
                       (session.elapsedPlaybackMs().toDouble() / safeDuration)
@@ -492,10 +524,18 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       title: String,
       authorName: String,
       defaultColor: TextColor,
+      elapsedMs: Long,
+      durationMs: Long,
   ): Component =
       Component.text("♪ ", defaultColor)
           .append(Component.text(title, defaultColor).decoration(TextDecoration.ITALIC, false))
-          .append(Component.text(" - $authorName", defaultColor))
+          .append(
+              Component.text(
+                  " - $authorName " +
+                      com.github.sahyuya.oyasaiMusic.audio.playbackTimeLabel(elapsedMs, durationMs),
+                  defaultColor,
+              )
+          )
 
   private fun bossBarStyle(recordMaterial: String): RecordBossBarStyle =
       when (recordMaterial.uppercase()) {
