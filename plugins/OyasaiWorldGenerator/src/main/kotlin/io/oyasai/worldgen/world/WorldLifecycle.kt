@@ -114,7 +114,7 @@ class WorldLifecycle(
       val supported = (heightProvider as? NmsHeightProvider)?.isSupportedServer() ?: true
       if (!supported) {
         startupInspectionPassed = false
-        sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 build 2622 のみです")
+        sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 build 2622/2593 のみです")
         return false
       }
       if (currentConfig.worlds.isEmpty() || currentConfig.validationErrors.isNotEmpty()) {

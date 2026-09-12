@@ -22,7 +22,7 @@ import org.bukkit.craftbukkit.CraftWorld
 import sun.misc.Unsafe
 
 class NmsHeightProvider(private val logger: Logger) : HeightProvider {
-  override val name: String = "NMS/Purpur-26.2-build.2622"
+  override val name: String = "NMS/Purpur-26.2-build.2622|2593"
 
   private val declarations = ConcurrentHashMap<String, HeightSpec>()
   private val unsafe: Unsafe by lazy { resolveUnsafe() }
@@ -38,7 +38,7 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     val spec = declarations[world.name] ?: return false
     if (!isSupportedServer()) {
       logger.severe(
-          "[OWG][height] Refusing to patch ${world.name}: expected Purpur 26.2 build 2622, got ${runtimeVersion()}"
+          "[OWG][height] Refusing to patch ${world.name}: expected Purpur 26.2 build 2622|2593, got ${runtimeVersion()}"
       )
       return false
     }
@@ -663,6 +663,6 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
 
   companion object {
     private const val SUPPORTED_MINECRAFT_VERSION = "26.2"
-    private val SUPPORTED_PURPUR_BUILDS = setOf("2622")
+    private val SUPPORTED_PURPUR_BUILDS = setOf("2622", "2593")
   }
 }
