@@ -14,8 +14,8 @@ internal class PlaybackClock(private val now: () -> Long = System::nanoTime) {
 
   fun hasStarted(): Boolean = !paused && now() - segmentNanos >= 0L
 
-  fun positionMs(): Long = accumulatedMs +
-    if (paused) 0L else ((now() - segmentNanos) / 1_000_000L).coerceAtLeast(0L)
+  fun positionMs(): Long =
+      accumulatedMs + if (paused) 0L else ((now() - segmentNanos) / 1_000_000L).coerceAtLeast(0L)
 
   fun pause() {
     if (paused) return
@@ -34,8 +34,9 @@ internal fun playbackTimeLabel(positionMs: Long, durationMs: Long): String {
   val duration = durationMs.coerceAtLeast(0)
   fun time(ms: Long): String {
     val seconds = ms / 1000L
-    return (seconds / 60L).toString().padStart(2, '0') + ":" +
-      (seconds % 60L).toString().padStart(2, '0')
+    return (seconds / 60L).toString().padStart(2, '0') +
+        ":" +
+        (seconds % 60L).toString().padStart(2, '0')
   }
   return "[${time(positionMs.coerceIn(0L, duration))} / ${time(duration)}]"
 }

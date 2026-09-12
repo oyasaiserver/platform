@@ -15,9 +15,9 @@ import org.bukkit.scheduler.BukkitTask
  * 側が行う。
  */
 class PlaybackSession(
-  val sessionId: UUID = UUID.randomUUID(),
-  val song: Song,
-  initialRecipients: Collection<Player>,
+    val sessionId: UUID = UUID.randomUUID(),
+    val song: Song,
+    initialRecipients: Collection<Player>,
 ) {
   val recipients: MutableSet<UUID> = CopyOnWriteArraySet(initialRecipients.map { it.uniqueId })
   /** Recipients with a verified local buffer; vanilla pre-play and normal dispatch exclude them. */
@@ -51,9 +51,9 @@ class PlaybackSession(
     initialDelayMs = delayMs.coerceAtLeast(0)
     startDeadlineMillis = System.currentTimeMillis() + initialDelayMs
     routeDecisionDeadlineMillis =
-      (startDeadlineMillis - routeDecisionLeadMs.coerceAtLeast(0)).coerceAtLeast(
-        System.currentTimeMillis()
-      )
+        (startDeadlineMillis - routeDecisionLeadMs.coerceAtLeast(0)).coerceAtLeast(
+            System.currentTimeMillis()
+        )
     clock.startAfter(initialDelayMs)
   }
 

@@ -24,18 +24,18 @@ private val SONG_ID_KEY = NamespacedKey("oyasaimusic", "song_id")
  * 再生は[PlaybackController]に一本化している（各画面が個別にPlaybackEngineを呼ぶと、 再生状態の再描画漏れ等の不具合の温床になっていたため）。
  */
 class SongListMenu(
-  private val plugin: OyasaiMusic,
-  private val menuManager: MenuManager,
-  viewer: Player,
-  title: String,
-  private val availableSorts: List<SongSort>,
-  initialSort: SongSort,
-  /**
-   * このリストが左列タブのどれに属するか（自作楽曲一覧=MY_SONGS、全楽曲一覧=ALL_SONGS）。 検索結果・作者作品一覧のようにタブに直接紐づかない場合はnull。
-   * 同じタブを再クリックした際にメインメニューへ戻る挙動([NavTabRouter])に使う。
-   */
-  private val ownTab: NavTab? = null,
-  private val loader: (sort: SongSort, limit: Int, offset: Int) -> List<Song>,
+    private val plugin: OyasaiMusic,
+    private val menuManager: MenuManager,
+    viewer: Player,
+    title: String,
+    private val availableSorts: List<SongSort>,
+    initialSort: SongSort,
+    /**
+     * このリストが左列タブのどれに属するか（自作楽曲一覧=MY_SONGS、全楽曲一覧=ALL_SONGS）。 検索結果・作者作品一覧のようにタブに直接紐づかない場合はnull。
+     * 同じタブを再クリックした際にメインメニューへ戻る挙動([NavTabRouter])に使う。
+     */
+    private val ownTab: NavTab? = null,
+    private val loader: (sort: SongSort, limit: Int, offset: Int) -> List<Song>,
 ) : BaseGridMenu(viewer, Component.text(title)) {
 
   companion object {
@@ -62,34 +62,34 @@ class SongListMenu(
     val requestedSort = currentSort()
     val requestedPage = page
     Bukkit.getScheduler()
-      .runTaskAsynchronously(
-        plugin,
-        Runnable {
-          val songs = loader(requestedSort, PAGE_SIZE + 1, requestedPage * PAGE_SIZE)
-          Bukkit.getScheduler()
-            .runTask(
-              plugin,
-              Runnable {
-                if (generation != reloadGeneration) return@Runnable
-                hasNextPage = songs.size > PAGE_SIZE
-                pageSongs = songs.take(PAGE_SIZE)
-                render()
-              },
-            )
-        },
-      )
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val songs = loader(requestedSort, PAGE_SIZE + 1, requestedPage * PAGE_SIZE)
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (generation != reloadGeneration) return@Runnable
+                        hasNextPage = songs.size > PAGE_SIZE
+                        pageSongs = songs.take(PAGE_SIZE)
+                        render()
+                      },
+                  )
+            },
+        )
   }
 
   private fun render() {
     val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
     GuiChrome.render(
-      inventory,
-      ownTab,
-      state,
-      sortLabel = sortDisplayName(currentSort()),
-      viewer = viewer,
-      plugin = plugin,
-      actionModeCategory = ActionModeCategory.SONG_LIST,
+        inventory,
+        ownTab,
+        state,
+        sortLabel = sortDisplayName(currentSort()),
+        viewer = viewer,
+        plugin = plugin,
+        actionModeCategory = ActionModeCategory.SONG_LIST,
     )
 
     LIST_SLOTS.forEachIndexed { index, slot ->
@@ -97,12 +97,12 @@ class SongListMenu(
     }
     // 検索結果・作者作品一覧は40枠をすべて使うため、1ページ目ではページ戻り欄を戻るにする。
     if (ownTab == null && page == 0)
-      inventory.setItem(ControllerSlots.PAGE_PREV, GuiChrome.backControllerButton())
+        inventory.setItem(ControllerSlots.PAGE_PREV, GuiChrome.backControllerButton())
   }
 
   private fun songIcon(
-    song: Song,
-    state: com.github.sahyuya.oyasaiMusic.gui.PlayerControllerState,
+      song: Song,
+      state: com.github.sahyuya.oyasaiMusic.gui.PlayerControllerState,
   ): org.bukkit.inventory.ItemStack {
     val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
     val nowPlaying = state.isPlaying && state.nowPlayingSong?.id == song.id
@@ -113,72 +113,72 @@ class SongListMenu(
     // レコードの欠片(DISC_FRAGMENT_5)で視覚的に区別する（サヒュヤ氏の指示で追加）。
     if (!song.published) {
       val lore: MutableList<Component> =
-        mutableListOf(
-          SongLoreComponents.author(authorName),
-          Component.text("非公開（自分だけに表示）", NamedTextColor.DARK_GRAY),
-        )
+          mutableListOf(
+              SongLoreComponents.author(authorName),
+              Component.text("非公開（自分だけに表示）", NamedTextColor.DARK_GRAY),
+          )
       lore +=
-        ActionLoreBuilder.build(
-          viewer,
-          prefix,
-          ActionModeCategory.SONG_LIST,
-          "試聴",
-          "設定を開く",
-          "-",
-          "-",
-        )
+          ActionLoreBuilder.build(
+              viewer,
+              prefix,
+              ActionModeCategory.SONG_LIST,
+              "試聴",
+              "設定を開く",
+              "-",
+              "-",
+          )
       if (nowPlaying) lore += Component.text("♪ 再生中", NamedTextColor.GREEN)
       return GuiItemBuilder(Material.DISC_FRAGMENT_5)
-        .name(Component.text("[下書き] ", NamedTextColor.GRAY).append(songTitle(song)))
+          .name(Component.text("[下書き] ", NamedTextColor.GRAY).append(songTitle(song)))
+          .lore(lore)
+          .glint(nowPlaying)
+          .tag(SONG_ID_KEY, (song.id ?: -1).toString())
+          .build()
+    }
+
+    val lore: MutableList<Component> =
+        mutableListOf(
+            SongLoreComponents.author(authorName),
+            SongLoreComponents.statistics(song.likes, song.views),
+        )
+    lore +=
+        ActionLoreBuilder.build(
+            viewer,
+            prefix,
+            ActionModeCategory.SONG_LIST,
+            "再生",
+            "詳細",
+            "いいね",
+            "お気に入り追加",
+        )
+    if (nowPlaying) lore += Component.text("♪ 再生中", NamedTextColor.GREEN)
+    return GuiItemBuilder(materialFor(song.recordMaterial))
+        .name(songTitle(song))
         .lore(lore)
         .glint(nowPlaying)
         .tag(SONG_ID_KEY, (song.id ?: -1).toString())
         .build()
-    }
-
-    val lore: MutableList<Component> =
-      mutableListOf(
-        SongLoreComponents.author(authorName),
-        SongLoreComponents.statistics(song.likes, song.views),
-      )
-    lore +=
-      ActionLoreBuilder.build(
-        viewer,
-        prefix,
-        ActionModeCategory.SONG_LIST,
-        "再生",
-        "詳細",
-        "いいね",
-        "お気に入り追加",
-      )
-    if (nowPlaying) lore += Component.text("♪ 再生中", NamedTextColor.GREEN)
-    return GuiItemBuilder(materialFor(song.recordMaterial))
-      .name(songTitle(song))
-      .lore(lore)
-      .glint(nowPlaying)
-      .tag(SONG_ID_KEY, (song.id ?: -1).toString())
-      .build()
   }
 
   private fun materialFor(recordMaterial: String): Material =
-    Material.matchMaterial(recordMaterial) ?: Material.MUSIC_DISC_13
+      Material.matchMaterial(recordMaterial) ?: Material.MUSIC_DISC_13
 
   private fun sortDisplayName(sort: SongSort): String =
-    when (sort) {
-      SongSort.CREATED_AT_DESC -> "作成日(新しい順)"
-      SongSort.CREATED_AT_ASC -> "作成日(古い順)"
-      SongSort.ID_ASC -> "ID順(昇順)"
-      SongSort.TITLE_ASC -> "題名(昇順)"
-      SongSort.LIKES_DESC -> "総いいね順"
-      SongSort.VIEWS_DESC -> "総再生回数順"
-    }
+      when (sort) {
+        SongSort.CREATED_AT_DESC -> "作成日(新しい順)"
+        SongSort.CREATED_AT_ASC -> "作成日(古い順)"
+        SongSort.ID_ASC -> "ID順(昇順)"
+        SongSort.TITLE_ASC -> "題名(昇順)"
+        SongSort.LIKES_DESC -> "総いいね順"
+        SongSort.VIEWS_DESC -> "総再生回数順"
+      }
 
   override fun onClick(event: InventoryClickEvent) {
     val slot = event.rawSlot
     if (
-      NavTabRouter.handle(slot, ownTab, ActionModeCategory.SONG_LIST, plugin, menuManager, viewer)
+        NavTabRouter.handle(slot, ownTab, ActionModeCategory.SONG_LIST, plugin, menuManager, viewer)
     )
-      return
+        return
     if (plugin.playbackController.handleControllerClick(slot, viewer)) return
     when (slot) {
       ControllerSlots.SORT -> {
@@ -187,15 +187,15 @@ class SongListMenu(
         reload()
       }
       ControllerSlots.PAGE_PREV ->
-        if (page > 0) {
-          page--
-          reload()
-        } else if (ownTab == null) menuManager.openPrevious(viewer)
+          if (page > 0) {
+            page--
+            reload()
+          } else if (ownTab == null) menuManager.openPrevious(viewer)
       ControllerSlots.PAGE_NEXT ->
-        if (hasNextPage) {
-          page++
-          reload()
-        }
+          if (hasNextPage) {
+            page++
+            reload()
+          }
       else -> if (slot in LIST_SLOTS) handleSongClick(event, slot)
     }
   }
@@ -214,8 +214,8 @@ class SongListMenu(
       ActionMode.SECONDARY -> {
         // 下書き楽曲は「詳細」ではなく直接「設定」を開く方が実用的なため分岐する。
         if (
-          !song.published &&
-          (song.authorUuid == viewer.uniqueId || viewer.hasPermission("oyasaimusic.admin"))
+            !song.published &&
+                (song.authorUuid == viewer.uniqueId || viewer.hasPermission("oyasaimusic.admin"))
         ) {
           menuManager.open(viewer, SongSettingsScreen(plugin, menuManager, viewer, song))
         } else {
@@ -233,30 +233,30 @@ class SongListMenu(
       return
     }
     Bukkit.getScheduler()
-      .runTaskAsynchronously(
-        plugin,
-        Runnable {
-          val added = plugin.likeService.like(viewer.uniqueId, song)
-          Bukkit.getScheduler()
-            .runTask(
-              plugin,
-              Runnable {
-                if (added) {
-                  GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
-                  plugin.deliverLikeSenderReward(viewer)
-                  Bukkit.getPlayer(song.authorUuid)?.let { author ->
-                    plugin.toastNotificationService.showLikeReceived(
-                      author,
-                      song.title,
-                      viewer.name,
-                    )
-                  }
-                  reload()
-                } else GuiFeedback.invalid(viewer, "既にいいね済みです。")
-              },
-            )
-        },
-      )
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val added = plugin.likeService.like(viewer.uniqueId, song)
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (added) {
+                          GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
+                          plugin.deliverLikeSenderReward(viewer)
+                          Bukkit.getPlayer(song.authorUuid)?.let { author ->
+                            plugin.toastNotificationService.showLikeReceived(
+                                author,
+                                song.title,
+                                viewer.name,
+                            )
+                          }
+                          reload()
+                        } else GuiFeedback.invalid(viewer, "既にいいね済みです。")
+                      },
+                  )
+            },
+        )
   }
 
   private fun favoriteSong(song: Song) {
@@ -298,23 +298,23 @@ class SongListMenu(
 
   private fun playRandomSong(justFinished: Song) {
     Bukkit.getScheduler()
-      .runTaskAsynchronously(
-        plugin,
-        Runnable {
-          val next = plugin.songRepository.randomPublished(excludeId = justFinished.id)
-          Bukkit.getScheduler()
-            .runTask(
-              plugin,
-              Runnable {
-                if (next != null) {
-                  playSong(next)
-                } else {
-                  // 公開楽曲がこの1曲しか無い等のフォールバック: 同じ曲を再度再生する。
-                  playSong(justFinished)
-                }
-              },
-            )
-        },
-      )
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val next = plugin.songRepository.randomPublished(excludeId = justFinished.id)
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (next != null) {
+                          playSong(next)
+                        } else {
+                          // 公開楽曲がこの1曲しか無い等のフォールバック: 同じ曲を再度再生する。
+                          playSong(justFinished)
+                        }
+                      },
+                  )
+            },
+        )
   }
 }
