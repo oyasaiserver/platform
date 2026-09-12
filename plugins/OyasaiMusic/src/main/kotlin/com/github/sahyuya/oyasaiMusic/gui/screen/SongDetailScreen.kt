@@ -16,10 +16,10 @@ import org.bukkit.event.inventory.InventoryClickEvent
 
 /** 楽曲の試聴、作者情報、ソーシャル操作、レコード購入をまとめた詳細画面。 操作項目を優先して配置し、未使用の外周スロットだけを装飾する。 */
 class SongDetailScreen(
-    private val plugin: OyasaiMusic,
-    private val menuManager: MenuManager,
-    viewer: Player,
-    initialSong: Song,
+  private val plugin: OyasaiMusic,
+  private val menuManager: MenuManager,
+  viewer: Player,
+  initialSong: Song,
 ) : BaseGridMenu(viewer, Component.text("楽曲詳細")), SongUpdateAware {
 
   private val previewSlot = 11 // クリックで再生
@@ -37,7 +37,7 @@ class SongDetailScreen(
   private var isFollowing = false
   private var hasLiked = false
   private var currentPlaybackMode: com.github.sahyuya.oyasaiMusic.audio.PlaybackMode =
-      com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.DEFAULT
+    com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.DEFAULT
 
   init {
     render()
@@ -55,39 +55,39 @@ class SongDetailScreen(
 
   private fun loadSocialState() {
     Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              val following =
-                  plugin.socialRepository
-                      .listFollowingUuids(viewer.uniqueId)
-                      .contains(song.authorUuid)
-              val liked = plugin.socialRepository.hasLiked(viewer.uniqueId, requireNotNull(song.id))
-              val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
-              Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        isFollowing = following
-                        hasLiked = liked
-                        currentPlaybackMode = mode
-                        render()
-                      },
-                  )
-            },
-        )
+      .runTaskAsynchronously(
+        plugin,
+        Runnable {
+          val following =
+            plugin.socialRepository
+              .listFollowingUuids(viewer.uniqueId)
+              .contains(song.authorUuid)
+          val liked = plugin.socialRepository.hasLiked(viewer.uniqueId, requireNotNull(song.id))
+          val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
+          Bukkit.getScheduler()
+            .runTask(
+              plugin,
+              Runnable {
+                isFollowing = following
+                hasLiked = liked
+                currentPlaybackMode = mode
+                render()
+              },
+            )
+        },
+      )
   }
 
   private fun render() {
     val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
     GuiChrome.render(
-        inventory,
-        null,
-        state,
-        sortLabel = "-",
-        viewer = viewer,
-        plugin = plugin,
-        actionModeCategory = null,
+      inventory,
+      null,
+      state,
+      sortLabel = "-",
+      viewer = viewer,
+      plugin = plugin,
+      actionModeCategory = null,
     )
 
     inventory.setItem(previewSlot, previewItem(state))
@@ -96,19 +96,19 @@ class SongDetailScreen(
     inventory.setItem(positionalModeSlot, positionalModeItem())
     inventory.setItem(likeSlot, likeItem())
     inventory.setItem(
-        favoriteSlot,
-        GuiItemBuilder(Material.CHISELED_BOOKSHELF)
-            .name(Component.text("お気に入り/プレイリストに追加", NamedTextColor.YELLOW))
-            .build(),
+      favoriteSlot,
+      GuiItemBuilder(Material.CHISELED_BOOKSHELF)
+        .name(Component.text("お気に入り/プレイリストに追加", NamedTextColor.YELLOW))
+        .build(),
     )
     inventory.setItem(buyRecordSlot, buyRecordItem())
     inventory.setItem(referenceUrlSlot, referenceUrlItem())
     if (song.authorUuid == viewer.uniqueId || viewer.hasPermission("oyasaimusic.admin")) {
       inventory.setItem(
-          settingsSlot,
-          GuiItemBuilder(Material.COMPARATOR)
-              .name(Component.text("楽曲設定を開く", NamedTextColor.LIGHT_PURPLE))
-              .build(),
+        settingsSlot,
+        GuiItemBuilder(Material.COMPARATOR)
+          .name(Component.text("楽曲設定を開く", NamedTextColor.LIGHT_PURPLE))
+          .build(),
       )
     } else {
       inventory.setItem(settingsSlot, null)
@@ -119,31 +119,32 @@ class SongDetailScreen(
   }
 
   private fun previewItem(
-      state: com.github.sahyuya.oyasaiMusic.gui.PlayerControllerState
+    state: com.github.sahyuya.oyasaiMusic.gui.PlayerControllerState
   ): org.bukkit.inventory.ItemStack {
     val nowPlaying = state.isPlaying && state.nowPlayingSong?.id == song.id
     return GuiItemBuilder(Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13)
-        .name(songTitle(song))
-        .lore(
-            SongLoreComponents.statistics(song.likes, song.views),
-            Component.text("BPM: ${song.bpm}", NamedTextColor.GRAY),
-            Component.text("クリックで再生", NamedTextColor.DARK_GRAY),
-            *(if (nowPlaying) arrayOf(Component.text("♪ 再生中", NamedTextColor.GREEN))
-            else emptyArray()),
-        )
-        .glint(nowPlaying)
-        .build()
+      .name(songTitle(song))
+      .lore(
+        *SongLoreComponents.detailStatistics(song.likes, song.views),
+        Component.text("BPM: ${song.bpm}", NamedTextColor.GRAY),
+        Component.text("作成日時: ${SongLoreComponents.creationTime(song.createdAt)} (JST)", NamedTextColor.GRAY),
+        Component.text("クリックで再生", NamedTextColor.DARK_GRAY),
+        *(if (nowPlaying) arrayOf(Component.text("♪ 再生中", NamedTextColor.GREEN))
+        else emptyArray()),
+      )
+      .glint(nowPlaying)
+      .build()
   }
 
   private fun buyRecordItem() =
-      GuiItemBuilder(Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13)
-          .name(Component.text("レコードを購入", NamedTextColor.GOLD))
-          .lore(
-              Component.text("価格: ${song.price}円", NamedTextColor.GRAY),
-              Component.text("クリックで購入", NamedTextColor.DARK_GRAY),
-              Component.text("購入額の80%は収益化対象の作者へ還元されます", NamedTextColor.DARK_GRAY),
-          )
-          .build()
+    GuiItemBuilder(Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13)
+      .name(Component.text("レコードを購入", NamedTextColor.GOLD))
+      .lore(
+        Component.text("価格: ${song.price}円", NamedTextColor.GRAY),
+        Component.text("クリックで購入", NamedTextColor.DARK_GRAY),
+        Component.text("購入額の80%は収益化対象の作者へ還元されます", NamedTextColor.DARK_GRAY),
+      )
+      .build()
 
   private fun renderAuthorHead() {
     val authorUuid = song.authorUuid
@@ -157,44 +158,44 @@ class SongDetailScreen(
   }
 
   private fun authorHeadItem(
-      item: org.bukkit.inventory.ItemStack =
-          HeadTextureUtil.placeholderHead(
-              song.authorUuid,
-              Bukkit.getOfflinePlayer(song.authorUuid).name,
-          )
+    item: org.bukkit.inventory.ItemStack =
+      HeadTextureUtil.placeholderHead(
+        song.authorUuid,
+        Bukkit.getOfflinePlayer(song.authorUuid).name,
+      )
   ): org.bukkit.inventory.ItemStack {
     val name = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     val stats = AuthorStatsCache.get(plugin, song.authorUuid) { render() }
     item.editMeta { meta ->
       meta.displayName(SongLoreComponents.author(name).decoration(TextDecoration.ITALIC, false))
       meta.lore(
-          buildList {
-                add(Component.text("クリックで作品一覧へ", NamedTextColor.GRAY))
-                if (stats == null) add(Component.text("統計を読み込み中...", NamedTextColor.DARK_GRAY))
-                else {
-                  add(Component.text("総いいね数: ${stats.totalLikes}", NamedTextColor.GRAY))
-                  add(Component.text("総お気に入り数: ${stats.totalFavorites}", NamedTextColor.GRAY))
-                  add(Component.text("総視聴回数: ${stats.totalViews}", NamedTextColor.GRAY))
-                  add(Component.text("総フォロワー数: ${stats.totalFollowers}", NamedTextColor.GRAY))
-                }
-              }
-              .map { it.decoration(TextDecoration.ITALIC, false) }
+        buildList {
+          add(Component.text("クリックで作品一覧へ", NamedTextColor.GRAY))
+          if (stats == null) add(Component.text("統計を読み込み中...", NamedTextColor.DARK_GRAY))
+          else {
+            add(Component.text("総いいね数: ${stats.totalLikes}", NamedTextColor.GRAY))
+            add(Component.text("総お気に入り数: ${stats.totalFavorites}", NamedTextColor.GRAY))
+            add(Component.text("総視聴回数: ${stats.totalViews}", NamedTextColor.GRAY))
+            add(Component.text("総フォロワー数: ${stats.totalFollowers}", NamedTextColor.GRAY))
+          }
+        }
+          .map { it.decoration(TextDecoration.ITALIC, false) }
       )
     }
     return item
   }
 
   private fun followItem() =
-      GuiItemBuilder(Material.TOTEM_OF_UNDYING)
-          .name(
-              Component.text(
-                  if (isFollowing) "フォロー中" else "フォローする",
-                  if (isFollowing) NamedTextColor.GREEN else NamedTextColor.YELLOW,
-              )
-          )
-          .lore(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
-          .glint(isFollowing)
-          .build()
+    GuiItemBuilder(Material.TOTEM_OF_UNDYING)
+      .name(
+        Component.text(
+          if (isFollowing) "フォロー中" else "フォローする",
+          if (isFollowing) NamedTextColor.GREEN else NamedTextColor.YELLOW,
+        )
+      )
+      .lore(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
+      .glint(isFollowing)
+      .build()
 
   /**
    * 通常(デフォルト)再生 / 立体音響再生の選択（追加項目.txt対応）。 「立体音響再生は楽曲詳細GUIを開いた際に、個々のリスナーが…選べて、その再生方法の選択を
@@ -202,43 +203,43 @@ class SongDetailScreen(
    */
   private fun positionalModeItem(): org.bukkit.inventory.ItemStack {
     val positional =
-        currentPlaybackMode == com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL
+      currentPlaybackMode == com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL
     if (!song.supportsPositional) {
       return GuiItemBuilder(Material.GRAY_DYE)
-          .name(Component.text("通常再生のみ対応", NamedTextColor.DARK_GRAY))
-          .lore(Component.text("この楽曲にはPan指定がありません", NamedTextColor.DARK_GRAY))
-          .build()
+        .name(Component.text("通常再生のみ対応", NamedTextColor.DARK_GRAY))
+        .lore(Component.text("この楽曲にはPan指定がありません", NamedTextColor.DARK_GRAY))
+        .build()
     }
     return GuiItemBuilder(if (positional) Material.ENDER_EYE else Material.ENDER_PEARL)
-        .name(Component.text(if (positional) "立体音響再生" else "通常再生", NamedTextColor.LIGHT_PURPLE))
-        .lore(
-            Component.text("クリックで切替", NamedTextColor.DARK_GRAY),
-            Component.text("(この選択は自分専用に保存されます)", NamedTextColor.DARK_GRAY),
-        )
-        .glint(positional)
-        .build()
+      .name(Component.text(if (positional) "立体音響再生" else "通常再生", NamedTextColor.LIGHT_PURPLE))
+      .lore(
+        Component.text("クリックで切替", NamedTextColor.DARK_GRAY),
+        Component.text("(この選択は自分専用に保存されます)", NamedTextColor.DARK_GRAY),
+      )
+      .glint(positional)
+      .build()
   }
 
   private fun referenceUrlItem() =
-      GuiItemBuilder(Material.SPYGLASS)
-          .name(Component.text("参考リンク", NamedTextColor.YELLOW))
-          .lore(
-              Component.text(song.referenceUrl ?: "未設定", NamedTextColor.GRAY),
-              Component.text("クリックでチャットへ出力", NamedTextColor.DARK_GRAY),
-          )
-          .build()
+    GuiItemBuilder(Material.SPYGLASS)
+      .name(Component.text("参考リンク", NamedTextColor.YELLOW))
+      .lore(
+        Component.text(song.referenceUrl ?: "未設定", NamedTextColor.GRAY),
+        Component.text("クリックでチャットへ出力", NamedTextColor.DARK_GRAY),
+      )
+      .build()
 
   private fun likeItem() =
-      GuiItemBuilder(Material.CHERRY_STAIRS)
-          .name(
-              Component.text(
-                  if (hasLiked) "いいね済み" else "いいね",
-                  if (hasLiked) NamedTextColor.GREEN else NamedTextColor.YELLOW,
-              )
-          )
-          .lore(Component.text("総いいね数: ${song.likes}", NamedTextColor.GRAY))
-          .glint(hasLiked)
-          .build()
+    GuiItemBuilder(Material.CHERRY_STAIRS)
+      .name(
+        Component.text(
+          if (hasLiked) "いいね済み" else "いいね",
+          if (hasLiked) NamedTextColor.GREEN else NamedTextColor.YELLOW,
+        )
+      )
+      .lore(Component.text("総いいね数: ${song.likes}", NamedTextColor.GRAY))
+      .glint(hasLiked)
+      .build()
 
   override fun onClick(event: InventoryClickEvent) {
     val slot = event.rawSlot
@@ -262,30 +263,30 @@ class SongDetailScreen(
       }
       buyRecordSlot -> buyRecord()
       settingsSlot ->
-          if (song.authorUuid == viewer.uniqueId || viewer.hasPermission("oyasaimusic.admin")) {
-            menuManager.open(viewer, SongSettingsScreen(plugin, menuManager, viewer, song))
-          }
+        if (song.authorUuid == viewer.uniqueId || viewer.hasPermission("oyasaimusic.admin")) {
+          menuManager.open(viewer, SongSettingsScreen(plugin, menuManager, viewer, song))
+        }
     }
   }
 
   /** ループ=1曲の場合は再生完了後に同じ曲を再生し直す（サヒュヤ氏の指示「ループはどこでも」対応）。 */
   private fun playSong() {
     plugin.playbackController.play(
-        viewer,
-        song,
-        onCompletion = {
-          val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
-          if (state.loopMode == com.github.sahyuya.oyasaiMusic.gui.LoopMode.SINGLE) {
-            plugin.playbackController.scheduleTrackTransition(viewer) {
-              if (
-                  plugin.controllerStateService.stateFor(viewer.uniqueId).loopMode ==
-                      com.github.sahyuya.oyasaiMusic.gui.LoopMode.SINGLE
-              ) {
-                playSong()
-              }
+      viewer,
+      song,
+      onCompletion = {
+        val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
+        if (state.loopMode == com.github.sahyuya.oyasaiMusic.gui.LoopMode.SINGLE) {
+          plugin.playbackController.scheduleTrackTransition(viewer) {
+            if (
+              plugin.controllerStateService.stateFor(viewer.uniqueId).loopMode ==
+              com.github.sahyuya.oyasaiMusic.gui.LoopMode.SINGLE
+            ) {
+              playSong()
             }
           }
-        },
+        }
+      },
     )
   }
 
@@ -294,11 +295,11 @@ class SongDetailScreen(
     val payment = plugin.economyService.withdraw(viewer, song.price.toLong())
     if (payment !is PayoutResult.Success) {
       val reason =
-          when (payment) {
-            is PayoutResult.Unavailable -> payment.reason
-            is PayoutResult.Failed -> payment.reason
-            PayoutResult.Success -> ""
-          }
+        when (payment) {
+          is PayoutResult.Unavailable -> payment.reason
+          is PayoutResult.Failed -> payment.reason
+          PayoutResult.Success -> ""
+        }
       viewer.sendMessage("§c購入できませんでした: $reason")
       return
     }
@@ -311,21 +312,21 @@ class SongDetailScreen(
     }
 
     val authorShare =
-        (song.price * plugin.config.getDouble("economy.record-sale-author-share", 0.8)).toLong()
+      (song.price * plugin.config.getDouble("economy.record-sale-author-share", 0.8)).toLong()
     Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              plugin.recordSaleRepository.recordSale(
-                  songId = songId,
-                  buyerUuid = viewer.uniqueId,
-                  authorUuid = song.authorUuid,
-                  grossAmount = song.price.toLong(),
-                  authorShare = authorShare,
-                  creditAuthor = song.isMonetizationEligible(),
-              )
-            },
-        )
+      .runTaskAsynchronously(
+        plugin,
+        Runnable {
+          plugin.recordSaleRepository.recordSale(
+            songId = songId,
+            buyerUuid = viewer.uniqueId,
+            authorUuid = song.authorUuid,
+            grossAmount = song.price.toLong(),
+            authorShare = authorShare,
+            creditAuthor = song.isMonetizationEligible(),
+          )
+        },
+      )
     viewer.sendMessage("§aレコードを受け取りました: ${song.title}")
     viewer.sendMessage("§7${song.price}円を支払いました。")
     viewer.sendMessage("§7Shift+右クリックで環境BGM設定（再生範囲/トリガー/ループ）を変更できます。")
@@ -334,32 +335,32 @@ class SongDetailScreen(
   private fun openAuthorProfile() {
     val name = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     menuManager.open(
-        viewer,
-        MainMenuScreens.authorWorks(plugin, menuManager, viewer, song.authorUuid, name),
+      viewer,
+      MainMenuScreens.authorWorks(plugin, menuManager, viewer, song.authorUuid, name),
     )
   }
 
   private fun toggleFollow() {
     Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              if (isFollowing) {
-                plugin.socialRepository.unfollow(viewer.uniqueId, song.authorUuid)
-              } else {
-                plugin.socialRepository.follow(viewer.uniqueId, song.authorUuid)
-              }
-              Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        isFollowing = !isFollowing
-                        viewer.sendMessage(if (isFollowing) "§aフォローしました。" else "§7フォローを解除しました。")
-                        render()
-                      },
-                  )
-            },
-        )
+      .runTaskAsynchronously(
+        plugin,
+        Runnable {
+          if (isFollowing) {
+            plugin.socialRepository.unfollow(viewer.uniqueId, song.authorUuid)
+          } else {
+            plugin.socialRepository.follow(viewer.uniqueId, song.authorUuid)
+          }
+          Bukkit.getScheduler()
+            .runTask(
+              plugin,
+              Runnable {
+                isFollowing = !isFollowing
+                viewer.sendMessage(if (isFollowing) "§aフォローしました。" else "§7フォローを解除しました。")
+                render()
+              },
+            )
+        },
+      )
   }
 
   private fun togglePlaybackMode() {
@@ -368,29 +369,29 @@ class SongDetailScreen(
       return
     }
     val next =
-        if (currentPlaybackMode == com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL) {
-          com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.DEFAULT
-        } else {
-          com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL
-        }
+      if (currentPlaybackMode == com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL) {
+        com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.DEFAULT
+      } else {
+        com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL
+      }
     Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              plugin.playbackModeService.setPreference(viewer.uniqueId, song, next)
-              Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        currentPlaybackMode = next
-                        viewer.sendMessage(
-                            "§a再生方式を変更しました: ${if (next == com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL) "立体音響再生" else "通常再生"}"
-                        )
-                        render()
-                      },
-                  )
-            },
-        )
+      .runTaskAsynchronously(
+        plugin,
+        Runnable {
+          plugin.playbackModeService.setPreference(viewer.uniqueId, song, next)
+          Bukkit.getScheduler()
+            .runTask(
+              plugin,
+              Runnable {
+                currentPlaybackMode = next
+                viewer.sendMessage(
+                  "§a再生方式を変更しました: ${if (next == com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL) "立体音響再生" else "通常再生"}"
+                )
+                render()
+              },
+            )
+        },
+      )
   }
 
   private fun outputReferenceUrl() {
@@ -400,10 +401,10 @@ class SongDetailScreen(
       return
     }
     val message =
-        Component.text("参考リンク: ", NamedTextColor.GOLD)
-            .append(
-                Component.text(url, NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(url)),
-            )
+      Component.text("参考リンク: ", NamedTextColor.GOLD)
+        .append(
+          Component.text(url, NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(url)),
+        )
     viewer.sendMessage(message)
   }
 
@@ -417,35 +418,35 @@ class SongDetailScreen(
       return
     }
     Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              val added = plugin.likeService.like(viewer.uniqueId, song)
-              val refreshed =
-                  if (added) plugin.songRepository.findById(requireNotNull(song.id)) else null
-              Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        if (added) {
-                          hasLiked = true
-                          if (refreshed != null) song = refreshed
-                          GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
-                          plugin.deliverLikeSenderReward(viewer)
-                          Bukkit.getPlayer(song.authorUuid)?.let { author ->
-                            plugin.toastNotificationService.showLikeReceived(
-                                author,
-                                song.title,
-                                viewer.name,
-                            )
-                          }
-                          render()
-                        } else {
-                          GuiFeedback.invalid(viewer, "既にいいね済みです。")
-                        }
-                      },
-                  )
-            },
-        )
+      .runTaskAsynchronously(
+        plugin,
+        Runnable {
+          val added = plugin.likeService.like(viewer.uniqueId, song)
+          val refreshed =
+            if (added) plugin.songRepository.findById(requireNotNull(song.id)) else null
+          Bukkit.getScheduler()
+            .runTask(
+              plugin,
+              Runnable {
+                if (added) {
+                  hasLiked = true
+                  if (refreshed != null) song = refreshed
+                  GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
+                  plugin.deliverLikeSenderReward(viewer)
+                  Bukkit.getPlayer(song.authorUuid)?.let { author ->
+                    plugin.toastNotificationService.showLikeReceived(
+                      author,
+                      song.title,
+                      viewer.name,
+                    )
+                  }
+                  render()
+                } else {
+                  GuiFeedback.invalid(viewer, "既にいいね済みです。")
+                }
+              },
+            )
+        },
+      )
   }
 }
