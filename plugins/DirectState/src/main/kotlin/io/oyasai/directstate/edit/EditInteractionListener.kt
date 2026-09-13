@@ -41,7 +41,7 @@ internal class EditInteractionListener(
     private val blockReplacement: BlockReplacement,
 ) : Listener {
   /** DirectStateが扱う操作だけを受理し、バニラ操作と他プラグインの拒否を尊重して振り分ける。 */
-  @EventHandler(priority = EventPriority.HIGHEST)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun interact(event: PlayerInteractEvent) {
     if (event.hand != EquipmentSlot.HAND) return
     val item = event.item
