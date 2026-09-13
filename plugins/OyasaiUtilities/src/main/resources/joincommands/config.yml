@@ -1,0 +1,103 @@
+# OyasaiUtilities JoinCommands
+# Compatible with SirBlobman JoinCommands config.yml.
+# To migrate, copy production plugins/JoinCommands/config.yml over this file.
+#
+# First-join data is stored as:
+#   plugins/OyasaiUtilities/joincommands/playerdata/<uuid>.data.yml
+# During migration, existing files under plugins/JoinCommands/playerdata/ are read as a fallback.
+# YAML keys match upstream: join-commands.played-before, join-commands.played-before-world-list
+
+# Set this to true to send extra output to console.
+debug-mode: false
+
+# Set this to true to disable player data files.
+# Using this option will cause problems with the 'first-join-only' options.
+disable-player-data: false
+
+# Parsed for compatibility. Proxy command prefixes ([BPLAYER], [BCONSOLE]) are not executed.
+bungeecord-hook: false
+
+# Parsed for compatibility. {player} and {world} are replaced; PlaceholderAPI expansions are not applied.
+placeholderapi-hook: false
+
+# This is a set of commands that will be executed when a player joins the server.
+# A command ID can be any valid YML section string, but they must all be different.
+# To disable all server join commands, set the value to 'server-join-commands: {}'
+server-join-commands:
+  exampleOne:
+    # 'command-list' is the list of commands that will be executed if the conditions are matched.
+    #
+    # Valid Placeholders:
+    # - {player} - The name of the player that joined
+    #
+    # Valid Prefixes:
+    # - no prefix - Execute the command as the server console (e.g. "eco give {player} 100")
+    # - [PLAYER] - Execute the command as a player (e.g. "[PLAYER]kit tools")
+    # - [OP] - Execute the command as the player, but with OP permissions (e.g. "[OP]warp opsOnlyArea")
+    # - [BPLAYER] / [BCONSOLE] - Parsed but not executed (proxy hook is not implemented)
+    command-list:
+      - "msg {player} Hello!"
+      - "say {player} joined the server!"
+
+    # What permission does the player need to have before this command is executed?
+    # Leave it blank for no permission check.
+    # This is not the permission for the 'command-list'.
+    permission: ""
+
+    # Should this command only be executed when the player first joins the server?
+    first-join-only: true
+
+    # How long should JoinCommands wait (in ticks) to execute the command list?
+    # 20 ticks = 1 second
+    delay: 20
+
+  example2:
+    permission: "i.hate.you"
+    first-join-only: false
+    delay: 0
+    command-list:
+      - "kill {player}"
+
+  example3:
+    permission: "donator.free.money"
+    first-join-only: false
+    delay: 100
+    command-list:
+      - "msg {player} You are a donator, so you get free money for joining."
+      - "eco give {player} 100"
+
+# A command ID can be any valid YML section string, but they must all be different.
+# To disable all world join commands, set the value to 'world-join-commands: {}'
+world-join-commands:
+  exampleOneWorld:
+    # This is the list of worlds that this command will be executed in.
+    # Use '*' to match every world.
+    world-list:
+      - "world"
+      - "world_nether"
+      - "world_the_end"
+
+    # Extra Placeholders:
+    # - {world} - The name of the world that the player joined
+    command-list:
+      - "msg {player} You are now in {world}"
+
+    delay: 0
+
+    # Should this command only be executed when the player first joins the world?
+    first-join-only: false
+    permission: ""
+
+  exampleWorld2:
+    world-list:
+      - "world"
+
+    command-list:
+      - "msg {player} welcome back to the main world"
+
+    delay: 20
+    first-join-only: false
+    permission: ""
+
+# Parsed so production files load. Proxy join execution is not implemented.
+proxy-join-commands: {}

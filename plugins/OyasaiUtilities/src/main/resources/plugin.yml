@@ -53,6 +53,11 @@ commands:
   togom:
     description: Togo Mode (DebugOnBE 設定GUI) コマンド
     usage: /togom [types/reset/lim/radius/duration/replace]
+  joincommands:
+    description: JoinCommands の設定をリロードする
+    usage: /<command> reload
+    aliases: [join-commands]
+    permission: join.commands.reload
 
 permissions:
   redbull.use:
@@ -77,3 +82,6 @@ permissions:
   debugonbe.refresh:
     description: Togo (DebugOnBE Refresh) コマンドの使用権限
     default: true
+  join.commands.reload:
+    description: /joincommands の使用権限
+    default: op
