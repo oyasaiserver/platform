@@ -1,0 +1,46 @@
+# Simple Elevators 互換のブロック組み合わせエレベーター。
+# 既存の plugins/Elevator/config.yml をこのファイルへコピーして使える。
+# First material = block under feet. Second = block below that. Optional third = maxDistance.
+# Use 'any' for either material.
+
+combinations:
+  - "Quartz_Block, Redstone_block"
+  - "Step:7, Iron_Block"
+  - "Carpet:14, Wool:11"
+  - "Stone:1, dirt:1"
+
+# Empty = all worlds.
+enabledworlds:
+
+maxDistance: 40
+
+elevatorSound:
+  up:
+    enabled: true
+    sound: "ORB_PICKUP"
+    pitch: 0.5
+    world: false
+  down:
+    enabled: true
+    sound: "ORB_PICKUP"
+    pitch: 1
+    world: false
+
+actionBarEnabled: true
+floorUp: "&e&lYou have been taken one floor &a&lUP"
+floorDown: "&e&lYou have been taken one floor &c&lDOWN"
+
+titleBarEnabled: true
+floorUpTitle: "&a&lUP"
+floorUpSubTitle: ""
+floorDownTitle: "&c&lDOWN"
+floorDownSubTitle: ""
+titleBarFadeIn: 5
+titleBarStay: 10
+titleBarFadeOut: 5
+
+# Destination occupancy. 'all' skips the check.
+ignoreList: "air, void_air, torch, wall_torch, redstone_torch_on, redstone_torch_off, redstone_wall_torch, vine, lever, banner, stone_button, wood_button, oak_button, spruce_button, birch_button, jungle_button, acacia_button, dark_oak_button, sign, sign_post, wall_sign, oak_sign, oak_wall_sign, spruce_sign, spruce_wall_sign, birch_sign, birch_wall_sign, jungle_sign, jungle_wall_sign, acacia_sign, acacia_wall_sign, dark_oak_sign, dark_oak_wall_sign"
+
+elevatorCooldown: 0
+elevatorCooldownMessage: "&cPlease wait %cooldown% seconds before using an elevator again!"

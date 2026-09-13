@@ -42,6 +42,9 @@ commands:
     permission: oyasaiutilities.tpdata
   pita:
     description: "ピタッ！と止まるモードの切り替え"
+  elevator:
+    description: "Elevator help and config reload"
+    usage: /elevator [reload]
   debugonbe:
     description: DebugOnBE メインコマンド
     usage: /debugonbe <refresh|reload|help>
@@ -70,6 +73,9 @@ permissions:
     default: op
   cm.bypass.spawn_egg:
     description: "CreativeManagementのSpawnEggバイパスする権限"
+    default: op
+  oyasaiutilities.elevator.reload:
+    description: Elevator の config リロード
     default: op
   debugonbe.admin:
     description: DebugOnBE の管理権限

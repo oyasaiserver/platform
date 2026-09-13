@@ -3,6 +3,7 @@ package icu.oyasai.utilities
 import icu.oyasai.utilities.adminbp.AdminBP
 import icu.oyasai.utilities.creative_management.CreativeManagement
 import icu.oyasai.utilities.debugonbe.DebugOnBE
+import icu.oyasai.utilities.elevator.Elevator
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
 import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
@@ -26,6 +27,7 @@ class Main : JavaPlugin() {
     server.pluginManager.registerEvents(NotNBTEvent, this) // NotNBTのイベント登録
     server.pluginManager.registerEvents(OreSmelterEvent, this) // OreSmelterのイベント登録
     server.pluginManager.registerEvents(VeinminerEvent, this)
+    server.pluginManager.registerEvents(Elevator, this)
     server.pluginManager.registerEvents(TimerBarEvent, this) // TimerBar用のイベント登録
     server.pluginManager.registerEvents(TeleportListener, this) // TPathのイベント登録
     server.pluginManager.registerEvents(Pita, this) // Pitaのイベント
@@ -36,6 +38,7 @@ class Main : JavaPlugin() {
     server.getPluginCommand("back")?.setExecutor(BackForwardCmd) // back コマンド
     server.getPluginCommand("forward")?.setExecutor(BackForwardCmd) // forward コマンド
     server.getPluginCommand("pita")?.setExecutor(Pita) // Pitaのコマンド
+    server.getPluginCommand("elevator")?.setExecutor(Elevator)
     listOf("redbull", "buyredbull", "buyredbullset").forEach { commandName ->
       server.getPluginCommand(commandName)?.setExecutor(RedBullCommand)
       server.getPluginCommand(commandName)?.tabCompleter = RedBullCommand
@@ -45,6 +48,7 @@ class Main : JavaPlugin() {
     AdminBP.onEnable()
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
+    Elevator.reload()
     CreativeManagement.onEnable()
     RedBullFeature.onEnable()
     DebugOnBE.onEnable(this)
