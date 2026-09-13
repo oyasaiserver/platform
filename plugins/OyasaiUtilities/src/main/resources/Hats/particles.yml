@@ -1,0 +1,202 @@
+# OyasaiUtilities 内製 /h メニュー。
+# 元: ローカル ParticleHats/menus/particles.yml の装備用アイテム。
+# 未移植: Walking Billboard（カスタムPNG）、Arrows（発射体追従）、
+# dummy / 装備一覧 / サウンド確認アイテム、sphere の node 重ね。
+settings:
+  title: "&8パーティクルを選ぶ"
+  size: 6
+items:
+  "10":
+    key: halo
+    permission: halo
+    name: "&6Colourful Redstone Halo"
+    id: REDSTONE
+    type: halo
+    animated: true
+    particles:
+      "1":
+        particle: REDSTONE
+        color: random
+  "11":
+    key: cape
+    permission: cape
+    name: "&6Sparkling Cape"
+    id: SHIELD
+    type: cape
+    location: chest
+    particles:
+      "1":
+        particle: CRIT
+  "12":
+    key: plumbob
+    permission: plumbob
+    name: "&aPlumbob"
+    id: EMERALD
+    type: crystal
+    location: feet
+    particles:
+      "1":
+        particle: REDSTONE
+        color: 12582656
+  "13":
+    key: creeper
+    permission: creeper
+    name: "&6Creeper Face"
+    id: CREEPER_HEAD
+    type: creeper_hat
+    location: feet
+    offset:
+      y: 1.0
+    tracking: track_head_movement
+    particles:
+      "1":
+        particle: REDSTONE
+        color: 65280
+  "14":
+    key: angel_wings
+    permission: angel_wings
+    name: "&bAngel Wings"
+    id: ELYTRA
+    type: angel_wings
+    location: chest
+    offset:
+      z: -0.4
+    tracking: track_body_rotation
+    particles:
+      "1":
+        particle: REDSTONE
+        color: 16777215
+  "15":
+    key: rainbow
+    permission: rainbow
+    name: "&4r&6a&ei&2n&9b&1o&bw"
+    id: RED_WOOL
+    type: arch
+    location: feet
+    particles:
+      "1":
+        particle: REDSTONE
+        color: 16711680
+      "2":
+        particle: REDSTONE
+        color: 16753920
+      "3":
+        particle: REDSTONE
+        color: 16776960
+      "4":
+        particle: REDSTONE
+        color: 32768
+      "5":
+        particle: REDSTONE
+        color: 255
+  "16":
+    key: thief
+    permission: thief
+    name: "&4&lThief!"
+    id: DIAMOND
+    description:
+      - "&7走るとアイテムがこぼれる"
+    type: trail
+    location: feet
+    mode: when_sprinting
+    particles:
+      "1":
+        particle: ITEMSTACK
+        items:
+          - GOLD_INGOT
+          - IRON_INGOT
+          - EMERALD
+          - DIAMOND
+          - GOLD_NUGGET
+          - IRON_NUGGET
+          - NETHER_STAR
+  "19":
+    key: rocket
+    permission: rocket
+    name: "&fRocket Trail"
+    id: FIREWORK_ROCKET
+    type: trail
+    location: feet
+    mode: when_gliding
+    update-frequency: 1
+    particles:
+      "1":
+        particle: REDSTONE
+        color: 16777215
+        size: 6.0
+  "20":
+    key: magic_aura
+    permission: magic_aura
+    name: "&5Magic Aura"
+    id: ENCHANTED_BOOK
+    type: trail
+    location: feet
+    count: 5
+    random-offset:
+      x: 0.5
+      z: 0.5
+    update-frequency: 1
+    particles:
+      "1":
+        particle: SPELL_WITCH
+  "21":
+    key: notes
+    permission: notes
+    name: "&2Notes"
+    id: NOTE_BLOCK
+    type: hoop
+    location: feet
+    animated: true
+    scale: 0.8
+    offset:
+      y: 1.0
+    update-frequency: 1
+    tracking: track_head_movement
+    particles:
+      "1":
+        particle: NOTE
+  "22":
+    key: tornado
+    permission: tornado
+    name: "&3Tornado"
+    id: HOPPER
+    description:
+      - "&7飛行中、足元に小さな竜巻"
+    type: tornado
+    location: feet
+    mode: when_flying
+    animated: true
+    update-frequency: 1
+    particles:
+      "1":
+        particle: FIREWORKS_SPARK
+  "23":
+    key: witches_sphere
+    permission: witches_sphere
+    name: "&5Witches Sphere"
+    id: BLAZE_POWDER
+    type: sphere
+    location: feet
+    animated: true
+    scale: 0.8
+    offset:
+      y: -0.5
+    update-frequency: 1
+    tracking: track_body_rotation
+    particles:
+      "1":
+        particle: SPELL_WITCH
+  "24":
+    key: bubble_wings
+    permission: bubble_wings
+    name: "&bBubble Wings"
+    id: CYAN_DYE
+    type: wings
+    location: chest
+    offset:
+      z: -0.3
+    update-frequency: 1
+    tracking: track_body_rotation
+    particles:
+      "1":
+        particle: CURRENT_DOWN
