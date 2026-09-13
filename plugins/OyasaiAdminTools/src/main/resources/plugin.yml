@@ -3,12 +3,24 @@ version: "1.0-SNAPSHOT"
 main: io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 api-version: "1.21"
 softdepend:
-  - AdvancedBan
   - TokenManager
   - WorldBorder
 commands:
   ban:
     aliases: ["oyasaiban", "aban", "tempban"]
+    permission: oyasai.admin
+  unban:
+    permission: oyasai.admin
+  mute:
+    aliases: ["tempmute"]
+    permission: oyasai.admin
+  unmute:
+    permission: oyasai.admin
+  warn:
+    permission: oyasai.admin
+  warns:
+    permission: oyasai.admin
+  history:
     permission: oyasai.admin
   syokaku:
     description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）

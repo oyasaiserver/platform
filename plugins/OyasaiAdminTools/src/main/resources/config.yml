@@ -1,1 +1,47 @@
 webhook-url: ""
+
+# BAN通知用。空なら sendBanNotification は警告だけ出して送らない。
+webhook-ban-url: ""
+
+punishment:
+  # AdvancedBan の MuteCommands 相当。先頭スラッシュや minecraft: 付きでも見る。
+  mute-commands:
+    - me
+    - say
+    - action
+    - eaction
+    - describe
+    - edescribe
+    - eme
+    - w
+    - m
+    - pm
+    - whisper
+    - ewhisper
+    - emsg
+    - msg
+    - etell
+    - tell
+    - er
+    - r
+    - reply
+    - ereply
+    - ac
+    - eac
+    - amsg
+    - eamsg
+    - ehelpop
+    - p msg
+  # 警告回数に達したときに実行する処置。kick / tempban <期間> / ban
+  warn-actions:
+    3: kick
+    4: tempban 30m
+    5: tempban 5h
+    6: tempban 7d
+    7: tempban 1mo
+    10: ban
+  # 任意。AdvancedBan の storage.script の絶対パス。未設定なら ../AdvancedBan/data/storage.script
+  # 見つからない場合は plugins/OyasaiAdminTools/import/advancedban.yml または advancedban.csv を読む。
+  # YAML: punishments: [{uuid, name, type, reason, operator, start, end, active}]
+  # CSV header: uuid,name,type,reason,operator,start,end,active
+  advancedban-script: ""

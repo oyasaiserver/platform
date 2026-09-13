@@ -1,8 +1,8 @@
 package io.oyasai.oyasaiAdminTools.commands
 
-import io.oyasai.oyasaiAdminTools.discord.SendEmbedMessage
+import io.oyasai.oyasaiAdminTools.punishment.DurationParser
+import io.oyasai.oyasaiAdminTools.punishment.PunishmentService
 import org.bukkit.Bukkit
-import org.bukkit.Sound
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -26,13 +26,13 @@ object GrieferCommandExecutor : CommandExecutor, TabCompleter {
           sender.sendMessage("§cUsage: /ban <名前> <期間> <理由>")
           return false
         }
-        if (Bukkit.dispatchCommand(sender, "tempban ${args.joinToString(" ")}")) {
-          SendEmbedMessage.sendBanNotification(args[0], sender.name, args[2], args[1])
-          Bukkit.getOnlinePlayers().forEach {
-            it.playSound(it.eyeLocation, Sound.ITEM_MACE_SMASH_GROUND_HEAVY, 0.5f, 2.0f)
-            it.sendMessage("§4§l[ＢＡＮ] §f§l${args[0]} §fが§c§lBAN§fされました。")
-          }
+        val duration = DurationParser.parse(args[1])
+        if (duration == null) {
+          sender.sendMessage("§c期間の形式が正しくありません。(例: 1mo, 2w, 3d, 4h, 5m, 6s, perm)")
+          return false
         }
+        val reason = args.drop(2).joinToString(" ")
+        PunishmentService.ban(args[0], duration, reason, sender.name, announce = true)
         return true
       }
     }
@@ -50,7 +50,7 @@ object GrieferCommandExecutor : CommandExecutor, TabCompleter {
           Bukkit.getOnlinePlayers()
               .map { it.name }
               .filter { it.startsWith(args[0], ignoreCase = true) }
-      2 -> listOf("1mo", "2w", "3d", "4h", "5m", "6s")
+      2 -> listOf("1mo", "2w", "3d", "4h", "5m", "6s", "perm")
       3 -> listOf("あらし")
       else -> emptyList()
     }

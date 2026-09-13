@@ -4,9 +4,12 @@ import io.oyasai.oyasaiAdminTools.bulletin.announcement.AnnouncementManager
 import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyListener
 import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyManager
 import io.oyasai.oyasaiAdminTools.commands.*
+import io.oyasai.oyasaiAdminTools.punishment.PunishmentListener
+import io.oyasai.oyasaiAdminTools.punishment.PunishmentService
 import io.oyasai.oyasaiAdminTools.utils.BookInputHandler
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import org.bukkit.Bukkit
+import org.bukkit.command.Command
 import org.bukkit.plugin.java.JavaPlugin
 
 class OyasaiAdminTools : JavaPlugin() {
@@ -15,17 +18,14 @@ class OyasaiAdminTools : JavaPlugin() {
   }
 
   override fun onEnable() {
-    // Plugin startup logic
     plugin = this
     plugin.saveDefaultConfig()
 
     AnnouncementManager.load()
     SurveyManager.load()
+    PunishmentService.init(this)
 
-    val commandMap = Bukkit.getCommandMap()
-    val knownCommands = commandMap.knownCommands
-    knownCommands.remove("ban")
-    knownCommands.remove("advancedban:ban")
+    claimPunishmentCommands()
 
     this.getCommand("syokaku")?.setExecutor(SyokakuCommandExecutor)
     this.getCommand("syokaku")?.tabCompleter = SyokakuCommandExecutor
@@ -38,7 +38,12 @@ class OyasaiAdminTools : JavaPlugin() {
     this.getCommand("kakutyo")?.setExecutor(KakutyoCommandExecutor)
     this.getCommand("kakutyo")?.tabCompleter = KakutyoCommandExecutor
 
-    // Bulletin Commands
+    val punishmentExecutor = PunishmentCommandExecutor
+    listOf("unban", "mute", "unmute", "warn", "warns", "history").forEach { name ->
+      this.getCommand(name)?.setExecutor(punishmentExecutor)
+      this.getCommand(name)?.tabCompleter = punishmentExecutor
+    }
+
     val bulletinExecutor = io.oyasai.oyasaiAdminTools.bulletin.BulletinCommandExecutor
     this.getCommand("bulletin")?.setExecutor(bulletinExecutor)
     this.getCommand("bulletin")?.tabCompleter = bulletinExecutor
@@ -47,14 +52,33 @@ class OyasaiAdminTools : JavaPlugin() {
 
     Bukkit.getPluginManager().registerEvents(SurveyListener, this)
     Bukkit.getPluginManager().registerEvents(BookInputHandler, this)
+    Bukkit.getPluginManager().registerEvents(PunishmentListener, this)
+
+    Bukkit.getScheduler().runTask(this, Runnable { claimPunishmentCommands() })
   }
 
   override fun onDisable() {
-    // Plugin shutdown logic
     AnnouncementManager.stopAll()
     AnnouncementManager.save()
     SurveyManager.stopAll()
     SurveyManager.save()
     JsonUtils.writeJsonFile("ranks.json", io.oyasai.oyasaiAdminTools.rank.RankManager.ranks)
+    PunishmentService.shutdown()
+  }
+
+  private fun claimPunishmentCommands() {
+    val known = Bukkit.getCommandMap().knownCommands
+    val names = listOf("ban", "unban", "mute", "unmute", "warn", "warns", "history")
+    for (name in names) {
+      val cmd: Command = getCommand(name) ?: continue
+      val aliases = (cmd.aliases + name).distinct()
+      for (alias in aliases) {
+        known.remove(alias)
+        known.remove("advancedban:$alias")
+        known.remove("essentials:$alias")
+        known.remove("essentialsx:$alias")
+        known[alias] = cmd
+      }
+    }
   }
 }
