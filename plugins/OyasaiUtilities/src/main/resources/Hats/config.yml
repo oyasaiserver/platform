@@ -1,0 +1,3 @@
+# 内製パーティクル帽子。経済ショップ・エディタ・MySQLは持たない。
+max-hats: 7
+menu: particles.yml
