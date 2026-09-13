@@ -7,10 +7,15 @@ import org.bukkit.plugin.java.JavaPlugin
 /** ブロック本体を描画するBlockEntityを切り替える。 */
 internal object BlockEntityAccess {
   private data class Pending(val data: BlockData, val present: Boolean)
+
   private val pending = linkedMapOf<Block, Pending>()
 
   fun hasBody(block: Block): Boolean {
-    pending[block]?.takeIf { it.data.asString == block.blockData.asString }?.let { return it.present }
+    pending[block]
+        ?.takeIf { it.data.asString == block.blockData.asString }
+        ?.let {
+          return it.present
+        }
     return block.chunk.getTileEntities(false).any {
       it.x == block.x && it.y == block.y && it.z == block.z
     }
@@ -35,7 +40,11 @@ internal object BlockEntityAccess {
     pending.clear()
     val chunks = linkedSetOf<org.bukkit.Chunk>()
     for ((block, change) in changes) {
-      if (!block.world.isChunkLoaded(block.x shr 4, block.z shr 4) || block.blockData.asString != change.data.asString) continue
+      if (
+          !block.world.isChunkLoaded(block.x shr 4, block.z shr 4) ||
+              block.blockData.asString != change.data.asString
+      )
+          continue
       writeBody(block, change.data, change.present)
       chunks += block.chunk
     }
