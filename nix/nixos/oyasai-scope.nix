@@ -2,9 +2,13 @@
   pkgs,
   lib,
   inputs,
+  config,
   ...
 }:
 {
   options.oyasai.scope = lib.mkOption { type = lib.types.raw; };
-  config.oyasai.scope = pkgs.callPackage ../oyasai-scope.nix { inherit inputs; };
+  config.oyasai.scope = pkgs.callPackage ../oyasai-scope.nix {
+    inherit inputs;
+    inherit (config) constants;
+  };
 }
