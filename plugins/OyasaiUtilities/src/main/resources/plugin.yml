@@ -53,6 +53,27 @@ commands:
   togom:
     description: Togo Mode (DebugOnBE 設定GUI) コマンド
     usage: /togom [types/reset/lim/radius/duration/replace]
+  gsit:
+    description: その場のブロックに座る
+    permission: gsit.sit
+  glay:
+    description: その場に寝そべる
+    permission: gsit.sit
+  gcrawl:
+    description: 這う
+    permission: gsit.sit
+  glayback:
+    description: 仰向けに寝そべる
+    permission: gsit.sit
+  gbellyflop:
+    description: うつ伏せになる
+    permission: gsit.sit
+  gspin:
+    description: 回転ポーズ
+    permission: gsit.sit
+  gsitreload:
+    description: GSit設定を再読み込みする
+    permission: gsit.reload
 
 permissions:
   redbull.use:
@@ -77,3 +98,9 @@ permissions:
   debugonbe.refresh:
     description: Togo (DebugOnBE Refresh) コマンドの使用権限
     default: true
+  gsit.sit:
+    description: 座る・寝そべる・這う
+    default: true
+  gsit.reload:
+    description: GSit設定の再読み込み
+    default: op

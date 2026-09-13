@@ -4,6 +4,9 @@ import icu.oyasai.utilities.adminbp.AdminBP
 import icu.oyasai.utilities.creative_management.CreativeManagement
 import icu.oyasai.utilities.debugonbe.DebugOnBE
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
+import icu.oyasai.utilities.gsit.GSitCommand
+import icu.oyasai.utilities.gsit.GSitFeature
+import icu.oyasai.utilities.gsit.GSitListener
 import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
 import icu.oyasai.utilities.oresmelter.OreSmelter
@@ -26,6 +29,7 @@ class Main : JavaPlugin() {
     server.pluginManager.registerEvents(NotNBTEvent, this) // NotNBTのイベント登録
     server.pluginManager.registerEvents(OreSmelterEvent, this) // OreSmelterのイベント登録
     server.pluginManager.registerEvents(VeinminerEvent, this)
+    server.pluginManager.registerEvents(GSitListener, this)
     server.pluginManager.registerEvents(TimerBarEvent, this) // TimerBar用のイベント登録
     server.pluginManager.registerEvents(TeleportListener, this) // TPathのイベント登録
     server.pluginManager.registerEvents(Pita, this) // Pitaのイベント
@@ -41,6 +45,11 @@ class Main : JavaPlugin() {
       server.getPluginCommand(commandName)?.tabCompleter = RedBullCommand
     }
 
+    listOf("gsit", "glay", "gcrawl", "glayback", "gbellyflop", "gspin", "gsitreload").forEach {
+        commandName ->
+      server.getPluginCommand(commandName)?.setExecutor(GSitCommand)
+    }
+
     OreReappears.onEnable() // OreReappearsの有効化
     AdminBP.onEnable()
     Pita.onEnable() // Pitaの有効化
@@ -48,6 +57,7 @@ class Main : JavaPlugin() {
     CreativeManagement.onEnable()
     RedBullFeature.onEnable()
     DebugOnBE.onEnable(this)
+    GSitFeature.onEnable()
   }
 
   override fun onDisable() {
@@ -58,5 +68,6 @@ class Main : JavaPlugin() {
     CreativeManagement.onDisable()
     RedBullFeature.onDisable()
     DebugOnBE.onDisable()
+    GSitFeature.onDisable()
   }
 }

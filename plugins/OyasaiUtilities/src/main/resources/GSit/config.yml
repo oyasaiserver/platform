@@ -1,0 +1,18 @@
+# OyasaiUtilities GSit — used options from the previous GSit config.
+get-up-sneak: true
+get-up-break: true
+center-block: true
+empty-hand-only: true
+bottom-part-only: true
+sit-materials:
+  - "#stairs"
+  - "#slabs"
+  - "#carpets"
+  - "#wool_carpets"
+  - moss_carpet
+  - pale_moss_carpet
+  - snow
+command-blacklist:
+  - skin
+  - nick
+world-blacklist: []
