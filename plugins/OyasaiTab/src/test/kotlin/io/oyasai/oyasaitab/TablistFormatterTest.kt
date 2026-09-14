@@ -104,13 +104,90 @@ class TablistFormatterTest {
             listOf("white", "blue", "default"),
         )
 
-    assertEquals(4, orders[white])
-    assertEquals(3, orders[blue])
-    assertEquals(2, orders[default])
-    assertEquals(1, orders[afkWhite])
-    assertTrue(orders.values.all { it > 0 })
+    assertEquals(1003, orders[white])
+    assertEquals(1002, orders[blue])
+    assertEquals(1001, orders[default])
+    assertEquals(1000, orders[afkWhite])
+    assertTrue(orders.values.all { it >= LOCAL_TAB_ORDER_BASE })
     assertTrue(orders.getValue(white) > orders.getValue(blue))
     assertTrue(orders.getValue(blue) > orders.getValue(default))
     assertTrue(orders.getValue(default) > orders.getValue(afkWhite))
+  }
+
+  @Test
+  fun keepsRemoteOrderBelowLocalBand() {
+    val first = UUID.fromString("00000000-0000-0000-0000-000000000011")
+    val second = UUID.fromString("00000000-0000-0000-0000-000000000012")
+    val orders =
+        CrossServerTabLogic.remoteOrders(
+            listOf(
+                CrossServerTabEntry(second, "§bBeni", "lobby", 20),
+                CrossServerTabEntry(first, "§aAki", "axiom", 10),
+            )
+        )
+
+    assertEquals(999, orders[first])
+    assertEquals(998, orders[second])
+    assertTrue(orders.values.all { it in 1 until LOCAL_TAB_ORDER_BASE })
+  }
+
+  @Test
+  fun calculatesRemoteDiffWithoutTouchingLocalEntries() {
+    val viewer = UUID.fromString("00000000-0000-0000-0000-000000000020")
+    val local = UUID.fromString("00000000-0000-0000-0000-000000000021")
+    val remote = UUID.fromString("00000000-0000-0000-0000-000000000022")
+    val stale = UUID.fromString("00000000-0000-0000-0000-000000000023")
+    val diff =
+        CrossServerTabLogic.diffForViewer(
+            viewerId = viewer,
+            viewerServer = "main",
+            managedEntries = setOf(stale),
+            records =
+                listOf(
+                    CrossServerTabEntry(local, "§aLocal", "main", 5),
+                    CrossServerTabEntry(remote, "§bRemote", "lobby", 8),
+                    CrossServerTabEntry(stale, "§cGone", "axiom", 9),
+                ),
+            connectedPlayerServers = mapOf(viewer to "main", local to "main", remote to "lobby"),
+        )
+
+    assertEquals(setOf(stale), diff.remove)
+    assertEquals(listOf(remote), diff.upsert.map { it.uuid })
+  }
+
+  @Test
+  fun usesActualServerToAvoidDuplicateDuringSwitch() {
+    val viewer = UUID.fromString("00000000-0000-0000-0000-000000000051")
+    val switching = UUID.fromString("00000000-0000-0000-0000-000000000052")
+    val diff =
+        CrossServerTabLogic.diffForViewer(
+            viewerId = viewer,
+            viewerServer = "lobby",
+            managedEntries = emptySet(),
+            records = listOf(CrossServerTabEntry(switching, "§aSwitching", "main", 20)),
+            connectedPlayerServers = mapOf(viewer to "lobby", switching to "lobby"),
+        )
+
+    assertEquals(emptyList(), diff.upsert)
+  }
+
+  @Test
+  fun keepsDisconnectEntryWhenPlayerAlreadyReconnected() {
+    val player = UUID.fromString("00000000-0000-0000-0000-000000000031")
+
+    assertEquals(false, CrossServerTabLogic.shouldRemoveOnDisconnect(player, setOf(player)))
+    assertEquals(true, CrossServerTabLogic.shouldRemoveOnDisconnect(player, emptySet()))
+  }
+
+  @Test
+  fun roundTripsSnapshotCodec() {
+    val player = UUID.fromString("00000000-0000-0000-0000-000000000041")
+    val snapshot =
+        OyasaiTabSnapshot(
+            "main",
+            listOf(OyasaiTabPlayerSnapshot(player, "§aSteve", "main", 42)),
+        )
+
+    assertEquals(snapshot, OyasaiTabSnapshotCodec.decode(OyasaiTabSnapshotCodec.encode(snapshot)))
   }
 }

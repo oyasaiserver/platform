@@ -1,3 +1,6 @@
+network:
+  backend-id: main
+
 tablist:
   sort-groups:
     - white

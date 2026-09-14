@@ -34,7 +34,7 @@ class OyasaiTabPlugin : JavaPlugin() {
 
   override fun onEnable() {
     saveDefaultConfig()
-    runtime = OyasaiTabRuntime.create(this)?.start()
+    runtime = OyasaiTabRuntime.create(this).start()
   }
 
   override fun onDisable() {
@@ -43,8 +43,64 @@ class OyasaiTabPlugin : JavaPlugin() {
   }
 }
 
-private class OyasaiTabRuntime
-private constructor(
+private interface OyasaiTabRuntime {
+  fun start(): OyasaiTabRuntime
+
+  fun stop()
+
+  companion object {
+    fun create(plugin: JavaPlugin): OyasaiTabRuntime {
+      val config = OyasaiTabConfig.load(plugin)
+      val missingPlugins =
+          listOfNotNull(
+              "SocialLikes3".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
+              "DynamicProfile".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
+              "Essentials".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
+              "LuckPerms".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
+              "TokenManager".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
+              "Vault".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
+          )
+      if (missingPlugins.isNotEmpty()) {
+        plugin.logger.info(
+            "OyasaiTab display disabled: missing plugins ${missingPlugins.joinToString()}; cross-server snapshots stay enabled."
+        )
+        return SnapshotOnlyOyasaiTabRuntime(plugin, config)
+      }
+
+      val scoreboard = Bukkit.getScoreboardManager().mainScoreboard
+      val economy = Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
+      val tokenApi =
+          Bukkit.getServicesManager().getRegistration(OyasaiTokenApi::class.java)?.provider
+      val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
+      val essentials = EssentialsAfkLookup.from(Bukkit.getPluginManager().getPlugin("Essentials"))
+      val missingServices =
+          listOfNotNull(
+              "Vault Economy".takeIf { economy == null },
+              "OyasaiTokenApi".takeIf { tokenApi == null },
+              "LuckPerms API".takeIf { luckPerms == null },
+              "Essentials API".takeIf { essentials == null },
+          )
+      if (economy == null || tokenApi == null || luckPerms == null || essentials == null) {
+        plugin.logger.info(
+            "OyasaiTab display disabled: missing services ${missingServices.joinToString()}; cross-server snapshots stay enabled."
+        )
+        return SnapshotOnlyOyasaiTabRuntime(plugin, config)
+      }
+
+      return FullOyasaiTabRuntime(
+          plugin = plugin,
+          scoreboard = scoreboard,
+          economy = economy,
+          tokenApi = tokenApi,
+          luckPerms = luckPerms,
+          config = config,
+          isAfk = essentials::isAfk,
+      )
+    }
+  }
+}
+
+private class FullOyasaiTabRuntime(
     private val plugin: JavaPlugin,
     private val scoreboard: Scoreboard,
     private val economy: Economy,
@@ -52,11 +108,13 @@ private constructor(
     private val luckPerms: LuckPerms,
     private val config: OyasaiTabConfig,
     private val isAfk: (Player) -> Boolean,
-) : Listener {
+) : OyasaiTabRuntime, Listener {
   private val legacy = LegacyComponentSerializer.legacyAmpersand()
+  private val network = PaperTabSnapshotBridge(plugin, config)
   private var task: BukkitTask? = null
 
-  fun start(): OyasaiTabRuntime {
+  override fun start(): OyasaiTabRuntime {
+    network.start()
     ensurePingObjective()
     cleanupEmptyOwnTeams()
     Bukkit.getPluginManager().registerEvents(this, plugin)
@@ -66,9 +124,10 @@ private constructor(
     return this
   }
 
-  fun stop() {
+  override fun stop() {
     task?.cancel()
     task = null
+    network.stop()
     HandlerList.unregisterAll(this)
     scoreboard.getObjective(PING_OBJECTIVE)?.let {
       if (it.displaySlot == DisplaySlot.PLAYER_LIST) scoreboard.clearSlot(DisplaySlot.PLAYER_LIST)
@@ -128,6 +187,7 @@ private constructor(
       updateNameTag(player, profile)
       updatePing(player)
     }
+    network.send(players)
   }
 
   private fun profile(player: Player): PlayerProfile {
@@ -213,47 +273,67 @@ private constructor(
 
   companion object {
     private const val PING_OBJECTIVE = "oyasaitab_ping"
+  }
+}
 
-    fun create(plugin: JavaPlugin): OyasaiTabRuntime? {
-      val missingPlugins =
-          listOfNotNull(
-              "SocialLikes3".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
-              "DynamicProfile".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
-              "Essentials".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
-          )
-      if (missingPlugins.isNotEmpty()) {
-        plugin.logger.info("OyasaiTab disabled: missing plugins ${missingPlugins.joinToString()}")
-        return null
-      }
+private class SnapshotOnlyOyasaiTabRuntime(
+    private val plugin: JavaPlugin,
+    config: OyasaiTabConfig,
+) : OyasaiTabRuntime {
+  private val network = PaperTabSnapshotBridge(plugin, config)
+  private var task: BukkitTask? = null
 
-      val scoreboard = Bukkit.getScoreboardManager().mainScoreboard
-      val economy = Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
-      val tokenApi =
-          Bukkit.getServicesManager().getRegistration(OyasaiTokenApi::class.java)?.provider
-      val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
-      val essentials = EssentialsAfkLookup.from(Bukkit.getPluginManager().getPlugin("Essentials"))
-      val missingServices =
-          listOfNotNull(
-              "Vault Economy".takeIf { economy == null },
-              "OyasaiTokenApi".takeIf { tokenApi == null },
-              "LuckPerms API".takeIf { luckPerms == null },
-              "Essentials API".takeIf { essentials == null },
-          )
-      if (economy == null || tokenApi == null || luckPerms == null || essentials == null) {
-        plugin.logger.info("OyasaiTab disabled: missing services ${missingServices.joinToString()}")
-        return null
-      }
+  override fun start(): OyasaiTabRuntime {
+    network.start()
+    task =
+        Bukkit.getScheduler()
+            .runTaskTimer(
+                plugin,
+                Runnable { network.send(Bukkit.getOnlinePlayers().toList()) },
+                20L,
+                20L,
+            )
+    network.send(Bukkit.getOnlinePlayers().toList())
+    plugin.logger.info("OyasaiTab cross-server snapshots enabled.")
+    return this
+  }
 
-      return OyasaiTabRuntime(
-          plugin = plugin,
-          scoreboard = scoreboard,
-          economy = economy,
-          tokenApi = tokenApi,
-          luckPerms = luckPerms,
-          config = OyasaiTabConfig.load(plugin),
-          isAfk = essentials::isAfk,
-      )
-    }
+  override fun stop() {
+    task?.cancel()
+    task = null
+    network.stop()
+  }
+}
+
+private class PaperTabSnapshotBridge(
+    private val plugin: JavaPlugin,
+    private val config: OyasaiTabConfig,
+) {
+  private val legacy = LegacyComponentSerializer.legacySection()
+
+  fun start() {
+    Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, OYASAI_TAB_CHANNEL)
+  }
+
+  fun stop() {
+    Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin, OYASAI_TAB_CHANNEL)
+  }
+
+  fun send(players: List<Player>) {
+    val carrier = players.firstOrNull() ?: return
+    val snapshot =
+        OyasaiTabSnapshot(
+            config.backendId,
+            players.map { player ->
+              OyasaiTabPlayerSnapshot(
+                  uuid = player.uniqueId,
+                  displayNameLegacy = legacy.serialize(player.playerListName()),
+                  serverName = config.backendId,
+                  ping = player.ping,
+              )
+            },
+        )
+    carrier.sendPluginMessage(plugin, OYASAI_TAB_CHANNEL, OyasaiTabSnapshotCodec.encode(snapshot))
   }
 }
 
@@ -269,6 +349,7 @@ private data class PlayerProfile(
 )
 
 private data class OyasaiTabConfig(
+    val backendId: String,
     val groupColors: Map<String, String>,
     val sortGroups: List<String>,
     val tagPrefixes: Map<String, String>,
@@ -278,6 +359,10 @@ private data class OyasaiTabConfig(
   companion object {
     fun load(plugin: JavaPlugin): OyasaiTabConfig =
         OyasaiTabConfig(
+            backendId =
+                System.getenv("OYASAI_SERVER_ID")?.trim()?.takeIf(String::isNotEmpty)
+                    ?: plugin.config.getString("network.backend-id", "main")
+                    ?: "main",
             groupColors = plugin.config.lowercaseStringMap("tablist.group-colors"),
             sortGroups =
                 plugin.config.getStringList("tablist.sort-groups").map { it.lowercase(Locale.US) },
@@ -347,7 +432,11 @@ object TablistFormatter {
 object TabOrder {
   data class Entry(val uuid: UUID, val name: String, val group: String, val afk: Boolean)
 
-  fun calculate(entries: Collection<Entry>, sortGroups: List<String>): Map<UUID, Int> {
+  fun calculate(
+      entries: Collection<Entry>,
+      sortGroups: List<String>,
+      baseOrder: Int = LOCAL_TAB_ORDER_BASE,
+  ): Map<UUID, Int> {
     val groupRanks =
         sortGroups.mapIndexed { index, group -> group.lowercase(Locale.US) to index }.toMap()
     return entries
@@ -357,7 +446,7 @@ object TabOrder {
                 .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name }
                 .thenBy { it.name }
         )
-        .mapIndexed { index, entry -> entry.uuid to entries.size - index }
+        .mapIndexed { index, entry -> entry.uuid to baseOrder + entries.size - index - 1 }
         .toMap()
   }
 }

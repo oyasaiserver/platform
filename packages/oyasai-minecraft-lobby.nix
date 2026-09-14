@@ -77,6 +77,7 @@ oyasaiPurpur rec {
     luckperms
     lunachat
     oyasaichat
+    oyasaitab
     oyasaiutilities
     plugmanx
     skinsrestorer
