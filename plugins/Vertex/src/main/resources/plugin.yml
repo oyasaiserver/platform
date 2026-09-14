@@ -10,3 +10,4 @@ softdepend:
   - TokenManager
   - Vault
   - LuckPerms
+  - Essentials

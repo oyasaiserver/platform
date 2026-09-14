@@ -1,5 +1,6 @@
 package io.oyasai.vertex.services.tablist
 
+import com.earth2me.essentials.Essentials
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaitoken.api.OyasaiTokenApi
 import io.oyasai.vertex.Vertex.Companion.plugin
@@ -8,6 +9,8 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.luckperms.api.LuckPerms
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitTask
 
 class TablistRuntime
@@ -16,6 +19,7 @@ private constructor(
     private val tokenApi: OyasaiTokenApi,
     private val luckPerms: LuckPerms,
     private val groupColors: Map<String, String>,
+    private val isAfk: (Player) -> Boolean,
 ) {
   private val legacy = LegacyComponentSerializer.legacyAmpersand()
   private var task: BukkitTask? = null
@@ -37,7 +41,7 @@ private constructor(
     val buildings = Data.getBuildingInt()
     val online = Bukkit.getOnlinePlayers().size
     val tps = TablistFormatter.formatTps(Bukkit.getTPS().firstOrNull() ?: 0.0)
-    val version = TablistFormatter.minecraftVersion(Bukkit.getBukkitVersion())
+    val version = Bukkit.getMinecraftVersion()
 
     Bukkit.getOnlinePlayers().forEach { player ->
       val likes = Data.userLikesInt[player.uniqueId] ?: 0
@@ -67,7 +71,7 @@ private constructor(
                   groupColor = groupColor,
                   suffix = suffix,
                   likes = likes,
-                  playerName = player.name,
+                  playerName = TablistFormatter.playerDisplayNameLegacy(player.name, isAfk(player)),
               )
           )
       )
@@ -80,6 +84,13 @@ private constructor(
       val tokenApi =
           Bukkit.getServicesManager().getRegistration(OyasaiTokenApi::class.java)?.provider
       val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
+      val essentials = Bukkit.getPluginManager().getPlugin("Essentials")
+      val isAfk =
+          if (essentials == null) {
+            { _: Player -> false }
+          } else {
+            EssentialsAfkLookup.from(essentials)?.let { it::isAfk } ?: { _: Player -> false }
+          }
       val missingServices =
           listOfNotNull(
               "Vault Economy".takeIf { economy == null },
@@ -92,7 +103,7 @@ private constructor(
         )
         return null
       }
-      return TablistRuntime(economy, tokenApi, luckPerms, loadGroupColors()).start()
+      return TablistRuntime(economy, tokenApi, luckPerms, loadGroupColors(), isAfk).start()
     }
 
     private fun loadGroupColors(): Map<String, String> {
@@ -102,5 +113,14 @@ private constructor(
         it.lowercase(Locale.US) to section.getString(it, "").orEmpty()
       }
     }
+  }
+}
+
+private class EssentialsAfkLookup(private val essentials: Essentials) {
+  fun isAfk(player: Player): Boolean = essentials.getUser(player)?.isAfk ?: false
+
+  companion object {
+    fun from(plugin: Plugin?): EssentialsAfkLookup? =
+        if (plugin == null) null else (plugin as? Essentials)?.let(::EssentialsAfkLookup)
   }
 }

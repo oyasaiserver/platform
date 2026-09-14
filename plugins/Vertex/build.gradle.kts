@@ -1,7 +1,10 @@
+repositories { maven("https://repo.essentialsx.net/releases/") }
+
 dependencies {
   compileOnly(libs.purpur.api)
   compileOnly(libs.luckperms.api)
   compileOnly(libs.vault.api)
+  compileOnly("net.essentialsx:EssentialsX:2.21.2") { isTransitive = false }
   compileOnly(project(":plugins:OyasaiToken"))
   compileOnly(project(":plugins:SocialLikes3"))
   implementation(libs.discord.webhooks)
