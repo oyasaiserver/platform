@@ -3,6 +3,7 @@ package io.oyasai.oyasaitab
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TablistFormatterTest {
   @Test
@@ -103,9 +104,13 @@ class TablistFormatterTest {
             listOf("white", "blue", "default"),
         )
 
-    assertEquals(0, orders[white])
-    assertEquals(1, orders[blue])
+    assertEquals(4, orders[white])
+    assertEquals(3, orders[blue])
     assertEquals(2, orders[default])
-    assertEquals(3, orders[afkWhite])
+    assertEquals(1, orders[afkWhite])
+    assertTrue(orders.values.all { it > 0 })
+    assertTrue(orders.getValue(white) > orders.getValue(blue))
+    assertTrue(orders.getValue(blue) > orders.getValue(default))
+    assertTrue(orders.getValue(default) > orders.getValue(afkWhite))
   }
 }

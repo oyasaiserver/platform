@@ -27,6 +27,7 @@ import org.bukkit.scoreboard.Criteria
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.RenderType
 import org.bukkit.scoreboard.Scoreboard
+import org.bukkit.scoreboard.Team
 
 class OyasaiTabPlugin : JavaPlugin() {
   private var runtime: OyasaiTabRuntime? = null
@@ -57,6 +58,7 @@ private constructor(
 
   fun start(): OyasaiTabRuntime {
     ensurePingObjective()
+    cleanupEmptyOwnTeams()
     Bukkit.getPluginManager().registerEvents(this, plugin)
     task = Bukkit.getScheduler().runTaskTimer(plugin, Runnable { updateAll() }, 20L, 20L)
     updateAll()
@@ -122,7 +124,7 @@ private constructor(
               )
           )
       )
-      player.setPlayerListOrder(orders[player.uniqueId] ?: 0)
+      player.setPlayerListOrder(orders[player.uniqueId] ?: 1)
       updateNameTag(player, profile)
       updatePing(player)
     }
@@ -159,7 +161,10 @@ private constructor(
     val team = scoreboard.getTeam(teamName) ?: scoreboard.registerNewTeam(teamName)
     team.prefix(legacy.deserialize(prefix))
     team.suffix(legacy.deserialize(suffix))
-    if (currentTeam != null && currentTeam.name != teamName) currentTeam.removeEntry(player.name)
+    if (currentTeam != null && currentTeam.name != teamName) {
+      currentTeam.removeEntry(player.name)
+      unregisterIfEmptyOwnTeam(currentTeam)
+    }
     if (!team.hasEntry(player.name)) team.addEntry(player.name)
   }
 
@@ -182,7 +187,19 @@ private constructor(
           }
 
   private fun removeOwnTeamEntry(entry: String) {
-    scoreboard.getEntryTeam(entry)?.takeIf { ownsTeam(it.name) }?.removeEntry(entry)
+    val team = scoreboard.getEntryTeam(entry)?.takeIf { ownsTeam(it.name) } ?: return
+    team.removeEntry(entry)
+    unregisterIfEmptyOwnTeam(team)
+  }
+
+  private fun cleanupEmptyOwnTeams() {
+    scoreboard.teams
+        .filter { ownsTeam(it.name) && it.entries.isEmpty() }
+        .forEach { it.unregister() }
+  }
+
+  private fun unregisterIfEmptyOwnTeam(team: Team) {
+    if (ownsTeam(team.name) && team.entries.isEmpty()) team.unregister()
   }
 
   private fun ownTeamName(group: String, prefix: String, suffix: String): String {
@@ -340,7 +357,7 @@ object TabOrder {
                 .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name }
                 .thenBy { it.name }
         )
-        .mapIndexed { index, entry -> entry.uuid to index }
+        .mapIndexed { index, entry -> entry.uuid to entries.size - index }
         .toMap()
   }
 }
