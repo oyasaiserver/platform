@@ -30,6 +30,13 @@ class OwgCommand(private val lifecycle: WorldLifecycle) : CommandExecutor, TabCo
         }
         lifecycle.loadWorld(args[1], sender)
       }
+      "create" -> {
+        if (!requireAdmin(sender) || args.size != 3) {
+          if (args.size != 3) sender.sendMessage("Usage: /owg create <name> <void-end|flat>")
+          return true
+        }
+        lifecycle.createWorld(args[1], args[2], sender)
+      }
       "unload" -> {
         if (!requireAdmin(sender) || args.size != 2) {
           if (args.size != 2) sender.sendMessage("Usage: /owg unload <world>")
@@ -42,7 +49,9 @@ class OwgCommand(private val lifecycle: WorldLifecycle) : CommandExecutor, TabCo
         lifecycle.runCheck(sender)
       }
       else ->
-          sender.sendMessage("Usage: /owg <status|tp [world]|load <world>|unload <world>|check>")
+          sender.sendMessage(
+              "Usage: /owg <status|tp [world]|load <world>|create <name> <void-end|flat>|unload <world>|check>"
+          )
     }
     return true
   }
@@ -55,7 +64,7 @@ class OwgCommand(private val lifecycle: WorldLifecycle) : CommandExecutor, TabCo
   ): List<String> {
     val candidates =
         when (args.size) {
-          1 -> listOf("status", "tp", "load", "unload", "check")
+          1 -> listOf("status", "tp", "load", "create", "unload", "check")
           2 ->
               if (
                   args[0].equals("tp", true) ||
@@ -64,6 +73,7 @@ class OwgCommand(private val lifecycle: WorldLifecycle) : CommandExecutor, TabCo
               )
                   lifecycle.configSnapshot().worlds.keys.toList()
               else emptyList()
+          3 -> if (args[0].equals("create", true)) listOf("void-end", "flat") else emptyList()
           else -> emptyList()
         }
     val prefix = args.lastOrNull()?.lowercase().orEmpty()

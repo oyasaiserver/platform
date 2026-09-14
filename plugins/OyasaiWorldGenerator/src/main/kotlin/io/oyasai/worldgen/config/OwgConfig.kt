@@ -4,16 +4,36 @@ import io.oyasai.worldgen.height.HeightSpec
 import java.util.Locale
 import java.util.logging.Logger
 import org.bukkit.GameMode
+import org.bukkit.World
 import org.bukkit.configuration.file.FileConfiguration
 
 data class OwgWorldConfig(
     val name: String,
     val generator: String,
+    val kind: OwgWorldKind,
     val heightSpec: HeightSpec,
     val spawnY: Int,
     val gameMode: GameMode,
     val allowFlight: Boolean,
 )
+
+enum class OwgWorldKind(
+    val id: String,
+    val environment: World.Environment,
+) {
+  VOID_END("void-end", World.Environment.THE_END),
+  FLAT("flat", World.Environment.NORMAL);
+
+  companion object {
+    fun parse(value: String): OwgWorldKind? =
+        when (value.trim().lowercase(Locale.ROOT)) {
+          "void",
+          "void-end" -> VOID_END
+          "flat" -> FLAT
+          else -> null
+        }
+  }
+}
 
 data class OwgConfig(
     val worlds: Map<String, OwgWorldConfig>,
@@ -26,6 +46,19 @@ data class OwgConfig(
     private val SAFE_WORLD_NAME = Regex("[A-Za-z0-9_.-]+")
 
     fun empty(): OwgConfig = OwgConfig(emptyMap(), true, false, emptySet(), emptyList())
+
+    fun isSafeWorldName(worldName: String): Boolean = SAFE_WORLD_NAME.matches(worldName)
+
+    fun defaultWorld(worldName: String, kind: OwgWorldKind): OwgWorldConfig =
+        OwgWorldConfig(
+            name = worldName,
+            generator = kind.id,
+            kind = kind,
+            heightSpec = HeightSpec(0, 2032, 256),
+            spawnY = 64,
+            gameMode = GameMode.ADVENTURE,
+            allowFlight = true,
+        )
 
     fun load(config: FileConfiguration, logger: Logger): OwgConfig {
       val worldsSection = config.getConfigurationSection("worlds")
@@ -54,7 +87,7 @@ data class OwgConfig(
           logger.warning("[OWG][config] Ignoring $error")
           continue
         }
-        if (!SAFE_WORLD_NAME.matches(worldName)) {
+        if (!isSafeWorldName(worldName)) {
           val error = "$worldName: unsafe world name"
           errors += error
           logger.warning("[OWG][config] Ignoring $error")
@@ -62,11 +95,9 @@ data class OwgConfig(
         }
 
         val generator = section.getString("generator", "void")!!.trim().lowercase(Locale.ROOT)
-        val generatorFamily = generator.substringBefore(':')
-        if (generator != "void") {
-          val reason =
-              if (generatorFamily == "flat") "flat generator is reserved but not implemented"
-              else "unsupported generator '$generator'"
+        val kind = OwgWorldKind.parse(generator)
+        if (kind == null) {
+          val reason = "unsupported generator '$generator'"
           errors += "$worldName: $reason"
           logger.warning("[OWG][config] Ignoring $worldName: $reason")
           continue
@@ -115,6 +146,7 @@ data class OwgConfig(
             OwgWorldConfig(
                 name = worldName,
                 generator = generator,
+                kind = kind,
                 heightSpec = HeightSpec(minY, height, logicalHeight),
                 spawnY = spawnY,
                 gameMode = gameMode,

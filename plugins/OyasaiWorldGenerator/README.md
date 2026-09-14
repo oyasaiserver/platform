@@ -1,14 +1,15 @@
 # OyasaiWorldGenerator
 
-展示用の `THE_END` ワールドをボイドジェネレータで生成し、Purpur 26.2 のワールド高さを起動時に適用するプラグインです。CustomWorldHeight には実行時依存しません。
+展示用の `THE_END` ボイドワールドと、バニラのスーパーフラット overworld を生成し、Purpur 26.2 のワールド高さを起動時に適用するプラグインです。CustomWorldHeight には実行時依存しません。
 
 ## 使い方
 
-`config.yml` の `worlds` に対象を定義し、サーバーを完全再起動します。`min-y + height` は 2032 以下、`min-y` と `height` は16の倍数である必要があります。`maxHeight` は排他的です。
+`config.yml` の `worlds` に対象を定義し、サーバーを完全再起動します。`generator` は `void-end`（互換値: `void`）または `flat` です。`min-y + height` は 2032 以下、`min-y` と `height` は16の倍数である必要があります。`maxHeight` は排他的です。
 
 - `/owg status`: 期待値、実測値、ロード状態、provider、自己テスト結果
 - `/owg tp [world]`: 設定したゲームモードと飛行可否を付与して入場
 - `/owg load <world>`: 起動時安全検査を通過した対象だけをロード
+- `/owg create <name> <void-end|flat>`: 設定へ追記し、自己テスト後に新規ワールドを作成
 - `/owg unload <world>`: 保存してアンロード（フォルダは削除しない）
 - `/owg check`: 設定・バージョン・ロード済みワールドを読み取り検査
 
@@ -20,7 +21,7 @@ Multiverse-Core の `auto-import-3rd-party-worlds` が有効な場合、ロー�
 
 `HeightProvider` を境界にし、現行の `NmsHeightProvider` は Purpur 26.2 以外で何も変更せず `false` を返します。`WorldInitEvent` (`NORMAL`) ではアンロードせず、次を行います。
 
-1. バニラ `the_end` の `DimensionType` を複製し、`minY` / `height` / `logicalHeight` だけを変更する。
+1. バニラ `the_end` または `overworld` の `DimensionType` を複製し、`minY` / `height` / `logicalHeight` だけを変更する。
 2. `DimensionType` レジストリの元の frozen 状態と intrusive-holder map を保存し、一時的に登録可能にしてから必ず復元する。
 3. `ServerLevel` の dimension holder と6個の高さキャッシュを書き換える。
 4. Moonrise/Starlight の4個の light-section 境界を書き換える。
@@ -41,7 +42,7 @@ Multiverse-Core の `auto-import-3rd-party-worlds` が有効な場合、ロー�
 OWG 側で独自に書いたもの:
 
 - `HeightProvider` の境界、宣言・適用・検証状態の管理。
-- バニラ `the_end` レコードを3項目だけ差し替えて複製する処理と、OWG 固有 namespace/key の設計。
+- バニラ `the_end` / `overworld` レコードを3項目だけ差し替えて複製する処理と、OWG 固有 namespace/key の設計。
 - レジストリ状態を `try/finally` で保存・復元し、各書き込みを読み返す処理。
 - フィールド名が変わった場合の型・宣言順・変更前値による一意探索と fail-closed 判定。
 - 自己テストの既存フォルダ拒否、作成元追跡、固定パス削除ガード。

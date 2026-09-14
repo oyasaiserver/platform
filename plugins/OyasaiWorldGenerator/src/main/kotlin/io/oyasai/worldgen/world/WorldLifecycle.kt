@@ -2,6 +2,7 @@ package io.oyasai.worldgen.world
 
 import io.oyasai.worldgen.config.OwgConfig
 import io.oyasai.worldgen.config.OwgWorldConfig
+import io.oyasai.worldgen.config.OwgWorldKind
 import io.oyasai.worldgen.gen.VoidGenerator
 import io.oyasai.worldgen.height.HeightProvider
 import io.oyasai.worldgen.height.HeightSpec
@@ -16,6 +17,7 @@ import org.bukkit.Location
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.WorldCreator
+import org.bukkit.WorldType
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -163,6 +165,45 @@ class WorldLifecycle(
     return createAndVerify(entry, sender)
   }
 
+  fun createWorld(name: String, kindId: String, sender: CommandSender): Boolean {
+    val kind = OwgWorldKind.parse(kindId)
+    if (kind == null || kind.id != kindId.lowercase()) {
+      sender.sendMessage("Usage: /owg create <name> <void-end|flat>")
+      return false
+    }
+    if (!OwgConfig.isSafeWorldName(name)) {
+      sender.sendMessage("[OWG] 使用できないワールド名です: $name")
+      return false
+    }
+    reloadConfiguration()
+    if (name in currentConfig.configuredWorldNames || plugin.config.contains("worlds.$name")) {
+      sender.sendMessage("[OWG] 既に設定されています: $name")
+      return false
+    }
+    if (Bukkit.getWorld(name) != null || worldFolders(name).any(Files::exists)) {
+      sender.sendMessage("[OWG] 既存ワールドまたはフォルダがあるため作成しません: $name")
+      return false
+    }
+    val entry = OwgConfig.defaultWorld(name, kind)
+    val supported = isSupportedServer()
+    if (!supported) {
+      sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 build 2622/2593 のみです")
+      return false
+    }
+    if (!currentConfig.selfTest) {
+      sender.sendMessage("[OWG] self-test が無効のため作成しません")
+      return false
+    }
+    if (runSelfTest(entry) != SelfTestResult.PASSED) {
+      sender.sendMessage("[OWG] 自己テストに失敗したため作成しません")
+      return false
+    }
+
+    writeWorldConfig(entry)
+    reloadConfiguration()
+    return createAndVerify(entry, sender)
+  }
+
   fun unloadWorld(name: String, sender: CommandSender): Boolean {
     val entry = currentConfig.worlds[name]
     if (entry == null) {
@@ -263,7 +304,10 @@ class WorldLifecycle(
           when {
             !currentConfig.selfTest -> SelfTestResult.DISABLED
             !supported || !configValid -> SelfTestResult.NOT_RUN
-            else -> runSelfTest(selectSelfTestSpec())
+            else ->
+                if (selectSelfTestEntries().all { runSelfTest(it) == SelfTestResult.PASSED })
+                    SelfTestResult.PASSED
+                else SelfTestResult.FAILED
           }
       if (selfTestResult == SelfTestResult.DISABLED) {
         plugin.logger.severe(
@@ -352,7 +396,7 @@ class WorldLifecycle(
 
   private fun declare(entry: OwgWorldConfig) {
     managedSpecs[entry.name] = entry.heightSpec
-    heightProvider.declare(entry.name, entry.heightSpec)
+    heightProvider.declare(entry.name, entry.heightSpec, entry.kind.environment)
   }
 
   private fun createAndVerify(entry: OwgWorldConfig, sender: CommandSender): Boolean {
@@ -366,10 +410,7 @@ class WorldLifecycle(
       val world =
           createManagedWorld(
               entry.name,
-              WorldCreator(entry.name)
-                  .environment(World.Environment.THE_END)
-                  .generator(VoidGenerator(entry.spawnY))
-                  .generateStructures(false),
+              worldCreator(entry.name, entry),
           )
       if (world == null) {
         failedWorlds += entry.name
@@ -396,14 +437,17 @@ class WorldLifecycle(
     }
   }
 
-  private fun selectSelfTestSpec(): HeightSpec =
-      currentConfig.worlds.values.maxBy { it.heightSpec.maxHeight }.heightSpec
+  private fun selectSelfTestEntries(): List<OwgWorldConfig> =
+      currentConfig.worlds.values
+          .distinctBy { it.kind to it.heightSpec }
+          .sortedWith(compareBy<OwgWorldConfig> { it.kind.id }.thenBy { it.heightSpec.maxHeight })
 
-  private fun runSelfTest(spec: HeightSpec): SelfTestResult {
+  private fun runSelfTest(entry: OwgWorldConfig): SelfTestResult {
     val name = SELF_TEST_WORLD
+    val spec = entry.heightSpec
     val allowedFolders = selfTestFolders()
     plugin.logger.info(
-        "[OWG][self-test] BEGIN world=$name expected min=${spec.minY} max=${spec.maxHeight} " +
+        "[OWG][self-test] BEGIN world=$name kind=${entry.kind.id} expected min=${spec.minY} max=${spec.maxHeight} " +
             "logical=${spec.logicalHeight} allowed=${allowedFolders.joinToString()}"
     )
     if (Bukkit.getWorld(name) != null || allowedFolders.any(Files::exists)) {
@@ -419,16 +463,13 @@ class WorldLifecycle(
     var passed = false
     try {
       managedSpecs[name] = spec
-      heightProvider.declare(name, spec)
+      heightProvider.declare(name, spec, entry.kind.environment)
       applyResults.remove(name)
       plugin.logger.info("[OWG][self-test] createWorld start")
       val createdWorld =
           createManagedWorld(
               name,
-              WorldCreator(name)
-                  .environment(World.Environment.THE_END)
-                  .generator(VoidGenerator(spec.minY.coerceAtLeast(0)))
-                  .generateStructures(false),
+              worldCreator(name, entry),
           )
       check(createdWorld != null) { "createWorld returned null" }
       world = createdWorld
@@ -472,25 +513,9 @@ class WorldLifecycle(
 
   private fun selfTestFolders(): Set<Path> {
     val root = Bukkit.getWorldContainer().toPath().toAbsolutePath().normalize()
-    val primaryWorldPath =
-        Bukkit.getWorlds()
-            .firstOrNull { it.key == NamespacedKey.minecraft("overworld") }
-            ?.worldPath
-            ?.toAbsolutePath()
-            ?.normalize() ?: error("Primary world is unavailable during self-test")
-    val levelStorageRoot =
-        if (
-            primaryWorldPath.fileName.toString() == "overworld" &&
-                primaryWorldPath.parent?.fileName?.toString() == "minecraft" &&
-                primaryWorldPath.parent?.parent?.fileName?.toString() == "dimensions"
-        ) {
-          primaryWorldPath.parent.parent.parent
-        } else {
-          primaryWorldPath
-        }
     return setOf(
         root.resolve(SELF_TEST_WORLD).normalize(),
-        levelStorageRoot.resolve("dimensions/minecraft/$SELF_TEST_WORLD").normalize(),
+        levelStorageRoot().resolve("dimensions/minecraft/$SELF_TEST_WORLD").normalize(),
     )
   }
 
@@ -512,6 +537,54 @@ class WorldLifecycle(
       Bukkit.createWorld(creator)
     } finally {
       managedLoadRequests -= worldName
+    }
+  }
+
+  private fun worldCreator(worldName: String, entry: OwgWorldConfig): WorldCreator {
+    val creator =
+        WorldCreator(worldName).environment(entry.kind.environment).generateStructures(false)
+    return when (entry.kind) {
+      OwgWorldKind.VOID_END -> creator.generator(VoidGenerator(entry.spawnY))
+      OwgWorldKind.FLAT -> creator.type(WorldType.FLAT)
+    }
+  }
+
+  private fun writeWorldConfig(entry: OwgWorldConfig) {
+    val path = "worlds.${entry.name}"
+    plugin.config.set("$path.generator", entry.kind.id)
+    plugin.config.set("$path.min-y", entry.heightSpec.minY)
+    plugin.config.set("$path.height", entry.heightSpec.height)
+    plugin.config.set("$path.logical-height", entry.heightSpec.logicalHeight)
+    plugin.config.set("$path.spawn-y", entry.spawnY)
+    plugin.config.set("$path.gamemode", entry.gameMode.name.lowercase())
+    plugin.config.set("$path.allow-flight", entry.allowFlight)
+    plugin.saveConfig()
+    plugin.logger.info("[OWG][config] Added ${entry.name} (${entry.kind.id}) to config.yml")
+  }
+
+  private fun worldFolders(worldName: String): Set<Path> {
+    val root = Bukkit.getWorldContainer().toPath().toAbsolutePath().normalize()
+    return setOf(
+        root.resolve(worldName).normalize(),
+        levelStorageRoot().resolve("dimensions/minecraft/$worldName").normalize(),
+    )
+  }
+
+  private fun levelStorageRoot(): Path {
+    val primaryWorldPath =
+        Bukkit.getWorlds()
+            .firstOrNull { it.key == NamespacedKey.minecraft("overworld") }
+            ?.worldPath
+            ?.toAbsolutePath()
+            ?.normalize() ?: error("Primary world is unavailable")
+    return if (
+        primaryWorldPath.fileName.toString() == "overworld" &&
+            primaryWorldPath.parent?.fileName?.toString() == "minecraft" &&
+            primaryWorldPath.parent?.parent?.fileName?.toString() == "dimensions"
+    ) {
+      primaryWorldPath.parent.parent.parent
+    } else {
+      primaryWorldPath
     }
   }
 
