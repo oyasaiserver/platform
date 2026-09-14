@@ -4,3 +4,9 @@ main: io.oyasai.vertex.Vertex
 api-version: "1.21"
 authors:
   - shunueda
+softdepend:
+  - SocialLikes3
+  - OyasaiToken
+  - TokenManager
+  - Vault
+  - LuckPerms

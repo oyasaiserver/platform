@@ -1,0 +1,14 @@
+tablist:
+  group-colors:
+    default: "&a"
+    white: "&7"
+    blue: "&9"
+    takumi: "&c"
+    builder: "&5"
+    jokyu: "&3"
+    chukyu: "&x&4&0&8&0&2&0"
+    mod: "&d"
+    dev: "&e"
+    guide: "&b"
+    admin: ""
+    admini: ""
