@@ -73,6 +73,7 @@ oyasaiPurpur rec {
     oyasaimenu
     oyasaimusic
     oyasaipets
+    oyasaitab
     oyasaitoken
     oyasaiutilities
     oyasaivehicles

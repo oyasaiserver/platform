@@ -1,0 +1,44 @@
+tablist:
+  sort-groups:
+    - white
+    - blue
+    - takumi
+    - builder
+    - jokyu
+    - chukyu
+    - default
+    - mod
+    - admini
+    - admin
+    - dev
+  group-colors:
+    default: "&a"
+    white: "&7"
+    blue: "&9"
+    takumi: "&c"
+    builder: "&5"
+    jokyu: "&3"
+    chukyu: "&x&4&0&8&0&2&0"
+    mod: "&d"
+    dev: "&e"
+    guide: "&b"
+    admin: ""
+    admini: ""
+
+nametag:
+  team-prefix: "oyasaitab_"
+  group-prefixes:
+    default: "&7[%dp_level%&7]&r&a*%luckperms-suffix%&f"
+    white: "&7[%dp_level%&7]&r&7*%luckperms-suffix%&f"
+    blue: "&7[%dp_level%&7]&r&9*%luckperms-suffix%&f"
+    takumi: "&7[%dp_level%&7]&r&c*%luckperms-suffix%&f"
+    builder: "&7[%dp_level%&7]&r&5%luckperms-suffix%*&f"
+    jokyu: "&7[%dp_level%&7]&r&3*%luckperms-suffix%&f"
+    chukyu: "&7[%dp_level%&7]&r&x&4&0&8&0&2&0*%luckperms-suffix%&f"
+    mod: "&7[%dp_level%&7]&r&d*%luckperms-suffix%&f"
+    dev: "&7[%dp_level%&7]&r&e*%luckperms-suffix%&f"
+    guide: "&b【案内人】&f"
+    admin: "&7[%dp_level%&7]&r%luckperms-suffix%&f"
+    admini: "&7[%dp_level%&7]&r%luckperms-suffix%&f"
+  group-suffixes:
+    default: ""

@@ -1,0 +1,14 @@
+name: OyasaiTab
+version: "0.1.0"
+main: io.oyasai.oyasaitab.OyasaiTabPlugin
+api-version: "26.2"
+authors:
+  - OyasaiServer
+softdepend:
+  - SocialLikes3
+  - OyasaiToken
+  - TokenManager
+  - Vault
+  - LuckPerms
+  - Essentials
+  - DynamicProfile
