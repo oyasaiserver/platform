@@ -62,7 +62,9 @@ class OyasaiWorldGenerator : JavaPlugin() {
     val normalized = id?.trim().orEmpty()
     val family = if (normalized.isEmpty()) "void" else normalized.substringBefore(':').lowercase()
     if (
-        family == "void" && (normalized.isEmpty() || normalized.equals("void", ignoreCase = true))
+        normalized.isEmpty() ||
+            normalized.equals("void", ignoreCase = true) ||
+            normalized.equals("void-end", ignoreCase = true)
     ) {
       val spawnY =
           lifecycle?.configSnapshot()?.worlds?.get(worldName)?.spawnY
@@ -71,7 +73,8 @@ class OyasaiWorldGenerator : JavaPlugin() {
       return VoidGenerator(spawnY)
     }
     val reason =
-        if (family == "flat") "flat generator is not implemented" else "unknown generator id"
+        if (family == "flat") "flat uses vanilla WorldType.FLAT, not an OWG generator id"
+        else "unknown generator id"
     logger.severe("[OWG] Refusing generator substitution for world=$worldName id=$id: $reason")
     return null
   }

@@ -29,8 +29,9 @@ val generateFailureTestProvider by
         var source = productionProvider.asFile.readText()
         source =
             source.replace(
-                "val spec = declarations[world.name] ?: return false\n    if (!isSupportedServer())",
-                "val spec = declarations[world.name] ?: return false\n" +
+                "val declaration = declarations[world.name] ?: return false\n    val spec = declaration.spec\n    if (!isSupportedServer())",
+                "val declaration = declarations[world.name] ?: return false\n" +
+                    "    val spec = declaration.spec\n" +
                     "    OwgFailureTestControl.fail(\"before-apply\", world.name)\n" +
                     "    if (!isSupportedServer())",
             )

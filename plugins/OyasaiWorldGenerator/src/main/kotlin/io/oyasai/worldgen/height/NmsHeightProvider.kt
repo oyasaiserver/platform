@@ -24,18 +24,19 @@ import sun.misc.Unsafe
 class NmsHeightProvider(private val logger: Logger) : HeightProvider {
   override val name: String = "NMS/Purpur-26.2-build.2622|2593"
 
-  private val declarations = ConcurrentHashMap<String, HeightSpec>()
+  private val declarations = ConcurrentHashMap<String, HeightDeclaration>()
   private val unsafe: Unsafe by lazy { resolveUnsafe() }
 
-  override fun declare(worldName: String, spec: HeightSpec) {
-    declarations[worldName] = spec
+  override fun declare(worldName: String, spec: HeightSpec, environment: World.Environment) {
+    declarations[worldName] = HeightDeclaration(spec, environment)
     logger.info(
-        "[OWG][height] Declared $worldName: min=${spec.minY} max=${spec.maxHeight} logical=${spec.logicalHeight}"
+        "[OWG][height] Declared $worldName: environment=$environment min=${spec.minY} max=${spec.maxHeight} logical=${spec.logicalHeight}"
     )
   }
 
   override fun apply(world: World): Boolean {
-    val spec = declarations[world.name] ?: return false
+    val declaration = declarations[world.name] ?: return false
+    val spec = declaration.spec
     if (!isSupportedServer()) {
       logger.severe(
           "[OWG][height] Refusing to patch ${world.name}: expected Purpur 26.2 build 2622|2593, got ${runtimeVersion()}"
@@ -51,7 +52,7 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     return try {
       logger.info("[OWG][height] APPLY BEGIN world=${world.name} provider=$name")
       val serverLevel = (world as CraftWorld).handle
-      registration = createOrReadDimensionType(world.name, spec)
+      registration = createOrReadDimensionType(world.name, spec, declaration.environment)
       levelSnapshot = captureLevel(serverLevel)
       starlightSnapshot = captureStarlight(serverLevel)
       levelMutationStarted = true
@@ -159,6 +160,7 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
   private fun createOrReadDimensionType(
       worldName: String,
       spec: HeightSpec,
+      environment: World.Environment,
   ): DimensionRegistration {
     val registry =
         MinecraftServer.getServer().registryAccess().lookup(Registries.DIMENSION_TYPE).orElseThrow()
@@ -167,7 +169,7 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     val key =
         ResourceKey.create(
             Registries.DIMENSION_TYPE,
-            Identifier.fromNamespaceAndPath("oyasai", dimensionPath(worldName, spec)),
+            Identifier.fromNamespaceAndPath("oyasai", dimensionPath(worldName, spec, environment)),
         )
 
     registry.get(key).orElse(null)?.let { existing ->
@@ -176,7 +178,13 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
       return DimensionRegistration(existing, null)
     }
 
-    val base = registry.getOrThrow(BuiltinDimensionTypes.END).value()
+    val baseKey =
+        when (environment) {
+          World.Environment.THE_END -> BuiltinDimensionTypes.END
+          World.Environment.NORMAL -> BuiltinDimensionTypes.OVERWORLD
+          else -> error("Unsupported OWG dimension base: $environment")
+        }
+    val base = registry.getOrThrow(baseKey).value()
     val copied =
         DimensionType(
             base.hasFixedTime(),
@@ -197,7 +205,9 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
             base.defaultClock(),
         )
     checkDimension(copied, spec, "copied DimensionType")
-    logger.info("[OWG][height] Copied vanilla the_end DimensionType and verified height fields")
+    logger.info(
+        "[OWG][height] Copied vanilla ${baseKey.identifier()} DimensionType and verified height fields"
+    )
 
     val frozenField = resolveRegistryFrozenField(registry)
     val intrusiveField = resolveRegistryIntrusiveField(registry, frozenField)
@@ -557,10 +567,25 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     return field.get(null) as Unsafe
   }
 
-  private fun dimensionPath(worldName: String, spec: HeightSpec): String {
+  private fun dimensionPath(
+      worldName: String,
+      spec: HeightSpec,
+      environment: World.Environment,
+  ): String {
     val safeName = worldName.lowercase().replace(Regex("[^a-z0-9/._-]"), "_")
-    return "the_end_${safeName}_${spec.minY}_${spec.height}_${spec.logicalHeight}"
+    val base =
+        when (environment) {
+          World.Environment.THE_END -> "the_end"
+          World.Environment.NORMAL -> "overworld"
+          else -> "unsupported"
+        }
+    return "${base}_${safeName}_${spec.minY}_${spec.height}_${spec.logicalHeight}"
   }
+
+  private data class HeightDeclaration(
+      val spec: HeightSpec,
+      val environment: World.Environment,
+  )
 
   private data class DimensionRegistration(
       val holder: Holder.Reference<DimensionType>,

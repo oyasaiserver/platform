@@ -4,7 +4,7 @@ import org.bukkit.World
 
 interface HeightProvider {
   /** ワールド生成前に呼ぶ。宣言だけ行う */
-  fun declare(worldName: String, spec: HeightSpec)
+  fun declare(worldName: String, spec: HeightSpec, environment: World.Environment)
 
   /** WorldInitEvent の中で呼ぶ。実際に適用する */
   fun apply(world: World): Boolean
