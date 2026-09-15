@@ -1589,6 +1589,16 @@
       "hash": "sha256-gqaI/7s/SrhTp/rtJwe5VoKRf2gsLn/SJU1cZ+QBKHY="
     }
   },
+  "net.essentialsx:EssentialsX:2.21.2": {
+    "EssentialsX-2.21.2.jar": {
+      "url": "https://nexus.scarsz.me/content/groups/public/net/essentialsx/EssentialsX/2.21.2/EssentialsX-2.21.2.jar",
+      "hash": "sha256-C3WQJvAvPFR8MohvNmbbPB+Uz/c+FBrlZIMT/Q0L38Y="
+    },
+    "EssentialsX-2.21.2.pom": {
+      "url": "https://nexus.scarsz.me/content/groups/public/net/essentialsx/EssentialsX/2.21.2/EssentialsX-2.21.2.pom",
+      "hash": "sha256-fBeyPtpqRk5e6smn/d2xPS/C+rEQRRv0Ri6Ig3z7t/A="
+    }
+  },
   "net.fabricmc:tiny-remapper:0.12.0": {
     "tiny-remapper-0.12.0-fat.jar": {
       "url": "https://repo.purpurmc.org/snapshots/net/fabricmc/tiny-remapper/0.12.0/tiny-remapper-0.12.0-fat.jar",
