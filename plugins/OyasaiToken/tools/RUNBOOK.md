@@ -1,5 +1,28 @@
 # TokenManager → OyasaiToken 本番移行 手順書
 
+## zVoteParty の全員配布切替（本番適用時の申し送り）
+
+このセクションは切替手順の記録であり、このコミットでは本番設定・本番Skriptを変更しない。
+
+OyasaiToken の配置とローカル検証が完了した後、zVotePartyの投票報酬コマンドにある暫定呼び出しを次のように置き換える。
+
+```diff
+- tokenaddall N
++ tm addall N
+```
+
+`N` は現在の投票報酬量の値をそのまま使う。切替後の実行結果がオンライン人数と一致することを確認する。
+
+暫定Skript `plugins/Skript/scripts/vote-token-spill.sk` は、次の順で撤去する。
+
+1. zVotePartyの設定を保存し、投票報酬の設定値が `tm addall N` になっていることを確認する。
+2. コンソールで稼働中の `vote-token-spill` をSkriptからunloadする（環境のSkript表示名に合わせる）。
+3. `plugins/Skript/scripts/vote-token-spill.sk` を削除する。
+4. Skriptのスクリプト一覧から `vote-token-spill` が消え、`tokenaddall` の呼び出しが残っていないことを確認する。
+5. OyasaiTokenの新JARとzVoteParty設定を反映したうえでサーバーをフル再起動し、投票報酬を1回確認する。
+
+新規サブコマンドを含むJAR差し替えは、OyasaiTokenのSQLite接続・永続化ワーカーを確実に再初期化するため、PlugManXのreloadではなくフル再起動を使用する。
+
 ## 前提
 
 - 残高の正本は **MariaDB `token.tokenmanager`**（9,601行）。`plugins/TokenManager/data.yml` は 2025-07-23 の古い残骸（68行）で**移行元にしてはいけない**
