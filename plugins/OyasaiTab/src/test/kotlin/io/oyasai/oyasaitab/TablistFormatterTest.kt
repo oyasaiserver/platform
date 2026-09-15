@@ -88,6 +88,15 @@ class TablistFormatterTest {
   }
 
   @Test
+  fun normalizesMiniMessageSuffixWithoutChangingLegacySuffix() {
+    assertEquals(
+        "&6*&b*",
+        TablistFormatter.normalizeSuffix("<color:#F1C40F>*</color><aqua>*</aqua>"),
+    )
+    assertEquals("&aLegacy", TablistFormatter.normalizeSuffix("&aLegacy"))
+  }
+
+  @Test
   fun sortsAfkAfterActiveThenGroupThenName() {
     val white = UUID.fromString("00000000-0000-0000-0000-000000000001")
     val blue = UUID.fromString("00000000-0000-0000-0000-000000000002")
@@ -132,26 +141,30 @@ class TablistFormatterTest {
   }
 
   @Test
-  fun calculatesRemoteDiffWithoutTouchingLocalEntries() {
+  fun calculatesRemoteDiffWithoutRemovingLocalEntries() {
     val viewer = UUID.fromString("00000000-0000-0000-0000-000000000020")
     val local = UUID.fromString("00000000-0000-0000-0000-000000000021")
     val remote = UUID.fromString("00000000-0000-0000-0000-000000000022")
     val stale = UUID.fromString("00000000-0000-0000-0000-000000000023")
+    val movedLocal = UUID.fromString("00000000-0000-0000-0000-000000000024")
     val diff =
         CrossServerTabLogic.diffForViewer(
             viewerId = viewer,
             viewerServer = "main",
-            managedEntries = setOf(stale),
+            managedEntries = setOf(stale, movedLocal),
             records =
                 listOf(
                     CrossServerTabEntry(local, "§aLocal", "main", 5),
                     CrossServerTabEntry(remote, "§bRemote", "lobby", 8),
                     CrossServerTabEntry(stale, "§cGone", "axiom", 9),
+                    CrossServerTabEntry(movedLocal, "§dMoved", "lobby", 10),
                 ),
-            connectedPlayerServers = mapOf(viewer to "main", local to "main", remote to "lobby"),
+            connectedPlayerServers =
+                mapOf(viewer to "main", local to "main", remote to "lobby", movedLocal to "main"),
         )
 
     assertEquals(setOf(stale), diff.remove)
+    assertEquals(setOf(movedLocal), diff.forget)
     assertEquals(listOf(remote), diff.upsert.map { it.uuid })
   }
 

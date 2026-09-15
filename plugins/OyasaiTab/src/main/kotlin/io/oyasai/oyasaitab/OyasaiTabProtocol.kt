@@ -68,6 +68,7 @@ data class CrossServerTabEntry(
 
 data class CrossServerTabDiff(
     val remove: Set<UUID>,
+    val forget: Set<UUID>,
     val upsert: List<CrossServerTabEntry>,
 )
 
@@ -98,7 +99,13 @@ object CrossServerTabLogic {
             .filter { it.uuid != viewerId && connectedPlayerServers[it.uuid] != viewerServer }
             .distinctBy { it.uuid }
     val remoteIds = remote.mapTo(mutableSetOf()) { it.uuid }
-    return CrossServerTabDiff(remove = managedEntries - remoteIds, upsert = remote)
+    val forget =
+        managedEntries.filterTo(mutableSetOf()) { connectedPlayerServers[it] == viewerServer }
+    return CrossServerTabDiff(
+        remove = managedEntries - remoteIds - forget,
+        forget = forget,
+        upsert = remote,
+    )
   }
 
   fun shouldRemoveOnDisconnect(uuid: UUID, connectedPlayers: Set<UUID>): Boolean =

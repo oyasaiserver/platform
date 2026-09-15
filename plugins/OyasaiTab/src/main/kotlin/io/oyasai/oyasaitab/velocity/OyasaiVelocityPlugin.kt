@@ -106,6 +106,7 @@ constructor(
   @Subscribe
   fun onServerPostConnect(event: ServerPostConnectEvent) {
     val switchedPlayerId = event.player.uniqueId
+    managedByViewer.remove(switchedPlayerId)
     proxy.scheduler
         .buildTask(
             this,
@@ -165,6 +166,7 @@ constructor(
       viewer.tabList.removeEntry(it)
       managed.remove(it)
     }
+    diff.forget.forEach { managed.remove(it) }
     val orders = CrossServerTabLogic.remoteOrders(diff.upsert)
     diff.upsert.forEach { remote ->
       val player = proxy.getPlayer(remote.uuid).orElse(null) ?: return@forEach

@@ -11,6 +11,7 @@ import java.util.Locale
 import java.util.UUID
 import java.util.zip.CRC32
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.luckperms.api.LuckPerms
 import net.milkbowl.vault.economy.Economy
@@ -196,7 +197,7 @@ private class FullOyasaiTabRuntime(
     return PlayerProfile(
         group = group,
         groupColor = config.groupColors[group].orEmpty(),
-        suffix = user?.cachedData?.metaData?.suffix.orEmpty(),
+        suffix = TablistFormatter.normalizeSuffix(user?.cachedData?.metaData?.suffix.orEmpty()),
         likes = Data.userLikesInt[player.uniqueId] ?: 0,
         money = economy.getBalance(player),
         tokens = tokenApi.getBalance(player.uniqueId),
@@ -388,6 +389,8 @@ object TablistFormatter {
   private val moneyFormat = DecimalFormat("#,##0.##", symbols)
   private val tpsFormat = DecimalFormat("#.##", symbols)
   private val tokenFormat = DecimalFormat("#,##0", symbols)
+  private val miniMessage = MiniMessage.miniMessage()
+  private val legacy = LegacyComponentSerializer.legacyAmpersand()
 
   fun headerLegacy(version: String, receivedLikes: Int): String =
       listOf(
@@ -425,6 +428,10 @@ object TablistFormatter {
 
   fun nameTagPrefixLegacy(template: String, suffix: String, level: String): String =
       template.replace("%dp_level%", level).replace("%luckperms-suffix%", suffix)
+
+  fun normalizeSuffix(suffix: String): String =
+      if (miniMessage.stripTags(suffix) == suffix) suffix
+      else legacy.serialize(miniMessage.deserialize(suffix))
 
   fun formatTps(tps: Double): String = tpsFormat.format(tps.coerceAtMost(20.0))
 }
