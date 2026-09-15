@@ -21,6 +21,27 @@ import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
+internal fun pruneStartupBackups(backupsDir: Path, keepCount: Int): Int {
+  if (keepCount <= 0 || !Files.isDirectory(backupsDir)) {
+    return 0
+  }
+
+  val oldBackups =
+      Files.list(backupsDir).use { paths ->
+        paths
+            .filter { Files.isDirectory(it) && it.fileName.toString().startsWith("startup-") }
+            .sorted(compareByDescending { it.fileName.toString() })
+            .skip(keepCount.toLong())
+            .toList()
+      }
+  oldBackups.forEach { backup ->
+    Files.walk(backup).use { paths ->
+      paths.sorted(java.util.Comparator.reverseOrder()).forEach(Files::delete)
+    }
+  }
+  return oldBackups.size
+}
+
 class SocialLikes : JavaPlugin() {
   override fun onEnable() {
     backupPluginDataOnStartup()
@@ -95,6 +116,9 @@ class SocialLikes : JavaPlugin() {
   }
 
   private fun backupPluginDataOnStartup() {
+    if (!config.getBoolean("backupOnStartup", true)) {
+      return
+    }
     if (!dataFolder.exists()) {
       return
     }
@@ -108,6 +132,15 @@ class SocialLikes : JavaPlugin() {
     try {
       copyDirectory(dataFolder.toPath(), backupDir)
       logger.info("[SocialLikes3] Startup backup created: $backupDir")
+      try {
+        val keepCount = config.getInt("backupKeepCount", 5)
+        val prunedCount = pruneStartupBackups(backupDir.parent, keepCount)
+        if (prunedCount > 0) {
+          logger.info("[SocialLikes3] Pruned $prunedCount old startup backups (kept $keepCount)")
+        }
+      } catch (e: Exception) {
+        logger.severe("[SocialLikes3] Startup backup pruning failed: ${e.message}")
+      }
     } catch (e: Exception) {
       logger.severe("[SocialLikes3] Startup backup failed: ${e.message}")
       throw IllegalStateException("SocialLikes3 startup backup failed", e)

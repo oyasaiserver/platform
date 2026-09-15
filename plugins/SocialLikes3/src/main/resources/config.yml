@@ -3,6 +3,13 @@
 # completion marker; otherwise the plugin warns and continues from YAML.
 readSource: yaml
 
+# Whether to copy the plugin's dataFolder to SocialLikes3-backups/startup-<timestamp> on every enable.
+backupOnStartup: true
+
+# How many of the most recent startup-* backups to keep. Older ones are deleted after each
+# successful backup. Set to a large number (or 0) to effectively disable pruning.
+backupKeepCount: 5
+
 # Interval in minutes for periodic dirty build reconciliation (SQLite retry).
 reconcileIntervalMinutes: 10
 
