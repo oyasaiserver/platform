@@ -79,6 +79,26 @@
         },
         "version": "2026.9.1"
     },
+    "mc-monitor": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "mc-monitor",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:f0667f713856e953dc82c70a608b986b943b33f4b65a9dd55a8ede17fe48f34e",
+            "imageName": "itzg/mc-monitor",
+            "imageTag": "0.17.1",
+            "os": "linux",
+            "sha256": "sha256-qtaPWj90wazHAY7JmysKRSKaZhD7OLV1PSP1w9dPjAc=",
+            "tlsVerify": null
+        },
+        "version": "0.17.1"
+    },
     "mysql-backup": {
         "cargoLock": null,
         "date": null,

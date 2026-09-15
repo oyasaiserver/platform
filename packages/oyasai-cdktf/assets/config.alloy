@@ -35,3 +35,19 @@ loki.source.docker "platform" {
 		environment = env("ENVIRONMENT"),
 	}
 }
+
+prometheus.scrape "mc_monitor" {
+	targets    = [{ "__address__" = "mc-monitor:8080" }]
+	forward_to = [prometheus.remote_write.cloud.receiver]
+}
+
+prometheus.remote_write "cloud" {
+	endpoint {
+		url = env("GRAFANA_METRICS_URL") + "/api/prom/push"
+
+		basic_auth {
+			username = env("GRAFANA_METRICS_USERNAME")
+			password = env("GRAFANA_CLOUD_API_KEY")
+		}
+	}
+}

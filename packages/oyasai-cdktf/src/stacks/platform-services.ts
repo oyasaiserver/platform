@@ -78,6 +78,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       alloy: imageIds["alloy"],
       caddy: imageIds["caddy"],
       mariadb: imageIds.mariadb,
+      mcMonitor: imageIds["mc-monitor"],
       minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
       minecraftLobby: imageIds["oyasai-minecraft-lobby"],
@@ -114,6 +115,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         GRAFANA_LOKI_URL: `${commonInfra.platformCloudGrafanaStack.logsUrl}/loki/api/v1/push`,
         GRAFANA_LOKI_USERNAME: commonInfra.platformCloudGrafanaStack.logsUserId,
         GRAFANA_CLOUD_API_KEY: commonInfra.platformAllServicesToken.token,
+        GRAFANA_METRICS_URL: commonInfra.platformCloudGrafanaStack.prometheusRemoteWriteEndpoint,
+        GRAFANA_METRICS_USERNAME: commonInfra.platformCloudGrafanaStack.prometheusUserId,
       }),
       upload: [
         {
@@ -254,7 +257,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       },
     );
 
-    new Container(this, this.t("velocity-container"), {
+    const velocityContainer = new Container(this, this.t("velocity-container"), {
       image: images.velocity,
       name: "oyasai-velocity",
       restart: "unless-stopped",
@@ -274,6 +277,14 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           hostPath: hostPaths.velocity,
         },
       ],
+    });
+
+    new Container(this, this.t("mc-monitor-container"), {
+      image: images.mcMonitor,
+      name: "mc-monitor",
+      restart: "unless-stopped",
+      command: ["--export-for-prometheus", "--servers", velocityContainer.name],
+      networksAdvanced: [network],
     });
 
     const oyasaiWebContainer = new Container(

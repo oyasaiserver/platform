@@ -164,7 +164,7 @@ export class CommonInfra extends OyasaiTerraformStack {
         provider: grafanaCloudProvider,
         name: "terraform-all-services",
         region: this.platformCloudGrafanaStack.regionSlug,
-        scopes: ["logs:read", "logs:write"],
+        scopes: ["logs:read", "logs:write", "metrics:write"],
         realm: [
           {
             type: "stack",
@@ -203,12 +203,26 @@ export class CommonInfra extends OyasaiTerraformStack {
       }),
     });
 
+    const prometheusDatasource = new DataSource(this, "prometheus-datasource", {
+      uid: "prometheus",
+      name: "Prometheus",
+      type: "prometheus",
+      url: this.platformCloudGrafanaStack.prometheusUrl,
+      accessMode: "proxy",
+      basicAuthEnabled: true,
+      basicAuthUsername: `${this.platformCloudGrafanaStack.prometheusUserId}`,
+      secureJsonDataEncoded: JSON.stringify({
+        basicAuthPassword: this.platformAllServicesToken.token,
+      }),
+    });
+
     const lokiDataSourceJson = pick(lokiDatasource, "type", "uid");
+    const prometheusDataSourceJson = pick(prometheusDatasource, "type", "uid");
 
     new Dashboard(this, "platform-dashboard", {
       overwrite: true,
       configJson: JSON.stringify({
-        title: "Oyasai Platform",
+        title: "Logs",
         uid: "oyasai-platform",
         panels: [
           {
@@ -303,6 +317,40 @@ export class CommonInfra extends OyasaiTerraformStack {
             },
           ],
         },
+      }),
+    });
+
+    new Dashboard(this, "mc-status-dashboard", {
+      overwrite: true,
+      configJson: JSON.stringify({
+        title: "Minecraft Status",
+        uid: "oyasai-mc-status",
+        panels: [
+          {
+            title: "Players Online",
+            type: "stat",
+            gridPos: { h: 4, w: 8, x: 0, y: 0 },
+            datasource: prometheusDataSourceJson,
+            targets: [{ expr: "mc_server_players_online", datasource: prometheusDataSourceJson }],
+            options: { colorMode: "value", graphMode: "area", justifyMode: "auto", orientation: "auto" },
+          },
+          {
+            title: "TPS",
+            type: "stat",
+            gridPos: { h: 4, w: 8, x: 8, y: 0 },
+            datasource: prometheusDataSourceJson,
+            targets: [{ expr: "mc_server_tps", datasource: prometheusDataSourceJson }],
+            options: { colorMode: "value", graphMode: "area", justifyMode: "auto", orientation: "auto" },
+          },
+          {
+            title: "TPS History",
+            type: "timeseries",
+            gridPos: { h: 8, w: 24, x: 0, y: 4 },
+            datasource: prometheusDataSourceJson,
+            targets: [{ expr: "mc_server_tps", datasource: prometheusDataSourceJson }],
+            fieldConfig: { defaults: { unit: "none", custom: { lineWidth: 1, fillOpacity: 30 } }, overrides: [] },
+          },
+        ],
       }),
     });
   }
