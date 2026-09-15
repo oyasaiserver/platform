@@ -40,7 +40,10 @@ class OyasaiResourcePackService(
     SUCCESS,
     DECLINED,
     FAILED,
-    TIMED_OUT,
+    TIMED_OUT;
+
+    /** Saved opt-in is independent from readiness for this connection. */
+    fun retainsOptIn(): Boolean = this in setOf(ALLOWED, REQUESTED, SUCCESS, FAILED, TIMED_OUT)
   }
 
   private data class Config(
@@ -159,7 +162,7 @@ class OyasaiResourcePackService(
 
   private fun sendBankConsent(player: Player) {
     val active = config
-    val allowed = active != null && isLoaded(player.uniqueId)
+    val allowed = active != null && states[player.uniqueId]?.retainsOptIn() == true
     val hash = if (allowed) requireNotNull(active).manifestHash else ByteArray(32)
     // Use the same channel as playback; client will ignore if not OMMT.
     runCatching {
