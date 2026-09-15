@@ -188,7 +188,16 @@ private class FullOyasaiTabRuntime(
       updateNameTag(player, profile)
       updatePing(player)
     }
-    network.send(players)
+    network.send(players) { player ->
+      val profile = profiles.getValue(player)
+      legacy.deserialize(
+          TablistFormatter.playerNameNoBadgeLegacy(
+              groupColor = profile.groupColor,
+              suffix = profile.suffix,
+              playerName = TablistFormatter.playerDisplayNameLegacy(player.name, profile.afk),
+          )
+      )
+    }
   }
 
   private fun profile(player: Player): PlayerProfile {
@@ -290,13 +299,18 @@ private class SnapshotOnlyOyasaiTabRuntime(
         Bukkit.getScheduler()
             .runTaskTimer(
                 plugin,
-                Runnable { network.send(Bukkit.getOnlinePlayers().toList()) },
+                Runnable { sendSnapshot() },
                 20L,
                 20L,
             )
-    network.send(Bukkit.getOnlinePlayers().toList())
+    sendSnapshot()
     plugin.logger.info("OyasaiTab cross-server snapshots enabled.")
     return this
+  }
+
+  /** 表示側が無効なので名前は素のまま送る。プロキシが所属サーバー名を前に付ける。 */
+  private fun sendSnapshot() {
+    network.send(Bukkit.getOnlinePlayers().toList()) { it.playerListName() }
   }
 
   override fun stop() {
@@ -310,7 +324,13 @@ private class PaperTabSnapshotBridge(
     private val plugin: JavaPlugin,
     private val config: OyasaiTabConfig,
 ) {
-  private val legacy = LegacyComponentSerializer.legacySection()
+  // hex を落とさずに送る。既定の legacySection() は hex を近い既定色へ丸める
+  private val legacy =
+      LegacyComponentSerializer.builder()
+          .character(LegacyComponentSerializer.SECTION_CHAR)
+          .hexColors()
+          .useUnusualXRepeatedCharacterHexFormat()
+          .build()
 
   fun start() {
     Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, OYASAI_TAB_CHANNEL)
@@ -320,7 +340,8 @@ private class PaperTabSnapshotBridge(
     Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin, OYASAI_TAB_CHANNEL)
   }
 
-  fun send(players: List<Player>) {
+  /** [nameOf] は `<1234>` バッジを含まない名前を返す。プロキシが所属サーバー名を代わりに前へ付ける。 */
+  fun send(players: List<Player>, nameOf: (Player) -> Component) {
     val carrier = players.firstOrNull() ?: return
     val snapshot =
         OyasaiTabSnapshot(
@@ -328,7 +349,7 @@ private class PaperTabSnapshotBridge(
             players.map { player ->
               OyasaiTabPlayerSnapshot(
                   uuid = player.uniqueId,
-                  displayNameLegacy = legacy.serialize(player.playerListName()),
+                  nameLegacy = legacy.serialize(nameOf(player)),
                   serverName = config.backendId,
                   ping = player.ping,
               )
@@ -430,6 +451,12 @@ object TablistFormatter {
   fun playerNameLegacy(groupColor: String, suffix: String, likes: Int, playerName: String): String {
     val groupMark = if (groupColor.isBlank()) "" else "$groupColor*"
     return "&r$groupMark$suffix&f&7<&6$likes&7>&f $playerName"
+  }
+
+  /** クロスサーバー送信用。`<1234>` のバッジは付けない（プロキシが所属サーバー名を代わりに付ける）。 */
+  fun playerNameNoBadgeLegacy(groupColor: String, suffix: String, playerName: String): String {
+    val groupMark = if (groupColor.isBlank()) "" else "$groupColor*"
+    return "&r$groupMark$suffix&f $playerName"
   }
 
   fun nameTagPrefixLegacy(template: String, suffix: String, level: String): String =

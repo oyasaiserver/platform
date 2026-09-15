@@ -212,4 +212,25 @@ class TablistFormatterTest {
 
     assertEquals(snapshot, OyasaiTabSnapshotCodec.decode(OyasaiTabSnapshotCodec.encode(snapshot)))
   }
+
+  @Test
+  fun showsServerLabelInsteadOfLikesForRemotePlayers() {
+    assertEquals(
+        "§7<§6Axiom§7>§f §r§a*§f marzipan99",
+        CrossServerTabLogic.remoteDisplayNameLegacy("axiom", "§r§a*§f marzipan99"),
+    )
+    assertEquals(
+        "§7<§6Lobby§7>§f Aramaa",
+        CrossServerTabLogic.remoteDisplayNameLegacy("lobby", "Aramaa"),
+    )
+  }
+
+  @Test
+  fun buildsCrossServerNameWithoutLikesBadge() {
+    assertEquals(
+        "&r&a*&7suffix&f Steve",
+        TablistFormatter.playerNameNoBadgeLegacy("&a", "&7suffix", "Steve"),
+    )
+    assertEquals("&r&f Alex", TablistFormatter.playerNameNoBadgeLegacy("", "", "Alex"))
+  }
 }

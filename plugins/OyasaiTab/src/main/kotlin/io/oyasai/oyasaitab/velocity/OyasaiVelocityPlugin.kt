@@ -41,7 +41,13 @@ constructor(
     @DataDirectory private val dataDirectory: Path,
 ) {
   private val identifier = MinecraftChannelIdentifier.from(OYASAI_TAB_CHANNEL)
-  private val legacy = LegacyComponentSerializer.legacySection()
+  // hex を落とさずに読み戻す。既定の legacySection() は hex を近い既定色へ丸める
+  private val legacy =
+      LegacyComponentSerializer.builder()
+          .character(LegacyComponentSerializer.SECTION_CHAR)
+          .hexColors()
+          .useUnusualXRepeatedCharacterHexFormat()
+          .build()
   private val records = ConcurrentHashMap<UUID, CrossServerTabEntry>()
   private val membersByServer = ConcurrentHashMap<String, Set<UUID>>()
   private val managedByViewer = ConcurrentHashMap<UUID, MutableSet<UUID>>()
@@ -88,7 +94,7 @@ constructor(
         snapshot.players.map {
           CrossServerTabEntry(
               uuid = it.uuid,
-              displayNameLegacy = it.displayNameLegacy,
+              nameLegacy = it.nameLegacy,
               serverName = sourceBackend,
               ping = it.ping,
           )
@@ -174,7 +180,10 @@ constructor(
         viewer.tabList.removeEntry(remote.uuid)
         managed.remove(remote.uuid)
       }
-      val displayName = legacy.deserialize(remote.displayNameLegacy)
+      val displayName =
+          legacy.deserialize(
+              CrossServerTabLogic.remoteDisplayNameLegacy(remote.serverName, remote.nameLegacy)
+          )
       val entry = viewer.tabList.getEntry(remote.uuid).orElse(null)
       if (entry == null) {
         viewer.tabList.addEntry(
