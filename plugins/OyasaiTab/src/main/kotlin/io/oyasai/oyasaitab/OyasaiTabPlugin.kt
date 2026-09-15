@@ -390,7 +390,13 @@ object TablistFormatter {
   private val tpsFormat = DecimalFormat("#.##", symbols)
   private val tokenFormat = DecimalFormat("#,##0", symbols)
   private val miniMessage = MiniMessage.miniMessage()
-  private val legacy = LegacyComponentSerializer.legacyAmpersand()
+  // hex を &x&F&1&C&4&0&F 形式で書き出す。既定の legacyAmpersand() は hex を近い既定色へ丸める
+  private val legacy =
+      LegacyComponentSerializer.builder()
+          .character('&')
+          .hexColors()
+          .useUnusualXRepeatedCharacterHexFormat()
+          .build()
 
   fun headerLegacy(version: String, receivedLikes: Int): String =
       listOf(

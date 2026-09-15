@@ -4,6 +4,8 @@ import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 
 class TablistFormatterTest {
   @Test
@@ -90,10 +92,17 @@ class TablistFormatterTest {
   @Test
   fun normalizesMiniMessageSuffixWithoutChangingLegacySuffix() {
     assertEquals(
-        "&6*&b*",
+        "&x&f&1&c&4&0&f*&b*",
         TablistFormatter.normalizeSuffix("<color:#F1C40F>*</color><aqua>*</aqua>"),
     )
     assertEquals("&aLegacy", TablistFormatter.normalizeSuffix("&aLegacy"))
+    // 書き出した hex を表示側の legacyAmpersand() が読み戻せること
+    assertEquals(
+        TextColor.fromHexString("#F1C40F"),
+        LegacyComponentSerializer.legacyAmpersand()
+            .deserialize(TablistFormatter.normalizeSuffix("<color:#F1C40F>*</color>"))
+            .color(),
+    )
   }
 
   @Test
