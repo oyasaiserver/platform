@@ -9,9 +9,10 @@ import java.util.UUID
 const val OYASAI_TAB_CHANNEL = "oyasaitab:main"
 const val LOCAL_TAB_ORDER_BASE = 1000
 
+/** [nameLegacy] は Likes の `<1234>` を含まない名前。リモート表示ではプロキシが代わりに所属サーバー名を 前に付けるため、バックエンドはバッジ抜きで送る。 */
 data class OyasaiTabPlayerSnapshot(
     val uuid: UUID,
-    val displayNameLegacy: String,
+    val nameLegacy: String,
     val serverName: String,
     val ping: Int,
 )
@@ -19,7 +20,7 @@ data class OyasaiTabPlayerSnapshot(
 data class OyasaiTabSnapshot(val serverName: String, val players: List<OyasaiTabPlayerSnapshot>)
 
 object OyasaiTabSnapshotCodec {
-  private const val VERSION = 1
+  private const val VERSION = 2
   private const val MAX_PLAYERS = 1000
 
   fun encode(snapshot: OyasaiTabSnapshot): ByteArray {
@@ -32,7 +33,7 @@ object OyasaiTabSnapshotCodec {
       snapshot.players.forEach { player ->
         out.writeLong(player.uuid.mostSignificantBits)
         out.writeLong(player.uuid.leastSignificantBits)
-        out.writeUTF(player.displayNameLegacy)
+        out.writeUTF(player.nameLegacy)
         out.writeUTF(player.serverName)
         out.writeInt(player.ping)
       }
@@ -50,7 +51,7 @@ object OyasaiTabSnapshotCodec {
             List(count) {
               OyasaiTabPlayerSnapshot(
                   uuid = UUID(input.readLong(), input.readLong()),
-                  displayNameLegacy = input.readUTF(),
+                  nameLegacy = input.readUTF(),
                   serverName = input.readUTF(),
                   ping = input.readInt().coerceAtLeast(0),
               )
@@ -61,24 +62,37 @@ object OyasaiTabSnapshotCodec {
 
 data class CrossServerTabEntry(
     val uuid: UUID,
-    val displayNameLegacy: String,
+    val nameLegacy: String,
     val serverName: String,
     val ping: Int,
 )
 
 data class CrossServerTabDiff(
     val remove: Set<UUID>,
+    val forget: Set<UUID>,
     val upsert: List<CrossServerTabEntry>,
 )
 
 object CrossServerTabLogic {
+  /**
+   * リモートのプレイヤーは Likes の代わりに所属サーバー名を出す。ローカル勢の `<1234> Steve` に対して `<Lobby> Steve` になる。
+   *
+   * ラベルはバックエンド ID の先頭を大文字にしただけ（`lobby` → `Lobby`）。 ponytail: 表示名を ID から機械的に作る。日本語名など ID
+   * と別の表記が要るようになったら設定に出す。
+   */
+  fun remoteDisplayNameLegacy(serverName: String, nameLegacy: String): String =
+      "§7<§6${serverLabel(serverName)}§7>§f $nameLegacy"
+
+  private fun serverLabel(serverName: String): String =
+      serverName.replaceFirstChar { it.uppercase() }
+
   fun remoteOrders(entries: Collection<CrossServerTabEntry>): Map<UUID, Int> =
       entries
           .sortedWith(
               compareBy<CrossServerTabEntry, String>(String.CASE_INSENSITIVE_ORDER) {
                     it.serverName
                   }
-                  .thenBy(String.CASE_INSENSITIVE_ORDER) { it.displayNameLegacy }
+                  .thenBy(String.CASE_INSENSITIVE_ORDER) { it.nameLegacy }
                   .thenBy { it.uuid.toString() }
           )
           .take(999)
@@ -98,7 +112,13 @@ object CrossServerTabLogic {
             .filter { it.uuid != viewerId && connectedPlayerServers[it.uuid] != viewerServer }
             .distinctBy { it.uuid }
     val remoteIds = remote.mapTo(mutableSetOf()) { it.uuid }
-    return CrossServerTabDiff(remove = managedEntries - remoteIds, upsert = remote)
+    val forget =
+        managedEntries.filterTo(mutableSetOf()) { connectedPlayerServers[it] == viewerServer }
+    return CrossServerTabDiff(
+        remove = managedEntries - remoteIds - forget,
+        forget = forget,
+        upsert = remote,
+    )
   }
 
   fun shouldRemoveOnDisconnect(uuid: UUID, connectedPlayers: Set<UUID>): Boolean =

@@ -4,6 +4,8 @@ import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 
 class TablistFormatterTest {
   @Test
@@ -88,6 +90,22 @@ class TablistFormatterTest {
   }
 
   @Test
+  fun normalizesMiniMessageSuffixWithoutChangingLegacySuffix() {
+    assertEquals(
+        "&x&f&1&c&4&0&f*&b*",
+        TablistFormatter.normalizeSuffix("<color:#F1C40F>*</color><aqua>*</aqua>"),
+    )
+    assertEquals("&aLegacy", TablistFormatter.normalizeSuffix("&aLegacy"))
+    // 書き出した hex を表示側の legacyAmpersand() が読み戻せること
+    assertEquals(
+        TextColor.fromHexString("#F1C40F"),
+        LegacyComponentSerializer.legacyAmpersand()
+            .deserialize(TablistFormatter.normalizeSuffix("<color:#F1C40F>*</color>"))
+            .color(),
+    )
+  }
+
+  @Test
   fun sortsAfkAfterActiveThenGroupThenName() {
     val white = UUID.fromString("00000000-0000-0000-0000-000000000001")
     val blue = UUID.fromString("00000000-0000-0000-0000-000000000002")
@@ -132,26 +150,30 @@ class TablistFormatterTest {
   }
 
   @Test
-  fun calculatesRemoteDiffWithoutTouchingLocalEntries() {
+  fun calculatesRemoteDiffWithoutRemovingLocalEntries() {
     val viewer = UUID.fromString("00000000-0000-0000-0000-000000000020")
     val local = UUID.fromString("00000000-0000-0000-0000-000000000021")
     val remote = UUID.fromString("00000000-0000-0000-0000-000000000022")
     val stale = UUID.fromString("00000000-0000-0000-0000-000000000023")
+    val movedLocal = UUID.fromString("00000000-0000-0000-0000-000000000024")
     val diff =
         CrossServerTabLogic.diffForViewer(
             viewerId = viewer,
             viewerServer = "main",
-            managedEntries = setOf(stale),
+            managedEntries = setOf(stale, movedLocal),
             records =
                 listOf(
                     CrossServerTabEntry(local, "§aLocal", "main", 5),
                     CrossServerTabEntry(remote, "§bRemote", "lobby", 8),
                     CrossServerTabEntry(stale, "§cGone", "axiom", 9),
+                    CrossServerTabEntry(movedLocal, "§dMoved", "lobby", 10),
                 ),
-            connectedPlayerServers = mapOf(viewer to "main", local to "main", remote to "lobby"),
+            connectedPlayerServers =
+                mapOf(viewer to "main", local to "main", remote to "lobby", movedLocal to "main"),
         )
 
     assertEquals(setOf(stale), diff.remove)
+    assertEquals(setOf(movedLocal), diff.forget)
     assertEquals(listOf(remote), diff.upsert.map { it.uuid })
   }
 
@@ -189,5 +211,26 @@ class TablistFormatterTest {
         )
 
     assertEquals(snapshot, OyasaiTabSnapshotCodec.decode(OyasaiTabSnapshotCodec.encode(snapshot)))
+  }
+
+  @Test
+  fun showsServerLabelInsteadOfLikesForRemotePlayers() {
+    assertEquals(
+        "§7<§6Axiom§7>§f §r§a*§f marzipan99",
+        CrossServerTabLogic.remoteDisplayNameLegacy("axiom", "§r§a*§f marzipan99"),
+    )
+    assertEquals(
+        "§7<§6Lobby§7>§f Aramaa",
+        CrossServerTabLogic.remoteDisplayNameLegacy("lobby", "Aramaa"),
+    )
+  }
+
+  @Test
+  fun buildsCrossServerNameWithoutLikesBadge() {
+    assertEquals(
+        "&r&a*&7suffix&f Steve",
+        TablistFormatter.playerNameNoBadgeLegacy("&a", "&7suffix", "Steve"),
+    )
+    assertEquals("&r&f Alex", TablistFormatter.playerNameNoBadgeLegacy("", "", "Alex"))
   }
 }
