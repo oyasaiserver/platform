@@ -16,6 +16,7 @@ oyasaiVelocity {
     luckperms
     oyasaichat
     oyasaimusic
+    oyasaitab
     # keep-sorted end
   ];
 

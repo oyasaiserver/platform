@@ -1,0 +1,8 @@
+{
+  "authors": ["OyasaiServer"],
+  "description": "Cross-server tab list bridge",
+  "id": "oyasaitab",
+  "main": "io.oyasai.oyasaitab.velocity.OyasaiVelocityPlugin",
+  "name": "OyasaiTab",
+  "version": "0.1.0"
+}

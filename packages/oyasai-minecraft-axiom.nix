@@ -35,6 +35,7 @@ oyasaiPurpur rec {
     multiversecore
     multiverseportals
     oyasaichat
+    oyasaitab
     placeholderapi
     plugmanx
     protocollib
