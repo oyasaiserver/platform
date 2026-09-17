@@ -93,8 +93,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.3/builds/1243/downloads/velocity",
-      "hash": "sha256-sUFLBcCMM2GI6/45Bno+ee7HTo269jbsfgDhsCBXOHM="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.3/builds/1245/downloads/velocity",
+      "hash": "sha256-MGq+OCkdJOh0xyhuHAS1N6w6teOQG3EPVr0kJQC+378="
     }
   },
   "gsit": {
@@ -201,7 +201,7 @@
     "paper": {
       "26.2": {
         "url": "https://cdn.spiget.org/file/spiget-resources/16584.jar",
-        "hash": "sha256-KPEIwHAcVasy1djx1j16ly40GWuS8aF+esiNhpDs84c="
+        "hash": "sha256-ww4DPTY76jRCx2EQjztEE1jmnmOMmk0xj+KfF26mbs4="
       }
     }
   },
@@ -300,8 +300,8 @@
   "viaversion": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/I7EtZ7sn/ViaVersion-5.12.0-SNAPSHOT.jar",
-        "hash": "sha256-zCOkFLK97YCnJkal/kPMayupffUWFHo2MPQC2WlelFs="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/YRcbhu0U/ViaVersion-5.12.0-SNAPSHOT.jar",
+        "hash": "sha256-6HIjRArjMHgdX3IZqcUhi5zSa93Pb6lGj0VaZA5Y4pQ="
       }
     }
   },
