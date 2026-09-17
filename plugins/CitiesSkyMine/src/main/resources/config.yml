@@ -166,5 +166,9 @@ hud:
   # 選択範囲(pos1/pos2/範囲)の行を出すか。各自 /.hud sel on|off で上書き可
   show-selection: true
 
+sui:
+  # WorldEdit 選択範囲パーティクル表示 (SUI) の既定ON/OFF。各自 /.sui on|off で上書き可
+  default-enabled: true
+
 prefix: "<gray>[<gold>CitiesSkyMine</gold>]</gray> "
 debug: false

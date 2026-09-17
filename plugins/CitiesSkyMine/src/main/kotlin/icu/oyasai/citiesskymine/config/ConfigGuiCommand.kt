@@ -95,6 +95,15 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             "クリックで切替",
         ),
     )
+    inv.setItem(
+        24,
+        item(
+            Material.BLAZE_ROD,
+            "WorldEdit SUI",
+            "現在: ${if (plugin.isSuiEnabled(player)) "on" else "off"}",
+            "クリックで切替",
+        ),
+    )
     inv.setItem(22, item(Material.BARRIER, "Close", "閉じる"))
     player.openInventory(inv)
   }
@@ -105,7 +114,14 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       12 -> openWindow(player)
       14 -> openIntersection(player)
       16 -> openPayload(player)
-      20 -> plugin.worldEditHud.setMode(player, nextHudMode(plugin.worldEditHud.mode(player)))
+      20 -> {
+        plugin.worldEditHud.setMode(player, nextHudMode(plugin.worldEditHud.mode(player)))
+        openHome(player)
+      }
+      24 -> {
+        plugin.setSuiEnabled(player, !plugin.isSuiEnabled(player))
+        openHome(player)
+      }
       22 -> player.closeInventory()
     }
   }

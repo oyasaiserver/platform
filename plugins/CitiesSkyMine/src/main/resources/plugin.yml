@@ -81,6 +81,9 @@ commands:
   ".hud":
     description: "WorldEdit 状態HUDを切り替えるショートカット"
     usage: "/.hud [on|off] | /.hud sel <on|off> | /.hud width <数値|reset>"
+  ".sui":
+    description: "WorldEdit 選択範囲パーティクル表示 (SUI) を切り替えるショートカット"
+    usage: "/.sui [on|off]"
 
 permissions:
   citiesskymine.*:
@@ -109,8 +112,12 @@ permissions:
       citiesskymine.preset: true
       citiesskymine.schematic: true
       citiesskymine.hud: true
+      citiesskymine.sui: true
   citiesskymine.hud:
     description: "WorldEdit 状態HUDの自己表示"
+    default: true
+  citiesskymine.sui:
+    description: "WorldEdit 選択範囲パーティクル表示 (SUI) の切り替え"
     default: true
   citiesskymine.role.admin:
     description: "CSM アドミンロール"
