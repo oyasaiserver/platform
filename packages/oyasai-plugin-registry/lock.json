@@ -18,8 +18,8 @@
   "bluemap": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/zjZDXCw6/bluemap-5.24-paper.jar",
-        "hash": "sha256-I1kq810Sif+SUTAZlJSPHWno2BtWlRXOgakcuk2qvHg="
+        "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/w7JKRF0Q/bluemap-5.27-paper.jar",
+        "hash": "sha256-2DbQBMc9gWPWqtbCCORODh15RNNGFailsVWKIKVw3oQ="
       }
     }
   },
@@ -93,8 +93,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1235/downloads/velocity",
-      "hash": "sha256-HWqxR3BJTFnhLPAZzCY1aCRyX/opjv0k4hBMYgmyoJg="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.3/builds/1243/downloads/velocity",
+      "hash": "sha256-sUFLBcCMM2GI6/45Bno+ee7HTo269jbsfgDhsCBXOHM="
     }
   },
   "gsit": {
@@ -184,8 +184,8 @@
   "plugmanx": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/yro4niHu/versions/ncMUNIIX/PlugManX-3.1.0.jar",
-        "hash": "sha256-PLsI+VsqiePM17pDvyn86DUDJCqiKmTmEGpmcBFbu3I="
+        "url": "https://cdn.modrinth.com/data/yro4niHu/versions/Jrz8N90m/PlugManX-3.2.0.jar",
+        "hash": "sha256-/JNUvBGcwZNBrV4kv2WxrZQd725pHbMV2u3KH0yE5rs="
       }
     }
   },
@@ -292,8 +292,8 @@
   "veinminer": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/qztdh63o/veinminer-paper-2.12.1.jar",
-        "hash": "sha256-rwEgP7Q8iW2ass0teKXaBbQK/h80f4pC4VcDx8QV2ao="
+        "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/O6IYCV7p/veinminer-paper-2.12.1.jar",
+        "hash": "sha256-OdFEGejWDh19NETp2XgkcLrb7aBlgv2Z3lB6BrG5xiM="
       }
     }
   },
