@@ -5,6 +5,7 @@ import icu.oyasai.utilities.YamlConfig
 import java.io.File
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import java.util.logging.Level
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -25,6 +26,7 @@ object Hats : Listener, CommandExecutor {
   private const val LEGACY_ALL_PERMISSION = "particlehats.particle.all"
 
   private val equipped = ConcurrentHashMap<UUID, List<String>>()
+  private val renderFailures = ConcurrentHashMap.newKeySet<Pair<UUID, String>>()
   private var maxHats = 7
   private var tick = 0
   private var task: BukkitTask? = null
@@ -51,6 +53,7 @@ object Hats : Listener, CommandExecutor {
     HatsGui.closeAll()
     Bukkit.getOnlinePlayers().forEach(::savePlayer)
     equipped.clear()
+    renderFailures.clear()
   }
 
   override fun onCommand(
@@ -82,6 +85,7 @@ object Hats : Listener, CommandExecutor {
   fun onQuit(event: PlayerQuitEvent) {
     savePlayer(event.player)
     equipped.remove(event.player.uniqueId)
+    renderFailures.removeIf { it.first == event.player.uniqueId }
   }
 
   fun equippedIds(player: Player): List<String> = equipped[player.uniqueId].orEmpty()
@@ -134,7 +138,17 @@ object Hats : Listener, CommandExecutor {
         if (!canEquip(player, hat) || !hat.renders) continue
         if (tick % hat.updateFrequency != 0) continue
         if (!modeActive(player, hat.mode)) continue
-        HatsRenderer.render(player, hat, tick)
+        val failure = runCatching { HatsRenderer.render(player, hat, tick) }.exceptionOrNull()
+        val key = player.uniqueId to id
+        if (failure == null) {
+          renderFailures.remove(key)
+        } else if (renderFailures.add(key)) {
+          OyasaiUtilities.plugin.logger.log(
+              Level.WARNING,
+              "Failed to render particle hat '$id' for ${player.name}; continuing the hats task.",
+              failure,
+          )
+        }
       }
     }
   }

@@ -230,13 +230,14 @@ internal object HatsRenderer {
         }
     val dataType = particle.dataType
     when {
-      DustOptions::class.java.isAssignableFrom(dataType) ->
+      dataType == DustOptions::class.java ->
           world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.0, DustOptions(color, spec.size))
-      ItemStack::class.java.isAssignableFrom(dataType) -> {
+      dataType == ItemStack::class.java -> {
         val material = spec.items.randomOrNull() ?: return
         world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.05, ItemStack(material))
       }
-      else -> world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.0)
+      Void::class.java.isAssignableFrom(dataType) ->
+          world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.0)
     }
   }
 }
