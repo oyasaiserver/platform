@@ -30,6 +30,7 @@ import icu.oyasai.citiesskymine.road.WaypointListener
 import icu.oyasai.citiesskymine.schematic.SchematicCommand
 import icu.oyasai.citiesskymine.selection.SelectionCommand
 import icu.oyasai.citiesskymine.selection.WorldEditSelectionPreview
+import icu.oyasai.citiesskymine.selection.WorldEditSuiCommand
 import icu.oyasai.citiesskymine.slabstairs.SlabStairsCommand
 import icu.oyasai.citiesskymine.stack.StackCommand
 import icu.oyasai.citiesskymine.storage.PlayerDataStore
@@ -62,6 +63,8 @@ class Main : JavaPlugin() {
   companion object {
     lateinit var instance: Main
       private set
+
+    private const val SUI_ENABLED_PATH = "sui.enabled"
   }
 
   override fun onEnable() {
@@ -192,6 +195,9 @@ class Main : JavaPlugin() {
     val dotSchematicCmd = getCommand(".sc")
     dotSchematicCmd?.setExecutor(schematicHandler)
     dotSchematicCmd?.tabCompleter = schematicHandler
+    val suiHandler = WorldEditSuiCommand(this)
+    getCommand(".sui")?.setExecutor(suiHandler)
+    getCommand(".sui")?.tabCompleter = suiHandler
     getCommand(".hud")?.setExecutor(hudHandler)
     getCommand(".hud")?.tabCompleter = hudHandler
     server.pluginManager.registerEvents(WorldEditHudListener(this), this)
@@ -235,10 +241,24 @@ class Main : JavaPlugin() {
     selectionParticleTask =
         server.scheduler.runTaskTimer(
             this,
-            Runnable { server.onlinePlayers.forEach(WorldEditSelectionPreview::showOnce) },
+            Runnable {
+              server.onlinePlayers.forEach { player ->
+                if (isSuiEnabled(player)) {
+                  WorldEditSelectionPreview.showOnce(player)
+                }
+              }
+            },
             0L,
             12L,
         )
+  }
+
+  fun isSuiEnabled(player: Player): Boolean =
+      playerDataStore.getBoolean(player, SUI_ENABLED_PATH)
+          ?: config.getBoolean("sui.default-enabled", true)
+
+  fun setSuiEnabled(player: Player, enabled: Boolean) {
+    playerDataStore.set(player, SUI_ENABLED_PATH, enabled)
   }
 
   // ──────────────────────────────────────────────────
