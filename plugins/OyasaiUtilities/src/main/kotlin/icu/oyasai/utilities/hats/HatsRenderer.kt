@@ -1,9 +1,15 @@
 package icu.oyasai.utilities.hats
 
+import icu.oyasai.utilities.OyasaiUtilities
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
+import javax.imageio.ImageIO
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Location
 import org.bukkit.Particle
@@ -24,188 +30,453 @@ internal object HatsRenderer {
       )
   private val particleCache = mutableMapOf<String, Particle?>()
 
+  // アニメーションインデックス: (UUID, HatID) -> (FrameIndex -> AnimationStep)
+  private val animationIndices =
+      ConcurrentHashMap<Pair<UUID, String>, ConcurrentHashMap<Int, Int>>()
+
+  class PixelPoint(val position: Vector, val color: Color)
+
+  private val creeperPixels by lazy { loadPixels("Hats/types/creeper_face.png") }
+  private val angelWingsPixels by lazy { loadPixels("Hats/types/angel_wings.png") }
+  private val wingsPixels by lazy { loadPixels("Hats/types/wings.png") }
+
+  private fun loadPixels(resourcePath: String, scale: Double = 0.2): List<PixelPoint> {
+    val stream =
+        OyasaiUtilities::class.java.classLoader.getResourceAsStream(resourcePath)
+            ?: return emptyList()
+    val image = ImageIO.read(stream) ?: return emptyList()
+    val width = image.width
+    val height = image.height
+    val centerX = width / 2.0 - 0.5
+    val centerY = height / 2.0 - 0.5
+    val list = mutableListOf<PixelPoint>()
+    for (y in 0 until height) {
+      for (x in 0 until width) {
+        val rgb = image.getRGB(x, y)
+        val r = (rgb shr 16) and 0xFF
+        val g = (rgb shr 8) and 0xFF
+        val b = rgb and 0xFF
+        if (r == 255 && g == 0 && b == 255) continue // マゼンタ除外
+        if ((rgb ushr 24) == 0) continue // 透明除外
+        val xx = (x - centerX) * -1.0 * scale
+        val yy = (y - centerY) * -1.0 * scale
+        list += PixelPoint(Vector(xx, yy, 0.0), Color.fromRGB(r, g, b))
+      }
+    }
+    return list
+  }
+
+  fun cleanup(uuid: UUID) {
+    animationIndices.keys.removeIf { it.first == uuid }
+  }
+
   fun render(player: Player, hat: HatDefinition, tick: Int) {
     val world = player.world
-    val layers = offsets(hat, tick)
-    val base = player.location.clone()
-    when (hat.location) {
-      HatAnchor.FEET -> Unit
-      HatAnchor.CHEST -> base.add(0.0, 1.0, 0.0)
-      HatAnchor.HEAD -> base.add(0.0, player.eyeHeight, 0.0)
+
+    // 1. 特殊挙動: TRAIL (thief, rocket, magic_aura)
+    if (hat.type == HatType.TRAIL) {
+      renderTrail(player, hat)
+      return
     }
-    val yaw = Math.toRadians(-player.location.yaw.toDouble())
-    val pitch = Math.toRadians(player.location.pitch.toDouble())
-    layers.forEachIndexed { index, points ->
-      val spec = hat.particles.getOrElse(index) { hat.particles.first() }
+
+    // 2. 特殊描画: PixelEffect (creeper, angel_wings, wings)
+    if (
+        hat.type == HatType.CREEPER_HAT ||
+            hat.type == HatType.ANGEL_WINGS ||
+            hat.type == HatType.WINGS
+    ) {
+      renderPixelEffect(player, hat)
+      return
+    }
+
+    // 3. 幾何学フレームエフェクト (halo, cape, crystal, arch, hoop, tornado, sphere)
+    val frames = getFrames(hat.type)
+    if (frames.isEmpty()) return
+
+    val location = if (hat.tracking == HatTracking.HEAD) player.eyeLocation else player.location
+    val yaw = Math.toRadians(location.yaw.toDouble())
+    val cos = cos(yaw)
+    val sin = sin(yaw)
+
+    val offset = hat.offset
+    val offsetX = offset.x * cos - offset.z * sin
+    val offsetZ = offset.x * sin + offset.z * cos
+
+    val angle = hat.angle
+    val angleXRad = Math.toRadians(angle.x)
+    val angleYRad = Math.toRadians(angle.y)
+    val angleZRad = Math.toRadians(angle.z)
+
+    val isAnimated = hat.animated && supportsAnimation(hat.type)
+    val animMap =
+        if (isAnimated) {
+          animationIndices.getOrPut(player.uniqueId to hat.id) { ConcurrentHashMap() }
+        } else null
+
+    frames.forEachIndexed { frameIndex, frame ->
+      val spec = hat.particles.getOrElse(frameIndex) { hat.particles.first() }
       val particle = resolve(spec.name) ?: return@forEachIndexed
-      for (point in points) {
-        val local = point.clone().multiply(hat.scale).add(hat.offset)
-        when (hat.tracking) {
-          HatTracking.HEAD -> {
-            local.rotateAroundX(pitch)
-            local.rotateAroundY(yaw)
-          }
-          HatTracking.BODY -> local.rotateAroundY(yaw)
-          HatTracking.NONE ->
-              if (hat.type != HatType.TRAIL) {
-                local.rotateAroundY(yaw)
-              }
+
+      if (isAnimated && animMap != null) {
+        val size = frame.size
+        if (size > 0) {
+          val idx = (animMap[frameIndex] ?: 0) % size
+          val target = frame[idx]
+          var v = target.clone().multiply(hat.scale)
+          v = getAngleVector(v, angleXRad, angleYRad, angleZRad)
+          val spawnLoc =
+              location
+                  .clone()
+                  .add(offsetX, 0.0, offsetZ)
+                  .add(getTrackingPosition(hat, v, location, cos, sin))
+          applyRandomOffset(spawnLoc, hat.randomOffset)
+          repeat(hat.count) { spawn(world, spawnLoc, particle, spec, spec.color, hat.speed) }
+          animMap[frameIndex] = (idx + 1) % size
         }
-        val loc = base.clone().add(local)
-        if (hat.randomOffset.lengthSquared() > 0) {
-          loc.add(
-              (Random.nextDouble() * 2 - 1) * hat.randomOffset.x,
-              (Random.nextDouble() * 2 - 1) * hat.randomOffset.y,
-              (Random.nextDouble() * 2 - 1) * hat.randomOffset.z,
-          )
+      } else {
+        for (target in frame) {
+          var v = target.clone().multiply(hat.scale)
+          v = getAngleVector(v, angleXRad, angleYRad, angleZRad)
+          val spawnLoc =
+              location
+                  .clone()
+                  .add(offsetX, 0.0, offsetZ)
+                  .add(getTrackingPosition(hat, v, location, cos, sin))
+          applyRandomOffset(spawnLoc, hat.randomOffset)
+          repeat(hat.count) { spawn(world, spawnLoc, particle, spec, spec.color, hat.speed) }
         }
-        repeat(hat.count) { spawn(world, loc, particle, spec) }
       }
     }
   }
 
-  private fun offsets(hat: HatDefinition, tick: Int): List<List<Vector>> {
-    val spin = if (hat.animated) tick * 0.12 else 0.0
-    val spun = { points: List<Vector> ->
-      if (spin == 0.0) points else points.map { it.clone().rotateAroundY(spin) }
-    }
-    return when (hat.type) {
-      HatType.HALO -> listOf(spun(ring(12, 0.8)))
-      HatType.CAPE -> listOf(cape())
-      HatType.CRYSTAL -> listOf(crystal())
-      HatType.CREEPER_HAT -> listOf(creeper())
-      HatType.ANGEL_WINGS -> listOf(wings(spread = 0.7, lift = 0.5))
-      HatType.ARCH -> arch().map { spun(it) }
-      HatType.TRAIL -> listOf(listOf(Vector()))
-      HatType.TORNADO -> listOf(spun(tornado()))
-      HatType.SPHERE -> listOf(spun(sphere(0.7)))
-      HatType.HOOP -> listOf(spun(hoop(0.7)))
-      HatType.WINGS -> listOf(wings(spread = 0.55, lift = 0.35))
-      HatType.UNSUPPORTED -> emptyList()
-    }
-  }
-
-  private fun ring(count: Int, radius: Double): List<Vector> {
-    val step = 2.0 * PI / count
-    return (0 until count).map { i ->
-      val angle = i * step
-      Vector(radius * cos(angle), 0.0, radius * sin(angle))
-    }
-  }
-
-  private fun cape(): List<Vector> {
-    val xs = doubleArrayOf(-0.32, -0.16, 0.0, 0.16, 0.32)
-    val points = mutableListOf<Vector>()
-    for (x in xs.indices) {
-      for (y in 0 until 6) {
-        points += Vector(xs[x] - x * 0.02, -y * 0.18, -0.28 - y * 0.1)
-      }
-    }
-    return points
-  }
-
-  private fun crystal(): List<Vector> {
-    val points = mutableListOf<Vector>()
-    for (y in listOf(0.7, 1.0, 1.3, 1.6, 1.9)) points += Vector(0.0, y, 0.0)
-    for (y in listOf(1.0, 1.3, 1.6)) {
-      points += Vector(0.2, y, 0.0)
-      points += Vector(-0.2, y, 0.0)
-      points += Vector(0.0, y, 0.2)
-      points += Vector(0.0, y, -0.2)
-    }
-    points += Vector(0.4, 1.3, 0.0)
-    points += Vector(-0.4, 1.3, 0.0)
-    points += Vector(0.0, 1.3, 0.4)
-    points += Vector(0.0, 1.3, -0.4)
-    return points
-  }
-
-  private fun creeper(): List<Vector> {
+  private fun renderPixelEffect(player: Player, hat: HatDefinition) {
     val pixels =
-        listOf(
-            1 to 6,
-            2 to 6,
-            5 to 6,
-            6 to 6,
-            1 to 5,
-            2 to 5,
-            5 to 5,
-            6 to 5,
-            3 to 3,
-            4 to 3,
-            2 to 2,
-            3 to 2,
-            4 to 2,
-            5 to 2,
-            2 to 1,
-            5 to 1,
+        when (hat.type) {
+          HatType.CREEPER_HAT -> creeperPixels
+          HatType.ANGEL_WINGS -> angelWingsPixels
+          HatType.WINGS -> wingsPixels
+          else -> return
+        }
+    val spec = hat.particles.firstOrNull() ?: return
+    val particle = resolve(spec.name) ?: return
+    val world = player.world
+
+    val location = if (hat.tracking == HatTracking.HEAD) player.eyeLocation else player.location
+    val yaw = Math.toRadians(location.yaw.toDouble())
+    val cos = cos(yaw)
+    val sin = sin(yaw)
+
+    val offset = hat.offset
+    val offsetX = offset.x * cos - offset.z * sin
+    val offsetZ = offset.x * sin + offset.z * cos
+
+    val angle = hat.angle
+    val angleXRad = Math.toRadians(angle.x)
+    val angleYRad = Math.toRadians(angle.y)
+    val angleZRad = Math.toRadians(angle.z)
+
+    for (pixel in pixels) {
+      var v = pixel.position.clone().multiply(hat.scale)
+      v = getAngleVector(v, angleXRad, angleYRad, angleZRad)
+      val spawnLoc =
+          location
+              .clone()
+              .add(offsetX, 0.0, offsetZ)
+              .add(getTrackingPosition(hat, v, location, cos, sin))
+      applyRandomOffset(spawnLoc, hat.randomOffset)
+
+      val isWhite = pixel.color.red > 245 && pixel.color.green > 245 && pixel.color.blue > 245
+      val finalColor = if (isWhite && spec.color != null) spec.color else pixel.color
+      repeat(hat.count) { spawn(world, spawnLoc, particle, spec, finalColor, hat.speed) }
+    }
+  }
+
+  private fun renderTrail(player: Player, hat: HatDefinition) {
+    val spec = hat.particles.firstOrNull() ?: return
+
+    // Thief!: 実際にアイテムを落とし、1秒後に消去
+    if (spec.items.isNotEmpty()) {
+      if (hat.mode == HatMode.SPRINTING && !player.isSprinting) return
+      val o = 0.3
+      val rx = (Random.nextDouble() * 2.0 - 1.0) * o
+      val ry = (Random.nextDouble() * 2.0 - 1.0) * o
+      val rz = (Random.nextDouble() * 2.0 - 1.0) * o
+      val loc = player.location.clone().add(rx, ry, rz)
+      val mat = spec.items.randomOrNull() ?: return
+      val dropped = player.world.dropItem(loc, ItemStack(mat))
+      dropped.pickupDelay = 36000
+      Bukkit.getScheduler()
+          .runTaskLater(
+              OyasaiUtilities.plugin,
+              Runnable { if (dropped.isValid) dropped.remove() },
+              20L,
+          )
+      return
+    }
+
+    // Rocket, Magic Aura など
+    val particle = resolve(spec.name) ?: return
+    val o = 0.3
+    val rx =
+        (Random.nextDouble() * 2.0 - 1.0) * (if (hat.randomOffset.x > 0) hat.randomOffset.x else o)
+    val ry =
+        (Random.nextDouble() * 2.0 - 1.0) * (if (hat.randomOffset.y > 0) hat.randomOffset.y else o)
+    val rz =
+        (Random.nextDouble() * 2.0 - 1.0) * (if (hat.randomOffset.z > 0) hat.randomOffset.z else o)
+    val baseHeight =
+        when (hat.location) {
+          HatAnchor.HEAD -> 2.3
+          HatAnchor.CHEST -> 1.3
+          HatAnchor.FEET -> 0.0
+        }
+    val loc = player.location.clone().add(rx, ry + baseHeight + hat.offset.y, rz)
+    repeat(hat.count) { spawn(player.world, loc, particle, spec, spec.color, hat.speed) }
+  }
+
+  private fun applyRandomOffset(loc: Location, randomOffset: Vector) {
+    if (randomOffset.lengthSquared() > 0) {
+      loc.add(
+          (Random.nextDouble() * 2 - 1) * randomOffset.x,
+          (Random.nextDouble() * 2 - 1) * randomOffset.y,
+          (Random.nextDouble() * 2 - 1) * randomOffset.z,
+      )
+    }
+  }
+
+  private fun supportsAnimation(type: HatType): Boolean =
+      when (type) {
+        HatType.HALO,
+        HatType.HOOP,
+        HatType.TORNADO,
+        HatType.SPHERE -> true
+        else -> false
+      }
+
+  private fun getFrames(type: HatType): List<List<Vector>> =
+      when (type) {
+        HatType.HALO -> haloFrames
+        HatType.CAPE -> capeFrames
+        HatType.CRYSTAL -> crystalFrames
+        HatType.ARCH -> archFrames
+        HatType.HOOP -> hoopFrames
+        HatType.TORNADO -> tornadoFrames
+        HatType.SPHERE -> sphereFrames
+        else -> emptyList()
+      }
+
+  // --- オリジナル幾何学フレーム定義 ---
+
+  private val haloFrames by lazy {
+    val radius = 0.8
+    listOf(
+        (0 until 12).map { i ->
+          val angle = Math.toRadians(i * 30.0)
+          Vector(radius * cos(angle), 0.0, radius * sin(angle))
+        }
+    )
+  }
+
+  private val capeFrames by lazy {
+    val xpoints = doubleArrayOf(-0.32, -0.16, 0.0, 0.16, 0.32)
+    val points = mutableListOf<Vector>()
+    for (x in 0 until 5) {
+      for (y in 0 until 6) {
+        points += Vector(xpoints[x] - x * 0.02, (-y) * 0.18, -0.28 - y * 0.1)
+      }
+    }
+    listOf(points)
+  }
+
+  private val crystalFrames by lazy {
+    val list =
+        mutableListOf(
+            Vector(0.0, 0.7, 0.0),
+            Vector(0.0, 1.0, 0.0),
+            Vector(0.0, 1.3, 0.0),
+            Vector(0.0, 1.6, 0.0),
+            Vector(0.0, 1.9, 0.0),
+            Vector(0.2, 1.0, 0.0),
+            Vector(0.2, 1.3, 0.0),
+            Vector(0.2, 1.6, 0.0),
+            Vector(0.4, 1.3, 0.0),
+            Vector(-0.2, 1.0, 0.0),
+            Vector(-0.2, 1.3, 0.0),
+            Vector(-0.2, 1.6, 0.0),
+            Vector(-0.4, 1.3, 0.0),
+            Vector(0.0, 1.0, 0.2),
+            Vector(0.0, 1.3, 0.2),
+            Vector(0.0, 1.6, 0.2),
+            Vector(0.0, 1.3, 0.4),
+            Vector(0.0, 1.0, -0.2),
+            Vector(0.0, 1.3, -0.2),
+            Vector(0.0, 1.6, -0.2),
+            Vector(0.0, 1.3, -0.4),
         )
-    val scale = 0.12
-    return pixels.map { (x, y) -> Vector((x - 3.5) * scale, (y - 3.5) * scale, 0.35) }
+    listOf(list)
   }
 
-  private fun wings(spread: Double, lift: Double): List<Vector> {
-    val points = mutableListOf<Vector>()
-    for (side in listOf(-1.0, 1.0)) {
-      for (i in 0 until 10) {
-        val t = i / 9.0
-        points +=
-            Vector(
-                side * (0.2 + spread * t),
-                0.25 + sin(t * PI) * lift,
-                -0.2 - 0.2 * t,
-            )
+  private val archFrames by lazy {
+    val l1 = mutableListOf<Vector>()
+    val l2 = mutableListOf<Vector>()
+    val l3 = mutableListOf<Vector>()
+    val l4 = mutableListOf<Vector>()
+    val l5 = mutableListOf<Vector>()
+    val count = 50.0
+    val distance = 360.0 / count
+    val radius = 2.3
+    var i = 0.0
+    while (i <= 180.0 + distance) {
+      val angle = Math.toRadians(i)
+      val x = radius * cos(angle)
+      val y = radius * sin(angle)
+      l1 += Vector(x, y, 0.6)
+      l2 += Vector(x, y, 0.3)
+      l3 += Vector(x, y, 0.0)
+      l4 += Vector(x, y, -0.3)
+      l5 += Vector(x, y, -0.6)
+      i += distance
+    }
+    listOf(l1, l2, l3, l4, l5)
+  }
+
+  private val hoopFrames by lazy {
+    val points = 30.0
+    val dist = 360.0 / points
+    val radius = 0.8
+    val frame1 = mutableListOf<Vector>()
+    val frame2 = mutableListOf<Vector>()
+    var i = 0.0
+    while (i < 360.0) {
+      val angle = Math.toRadians(i)
+      val x = radius * cos(angle)
+      val z = radius * sin(angle)
+      frame1 += Vector(x, 0.0, z)
+      frame2 += Vector(-x, 0.0, -z)
+      i += dist
+    }
+    listOf(frame1, frame2)
+  }
+
+  private val tornadoFrames by lazy {
+    val points = 16.0
+    val dist = 360.0 / points
+    val frame1 = mutableListOf<Vector>()
+    val frame2 = mutableListOf<Vector>()
+    var i = 0.0
+    while (i < 360.0) {
+      val angle = Math.toRadians(i)
+      val x = 0.5 * cos(angle)
+      val z = 0.5 * sin(angle)
+      frame1 += Vector(x, 0.0, z)
+      i += dist
+    }
+    i = 0.0
+    while (i < 360.0) {
+      val angle = Math.toRadians(i + 50.0)
+      val x = 0.25 * cos(angle)
+      val z = 0.25 * sin(angle)
+      frame2 += Vector(x, -0.1, z)
+      i += dist
+    }
+    listOf(frame1, frame2)
+  }
+
+  private val sphereFrames by lazy {
+    var phi = 0.0
+    val radius = 1.5
+    val angle = PI / 10.0
+    val frames = mutableListOf<List<Vector>>()
+    while (phi < PI) {
+      val frame = mutableListOf<Vector>()
+      phi += angle
+      var a = 0.0
+      while (a <= PI * 2.0) {
+        val x = radius * cos(a) * sin(phi)
+        val y = radius * cos(phi) + 1.5
+        val z = radius * sin(a) * sin(phi)
+        frame += Vector(x, y, z)
+        a += PI / 20.0
       }
+      frames += frame
     }
-    return points
+    frames
   }
 
-  private fun arch(): List<List<Vector>> {
-    val zs = listOf(0.6, 0.3, 0.0, -0.3, -0.6)
-    val count = 16
-    return zs.map { z ->
-      (0 until count).map { i ->
-        val angle = PI * i / (count - 1)
-        Vector(2.3 * cos(angle), 2.3 * sin(angle), z)
+  // --- 座標変換・回転計算 (MathUtil / Effect 準拠) ---
+
+  private fun rotateXAxis(v: Vector, a: Double): Vector {
+    val y = cos(a) * v.y - sin(a) * v.z
+    val z = sin(a) * v.y + cos(a) * v.z
+    return v.setY(y).setZ(z)
+  }
+
+  private fun rotateYAxis(v: Vector, b: Double): Vector {
+    val x = cos(b) * v.x + sin(b) * v.z
+    val z = -sin(b) * v.x + cos(b) * v.z
+    return v.setX(x).setZ(z)
+  }
+
+  private fun rotateZAxis(v: Vector, c: Double): Vector {
+    val x = cos(c) * v.x - sin(c) * v.y
+    val y = sin(c) * v.x + cos(c) * v.y
+    return v.setX(x).setY(y)
+  }
+
+  private fun rotateVector(v: Vector, location: Location): Vector {
+    val yaw = Math.toRadians(location.yaw.toDouble())
+    val pitch = Math.toRadians(location.pitch.toDouble())
+    var res = rotateXAxis(v, pitch)
+    res = rotateYAxis(res, -yaw)
+    return res
+  }
+
+  private fun getAngleVector(
+      target: Vector,
+      angleXRad: Double,
+      angleYRad: Double,
+      angleZRad: Double,
+  ): Vector {
+    var t = target
+    if (abs(angleZRad) > 0.0) t = rotateXAxis(t, angleZRad)
+    if (abs(angleYRad) > 0.0) t = rotateYAxis(t, angleYRad)
+    if (abs(angleXRad) > 0.0) t = rotateZAxis(t, -angleXRad)
+    return t
+  }
+
+  private fun getTrackingPosition(
+      hat: HatDefinition,
+      target: Vector,
+      location: Location,
+      cos: Double,
+      sin: Double,
+  ): Vector {
+    val baseHeight =
+        when (hat.location) {
+          HatAnchor.HEAD -> 2.3
+          HatAnchor.CHEST -> 1.3
+          HatAnchor.FEET -> 0.0
+        }
+    val offsetY = baseHeight + hat.offset.y
+    return when (hat.tracking) {
+      HatTracking.NONE -> Vector(target.x, target.y + offsetY, target.z)
+      HatTracking.BODY -> {
+        val tx = target.x
+        val tz = target.z
+        val x = tx * cos - tz * sin
+        val y = target.y + offsetY
+        val z = tx * sin + tz * cos
+        Vector(x, y, z)
       }
-    }
-  }
-
-  private fun tornado(): List<Vector> {
-    return (0 until 16).map { i ->
-      val t = i / 16.0
-      val radius = 0.15 + t * 0.45
-      val angle = t * 4.0 * PI
-      Vector(radius * cos(angle), t * 1.4, radius * sin(angle))
-    }
-  }
-
-  private fun sphere(radius: Double): List<Vector> {
-    val points = mutableListOf<Vector>()
-    val rings = 6
-    val slices = 8
-    for (r in 0..rings) {
-      val v = PI * r / rings
-      val y = radius * cos(v)
-      val ringR = radius * sin(v)
-      for (s in 0 until slices) {
-        val u = 2.0 * PI * s / slices
-        points += Vector(ringR * cos(u), y, ringR * sin(u))
+      HatTracking.HEAD -> {
+        val v = Vector(target.x, target.y + offsetY, target.z)
+        rotateVector(v, location)
       }
-    }
-    return points
-  }
-
-  private fun hoop(radius: Double): List<Vector> {
-    val count = 14
-    val step = 2.0 * PI / count
-    return (0 until count).map { i ->
-      val angle = i * step
-      Vector(radius * cos(angle), radius * sin(angle), 0.0)
     }
   }
 
   private fun resolve(name: String): Particle? {
+    if (name.equals("EMPTY_SPACE", ignoreCase = true) || name.equals("NONE", ignoreCase = true))
+        return null
     val key = name.uppercase()
     if (particleCache.containsKey(key)) return particleCache[key]
     val mapped = particleAliases[key] ?: key
@@ -221,23 +492,35 @@ internal object HatsRenderer {
       loc: Location,
       particle: Particle,
       spec: HatParticleSpec,
+      colorOverride: Color? = null,
+      speed: Double = 0.0,
   ) {
     val color =
         when {
           spec.randomColor -> Color.fromRGB(Random.nextInt(0xFFFFFF + 1))
+          colorOverride != null -> colorOverride
           spec.color != null -> spec.color
           else -> Color.WHITE
         }
     val dataType = particle.dataType
     when {
       dataType == DustOptions::class.java ->
-          world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.0, DustOptions(color, spec.size))
+          world.spawnParticle(
+              particle,
+              loc,
+              1,
+              0.0,
+              0.0,
+              0.0,
+              speed,
+              DustOptions(color, spec.size),
+          )
       dataType == ItemStack::class.java -> {
         val material = spec.items.randomOrNull() ?: return
         world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.05, ItemStack(material))
       }
       Void::class.java.isAssignableFrom(dataType) ->
-          world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.0)
+          world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, speed)
     }
   }
 }

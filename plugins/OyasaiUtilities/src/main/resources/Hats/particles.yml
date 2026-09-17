@@ -170,6 +170,8 @@ items:
     particles:
       "1":
         particle: FIREWORKS_SPARK
+      "2":
+        particle: FIREWORKS_SPARK
   "23":
     key: witches_sphere
     permission: witches_sphere
@@ -186,6 +188,24 @@ items:
     particles:
       "1":
         particle: SPELL_WITCH
+      "2":
+        particle: EMPTY_SPACE
+      "3":
+        particle: SPELL_WITCH
+      "4":
+        particle: EMPTY_SPACE
+      "5":
+        particle: SPELL_WITCH
+      "6":
+        particle: EMPTY_SPACE
+      "7":
+        particle: SPELL_WITCH
+      "8":
+        particle: EMPTY_SPACE
+      "9":
+        particle: SPELL_WITCH
+      "10":
+        particle: EMPTY_SPACE
   "24":
     key: bubble_wings
     permission: bubble_wings

@@ -54,6 +54,7 @@ object Hats : Listener, CommandExecutor {
     Bukkit.getOnlinePlayers().forEach(::savePlayer)
     equipped.clear()
     renderFailures.clear()
+    Bukkit.getOnlinePlayers().forEach { HatsRenderer.cleanup(it.uniqueId) }
   }
 
   override fun onCommand(
@@ -86,6 +87,7 @@ object Hats : Listener, CommandExecutor {
     savePlayer(event.player)
     equipped.remove(event.player.uniqueId)
     renderFailures.removeIf { it.first == event.player.uniqueId }
+    HatsRenderer.cleanup(event.player.uniqueId)
   }
 
   fun equippedIds(player: Player): List<String> = equipped[player.uniqueId].orEmpty()

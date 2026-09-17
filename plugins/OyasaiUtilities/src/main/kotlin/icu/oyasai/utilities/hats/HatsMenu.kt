@@ -57,9 +57,11 @@ internal data class HatDefinition(
     val type: HatType,
     val location: HatAnchor,
     val offset: Vector,
+    val angle: Vector,
     val tracking: HatTracking,
     val mode: HatMode,
     val count: Int,
+    val speed: Double,
     val randomOffset: Vector,
     val updateFrequency: Int,
     val scale: Double,
@@ -122,11 +124,13 @@ internal object HatsMenu {
         icon = icon,
         description = section.getStringList("description"),
         type = type,
-        location = parseAnchor(section.getString("location")),
+        location = parseAnchor(section.getString("location"), type),
         offset = readVector(section.getConfigurationSection("offset")),
-        tracking = parseTracking(section.getString("tracking")),
+        angle = readVector(section.getConfigurationSection("angle")),
+        tracking = parseTracking(section.getString("tracking"), type),
         mode = parseMode(section.getString("mode")),
         count = section.getInt("count", 1).coerceAtLeast(1),
+        speed = section.getDouble("speed", 0.0),
         randomOffset = readVector(section.getConfigurationSection("random-offset")),
         updateFrequency = section.getInt("update-frequency", 2).coerceAtLeast(1),
         scale = section.getDouble("scale", 1.0).let { if (it <= 0.0) 1.0 else it },
@@ -146,7 +150,6 @@ internal object HatsMenu {
         .mapNotNull { key ->
           val particleSection = section.getConfigurationSection(key) ?: return@mapNotNull null
           val name = particleSection.getString("particle") ?: return@mapNotNull null
-          if (name.equals("EMPTY_SPACE", ignoreCase = true)) return@mapNotNull null
           val colorValue = particleSection.get("color")
           val randomColor = colorValue?.toString().equals("random", ignoreCase = true)
           val rgb =
@@ -162,7 +165,7 @@ internal object HatsMenu {
               name = name,
               randomColor = randomColor,
               color = rgb?.let { Color.fromRGB(it and 0xFFFFFF) },
-              size = particleSection.getDouble("size", 1.0).toFloat().coerceIn(0.1f, 4.0f),
+              size = particleSection.getDouble("size", 1.0).toFloat().coerceIn(0.1f, 10.0f),
               items = items,
           )
         }
@@ -184,18 +187,31 @@ internal object HatsMenu {
         else -> HatType.UNSUPPORTED
       }
 
-  private fun parseAnchor(raw: String?): HatAnchor =
+  private fun parseAnchor(raw: String?, type: HatType): HatAnchor =
       when (raw?.lowercase()) {
         "head" -> HatAnchor.HEAD
         "chest" -> HatAnchor.CHEST
-        else -> HatAnchor.FEET
+        "feet" -> HatAnchor.FEET
+        else ->
+            when (type) {
+              HatType.HALO,
+              HatType.CRYSTAL -> HatAnchor.HEAD
+              else -> HatAnchor.FEET
+            }
       }
 
-  private fun parseTracking(raw: String?): HatTracking =
+  private fun parseTracking(raw: String?, type: HatType): HatTracking =
       when (raw?.lowercase()) {
         "track_head_movement" -> HatTracking.HEAD
         "track_body_rotation" -> HatTracking.BODY
-        else -> HatTracking.NONE
+        "track_nothing" -> HatTracking.NONE
+        else ->
+            when (type) {
+              HatType.CAPE,
+              HatType.ARCH -> HatTracking.BODY
+              HatType.CRYSTAL -> HatTracking.HEAD
+              else -> HatTracking.NONE
+            }
       }
 
   private fun parseMode(raw: String?): HatMode =
