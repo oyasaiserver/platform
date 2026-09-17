@@ -11,6 +11,7 @@ import icu.oyasai.utilities.oresmelter.OreSmelterEvent
 import icu.oyasai.utilities.pita.Pita
 import icu.oyasai.utilities.redbull.RedBullCommand
 import icu.oyasai.utilities.redbull.RedBullFeature
+import icu.oyasai.utilities.skin.SkinFeature
 import icu.oyasai.utilities.timerbar.TimerBarEvent
 import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
@@ -20,9 +21,13 @@ import icu.oyasai.utilities.veinminer.VeinminerEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {
+  private lateinit var skinFeature: SkinFeature
+
   override fun onLoad() {}
 
   override fun onEnable() {
+    skinFeature = SkinFeature(this)
+    skinFeature.enable()
     server.pluginManager.registerEvents(NotNBTEvent, this) // NotNBTのイベント登録
     server.pluginManager.registerEvents(OreSmelterEvent, this) // OreSmelterのイベント登録
     server.pluginManager.registerEvents(VeinminerEvent, this)
@@ -30,6 +35,9 @@ class Main : JavaPlugin() {
     server.pluginManager.registerEvents(TeleportListener, this) // TPathのイベント登録
     server.pluginManager.registerEvents(Pita, this) // Pitaのイベント
     server.pluginManager.registerEvents(RedBullFeature, this) // RedBullのイベント
+    server.pluginManager.registerEvents(skinFeature, this)
+    server.getPluginCommand("skin")?.setExecutor(skinFeature)
+    server.getPluginCommand("skin")?.tabCompleter = skinFeature
     server.getPluginCommand("oresmelter")?.setExecutor(OreSmelter) // OreSmelterのコマンド
     server.getPluginCommand("uuid")?.setExecutor(GetUUIDCmd) // GetUUIDのコマンド
     server.getPluginCommand("timerbar")?.setExecutor(TimerCmd) // TimerBarのコマンド
@@ -51,6 +59,7 @@ class Main : JavaPlugin() {
   }
 
   override fun onDisable() {
+    if (::skinFeature.isInitialized) skinFeature.disable()
     OreReappears.onDisable() // OreReappearsの無効化
     AdminBP.onDisable()
     Pita.onDisable() // Pitaの無効化

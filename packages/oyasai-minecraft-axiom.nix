@@ -38,7 +38,6 @@ oyasaiPurpur rec {
     oyasaitab
     placeholderapi
     plugmanx
-    protocollib
     vault
     viaversion
     worldeditsui
