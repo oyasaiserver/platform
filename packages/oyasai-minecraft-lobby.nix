@@ -80,7 +80,6 @@ oyasaiPurpur rec {
     oyasaitab
     oyasaiutilities
     plugmanx
-    skinsrestorer
     vertex
     viaversion
     # keep-sorted end

@@ -5,7 +5,6 @@ import com.google.gson.JsonParser
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Base64
-import java.util.Optional
 import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -96,45 +95,6 @@ object SLPlayerHeads {
     }
   }
 
-  fun fetchFromSkinsRestorer(uuid: UUID, name: String?): ProfileData? {
-    if (name.isNullOrBlank() || !Bukkit.getPluginManager().isPluginEnabled("SkinsRestorer")) {
-      return null
-    }
-
-    return try {
-      val providerClass = Class.forName("net.skinsrestorer.api.SkinsRestorerProvider")
-      val api = providerClass.getMethod("get").invoke(null)
-      val playerStorage = api.javaClass.getMethod("getPlayerStorage").invoke(api)
-
-      val storedProperty =
-          optionalValue(
-              playerStorage.javaClass
-                  .getMethod("getSkinOfPlayer", UUID::class.java)
-                  .invoke(
-                      playerStorage,
-                      uuid,
-                  )
-          )
-      val property =
-          storedProperty
-              ?: optionalValue(
-                  playerStorage.javaClass
-                      .getMethod(
-                          "getSkinForPlayer",
-                          UUID::class.java,
-                          String::class.java,
-                          java.lang.Boolean.TYPE,
-                      )
-                      .invoke(playerStorage, uuid, name, false)
-              )
-              ?: return null
-      val textureValue = property.javaClass.getMethod("getValue").invoke(property) as? String
-      textureValue?.let { ProfileData(name, it) }
-    } catch (_: Throwable) {
-      null
-    }
-  }
-
   fun fetchFromPlayerDB(uuid: UUID): ProfileData? {
     return try {
       val cleanUuid = uuid.toString().replace("-", "")
@@ -170,10 +130,6 @@ object SLPlayerHeads {
     }
     val textureJson = """{"textures":{"SKIN":{"url":"$texture"}}}"""
     return Base64.getEncoder().encodeToString(textureJson.toByteArray(Charsets.UTF_8))
-  }
-
-  private fun optionalValue(optional: Any?): Any? {
-    return (optional as? Optional<*>)?.orElse(null)
   }
 
   private fun profileName(name: String): String {

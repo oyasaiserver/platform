@@ -98,21 +98,6 @@ object SLSignLikes {
 
                 val resolvedName = SLPlayerHeads.resolveName(uuid)
 
-                val skinsRestorerResult = SLPlayerHeads.fetchFromSkinsRestorer(uuid, resolvedName)
-                if (skinsRestorerResult != null) {
-                  profileCache[uuid] = skinsRestorerResult
-                  Bukkit.getScheduler()
-                      .runTask(
-                          Tools.plugin,
-                          Runnable {
-                            headStacks[index] = SLPlayerHeads.createHead(uuid, skinsRestorerResult)
-                            scheduleUpdate(pagePane, headStacks, gui)
-                          },
-                      )
-                  Thread.sleep(50)
-                  return@forEachIndexed
-                }
-
                 val playerDBResult =
                     if (SLPlayerHeads.isFloodgatePseudoUUID(uuid)) {
                       null

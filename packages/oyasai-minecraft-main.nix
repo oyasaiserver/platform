@@ -81,13 +81,11 @@ oyasaiPurpur rec {
     painttools
     placeholderapi
     plugmanx
-    protocollib
     pvparena
     sba
     screamingbedwars
     signshop
     simpleelevator
-    skinsrestorer
     skript
     slotmachine
     sociallikes3

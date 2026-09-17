@@ -5,8 +5,12 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
-softdepend: [Vault, TokenManager, LuckPerms]
+softdepend: [Vault, TokenManager, LuckPerms, floodgate]
 commands:
+  skin:
+    description: "自分のスキンを変更する"
+    usage: /skin <set <MCID>|reset>
+    permission: oyasai.skin
   redbull:
     description: "20ポイントで一日 fly 権限を有効にする"
     permission: redbull.use
@@ -55,6 +59,9 @@ commands:
     usage: /togom [types/reset/lim/radius/duration/replace]
 
 permissions:
+  oyasai.skin:
+    description: "スキン変更コマンドの使用権限"
+    default: op
   redbull.use:
     description: "Red Bull の一日 fly 権限を有効にする"
     default: true
