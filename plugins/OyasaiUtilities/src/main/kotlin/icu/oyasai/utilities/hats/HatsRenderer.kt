@@ -12,11 +12,14 @@ import kotlin.random.Random
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Location
+import org.bukkit.NamespacedKey
 import org.bukkit.Particle
 import org.bukkit.Particle.DustOptions
 import org.bukkit.World
+import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.util.Vector
 
 internal object HatsRenderer {
@@ -29,6 +32,10 @@ internal object HatsRenderer {
           "BARRIER" to "BLOCK_MARKER",
       )
   private val particleCache = mutableMapOf<String, Particle?>()
+  private val warnedUnknownParticles = ConcurrentHashMap.newKeySet<String>()
+  private val warnedUnsupportedDataTypes = ConcurrentHashMap.newKeySet<Class<*>>()
+  private val thiefDropKey by lazy { NamespacedKey(OyasaiUtilities.plugin, "hats_thief_drop") }
+  private val zeroOffset = Vector()
 
   // アニメーションインデックス: (UUID, HatID) -> (FrameIndex -> AnimationStep)
   private val animationIndices =
@@ -70,7 +77,7 @@ internal object HatsRenderer {
     animationIndices.keys.removeIf { it.first == uuid }
   }
 
-  fun render(player: Player, hat: HatDefinition, tick: Int) {
+  fun render(player: Player, hat: HatDefinition) {
     val world = player.world
 
     // 1. 特殊挙動: TRAIL (thief, rocket, magic_aura)
@@ -129,8 +136,7 @@ internal object HatsRenderer {
                   .clone()
                   .add(offsetX, 0.0, offsetZ)
                   .add(getTrackingPosition(hat, v, location, cos, sin))
-          applyRandomOffset(spawnLoc, hat.randomOffset)
-          repeat(hat.count) { spawn(world, spawnLoc, particle, spec, spec.color, hat.speed) }
+          spawn(world, spawnLoc, particle, spec, hat.count, hat.randomOffset, speed = hat.speed)
           animMap[frameIndex] = (idx + 1) % size
         }
       } else {
@@ -142,8 +148,7 @@ internal object HatsRenderer {
                   .clone()
                   .add(offsetX, 0.0, offsetZ)
                   .add(getTrackingPosition(hat, v, location, cos, sin))
-          applyRandomOffset(spawnLoc, hat.randomOffset)
-          repeat(hat.count) { spawn(world, spawnLoc, particle, spec, spec.color, hat.speed) }
+          spawn(world, spawnLoc, particle, spec, hat.count, hat.randomOffset, speed = hat.speed)
         }
       }
     }
@@ -183,11 +188,17 @@ internal object HatsRenderer {
               .clone()
               .add(offsetX, 0.0, offsetZ)
               .add(getTrackingPosition(hat, v, location, cos, sin))
-      applyRandomOffset(spawnLoc, hat.randomOffset)
-
       val isWhite = pixel.color.red > 245 && pixel.color.green > 245 && pixel.color.blue > 245
       val finalColor = if (isWhite && spec.color != null) spec.color else pixel.color
-      repeat(hat.count) { spawn(world, spawnLoc, particle, spec, finalColor, hat.speed) }
+      spawn(
+          world,
+          spawnLoc,
+          particle,
+          spec,
+          hat.count,
+          colorOverride = finalColor,
+          speed = hat.speed,
+      )
     }
   }
 
@@ -204,6 +215,8 @@ internal object HatsRenderer {
       val loc = player.location.clone().add(rx, ry, rz)
       val mat = spec.items.randomOrNull() ?: return
       val dropped = player.world.dropItem(loc, ItemStack(mat))
+      dropped.velocity = Vector()
+      dropped.persistentDataContainer.set(thiefDropKey, PersistentDataType.BYTE, 1.toByte())
       dropped.pickupDelay = 36000
       Bukkit.getScheduler()
           .runTaskLater(
@@ -217,35 +230,30 @@ internal object HatsRenderer {
     // Rocket, Magic Aura など
     val particle = resolve(spec.name) ?: return
     val o = 0.3
-    val rx =
-        (Random.nextDouble() * 2.0 - 1.0) * (if (hat.randomOffset.x > 0) hat.randomOffset.x else o)
-    val ry =
-        (Random.nextDouble() * 2.0 - 1.0) * (if (hat.randomOffset.y > 0) hat.randomOffset.y else o)
-    val rz =
-        (Random.nextDouble() * 2.0 - 1.0) * (if (hat.randomOffset.z > 0) hat.randomOffset.z else o)
+    val rx = (Random.nextDouble() * 2.0 - 1.0) * o
+    val ry = (Random.nextDouble() * 2.0 - 1.0) * o
+    val rz = (Random.nextDouble() * 2.0 - 1.0) * o
     val baseHeight =
         when (hat.location) {
           HatAnchor.HEAD -> 2.3
           HatAnchor.CHEST -> 1.3
           HatAnchor.FEET -> 0.0
         }
-    val loc = player.location.clone().add(rx, ry + baseHeight + hat.offset.y, rz)
-    repeat(hat.count) { spawn(player.world, loc, particle, spec, spec.color, hat.speed) }
+    val loc =
+        player.location
+            .clone()
+            .add(rx, ry, rz)
+            .add(hat.offset.x, baseHeight + hat.offset.y, hat.offset.z)
+    spawn(player.world, loc, particle, spec, hat.count, hat.randomOffset, speed = hat.speed)
   }
 
-  private fun applyRandomOffset(loc: Location, randomOffset: Vector) {
-    if (randomOffset.lengthSquared() > 0) {
-      loc.add(
-          (Random.nextDouble() * 2 - 1) * randomOffset.x,
-          (Random.nextDouble() * 2 - 1) * randomOffset.y,
-          (Random.nextDouble() * 2 - 1) * randomOffset.z,
-      )
-    }
-  }
+  fun isThiefDrop(item: Item): Boolean =
+      item.persistentDataContainer.has(thiefDropKey, PersistentDataType.BYTE)
 
   private fun supportsAnimation(type: HatType): Boolean =
       when (type) {
         HatType.HALO,
+        HatType.ARCH,
         HatType.HOOP,
         HatType.TORNADO,
         HatType.SPHERE -> true
@@ -325,7 +333,7 @@ internal object HatsRenderer {
     val distance = 360.0 / count
     val radius = 2.3
     var i = 0.0
-    while (i <= 180.0 + distance) {
+    while (i < 180.0 + distance) {
       val angle = Math.toRadians(i)
       val x = radius * cos(angle)
       val y = radius * sin(angle)
@@ -484,6 +492,9 @@ internal object HatsRenderer {
         Particle.entries.firstOrNull { it.name.equals(mapped, ignoreCase = true) }
             ?: Particle.entries.firstOrNull { it.name.equals(key, ignoreCase = true) }
     particleCache[key] = particle
+    if (particle == null && warnedUnknownParticles.add(key)) {
+      OyasaiUtilities.plugin.logger.warning("Unknown particle '$name'; skipping it.")
+    }
     return particle
   }
 
@@ -492,6 +503,8 @@ internal object HatsRenderer {
       loc: Location,
       particle: Particle,
       spec: HatParticleSpec,
+      count: Int,
+      randomOffset: Vector = zeroOffset,
       colorOverride: Color? = null,
       speed: Double = 0.0,
   ) {
@@ -508,19 +521,42 @@ internal object HatsRenderer {
           world.spawnParticle(
               particle,
               loc,
-              1,
-              0.0,
-              0.0,
-              0.0,
+              count,
+              randomOffset.x,
+              randomOffset.y,
+              randomOffset.z,
               speed,
               DustOptions(color, spec.size),
           )
       dataType == ItemStack::class.java -> {
         val material = spec.items.randomOrNull() ?: return
-        world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.05, ItemStack(material))
+        world.spawnParticle(
+            particle,
+            loc,
+            count,
+            randomOffset.x,
+            randomOffset.y,
+            randomOffset.z,
+            speed,
+            ItemStack(material),
+        )
       }
       Void::class.java.isAssignableFrom(dataType) ->
-          world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, speed)
+          world.spawnParticle(
+              particle,
+              loc,
+              count,
+              randomOffset.x,
+              randomOffset.y,
+              randomOffset.z,
+              speed,
+          )
+      else ->
+          if (warnedUnsupportedDataTypes.add(dataType)) {
+            OyasaiUtilities.plugin.logger.warning(
+                "Unsupported particle data type '${dataType.name}' for ${particle.name}; skipping it."
+            )
+          }
     }
   }
 }

@@ -124,7 +124,7 @@ internal object HatsMenu {
         icon = icon,
         description = section.getStringList("description"),
         type = type,
-        location = parseAnchor(section.getString("location"), type),
+        location = parseAnchor(section.getString("location")),
         offset = readVector(section.getConfigurationSection("offset")),
         angle = readVector(section.getConfigurationSection("angle")),
         tracking = parseTracking(section.getString("tracking"), type),
@@ -187,17 +187,12 @@ internal object HatsMenu {
         else -> HatType.UNSUPPORTED
       }
 
-  private fun parseAnchor(raw: String?, type: HatType): HatAnchor =
+  private fun parseAnchor(raw: String?): HatAnchor =
       when (raw?.lowercase()) {
         "head" -> HatAnchor.HEAD
         "chest" -> HatAnchor.CHEST
         "feet" -> HatAnchor.FEET
-        else ->
-            when (type) {
-              HatType.HALO,
-              HatType.CRYSTAL -> HatAnchor.HEAD
-              else -> HatAnchor.FEET
-            }
+        else -> HatAnchor.HEAD
       }
 
   private fun parseTracking(raw: String?, type: HatType): HatTracking =

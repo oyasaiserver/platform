@@ -1,7 +1,7 @@
 # OyasaiUtilities 内製 /h メニュー。
 # 元: ローカル ParticleHats/menus/particles.yml の装備用アイテム。
 # 未移植: Walking Billboard（カスタムPNG）、Arrows（発射体追従）、
-# dummy / 装備一覧 / サウンド確認アイテム、sphere の node 重ね。
+# dummy / 装備一覧 / サウンド確認アイテム、nodes 機構。
 settings:
   title: "&8パーティクルを選ぶ"
   size: 6
@@ -147,6 +147,7 @@ items:
     type: hoop
     location: feet
     animated: true
+    speed: 1
     scale: 0.8
     offset:
       y: 1.0
@@ -189,23 +190,23 @@ items:
       "1":
         particle: SPELL_WITCH
       "2":
-        particle: EMPTY_SPACE
+        particle: SPELL_WITCH
       "3":
         particle: SPELL_WITCH
       "4":
-        particle: EMPTY_SPACE
+        particle: SPELL_WITCH
       "5":
         particle: SPELL_WITCH
       "6":
-        particle: EMPTY_SPACE
+        particle: SPELL_WITCH
       "7":
         particle: SPELL_WITCH
       "8":
-        particle: EMPTY_SPACE
+        particle: SPELL_WITCH
       "9":
         particle: SPELL_WITCH
       "10":
-        particle: EMPTY_SPACE
+        particle: SPELL_WITCH
   "24":
     key: bubble_wings
     permission: bubble_wings

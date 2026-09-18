@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryPickupItemEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.potion.PotionEffectType
@@ -90,6 +91,11 @@ object Hats : Listener, CommandExecutor {
     HatsRenderer.cleanup(event.player.uniqueId)
   }
 
+  @EventHandler
+  fun onInventoryPickup(event: InventoryPickupItemEvent) {
+    if (HatsRenderer.isThiefDrop(event.item)) event.isCancelled = true
+  }
+
   fun equippedIds(player: Player): List<String> = equipped[player.uniqueId].orEmpty()
 
   fun isEquipped(player: Player, id: String): Boolean = equippedIds(player).contains(id)
@@ -140,7 +146,7 @@ object Hats : Listener, CommandExecutor {
         if (!canEquip(player, hat) || !hat.renders) continue
         if (tick % hat.updateFrequency != 0) continue
         if (!modeActive(player, hat.mode)) continue
-        val failure = runCatching { HatsRenderer.render(player, hat, tick) }.exceptionOrNull()
+        val failure = runCatching { HatsRenderer.render(player, hat) }.exceptionOrNull()
         val key = player.uniqueId to id
         if (failure == null) {
           renderFailures.remove(key)
