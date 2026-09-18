@@ -149,12 +149,6 @@
       "type": "modrinth"
     }
   },
-  "protocollib": {
-    "paper": {
-      "slug": "dmulloy2/protocollib",
-      "type": "hangar"
-    }
-  },
   "pvparena": {
     "paper": {
       "id": 16584,
@@ -186,16 +180,6 @@
       "type": "spiget"
     }
   },
-  "skinsrestorer": {
-    "paper": {
-      "slug": "skinsrestorer",
-      "type": "modrinth"
-    },
-    "velocity": {
-      "slug": "skinsrestorer",
-      "type": "modrinth"
-    }
-  },
   "skript": {
     "paper": {
       "slug": "skript",
@@ -208,12 +192,6 @@
       "type": "spiget"
     }
   },
-  "tab": {
-    "paper": {
-      "slug": "tab-was-taken",
-      "type": "modrinth"
-    }
-  },
   "tntruneloaded": {
     "paper": {
       "id": 53359,
@@ -224,12 +202,6 @@
     "paper": {
       "id": 34315,
       "type": "spiget"
-    }
-  },
-  "veinminer": {
-    "paper": {
-      "slug": "veinminer",
-      "type": "modrinth"
     }
   },
   "viaversion": {
@@ -245,12 +217,6 @@
       "repo": "WorldBorder",
       "tag": "v2.1.5",
       "type": "github"
-    }
-  },
-  "worldeditsui": {
-    "paper": {
-      "slug": "kennytv/worldeditsui",
-      "type": "hangar"
     }
   },
   "worldguard": {

@@ -189,14 +189,6 @@
       }
     }
   },
-  "protocollib": {
-    "paper": {
-      "26.2": {
-        "url": "https://github.com/dmulloy2/ProtocolLib/releases/download/5.4.0/ProtocolLib.jar",
-        "hash": "sha256-7i56ubU4by0QMIHE0QjmGxA13yymkrU9biQJ+x9crM8="
-      }
-    }
-  },
   "pvparena": {
     "paper": {
       "26.2": {
@@ -237,18 +229,6 @@
       }
     }
   },
-  "skinsrestorer": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/wXS6bHiC/SkinsRestorer.jar",
-        "hash": "sha256-vxP/7pu0iBQbfsmWA+vIq6xomTPXLbFeZk/rC03u/GA="
-      }
-    },
-    "velocity": {
-      "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/wXS6bHiC/SkinsRestorer.jar",
-      "hash": "sha256-vxP/7pu0iBQbfsmWA+vIq6xomTPXLbFeZk/rC03u/GA="
-    }
-  },
   "skript": {
     "paper": {
       "26.2": {
@@ -262,14 +242,6 @@
       "26.2": {
         "url": "https://cdn.spiget.org/file/spiget-resources/22023.jar",
         "hash": "sha256-qg+XVjITD4WzBQMDrNi4h5jX+p7oH07KamobDvSmk2k="
-      }
-    }
-  },
-  "tab": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/OzomWbbH/TAB%20v6.2.0.jar",
-        "hash": "sha256-+UMxlHE0JC76R4ubm/BLKeN4YXId7ljDK36ld3mqc14="
       }
     }
   },
@@ -289,14 +261,6 @@
       }
     }
   },
-  "veinminer": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/O6IYCV7p/veinminer-paper-2.12.1.jar",
-        "hash": "sha256-OdFEGejWDh19NETp2XgkcLrb7aBlgv2Z3lB6BrG5xiM="
-      }
-    }
-  },
   "viaversion": {
     "paper": {
       "26.2": {
@@ -310,14 +274,6 @@
       "26.2": {
         "url": "https://github.com/PryPurity/WorldBorder/releases/download/v2.1.5/WorldBorder.jar",
         "hash": "sha256-n8w7xj+ii6vHJJTRKbiu3wNK4kdhu2bRCuGatPmW3io="
-      }
-    }
-  },
-  "worldeditsui": {
-    "paper": {
-      "26.2": {
-        "url": "https://hangarcdn.papermc.io/plugins/kennytv/WorldEditSUI/versions/1.8.0/PAPER/WorldEditSUI-1.8.0.jar",
-        "hash": "sha256-wS283aZjbaufbIDzRYs8GpUIcX5DCmOB+CVz86/D8JQ="
       }
     }
   },

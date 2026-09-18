@@ -26,6 +26,7 @@ oyasaiPurpur rec {
     arceon
     arceon-axiom
     axiom-paper-plugin
+    citiesskymine
     ezedits
     fastasyncvoxelsniper
     fastasyncworldedit
@@ -40,7 +41,6 @@ oyasaiPurpur rec {
     plugmanx
     vault
     viaversion
-    worldeditsui
     worldguard
     # keep-sorted end
   ];
