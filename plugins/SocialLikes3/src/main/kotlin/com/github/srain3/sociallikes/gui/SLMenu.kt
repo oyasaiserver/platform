@@ -92,6 +92,17 @@ object SLMenu {
           6,
           1,
       )
+      addItem(
+          GuiItem(
+              ItemStack(Material.WRITTEN_BOOK)
+                  .allFlag()
+                  .addText("&f旅行ガイドブック", mutableListOf("&7公開ガイドの一覧を表示します"))
+          ) {
+            GuidebookGUI.openCatalog(it.whoClicked as Player)
+          },
+          8,
+          1,
+      )
     }
 
     gui.addPane(Slot.fromXY(0, 1), paneMid)

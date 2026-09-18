@@ -51,6 +51,7 @@ class SocialLikes : JavaPlugin() {
     SLDatabase.requireReady()
 
     server.pluginManager.registerEvents(Events, this)
+    server.pluginManager.registerEvents(GuidebookListener, this)
     server.pluginManager.registerEvents(FollowBuild, this)
     server.pluginManager.registerEvents(SocialLikesAnvilInput, this)
     server.pluginManager.registerEvents(SLDataFont, this)
@@ -80,6 +81,7 @@ class SocialLikes : JavaPlugin() {
     server.getPluginCommand("sllucky")?.setExecutor(SLLucky)
     server.getPluginCommand("sllucky")?.tabCompleter = SLLucky
     server.getPluginCommand("sldatapack")?.setExecutor(SLDataPack)
+    server.getPluginCommand("slguide")?.setExecutor(SLGuide)
 
     if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
       PlaceHolder(this).register()

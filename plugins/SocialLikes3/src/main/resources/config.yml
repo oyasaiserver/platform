@@ -20,3 +20,7 @@ reconcileIntervalMinutes: 10
 # stop the server, then set migrateNegativeIdsOnStartup back to false before the next restart.
 migrateNegativeIdsOnStartup: false
 migrateNegativeIdsDryRun: false
+
+guidebook:
+  personalBookLimit: 5
+  entriesPerBookLimit: 30
