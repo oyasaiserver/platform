@@ -413,6 +413,7 @@ object Events : Listener {
   /** オフラインの時イイねされたPointを貯めておく */
   private val offlineLikesPoint = mutableMapOf<UUID, Int>()
   private val offlineLikesPointLock = Any()
+  private val offlineLikePointStore by lazy { OfflineLikePointStore(plugin.dataFolder.toPath()) }
   private const val OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS = 750L
 
   private fun sendLikeRewardMessage(player: Player, amount: Long, offline: Boolean = false) {
@@ -454,13 +455,13 @@ object Events : Listener {
   }
 
   private fun persistOfflineLikePointsLocked(): Boolean {
-    return runCatching { OfflineLikePointStore(plugin.dataFolder.toPath()).save(offlineLikesPoint) }
+    return runCatching { offlineLikePointStore.save(offlineLikesPoint) }
         .onFailure { exception ->
           plugin.logger.severe(
               "Failed to atomically save pending offline-like rewards: ${exception.message}"
           )
         }
-        .isSuccess
+        .getOrDefault(false)
   }
 
   /** オフライン時のいいねPointをプラグイン無効化時ファイルへ保存 */
@@ -472,7 +473,7 @@ object Events : Listener {
   fun offlineLikePointLoad() {
     synchronized(offlineLikesPointLock) {
       offlineLikesPoint.clear()
-      offlineLikesPoint.putAll(OfflineLikePointStore(plugin.dataFolder.toPath()).load())
+      offlineLikesPoint.putAll(offlineLikePointStore.load())
     }
   }
 
