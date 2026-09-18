@@ -90,15 +90,12 @@ oyasaiPurpur rec {
     slotmachine
     sociallikes3
     socialvotes
-    tab
     tntruneloaded
     tpswitch
     vault
-    veinminer
     vertex
     viaversion
     worldborder
-    worldeditsui
     worldguard
     zvoteparty
     # keep-sorted end
