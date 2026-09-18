@@ -4,6 +4,7 @@ import icu.oyasai.utilities.adminbp.AdminBP
 import icu.oyasai.utilities.creative_management.CreativeManagement
 import icu.oyasai.utilities.debugonbe.DebugOnBE
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
+import icu.oyasai.utilities.hats.Hats
 import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
 import icu.oyasai.utilities.oresmelter.OreSmelter
@@ -51,6 +52,7 @@ class Main : JavaPlugin() {
 
     OreReappears.onEnable() // OreReappearsの有効化
     AdminBP.onEnable()
+    Hats.onEnable()
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
     CreativeManagement.onEnable()
@@ -62,6 +64,7 @@ class Main : JavaPlugin() {
     if (::skinFeature.isInitialized) skinFeature.disable()
     OreReappears.onDisable() // OreReappearsの無効化
     AdminBP.onDisable()
+    Hats.onDisable()
     Pita.onDisable() // Pitaの無効化
     TimerObj.onDisable()
     CreativeManagement.onDisable()

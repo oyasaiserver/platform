@@ -46,6 +46,10 @@ commands:
     permission: oyasaiutilities.tpdata
   pita:
     description: "ピタッ！と止まるモードの切り替え"
+  h:
+    description: "パーティクル帽子のメニューを開く"
+    aliases: [particlehats]
+    permission: oyasai.hats.use
   debugonbe:
     description: DebugOnBE メインコマンド
     usage: /debugonbe <refresh|reload|help>
@@ -84,3 +88,111 @@ permissions:
   debugonbe.refresh:
     description: Togo (DebugOnBE Refresh) コマンドの使用権限
     default: true
+  oyasai.hats.use:
+    description: /h でパーティクル帽子メニューを開く
+    default: true
+    children:
+      particlehats.command.h: true
+  oyasai.hats.donator:
+    description: すべてのパーティクル帽子を装備する（寄付者）
+    default: false
+    children:
+      oyasai.hats.halo: true
+      oyasai.hats.cape: true
+      oyasai.hats.plumbob: true
+      oyasai.hats.creeper: true
+      oyasai.hats.angel_wings: true
+      oyasai.hats.rainbow: true
+      oyasai.hats.thief: true
+      oyasai.hats.rocket: true
+      oyasai.hats.magic_aura: true
+      oyasai.hats.notes: true
+      oyasai.hats.tornado: true
+      oyasai.hats.witches_sphere: true
+      oyasai.hats.bubble_wings: true
+      particlehats.particle.all: true
+  oyasai.hats.halo:
+    description: Colourful Redstone Halo を装備する
+    default: false
+  oyasai.hats.cape:
+    description: Sparkling Cape を装備する
+    default: false
+  oyasai.hats.plumbob:
+    description: Plumbob を装備する
+    default: false
+  oyasai.hats.creeper:
+    description: Creeper Face を装備する
+    default: false
+  oyasai.hats.angel_wings:
+    description: Angel Wings を装備する
+    default: false
+  oyasai.hats.rainbow:
+    description: rainbow アーチを装備する
+    default: false
+  oyasai.hats.thief:
+    description: Thief! トレイルを装備する
+    default: false
+  oyasai.hats.rocket:
+    description: Rocket Trail を装備する
+    default: false
+  oyasai.hats.magic_aura:
+    description: Magic Aura を装備する
+    default: false
+  oyasai.hats.notes:
+    description: Notes を装備する
+    default: false
+  oyasai.hats.tornado:
+    description: Tornado を装備する
+    default: false
+  oyasai.hats.witches_sphere:
+    description: Witches Sphere を装備する
+    default: false
+  oyasai.hats.bubble_wings:
+    description: Bubble Wings を装備する
+    default: false
+  particlehats.command.h:
+    description: 旧 ParticleHats 互換。/h を開く
+    default: true
+  particlehats.particle.all:
+    description: 旧 ParticleHats 互換。すべての帽子を装備する
+    default: false
+    children:
+      particlehats.particle.halo: true
+      particlehats.particle.cape: true
+      particlehats.particle.plumbob: true
+      particlehats.particle.creeper: true
+      particlehats.particle.angel_wings: true
+      particlehats.particle.rainbow: true
+      particlehats.particle.thief: true
+      particlehats.particle.rocket: true
+      particlehats.particle.magic_aura: true
+      particlehats.particle.notes: true
+      particlehats.particle.tornado: true
+      particlehats.particle.witches_sphere: true
+      particlehats.particle.bubble_wings: true
+  particlehats.particle.halo:
+    default: false
+  particlehats.particle.cape:
+    default: false
+  particlehats.particle.plumbob:
+    default: false
+  particlehats.particle.creeper:
+    default: false
+  particlehats.particle.angel_wings:
+    default: false
+  particlehats.particle.rainbow:
+    default: false
+  particlehats.particle.thief:
+    default: false
+  particlehats.particle.rocket:
+    default: false
+  particlehats.particle.magic_aura:
+    default: false
+  particlehats.particle.notes:
+    default: false
+  particlehats.particle.tornado:
+    default: false
+  particlehats.particle.witches_sphere:
+    default: false
+  particlehats.particle.bubble_wings:
+    default: false
