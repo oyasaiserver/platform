@@ -3,26 +3,61 @@ package icu.oyasai.utilities.veinminer
 import java.util.ArrayDeque
 import java.util.UUID
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
-import org.bukkit.Particle
 import org.bukkit.Tag
 import org.bukkit.block.Block
-import org.bukkit.entity.ExperienceOrb
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.Damageable
+
+internal enum class OreFamily {
+  COAL,
+  IRON,
+  COPPER,
+  GOLD,
+  LAPIS,
+  REDSTONE,
+  DIAMOND,
+  EMERALD,
+  NETHER_GOLD,
+  NETHER_QUARTZ,
+  ANCIENT_DEBRIS,
+}
+
+internal fun <T> oreFamily(
+    material: Material,
+    taggedFamilies: List<Pair<OreFamily, T>>,
+    isTagged: (T, Material) -> Boolean,
+): OreFamily? =
+    taggedFamilies.firstOrNull { (_, tag) -> isTagged(tag, material) }?.first
+        ?: when (material) {
+          Material.NETHER_GOLD_ORE -> OreFamily.NETHER_GOLD
+          Material.NETHER_QUARTZ_ORE -> OreFamily.NETHER_QUARTZ
+          Material.ANCIENT_DEBRIS -> OreFamily.ANCIENT_DEBRIS
+          else -> null
+        }
 
 object VeinminerEvent : Listener {
   private const val MAX_CHAIN = 100
   private const val COOLDOWN_TICKS = 20
   private val cooldowns = mutableMapOf<UUID, Int>()
   private val miningPlayers = mutableSetOf<UUID>()
-  private val ores: Tag<Material>? by lazy {
-    Bukkit.getTag(Tag.REGISTRY_BLOCKS, NamespacedKey("c", "ores"), Material::class.java)
+  private val taggedOreFamilies by lazy {
+    listOf(
+        OreFamily.COAL to Tag.COAL_ORES,
+        OreFamily.IRON to Tag.IRON_ORES,
+        OreFamily.COPPER to Tag.COPPER_ORES,
+        OreFamily.GOLD to Tag.GOLD_ORES,
+        OreFamily.LAPIS to Tag.LAPIS_ORES,
+        OreFamily.REDSTONE to Tag.REDSTONE_ORES,
+        OreFamily.DIAMOND to Tag.DIAMOND_ORES,
+        OreFamily.EMERALD to Tag.EMERALD_ORES,
+    )
   }
   private val directions =
       buildList {
@@ -36,74 +71,71 @@ object VeinminerEvent : Listener {
           }
           .also { check(it.size == 26) }
 
-  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onBlockBreak(event: BlockBreakEvent) {
     val player = event.player
+    if (player.uniqueId in miningPlayers) return
+
     val tool = player.inventory.itemInMainHand
+    val family = oreFamily(event.block.type) ?: return
+    if (!player.isSneaking || player.gameMode == GameMode.CREATIVE) return
     if (!isVeinmineable(event.block, tool) || !canVeinmine(player)) return
     if (!miningPlayers.add(player.uniqueId)) return
 
     try {
       cooldowns[player.uniqueId] = Bukkit.getCurrentTick()
-      veinmine(event.block, player, tool)
+      veinmine(event.block, player, family)
     } finally {
       miningPlayers.remove(player.uniqueId)
     }
   }
 
   private fun isVeinmineable(block: Block, tool: ItemStack): Boolean =
-      ores?.isTagged(block.type) == true &&
-          Tag.ITEMS_PICKAXES.isTagged(tool.type) &&
-          block.isPreferredTool(tool)
+      Tag.ITEMS_PICKAXES.isTagged(tool.type) && block.isPreferredTool(tool)
 
   private fun canVeinmine(player: Player): Boolean =
       cooldowns[player.uniqueId]?.let { Bukkit.getCurrentTick() - it >= COOLDOWN_TICKS } ?: true
 
-  private fun veinmine(origin: Block, player: Player, tool: ItemStack) {
+  private fun veinmine(origin: Block, player: Player, family: OreFamily) {
     val queue = ArrayDeque<Block>()
     val visited = mutableSetOf(origin)
     queue.add(origin)
     var mined = 1
 
-    while (queue.isNotEmpty() && mined < MAX_CHAIN && !tool.isEmpty) {
+    while (queue.isNotEmpty() && mined < MAX_CHAIN) {
       val current = queue.removeFirst()
       for ((x, y, z) in directions) {
-        val target = current.getRelative(x, y, z)
-        if (!visited.add(target) || ores?.isTagged(target.type) != true) continue
-        if (breakBlock(target, player, tool)) {
+        val targetX = current.x + x
+        val targetY = current.y + y
+        val targetZ = current.z + z
+        if (targetY !in current.world.minHeight until current.world.maxHeight) continue
+        if (!current.world.isChunkLoaded(targetX shr 4, targetZ shr 4)) continue
+
+        val target = current.world.getBlockAt(targetX, targetY, targetZ)
+        if (!visited.add(target) || oreFamily(target.type) != family) continue
+
+        val tool = player.inventory.itemInMainHand
+        if (!canBreak(target, tool)) return
+        if (player.breakBlock(target)) {
           mined++
           queue.add(target)
-          if (mined == MAX_CHAIN || tool.isEmpty) break
+          if (mined == MAX_CHAIN) break
         }
       }
     }
   }
 
-  private fun breakBlock(block: Block, player: Player, tool: ItemStack): Boolean {
-    val breakEvent = BlockBreakEvent(block, player)
-    Bukkit.getPluginManager().callEvent(breakEvent)
-    if (breakEvent.isCancelled) return false
+  private fun oreFamily(material: Material): OreFamily? =
+      oreFamily(material, taggedOreFamilies) { tag, candidate -> tag.isTagged(candidate) }
 
-    val dropEvent =
-        VeinmineDropEvent(
-            block,
-            block.state,
-            player,
-            if (breakEvent.isDropItems) block.getDrops(tool, player).toMutableList()
-            else mutableListOf(),
-            breakEvent.expToDrop,
-        )
-    dropEvent.callEvent()
-
-    val location = block.location.toCenterLocation()
-    block.world.playSound(location, block.blockSoundGroup.breakSound, 1f, 1f)
-    block.world.spawnParticle(Particle.BLOCK, location, 20, block.blockData)
-    block.type = Material.AIR
-    dropEvent.items.forEach { block.world.dropItemNaturally(location, it) }
-    if (dropEvent.expToDrop > 0) {
-      block.world.spawn(location, ExperienceOrb::class.java) { it.experience = dropEvent.expToDrop }
+  private fun canBreak(block: Block, tool: ItemStack): Boolean {
+    if (tool.isEmpty || !Tag.ITEMS_PICKAXES.isTagged(tool.type) || !block.isPreferredTool(tool)) {
+      return false
     }
-    tool.damage(1, player)
-    return true
+
+    val meta = tool.itemMeta
+    if (meta !is Damageable || meta.isUnbreakable) return true
+    val maxDamage = if (meta.hasMaxDamage()) meta.maxDamage else tool.type.maxDurability.toInt()
+    return maxDamage <= 0 || maxDamage - meta.damage > 1
   }
 }

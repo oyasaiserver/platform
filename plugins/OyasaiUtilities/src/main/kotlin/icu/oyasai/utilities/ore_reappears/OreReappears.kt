@@ -6,6 +6,7 @@ import org.bukkit.Bukkit.getServer
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
@@ -85,23 +86,17 @@ object OreReappears : Listener {
   fun breakBlockEvent(e: BlockBreakEvent) {
     if (!worldList.contains(e.block.world.name)) return
     if (switch) return
-    if (!blockAndTickList.keys.contains(e.block.type)) {
-      if (e.player.isOp) return
-      e.isCancelled = true
-      return
-    }
-    val p = blockAndTickList[e.block.type]
-    if (p == null) {
-      if (e.player.isOp) return
-      e.isCancelled = true
-      return
-    }
+    if (blockAndTickList.containsKey(e.block.type) || e.player.isOp) return
+    e.isCancelled = true
+  }
 
-    if (e.player.isOp) {
-      if (e.player.gameMode == GameMode.CREATIVE) {
-        return
-      }
-    }
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  fun recordBrokenBlock(e: BlockBreakEvent) {
+    if (!worldList.contains(e.block.world.name)) return
+    if (switch) return
+    val p = blockAndTickList[e.block.type] ?: return
+    if (e.player.isOp && e.player.gameMode == GameMode.CREATIVE) return
+
     breakBlockList.add(OreReappearsData(e.block.location, e.block.blockData.clone(), p.first))
     if (eco != null) {
       var dropCount = 0
