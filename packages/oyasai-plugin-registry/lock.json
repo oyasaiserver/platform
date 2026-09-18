@@ -82,13 +82,13 @@
   "floodgate": {
     "paper": {
       "26.2": {
-        "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/140/downloads/spigot",
-        "hash": "sha256-n0NsQv/YsQkaQ316Thb4IYG51TFPixcy36nVpP/7Gf4="
+        "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/141/downloads/spigot",
+        "hash": "sha256-IVcK/5zhfWmDko6FUnd3YOHt5QUAJrBMaGsK4RLm/X4="
       }
     },
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/140/downloads/velocity",
-      "hash": "sha256-9YZ615uQ04q8xydVpoVCj7z0I7UsmDCjn/7VID3mk2o="
+      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/141/downloads/velocity",
+      "hash": "sha256-ZJg1Ai3jf/CSVfxibUv+e8KjuSbQew368fUeEr83AB0="
     }
   },
   "geyser": {
@@ -100,8 +100,8 @@
   "gsit": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/nZM8fxpG/GSit-3.5.1.jar",
-        "hash": "sha256-sHSUErZcAb3NaDggp2Si92msVX6wtpGFbSZ6Y/KDyhw="
+        "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/j4nBwUoo/GSit-3.6.0.jar",
+        "hash": "sha256-Fv8Nhz8m8frSViVULzEDM+CJPJLSA/z7cTxkgeneMIg="
       }
     }
   },
@@ -268,8 +268,8 @@
   "tab": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/8gvFF92Z/TAB%20v6.1.3.jar",
-        "hash": "sha256-+jZBRyvIIKbhZ1HLvlA+VyMGzJl60Ftg4jC42HgSyxk="
+        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/OzomWbbH/TAB%20v6.2.0.jar",
+        "hash": "sha256-+UMxlHE0JC76R4ubm/BLKeN4YXId7ljDK36ld3mqc14="
       }
     }
   },
