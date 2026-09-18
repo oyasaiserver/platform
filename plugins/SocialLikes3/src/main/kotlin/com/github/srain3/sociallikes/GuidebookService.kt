@@ -126,7 +126,12 @@ object GuidebookService {
         EntryView(
             buildId = buildId,
             data = data,
-            valid = data?.let(::findValidSign) != null,
+            valid =
+                data?.let {
+                  val world = Bukkit.getWorld(it.worldName) ?: return@let false
+                  !world.isChunkLoaded(it.loc.blockX shr 4, it.loc.blockZ shr 4) ||
+                      findValidSign(it) != null
+                } ?: false,
             liked = data?.likes?.contains(playerUuid) == true,
         )
       }
@@ -199,30 +204,30 @@ object GuidebookService {
 
   fun teleportToNext(player: Player, guidebook: GuidebookData): Boolean {
     val entries = entries(guidebook.id, player.uniqueId)
-    val entry = entries.firstOrNull { it.valid && !it.liked }
-    if (entry == null) {
-      val progress = progress(entries)
-      player.sendMessage(
-          Tools.socialLikesLOGO +
-              if (progress.complete) " &aコンプリート済みです。".color() else " &e案内できる未発見の建築がありません。".color()
-      )
-      return false
+    val candidates = entries.filter { !it.liked && it.data != null }
+    for (entry in candidates) {
+      val data = entry.data ?: continue
+      val destination = safeDestination(data) ?: continue
+      val teleported = player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)
+      if (teleported) {
+        player.sendMessage(
+            Tools.socialLikesLOGO + " &a「${data.title}」へ案内しました (ID:${data.id})".color()
+        )
+      } else {
+        player.sendMessage(Tools.socialLikesLOGO + " &cテレポートできませんでした。".color())
+      }
+      return teleported
     }
-    val data = entry.data ?: return false
-    val destination = safeDestination(data)
-    if (destination == null) {
-      player.sendMessage(Tools.socialLikesLOGO + " &cこの建築は現在案内不可です。".color())
-      return false
-    }
-    val teleported = player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)
-    if (teleported) {
-      player.sendMessage(
-          Tools.socialLikesLOGO + " &a「${data.title}」へ案内しました (ID:${data.id})".color()
-      )
-    } else {
-      player.sendMessage(Tools.socialLikesLOGO + " &cテレポートできませんでした。".color())
-    }
-    return teleported
+    val progress = progress(entries)
+    player.sendMessage(
+        Tools.socialLikesLOGO +
+            when {
+              progress.complete -> " &aコンプリート済みです。".color()
+              candidates.isNotEmpty() -> " &cこのガイドブックは現在案内不可です。".color()
+              else -> " &e案内できる未発見の建築がありません。".color()
+            }
+    )
+    return false
   }
 
   fun handleLike(player: Player, buildId: Int) {
