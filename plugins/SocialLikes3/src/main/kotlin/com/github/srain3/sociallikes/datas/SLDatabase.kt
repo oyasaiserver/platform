@@ -4,6 +4,7 @@ import com.github.srain3.sociallikes.Tools
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.Types
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
@@ -3289,21 +3290,85 @@ object SLDatabase {
       it[signMaterial] = toPersist.signMaterial
     }
 
-    BuildLikes.deleteWhere { buildId eq toPersist.id }
-    val likes = toPersist.likes.distinctBy { it.playerUuid }
-    val playerIds = ensurePlayerIds(likes.map { it.playerUuid })
-    likes.forEach { like ->
-      BuildLikes.insert {
-        it[buildId] = toPersist.id
-        it[playerId] = checkNotNull(playerIds[like.playerUuid])
-        it[likedAt] = like.likedAt
-      }
-    }
+    syncBuildLikes(
+        checkNotNull(rawConnection()) { "SQLite connection is unavailable" },
+        toPersist.id,
+        toPersist.likes.map { it.playerUuid to it.likedAt },
+    )
   }
 
-  private fun ensurePlayerIds(uuids: List<String>): Map<String, Int> {
+  internal fun syncBuildLikes(
+      connection: Connection,
+      buildId: Int,
+      likes: List<Pair<String, Long?>>,
+  ) {
+    val desired = likes.distinctBy { it.first }.toMap()
+    val existing = mutableMapOf<String, Pair<Int, Long?>>()
+    connection
+        .prepareStatement(
+            "SELECT player_id, player_uuid, liked_at FROM build_likes_with_uuid WHERE build_id = ?"
+        )
+        .use { statement ->
+          statement.setInt(1, buildId)
+          statement.executeQuery().use { rows ->
+            while (rows.next()) {
+              existing[rows.getString("player_uuid")] =
+                  rows.getInt("player_id") to
+                      rows.getLong("liked_at").let { if (rows.wasNull()) null else it }
+            }
+          }
+        }
+
+    val deletions = existing.filterKeys { it !in desired }
+    val additions = desired.filterKeys { it !in existing }
+    val updates =
+        desired.filter { (uuid, likedAt) -> uuid in existing && existing[uuid]?.second != likedAt }
+
+    connection
+        .prepareStatement("DELETE FROM build_likes WHERE build_id = ? AND player_id = ?")
+        .use { statement ->
+          deletions.values.forEach { (playerId) ->
+            statement.setInt(1, buildId)
+            statement.setInt(2, playerId)
+            statement.addBatch()
+          }
+          statement.executeBatch()
+        }
+
+    connection
+        .prepareStatement(
+            "UPDATE build_likes SET liked_at = ? WHERE build_id = ? AND player_id = ?"
+        )
+        .use { statement ->
+          updates.forEach { (uuid, likedAt) ->
+            statement.setNullableLong(1, likedAt)
+            statement.setInt(2, buildId)
+            statement.setInt(3, checkNotNull(existing[uuid]).first)
+            statement.addBatch()
+          }
+          statement.executeBatch()
+        }
+
+    val playerIds = ensurePlayerIds(connection, additions.keys.toList())
+    connection
+        .prepareStatement("INSERT INTO build_likes(build_id, player_id, liked_at) VALUES (?, ?, ?)")
+        .use { statement ->
+          additions.forEach { (uuid, likedAt) ->
+            statement.setInt(1, buildId)
+            statement.setInt(2, checkNotNull(playerIds[uuid]))
+            statement.setNullableLong(3, likedAt)
+            statement.addBatch()
+          }
+          statement.executeBatch()
+        }
+  }
+
+  private fun java.sql.PreparedStatement.setNullableLong(index: Int, value: Long?) {
+    if (value == null) setNull(index, Types.BIGINT) else setLong(index, value)
+  }
+
+  private fun ensurePlayerIds(connection: Connection, uuids: List<String>): Map<String, Int> {
     if (uuids.isEmpty()) return emptyMap()
-    val connection = checkNotNull(rawConnection()) { "SQLite connection is unavailable" }
     connection
         .prepareStatement("INSERT INTO players(uuid) VALUES (?) ON CONFLICT(uuid) DO NOTHING")
         .use { statement ->
