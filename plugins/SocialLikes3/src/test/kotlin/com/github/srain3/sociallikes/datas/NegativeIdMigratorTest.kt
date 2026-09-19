@@ -326,13 +326,24 @@ class NegativeIdMigratorTest {
       )
       stmt.execute(
           """
+          CREATE TABLE players (
+              id INTEGER PRIMARY KEY,
+              uuid VARCHAR(36) NOT NULL UNIQUE,
+              last_known_name TEXT,
+              last_seen_at BIGINT
+          );
+          """
+              .trimIndent()
+      )
+      stmt.execute(
+          """
           CREATE TABLE build_likes (
               build_id INTEGER NOT NULL,
-              player_uuid VARCHAR(36) NOT NULL,
+              player_id INTEGER NOT NULL REFERENCES players(id),
               liked_at BIGINT,
-              PRIMARY KEY (build_id, player_uuid),
+              PRIMARY KEY (build_id, player_id),
               CONSTRAINT fk_build_likes_build_id__id FOREIGN KEY (build_id) REFERENCES builds(id) ON DELETE CASCADE ON UPDATE RESTRICT
-          );
+          ) WITHOUT ROWID;
           """
               .trimIndent()
       )
@@ -405,23 +416,34 @@ class NegativeIdMigratorTest {
           stmt.executeBatch()
         }
 
+    conn.createStatement().use { statement ->
+      statement.execute(
+          """
+          INSERT INTO players(id, uuid) VALUES
+            (10, '00000000-0000-0000-0000-000000000010'),
+            (11, '00000000-0000-0000-0000-000000000011'),
+            (12, '00000000-0000-0000-0000-000000000012')
+          """
+              .trimIndent()
+      )
+    }
     conn
         .prepareStatement(
-            "INSERT INTO build_likes (build_id, player_uuid, liked_at) VALUES (?, ?, ?)"
+            "INSERT INTO build_likes (build_id, player_id, liked_at) VALUES (?, ?, ?)"
         )
         .use { stmt ->
           stmt.setInt(1, -50)
-          stmt.setString(2, "00000000-0000-0000-0000-000000000010")
+          stmt.setInt(2, 10)
           stmt.setLong(3, 1000L)
           stmt.addBatch()
 
           stmt.setInt(1, -1)
-          stmt.setString(2, "00000000-0000-0000-0000-000000000011")
+          stmt.setInt(2, 11)
           stmt.setLong(3, 2000L)
           stmt.addBatch()
 
           stmt.setInt(1, 10)
-          stmt.setString(2, "00000000-0000-0000-0000-000000000012")
+          stmt.setInt(2, 12)
           stmt.setLong(3, 3000L)
           stmt.addBatch()
 
@@ -506,10 +528,12 @@ class NegativeIdMigratorTest {
       val likes = mutableMapOf<Int, String>()
       conn.createStatement().use { stmt ->
         stmt
-            .executeQuery("SELECT build_id, player_uuid FROM build_likes ORDER BY build_id ASC")
+            .executeQuery(
+                "SELECT bl.build_id, p.uuid FROM build_likes bl JOIN players p ON p.id = bl.player_id ORDER BY bl.build_id ASC"
+            )
             .use { rs ->
               while (rs.next()) {
-                likes[rs.getInt("build_id")] = rs.getString("player_uuid")
+                likes[rs.getInt("build_id")] = rs.getString("uuid")
               }
             }
       }
@@ -592,18 +616,28 @@ class NegativeIdMigratorTest {
           }
 
       // FK参照テーブルにもデータを挿入
+      conn.createStatement().use { stmt ->
+        stmt.execute(
+            """
+            INSERT INTO players(id, uuid) VALUES
+              (1, '00000000-0000-0000-0000-000000000001'),
+              (2, '00000000-0000-0000-0000-000000000002')
+            """
+                .trimIndent()
+        )
+      }
       conn
           .prepareStatement(
-              "INSERT INTO build_likes (build_id, player_uuid, liked_at) VALUES (?, ?, ?)"
+              "INSERT INTO build_likes (build_id, player_id, liked_at) VALUES (?, ?, ?)"
           )
           .use { stmt ->
             stmt.setInt(1, 1)
-            stmt.setString(2, "00000000-0000-0000-0000-000000000001")
+            stmt.setInt(2, 1)
             stmt.setLong(3, 100L)
             stmt.addBatch()
 
             stmt.setInt(1, 10001)
-            stmt.setString(2, "00000000-0000-0000-0000-000000000002")
+            stmt.setInt(2, 2)
             stmt.setLong(3, 200L)
             stmt.addBatch()
 

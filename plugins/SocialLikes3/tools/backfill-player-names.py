@@ -67,16 +67,17 @@ def main() -> int:
         db.execute(
             """
             CREATE TABLE IF NOT EXISTS players (
-              uuid TEXT PRIMARY KEY,
-              last_known_name TEXT NOT NULL,
-              last_seen_at INTEGER NOT NULL
+              id INTEGER PRIMARY KEY,
+              uuid VARCHAR(36) NOT NULL UNIQUE,
+              last_known_name TEXT NULL,
+              last_seen_at BIGINT NULL
             )
             """
         )
         rows = db.execute(
             """
             SELECT owner_uuid AS uuid FROM builds
-            UNION SELECT player_uuid FROM build_likes
+            UNION SELECT p.uuid FROM build_likes bl JOIN players p ON p.id = bl.player_id
             UNION SELECT user_uuid FROM publicity_history
             """
         ).fetchall()
