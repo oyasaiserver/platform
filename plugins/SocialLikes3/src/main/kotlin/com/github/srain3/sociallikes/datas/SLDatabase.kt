@@ -391,6 +391,16 @@ object SLDatabase {
           )
         }
 
+        transaction(database) {
+          rawConnection()?.let { conn ->
+            migrateBuildsColumns(conn)
+            migrateIdMigrationMapColumns(conn)
+            TimestampEpochMigration.initializeEmptyDatabaseOrRequireMigration(conn)
+          }
+        }
+
+        // Normalize only after every readiness check passes, so a refused startup leaves the
+        // legacy schema intact for the previous jar.
         val normalization =
             DriverManager.getConnection(dbUrl).use { connection ->
               connection.createStatement().use { it.execute("PRAGMA busy_timeout = 30000") }
@@ -408,14 +418,7 @@ object SLDatabase {
                 "players=${normalization.after.distinctPlayers}"
         )
 
-        transaction(database) {
-          rawConnection()?.let { conn ->
-            migrateBuildsColumns(conn)
-            migrateIdMigrationMapColumns(conn)
-            TimestampEpochMigration.initializeEmptyDatabaseOrRequireMigration(conn)
-            createViews(conn)
-          }
-        }
+        transaction(database) { rawConnection()?.let { conn -> createViews(conn) } }
 
         transaction(database) {
           rawConnection()?.let { conn ->
