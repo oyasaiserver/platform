@@ -24,10 +24,10 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+import java.util.logging.Logger
 import javax.crypto.Cipher
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import org.bukkit.plugin.java.JavaPlugin
 
 internal enum class VoteProtocol {
   V1,
@@ -35,7 +35,7 @@ internal enum class VoteProtocol {
 }
 
 internal class VoteServer(
-    private val plugin: JavaPlugin,
+    private val logger: Logger,
     private val config: VotifierConfig,
     private val keys: KeyPair,
     private val accepted: (Vote, VoteProtocol) -> Unit,
@@ -52,6 +52,9 @@ internal class VoteServer(
   private val random = SecureRandom()
   @Volatile private var socket: ServerSocket? = null
   @Volatile private var running = false
+
+  val port: Int
+    get() = socket?.localPort ?: error("Vote server is not running")
 
   fun start() {
     check(!running)
@@ -72,10 +75,10 @@ internal class VoteServer(
           workers.execute { client.use(::receive) }
         } catch (_: RejectedExecutionException) {
           client.close()
-          plugin.logger.warning("Vote listener is busy; rejected ${client.remoteSocketAddress}")
+          logger.warning("Vote listener is busy; rejected ${client.remoteSocketAddress}")
         }
       } catch (error: Exception) {
-        if (running) plugin.logger.warning("Vote listener accept failed: ${error.message}")
+        if (running) logger.warning("Vote listener accept failed: ${error.message}")
       }
     }
   }
@@ -91,8 +94,12 @@ internal class VoteServer(
       if (first == V2_MAGIC) receiveV2(input, client.getOutputStream(), challenge)
       else if (config.v1Enabled) receiveV1(first, input)
       else throw IllegalArgumentException("This server only accepts Votifier v2 packets")
+    } catch (error: VoteAuthenticationException) {
+      logger.warning(
+          "Rejected unauthenticated vote from ${client.remoteSocketAddress}: ${error.message}"
+      )
     } catch (error: Exception) {
-      plugin.logger.fine("Rejected vote from ${client.remoteSocketAddress}: ${error.message}")
+      logger.fine("Rejected vote from ${client.remoteSocketAddress}: ${error.message}")
     }
   }
 
@@ -101,7 +108,12 @@ internal class VoteServer(
     encrypted[0] = (first ushr 8).toByte()
     encrypted[1] = first.toByte()
     input.readFully(encrypted, 2, 254)
-    val fields = String(decryptV1(encrypted), StandardCharsets.US_ASCII).split('\n')
+    val fields =
+        try {
+          String(decryptV1(encrypted), StandardCharsets.US_ASCII).split('\n')
+        } catch (_: Exception) {
+          throw VoteAuthenticationException("Votifier v1 decryption failed")
+        }
     require(fields.size >= 5 && fields[0] == "VOTE") { "Invalid Votifier v1 vote" }
     accepted(Vote(fields[1], fields[2], fields[3], fields[4]), VoteProtocol.V1)
   }
@@ -114,18 +126,18 @@ internal class VoteServer(
     val outer = JsonParser.parseString(String(bytes, StandardCharsets.UTF_8)).asJsonObject
     val payload = outer.requiredString("payload")
     val voteJson = JsonParser.parseString(payload).asJsonObject
-    require(voteJson.requiredString("challenge") == challenge) { "Challenge is not valid" }
+    authenticate(voteJson.requiredString("challenge") == challenge, "Challenge is not valid")
     val token =
         config.tokens[voteJson.requiredString("serviceName")]
             ?: config.tokens["default"]
-            ?: error("Unknown service")
-    require(validHmac(token, payload, outer.requiredString("signature"))) {
-      "Signature is not valid"
-    }
+            ?: throw VoteAuthenticationException("Unknown service")
+    authenticate(
+        validHmac(token, payload, outer.requiredString("signature")),
+        "Signature is not valid",
+    )
     val username = voteJson.requiredString("username")
     require(username.length <= 16) { "Username too long" }
     requireIp(voteJson.requiredString("address"))
-    voteJson.get("uuid")?.asString?.let { java.util.UUID.fromString(it) }
     accepted(Vote(voteJson), VoteProtocol.V2)
     output.write("{\"status\":\"ok\"}\r\n".toByteArray(StandardCharsets.UTF_8))
     output.flush()
@@ -160,8 +172,14 @@ internal class VoteServer(
       require(address.matches(Regex("[0-9A-Fa-f:.]+"))) { "Address is not an IP literal" }
       InetAddress.getByName(address)
     }
+
+    fun authenticate(condition: Boolean, message: String) {
+      if (!condition) throw VoteAuthenticationException(message)
+    }
   }
 }
+
+private class VoteAuthenticationException(message: String) : IllegalArgumentException(message)
 
 internal fun validHmac(token: String, payload: String, signature: String): Boolean =
     MessageDigest.isEqual(

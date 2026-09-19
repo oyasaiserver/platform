@@ -18,7 +18,8 @@ internal class VoteRewards(private val plugin: JavaPlugin, private val config: V
   private var progress = state.getInt("votes", 0).coerceAtLeast(0)
 
   fun deliver(vote: Vote) {
-    val player = Bukkit.getOfflinePlayer(vote.username)
+    val player =
+        vote.playerUuid()?.let(Bukkit::getOfflinePlayer) ?: Bukkit.getOfflinePlayer(vote.username)
     deliver(player, vote, config.individual, progress)
     val party = config.party
     if (party.votesNeeded == 0) return
@@ -73,6 +74,10 @@ internal class VoteRewards(private val plugin: JavaPlugin, private val config: V
       plugin.logger.warning("Skipped vote command for unsafe username '$player'")
       return null
     }
+    if ("%service%" in template && !vote.serviceName.matches(SERVICE)) {
+      plugin.logger.warning("Skipped vote command for unsafe service '${vote.serviceName}'")
+      return null
+    }
     return template
         .removePrefix("/")
         .replace("%player%", player)
@@ -92,6 +97,10 @@ internal class VoteRewards(private val plugin: JavaPlugin, private val config: V
       )
       return null
     }
+    if ("%service%" in template && !vote.serviceName.matches(SERVICE)) {
+      plugin.logger.warning("Skipped party command for unsafe service '${vote.serviceName}'")
+      return null
+    }
     return template
         .removePrefix("/")
         .replace("%service%", vote.serviceName)
@@ -108,6 +117,7 @@ internal class VoteRewards(private val plugin: JavaPlugin, private val config: V
 
   private companion object {
     val USERNAME = Regex("[A-Za-z0-9_]{1,16}")
+    val SERVICE = Regex("[A-Za-z0-9_-]{1,64}")
   }
 }
 

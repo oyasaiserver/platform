@@ -16,6 +16,12 @@ data class VotifierConfig(
     fun load(plugin: JavaPlugin): VotifierConfig {
       plugin.reloadConfig()
       return plugin.config.let { config ->
+        require(
+            config.isConfigurationSection("rewards.individual") &&
+                config.isConfigurationSection("rewards.party")
+        ) {
+          "This config.yml uses the legacy NuVotifier schema; configure rewards.individual and rewards.party before enabling OyasaiVotifier"
+        }
         VotifierConfig(
             host = config.getString("listener.host", "0.0.0.0")!!,
             port = config.getInt("listener.port", 8192).also { require(it in 1..65535) },

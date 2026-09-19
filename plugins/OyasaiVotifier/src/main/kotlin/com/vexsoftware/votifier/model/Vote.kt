@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.util.Arrays
 import java.util.Base64
+import java.util.UUID
 
 /**
  * Compatibility model for plugins compiled against NuVotifier's public API. This implementation is
@@ -15,6 +16,7 @@ open class Vote {
   private var address: String? = null
   private var timeStamp: String? = null
   private var additionalData: ByteArray? = null
+  private var playerUuid: UUID? = null
 
   constructor()
 
@@ -43,7 +45,9 @@ open class Vote {
       vote.address,
       vote.timeStamp,
       vote.additionalData?.clone(),
-  )
+  ) {
+    playerUuid = vote.playerUuid
+  }
 
   constructor(
       json: JsonObject
@@ -55,7 +59,10 @@ open class Vote {
   ) {
     if (json.has("additionalData"))
         additionalData = Base64.getDecoder().decode(json["additionalData"].asString)
+    playerUuid = json.get("uuid")?.asString?.let(UUID::fromString)
   }
+
+  internal fun playerUuid(): UUID? = playerUuid
 
   open fun setServiceName(serviceName: String?) {
     this.serviceName = serviceName

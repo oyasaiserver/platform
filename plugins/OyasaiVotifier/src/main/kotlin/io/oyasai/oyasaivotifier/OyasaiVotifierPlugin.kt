@@ -20,7 +20,7 @@ class OyasaiVotifierPlugin : JavaPlugin() {
     configModel = VotifierConfig.load(this)
     rewards = VoteRewards(this, configModel)
     val keys = VoteKeys.loadOrCreate(dataFolder.resolve("rsa"))
-    server = VoteServer(this, configModel, keys, ::receive).also { it.start() }
+    server = VoteServer(logger, configModel, keys, ::receive).also { it.start() }
     logger.info(
         "Votifier listening on ${configModel.host}:${configModel.port}; v1=${configModel.v1Enabled}"
     )
@@ -54,15 +54,22 @@ class OyasaiVotifierPlugin : JavaPlugin() {
       when (command.name.lowercase()) {
         "testvote" -> {
           if (args.isEmpty()) return false
-          publishAndReward(
+          val protocol =
+              when (args.getOrElse(2) { "v2" }.lowercase()) {
+                "v1" -> VoteProtocol.V1
+                "v2" -> VoteProtocol.V2
+                else -> return false
+              }
+          receive(
               Vote(
                   args.getOrElse(1) { "testvote" },
                   args[0],
                   "127.0.0.1",
                   System.currentTimeMillis().toString(),
-              )
+              ),
+              protocol,
           )
-          sender.sendMessage("§aTest vote accepted for ${args[0]}.")
+          sender.sendMessage("§aTest $protocol vote accepted for ${args[0]}.")
           true
         }
         "votifierstats" -> {
