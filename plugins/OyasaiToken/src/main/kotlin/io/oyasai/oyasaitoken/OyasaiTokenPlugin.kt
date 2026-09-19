@@ -502,6 +502,7 @@ class OyasaiTokenPlugin :
         } else {
           sender.sendMessage("${added} 人に ${amount}P 付与しました（${onlinePlayers.size - added} 人は付与失敗）")
         }
+        return true
       }
       "add",
       "remove",
