@@ -1,0 +1,30 @@
+# Copy the real host/port, v1 key pair, v2 tokens, and zVoteParty reward amounts from production
+# before replacing NuVotifier and zVoteParty. The numeric values below are intentionally inert.
+listener:
+  host: 0.0.0.0
+  port: 8192
+  socket-timeout-seconds: 10
+protocol-v1:
+  enabled: true
+
+# NuVotifier v2 chooses a service-name key first, then falls back to default.
+# Keep the existing production default token secret; do not commit it.
+tokens:
+  default: REPLACE_WITH_THE_EXISTING_PRODUCTION_TOKEN
+
+rewards:
+  individual:
+    money: 0.0
+    tokens: 0
+    # Escape hatch for presentation only, e.g. tellraw. Commands run as console.
+    # Supported placeholders: %player%, %service%, %votes%.
+    commands: []
+  party:
+    # Copy votes_needed from the production zVoteParty config; 0 disables party rewards.
+    votes-needed: 0
+    money: 0.0
+    tokens: 0
+    # Runs once per online player when the threshold is reached.
+    commands-per-player: []
+    # Runs once when the threshold is reached, e.g. tellraw @a. No %player% here.
+    commands: []

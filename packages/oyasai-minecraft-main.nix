@@ -67,7 +67,6 @@ oyasaiPurpur rec {
     minepacks
     multiversecore
     multiverseportals
-    nuvotifier
     oyasaiadmintools
     oyasaichat
     oyasaimenu
@@ -77,6 +76,7 @@ oyasaiPurpur rec {
     oyasaitoken
     oyasaiutilities
     oyasaivehicles
+    oyasaivotifier
     oyasaiworldgenerator
     painttools
     placeholderapi
@@ -97,7 +97,6 @@ oyasaiPurpur rec {
     viaversion
     worldborder
     worldguard
-    zvoteparty
     # keep-sorted end
   ];
 }

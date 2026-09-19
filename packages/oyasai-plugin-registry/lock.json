@@ -165,14 +165,6 @@
       }
     }
   },
-  "nuvotifier": {
-    "paper": {
-      "26.2": {
-        "url": "https://github.com/NuVotifier/NuVotifier/releases/download/v2.7.3/nuvotifier.jar",
-        "hash": "sha256-X+VFfpunmJ3JRG9SKmkOTodyNrovxekO1m+tM9PGnzk="
-      }
-    }
-  },
   "placeholderapi": {
     "paper": {
       "26.2": {
@@ -282,14 +274,6 @@
       "26.2": {
         "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/btHBavWa/worldguard-bukkit-7.0.18.jar",
         "hash": "sha256-CPPvWLxSHGNdjHiu2sqW8VHS05fnzYAYWElV3XRo6wU="
-      }
-    }
-  },
-  "zvoteparty": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/95603.jar",
-        "hash": "sha256-lm4CuTn7f/5uIDE7OA1rwP/XJ3ClbiqYUTitjuMf1ic="
       }
     }
   }
