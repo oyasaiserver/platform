@@ -45,6 +45,7 @@ object SLDatabase {
   private const val MAX_WRITE_RETRIES = 5
   private const val INITIAL_BACKOFF_MS = 100L
   private const val BLOCKING_TIMEOUT_SECONDS = 30L
+  private const val SLOW_WRITE_THRESHOLD_MS = 50L
   private const val SQLITE_PRIMARY_READY_KEY = "sqlite_primary_id_migration_complete"
 
   @Volatile private var database: Database? = null
@@ -3014,6 +3015,7 @@ object SLDatabase {
       onSuccess: (() -> Unit)? = null,
       block: () -> Unit,
   ) {
+    val queuedAt = System.nanoTime()
     val service =
         writeExecutor
             ?: run {
@@ -3034,6 +3036,7 @@ object SLDatabase {
             }
 
     service.submit {
+      val waitMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - queuedAt)
       if (!awaitInit()) {
         val ex = TimeoutException("database initialization timed out")
         Tools.plugin.logger.severe(
@@ -3051,10 +3054,12 @@ object SLDatabase {
         return@submit
       }
       for (attempt in 1..MAX_WRITE_RETRIES) {
+        val startedAt = System.nanoTime()
         try {
           val db = database ?: throw IllegalStateException("database is not connected")
 
           transaction(db) { block() }
+          warnIfSlowWrite(taskName, waitMs, startedAt, attempt)
           try {
             onSuccess?.invoke()
           } catch (scEx: Exception) {
@@ -3066,6 +3071,7 @@ object SLDatabase {
           }
           return@submit
         } catch (e: Exception) {
+          warnIfSlowWrite(taskName, waitMs, startedAt, attempt)
           if (attempt == MAX_WRITE_RETRIES) {
             val message = e.message ?: e.javaClass.simpleName
             Tools.plugin.logger.log(
@@ -3109,6 +3115,15 @@ object SLDatabase {
           }
         }
       }
+    }
+  }
+
+  private fun warnIfSlowWrite(taskName: String, waitMs: Long, startedAt: Long, attempt: Int) {
+    val execMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startedAt)
+    if (waitMs + execMs > SLOW_WRITE_THRESHOLD_MS) {
+      Tools.plugin.logger.warning(
+          "[SL3] Slow SQLite write: taskName=$taskName wait_ms=$waitMs exec_ms=$execMs attempt=$attempt"
+      )
     }
   }
 
