@@ -11,8 +11,11 @@ import org.bukkit.configuration.file.YamlConfiguration
 /** Persists pending offline-like rewards without ever deleting the live file before replacement. */
 internal class OfflineLikePointStore(private val dataDirectory: Path) {
   private val file = dataDirectory.resolve(FILE_NAME)
+  private var loaded = false
 
-  fun save(points: Map<UUID, Int>) {
+  fun save(points: Map<UUID, Int>): Boolean {
+    if (!loaded) return false
+
     Files.createDirectories(dataDirectory)
 
     val yaml = YamlConfiguration()
@@ -29,15 +32,24 @@ internal class OfflineLikePointStore(private val dataDirectory: Path) {
     } finally {
       Files.deleteIfExists(temporaryFile)
     }
+    return true
   }
 
   fun load(): Map<UUID, Int> {
-    if (Files.notExists(file)) return emptyMap()
-
-    val yaml = YamlConfiguration.loadConfiguration(file.toFile())
-    return yaml.getKeys(false).associate { uuidString ->
-      UUID.fromString(uuidString) to yaml.getInt(uuidString, 0)
+    loaded = false
+    if (Files.notExists(file)) {
+      loaded = true
+      return emptyMap()
     }
+
+    val yaml = YamlConfiguration().apply { load(file.toFile()) }
+    val points =
+        yaml.getKeys(false).associate { uuidString ->
+          require(yaml.isInt(uuidString)) { "Invalid offline-like points for $uuidString" }
+          UUID.fromString(uuidString) to yaml.getInt(uuidString, 0)
+        }
+    loaded = true
+    return points
   }
 
   companion object {
