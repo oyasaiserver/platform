@@ -1,0 +1,21 @@
+name: Votifier
+main: io.oyasai.oyasaivotifier.OyasaiVotifierPlugin
+version: "${version}"
+api-version: "1.21.11"
+author: OyasaiServer
+description: In-house Votifier v1/v2 receiver and typed vote rewards.
+depend: [Vault, TokenManager]
+commands:
+  testvote:
+    description: Exercises post-auth v1/v2 event and reward handling; it does not test wire authentication.
+    usage: /testvote <username> [service] [v1|v2]
+    permission: nuvotifier.testvote
+  votifierstats:
+    description: Shows accepted Votifier protocol counters and party progress.
+    usage: /votifierstats
+    permission: nuvotifier.stats
+permissions:
+  nuvotifier.testvote:
+    default: op
+  nuvotifier.stats:
+    default: op

@@ -128,15 +128,6 @@
       "type": "modrinth"
     }
   },
-  "nuvotifier": {
-    "paper": {
-      "name": "nuvotifier.jar",
-      "owner": "NuVotifier",
-      "repo": "NuVotifier",
-      "tag": "v2.7.3",
-      "type": "github"
-    }
-  },
   "placeholderapi": {
     "paper": {
       "slug": "placeholderapi",
@@ -223,12 +214,6 @@
     "paper": {
       "slug": "worldguard",
       "type": "modrinth"
-    }
-  },
-  "zvoteparty": {
-    "paper": {
-      "id": 95603,
-      "type": "spiget"
     }
   }
 }
