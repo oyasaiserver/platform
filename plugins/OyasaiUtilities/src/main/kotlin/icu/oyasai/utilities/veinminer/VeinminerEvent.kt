@@ -4,8 +4,6 @@ import java.util.ArrayDeque
 import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.Tag
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -16,51 +14,9 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 
-internal enum class OreFamily {
-  COAL,
-  IRON,
-  COPPER,
-  GOLD,
-  LAPIS,
-  REDSTONE,
-  DIAMOND,
-  EMERALD,
-  NETHER_GOLD,
-  NETHER_QUARTZ,
-  ANCIENT_DEBRIS,
-}
-
-internal fun <T> oreFamily(
-    material: Material,
-    taggedFamilies: List<Pair<OreFamily, T>>,
-    isTagged: (T, Material) -> Boolean,
-): OreFamily? =
-    taggedFamilies.firstOrNull { (_, tag) -> isTagged(tag, material) }?.first
-        ?: when (material) {
-          Material.NETHER_GOLD_ORE -> OreFamily.NETHER_GOLD
-          Material.NETHER_QUARTZ_ORE -> OreFamily.NETHER_QUARTZ
-          Material.ANCIENT_DEBRIS -> OreFamily.ANCIENT_DEBRIS
-          else -> null
-        }
-
 object VeinminerEvent : Listener {
   private val cooldowns = mutableMapOf<UUID, Int>()
   private val miningPlayers = mutableSetOf<UUID>()
-  private val ores by lazy {
-    Bukkit.getTag(Tag.REGISTRY_BLOCKS, NamespacedKey("c", "ores"), Material::class.java)
-  }
-  private val taggedOreFamilies by lazy {
-    listOf(
-        OreFamily.COAL to Tag.COAL_ORES,
-        OreFamily.IRON to Tag.IRON_ORES,
-        OreFamily.COPPER to Tag.COPPER_ORES,
-        OreFamily.GOLD to Tag.GOLD_ORES,
-        OreFamily.LAPIS to Tag.LAPIS_ORES,
-        OreFamily.REDSTONE to Tag.REDSTONE_ORES,
-        OreFamily.DIAMOND to Tag.DIAMOND_ORES,
-        OreFamily.EMERALD to Tag.EMERALD_ORES,
-    )
-  }
   private val directions =
       buildList {
             for (x in -1..1) {
@@ -79,8 +35,7 @@ object VeinminerEvent : Listener {
     if (player.uniqueId in miningPlayers) return
 
     val tool = player.inventory.itemInMainHand
-    val family = oreFamily(event.block.type)
-    if (!isInScope(event.block.type, family)) return
+    val group = VeinminerConfig.groupOf(event.block.type) ?: return
     if (
         (VeinminerConfig.requireSneak && !player.isSneaking) || player.gameMode == GameMode.CREATIVE
     )
@@ -90,7 +45,7 @@ object VeinminerEvent : Listener {
 
     try {
       cooldowns[player.uniqueId] = Bukkit.getCurrentTick()
-      veinmine(event.block, player, family)
+      veinmine(event.block, player, group)
     } finally {
       miningPlayers.remove(player.uniqueId)
     }
@@ -104,7 +59,7 @@ object VeinminerEvent : Listener {
         Bukkit.getCurrentTick() - it >= VeinminerConfig.cooldownTicks
       } ?: true
 
-  private fun veinmine(origin: Block, player: Player, family: OreFamily?) {
+  private fun veinmine(origin: Block, player: Player, group: String) {
     val queue = ArrayDeque<Block>()
     val visited = mutableSetOf(origin)
     queue.add(origin)
@@ -120,7 +75,7 @@ object VeinminerEvent : Listener {
         if (!current.world.isChunkLoaded(targetX shr 4, targetZ shr 4)) continue
 
         val target = current.world.getBlockAt(targetX, targetY, targetZ)
-        if (!visited.add(target) || !isInScope(target.type, family)) continue
+        if (!visited.add(target) || VeinminerConfig.groupOf(target.type) != group) continue
 
         val tool = player.inventory.itemInMainHand
         if (!canBreak(target, tool)) return
@@ -132,15 +87,6 @@ object VeinminerEvent : Listener {
       }
     }
   }
-
-  private fun oreFamily(material: Material): OreFamily? =
-      oreFamily(material, taggedOreFamilies) { tag, candidate -> tag.isTagged(candidate) }
-
-  private fun isInScope(material: Material, family: OreFamily?): Boolean =
-      when (VeinminerConfig.chainScope) {
-        ChainScope.FAMILY -> family != null && oreFamily(material) == family
-        ChainScope.ALL_ORES -> ores?.isTagged(material) == true
-      }
 
   private fun canBreak(block: Block, tool: ItemStack): Boolean {
     if (tool.isEmpty || !Tag.ITEMS_PICKAXES.isTagged(tool.type) || !block.isPreferredTool(tool)) {

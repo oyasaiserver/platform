@@ -7,7 +7,28 @@ cooldown_ticks: 20
 # trueの場合、スニーク中のみ連鎖採掘を発動する
 require_sneak: true
 
-# 連鎖が伝播する範囲
-# family: 起点と同じ鉱石ファミリーのみ（通常鉱石と深層岩版は同一ファミリー）
-# all_ores: c:oresタグに含まれるすべての鉱石
-chain_scope: family
+# 一緒に連鎖するブロックのグループ。
+# 同じグループ内のブロック同士が連鎖する。別のグループとは連鎖しない。
+# 既定では全鉱石が1つのグループなので、鉄鉱石の隣の石炭鉱石も一緒に掘れる。
+# 鉱石の種類ごとに分けたい場合は、グループを追加してそちらへブロックを移す。
+groups:
+  ores:
+    - coal_ore
+    - deepslate_coal_ore
+    - iron_ore
+    - deepslate_iron_ore
+    - copper_ore
+    - deepslate_copper_ore
+    - gold_ore
+    - deepslate_gold_ore
+    - nether_gold_ore
+    - lapis_ore
+    - deepslate_lapis_ore
+    - redstone_ore
+    - deepslate_redstone_ore
+    - diamond_ore
+    - deepslate_diamond_ore
+    - emerald_ore
+    - deepslate_emerald_ore
+    - nether_quartz_ore
+    - ancient_debris
