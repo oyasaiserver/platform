@@ -1,7 +1,6 @@
 package io.oyasai.oyasaiAdminTools.commands
 
-import com.wimbli.WorldBorder.BorderData
-import com.wimbli.WorldBorder.Config
+import io.oyasai.oyasaiAdminTools.worldborder.WorldBorderManager
 import me.realized.tokenmanager.api.TokenManager
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -60,10 +59,8 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
       return true
     }
 
-    // WorldBorderの処理
-    // 実行者がいるワールドのボーダーを取得
     val currentWorldName = sender.world.name
-    val borderData: BorderData? = Config.Border(currentWorldName)
+    val borderData = WorldBorderManager.getBorder(currentWorldName)
 
     if (borderData == null) {
       sender.sendMessage(
@@ -72,45 +69,28 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
       return true
     }
 
-    // 拡張量の計算
     // 100ポイント = 半径50ブロック
-    val expansionRadius = (points / 100) * 50
-
-    // 現在の情報を取得
-    val currentRadiusX = borderData.radiusX.toLong()
-    val currentRadiusZ = borderData.radiusZ.toLong() // 通常はXと同じはずだが念のため
+    val expansionRadius = ((points / 100) * 50).toInt()
+    val currentRadiusX = borderData.radiusX
+    val currentRadiusZ = borderData.radiusZ
     val centerX = borderData.x
     val centerZ = borderData.z
-
-    // 新しい半径
     val newRadiusX = currentRadiusX + expansionRadius
     val newRadiusZ = currentRadiusZ + expansionRadius
 
-    // WorldBorderプラグインに新しい値をセット
-    borderData.radiusX = newRadiusX.toInt()
-    borderData.radiusZ = newRadiusZ.toInt()
+    WorldBorderManager.setRadii(currentWorldName, newRadiusX, newRadiusZ)
 
-    // 変更を適用して保存
-    // WorldBorderプラグインはConfig.save(true)でファイルに書き込み、update()でゲーム内に反映
-    Config.save(true)
-
-    // 確認ログ
     sender.sendMessage("§aワールド §e$currentWorldName §aの拡張を開始します。")
     sender.sendMessage("§8中心: ($centerX, $centerZ)")
     sender.sendMessage("§8半径: $currentRadiusX -> $newRadiusX (+ $expansionRadius)")
 
-    // トークンを消費
     val success = tmPlugin.removeTokens(targetPlayer, points)
     if (success) {
       sender.sendMessage("§b拡張成功！ ${targetName}から ${points}ポイント徴収しました。")
-      // ターゲットにも通知
       targetPlayer.sendMessage("§gワールド拡張のため ${points}ポイント消費しました。")
     } else {
-      // 万が一失敗した場合（並行処理などで残高が変わった場合など）
       sender.sendMessage("§cトークン消費に失敗したため、ボーダーを元に戻します。")
-      borderData.radiusX = currentRadiusX.toInt()
-      borderData.radiusZ = currentRadiusZ.toInt()
-      Config.save(true)
+      WorldBorderManager.setRadii(currentWorldName, currentRadiusX, currentRadiusZ)
     }
     return true
   }

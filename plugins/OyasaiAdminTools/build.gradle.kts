@@ -1,7 +1,6 @@
 dependencies {
   compileOnly(libs.purpur.api)
   compileOnly(libs.luckperms.api)
-  compileOnly(libs.worldborder) { isTransitive = false }
   compileOnly(project(":plugins:OyasaiToken"))
   compileOnly(project(":plugins:SocialLikes3"))
   compileOnly(project(":plugins:DynamicProfile"))

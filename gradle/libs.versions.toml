@@ -21,7 +21,6 @@ spotless-plugin = {module = "com.diffplug.spotless:spotless-plugin-gradle", vers
 tab-api = {module = "com.github.NEZNAMY:TAB-API", version.ref = "tab-api"}
 purpur-dev-bundle = {module = "org.purpurmc.purpur:dev-bundle", version.ref = "purpur-api"}
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
-worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder"}
 fawe-bukkit = {module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe"}
 velocity-api = {module = "com.velocitypowered:velocity-api", version.ref = "velocity-api"}
 worldguard-bukkit = {module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard"}
@@ -51,7 +50,6 @@ spotless = "8.5.1" # Ktfmt version must match that of Nixpkgs
 paperweight = "2.0.0-beta.22"
 tab-api = "6.1.2"
 vault = "1.7.1"
-worldborder = "2.1.4"
 fawe = "2.15.3"
 velocity-api = "4.1.1-SNAPSHOT"
 worldguard = "7.0.18"
