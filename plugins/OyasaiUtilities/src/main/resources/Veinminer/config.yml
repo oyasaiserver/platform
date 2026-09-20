@@ -1,0 +1,34 @@
+# 1回の連鎖採掘で壊せる最大ブロック数（1以上）
+max_chain: 64
+
+# 連鎖採掘のクールダウン（tick、0以上）
+cooldown_ticks: 20
+
+# trueの場合、スニーク中のみ連鎖採掘を発動する
+require_sneak: true
+
+# 一緒に連鎖するブロックのグループ。
+# 同じグループ内のブロック同士が連鎖する。別のグループとは連鎖しない。
+# 既定では全鉱石が1つのグループなので、鉄鉱石の隣の石炭鉱石も一緒に掘れる。
+# 鉱石の種類ごとに分けたい場合は、グループを追加してそちらへブロックを移す。
+groups:
+  ores:
+    - coal_ore
+    - deepslate_coal_ore
+    - iron_ore
+    - deepslate_iron_ore
+    - copper_ore
+    - deepslate_copper_ore
+    - gold_ore
+    - deepslate_gold_ore
+    - nether_gold_ore
+    - lapis_ore
+    - deepslate_lapis_ore
+    - redstone_ore
+    - deepslate_redstone_ore
+    - diamond_ore
+    - deepslate_diamond_ore
+    - emerald_ore
+    - deepslate_emerald_ore
+    - nether_quartz_ore
+    - ancient_debris

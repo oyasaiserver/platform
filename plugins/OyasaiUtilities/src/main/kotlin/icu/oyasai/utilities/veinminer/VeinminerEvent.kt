@@ -4,7 +4,6 @@ import java.util.ArrayDeque
 import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
-import org.bukkit.Material
 import org.bukkit.Tag
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -15,50 +14,9 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 
-internal enum class OreFamily {
-  COAL,
-  IRON,
-  COPPER,
-  GOLD,
-  LAPIS,
-  REDSTONE,
-  DIAMOND,
-  EMERALD,
-  NETHER_GOLD,
-  NETHER_QUARTZ,
-  ANCIENT_DEBRIS,
-}
-
-internal fun <T> oreFamily(
-    material: Material,
-    taggedFamilies: List<Pair<OreFamily, T>>,
-    isTagged: (T, Material) -> Boolean,
-): OreFamily? =
-    taggedFamilies.firstOrNull { (_, tag) -> isTagged(tag, material) }?.first
-        ?: when (material) {
-          Material.NETHER_GOLD_ORE -> OreFamily.NETHER_GOLD
-          Material.NETHER_QUARTZ_ORE -> OreFamily.NETHER_QUARTZ
-          Material.ANCIENT_DEBRIS -> OreFamily.ANCIENT_DEBRIS
-          else -> null
-        }
-
 object VeinminerEvent : Listener {
-  private const val MAX_CHAIN = 100
-  private const val COOLDOWN_TICKS = 20
   private val cooldowns = mutableMapOf<UUID, Int>()
   private val miningPlayers = mutableSetOf<UUID>()
-  private val taggedOreFamilies by lazy {
-    listOf(
-        OreFamily.COAL to Tag.COAL_ORES,
-        OreFamily.IRON to Tag.IRON_ORES,
-        OreFamily.COPPER to Tag.COPPER_ORES,
-        OreFamily.GOLD to Tag.GOLD_ORES,
-        OreFamily.LAPIS to Tag.LAPIS_ORES,
-        OreFamily.REDSTONE to Tag.REDSTONE_ORES,
-        OreFamily.DIAMOND to Tag.DIAMOND_ORES,
-        OreFamily.EMERALD to Tag.EMERALD_ORES,
-    )
-  }
   private val directions =
       buildList {
             for (x in -1..1) {
@@ -77,14 +35,17 @@ object VeinminerEvent : Listener {
     if (player.uniqueId in miningPlayers) return
 
     val tool = player.inventory.itemInMainHand
-    val family = oreFamily(event.block.type) ?: return
-    if (!player.isSneaking || player.gameMode == GameMode.CREATIVE) return
+    val group = VeinminerConfig.groupOf(event.block.type) ?: return
+    if (
+        (VeinminerConfig.requireSneak && !player.isSneaking) || player.gameMode == GameMode.CREATIVE
+    )
+        return
     if (!isVeinmineable(event.block, tool) || !canVeinmine(player)) return
     if (!miningPlayers.add(player.uniqueId)) return
 
     try {
       cooldowns[player.uniqueId] = Bukkit.getCurrentTick()
-      veinmine(event.block, player, family)
+      veinmine(event.block, player, group)
     } finally {
       miningPlayers.remove(player.uniqueId)
     }
@@ -94,15 +55,17 @@ object VeinminerEvent : Listener {
       Tag.ITEMS_PICKAXES.isTagged(tool.type) && block.isPreferredTool(tool)
 
   private fun canVeinmine(player: Player): Boolean =
-      cooldowns[player.uniqueId]?.let { Bukkit.getCurrentTick() - it >= COOLDOWN_TICKS } ?: true
+      cooldowns[player.uniqueId]?.let {
+        Bukkit.getCurrentTick() - it >= VeinminerConfig.cooldownTicks
+      } ?: true
 
-  private fun veinmine(origin: Block, player: Player, family: OreFamily) {
+  private fun veinmine(origin: Block, player: Player, group: String) {
     val queue = ArrayDeque<Block>()
     val visited = mutableSetOf(origin)
     queue.add(origin)
     var mined = 1
 
-    while (queue.isNotEmpty() && mined < MAX_CHAIN) {
+    while (queue.isNotEmpty() && mined < VeinminerConfig.maxChain) {
       val current = queue.removeFirst()
       for ((x, y, z) in directions) {
         val targetX = current.x + x
@@ -112,21 +75,18 @@ object VeinminerEvent : Listener {
         if (!current.world.isChunkLoaded(targetX shr 4, targetZ shr 4)) continue
 
         val target = current.world.getBlockAt(targetX, targetY, targetZ)
-        if (!visited.add(target) || oreFamily(target.type) != family) continue
+        if (!visited.add(target) || VeinminerConfig.groupOf(target.type) != group) continue
 
         val tool = player.inventory.itemInMainHand
         if (!canBreak(target, tool)) return
         if (player.breakBlock(target)) {
           mined++
           queue.add(target)
-          if (mined == MAX_CHAIN) break
+          if (mined == VeinminerConfig.maxChain) break
         }
       }
     }
   }
-
-  private fun oreFamily(material: Material): OreFamily? =
-      oreFamily(material, taggedOreFamilies) { tag, candidate -> tag.isTagged(candidate) }
 
   private fun canBreak(block: Block, tool: ItemStack): Boolean {
     if (tool.isEmpty || !Tag.ITEMS_PICKAXES.isTagged(tool.type) || !block.isPreferredTool(tool)) {

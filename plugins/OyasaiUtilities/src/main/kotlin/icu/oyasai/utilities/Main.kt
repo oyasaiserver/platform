@@ -18,6 +18,7 @@ import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
 import icu.oyasai.utilities.tpath.BackForwardCmd
 import icu.oyasai.utilities.tpath.TeleportListener
+import icu.oyasai.utilities.veinminer.VeinminerConfig
 import icu.oyasai.utilities.veinminer.VeinminerEvent
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -55,6 +56,7 @@ class Main : JavaPlugin() {
     Hats.onEnable()
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
+    VeinminerConfig.reloadConfig()
     CreativeManagement.onEnable()
     RedBullFeature.onEnable()
     DebugOnBE.onEnable(this)
