@@ -27,6 +27,10 @@ commands:
   adminbp:
     description: "AdminBPのコマンド"
     aliases: [abp]
+  oyasaibackpack:
+    description: "個人バックパックを開く"
+    aliases: [obp]
+    permission: backpack.use
   oresmelter:
     description: "OreSmelterのコマンド"
     aliases: [os]
@@ -76,6 +80,39 @@ permissions:
     description: "TimerBarコマンドの使用権限"
   oyasaiutilities.tpdata:
     default: op
+  backpack.user:
+    description: "標準サイズのバックパックを使う"
+    default: false
+    children:
+      backpack.use: true
+      backpack.size.1: true
+  backpack.userBig:
+    description: "最大サイズのバックパックを使う"
+    default: false
+    children:
+      backpack.use: true
+      backpack.size.6: true
+  backpack.use:
+    description: "自分のバックパックを開く"
+    default: false
+  backpack.size.1:
+    description: "1段のバックパックを使う"
+    default: false
+  backpack.size.2:
+    description: "2段のバックパックを使う"
+    default: false
+  backpack.size.3:
+    description: "3段のバックパックを使う"
+    default: false
+  backpack.size.4:
+    description: "4段のバックパックを使う"
+    default: false
+  backpack.size.5:
+    description: "5段のバックパックを使う"
+    default: false
+  backpack.size.6:
+    description: "6段のバックパックを使う"
+    default: false
   cm.bypass:
     description: "CreativeManagementのバイパスする権限"
     default: op
