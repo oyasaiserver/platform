@@ -3,7 +3,7 @@ package com.github.srain3.sociallikes
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLDatabase
-import com.github.srain3.sociallikes.gui.GuidebookGUI
+import com.github.srain3.sociallikes.gui.GuidebookBookUI
 import java.util.UUID
 import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
@@ -61,12 +61,12 @@ object GuidebookListener : Listener {
       }
       if (GuidebookService.addBuild(event.player, editorId, build)) {
         addModes.remove(event.player.uniqueId)
-        GuidebookGUI.openEditor(event.player, editorId)
+        GuidebookBookUI.openEditor(event.player, editorId)
       }
       return true
     }
 
-    GuidebookGUI.openEditor(event.player, editorId)
+    GuidebookBookUI.openEditor(event.player, editorId)
     return true
   }
 
@@ -107,13 +107,14 @@ object GuidebookListener : Listener {
             (event.action == Action.RIGHT_CLICK_BLOCK && event.clickedBlock?.state !is Sign)
     ) {
       event.isCancelled = true
-      GuidebookGUI.openEditor(event.player, editorId)
+      GuidebookBookUI.openEditor(event.player, editorId)
     }
   }
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
     addModes.remove(event.player.uniqueId)
+    GuidebookBookUI.clear(event.player.uniqueId)
   }
 
   private fun teleport(player: org.bukkit.entity.Player, guidebookId: Int) {
@@ -141,7 +142,7 @@ object GuidebookListener : Listener {
       player.sendMessage(Tools.socialLikesLOGO + " &cこのガイドブックは現在公開されていません。".color())
       return
     }
-    GuidebookGUI.openInfo(player, guidebook)
+    GuidebookBookUI.openInfo(player, guidebook)
   }
 
   private fun ready(player: org.bukkit.entity.Player): Boolean {

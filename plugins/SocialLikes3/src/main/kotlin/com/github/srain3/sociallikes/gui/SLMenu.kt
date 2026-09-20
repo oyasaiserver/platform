@@ -98,7 +98,7 @@ object SLMenu {
                   .allFlag()
                   .addText("&f旅行ガイドブック", mutableListOf("&7公開ガイドの一覧を表示します"))
           ) {
-            GuidebookGUI.openCatalog(it.whoClicked as Player)
+            GuidebookBookUI.openCatalog(it.whoClicked as Player)
           },
           8,
           1,
