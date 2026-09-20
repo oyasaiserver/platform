@@ -204,9 +204,12 @@ object SLtp : CommandExecutor {
 
   /** ユーザーごとの最後のsltp対象の時間保存 */
   private val userLastTimeStamp = mutableMapOf<UUID, LocalDateTime>()
+  private var userLastTimeStampLoaded = false
 
   /** ユーザーごとの最後のsltp対象の時間をファイルへ保存 */
   fun userLastSLTPTimeSave() {
+    if (!userLastTimeStampLoaded) return
+
     val yml = CustomYaml("lastSLTP-Time.yml")
     userLastTimeStamp.forEach { (uuid, time) ->
       yml.set(uuid.toString(), BuildTimestamps.toStored(time))
@@ -216,13 +219,18 @@ object SLtp : CommandExecutor {
 
   /** ユーザーごとの最後のsltp対象の時間をファイルからロード */
   fun userLastSLTPTimeLoad() {
+    userLastTimeStampLoaded = false
     val yml = CustomYaml("lastSLTP-Time.yml")
+    val loadedTimeStamps = mutableMapOf<UUID, LocalDateTime>()
     yml.getKeys(false).forEach { uuidStr ->
       val uuid = UUID.fromString(uuidStr)
       val raw = yml.getString(uuidStr) ?: return@forEach
       val time = BuildTimestamps.parseStored(raw) ?: return@forEach
-      userLastTimeStamp[uuid] = time
+      loadedTimeStamps[uuid] = time
     }
+    userLastTimeStamp.clear()
+    userLastTimeStamp.putAll(loadedTimeStamps)
+    userLastTimeStampLoaded = true
   }
 
   /** BlockFaceをYawに変換 */
