@@ -264,8 +264,8 @@
   "viaversion": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/YRcbhu0U/ViaVersion-5.12.0-SNAPSHOT.jar",
-        "hash": "sha256-6HIjRArjMHgdX3IZqcUhi5zSa93Pb6lGj0VaZA5Y4pQ="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/MmYpF9Fh/ViaVersion-5.12.1-SNAPSHOT.jar",
+        "hash": "sha256-+DnxEAfOu21xcv5HPIdwWonN+jp09KJBURY/Es1nsyk="
       }
     }
   },
@@ -280,8 +280,8 @@
   "worldguard": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/btHBavWa/worldguard-bukkit-7.0.18.jar",
-        "hash": "sha256-CPPvWLxSHGNdjHiu2sqW8VHS05fnzYAYWElV3XRo6wU="
+        "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/TtfwTyi6/worldguard-bukkit-7.0.19.jar",
+        "hash": "sha256-OW3wZfHPOLq5h4oPU6d21aCF6788QYE5OLc/ldTqygM="
       }
     }
   },
