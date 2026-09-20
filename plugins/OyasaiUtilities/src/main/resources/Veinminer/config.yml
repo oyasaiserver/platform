@@ -1,0 +1,13 @@
+# 1回の連鎖採掘で壊せる最大ブロック数（1以上）
+max_chain: 64
+
+# 連鎖採掘のクールダウン（tick、0以上）
+cooldown_ticks: 20
+
+# trueの場合、スニーク中のみ連鎖採掘を発動する
+require_sneak: true
+
+# 連鎖が伝播する範囲
+# family: 起点と同じ鉱石ファミリーのみ（通常鉱石と深層岩版は同一ファミリー）
+# all_ores: c:oresタグに含まれるすべての鉱石
+chain_scope: family

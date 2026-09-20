@@ -5,6 +5,7 @@ import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Tag
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -43,10 +44,11 @@ internal fun <T> oreFamily(
         }
 
 object VeinminerEvent : Listener {
-  private const val MAX_CHAIN = 100
-  private const val COOLDOWN_TICKS = 20
   private val cooldowns = mutableMapOf<UUID, Int>()
   private val miningPlayers = mutableSetOf<UUID>()
+  private val ores by lazy {
+    Bukkit.getTag(Tag.REGISTRY_BLOCKS, NamespacedKey("c", "ores"), Material::class.java)
+  }
   private val taggedOreFamilies by lazy {
     listOf(
         OreFamily.COAL to Tag.COAL_ORES,
@@ -77,8 +79,12 @@ object VeinminerEvent : Listener {
     if (player.uniqueId in miningPlayers) return
 
     val tool = player.inventory.itemInMainHand
-    val family = oreFamily(event.block.type) ?: return
-    if (!player.isSneaking || player.gameMode == GameMode.CREATIVE) return
+    val family = oreFamily(event.block.type)
+    if (!isInScope(event.block.type, family)) return
+    if (
+        (VeinminerConfig.requireSneak && !player.isSneaking) || player.gameMode == GameMode.CREATIVE
+    )
+        return
     if (!isVeinmineable(event.block, tool) || !canVeinmine(player)) return
     if (!miningPlayers.add(player.uniqueId)) return
 
@@ -94,15 +100,17 @@ object VeinminerEvent : Listener {
       Tag.ITEMS_PICKAXES.isTagged(tool.type) && block.isPreferredTool(tool)
 
   private fun canVeinmine(player: Player): Boolean =
-      cooldowns[player.uniqueId]?.let { Bukkit.getCurrentTick() - it >= COOLDOWN_TICKS } ?: true
+      cooldowns[player.uniqueId]?.let {
+        Bukkit.getCurrentTick() - it >= VeinminerConfig.cooldownTicks
+      } ?: true
 
-  private fun veinmine(origin: Block, player: Player, family: OreFamily) {
+  private fun veinmine(origin: Block, player: Player, family: OreFamily?) {
     val queue = ArrayDeque<Block>()
     val visited = mutableSetOf(origin)
     queue.add(origin)
     var mined = 1
 
-    while (queue.isNotEmpty() && mined < MAX_CHAIN) {
+    while (queue.isNotEmpty() && mined < VeinminerConfig.maxChain) {
       val current = queue.removeFirst()
       for ((x, y, z) in directions) {
         val targetX = current.x + x
@@ -112,14 +120,14 @@ object VeinminerEvent : Listener {
         if (!current.world.isChunkLoaded(targetX shr 4, targetZ shr 4)) continue
 
         val target = current.world.getBlockAt(targetX, targetY, targetZ)
-        if (!visited.add(target) || oreFamily(target.type) != family) continue
+        if (!visited.add(target) || !isInScope(target.type, family)) continue
 
         val tool = player.inventory.itemInMainHand
         if (!canBreak(target, tool)) return
         if (player.breakBlock(target)) {
           mined++
           queue.add(target)
-          if (mined == MAX_CHAIN) break
+          if (mined == VeinminerConfig.maxChain) break
         }
       }
     }
@@ -127,6 +135,12 @@ object VeinminerEvent : Listener {
 
   private fun oreFamily(material: Material): OreFamily? =
       oreFamily(material, taggedOreFamilies) { tag, candidate -> tag.isTagged(candidate) }
+
+  private fun isInScope(material: Material, family: OreFamily?): Boolean =
+      when (VeinminerConfig.chainScope) {
+        ChainScope.FAMILY -> family != null && oreFamily(material) == family
+        ChainScope.ALL_ORES -> ores?.isTagged(material) == true
+      }
 
   private fun canBreak(block: Block, tool: ItemStack): Boolean {
     if (tool.isEmpty || !Tag.ITEMS_PICKAXES.isTagged(tool.type) || !block.isPreferredTool(tool)) {

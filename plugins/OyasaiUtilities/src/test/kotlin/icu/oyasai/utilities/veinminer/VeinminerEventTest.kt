@@ -24,4 +24,15 @@ class VeinminerEventTest {
     assertEquals(OreFamily.ANCIENT_DEBRIS, family(Material.ANCIENT_DEBRIS))
     assertNull(family(Material.STONE))
   }
+
+  @Test
+  fun `invalid config values fall back and warn`() {
+    var warnings = 0
+    val warn: () -> Unit = { warnings++ }
+
+    assertEquals(64, intAtLeast(0, 1, 64, warn))
+    assertEquals(20, intAtLeast(-1, 0, 20, warn))
+    assertEquals(ChainScope.FAMILY, parseChainScope("invalid", warn))
+    assertEquals(3, warnings)
+  }
 }
