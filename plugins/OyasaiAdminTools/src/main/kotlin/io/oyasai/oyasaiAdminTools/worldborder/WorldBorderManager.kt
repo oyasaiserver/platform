@@ -119,15 +119,10 @@ object WorldBorderManager {
     return removed
   }
 
+  // 境界はすべて独自ロジックで判定する。バニラボーダーを設定すると縞模様の壁と
+  // 境界外ダメージが付き、旧 Brettflan WorldBorder の挙動と変わってしまうため残さない。
   fun applyToWorld(world: World) {
-    val data = borders[world.name]
-    if (data == null || !data.usesVanillaBorder(roundBorder)) {
-      world.worldBorder.reset()
-      return
-    }
-    val wb = world.worldBorder
-    wb.center = Location(world, data.x, 0.0, data.z)
-    wb.size = data.radiusX * 2.0
+    world.worldBorder.reset()
   }
 
   fun knockBackIfOutside(
@@ -140,7 +135,6 @@ object WorldBorderManager {
     val world = loc.world ?: return null
     val border = borders[world.name] ?: return null
     if (border.inside(loc.x, loc.z, roundBorder)) return null
-    if (border.usesVanillaBorder(roundBorder) && target == null) return null
 
     val key = player.name.lowercase()
     if (!handlingPlayers.add(key)) return null

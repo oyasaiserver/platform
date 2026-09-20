@@ -34,9 +34,6 @@ data class WorldBorderData(
 
   fun isRound(defaultRound: Boolean): Boolean = shapeRound ?: defaultRound
 
-  fun usesVanillaBorder(defaultRound: Boolean): Boolean =
-      !isRound(defaultRound) && radiusX == radiusZ && radiusX > 0
-
   fun inside(xLoc: Double, zLoc: Double, defaultRound: Boolean): Boolean {
     if (isRound(defaultRound)) {
       val dx = abs(x - xLoc)

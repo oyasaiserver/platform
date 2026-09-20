@@ -195,9 +195,7 @@ object WorldBorderCommandExecutor : CommandExecutor, TabCompleter {
     if (data != null) {
       val shape =
           if (data.isRound(WorldBorderManager.roundBorder)) "round/elliptic" else "square/rect"
-      val enforcement =
-          if (data.usesVanillaBorder(WorldBorderManager.roundBorder)) "vanilla" else "custom"
-      sender.sendMessage("§8shape: $shape  enforcement: $enforcement")
+      sender.sendMessage("§8shape: $shape")
     }
     return true
   }

@@ -27,13 +27,6 @@ object WorldBorderListener : Listener {
       return
     }
 
-    if (
-        border.usesVanillaBorder(WorldBorderManager.roundBorder) &&
-            event.cause != PlayerTeleportEvent.TeleportCause.ENDER_PEARL
-    ) {
-      return
-    }
-
     val corrected = WorldBorderManager.knockBackIfOutside(event.player, to, notify = true)
     if (corrected != null) event.setTo(corrected)
   }
