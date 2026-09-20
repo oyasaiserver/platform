@@ -233,7 +233,13 @@ def load_sqlite(data_dir: Path) -> tuple[dict[int, dict[str, Any]], dict[tuple[i
                 "player_uuid": normalize_uuid(row["player_uuid"]),
                 "liked_at": to_int_or_none(row["liked_at"]),
             }
-            for row in conn.execute("SELECT build_id, player_uuid, liked_at FROM build_likes")
+            for row in conn.execute(
+                """
+                SELECT bl.build_id, p.uuid AS player_uuid, bl.liked_at
+                FROM build_likes bl
+                JOIN players p ON p.id = bl.player_id
+                """
+            )
         }
         publicity = {
             int(row["id"]): {
