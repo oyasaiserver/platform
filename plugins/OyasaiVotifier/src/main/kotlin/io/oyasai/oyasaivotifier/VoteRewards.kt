@@ -6,13 +6,18 @@ import io.oyasai.oyasaitoken.api.OyasaiTokenService
 import io.oyasai.oyasaitoken.api.TokenRequest
 import io.oyasai.oyasaitoken.api.TokenResult
 import java.io.File
+import kotlin.random.Random
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 
-internal class VoteRewards(private val plugin: JavaPlugin, private val config: VotifierConfig) {
+internal class VoteRewards(
+    private val plugin: JavaPlugin,
+    private val config: VotifierConfig,
+    private val nextInt: (Int) -> Int = Random.Default::nextInt,
+) {
   private val stateFile = File(plugin.dataFolder, "party-progress.yml")
   private val state = YamlConfiguration.loadConfiguration(stateFile)
   private var progress = state.getInt("votes", 0).coerceAtLeast(0)
@@ -20,7 +25,7 @@ internal class VoteRewards(private val plugin: JavaPlugin, private val config: V
   fun deliver(vote: Vote) {
     val player =
         vote.playerUuid()?.let(Bukkit::getOfflinePlayer) ?: Bukkit.getOfflinePlayer(vote.username)
-    deliver(player, vote, config.individual, progress)
+    deliver(player, vote, config.individual.pick(nextInt), progress)
     val party = config.party
     if (party.votesNeeded == 0) return
     progress++
@@ -32,7 +37,7 @@ internal class VoteRewards(private val plugin: JavaPlugin, private val config: V
     save()
     Bukkit.broadcastMessage("§a投票パーティーが始まりました！オンラインの全員に報酬を配布します。")
     Bukkit.getOnlinePlayers().forEach { recipient ->
-      deliver(recipient, vote, party.reward, party.votesNeeded)
+      deliver(recipient, vote, party.rewards.pick(nextInt), party.votesNeeded)
     }
     party.globalCommands.forEach { command ->
       globalCommand(vote, party.votesNeeded, command)?.let(::runCommand)

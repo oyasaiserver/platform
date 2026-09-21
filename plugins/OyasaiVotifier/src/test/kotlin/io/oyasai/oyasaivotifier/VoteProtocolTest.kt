@@ -134,8 +134,12 @@ class VoteProtocolTest {
           1,
           true,
           mapOf("default" to "secret"),
-          Reward(0.0, 0, emptyList()),
-          PartyReward(0, Reward(0.0, 0, emptyList()), emptyList()),
+          RewardTable(listOf(WeightedReward(1, Reward(0.0, 0, emptyList())))),
+          PartyReward(
+              1,
+              RewardTable(listOf(WeightedReward(1, Reward(0.0, 0, emptyList())))),
+              emptyList(),
+          ),
       )
 
   private fun keyPair(): KeyPair =
