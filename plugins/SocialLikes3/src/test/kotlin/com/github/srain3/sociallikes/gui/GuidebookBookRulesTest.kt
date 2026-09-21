@@ -28,6 +28,12 @@ class GuidebookBookRulesTest {
   }
 
   @Test
+  fun `entry mark is a checkbox for liked builds only`() {
+    assertEquals("☑ ", GuidebookBookRules.entryMark(true))
+    assertEquals("☐ ", GuidebookBookRules.entryMark(false))
+  }
+
+  @Test
   fun `home selects next available build or terminal state`() {
     val entries =
         listOf(

@@ -226,16 +226,29 @@ var PAGE_W = 114,
   LINES = 14,
   LH = 9;
 // 付属フォントデータに無い記号（↑↓★ など）は近い幅で数え、ブラウザのフォントで代わりに描く
+// accented.png（height 12, ascent 10）の ☐☑。9行×9px、ビットx=左からx列目。
+// セル上2行は空なので、通常グリフ（ascent 7）の上端から y-1 に描く
+var BOX = {
+  "☐": [511, 257, 257, 257, 257, 257, 257, 257, 511],
+  "☑": [511, 257, 385, 321, 289, 277, 265, 257, 511],
+};
 function missing(ch) {
   return (
     ch !== " " &&
+    !BOX[ch] &&
     !MF.asciiAdv.hasOwnProperty(ch) &&
     !MF.uniGlyph(ch.codePointAt(0))
   );
 }
 function adv(ch, bold) {
   var cp = ch.codePointAt(0);
-  var a = missing(ch) ? (cp >= 0x2190 && cp <= 0x21ff ? 5 : 9) : charAdv(ch);
+  var a = BOX[ch]
+    ? 10
+    : missing(ch)
+      ? cp >= 0x2190 && cp <= 0x21ff
+        ? 5
+        : 9
+      : charAdv(ch);
   return a + (bold && ch !== " " ? 1 : 0);
 }
 // blocks: [{segs:[[text, role]], cap}] → 行の配列。行 = {runs:[{ch,x,role}], cut}
@@ -309,6 +322,17 @@ function drawRun(r, ox, y, shadow) {
 }
 function drawGlyph(ch, x, y, color, bold) {
   if (ch === " ") return;
+  if (BOX[ch]) {
+    ctx.fillStyle = color;
+    BOX[ch].forEach(function (m, r) {
+      for (var c = 0; c < 9; c++)
+        if (m & (1 << c)) {
+          ctx.fillRect(x + c, y - 1 + r, 1, 1);
+          if (bold) ctx.fillRect(x + c + 1, y - 1 + r, 1, 1);
+        }
+    });
+    return;
+  }
   if (missing(ch)) {
     ctx.fillStyle = color;
     ctx.font = "8px sans-serif";
@@ -572,7 +596,12 @@ function readerEntries() {
     var st = STATE[e.state] || STATE["未発見"];
     blocks.push({
       segs: [
-        [i + 1 + ". " + e.name, "entry", T("hEntry") || null, { e: [i, 0] }],
+        [
+          (e.state === "いいね済み" ? "☑ " : "☐ ") + e.name,
+          "entry",
+          T("hEntry") || null,
+          { e: [i, 0] },
+        ],
       ],
     });
     blocks.push({ segs: [[T(st[0]), st[1], null, { t: st[0] }]] });

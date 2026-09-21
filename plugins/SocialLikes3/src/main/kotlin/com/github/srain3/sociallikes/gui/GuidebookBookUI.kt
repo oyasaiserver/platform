@@ -46,6 +46,8 @@ internal object GuidebookBookRules {
         else -> "いいね済み"
       }
 
+  fun entryMark(liked: Boolean): String = if (liked) "☑ " else "☐ "
+
   fun nextLine(entries: List<GuidebookService.EntryView>, complete: Boolean): NextLine =
       when {
         complete -> NextLine("コンプリート！")
@@ -232,7 +234,8 @@ object GuidebookBookUI {
           entryPage.forEach { indexed ->
             val entry = indexed.value
             val state = GuidebookBookRules.entryState(entry.valid, entry.liked)
-            val entryTitle = "${indexed.index + 1}. ${entry.data?.title ?: "建築ID:${entry.buildId}"}"
+            val entryTitle =
+                "${GuidebookBookRules.entryMark(entry.liked)}${entry.data?.title ?: "建築ID:${entry.buildId}"}"
             content.append(
                 entry.data?.let {
                   destination(entryTitle, "$COMMAND go ${guidebook.id} ${entry.buildId}")
