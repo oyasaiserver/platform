@@ -100,8 +100,8 @@
   "gsit": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/j4nBwUoo/GSit-3.6.0.jar",
-        "hash": "sha256-Fv8Nhz8m8frSViVULzEDM+CJPJLSA/z7cTxkgeneMIg="
+        "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/gnY5Flgo/GSit-3.7.0.jar",
+        "hash": "sha256-FD04UJ9JxAshSIetPGgsjbf92BxhB4fQGG1l9RJW9NI="
       }
     }
   },
@@ -176,8 +176,8 @@
   "plugmanx": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/yro4niHu/versions/Jrz8N90m/PlugManX-3.2.0.jar",
-        "hash": "sha256-/JNUvBGcwZNBrV4kv2WxrZQd725pHbMV2u3KH0yE5rs="
+        "url": "https://cdn.modrinth.com/data/yro4niHu/versions/j22EUw2Y/PlugManX-3.2.1.jar",
+        "hash": "sha256-ZgpIxZdasermepJz6OsP22B/NNdkRzDlEEHT+L3+3PI="
       }
     }
   },
@@ -256,8 +256,8 @@
   "viaversion": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/MmYpF9Fh/ViaVersion-5.12.1-SNAPSHOT.jar",
-        "hash": "sha256-+DnxEAfOu21xcv5HPIdwWonN+jp09KJBURY/Es1nsyk="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/TEgYlalY/ViaVersion-5.12.1-SNAPSHOT.jar",
+        "hash": "sha256-072ZwsSSNn45o+CXYdlbkR96kEr0/QjvyXVIyYeDD8s="
       }
     }
   },
