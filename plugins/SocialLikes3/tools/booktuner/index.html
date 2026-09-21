@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>ガイドブック配色</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --bg: #f4f1ea;
+        --panel: #fff;
+        --ink: #222;
+        --muted: #777;
+        --line: #ddd6c8;
+        --accent: #6b4f2a;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #1d1b18;
+          --panel: #282521;
+          --ink: #eee;
+          --muted: #aaa;
+          --line: #3d3830;
+          --accent: #d9b27a;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #1d1b18;
+        --panel: #282521;
+        --ink: #eee;
+        --muted: #aaa;
+        --line: #3d3830;
+        --accent: #d9b27a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          14px/1.6 -apple-system,
+          "Hiragino Sans",
+          sans-serif;
+      }
+      header {
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header h1 {
+        font-size: 17px;
+        margin: 0;
+        font-weight: 600;
+      }
+      header .sp {
+        flex: 1;
+      }
+      button {
+        font: inherit;
+        padding: 5px 12px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--ink);
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: var(--accent);
+      }
+      main {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 0;
+        min-height: calc(100vh - 56px);
+      }
+      @media (max-width: 900px) {
+        main {
+          grid-template-columns: 1fr;
+        }
+      }
+      aside {
+        border-right: 1px solid var(--line);
+        padding: 12px 16px;
+        overflow: auto;
+        max-height: calc(100vh - 56px);
+      }
+      @media (max-width: 900px) {
+        aside {
+          max-height: none;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+      }
+      aside h2 {
+        font-size: 13px;
+        color: var(--accent);
+        margin: 18px 0 6px;
+        letter-spacing: 0.04em;
+      }
+      .role {
+        display: grid;
+        grid-template-columns: 1fr auto auto auto;
+        gap: 6px;
+        align-items: center;
+        padding: 4px 0;
+        border-bottom: 1px dashed var(--line);
+      }
+      .role label {
+        font-size: 13px;
+      }
+      .role input[type="color"] {
+        width: 34px;
+        height: 24px;
+        border: 1px solid var(--line);
+        padding: 0;
+        background: none;
+      }
+      .role select {
+        font-size: 12px;
+        max-width: 110px;
+        background: var(--panel);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+      }
+      .tg {
+        font-size: 11px;
+        display: flex;
+        gap: 2px;
+        align-items: center;
+        color: var(--muted);
+      }
+      .sample textarea,
+      .sample input {
+        width: 100%;
+        font: inherit;
+        font-size: 13px;
+        padding: 4px 6px;
+        background: var(--panel);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+      }
+      .sample label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      section.view {
+        padding: 16px 20px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+      figure {
+        margin: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      canvas {
+        image-rendering: pixelated;
+        display: block;
+        border-radius: 4px;
+        max-width: 100%;
+      }
+      .note {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      details {
+        margin: 6px 0;
+      }
+      details summary {
+        cursor: pointer;
+        font-size: 13px;
+        color: var(--accent);
+      }
+      .presets {
+        display: flex;
+        gap: 6px;
+      }
+      pre {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: pre-wrap;
+        max-height: 260px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>旅行ガイドブック UI・配色</h1>
+      <span class="note"
+        >本の中身は Minecraft の実フォントで描画（1行114px・1ページ14行）</span
+      >
+      <span class="sp"></span>
+      <button id="reset">初期値に戻す</button>
+      <button id="copy">設定をコピー</button>
+    </header>
+    <main>
+      <aside id="controls"></aside>
+      <section class="view">
+        <div class="row" id="books-reader"></div>
+        <div class="row" id="books-editor"></div>
+        <div class="row" id="tooltips"></div>
+        <h2 style="font-size: 14px">書き出し（これを Claude に貼る）</h2>
+        <pre id="out"></pre>
+      </section>
+    </main>
+    <script src="../tuner/js/mcfont-data.js"></script>
+    <script src="../tuner/js/mcfont.js"></script>
+    <script src="booktuner.js"></script>
+  </body>
+</html>
