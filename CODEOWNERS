@@ -8,3 +8,6 @@
 
 # Internal, dev docs
 /docs
+
+# Anyone can update plugins
+/packages/oyasai-plugin-registry/lock.json
