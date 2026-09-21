@@ -51,22 +51,22 @@ var ROLES = [
   ["title", "ガイド名", "#00AA00", 1, 0],
   ["progress", "進捗", "#00AA00", 0, 0],
   ["author", "作者", "#555555", 0, 0],
-  ["nextLabel", "「Next:」の文字", "#000000", 0, 0],
-  ["nextName", "Next の建築名（クリックで案内）", "#000000", 0, 0],
+  ["nextLabel", "「Next:」の文字", "#00AAAA", 0, 0],
+  ["nextName", "Next の建築名（クリックで案内）", "#00AAAA", 0, 0],
   ["complete", "コンプリート！", "#00AA00", 1, 0],
   ["desc", "説明文", "#000000", 0, 0],
   ["旅行ガイド 掲載建築"],
   ["heading", "見出し「掲載建築」", "#00AA00", 1, 0],
-  ["entry", "建築名（クリックで案内）", "#5555FF", 0, 1],
-  ["liked", "いいね済み", "#00AA00", 0, 0],
-  ["unfound", "未発見", "#FFAA00", 0, 0],
-  ["invalid", "案内不可", "#FF5555", 0, 0],
+  ["entry", "建築名（クリックで案内）", "#00AAAA", 0, 0],
+  ["liked", "☑ いいね済み", "#00AA00", 0, 0],
+  ["unfound", "☐ 未発見", "#FFAA00", 0, 0],
+  ["invalid", "！ 案内不可", "#FF5555", 0, 0],
   ["sub", "コメント／作者の行", "#555555", 0, 0],
   ["編集ガイド"],
   ["eTitle", "編集: ガイド名", "#00AA00", 1, 0],
   ["ePublic", "公開中", "#00AA00", 0, 0],
   ["ePrivate", "非公開", "#AAAAAA", 0, 0],
-  ["eButton", "ボタン（通常）", "#5555FF", 0, 1],
+  ["eButton", "ボタン（通常）", "#5555FF", 0, 0],
   ["eDanger", "ボタン（削除）", "#FF5555", 0, 1],
   ["eNote", "注記", "#AAAAAA", 0, 0],
   ["eEntry", "掲載建築名", "#000000", 0, 0],
@@ -89,9 +89,7 @@ var TEXTS = [
   ["next", "Next の前置き", "Next: "],
   ["complete", "コンプリート", "コンプリート！"],
   ["heading", "掲載建築の見出し", "掲載建築"],
-  ["liked", "いいね済み", "いいね済み"],
-  ["unfound", "未発見", "未発見"],
-  ["invalid", "案内不可", "案内不可（進捗対象外）"],
+  ["invalid", "ホバー: ！（案内不可）", "案内不可"],
   ["entryAuthor", "公式ガイドの作者行", "作者: {author}"],
   ["hNext", "ホバー: Next の建築名", "クリックでこの建築へ案内"],
   ["hEntry", "ホバー: 掲載建築名", "クリックでこの建築へ案内"],
@@ -99,15 +97,15 @@ var TEXTS = [
   ["eTitle", "ホームの見出し", "編集: {title}"],
   ["ePublic", "公開中", "公開中"],
   ["ePrivate", "非公開", "非公開"],
-  ["bAdd", "ボタン: 追加", "建築追加モード"],
+  ["bAdd", "ボタン: 追加", "建築追加"],
   ["bToggle", "ボタン: 公開切替（公開中のとき）", "非公開にする"],
   ["bDesc", "ボタン: 説明", "説明を書く"],
-  ["bList", "ボタン: 一覧", "一覧へ"],
-  ["bDelete", "ボタン: 削除", "ガイドを削除"],
+  ["bList", "ボタン: 一覧", "ガイド一覧へ"],
+  ["bDelete", "ボタン: 削除", "このガイドを削除"],
   ["eNote", "注記", "次のページから掲載建築を編集できます。"],
   ["eHeading", "掲載建築の見出し", "掲載建築の編集"],
   ["eOk", "案内可能", "案内可能"],
-  ["eNg", "案内不可", "案内不可（進捗対象外）"],
+  ["eNg", "案内不可", "案内不可"],
   ["bUp", "ボタン: 上へ", "↑"],
   ["bDown", "ボタン: 下へ", "↓"],
   ["bComment", "ボタン: コメント", "コメント"],
@@ -186,7 +184,7 @@ var SAMPLE = {
   official: false,
 };
 
-var STORE_KEY = "sl3-booktuner-v2";
+var STORE_KEY = "sl3-booktuner-v3";
 var S = defaults();
 function defaults() {
   var s = {
@@ -590,29 +588,65 @@ function readerHome() {
     });
   return blocks;
 }
-function readerEntries() {
-  var blocks = [{ segs: [[T("heading"), "heading", null, { t: "heading" }]] }];
-  entries().forEach(function (e, i) {
-    var st = STATE[e.state] || STATE["未発見"];
-    blocks.push({
-      segs: [
-        [
-          (e.state === "いいね済み" ? "☑ " : "☐ ") + e.name,
-          "entry",
-          T("hEntry") || null,
-          { e: [i, 0] },
-        ],
-      ],
-    });
-    blocks.push({ segs: [[T(st[0]), st[1], null, { t: st[0] }]] });
-    var sub = S.sample.official
-      ? T("entryAuthor", { author: S.sample.author })
-      : e.comment;
-    var subSrc = S.sample.official ? { t: "entryAuthor" } : { e: [i, 2] };
-    if (sub) blocks.push({ segs: [[sub, "sub", null, subSrc]] });
-    blocks.push({ segs: [["", "sub"]] });
+var MARK = { いいね済み: "☑", 未発見: "☐", 案内不可: "！" };
+// 実機と同じく「,」より前の1文。表示3行を超えたら3行目の末尾を … にする
+function commentLines(comment) {
+  var c = comment.split(",")[0].trim();
+  if (!c || c.toLowerCase() === "no comment") return [];
+  var lines = layout([{ segs: [[c, "sub"]] }]).map(function (l) {
+    return l.runs
+      .map(function (r) {
+        return r.ch;
+      })
+      .join("");
   });
-  return blocks;
+  if (lines.length <= 3) return lines;
+  var last = Array.from(lines[2]);
+  while (last.length && mcWidth(last.join("") + "…") > PAGE_W) last.pop();
+  return lines.slice(0, 2).concat(last.join("") + "…");
+}
+// 1ページ14行に詰める（見出し1行、ページ末尾の空行は数えない）。ページごとの blocks を返す
+function readerEntryPages() {
+  var heading = { segs: [[T("heading"), "heading", null, { t: "heading" }]] };
+  var pages = [],
+    used = 0;
+  entries().forEach(function (e, i) {
+    var mark = MARK[e.state] || "☐",
+      role = STATE[e.state] ? STATE[e.state][0] : "unfound";
+    var blocks = [
+      {
+        segs: [
+          [mark, role, mark === "！" ? T("invalid") || null : null],
+          [" ", "entry"],
+          [e.name, "entry", T("hEntry") || null, { e: [i, 0] }],
+        ],
+      },
+    ];
+    if (S.sample.official)
+      blocks.push({
+        segs: [
+          [
+            T("entryAuthor", { author: S.sample.author }),
+            "sub",
+            null,
+            { t: "entryAuthor" },
+          ],
+        ],
+      });
+    else
+      commentLines(e.comment).forEach(function (l) {
+        blocks.push({ segs: [[l, "sub", null, { e: [i, 2] }]] });
+      });
+    blocks.push({ segs: [["", "sub"]] });
+    var n = layout(blocks).length;
+    if (!pages.length || used + n - 1 > LINES) {
+      pages.push([heading]);
+      used = 1;
+    }
+    pages[pages.length - 1] = pages[pages.length - 1].concat(blocks);
+    used += n;
+  });
+  return pages;
 }
 function editorHome() {
   var v = progressVars();
@@ -687,8 +721,17 @@ function render() {
     ed = document.getElementById("books-editor"),
     tt = document.getElementById("tooltips");
   rd.innerHTML = ed.innerHTML = tt.innerHTML = "";
-  drawBook(rd, "旅行ガイド ホーム（右クリック）", readerHome(), 1, 2);
-  drawBook(rd, "旅行ガイド 掲載建築", readerEntries(), 2, 2);
+  var rp = readerEntryPages();
+  drawBook(
+    rd,
+    "旅行ガイド ホーム（右クリック）",
+    readerHome(),
+    1,
+    rp.length + 1,
+  );
+  rp.forEach(function (blocks, i) {
+    drawBook(rd, "旅行ガイド 掲載建築", blocks, i + 2, rp.length + 1);
+  });
   drawBook(ed, "編集ガイド ホーム", editorHome(), 1, 2);
   drawBook(ed, "編集ガイド 掲載建築", editorEntries(), 2, 2);
   var t = S.sample.title,

@@ -21,16 +21,38 @@ class GuidebookBookRulesTest {
   }
 
   @Test
-  fun `entry state shows validity before like status`() {
-    assertEquals("いいね済み", GuidebookBookRules.entryState(true, true))
-    assertEquals("未発見", GuidebookBookRules.entryState(true, false))
-    assertEquals("案内不可（進捗対象外）", GuidebookBookRules.entryState(false, true))
+  fun `entry mark prefers liked then invalid`() {
+    assertEquals("☑", GuidebookBookRules.entryMark(valid = false, liked = true))
+    assertEquals("！", GuidebookBookRules.entryMark(valid = false, liked = false))
+    assertEquals("☐", GuidebookBookRules.entryMark(valid = true, liked = false))
   }
 
   @Test
-  fun `entry mark is a checkbox for liked builds only`() {
-    assertEquals("☑ ", GuidebookBookRules.entryMark(true))
-    assertEquals("☐ ", GuidebookBookRules.entryMark(false))
+  fun `comment keeps three lines and ends with an ellipsis`() {
+    assertEquals(emptyList(), GuidebookBookRules.commentLines("No comment"))
+    assertEquals(listOf("短い"), GuidebookBookRules.commentLines("短い,二行目"))
+
+    val lines = GuidebookBookRules.commentLines("あ".repeat(40))
+
+    assertEquals(listOf("あ".repeat(12), "あ".repeat(12), "あ".repeat(12) + "…"), lines)
+    // 3行目が満杯なら … が入るまで削る
+    assertEquals(
+        "a".repeat(18) + "…",
+        GuidebookBookRules.commentLines("あ".repeat(24) + "a".repeat(21)).last(),
+    )
+  }
+
+  @Test
+  fun `entry pages fill fourteen lines`() {
+    val long = listOf("a", "b", "c")
+    fun row(sub: List<String>) = GuidebookBookRules.EntryRow("☐", "名前", sub, 1)
+    // 見出し1 + 5 + 5 = 11、3件目の5行（末尾空行を除き4行）で15 > 14
+    val rows = listOf(row(long), row(long), row(long))
+    assertEquals(listOf(2, 1), GuidebookBookRules.paginateByLines(rows).map { it.size })
+    // コメントなし（2行）: 1 + 2*7 - 1 = 14 で7件、8件目は次ページ
+    val short = List(8) { row(emptyList()) }
+    assertEquals(listOf(7, 1), GuidebookBookRules.paginateByLines(short).map { it.size })
+    assertEquals(emptyList(), GuidebookBookRules.paginateByLines(emptyList()))
   }
 
   @Test

@@ -22,7 +22,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
-import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -39,14 +39,42 @@ internal object GuidebookBookRules {
     return items.chunked(perPage).ifEmpty { listOf(emptyList()) }
   }
 
-  fun entryState(valid: Boolean, liked: Boolean): String =
+  /** 掲載建築1件分。[buildId] が null なら案内できない（建築データなし）。 */
+  data class EntryRow(
+      val mark: String,
+      val name: String,
+      val sub: List<String>,
+      val buildId: Int?,
+  ) {
+    /** 名前の行 + コメント／作者の行 + 空行 */
+    val lines: Int
+      get() = GuidebookRules.wrapLines("$mark $name").size + sub.size + 1
+  }
+
+  fun entryMark(valid: Boolean, liked: Boolean): String =
       when {
-        !valid -> "案内不可（進捗対象外）"
-        !liked -> "未発見"
-        else -> "いいね済み"
+        liked -> "☑"
+        !valid -> "！"
+        else -> "☐"
       }
 
-  fun entryMark(liked: Boolean): String = if (liked) "☑ " else "☐ "
+  fun commentLines(comment: String): List<String> =
+      firstCommentLine(comment)?.let { GuidebookRules.truncateLines(it, 3) }.orEmpty()
+
+  /** 見出し1行 + 各建築の行数で1ページ14行に詰める。ページ末尾の空行は数えない。 */
+  fun paginateByLines(rows: List<EntryRow>, pageLines: Int = 14): List<List<EntryRow>> {
+    val pages = mutableListOf<MutableList<EntryRow>>()
+    var used = 0
+    rows.forEach { row ->
+      if (pages.isEmpty() || used + row.lines - 1 > pageLines) {
+        pages += mutableListOf<EntryRow>()
+        used = 1
+      }
+      pages.last() += row
+      used += row.lines
+    }
+    return pages
+  }
 
   fun nextLine(entries: List<GuidebookService.EntryView>, complete: Boolean): NextLine =
       when {
@@ -73,6 +101,14 @@ internal object GuidebookBookRules {
 object GuidebookBookUI {
   private const val COMMAND = "/sociallikes3:slguide"
   private const val DELETE_CONFIRM_MILLIS = 15_000L
+  private val GREEN = TextColor.color(0x00AA00)
+  private val DARK_GRAY = TextColor.color(0x555555)
+  private val AQUA = TextColor.color(0x00AAAA)
+  private val BLACK = TextColor.color(0x000000)
+  private val GOLD = TextColor.color(0xFFAA00)
+  private val GRAY = TextColor.color(0xAAAAAA)
+  private val BLUE = TextColor.color(0x5555FF)
+  private val RED = TextColor.color(0xFF5555)
   private val deleteConfirmations = mutableMapOf<UUID, DeleteConfirmation>()
 
   fun openCatalog(player: Player) {
@@ -212,13 +248,8 @@ object GuidebookBookUI {
     val home =
         page()
             .append(title(guidebook.title))
-            .append(line("進捗: ${progress.discovered}/${progress.total}", NamedTextColor.DARK_GREEN))
-            .append(
-                line(
-                    "作者: ${GuidebookService.authorName(guidebook.creatorUuid)}",
-                    NamedTextColor.DARK_GRAY,
-                )
-            )
+            .append(line("進捗: ${progress.discovered}/${progress.total}", GREEN))
+            .append(line("作者: ${GuidebookService.authorName(guidebook.creatorUuid)}", DARK_GRAY))
             .append(nextLine(next, guidebook.id, progress.complete))
     home.append(blank())
     if (guidebook.description.isNotBlank()) {
@@ -227,37 +258,39 @@ object GuidebookBookUI {
       }
     }
     val pages = mutableListOf(home.build())
-    GuidebookBookRules.paginate(entries.withIndex().toList(), 3)
-        .filter { it.isNotEmpty() }
-        .forEach { entryPage ->
-          val content = page().append(title("掲載建築"))
-          entryPage.forEach { indexed ->
-            val entry = indexed.value
-            val state = GuidebookBookRules.entryState(entry.valid, entry.liked)
-            val entryTitle =
-                "${GuidebookBookRules.entryMark(entry.liked)}${entry.data?.title ?: "建築ID:${entry.buildId}"}"
-            content.append(
-                entry.data?.let {
-                  destination(entryTitle, "$COMMAND go ${guidebook.id} ${entry.buildId}")
-                } ?: line(entryTitle)
-            )
-            content.append(line(state, stateColor(entry.valid, entry.liked)))
-            if (guidebook.type == GuidebookType.OFFICIAL) {
-              content.append(
-                  line(
-                      "作者: ${entry.data?.owner?.let(GuidebookService::authorName) ?: "不明"}",
-                      NamedTextColor.DARK_GRAY,
-                  )
-              )
-            } else {
-              entry.data?.comment?.let(GuidebookBookRules::firstCommentLine)?.let {
-                content.append(line(it, NamedTextColor.DARK_GRAY))
-              }
-            }
-            content.append(blank())
-          }
-          pages += content.build()
+    val rows =
+        entries.map { entry ->
+          GuidebookBookRules.EntryRow(
+              GuidebookBookRules.entryMark(entry.valid, entry.liked),
+              entry.data?.title ?: "建築ID:${entry.buildId}",
+              if (guidebook.type == GuidebookType.OFFICIAL) {
+                GuidebookRules.wrapLines(
+                    "作者: ${entry.data?.owner?.let(GuidebookService::authorName) ?: "不明"}"
+                )
+              } else {
+                entry.data?.comment?.let(GuidebookBookRules::commentLines).orEmpty()
+              },
+              entry.data?.let { entry.buildId },
+          )
         }
+    GuidebookBookRules.paginateByLines(rows).forEach { entryPage ->
+      val content = page().append(title("掲載建築"))
+      entryPage.forEach { row ->
+        content.append(mark(row.mark)).append(Component.space())
+        val name = Component.text(row.name, AQUA)
+        content.append(
+            row.buildId?.let {
+              name
+                  .clickEvent(ClickEvent.runCommand("$COMMAND go ${guidebook.id} $it"))
+                  .hoverEvent(HoverEvent.showText(Component.text("クリックでこの建築へ案内")))
+            } ?: name
+        )
+        content.append(newline())
+        row.sub.forEach { content.append(line(it, DARK_GRAY)) }
+        content.append(blank())
+      }
+      pages += content.build()
+    }
     open(player, guidebook.title, pages)
   }
 
@@ -271,36 +304,29 @@ object GuidebookBookUI {
             .append(
                 line(
                     if (guidebook.published) "公開中" else "非公開",
-                    if (guidebook.published) NamedTextColor.DARK_GREEN else NamedTextColor.GRAY,
+                    if (guidebook.published) GREEN else GRAY,
                 )
             )
             .append(blank())
-            .append(command("[建築追加モード]", "$COMMAND add ${guidebook.id}"))
+            .append(command("[建築追加]", "$COMMAND add ${guidebook.id}"))
             .append(newline())
             .append(
                 command(
                     if (guidebook.published) "[非公開にする]" else "[公開する]",
                     "$COMMAND toggle ${guidebook.id}",
-                    if (guidebook.published) NamedTextColor.GRAY else NamedTextColor.DARK_GREEN,
                 )
             )
             .append(newline())
             .append(command("[説明を書く]", "$COMMAND describe ${guidebook.id}"))
             .append(newline())
-            .append(command("[一覧へ]", "$COMMAND edit", NamedTextColor.DARK_GREEN))
+            .append(command("[ガイド一覧へ]", "$COMMAND edit"))
             .append(newline())
-            .append(
-                command(
-                    "[ガイドを削除]",
-                    "$COMMAND delete-request ${guidebook.id}",
-                    NamedTextColor.RED,
-                )
-            )
+            .append(danger("[このガイドを削除]", "$COMMAND delete-request ${guidebook.id}"))
             .append(blank())
             .append(
                 line(
                     if (entries.isEmpty()) "掲載建築はありません。" else "次のページから掲載建築を編集できます。",
-                    NamedTextColor.GRAY,
+                    GRAY,
                 )
             )
     val pages = mutableListOf(home.build())
@@ -316,8 +342,8 @@ object GuidebookBookUI {
                 )
                 .append(
                     line(
-                        if (entry.valid) "案内可能" else "案内不可（進捗対象外）",
-                        if (entry.valid) NamedTextColor.DARK_GREEN else NamedTextColor.RED,
+                        if (entry.valid) "案内可能" else "案内不可",
+                        if (entry.valid) GREEN else RED,
                     )
                 )
                 .append(command("[↑]", "$COMMAND move ${guidebook.id} ${entry.buildId} -1"))
@@ -330,13 +356,7 @@ object GuidebookBookUI {
             }
             content
                 .append(Component.space())
-                .append(
-                    command(
-                        "[削除]",
-                        "$COMMAND remove ${guidebook.id} ${entry.buildId}",
-                        NamedTextColor.RED,
-                    )
-                )
+                .append(danger("[削除]", "$COMMAND remove ${guidebook.id} ${entry.buildId}"))
                 .append(blank())
           }
           pages += content.build()
@@ -444,23 +464,15 @@ object GuidebookBookUI {
         "削除の確認",
         listOf(
             page()
-                .append(title("本当に削除しますか？", NamedTextColor.RED))
+                .append(title("本当に削除しますか？", RED))
                 .append(line("「${guidebook.title}」"))
                 .append(blank())
-                .append(line("この操作は取り消せません。", NamedTextColor.RED))
-                .append(line("15秒以内にもう一度クリックしてください。", NamedTextColor.DARK_GRAY))
+                .append(line("この操作は取り消せません。", RED))
+                .append(line("15秒以内にもう一度クリックしてください。", DARK_GRAY))
                 .append(blank())
-                .append(
-                    command(
-                        "[削除を確定]",
-                        "$COMMAND delete-confirm ${guidebook.id}",
-                        NamedTextColor.RED,
-                    )
-                )
+                .append(danger("[削除を確定]", "$COMMAND delete-confirm ${guidebook.id}"))
                 .append(newline())
-                .append(
-                    command("[キャンセル]", "$COMMAND editor ${guidebook.id}", NamedTextColor.DARK_GREEN)
-                )
+                .append(command("[キャンセル]", "$COMMAND editor ${guidebook.id}"))
                 .build()
         ),
     )
@@ -497,38 +509,30 @@ object GuidebookBookUI {
     return guidebook
   }
 
-  private fun stateColor(valid: Boolean, liked: Boolean): NamedTextColor =
-      when {
-        !valid -> NamedTextColor.RED
-        liked -> NamedTextColor.DARK_GREEN
-        else -> NamedTextColor.GOLD
-      }
-
   private fun open(player: Player, bookTitle: String, pages: List<Component>) {
     player.openBook(Book.book(Component.text(bookTitle), Component.text("Oyasai Server"), pages))
   }
 
   private fun page(): TextComponent.Builder = Component.text()
 
-  private fun title(text: String, color: NamedTextColor = NamedTextColor.DARK_GREEN): Component =
+  private fun title(text: String, color: TextColor = GREEN): Component =
       Component.text(text, color).decorate(TextDecoration.BOLD).append(newline())
 
-  private fun line(text: String, color: NamedTextColor = NamedTextColor.BLACK): Component =
+  private fun line(text: String, color: TextColor = BLACK): Component =
       Component.text(text, color).append(newline())
 
-  private fun command(
-      text: String,
-      command: String,
-      color: NamedTextColor = NamedTextColor.BLUE,
-  ): Component =
-      Component.text(text, color)
-          .decorate(TextDecoration.UNDERLINED)
-          .clickEvent(ClickEvent.runCommand(command))
+  private fun command(text: String, command: String, color: TextColor = BLUE): Component =
+      Component.text(text, color).clickEvent(ClickEvent.runCommand(command))
 
-  private fun destination(text: String, commandText: String): Component =
-      command(text, commandText)
-          .hoverEvent(HoverEvent.showText(Component.text("クリックでこの建築へ案内")))
-          .append(newline())
+  private fun danger(text: String, command: String): Component =
+      command(text, command, RED).decorate(TextDecoration.UNDERLINED)
+
+  private fun mark(mark: String): Component =
+      when (mark) {
+        "☑" -> Component.text(mark, GREEN)
+        "！" -> Component.text(mark, RED).hoverEvent(HoverEvent.showText(Component.text("案内不可")))
+        else -> Component.text(mark, GOLD)
+      }
 
   private fun nextLine(
       next: GuidebookBookRules.NextLine,
@@ -536,16 +540,11 @@ object GuidebookBookUI {
       complete: Boolean,
   ): Component {
     val buildId = next.buildId
-    if (buildId == null) {
-      return line(
-          next.text,
-          if (complete) NamedTextColor.DARK_GREEN else NamedTextColor.BLACK,
-      )
-    }
-    return Component.text("Next: ", NamedTextColor.BLACK)
+    if (complete) return title(next.text)
+    if (buildId == null) return line(next.text, AQUA)
+    return Component.text("Next: ", AQUA)
         .append(
-            Component.text(next.text.removePrefix("Next: "), NamedTextColor.BLACK)
-                .decoration(TextDecoration.UNDERLINED, false)
+            Component.text(next.text.removePrefix("Next: "), AQUA)
                 .clickEvent(ClickEvent.runCommand("$COMMAND go $guidebookId $buildId"))
                 .hoverEvent(HoverEvent.showText(Component.text("クリックでこの建築へ案内")))
         )

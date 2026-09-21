@@ -64,35 +64,64 @@ object GuidebookRules {
 
   fun description(text: String, maxLines: Int = 8): GuidebookDescription {
     require(maxLines > 0)
-    var line = 1
+    val ranges = lineRanges(text)
+    if (ranges.size <= maxLines) return GuidebookDescription(text, false)
+    return GuidebookDescription(text.substring(0, ranges[maxLines - 1].last + 1), true)
+  }
+
+  /** 本の1行（114px）で折り返した表示行。明示的な改行も行を分ける。 */
+  fun wrapLines(text: String): List<String> = lineRanges(text).map(text::substring)
+
+  /** 表示行を [maxLines] 行までに切る。切ったときは最終行の末尾を [ELLIPSIS] にする。 */
+  fun truncateLines(text: String, maxLines: Int): List<String> {
+    require(maxLines > 0)
+    val lines = wrapLines(text)
+    if (lines.size <= maxLines) return lines
+    var last = lines[maxLines - 1]
+    while (last.isNotEmpty() && width(last + ELLIPSIS) > BOOK_LINE_WIDTH) {
+      last = last.substring(0, last.offsetByCodePoints(last.length, -1))
+    }
+    return lines.take(maxLines - 1) + (last + ELLIPSIS)
+  }
+
+  private const val ELLIPSIS = "…"
+
+  private fun width(text: String): Int = text.codePoints().map(::glyphAdvance).sum()
+
+  private fun lineRanges(text: String): List<IntRange> {
+    val ranges = mutableListOf<IntRange>()
+    var start = 0
     var width = 0
     var index = 0
     while (index < text.length) {
       val codePoint = text.codePointAt(index)
       val characterLength = Character.charCount(codePoint)
       if (codePoint == '\n'.code || codePoint == '\r'.code) {
-        if (line == maxLines) return GuidebookDescription(text.substring(0, index), true)
-        line++
-        width = 0
+        ranges += start until index
         index +=
             if (codePoint == '\r'.code && text.getOrNull(index + 1) == '\n') 2 else characterLength
+        start = index
+        width = 0
         continue
       }
       val advance = glyphAdvance(codePoint)
-      if (width + advance > BOOK_LINE_WIDTH) {
-        if (line == maxLines) return GuidebookDescription(text.substring(0, index), true)
-        line++
+      if (width + advance > BOOK_LINE_WIDTH && width > 0) {
+        ranges += start until index
+        start = index
         width = 0
       }
       width += advance
       index += characterLength
     }
-    return GuidebookDescription(text, false)
+    ranges += start until text.length
+    return ranges
   }
 
   private fun glyphAdvance(codePoint: Int): Int =
       when {
         codePoint in 0x20..0x7E -> ASCII_ADVANCES[codePoint - 0x20].digitToInt()
+        // ☐☑ は accented.png の 9px グリフ + 1px
+        codePoint == 0x2610 || codePoint == 0x2611 -> 10
         isFullWidth(codePoint) -> 9
         else -> 5
       }
