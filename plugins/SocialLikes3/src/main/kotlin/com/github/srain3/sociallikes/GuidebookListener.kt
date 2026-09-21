@@ -22,12 +22,26 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTakeLecternBookEvent
 import org.bukkit.inventory.EquipmentSlot
 
+internal data class GuideTeleportRecord(val buildId: Int, val atMillis: Long)
+
+internal fun canGuideTeleport(
+    destinationLiked: Boolean,
+    lastTeleport: GuideTeleportRecord?,
+    lastBuildLiked: Boolean,
+    nowMillis: Long,
+    cooldownMillis: Long,
+): Boolean =
+    destinationLiked ||
+        lastTeleport == null ||
+        lastBuildLiked ||
+        nowMillis - lastTeleport.atMillis >= cooldownMillis
+
 object GuidebookListener : Listener {
   private const val TELEPORT_COOLDOWN_MILLIS = 30_000L
 
   private val addModes = mutableMapOf<UUID, Int>()
   private val descriptionModes = mutableMapOf<UUID, Int>()
-  private val lastTeleports = mutableMapOf<UUID, Long>()
+  private val lastTeleports = mutableMapOf<UUID, GuideTeleportRecord>()
   private val plainText = PlainTextComponentSerializer.plainText()
 
   fun startAddMode(player: org.bukkit.entity.Player, guidebookId: Int) {
@@ -161,7 +175,9 @@ object GuidebookListener : Listener {
 
   @EventHandler
   fun onTakeLecternBook(event: PlayerTakeLecternBookEvent) {
-    if (GuidebookBookUI.isViewBook(event.book)) event.isCancelled = true
+    if (GuidebookBookUI.isViewBook(event.player.openInventory.topInventory.getItem(0))) {
+      event.isCancelled = true
+    }
   }
 
   @EventHandler
@@ -181,30 +197,50 @@ object GuidebookListener : Listener {
       player.sendMessage(Tools.socialLikesLOGO + " &cこのガイドブックは現在公開されていません。".color())
       return
     }
-    // Already-liked builds give no reward, so revisiting them skips the cooldown.
-    if (buildId != null && Data.getSLData(buildId)?.likes?.contains(player.uniqueId) == true) {
-      GuidebookService.teleportToBuild(player, buildId)
-      return
-    }
-    withTeleportCooldown(player) {
+    val destinationLiked =
+        buildId?.let { Data.getSLData(it)?.likes?.contains(player.uniqueId) == true } == true
+    withTeleportCooldown(player, destinationLiked) {
       if (buildId == null) GuidebookService.teleportToNext(player, guidebook)
-      else GuidebookService.teleportToBuild(player, buildId)
+      else buildId.takeIf { GuidebookService.teleportToBuild(player, it) }
+    }
+  }
+
+  fun releaseTeleportCooldown(playerUuid: UUID, buildId: Int) {
+    lastTeleports.computeIfPresent(playerUuid) { _, record ->
+      record.takeUnless { it.buildId == buildId }
     }
   }
 
   private fun withTeleportCooldown(
       player: org.bukkit.entity.Player,
-      teleport: () -> Boolean,
+      destinationLiked: Boolean,
+      teleport: () -> Int?,
   ) {
     val now = System.currentTimeMillis()
-    val remaining = TELEPORT_COOLDOWN_MILLIS - (now - (lastTeleports[player.uniqueId] ?: 0L))
-    if (remaining > 0) {
+    val lastTeleport = lastTeleports[player.uniqueId]
+    val lastBuildLiked =
+        lastTeleport?.let {
+          Data.getSLData(it.buildId)?.likes?.contains(player.uniqueId) == true
+        } == true
+    if (
+        !canGuideTeleport(
+            destinationLiked,
+            lastTeleport,
+            lastBuildLiked,
+            now,
+            TELEPORT_COOLDOWN_MILLIS,
+        )
+    ) {
+      val remaining = TELEPORT_COOLDOWN_MILLIS - (now - lastTeleport!!.atMillis)
       player.sendMessage(
           Tools.socialLikesLOGO + " &eあと${(remaining + 999) / 1000}秒で再び案内できます。".color()
       )
       return
     }
-    if (teleport()) lastTeleports[player.uniqueId] = now
+    val teleportedBuildId = teleport() ?: return
+    if (!destinationLiked) {
+      lastTeleports[player.uniqueId] = GuideTeleportRecord(teleportedBuildId, now)
+    }
   }
 
   private fun openTouristInfo(player: org.bukkit.entity.Player, guidebookId: Int) {

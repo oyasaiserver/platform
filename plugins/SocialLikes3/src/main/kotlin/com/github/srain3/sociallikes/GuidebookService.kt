@@ -226,14 +226,14 @@ object GuidebookService {
     }
   }
 
-  fun teleportToNext(player: Player, guidebook: GuidebookData): Boolean {
+  fun teleportToNext(player: Player, guidebook: GuidebookData): Int? {
     val entries = entries(guidebook.id, player.uniqueId)
     val candidates = entries.filter(EntryView::canGuide)
     for (entry in candidates) {
       val data = entry.data ?: continue
       when (teleport(player, data)) {
-        TeleportResult.SUCCESS -> return true
-        TeleportResult.FAILED -> return false
+        TeleportResult.SUCCESS -> return data.id
+        TeleportResult.FAILED -> return null
         TeleportResult.UNAVAILABLE -> continue
       }
     }
@@ -246,7 +246,7 @@ object GuidebookService {
               else -> " &e案内できる未発見の建築がありません。".color()
             }
     )
-    return false
+    return null
   }
 
   fun teleportToBuild(player: Player, buildId: Int): Boolean {
@@ -262,6 +262,7 @@ object GuidebookService {
   }
 
   fun handleLike(player: Player, buildId: Int) {
+    GuidebookListener.releaseTeleportCooldown(player.uniqueId, buildId)
     SLDatabase.loadPublishedGuidebooksContainingBuildBlocking(buildId).forEach { guidebook ->
       val guidebookProgress = progress(entries(guidebook.id, player.uniqueId))
       if (!guidebookProgress.complete) return@forEach
