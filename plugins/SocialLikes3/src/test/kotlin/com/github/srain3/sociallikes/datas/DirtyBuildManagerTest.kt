@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class DirtyBuildManagerTest {
   @Test
   fun `reconciliation failures log through six then every sixth attempt`() {
-    val loggedAttempts = (1..18).filter(DirtyBuildManager::shouldLogReconciliationFailure)
+    val loggedAttempts = (1..18).filter(::shouldLogRepeatedFailure)
 
     assertEquals(listOf(1, 2, 3, 4, 5, 6, 12, 18), loggedAttempts)
   }
