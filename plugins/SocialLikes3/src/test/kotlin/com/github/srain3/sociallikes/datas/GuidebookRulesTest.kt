@@ -50,6 +50,15 @@ class GuidebookRulesTest {
   }
 
   @Test
+  fun `description keeps only the first eight lines`() {
+    val result = GuidebookRules.description((1..10).joinToString("\n") { "line$it" })
+
+    assertEquals((1..8).joinToString("\n") { "line$it" }, result.text)
+    assertTrue(result.truncated)
+    assertFalse(GuidebookRules.description("one\ntwo").truncated)
+  }
+
+  @Test
   fun `safe destination requires space solid support and no hazard`() {
     assertTrue(
         GuidebookRules.isSafeDestination(

@@ -37,7 +37,13 @@ object GuidebookService {
   val touristKey = NamespacedKey(Tools.plugin, "guidebook_id")
   val editorKey = NamespacedKey(Tools.plugin, "guidebook_editor_id")
 
-  data class EntryView(val buildId: Int, val data: SLData?, val valid: Boolean, val liked: Boolean)
+  data class EntryView(
+      val buildId: Int,
+      val data: SLData?,
+      val valid: Boolean,
+      val liked: Boolean,
+      val likedAt: Long?,
+  )
 
   fun touristId(item: ItemStack?): Int? =
       item?.itemMeta?.persistentDataContainer?.get(touristKey, PersistentDataType.INTEGER)
@@ -133,6 +139,7 @@ object GuidebookService {
                       findValidSign(it) != null
                 } ?: false,
             liked = data?.likes?.contains(playerUuid) == true,
+            likedAt = data?.likesWithTimestamp?.get(playerUuid),
         )
       }
 
@@ -182,6 +189,16 @@ object GuidebookService {
             Tools.socialLikesLOGO + if (published) " &a公開しました。".color() else " &e非公開にしました。".color()
         )
       }
+    }
+  }
+
+  fun setDescription(player: Player, guidebookId: Int, description: String): Boolean {
+    editableGuidebook(player, guidebookId) ?: return false
+    return SLDatabase.setGuidebookDescriptionBlocking(guidebookId, description).also { saved ->
+      player.sendMessage(
+          Tools.socialLikesLOGO +
+              if (saved) " &a説明文を保存しました。".color() else " &c説明文を保存できませんでした。".color()
+      )
     }
   }
 

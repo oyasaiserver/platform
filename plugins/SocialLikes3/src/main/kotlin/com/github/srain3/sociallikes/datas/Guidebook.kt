@@ -12,9 +12,12 @@ data class GuidebookData(
     val type: GuidebookType,
     val creatorUuid: UUID,
     val title: String,
+    val description: String,
     val published: Boolean,
     val createdAt: Long,
 )
+
+data class GuidebookDescription(val text: String, val truncated: Boolean)
 
 data class GuidebookProgress(val discovered: Int, val total: Int) {
   val complete: Boolean
@@ -54,6 +57,12 @@ object GuidebookRules {
           title.length <= maxLength &&
           title.none(Char::isISOControl) &&
           !colorCode.containsMatchIn(title)
+
+  fun description(text: String, maxLines: Int = 8): GuidebookDescription {
+    require(maxLines > 0)
+    val lines = text.lines()
+    return GuidebookDescription(lines.take(maxLines).joinToString("\n"), lines.size > maxLines)
+  }
 
   fun isSafeDestination(
       signValid: Boolean,

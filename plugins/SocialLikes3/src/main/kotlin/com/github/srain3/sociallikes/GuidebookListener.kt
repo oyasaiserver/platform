@@ -2,14 +2,19 @@ package com.github.srain3.sociallikes
 
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
+import com.github.srain3.sociallikes.datas.GuidebookRules
 import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.gui.GuidebookBookUI
 import java.util.UUID
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.Bukkit
 import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
@@ -18,17 +23,26 @@ object GuidebookListener : Listener {
   private const val TELEPORT_COOLDOWN_MILLIS = 30_000L
 
   private val addModes = mutableMapOf<UUID, Int>()
+  private val descriptionModes = mutableMapOf<UUID, Int>()
   private val lastTeleports = mutableMapOf<UUID, Long>()
+  private val plainText = PlainTextComponentSerializer.plainText()
 
   fun startAddMode(player: org.bukkit.entity.Player, guidebookId: Int) {
+    descriptionModes.remove(player.uniqueId)
     addModes[player.uniqueId] = guidebookId
     player.sendMessage(Tools.socialLikesLOGO + " &e編集キーを持って、追加するSL看板を右クリックしてください。".color())
+  }
+
+  fun startDescriptionMode(player: org.bukkit.entity.Player, guidebookId: Int) {
+    addModes.remove(player.uniqueId)
+    descriptionModes[player.uniqueId] = guidebookId
   }
 
   fun handleSignRightClick(event: PlayerInteractEvent, sign: Sign): Boolean {
     if (event.hand != EquipmentSlot.HAND) return false
     val item = event.player.inventory.itemInMainHand
     val editorId = GuidebookService.editorId(item) ?: return false
+    if (descriptionModes[event.player.uniqueId] == editorId) return false
     event.isCancelled = true
     if (!ready(event.player)) return true
     if (addModes[event.player.uniqueId] == editorId) {
@@ -90,6 +104,7 @@ object GuidebookListener : Listener {
     }
 
     val editorId = GuidebookService.editorId(item) ?: return
+    if (descriptionModes[event.player.uniqueId] == editorId && opensBook(event)) return
     if (!ready(event.player)) {
       event.isCancelled = true
       return
@@ -98,6 +113,31 @@ object GuidebookListener : Listener {
       event.isCancelled = true
       GuidebookBookUI.openEditor(event.player, editorId)
     }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  fun onEditBook(event: PlayerEditBookEvent) {
+    val guidebookId =
+        event.newBookMeta.persistentDataContainer.get(
+            GuidebookService.editorKey,
+            org.bukkit.persistence.PersistentDataType.INTEGER,
+        ) ?: return
+    event.isSigning = false
+    if (descriptionModes[event.player.uniqueId] != guidebookId) return
+    descriptionModes.remove(event.player.uniqueId)
+
+    val page = event.newBookMeta.pages().firstOrNull()?.let(plainText::serialize).orEmpty()
+    val description = GuidebookRules.description(page)
+    event.newBookMeta = event.newBookMeta.apply { pages(listOf(Component.text(description.text))) }
+    if (description.truncated) {
+      event.player.sendMessage(Tools.socialLikesLOGO + " &e説明文は8行までに切り詰めました。".color())
+    }
+    GuidebookService.setDescription(event.player, guidebookId, description.text)
+    Bukkit.getScheduler()
+        .runTask(
+            Tools.plugin,
+            Runnable { GuidebookBookUI.openEditor(event.player, guidebookId) },
+        )
   }
 
   /** 右クリックで本を開いてよいか。看板・チェストなど元から右クリック操作があるブロックはそちらを優先する */
@@ -109,6 +149,7 @@ object GuidebookListener : Listener {
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
     addModes.remove(event.player.uniqueId)
+    descriptionModes.remove(event.player.uniqueId)
     GuidebookBookUI.clear(event.player.uniqueId)
   }
 

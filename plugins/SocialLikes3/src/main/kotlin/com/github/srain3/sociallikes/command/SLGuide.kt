@@ -13,17 +13,15 @@ import org.bukkit.entity.Player
 internal sealed interface GuidebookAction {
   data object Catalog : GuidebookAction
 
-  data class Info(val guidebookId: Int) : GuidebookAction
-
-  data class Get(val guidebookId: Int) : GuidebookAction
+  data class Read(val guidebookId: Int) : GuidebookAction
 
   data class Create(val type: GuidebookType) : GuidebookAction
 
-  data object Editable : GuidebookAction
+  data object EditCatalog : GuidebookAction
 
   data class Edit(val guidebookId: Int) : GuidebookAction
 
-  data class Key(val guidebookId: Int) : GuidebookAction
+  data class Editor(val guidebookId: Int) : GuidebookAction
 
   data class Move(val guidebookId: Int, val buildId: Int, val offset: Int) : GuidebookAction
 
@@ -33,6 +31,10 @@ internal sealed interface GuidebookAction {
 
   data class Toggle(val guidebookId: Int) : GuidebookAction
 
+  data class Describe(val guidebookId: Int) : GuidebookAction
+
+  data class Comment(val guidebookId: Int, val buildId: Int) : GuidebookAction
+
   data class DeleteRequest(val guidebookId: Int) : GuidebookAction
 
   data class DeleteConfirm(val guidebookId: Int) : GuidebookAction
@@ -40,25 +42,22 @@ internal sealed interface GuidebookAction {
 
 internal object GuidebookCommandRules {
   fun parse(args: List<String>): GuidebookAction? {
-    if (args.isEmpty() || args == listOf("catalog")) return GuidebookAction.Catalog
+    if (args.isEmpty()) return GuidebookAction.Catalog
+    if (args.size == 1)
+        args[0].toIntOrNull()?.let {
+          return GuidebookAction.Read(it)
+        }
     return when (args.first()) {
-      "info" -> args.singleId()?.let(GuidebookAction::Info)
-      "get" -> args.singleId()?.let(GuidebookAction::Get)
       "create" ->
-          args
-              .takeIf { it.size == 2 }
-              ?.get(1)
-              ?.let {
-                when (it) {
-                  "personal" -> GuidebookType.PERSONAL
-                  "official" -> GuidebookType.OFFICIAL
-                  else -> null
-                }
-              }
-              ?.let(GuidebookAction::Create)
-      "editable" -> GuidebookAction.Editable.takeIf { args.size == 1 }
-      "edit" -> args.singleId()?.let(GuidebookAction::Edit)
-      "key" -> args.singleId()?.let(GuidebookAction::Key)
+          when (args) {
+            listOf("create") -> GuidebookAction.Create(GuidebookType.PERSONAL)
+            listOf("create", "official") -> GuidebookAction.Create(GuidebookType.OFFICIAL)
+            else -> null
+          }
+      "edit" ->
+          if (args.size == 1) GuidebookAction.EditCatalog
+          else args.singleId()?.let(GuidebookAction::Edit)
+      "editor" -> args.singleId()?.let(GuidebookAction::Editor)
       "move" ->
           args
               .takeIf { it.size == 4 }
@@ -75,6 +74,11 @@ internal object GuidebookCommandRules {
           }
       "add" -> args.singleId()?.let(GuidebookAction::Add)
       "toggle" -> args.singleId()?.let(GuidebookAction::Toggle)
+      "describe" -> args.singleId()?.let(GuidebookAction::Describe)
+      "comment" ->
+          args.twoIds()?.let { (guidebookId, buildId) ->
+            GuidebookAction.Comment(guidebookId, buildId)
+          }
       "delete-request" -> args.singleId()?.let(GuidebookAction::DeleteRequest)
       "delete-confirm" -> args.singleId()?.let(GuidebookAction::DeleteConfirm)
       else -> null
@@ -107,18 +111,21 @@ object SLGuide : CommandExecutor {
     }
     when (val action = GuidebookCommandRules.parse(args.toList())) {
       GuidebookAction.Catalog -> GuidebookBookUI.openCatalog(sender)
-      is GuidebookAction.Info -> GuidebookBookUI.openInfo(sender, action.guidebookId)
-      is GuidebookAction.Get -> GuidebookBookUI.giveTourist(sender, action.guidebookId)
+      is GuidebookAction.Read -> GuidebookBookUI.giveTourist(sender, action.guidebookId)
       is GuidebookAction.Create -> GuidebookBookUI.openTitleInput(sender, action.type)
-      GuidebookAction.Editable -> GuidebookBookUI.openEditable(sender)
-      is GuidebookAction.Edit -> GuidebookBookUI.openEditor(sender, action.guidebookId)
-      is GuidebookAction.Key -> GuidebookBookUI.giveEditor(sender, action.guidebookId)
+      GuidebookAction.EditCatalog -> GuidebookBookUI.openEditable(sender)
+      is GuidebookAction.Edit -> GuidebookBookUI.giveEditor(sender, action.guidebookId)
+      is GuidebookAction.Editor -> GuidebookBookUI.openEditor(sender, action.guidebookId)
       is GuidebookAction.Move ->
           GuidebookBookUI.moveBuild(sender, action.guidebookId, action.buildId, action.offset)
       is GuidebookAction.Remove ->
           GuidebookBookUI.removeBuild(sender, action.guidebookId, action.buildId)
       is GuidebookAction.Add -> GuidebookBookUI.startAddMode(sender, action.guidebookId)
       is GuidebookAction.Toggle -> GuidebookBookUI.togglePublished(sender, action.guidebookId)
+      is GuidebookAction.Describe ->
+          GuidebookBookUI.startDescriptionEdit(sender, action.guidebookId)
+      is GuidebookAction.Comment ->
+          GuidebookBookUI.editComment(sender, action.guidebookId, action.buildId)
       is GuidebookAction.DeleteRequest -> GuidebookBookUI.requestDelete(sender, action.guidebookId)
       is GuidebookAction.DeleteConfirm -> GuidebookBookUI.confirmDelete(sender, action.guidebookId)
       null -> sender.sendMessage(Tools.socialLikesLOGO + " &e使い方: /slguide".color())

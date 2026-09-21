@@ -7,9 +7,12 @@ import kotlin.test.assertNull
 
 class GuidebookCommandRulesTest {
   @Test
-  fun `empty and catalog commands open the catalog`() {
+  fun `public and edit entry points parse exactly`() {
     assertEquals(GuidebookAction.Catalog, GuidebookCommandRules.parse(emptyList()))
-    assertEquals(GuidebookAction.Catalog, GuidebookCommandRules.parse(listOf("catalog")))
+    assertEquals(GuidebookAction.Read(12), GuidebookCommandRules.parse(listOf("12")))
+    assertEquals(GuidebookAction.EditCatalog, GuidebookCommandRules.parse(listOf("edit")))
+    assertEquals(GuidebookAction.Edit(12), GuidebookCommandRules.parse(listOf("edit", "12")))
+    assertEquals(GuidebookAction.Editor(12), GuidebookCommandRules.parse(listOf("editor", "12")))
   }
 
   @Test
@@ -23,8 +26,16 @@ class GuidebookCommandRulesTest {
         GuidebookCommandRules.parse(listOf("remove", "10", "20")),
     )
     assertEquals(
+        GuidebookAction.Create(GuidebookType.PERSONAL),
+        GuidebookCommandRules.parse(listOf("create")),
+    )
+    assertEquals(
         GuidebookAction.Create(GuidebookType.OFFICIAL),
         GuidebookCommandRules.parse(listOf("create", "official")),
+    )
+    assertEquals(
+        GuidebookAction.Comment(10, 20),
+        GuidebookCommandRules.parse(listOf("comment", "10", "20")),
     )
     assertNull(GuidebookCommandRules.parse(listOf("move", "10", "20", "2")))
     assertNull(GuidebookCommandRules.parse(listOf("remove", "10", "x")))
@@ -42,5 +53,15 @@ class GuidebookCommandRulesTest {
         GuidebookCommandRules.parse(listOf("delete-confirm", "10")),
     )
     assertNull(GuidebookCommandRules.parse(listOf("delete", "10")))
+  }
+
+  @Test
+  fun `removed book catalog commands stay removed`() {
+    assertNull(GuidebookCommandRules.parse(listOf("catalog")))
+    assertNull(GuidebookCommandRules.parse(listOf("info", "10")))
+    assertNull(GuidebookCommandRules.parse(listOf("get", "10")))
+    assertNull(GuidebookCommandRules.parse(listOf("editable")))
+    assertNull(GuidebookCommandRules.parse(listOf("key", "10")))
+    assertNull(GuidebookCommandRules.parse(listOf("create", "personal")))
   }
 }

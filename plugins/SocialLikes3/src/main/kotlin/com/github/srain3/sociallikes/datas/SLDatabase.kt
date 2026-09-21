@@ -325,6 +325,7 @@ object SLDatabase {
     val type = varchar("type", 16)
     val creatorUuid = varchar("creator_uuid", 36)
     val title = text("title")
+    val description = text("description").default("")
     val published = bool("published")
     val createdAt = long("created_at")
 
@@ -434,6 +435,7 @@ object SLDatabase {
           rawConnection()?.let { conn ->
             migrateBuildsColumns(conn)
             migrateIdMigrationMapColumns(conn)
+            migrateGuidebookColumns(conn)
             TimestampEpochMigration.initializeEmptyDatabaseOrRequireMigration(conn)
           }
         }
@@ -527,7 +529,7 @@ object SLDatabase {
         rawConnection()?.let { connection ->
           connection
               .prepareStatement(
-                  "SELECT id, type, creator_uuid, title, published, created_at FROM guidebooks WHERE id = ?"
+                  "SELECT id, type, creator_uuid, title, description, published, created_at FROM guidebooks WHERE id = ?"
               )
               .use { statement ->
                 statement.setInt(1, id)
@@ -542,7 +544,7 @@ object SLDatabase {
       loadGuidebooksBlocking(
           "loadPublishedGuidebooks",
           """
-          SELECT id, type, creator_uuid, title, published, created_at
+          SELECT id, type, creator_uuid, title, description, published, created_at
           FROM guidebooks
           WHERE published = 1
           ORDER BY CASE type WHEN 'OFFICIAL' THEN 0 ELSE 1 END, created_at DESC, id DESC
@@ -557,7 +559,7 @@ object SLDatabase {
       loadGuidebooksBlocking(
           "loadEditableGuidebooks",
           """
-          SELECT id, type, creator_uuid, title, published, created_at
+          SELECT id, type, creator_uuid, title, description, published, created_at
           FROM guidebooks
           WHERE creator_uuid = ? OR (? = 1 AND type = 'OFFICIAL')
           ORDER BY CASE type WHEN 'OFFICIAL' THEN 0 ELSE 1 END, created_at DESC, id DESC
@@ -657,6 +659,17 @@ object SLDatabase {
             } ?: false
       } ?: false
 
+  fun setGuidebookDescriptionBlocking(guidebookId: Int, description: String): Boolean =
+      submitWriteBlocking("setGuidebookDescription") {
+        rawConnection()
+            ?.prepareStatement("UPDATE guidebooks SET description = ? WHERE id = ?")
+            ?.use { statement ->
+              statement.setString(1, description)
+              statement.setInt(2, guidebookId)
+              statement.executeUpdate() == 1
+            } ?: false
+      } ?: false
+
   fun deleteGuidebookBlocking(guidebookId: Int): Boolean =
       submitWriteBlocking("deleteGuidebook") {
         rawConnection()?.prepareStatement("DELETE FROM guidebooks WHERE id = ?")?.use { statement ->
@@ -669,7 +682,7 @@ object SLDatabase {
       loadGuidebooksBlocking(
           "loadGuidebooksContainingBuild",
           """
-          SELECT g.id, g.type, g.creator_uuid, g.title, g.published, g.created_at
+          SELECT g.id, g.type, g.creator_uuid, g.title, g.description, g.published, g.created_at
           FROM guidebooks g
           JOIN guidebook_entries e ON e.guidebook_id = g.id
           WHERE g.published = 1 AND e.build_id = ?
@@ -728,6 +741,7 @@ object SLDatabase {
           type = GuidebookType.valueOf(getString("type")),
           creatorUuid = UUID.fromString(getString("creator_uuid")),
           title = getString("title"),
+          description = getString("description"),
           published = getBoolean("published"),
           createdAt = getLong("created_at"),
       )
@@ -817,6 +831,20 @@ object SLDatabase {
     if (existingColumns.contains("new_positive_id") && !existingColumns.contains("new_id")) {
       conn.createStatement().use { stmt ->
         stmt.execute("ALTER TABLE id_migration_map RENAME COLUMN new_positive_id TO new_id")
+      }
+    }
+  }
+
+  private fun migrateGuidebookColumns(conn: Connection) {
+    val columns = mutableSetOf<String>()
+    conn.createStatement().use { stmt ->
+      stmt.executeQuery("PRAGMA table_info(guidebooks)").use { rows ->
+        while (rows.next()) columns += rows.getString("name").lowercase(Locale.ROOT)
+      }
+    }
+    if ("description" !in columns) {
+      conn.createStatement().use {
+        it.execute("ALTER TABLE guidebooks ADD COLUMN description TEXT NOT NULL DEFAULT ''")
       }
     }
   }

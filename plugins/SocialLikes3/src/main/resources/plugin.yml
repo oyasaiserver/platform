@@ -49,7 +49,7 @@ commands:
   sldatapack:
     description: "フォントグラフPOC用リソースパックを再配布するコマンド"
   slguide:
-    description: "旅行ガイドブックのカタログを開くコマンド"
+    description: "旅行ガイドブックの一覧・入手・作成・編集コマンド"
 permissions:
   sociallikes3.admin:
     description: "SocialLikes 管理者権限"
