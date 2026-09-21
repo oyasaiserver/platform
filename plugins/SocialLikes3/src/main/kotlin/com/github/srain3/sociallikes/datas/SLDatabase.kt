@@ -41,6 +41,8 @@ import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.jetbrains.exposed.v1.jdbc.upsert
+import org.sqlite.SQLiteErrorCode
+import org.sqlite.SQLiteException
 
 object SLDatabase {
   private const val MAX_WRITE_RETRIES = 5
@@ -58,6 +60,7 @@ object SLDatabase {
   private lateinit var plugin: JavaPlugin
 
   private val idMigrationCache = ConcurrentHashMap<Int, Int>()
+  private val writeFailureRetries = ConcurrentHashMap<String, Int>()
 
   data class WeeklyLikeCount(val weekStart: LocalDate, val count: Int)
 
@@ -711,6 +714,11 @@ object SLDatabase {
 
   fun deleteBuild(id: Int) {
     softDeleteBuild(id, null, LocalDateTime.now(BuildTimestamps.ZONE_JST))
+  }
+
+  internal fun clearBuildWriteFailures(id: Int) {
+    writeFailureRetries.remove("saveBuild[$id]")
+    writeFailureRetries.remove("softDeleteBuild[$id]")
   }
 
   fun syncBuilds(dataList: Collection<SLData>) {
@@ -3021,18 +3029,12 @@ object SLDatabase {
         writeExecutor
             ?: run {
               val ex = IllegalStateException("database is not initialized")
-              Tools.plugin.logger.severe(
-                  "[SL3] SQLite write $taskName skipped: database is not initialized"
+              handleFinalWriteFailure(
+                  taskName,
+                  ex,
+                  "[SL3] SQLite write $taskName skipped: database is not initialized",
+                  onFinalFailure,
               )
-              try {
-                onFinalFailure?.invoke(ex)
-              } catch (cbEx: Exception) {
-                Tools.plugin.logger.log(
-                    Level.SEVERE,
-                    "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
-                    cbEx,
-                )
-              }
               return
             }
 
@@ -3040,18 +3042,12 @@ object SLDatabase {
       val waitMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - queuedAt)
       if (!awaitInit()) {
         val ex = TimeoutException("database initialization timed out")
-        Tools.plugin.logger.severe(
-            "[SL3] SQLite write $taskName skipped: database initialization timed out"
+        handleFinalWriteFailure(
+            taskName,
+            ex,
+            "[SL3] SQLite write $taskName skipped: database initialization timed out",
+            onFinalFailure,
         )
-        try {
-          onFinalFailure?.invoke(ex)
-        } catch (cbEx: Exception) {
-          Tools.plugin.logger.log(
-              Level.SEVERE,
-              "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
-              cbEx,
-          )
-        }
         return@submit
       }
       for (attempt in 1..MAX_WRITE_RETRIES) {
@@ -3061,6 +3057,7 @@ object SLDatabase {
 
           transaction(db) { block() }
           warnIfSlowWrite(taskName, waitMs, startedAt, attempt)
+          writeFailureRetries.remove(taskName)
           try {
             onSuccess?.invoke()
           } catch (scEx: Exception) {
@@ -3073,22 +3070,21 @@ object SLDatabase {
           return@submit
         } catch (e: Exception) {
           warnIfSlowWrite(taskName, waitMs, startedAt, attempt)
-          if (attempt == MAX_WRITE_RETRIES) {
+          val isConstraintViolation =
+              generateSequence<Throwable>(e) { it.cause }
+                  .any { cause ->
+                    cause is SQLiteException &&
+                        (cause.resultCode.code and 0xFF) == SQLiteErrorCode.SQLITE_CONSTRAINT.code
+                  }
+          if (isConstraintViolation || attempt == MAX_WRITE_RETRIES) {
             val message = e.message ?: e.javaClass.simpleName
-            Tools.plugin.logger.log(
-                Level.SEVERE,
-                "[SL3] SQLite write $taskName failed permanently after $MAX_WRITE_RETRIES attempts: $message",
+            handleFinalWriteFailure(
+                taskName,
                 e,
+                "[SL3] SQLite write $taskName failed permanently after $attempt attempt(s): $message",
+                onFinalFailure,
             )
-            try {
-              onFinalFailure?.invoke(e)
-            } catch (cbEx: Exception) {
-              Tools.plugin.logger.log(
-                  Level.SEVERE,
-                  "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
-                  cbEx,
-              )
-            }
+            return@submit
           } else {
             val backoffMs = attempt * INITIAL_BACKOFF_MS
             val message = e.message ?: e.javaClass.simpleName
@@ -3099,23 +3095,38 @@ object SLDatabase {
               Thread.sleep(backoffMs)
             } catch (ie: InterruptedException) {
               Thread.currentThread().interrupt()
-              Tools.plugin.logger.warning(
-                  "[SL3] SQLite write $taskName interrupted during retry backoff"
+              handleFinalWriteFailure(
+                  taskName,
+                  ie,
+                  "[SL3] SQLite write $taskName interrupted during retry backoff",
+                  onFinalFailure,
               )
-              try {
-                onFinalFailure?.invoke(ie)
-              } catch (cbEx: Exception) {
-                Tools.plugin.logger.log(
-                    Level.SEVERE,
-                    "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
-                    cbEx,
-                )
-              }
               return@submit
             }
           }
         }
       }
+    }
+  }
+
+  private fun handleFinalWriteFailure(
+      taskName: String,
+      exception: Exception,
+      message: String,
+      onFinalFailure: ((Exception) -> Unit)?,
+  ) {
+    val attempts = writeFailureRetries.merge(taskName, 1, Int::plus) ?: 1
+    if (shouldLogRepeatedFailure(attempts)) {
+      Tools.plugin.logger.log(Level.SEVERE, message, exception)
+    }
+    try {
+      onFinalFailure?.invoke(exception)
+    } catch (cbEx: Exception) {
+      Tools.plugin.logger.log(
+          Level.SEVERE,
+          "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
+          cbEx,
+      )
     }
   }
 

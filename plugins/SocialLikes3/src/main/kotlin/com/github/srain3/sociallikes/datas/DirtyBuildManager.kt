@@ -21,6 +21,7 @@ object DirtyBuildManager {
 
   private val dirtyBuildIds: MutableSet<Int> = ConcurrentHashMap.newKeySet()
   private val missingDataRetries: MutableMap<Int, Int> = ConcurrentHashMap()
+  private val writeFailureRetries: MutableMap<Int, Int> = ConcurrentHashMap()
   private val isReconciling = AtomicBoolean(false)
   private val fileLock = Any()
   private var periodicTask: BukkitTask? = null
@@ -64,6 +65,8 @@ object DirtyBuildManager {
    */
   fun markClean(id: Int) {
     missingDataRetries.remove(id)
+    writeFailureRetries.remove(id)
+    SLDatabase.clearBuildWriteFailures(id)
     if (dirtyBuildIds.remove(id)) {
       Tools.plugin.logger.info("[SL3] Marked build ID $id as clean (removed from dirty set).")
       persistDirtyIds()
@@ -235,9 +238,12 @@ object DirtyBuildManager {
     SLDatabase.saveBuild(
         data,
         onFinalFailure = { ex ->
-          Tools.plugin.logger.warning(
-              "[SL3] Reconciliation write failed for build ID $id: ${ex.message}"
-          )
+          val attempts = writeFailureRetries.compute(id) { _, v -> (v ?: 0) + 1 } ?: 1
+          if (shouldLogRepeatedFailure(attempts)) {
+            Tools.plugin.logger.warning(
+                "[SL3] Reconciliation write failed for build ID $id ($attempts consecutive failures): ${ex.message}"
+            )
+          }
           markDirty(id)
         },
     )
@@ -245,3 +251,5 @@ object DirtyBuildManager {
 
   private fun getFile(): File = File(Tools.plugin.dataFolder, FILE_NAME)
 }
+
+internal fun shouldLogRepeatedFailure(attempts: Int): Boolean = attempts <= 6 || attempts % 6 == 0
