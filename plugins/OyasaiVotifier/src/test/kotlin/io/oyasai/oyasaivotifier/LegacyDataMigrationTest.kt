@@ -9,7 +9,7 @@ import kotlin.test.assertTrue
 
 class LegacyDataMigrationTest {
   @Test
-  fun `migrates legacy RSA keys and party progress`() = temporaryDirectory { plugins ->
+  fun `migrates party progress but not legacy RSA keys`() = temporaryDirectory { plugins ->
     val legacy = plugins.resolve("Votifier")
     legacy.resolve("rsa").mkdirs()
     legacy.resolve("rsa/public.key").writeText("old public")
@@ -20,29 +20,22 @@ class LegacyDataMigrationTest {
     val target = plugins.resolve("OyasaiVotifier")
     migrateLegacyData(target, logs::add)
 
-    assertEquals("old public", target.resolve("rsa/public.key").readText())
-    assertEquals("old private", target.resolve("rsa/private.key").readText())
+    assertFalse(target.resolve("rsa").exists())
     assertEquals("votes: 17", target.resolve("party-progress.yml").readText())
-    assertEquals(2, logs.size)
+    assertEquals(1, logs.size)
   }
 
   @Test
   fun `does not overwrite existing new data`() = temporaryDirectory { plugins ->
     val legacy = plugins.resolve("Votifier")
-    legacy.resolve("rsa").mkdirs()
-    legacy.resolve("rsa/public.key").writeText("old public")
-    legacy.resolve("rsa/private.key").writeText("old private")
+    legacy.mkdirs()
     legacy.resolve("party-progress.yml").writeText("votes: 17")
     val target = plugins.resolve("OyasaiVotifier")
-    target.resolve("rsa").mkdirs()
-    target.resolve("rsa/public.key").writeText("new public")
-    target.resolve("rsa/private.key").writeText("new private")
+    target.mkdirs()
     target.resolve("party-progress.yml").writeText("votes: 4")
 
     migrateLegacyData(target)
 
-    assertEquals("new public", target.resolve("rsa/public.key").readText())
-    assertEquals("new private", target.resolve("rsa/private.key").readText())
     assertEquals("votes: 4", target.resolve("party-progress.yml").readText())
   }
 

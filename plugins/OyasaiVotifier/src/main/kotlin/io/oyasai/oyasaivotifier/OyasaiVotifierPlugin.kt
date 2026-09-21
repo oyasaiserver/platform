@@ -130,20 +130,6 @@ class OyasaiVotifierPlugin : JavaPlugin() {
 
 internal fun migrateLegacyData(dataFolder: File, log: (String) -> Unit = {}) {
   val legacyDataFolder = dataFolder.parentFile?.resolve("Votifier") ?: return
-  val legacyRsa = legacyDataFolder.resolve("rsa")
-  val legacyPublic = legacyRsa.resolve("public.key")
-  val legacyPrivate = legacyRsa.resolve("private.key")
-  val rsa = dataFolder.resolve("rsa")
-  val public = rsa.resolve("public.key")
-  val private = rsa.resolve("private.key")
-
-  if (!public.exists() && !private.exists() && legacyPublic.isFile && legacyPrivate.isFile) {
-    rsa.mkdirs()
-    legacyPublic.copyTo(public)
-    legacyPrivate.copyTo(private)
-    log("Migrated legacy Votifier RSA keys to OyasaiVotifier data folder")
-  }
-
   val legacyProgress = legacyDataFolder.resolve("party-progress.yml")
   val progress = dataFolder.resolve("party-progress.yml")
   if (!progress.exists() && legacyProgress.isFile) {
