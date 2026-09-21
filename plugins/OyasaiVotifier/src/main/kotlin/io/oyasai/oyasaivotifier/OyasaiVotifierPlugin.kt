@@ -3,27 +3,52 @@ package io.oyasai.oyasaivotifier
 import com.vexsoftware.votifier.model.Vote
 import com.vexsoftware.votifier.model.VotifierEvent
 import java.util.concurrent.atomic.AtomicLong
+import java.util.logging.Level
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 
 class OyasaiVotifierPlugin : JavaPlugin() {
-  private lateinit var configModel: VotifierConfig
-  private lateinit var rewards: VoteRewards
+  private var configModel: VotifierConfig? = null
+  private var rewards: VoteRewards? = null
   private var server: VoteServer? = null
+  private var unavailableReason: String? = null
   private val v1Votes = AtomicLong()
   private val v2Votes = AtomicLong()
 
   override fun onEnable() {
-    saveDefaultConfig()
-    configModel = VotifierConfig.load(this)
-    rewards = VoteRewards(this, configModel)
-    val keys = VoteKeys.loadOrCreate(dataFolder.resolve("rsa"))
-    server = VoteServer(logger, configModel, keys, ::receive).also { it.start() }
-    logger.info(
-        "Votifier listening on ${configModel.host}:${configModel.port}; v1=${configModel.v1Enabled}"
-    )
+    try {
+      saveDefaultConfig()
+      val loadedConfig = VotifierConfig.load(this)
+      val keys = VoteKeys.loadOrCreate(dataFolder.resolve("rsa"))
+      configModel = loadedConfig
+      rewards = VoteRewards(this, loadedConfig)
+      val startedServer = VoteServer(logger, loadedConfig, keys, ::receive)
+      server = startedServer
+      startedServer.start()
+      logger.info(
+          "Votifier listening on ${loadedConfig.host}:${loadedConfig.port}; v1=${loadedConfig.v1Enabled}"
+      )
+    } catch (error: Exception) {
+      server?.close()
+      server = null
+      configModel = null
+      rewards = null
+      unavailableReason = error.message ?: error.javaClass.simpleName
+      logger.severe(
+          """
+          ============================================================
+          OyasaiVotifier is enabled, but is NOT accepting votes.
+          The TCP listener and reward processing are disabled.
+          Reason: $unavailableReason
+          Fix the configuration or RSA keys, then restart the server.
+          ============================================================
+          """
+              .trimIndent()
+      )
+      logger.log(Level.SEVERE, "OyasaiVotifier startup failed", error)
+    }
   }
 
   override fun onDisable() {
@@ -42,8 +67,14 @@ class OyasaiVotifierPlugin : JavaPlugin() {
   private fun publishAndReward(vote: Vote) {
     Bukkit.getPluginManager().callEvent(VotifierEvent(vote))
     // Do not listen to our own event: this one direct call prevents double rewards.
-    rewards.deliver(vote)
+    rewards?.deliver(vote)
   }
+
+  private fun disabledReason(): String? =
+      unavailableReason
+          ?: if (server == null || configModel == null || rewards == null)
+              "Vote service is unavailable"
+          else null
 
   override fun onCommand(
       sender: CommandSender,
@@ -53,6 +84,10 @@ class OyasaiVotifierPlugin : JavaPlugin() {
   ): Boolean =
       when (command.name.lowercase()) {
         "testvote" -> {
+          disabledReason()?.let { reason ->
+            sender.sendMessage("§cVotifier is not accepting votes: $reason")
+            return true
+          }
           if (args.isEmpty()) return false
           val protocol =
               when (args.getOrElse(2) { "v2" }.lowercase()) {
@@ -73,8 +108,14 @@ class OyasaiVotifierPlugin : JavaPlugin() {
           true
         }
         "votifierstats" -> {
+          disabledReason()?.let { reason ->
+            sender.sendMessage("§cVotifier is not accepting votes: $reason")
+            return true
+          }
+          val activeConfig = checkNotNull(configModel)
+          val activeRewards = checkNotNull(rewards)
           sender.sendMessage(
-              "§aVotifier accepted: v1=${v1Votes.get()}, v2=${v2Votes.get()}, party=${rewards.progress()}/${configModel.party.votesNeeded}"
+              "§aVotifier accepted: v1=${v1Votes.get()}, v2=${v2Votes.get()}, party=${activeRewards.progress()}/${activeConfig.party.votesNeeded}"
           )
           true
         }

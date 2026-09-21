@@ -5,9 +5,11 @@
 ## 本番移行
 
 1. 本番の `plugins/Votifier/config.yml` から `host`、`port`、`tokens.default`（およびサービス別トークン）、`rsa/public.key` と `rsa/private.key` をこのプラグインのデータディレクトリへ移す。鍵とトークンはリポジトリへ追加しない。
-2. 本番の `plugins/zVoteParty/config.yml` から個別報酬額、Party の `votes_needed`、Party 報酬額を `config.yml` の `rewards` へ転記する。未確認の数値をサンプル値で確定しない。
-3. `eco give` は `money`、`tm add`/`tm addall` は `tokens` に移す。`tellraw` など表示だけが必要なものだけを `commands` / `commands-per-player` に残す。
-4. zVoteParty の進捗を維持したい場合は、切替直前に残り投票数を確認し、`party-progress.yml` の `votes` に設定する。確認不能なら Party カウントは 0 から開始する。
-5. 旧 `Votifier` と `zVoteParty` を同時にロードしない。`/testvote <player>`、`/votifierstats`、実際の v1/v2 投票サイトのテストで確認してから旧 JAR を退避する。
+2. `rewards.individual` と `rewards.party.rewards` は、`weight`、`money`、`tokens`、`commands` の重み付き抽選表である。各抽選は独立し、weight は合計100でなくてもよい。表が欠ける・空の場合は起動を拒否する。
+3. 同梱 `config.yml` は本番 zVoteParty の値をそのまま例示している。個別は 50% ¥30,000 + 15P、40% ¥20,000 + 10P、10% ¥50,000 + 20P（各 tier でオンライン全員へ順に 3P/2P/5P）、Party は 60 票でオンライン各人が 50% ¥10,000 + 20P / 50% ¥5,000 + 10P を抽選する。旧 `tokenaddall` は現在の `token addall` として `commands` に残している。
+4. 旧 zVoteParty の個別 `needToBeOnline: false` と同様、個別の金額・個人ポイントはオフラインプレイヤーにも付与を試みる。Party は閾値到達時のオンラインプレイヤーだけが対象である。
+5. `eco give` は `money`、`token add %player%` は `tokens` に移す。`tellraw` と `token addall` はコンソールコマンドとして `commands` に残す。
+6. zVoteParty の進捗を維持したい場合は、切替直前に残り投票数を確認し、`party-progress.yml` の `votes` に設定する。確認不能なら Party カウントは 0 から開始する。
+7. 旧 `Votifier` と `zVoteParty` を同時にロードしない。`/testvote <player>`、`/votifierstats`、実際の v1/v2 投票サイトのテストで確認してから旧 JAR を退避する。
 
-`commands` はコンソール実行の明示的な表示用エスケープハッチです。個別・per-player は `%player%`、`%service%`、`%votes%` を使え、Party の一度だけ実行する `commands` は `%service%`、`%votes%` のみです。プレイヤー名は安全な Minecraft 名に限定します。
+`commands` はコンソール実行です。抽選 tier の `commands` は `%player%`、`%service%`、`%votes%` を使え、Party の一度だけ実行する `commands` は `%service%`、`%votes%` のみです。プレイヤー名は安全な Minecraft 名に限定します。

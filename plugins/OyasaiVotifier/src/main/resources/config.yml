@@ -1,5 +1,5 @@
-# Copy the real host/port, v1 key pair, v2 tokens, and zVoteParty reward amounts from production
-# before replacing NuVotifier and zVoteParty. The numeric values below are intentionally inert.
+# Copy the real host/port, v1 key pair, and v2 tokens from production before enabling.
+# This file has the production zVoteParty reward table (50/40/10 and Party threshold 60).
 listener:
   host: 0.0.0.0
   port: 8192
@@ -7,24 +7,61 @@ listener:
 protocol-v1:
   enabled: true
 
+# zVoteParty の実運用メッセージ。空文字にすると該当の通知を無効化できる。
+messages:
+  prefix: "&8(&6zVoteParty&8) "
+  vote:
+    broadcast:
+      action-bar: "&c%player%&6さんが投票しました！&7(&b%zvoteparty_votes_recorded%&7/&a%zvoteparty_votes_required_total%&7)"
+      chat: "&c%player%&6さんが投票しました！&7(&b%zvoteparty_votes_recorded%&7/&a%zvoteparty_votes_required_total%&7)"
+    thank-you: "&7投票ありがとうございます！"
+  party-start:
+    - "&6累計投票数が&c%zvoteparty_votes_required_total%&6に達しました！"
+    - "&6オンラインの皆様に報酬が配られます！"
+
 # NuVotifier v2 chooses a service-name key first, then falls back to default.
 # Keep the existing production default token secret; do not commit it.
 tokens:
+  # This placeholder deliberately refuses startup until the real token is set.
   default: REPLACE_WITH_THE_EXISTING_PRODUCTION_TOKEN
 
 rewards:
+  # Every reward table must be present and non-empty. weight is relative probability.
   individual:
-    money: 0.0
-    tokens: 0
-    # Escape hatch for presentation only, e.g. tellraw. Commands run as console.
-    # Supported placeholders: %player%, %service%, %votes%.
-    commands: []
+    # Production zVoteParty: 50% ¥30,000 + 15P, then 3P for every online player.
+    - weight: 50
+      money: 30000
+      tokens: 15
+      commands:
+        - 'tellraw @a [{"color":"blue","text":"Minecraft.jp(JMS) "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://minecraft.jp/servers/oyasai.icu/vote"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true},"     ",{"color":"dark_green","text":"MinePortal "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://mineportal.jp/servers/clrfqwdka0000lgansuxtj9mi"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true}]'
+        - token addall 3
+    # Production zVoteParty: 40% ¥20,000 + 10P, then 2P for every online player.
+    - weight: 40
+      money: 20000
+      tokens: 10
+      commands:
+        - 'tellraw @a [{"color":"blue","text":"Minecraft.jp(JMS) "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://minecraft.jp/servers/oyasai.icu/vote"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true},"     ",{"color":"dark_green","text":"MinePortal "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://mineportal.jp/servers/clrfqwdka0000lgansuxtj9mi"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true}]'
+        - token addall 2
+    # Production zVoteParty: 10% ¥50,000 + 20P, then 5P for every online player.
+    - weight: 10
+      money: 50000
+      tokens: 20
+      commands:
+        - 'tellraw @a [{"color":"blue","text":"Minecraft.jp(JMS) "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://minecraft.jp/servers/oyasai.icu/vote"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true},"     ",{"color":"dark_green","text":"MinePortal "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://mineportal.jp/servers/clrfqwdka0000lgansuxtj9mi"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true}]'
+        - token addall 5
   party:
-    # Copy votes_needed from the production zVoteParty config; 0 disables party rewards.
-    votes-needed: 0
-    money: 0.0
-    tokens: 0
-    # Runs once per online player when the threshold is reached.
-    commands-per-player: []
+    # Production zVoteParty threshold: 60 votes. Each online player draws independently.
+    votes-needed: 60
+    rewards:
+      # Production zVoteParty: 50% ¥10,000 + 20P.
+      - weight: 50
+        money: 10000
+        tokens: 20
+        commands: []
+      # Production zVoteParty: 50% ¥5,000 + 10P.
+      - weight: 50
+        money: 5000
+        tokens: 10
+        commands: []
     # Runs once when the threshold is reached, e.g. tellraw @a. No %player% here.
     commands: []

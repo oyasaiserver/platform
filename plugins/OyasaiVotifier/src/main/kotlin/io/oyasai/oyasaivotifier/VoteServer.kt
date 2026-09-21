@@ -115,6 +115,7 @@ internal class VoteServer(
           throw VoteAuthenticationException("Votifier v1 decryption failed")
         }
     require(fields.size >= 5 && fields[0] == "VOTE") { "Invalid Votifier v1 vote" }
+    require(fields[2].matches(MINECRAFT_USERNAME)) { "Invalid Minecraft username" }
     accepted(Vote(fields[1], fields[2], fields[3], fields[4]), VoteProtocol.V1)
   }
 
@@ -136,7 +137,7 @@ internal class VoteServer(
         "Signature is not valid",
     )
     val username = voteJson.requiredString("username")
-    require(username.length <= 16) { "Username too long" }
+    require(username.matches(MINECRAFT_USERNAME)) { "Invalid Minecraft username" }
     requireIp(voteJson.requiredString("address"))
     accepted(Vote(voteJson), VoteProtocol.V2)
     output.write("{\"status\":\"ok\"}\r\n".toByteArray(StandardCharsets.UTF_8))
