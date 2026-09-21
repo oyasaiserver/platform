@@ -17,18 +17,23 @@ import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.util.UUID
-import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import org.bukkit.inventory.InventoryView
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.MenuType
 import org.bukkit.inventory.meta.BookMeta
+import org.bukkit.inventory.view.LecternView
+import org.bukkit.persistence.PersistentDataType
 
 internal object GuidebookBookRules {
 
@@ -96,6 +101,9 @@ internal object GuidebookBookRules {
       requestedId: Int,
       now: Long,
   ): Boolean = expectedGuidebookId == requestedId && expiresAt != null && now <= expiresAt
+
+  fun bookmarkPage(saved: Int?, pageCount: Int): Int =
+      (saved ?: 0).coerceIn(0, maxOf(pageCount - 1, 0))
 }
 
 object GuidebookBookUI {
@@ -108,6 +116,8 @@ object GuidebookBookUI {
     get() = GuidebookStyle.current
 
   private val deleteConfirmations = mutableMapOf<UUID, DeleteConfirmation>()
+  private val bookmarks = mutableMapOf<UUID, MutableMap<String, Int>>()
+  private val viewKey = NamespacedKey(Tools.plugin, "guidebook_view")
 
   fun openCatalog(player: Player) {
     createCatalog(player, editable = false).show(player)
@@ -319,7 +329,7 @@ object GuidebookBookUI {
       }
       pages += content.build()
     }
-    open(player, guidebook.title, pages)
+    open(player, guidebook.title, pages, "info:${guidebook.id}")
   }
 
   fun openEditor(player: Player, guidebookId: Int) {
@@ -380,7 +390,7 @@ object GuidebookBookUI {
           }
           pages += content.build()
         }
-    open(player, "ガイド編集", pages)
+    open(player, "ガイド編集", pages, "editor:${guidebook.id}")
   }
 
   fun giveTourist(player: Player, guidebookId: Int) {
@@ -498,6 +508,7 @@ object GuidebookBookUI {
                 .append(button("キャンセル", "$COMMAND editor ${guidebook.id}", "eButton"))
                 .build()
         ),
+        null,
     )
   }
 
@@ -521,7 +532,43 @@ object GuidebookBookUI {
 
   fun clear(playerUuid: UUID) {
     deleteConfirmations.remove(playerUuid)
+    bookmarks.remove(playerUuid)
   }
+
+  /** 仮想書見台を閉じたらページを覚え、本を回収する（「本を取る」も閉じると同じ扱い）。 */
+  fun closed(player: Player, view: InventoryView) {
+    val lectern = view as? LecternView ?: return
+    val key = viewKeyOf(lectern.topInventory.book) ?: removeViewBooks(player) ?: return
+    lectern.topInventory.book = null
+    removeViewBooks(player)
+    Bukkit.getScheduler().runTask(Tools.plugin, Runnable { removeViewBooks(player) })
+    if (key.isNotEmpty()) bookmarks.getOrPut(player.uniqueId, ::mutableMapOf)[key] = lectern.page
+  }
+
+  fun isViewBook(item: ItemStack?): Boolean = viewKeyOf(item) != null
+
+  /** 手元に紛れ込んだ閲覧用の本を消す。見つかった本のしおりキーを返す。 */
+  fun removeViewBooks(player: Player): String? {
+    var key: String? = null
+    val inventory = player.inventory
+    inventory.contents.forEachIndexed { slot, item ->
+      viewKeyOf(item)?.let {
+        key = it
+        inventory.setItem(slot, null)
+      }
+    }
+    viewKeyOf(player.itemOnCursor)?.let {
+      key = it
+      player.setItemOnCursor(null)
+    }
+    return key
+  }
+
+  private fun viewKeyOf(item: ItemStack?): String? =
+      item
+          ?.takeIf { it.type == Material.WRITTEN_BOOK }
+          ?.persistentDataContainer
+          ?.get(viewKey, PersistentDataType.STRING)
 
   private fun editableGuidebook(player: Player, guidebookId: Int): GuidebookData? {
     val guidebook = SLDatabase.loadGuidebookBlocking(guidebookId)
@@ -532,8 +579,28 @@ object GuidebookBookUI {
     return guidebook
   }
 
-  private fun open(player: Player, bookTitle: String, pages: List<Component>) {
-    player.openBook(Book.book(Component.text(bookTitle), Component.text("Oyasai Server"), pages))
+  /** 仮想書見台で開く。[bookmarkKey] が null なら常に1ページ目。 */
+  private fun open(
+      player: Player,
+      bookTitle: String,
+      pages: List<Component>,
+      bookmarkKey: String?,
+  ) {
+    val book = ItemStack(Material.WRITTEN_BOOK)
+    book.editMeta(BookMeta::class.java) {
+      it.title(Component.text(bookTitle.take(32)))
+      it.author(Component.text("Oyasai Server"))
+      it.pages(pages)
+      it.persistentDataContainer.set(viewKey, PersistentDataType.STRING, bookmarkKey.orEmpty())
+    }
+    val view = MenuType.LECTERN.create(player, Component.text(bookTitle))
+    view.topInventory.book = book
+    player.openInventory(view)
+    view.page =
+        GuidebookBookRules.bookmarkPage(
+            bookmarkKey?.let { bookmarks[player.uniqueId]?.get(it) },
+            pages.size,
+        )
   }
 
   private fun page(): TextComponent.Builder = Component.text()

@@ -91,6 +91,14 @@ class GuidebookBookRulesTest {
     assertFalse(GuidebookBookRules.canConfirmDelete(null, null, requestedId = 10, now = 1_000))
   }
 
+  @Test
+  fun `bookmark page is clamped to the book`() {
+    assertEquals(0, GuidebookBookRules.bookmarkPage(null, 3))
+    assertEquals(2, GuidebookBookRules.bookmarkPage(5, 3))
+    assertEquals(0, GuidebookBookRules.bookmarkPage(-1, 3))
+    assertEquals(0, GuidebookBookRules.bookmarkPage(4, 0))
+  }
+
   private fun entry(id: Int, title: String?, valid: Boolean, liked: Boolean) =
       GuidebookService.EntryView(
           id,

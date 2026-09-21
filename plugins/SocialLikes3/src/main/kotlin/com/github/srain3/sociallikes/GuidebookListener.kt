@@ -14,9 +14,12 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerTakeLecternBookEvent
 import org.bukkit.inventory.EquipmentSlot
 
 object GuidebookListener : Listener {
@@ -145,6 +148,21 @@ object GuidebookListener : Listener {
       event.action == Action.RIGHT_CLICK_AIR ||
           (event.action == Action.RIGHT_CLICK_BLOCK &&
               event.clickedBlock?.type?.isInteractable != true)
+
+  @EventHandler
+  fun onJoin(event: PlayerJoinEvent) {
+    GuidebookBookUI.removeViewBooks(event.player)
+  }
+
+  @EventHandler
+  fun onCloseInventory(event: InventoryCloseEvent) {
+    (event.player as? org.bukkit.entity.Player)?.let { GuidebookBookUI.closed(it, event.view) }
+  }
+
+  @EventHandler
+  fun onTakeLecternBook(event: PlayerTakeLecternBookEvent) {
+    if (GuidebookBookUI.isViewBook(event.book)) event.isCancelled = true
+  }
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
