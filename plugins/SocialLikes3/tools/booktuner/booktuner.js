@@ -263,6 +263,7 @@ function layout(blocks) {
           role: seg[1],
           w: w,
           hover: seg[2],
+          src: seg[3],
         });
         x += w;
       }
@@ -340,10 +341,19 @@ function drawBook(parent, caption, blocks, pageNo, pageCount) {
   var ind = pageNo + "/" + pageCount + "ページ";
   drawMcText(ind, ox + PAGE_W - mcWidth(ind), 8, 1, "#000000");
   var lines = layout(blocks),
-    areas = [];
+    areas = [],
+    edits = [];
   lines.forEach(function (l, i) {
     var y = oy + i * LH;
     l.runs.forEach(function (r) {
+      if (r.src)
+        edits.push({
+          x: ox + r.x - 1,
+          y: y - 1,
+          w: r.w + 1,
+          h: LH,
+          src: r.src,
+        });
       if (r.hover && i < LINES && !l.cut)
         areas.push({
           x: ox + r.x - 1,
@@ -371,20 +381,96 @@ function drawBook(parent, caption, blocks, pageNo, pageCount) {
     ctx.fillStyle = "#c00";
     ctx.fillRect(W - 8, 4, 4, 4);
   }
-  cv.onmousemove = function (e) {
+  function at(list, e) {
     var b = cv.getBoundingClientRect(),
       k = W / b.width;
     var mx = (e.clientX - b.left) * k,
       my = (e.clientY - b.top) * k;
-    var hit = areas.find(function (a) {
+    return list.find(function (a) {
       return mx >= a.x && mx < a.x + a.w && my >= a.y && my < a.y + a.h;
     });
-    cv.style.cursor = hit ? "pointer" : "default";
+  }
+  cv.onmousemove = function (e) {
+    var hit = at(areas, e);
+    cv.style.cursor = at(edits, e) ? "text" : hit ? "pointer" : "default";
     showHover(hit && hit.text, e.clientX, e.clientY);
+  };
+  cv.onclick = function (e) {
+    var hit = at(edits, e);
+    if (!hit) return;
+    var b = cv.getBoundingClientRect(),
+      z = b.width / W;
+    openEdit(
+      hit.src,
+      b.left + (ox - 3) * z,
+      b.top + hit.y * z,
+      (PAGE_W + 6) * z,
+    );
   };
   cv.onmouseleave = function () {
     showHover(null);
   };
+}
+
+// プレビューの文字をその場で書き換える。src = {t:文言キー} / {s:サンプル欄} / {e:[建築番号, 0=名前 2=コメント]}
+function srcGet(src) {
+  if (src.t) return S.texts[src.t] || "";
+  if (src.s) return S.sample[src.s] || "";
+  return (S.sample["e" + (src.e[0] + 1)] || "").split("|")[src.e[1]] || "";
+}
+function srcSet(src, v) {
+  var key = src.t || src.s || "e" + (src.e[0] + 1);
+  if (src.t) S.texts[key] = v;
+  else if (src.s) S.sample[key] = v;
+  else {
+    var p = (S.sample[key] || "").split("|");
+    while (p.length < 3) p.push("");
+    p[src.e[1]] = v;
+    S.sample[key] = p.join("|");
+  }
+  var c = document.querySelector(
+    "#controls [data-" + (src.t ? "t" : "s") + '="' + key + '"]',
+  );
+  if (c) c.value = src.t ? S.texts[key] : S.sample[key];
+  render();
+}
+var editBox = null;
+function openEdit(src, left, top, width) {
+  if (editBox) editBox.blur();
+  var ta = src.s === "desc",
+    orig = srcGet(src),
+    done = false,
+    el = (editBox = document.createElement(ta ? "textarea" : "input"));
+  el.style.cssText =
+    "position:fixed;z-index:20;font:13px/1.4 -apple-system,'Hiragino Sans',sans-serif;padding:2px 4px;box-sizing:border-box;" +
+    "left:" +
+    left +
+    "px;top:" +
+    top +
+    "px;width:" +
+    width +
+    "px" +
+    (ta ? ";height:140px" : "");
+  el.value = orig;
+  function close(restore) {
+    if (done) return;
+    done = true;
+    if (restore) srcSet(src, orig);
+    if (editBox === el) editBox = null;
+    el.remove();
+  }
+  el.oninput = function () {
+    srcSet(src, el.value);
+  };
+  el.onblur = function () {
+    close(false);
+  };
+  el.onkeydown = function (e) {
+    if (e.key === "Escape") close(true);
+    else if (e.key === "Enter" && !ta && !e.isComposing) close(false);
+  };
+  document.body.appendChild(el);
+  el.focus();
 }
 
 // Minecraft のホバー表示（本の文字の上にマウスを置いたとき）
@@ -419,7 +505,12 @@ function btn(key, role) {
   var label = T(key),
     hover = T("h" + key.slice(1));
   return [
-    [S.options.brackets ? "[" + label + "]" : label, role, hover || null],
+    [
+      S.options.brackets ? "[" + label + "]" : label,
+      role,
+      hover || null,
+      { t: key },
+    ],
   ];
 }
 function entries() {
@@ -449,38 +540,47 @@ function progressVars() {
 }
 function readerHome() {
   var v = progressVars();
-  var next = entries().find(function (e) {
-    return e.state === "未発見";
-  });
+  var list = entries(),
+    ni = list.findIndex(function (e) {
+      return e.state === "未発見";
+    }),
+    next = list[ni];
   var blocks = [
-    { segs: [[S.sample.title, "title"]] },
-    { segs: [[T("progress", v), "progress"]] },
-    { segs: [[T("author", v), "author"]] },
+    { segs: [[S.sample.title, "title", null, { s: "title" }]] },
+    { segs: [[T("progress", v), "progress", null, { t: "progress" }]] },
+    { segs: [[T("author", v), "author", null, { t: "author" }]] },
     {
       segs: next
         ? [
-            [T("next"), "nextLabel"],
-            [next.name, "nextName", T("hNext") || null],
+            [T("next"), "nextLabel", null, { t: "next" }],
+            [next.name, "nextName", T("hNext") || null, { e: [ni, 0] }],
           ]
-        : [[T("complete"), "complete"]],
+        : [[T("complete"), "complete", null, { t: "complete" }]],
     },
     { segs: [["", "desc"]] },
   ];
-  if (S.sample.desc) blocks.push({ segs: [[S.sample.desc, "desc"]], cap: 8 });
+  if (S.sample.desc)
+    blocks.push({
+      segs: [[S.sample.desc, "desc", null, { s: "desc" }]],
+      cap: 8,
+    });
   return blocks;
 }
 function readerEntries() {
-  var blocks = [{ segs: [[T("heading"), "heading"]] }];
+  var blocks = [{ segs: [[T("heading"), "heading", null, { t: "heading" }]] }];
   entries().forEach(function (e, i) {
     var st = STATE[e.state] || STATE["未発見"];
     blocks.push({
-      segs: [[i + 1 + ". " + e.name, "entry", T("hEntry") || null]],
+      segs: [
+        [i + 1 + ". " + e.name, "entry", T("hEntry") || null, { e: [i, 0] }],
+      ],
     });
-    blocks.push({ segs: [[T(st[0]), st[1]]] });
+    blocks.push({ segs: [[T(st[0]), st[1], null, { t: st[0] }]] });
     var sub = S.sample.official
       ? T("entryAuthor", { author: S.sample.author })
       : e.comment;
-    if (sub) blocks.push({ segs: [[sub, "sub"]] });
+    var subSrc = S.sample.official ? { t: "entryAuthor" } : { e: [i, 2] };
+    if (sub) blocks.push({ segs: [[sub, "sub", null, subSrc]] });
     blocks.push({ segs: [["", "sub"]] });
   });
   return blocks;
@@ -488,8 +588,8 @@ function readerEntries() {
 function editorHome() {
   var v = progressVars();
   return [
-    { segs: [[T("eTitle", v), "eTitle"]] },
-    { segs: [[T("ePublic"), "ePublic"]] },
+    { segs: [[T("eTitle", v), "eTitle", null, { t: "eTitle" }]] },
+    { segs: [[T("ePublic"), "ePublic", null, { t: "ePublic" }]] },
     { segs: [["", "eNote"]] },
     { segs: btn("bAdd", "eButton") },
     { segs: btn("bToggle", "eButton") },
@@ -497,16 +597,19 @@ function editorHome() {
     { segs: btn("bList", "eButton") },
     { segs: btn("bDelete", "eDanger") },
     { segs: [["", "eNote"]] },
-    { segs: [[T("eNote"), "eNote"]] },
+    { segs: [[T("eNote"), "eNote", null, { t: "eNote" }]] },
   ];
 }
 function editorEntries() {
-  var blocks = [{ segs: [[T("eHeading"), "eTitle"]] }];
+  var blocks = [{ segs: [[T("eHeading"), "eTitle", null, { t: "eHeading" }]] }];
   var sp = [[" ", "eButton"]];
   entries().forEach(function (e, i) {
-    blocks.push({ segs: [[i + 1 + ". " + e.name, "eEntry"]] });
-    var ok = e.state !== "案内不可";
-    blocks.push({ segs: [[ok ? T("eOk") : T("eNg"), ok ? "eOk" : "eNg"]] });
+    blocks.push({
+      segs: [[i + 1 + ". " + e.name, "eEntry", null, { e: [i, 0] }]],
+    });
+    var ok = e.state !== "案内不可",
+      k = ok ? "eOk" : "eNg";
+    blocks.push({ segs: [[T(k), k, null, { t: k }]] });
     var row = btn("bUp", "eButton").concat(sp, btn("bDown", "eButton"));
     if (!S.sample.official) row = row.concat(sp, btn("bComment", "eButton"));
     row = row.concat(sp, btn("bRemove", "eDanger"));
