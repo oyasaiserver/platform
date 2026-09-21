@@ -41,7 +41,7 @@ guidebook:
       heading: {color: "#00AA00", bold: true, underline: false}
       entry: {color: "#00AAAA", bold: false, underline: false}
       liked: {color: "#00AA00", bold: false, underline: false}
-      unfound: {color: "#FFAA00", bold: false, underline: false}
+      unfound: {color: "#AAAAAA", bold: false, underline: false}
       invalid: {color: "#FF5555", bold: false, underline: false}
       sub: {color: "#555555", bold: false, underline: false}
       eTitle: {color: "#00AA00", bold: true, underline: false}

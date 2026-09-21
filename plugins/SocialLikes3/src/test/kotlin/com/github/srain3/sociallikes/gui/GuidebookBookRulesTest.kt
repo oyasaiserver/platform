@@ -1,6 +1,7 @@
 package com.github.srain3.sociallikes.gui
 
 import com.github.srain3.sociallikes.GuidebookService
+import com.github.srain3.sociallikes.datas.GuidebookRules
 import com.github.srain3.sociallikes.datas.SLData
 import java.time.LocalDateTime
 import java.util.UUID
@@ -34,10 +35,12 @@ class GuidebookBookRulesTest {
 
     val lines = GuidebookBookRules.commentLines("あ".repeat(40))
 
-    assertEquals(listOf("あ".repeat(12), "あ".repeat(12), "あ".repeat(12) + "…"), lines)
+    // … は 8px。12文字(108px)+… は 114px を超えるので 11文字まで削る
+    assertEquals(listOf("あ".repeat(12), "あ".repeat(12), "あ".repeat(11) + "…"), lines)
+    assertTrue(lines.all { GuidebookRules.wrapLines(it).size == 1 })
     // 3行目が満杯なら … が入るまで削る
     assertEquals(
-        "a".repeat(18) + "…",
+        "a".repeat(17) + "…",
         GuidebookBookRules.commentLines("あ".repeat(24) + "a".repeat(21)).last(),
     )
   }

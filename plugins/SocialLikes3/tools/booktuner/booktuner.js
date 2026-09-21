@@ -59,7 +59,7 @@ var ROLES = [
   ["heading", "見出し「掲載建築」", "#00AA00", 1, 0],
   ["entry", "建築名（クリックで案内）", "#00AAAA", 0, 0],
   ["liked", "☑ いいね済み", "#00AA00", 0, 0],
-  ["unfound", "☐ 未発見", "#FFAA00", 0, 0],
+  ["unfound", "☐ 未発見", "#AAAAAA", 0, 0],
   ["invalid", "！ 案内不可", "#FF5555", 0, 0],
   ["sub", "コメント／作者の行", "#555555", 0, 0],
   ["編集ガイド"],
@@ -245,11 +245,13 @@ function adv(ch, bold) {
   var cp = ch.codePointAt(0);
   var a = BOX[ch]
     ? 10
-    : missing(ch)
-      ? cp >= 0x2190 && cp <= 0x21ff
-        ? 5
-        : 9
-      : charAdv(ch);
+    : ch === "…"
+      ? 8 // nonlatin_european.png の 7px グリフ + 1px
+      : missing(ch)
+        ? cp >= 0x2190 && cp <= 0x21ff
+          ? 5
+          : 9
+        : charAdv(ch);
   return a + (bold && ch !== " " ? 1 : 0);
 }
 // blocks: [{segs:[[text, role]], cap}] → 行の配列。行 = {runs:[{ch,x,role}], cut}
@@ -605,7 +607,12 @@ function commentLines(comment) {
   });
   if (lines.length <= 3) return lines;
   var last = Array.from(lines[2]);
-  while (last.length && mcWidth(last.join("") + "…") > PAGE_W) last.pop();
+  var w = function (cs) {
+    return cs.concat("…").reduce(function (s, ch) {
+      return s + adv(ch, false);
+    }, 0);
+  };
+  while (last.length && w(last) > PAGE_W) last.pop();
   return lines.slice(0, 2).concat(last.join("") + "…");
 }
 // 1ページ14行に詰める（見出し1行、ページ末尾の空行は数えない）。ページごとの blocks を返す

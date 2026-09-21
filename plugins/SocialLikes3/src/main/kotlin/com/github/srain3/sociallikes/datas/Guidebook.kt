@@ -122,6 +122,8 @@ object GuidebookRules {
         codePoint in 0x20..0x7E -> ASCII_ADVANCES[codePoint - 0x20].digitToInt()
         // ☐☑ は accented.png の 9px グリフ + 1px
         codePoint == 0x2610 || codePoint == 0x2611 -> 10
+        // … は nonlatin_european.png の 7px グリフ + 1px
+        codePoint == 0x2026 -> 8
         isFullWidth(codePoint) -> 9
         else -> 5
       }

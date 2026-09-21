@@ -76,7 +76,7 @@ class GuidebookStyle(section: ConfigurationSection?, warn: (String) -> Unit = {}
             "heading" to r("#00AA00", bold = true),
             "entry" to r("#00AAAA"),
             "liked" to r("#00AA00"),
-            "unfound" to r("#FFAA00"),
+            "unfound" to r("#AAAAAA"),
             "invalid" to r("#FF5555"),
             "sub" to r("#555555"),
             "eTitle" to r("#00AA00", bold = true),
