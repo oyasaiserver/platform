@@ -21,7 +21,10 @@ class OyasaiVotifierPlugin : JavaPlugin() {
     try {
       saveDefaultConfig()
       val loadedConfig = VotifierConfig.load(this)
-      val keys = VoteKeys.loadOrCreate(dataFolder.resolve("rsa"))
+      val keys =
+          VoteKeys.loadOrCreate(dataFolder.resolve("rsa"), System::getenv) { source ->
+            logger.info("OyasaiVotifier RSA keys source: $source")
+          }
       configModel = loadedConfig
       rewards = VoteRewards(this, loadedConfig)
       val startedServer = VoteServer(logger, loadedConfig, keys, ::receive)

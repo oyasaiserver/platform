@@ -18,6 +18,9 @@ const secretKeys = [
   "DISCORDSRV_TOKEN",
   "DISCORD_X_CRON_WEBHOOK_URL",
   "TWITTERAPIIO_API_KEY",
+  "VOTIFIER_RSA_PRIVATE_KEY",
+  "VOTIFIER_RSA_PUBLIC_KEY",
+  "VOTIFIER_TOKEN",
 
   // This is static, do not change.
   "RESTIC_PASSWORD",
