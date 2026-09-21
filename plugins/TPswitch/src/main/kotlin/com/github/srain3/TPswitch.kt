@@ -29,7 +29,8 @@ class TPswitch : JavaPlugin() {
         val permissionData = user.cachedData.getPermissionData(QueryOptions.contextual(contextSet))
         return permissionData.checkPermission(permission).asBoolean()
       }
-      if (!hasPerm(senderP, "tpswitch.tpignore")) {
+      // LuckPerms の cachedData は plugin.yml の default: op を見ないので OP は明示的に通す
+      if (!senderP.isOp && !hasPerm(senderP, "tpswitch.tpignore")) {
         if (server.getPlayerExact(targetP) == null) {
           senderP.sendMessage("§e$targetP §6is offline!")
           return true
