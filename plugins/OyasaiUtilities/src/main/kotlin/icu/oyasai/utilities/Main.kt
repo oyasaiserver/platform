@@ -1,6 +1,7 @@
 package icu.oyasai.utilities
 
 import icu.oyasai.utilities.adminbp.AdminBP
+import icu.oyasai.utilities.backpack.BackpackFeature
 import icu.oyasai.utilities.creative_management.CreativeManagement
 import icu.oyasai.utilities.debugonbe.DebugOnBE
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
@@ -23,6 +24,7 @@ import icu.oyasai.utilities.veinminer.VeinminerEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {
+  private lateinit var backpackFeature: BackpackFeature
   private lateinit var skinFeature: SkinFeature
 
   override fun onLoad() {}
@@ -30,6 +32,8 @@ class Main : JavaPlugin() {
   override fun onEnable() {
     skinFeature = SkinFeature(this)
     skinFeature.enable()
+    backpackFeature = BackpackFeature(this)
+    backpackFeature.enable()
     server.pluginManager.registerEvents(NotNBTEvent, this) // NotNBTのイベント登録
     server.pluginManager.registerEvents(OreSmelterEvent, this) // OreSmelterのイベント登録
     server.pluginManager.registerEvents(VeinminerEvent, this)
@@ -72,5 +76,6 @@ class Main : JavaPlugin() {
     CreativeManagement.onDisable()
     RedBullFeature.onDisable()
     DebugOnBE.onDisable()
+    if (::backpackFeature.isInitialized) backpackFeature.disable()
   }
 }
