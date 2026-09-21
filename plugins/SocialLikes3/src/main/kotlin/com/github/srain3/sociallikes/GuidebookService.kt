@@ -53,7 +53,7 @@ object GuidebookService {
             mutableListOf(
                 if (guidebook.type == GuidebookType.OFFICIAL) "&6★ 公式ガイド" else "&7個人ガイド",
                 "&7左クリック: 次の未発見建築へ",
-                "&7Shift + 右クリック: ガイド情報",
+                "&7右クリック: ガイド情報",
             ),
         )
         itemMeta =

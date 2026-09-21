@@ -28,14 +28,6 @@ object GuidebookListener : Listener {
   fun handleSignRightClick(event: PlayerInteractEvent, sign: Sign): Boolean {
     if (event.hand != EquipmentSlot.HAND) return false
     val item = event.player.inventory.itemInMainHand
-    val touristId = GuidebookService.touristId(item)
-    if (touristId != null && event.player.isSneaking) {
-      event.isCancelled = true
-      if (!ready(event.player)) return true
-      openTouristInfo(event.player, touristId)
-      return true
-    }
-
     val editorId = GuidebookService.editorId(item) ?: return false
     event.isCancelled = true
     if (!ready(event.player)) return true
@@ -88,7 +80,7 @@ object GuidebookListener : Listener {
         }
         Action.RIGHT_CLICK_AIR,
         Action.RIGHT_CLICK_BLOCK ->
-            if (event.player.isSneaking && event.clickedBlock?.state !is Sign) {
+            if (opensBook(event)) {
               event.isCancelled = true
               openTouristInfo(event.player, touristId)
             }
@@ -102,14 +94,17 @@ object GuidebookListener : Listener {
       event.isCancelled = true
       return
     }
-    if (
-        event.action == Action.RIGHT_CLICK_AIR ||
-            (event.action == Action.RIGHT_CLICK_BLOCK && event.clickedBlock?.state !is Sign)
-    ) {
+    if (opensBook(event)) {
       event.isCancelled = true
       GuidebookBookUI.openEditor(event.player, editorId)
     }
   }
+
+  /** 右クリックで本を開いてよいか。看板・チェストなど元から右クリック操作があるブロックはそちらを優先する */
+  private fun opensBook(event: PlayerInteractEvent): Boolean =
+      event.action == Action.RIGHT_CLICK_AIR ||
+          (event.action == Action.RIGHT_CLICK_BLOCK &&
+              event.clickedBlock?.type?.isInteractable != true)
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
