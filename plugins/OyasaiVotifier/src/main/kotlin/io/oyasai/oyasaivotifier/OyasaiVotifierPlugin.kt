@@ -2,6 +2,7 @@ package io.oyasai.oyasaivotifier
 
 import com.vexsoftware.votifier.model.Vote
 import com.vexsoftware.votifier.model.VotifierEvent
+import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 import java.util.logging.Level
 import org.bukkit.Bukkit
@@ -19,16 +20,20 @@ class OyasaiVotifierPlugin : JavaPlugin() {
 
   override fun onEnable() {
     try {
+      migrateLegacyData(dataFolder, logger::info)
       saveDefaultConfig()
       val loadedConfig = VotifierConfig.load(this)
-      val keys = VoteKeys.loadOrCreate(dataFolder.resolve("rsa"))
+      val keys =
+          VoteKeys.loadOrCreate(dataFolder.resolve("rsa"), System::getenv) { source ->
+            logger.info("OyasaiVotifier RSA keys source: $source")
+          }
       configModel = loadedConfig
       rewards = VoteRewards(this, loadedConfig)
       val startedServer = VoteServer(logger, loadedConfig, keys, ::receive)
       server = startedServer
       startedServer.start()
       logger.info(
-          "Votifier listening on ${loadedConfig.host}:${loadedConfig.port}; v1=${loadedConfig.v1Enabled}"
+          "OyasaiVotifier listening on ${loadedConfig.host}:${loadedConfig.port}; v1=${loadedConfig.v1Enabled}"
       )
     } catch (error: Exception) {
       server?.close()
@@ -115,10 +120,21 @@ class OyasaiVotifierPlugin : JavaPlugin() {
           val activeConfig = checkNotNull(configModel)
           val activeRewards = checkNotNull(rewards)
           sender.sendMessage(
-              "§aVotifier accepted: v1=${v1Votes.get()}, v2=${v2Votes.get()}, party=${activeRewards.progress()}/${activeConfig.party.votesNeeded}"
+              "§aOyasaiVotifier accepted: v1=${v1Votes.get()}, v2=${v2Votes.get()}, party=${activeRewards.progress()}/${activeConfig.party.votesNeeded}"
           )
           true
         }
         else -> false
       }
+}
+
+internal fun migrateLegacyData(dataFolder: File, log: (String) -> Unit = {}) {
+  val legacyDataFolder = dataFolder.parentFile?.resolve("Votifier") ?: return
+  val legacyProgress = legacyDataFolder.resolve("party-progress.yml")
+  val progress = dataFolder.resolve("party-progress.yml")
+  if (!progress.exists() && legacyProgress.isFile) {
+    dataFolder.mkdirs()
+    legacyProgress.copyTo(progress)
+    log("Migrated legacy Votifier party progress to OyasaiVotifier data folder")
+  }
 }

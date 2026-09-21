@@ -66,6 +66,10 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           special: false,
         },
       ),
+      votifierToken: new Password(this, this.t("votifier-token"), {
+        length: 32,
+        special: false,
+      }),
       // Floodgate's key.pem is a 16-byte AES-128 key.
       floodgateKey: new Bytes(this, this.t("floodgate-key"), {
         length: 16,
@@ -185,6 +189,13 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           }),
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
+          VOTIFIER_TOKEN: this.isMaster
+            ? secrets.get("VOTIFIER_TOKEN")
+            : randoms.votifierToken.result,
+          ...(this.isMaster && {
+            VOTIFIER_RSA_PRIVATE_KEY: secrets.get("VOTIFIER_RSA_PRIVATE_KEY"),
+            VOTIFIER_RSA_PUBLIC_KEY: secrets.get("VOTIFIER_RSA_PUBLIC_KEY"),
+          }),
         }),
         volumes: [
           {

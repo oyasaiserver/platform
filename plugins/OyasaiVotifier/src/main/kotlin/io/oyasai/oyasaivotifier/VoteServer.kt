@@ -192,24 +192,31 @@ internal fun validHmac(token: String, payload: String, signature: String): Boole
     )
 
 internal object VoteKeys {
-  fun loadOrCreate(directory: java.io.File): KeyPair {
+  fun loadOrCreate(
+      directory: java.io.File,
+      environment: (String) -> String? = System::getenv,
+      onSource: (String) -> Unit = {},
+  ): KeyPair {
     directory.mkdirs()
     val public = directory.resolve("public.key")
     val private = directory.resolve("private.key")
+    val environmentPublic = environment("VOTIFIER_RSA_PUBLIC_KEY")
+    val environmentPrivate = environment("VOTIFIER_RSA_PRIVATE_KEY")
+    if (environmentPublic != null || environmentPrivate != null) {
+      require(environmentPublic != null && environmentPrivate != null) {
+        "Both VOTIFIER_RSA_PUBLIC_KEY and VOTIFIER_RSA_PRIVATE_KEY are required"
+      }
+      onSource("environment variables")
+      return load(environmentPublic, environmentPrivate)
+    }
     if (public.exists() || private.exists()) {
       require(public.exists() && private.exists()) {
         "Both rsa/public.key and rsa/private.key are required"
       }
-      val factory = KeyFactory.getInstance("RSA")
-      return KeyPair(
-          factory.generatePublic(
-              X509EncodedKeySpec(Base64.getDecoder().decode(public.readText().trim()))
-          ),
-          factory.generatePrivate(
-              PKCS8EncodedKeySpec(Base64.getDecoder().decode(private.readText().trim()))
-          ),
-      )
+      onSource("rsa key files")
+      return load(public.readText().trim(), private.readText().trim())
     }
+    onSource("generated and saved to rsa key files")
     return KeyPairGenerator.getInstance("RSA")
         .apply { initialize(2048) }
         .generateKeyPair()
@@ -217,5 +224,13 @@ internal object VoteKeys {
           public.writeText(Base64.getEncoder().encodeToString(pair.public.encoded))
           private.writeText(Base64.getEncoder().encodeToString(pair.private.encoded))
         }
+  }
+
+  private fun load(public: String, private: String): KeyPair {
+    val factory = KeyFactory.getInstance("RSA")
+    return KeyPair(
+        factory.generatePublic(X509EncodedKeySpec(Base64.getDecoder().decode(public))),
+        factory.generatePrivate(PKCS8EncodedKeySpec(Base64.getDecoder().decode(private))),
+    )
   }
 }

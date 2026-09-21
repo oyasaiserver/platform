@@ -16,12 +16,22 @@ data class VotifierConfig(
     val messages: VoteMessages,
 ) {
   companion object {
-    fun load(plugin: JavaPlugin): VotifierConfig {
+    fun load(
+        plugin: JavaPlugin,
+        environment: (String) -> String? = System::getenv,
+    ): VotifierConfig {
       plugin.reloadConfig()
-      return load(plugin.config)
+      return load(plugin.config, environment).also {
+        plugin.logger.info(
+            "NuVotifier v2 default token source: ${if (environment("VOTIFIER_TOKEN") != null) "environment variable" else "config.yml"}"
+        )
+      }
     }
 
-    internal fun load(config: FileConfiguration): VotifierConfig {
+    internal fun load(
+        config: FileConfiguration,
+        environment: (String) -> String? = System::getenv,
+    ): VotifierConfig {
       require(
           config.contains("rewards.individual", true) && config.contains("rewards.party", true)
       ) {
@@ -37,6 +47,8 @@ data class VotifierConfig(
                   .getConfigurationSection("tokens")
                   ?.getKeys(false)
                   ?.associateWith { key -> config.getString("tokens.$key")!! }
+                  ?.toMutableMap()
+                  ?.also { tokens -> environment("VOTIFIER_TOKEN")?.let { tokens["default"] = it } }
                   ?.also { tokens ->
                     require(
                         tokens.isNotEmpty() && tokens.values.none { it.startsWith("REPLACE_WITH_") }

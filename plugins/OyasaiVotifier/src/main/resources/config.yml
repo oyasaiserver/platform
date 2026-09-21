@@ -1,4 +1,8 @@
-# Copy the real host/port, v1 key pair, and v2 tokens from production before enabling.
+# This file is written to plugins/OyasaiVotifier/config.yml on first startup.
+# Only legacy plugins/Votifier party progress is migrated automatically; its config.yml and RSA keys are not.
+# Set the real host/port and v2 token before enabling.
+# VOTIFIER_TOKEN overrides tokens.default. VOTIFIER_RSA_PUBLIC_KEY and VOTIFIER_RSA_PRIVATE_KEY
+# override rsa/public.key and rsa/private.key; both environment values must be Base64 one-line keys.
 # This file has the production zVoteParty reward table (50/40/10 and Party threshold 60).
 listener:
   host: 0.0.0.0
@@ -20,6 +24,7 @@ messages:
     - "&6オンラインの皆様に報酬が配られます！"
 
 # NuVotifier v2 chooses a service-name key first, then falls back to default.
+# VOTIFIER_TOKEN replaces only default; keep service-specific tokens here when needed.
 # Keep the existing production default token secret; do not commit it.
 tokens:
   # This placeholder deliberately refuses startup until the real token is set.
