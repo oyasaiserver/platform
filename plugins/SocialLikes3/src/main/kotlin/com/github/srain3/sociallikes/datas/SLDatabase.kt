@@ -41,6 +41,8 @@ import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.jetbrains.exposed.v1.jdbc.upsert
+import org.sqlite.SQLiteErrorCode
+import org.sqlite.SQLiteException
 
 object SLDatabase {
   private const val MAX_WRITE_RETRIES = 5
@@ -3073,11 +3075,17 @@ object SLDatabase {
           return@submit
         } catch (e: Exception) {
           warnIfSlowWrite(taskName, waitMs, startedAt, attempt)
-          if (attempt == MAX_WRITE_RETRIES) {
+          val isConstraintViolation =
+              generateSequence<Throwable>(e) { it.cause }
+                  .any { cause ->
+                    cause is SQLiteException &&
+                        (cause.resultCode.code and 0xFF) == SQLiteErrorCode.SQLITE_CONSTRAINT.code
+                  }
+          if (isConstraintViolation || attempt == MAX_WRITE_RETRIES) {
             val message = e.message ?: e.javaClass.simpleName
             Tools.plugin.logger.log(
                 Level.SEVERE,
-                "[SL3] SQLite write $taskName failed permanently after $MAX_WRITE_RETRIES attempts: $message",
+                "[SL3] SQLite write $taskName failed permanently after $attempt attempt(s): $message",
                 e,
             )
             try {

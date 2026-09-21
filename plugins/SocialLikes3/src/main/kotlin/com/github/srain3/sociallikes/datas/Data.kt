@@ -43,7 +43,10 @@ object Data {
     if (activeReadSource == ReadSource.SQLITE) {
       SLDatabase.saveBuild(data) {
         DirtyBuildManager.markDirty(data.id)
-        notifyPlayerFailure(actorUuid, "データの保存に失敗しました。")
+        notifyPlayerFailure(
+            actorUuid,
+            "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）",
+        )
       }
       saveYamlAsync(data)
     } else {
