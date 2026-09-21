@@ -99,10 +99,12 @@ var TEXTS = [
   ["ePrivate", "非公開", "非公開"],
   ["bAdd", "ボタン: 追加", "建築追加"],
   ["bToggle", "ボタン: 公開切替（公開中のとき）", "非公開にする"],
+  ["bPublish", "ボタン: 公開切替（非公開のとき）", "公開する"],
   ["bDesc", "ボタン: 説明", "説明を書く"],
   ["bList", "ボタン: 一覧", "ガイド一覧へ"],
   ["bDelete", "ボタン: 削除", "このガイドを削除"],
   ["eNote", "注記", "次のページから掲載建築を編集できます。"],
+  ["eEmpty", "注記（掲載建築なし）", "掲載建築はありません。"],
   ["eHeading", "掲載建築の見出し", "掲載建築の編集"],
   ["eOk", "案内可能", "案内可能"],
   ["eNg", "案内不可", "案内不可"],
@@ -112,6 +114,7 @@ var TEXTS = [
   ["bRemove", "ボタン: 外す", "削除"],
   ["hAdd", "ホバー: 追加", ""],
   ["hToggle", "ホバー: 公開切替", ""],
+  ["hPublish", "ホバー: 公開する", ""],
   ["hDesc", "ホバー: 説明", ""],
   ["hList", "ホバー: 一覧", ""],
   ["hDelete", "ホバー: 削除", ""],
@@ -765,6 +768,32 @@ function render() {
   );
   save();
 }
+// config.yml の guidebook.style にそのまま貼れる YAML（文字列と色は必ず引用符で囲む）
+function toYaml() {
+  var q = JSON.stringify;
+  var out = ["guidebook:", "  style:", "    options:"];
+  out.push("      brackets: " + !!S.options.brackets);
+  out.push("    roles:");
+  Object.keys(S.roles).forEach(function (k) {
+    var r = S.roles[k];
+    out.push(
+      "      " +
+        k +
+        ": { color: " +
+        q(r.color) +
+        ", bold: " +
+        !!r.bold +
+        ", underline: " +
+        !!r.underline +
+        " }",
+    );
+  });
+  out.push("    texts:");
+  Object.keys(S.texts).forEach(function (k) {
+    out.push("      " + k + ": " + q(S.texts[k]));
+  });
+  return out.join("\n") + "\n";
+}
 
 // ---- 操作パネル ----
 function buildControls() {
@@ -923,19 +952,24 @@ document.getElementById("reset").onclick = function () {
   buildControls();
   render();
 };
-document.getElementById("copy").onclick = function () {
-  var text = document.getElementById("out").textContent;
-  (navigator.clipboard
-    ? navigator.clipboard.writeText(text)
-    : Promise.reject()
-  ).then(
-    function () {
-      document.getElementById("copy").textContent = "コピーしました";
-    },
-    function () {
-      window.getSelection().selectAllChildren(document.getElementById("out"));
-    },
-  );
-};
+function copyButton(id, textFn) {
+  document.getElementById(id).onclick = function () {
+    (navigator.clipboard
+      ? navigator.clipboard.writeText(textFn())
+      : Promise.reject()
+    ).then(
+      function () {
+        document.getElementById(id).textContent = "コピーしました";
+      },
+      function () {
+        window.getSelection().selectAllChildren(document.getElementById("out"));
+      },
+    );
+  };
+}
+copyButton("copy", function () {
+  return document.getElementById("out").textContent;
+});
+copyButton("copy-yaml", toYaml);
 buildControls();
 render();

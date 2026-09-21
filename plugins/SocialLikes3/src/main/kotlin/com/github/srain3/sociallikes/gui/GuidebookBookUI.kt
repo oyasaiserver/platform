@@ -101,14 +101,12 @@ internal object GuidebookBookRules {
 object GuidebookBookUI {
   private const val COMMAND = "/sociallikes3:slguide"
   private const val DELETE_CONFIRM_MILLIS = 15_000L
-  private val GREEN = TextColor.color(0x00AA00)
   private val DARK_GRAY = TextColor.color(0x555555)
-  private val AQUA = TextColor.color(0x00AAAA)
   private val BLACK = TextColor.color(0x000000)
-  private val GOLD = TextColor.color(0xFFAA00)
-  private val GRAY = TextColor.color(0xAAAAAA)
-  private val BLUE = TextColor.color(0x5555FF)
   private val RED = TextColor.color(0xFF5555)
+  private val style: GuidebookStyle
+    get() = GuidebookStyle.current
+
   private val deleteConfirmations = mutableMapOf<UUID, DeleteConfirmation>()
 
   fun openCatalog(player: Player) {
@@ -208,30 +206,45 @@ object GuidebookBookUI {
       guidebook: GuidebookData,
       editable: Boolean,
   ): ItemStack {
+    val s = style
     if (editable) {
+      val state = if (guidebook.published) "cPublic" else "cPrivate"
       return ItemStack(Material.WRITABLE_BOOK)
           .allFlag()
-          .addText(
-              "&f${guidebook.title}",
-              mutableListOf(
-                  if (guidebook.published) "&a公開中" else "&7非公開",
-                  "&aクリックで編集キーを入手",
-              ),
+          .styledText(
+              s.styled(guidebook.title, "cName"),
+              listOf(s.styled(s.text(state), state), s.styled(s.text("cGetKey"), "cAction")),
           )
     }
     val progress =
         GuidebookService.progress(GuidebookService.entries(guidebook.id, player.uniqueId))
+    val vars =
+        mapOf(
+            "title" to guidebook.title,
+            "author" to GuidebookService.authorName(guidebook.creatorUuid),
+            "n" to progress.discovered,
+            "m" to progress.total,
+        )
     return ItemStack(Material.BOOK)
         .allFlag()
-        .addText(
-            if (guidebook.type == GuidebookType.OFFICIAL) "&6★ ${guidebook.title}"
-            else "&f${guidebook.title}",
-            mutableListOf(
-                "&7作者: ${GuidebookService.authorName(guidebook.creatorUuid)}",
-                "&7進捗: ${progress.discovered}/${progress.total}",
-                "&aクリックで入手",
+        .styledText(
+            if (guidebook.type == GuidebookType.OFFICIAL)
+                s.styled(s.text("cOfficialMark") + guidebook.title, "cOfficial")
+            else s.styled(guidebook.title, "cName"),
+            listOf(
+                s.styled(s.text("cAuthor", vars), "cLore"),
+                s.styled(s.text("cProgress", vars), "cLore"),
+                s.styled(s.text("cGet"), "cAction"),
             ),
         )
+  }
+
+  private fun ItemStack.styledText(name: Component, lore: List<Component>): ItemStack {
+    val meta = itemMeta ?: return this
+    meta.displayName(name.decoration(TextDecoration.ITALIC, false))
+    meta.lore(lore.map { it.decoration(TextDecoration.ITALIC, false) })
+    itemMeta = meta
+    return this
   }
 
   private fun navigationItem(material: Material, name: String): ItemStack =
@@ -245,16 +258,24 @@ object GuidebookBookUI {
     val entries = GuidebookService.entries(guidebook.id, player.uniqueId)
     val progress = GuidebookService.progress(entries)
     val next = GuidebookBookRules.nextLine(entries, progress.complete)
+    val s = style
+    val vars =
+        mapOf(
+            "title" to guidebook.title,
+            "author" to GuidebookService.authorName(guidebook.creatorUuid),
+            "n" to progress.discovered,
+            "m" to progress.total,
+        )
     val home =
         page()
-            .append(title(guidebook.title))
-            .append(line("進捗: ${progress.discovered}/${progress.total}", GREEN))
-            .append(line("作者: ${GuidebookService.authorName(guidebook.creatorUuid)}", DARK_GRAY))
+            .append(line(guidebook.title, "title"))
+            .append(line(s.text("progress", vars), "progress"))
+            .append(line(s.text("author", vars), "author"))
             .append(nextLine(next, guidebook.id, progress.complete))
     home.append(blank())
     if (guidebook.description.isNotBlank()) {
       GuidebookRules.description(guidebook.description).text.lines().forEach {
-        home.append(line(it))
+        home.append(line(it, "desc"))
       }
     }
     val pages = mutableListOf(home.build())
@@ -265,7 +286,13 @@ object GuidebookBookUI {
               entry.data?.title ?: "建築ID:${entry.buildId}",
               if (guidebook.type == GuidebookType.OFFICIAL) {
                 GuidebookRules.wrapLines(
-                    "作者: ${entry.data?.owner?.let(GuidebookService::authorName) ?: "不明"}"
+                    s.text(
+                        "entryAuthor",
+                        mapOf(
+                            "author" to
+                                (entry.data?.owner?.let(GuidebookService::authorName) ?: "不明")
+                        ),
+                    )
                 )
               } else {
                 entry.data?.comment?.let(GuidebookBookRules::commentLines).orEmpty()
@@ -274,19 +301,20 @@ object GuidebookBookUI {
           )
         }
     GuidebookBookRules.paginateByLines(rows).forEach { entryPage ->
-      val content = page().append(title("掲載建築"))
+      val content = page().append(line(s.text("heading"), "heading"))
       entryPage.forEach { row ->
         content.append(mark(row.mark)).append(Component.space())
-        val name = Component.text(row.name, AQUA)
+        val name = s.styled(row.name, "entry")
         content.append(
             row.buildId?.let {
-              name
-                  .clickEvent(ClickEvent.runCommand("$COMMAND go ${guidebook.id} $it"))
-                  .hoverEvent(HoverEvent.showText(Component.text("クリックでこの建築へ案内")))
+              hover(
+                  name.clickEvent(ClickEvent.runCommand("$COMMAND go ${guidebook.id} $it")),
+                  "hEntry",
+              )
             } ?: name
         )
         content.append(newline())
-        row.sub.forEach { content.append(line(it, DARK_GRAY)) }
+        row.sub.forEach { content.append(line(it, "sub")) }
         content.append(blank())
       }
       pages += content.build()
@@ -298,65 +326,56 @@ object GuidebookBookUI {
     deleteConfirmations.remove(player.uniqueId)
     val guidebook = editableGuidebook(player, guidebookId) ?: return
     val entries = GuidebookService.entries(guidebook.id, player.uniqueId)
+    val s = style
+    val state = if (guidebook.published) "ePublic" else "ePrivate"
     val home =
         page()
-            .append(title("編集: ${guidebook.title}"))
-            .append(
-                line(
-                    if (guidebook.published) "公開中" else "非公開",
-                    if (guidebook.published) GREEN else GRAY,
-                )
-            )
+            .append(line(s.text("eTitle", mapOf("title" to guidebook.title)), "eTitle"))
+            .append(line(s.text(state), state))
             .append(blank())
-            .append(command("[建築追加]", "$COMMAND add ${guidebook.id}"))
+            .append(command("bAdd", "$COMMAND add ${guidebook.id}"))
             .append(newline())
             .append(
                 command(
-                    if (guidebook.published) "[非公開にする]" else "[公開する]",
+                    if (guidebook.published) "bToggle" else "bPublish",
                     "$COMMAND toggle ${guidebook.id}",
                 )
             )
             .append(newline())
-            .append(command("[説明を書く]", "$COMMAND describe ${guidebook.id}"))
+            .append(command("bDesc", "$COMMAND describe ${guidebook.id}"))
             .append(newline())
-            .append(command("[ガイド一覧へ]", "$COMMAND edit"))
+            .append(command("bList", "$COMMAND edit"))
             .append(newline())
-            .append(danger("[このガイドを削除]", "$COMMAND delete-request ${guidebook.id}"))
+            .append(danger("bDelete", "$COMMAND delete-request ${guidebook.id}"))
             .append(blank())
-            .append(
-                line(
-                    if (entries.isEmpty()) "掲載建築はありません。" else "次のページから掲載建築を編集できます。",
-                    GRAY,
-                )
-            )
+            .append(line(s.text(if (entries.isEmpty()) "eEmpty" else "eNote"), "eNote"))
     val pages = mutableListOf(home.build())
     GuidebookBookRules.paginate(entries.withIndex().toList(), 3)
         .filter { it.isNotEmpty() }
         .forEach { entryPage ->
-          val content = page().append(title("掲載建築の編集"))
+          val content = page().append(line(s.text("eHeading"), "eTitle"))
           entryPage.forEach { indexed ->
             val entry = indexed.value
+            val ok = if (entry.valid) "eOk" else "eNg"
             content
                 .append(
-                    line("${indexed.index + 1}. ${entry.data?.title ?: "建築ID:${entry.buildId}"}")
-                )
-                .append(
                     line(
-                        if (entry.valid) "案内可能" else "案内不可",
-                        if (entry.valid) GREEN else RED,
+                        "${indexed.index + 1}. ${entry.data?.title ?: "建築ID:${entry.buildId}"}",
+                        "eEntry",
                     )
                 )
-                .append(command("[↑]", "$COMMAND move ${guidebook.id} ${entry.buildId} -1"))
+                .append(line(s.text(ok), ok))
+                .append(command("bUp", "$COMMAND move ${guidebook.id} ${entry.buildId} -1"))
                 .append(Component.space())
-                .append(command("[↓]", "$COMMAND move ${guidebook.id} ${entry.buildId} 1"))
+                .append(command("bDown", "$COMMAND move ${guidebook.id} ${entry.buildId} 1"))
             if (guidebook.type == GuidebookType.PERSONAL) {
               content
                   .append(Component.space())
-                  .append(command("[コメント]", "$COMMAND comment ${guidebook.id} ${entry.buildId}"))
+                  .append(command("bComment", "$COMMAND comment ${guidebook.id} ${entry.buildId}"))
             }
             content
                 .append(Component.space())
-                .append(danger("[削除]", "$COMMAND remove ${guidebook.id} ${entry.buildId}"))
+                .append(danger("bRemove", "$COMMAND remove ${guidebook.id} ${entry.buildId}"))
                 .append(blank())
           }
           pages += content.build()
@@ -464,15 +483,19 @@ object GuidebookBookUI {
         "削除の確認",
         listOf(
             page()
-                .append(title("本当に削除しますか？", RED))
-                .append(line("「${guidebook.title}」"))
+                .append(
+                    Component.text("本当に削除しますか？", RED)
+                        .decorate(TextDecoration.BOLD)
+                        .append(newline())
+                )
+                .append(Component.text("「${guidebook.title}」", BLACK).append(newline()))
                 .append(blank())
-                .append(line("この操作は取り消せません。", RED))
-                .append(line("15秒以内にもう一度クリックしてください。", DARK_GRAY))
+                .append(Component.text("この操作は取り消せません。", RED).append(newline()))
+                .append(Component.text("15秒以内にもう一度クリックしてください。", DARK_GRAY).append(newline()))
                 .append(blank())
-                .append(danger("[削除を確定]", "$COMMAND delete-confirm ${guidebook.id}"))
+                .append(button("削除を確定", "$COMMAND delete-confirm ${guidebook.id}", "eDanger"))
                 .append(newline())
-                .append(command("[キャンセル]", "$COMMAND editor ${guidebook.id}"))
+                .append(button("キャンセル", "$COMMAND editor ${guidebook.id}", "eButton"))
                 .build()
         ),
     )
@@ -515,23 +538,32 @@ object GuidebookBookUI {
 
   private fun page(): TextComponent.Builder = Component.text()
 
-  private fun title(text: String, color: TextColor = GREEN): Component =
-      Component.text(text, color).decorate(TextDecoration.BOLD).append(newline())
+  private fun line(text: String, role: String): Component =
+      style.styled(text, role).append(newline())
 
-  private fun line(text: String, color: TextColor = BLACK): Component =
-      Component.text(text, color).append(newline())
+  /** hover が空文字なら付けない。 */
+  private fun hover(component: Component, textKey: String): Component {
+    val text = style.text(textKey)
+    return if (text.isEmpty()) component
+    else component.hoverEvent(HoverEvent.showText(style.styled(text, "hover")))
+  }
 
-  private fun command(text: String, command: String, color: TextColor = BLUE): Component =
-      Component.text(text, color).clickEvent(ClickEvent.runCommand(command))
+  private fun button(label: String, command: String, role: String): Component =
+      style
+          .styled(if (style.brackets) "[$label]" else label, role)
+          .clickEvent(ClickEvent.runCommand(command))
 
-  private fun danger(text: String, command: String): Component =
-      command(text, command, RED).decorate(TextDecoration.UNDERLINED)
+  /** booktuner と同じく bXxx のホバーは hXxx。 */
+  private fun command(key: String, command: String, role: String = "eButton"): Component =
+      hover(button(style.text(key), command, role), "h" + key.drop(1))
+
+  private fun danger(key: String, command: String): Component = command(key, command, "eDanger")
 
   private fun mark(mark: String): Component =
       when (mark) {
-        "☑" -> Component.text(mark, GREEN)
-        "！" -> Component.text(mark, RED).hoverEvent(HoverEvent.showText(Component.text("案内不可")))
-        else -> Component.text(mark, GOLD)
+        "☑" -> style.styled(mark, "liked")
+        "！" -> hover(style.styled(mark, "invalid"), "invalid")
+        else -> style.styled(mark, "unfound")
       }
 
   private fun nextLine(
@@ -539,14 +571,18 @@ object GuidebookBookUI {
       guidebookId: Int,
       complete: Boolean,
   ): Component {
+    val s = style
     val buildId = next.buildId
-    if (complete) return title(next.text)
-    if (buildId == null) return line(next.text, AQUA)
-    return Component.text("Next: ", AQUA)
+    if (complete) return line(s.text("complete"), "complete")
+    val label = s.styled(s.text("next"), "nextLabel")
+    if (buildId == null) return label.append(s.styled("なし", "nextLabel")).append(newline())
+    return label
         .append(
-            Component.text(next.text.removePrefix("Next: "), AQUA)
-                .clickEvent(ClickEvent.runCommand("$COMMAND go $guidebookId $buildId"))
-                .hoverEvent(HoverEvent.showText(Component.text("クリックでこの建築へ案内")))
+            hover(
+                s.styled(next.text.removePrefix("Next: "), "nextName")
+                    .clickEvent(ClickEvent.runCommand("$COMMAND go $guidebookId $buildId")),
+                "hNext",
+            )
         )
         .append(newline())
   }
