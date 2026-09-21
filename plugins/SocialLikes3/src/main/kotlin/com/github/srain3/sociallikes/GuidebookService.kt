@@ -42,7 +42,16 @@ object GuidebookService {
       val data: SLData?,
       val valid: Boolean,
       val liked: Boolean,
-  )
+  ) {
+    val canGuide: Boolean
+      get() = valid && !liked && data != null
+  }
+
+  private enum class TeleportResult {
+    SUCCESS,
+    FAILED,
+    UNAVAILABLE,
+  }
 
   fun touristId(item: ItemStack?): Int? =
       item?.itemMeta?.persistentDataContainer?.get(touristKey, PersistentDataType.INTEGER)
@@ -219,19 +228,14 @@ object GuidebookService {
 
   fun teleportToNext(player: Player, guidebook: GuidebookData): Boolean {
     val entries = entries(guidebook.id, player.uniqueId)
-    val candidates = entries.filter { !it.liked && it.data != null }
+    val candidates = entries.filter(EntryView::canGuide)
     for (entry in candidates) {
       val data = entry.data ?: continue
-      val destination = safeDestination(data) ?: continue
-      val teleported = player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)
-      if (teleported) {
-        player.sendMessage(
-            Tools.socialLikesLOGO + " &a「${data.title}」へ案内しました (ID:${data.id})".color()
-        )
-      } else {
-        player.sendMessage(Tools.socialLikesLOGO + " &cテレポートできませんでした。".color())
+      when (teleport(player, data)) {
+        TeleportResult.SUCCESS -> return true
+        TeleportResult.FAILED -> return false
+        TeleportResult.UNAVAILABLE -> continue
       }
-      return teleported
     }
     val progress = progress(entries)
     player.sendMessage(
@@ -243,6 +247,18 @@ object GuidebookService {
             }
     )
     return false
+  }
+
+  fun teleportToBuild(player: Player, buildId: Int): Boolean {
+    val result = Data.getSLData(buildId)?.let { teleport(player, it) } ?: TeleportResult.UNAVAILABLE
+    return when (result) {
+      TeleportResult.SUCCESS -> true
+      TeleportResult.FAILED -> false
+      TeleportResult.UNAVAILABLE -> {
+        player.sendMessage(Tools.socialLikesLOGO + " &cこの建築へは現在案内できません。".color())
+        false
+      }
+    }
   }
 
   fun handleLike(player: Player, buildId: Int) {
@@ -320,6 +336,16 @@ object GuidebookService {
           dangerous = dangerous,
       )
     }
+  }
+
+  private fun teleport(player: Player, data: SLData): TeleportResult {
+    val destination = safeDestination(data) ?: return TeleportResult.UNAVAILABLE
+    if (!player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
+      player.sendMessage(Tools.socialLikesLOGO + " &cテレポートできませんでした。".color())
+      return TeleportResult.FAILED
+    }
+    player.sendMessage(Tools.socialLikesLOGO + " &a「${data.title}」へ案内しました。".color())
+    return TeleportResult.SUCCESS
   }
 
   private fun isDangerous(material: Material): Boolean =

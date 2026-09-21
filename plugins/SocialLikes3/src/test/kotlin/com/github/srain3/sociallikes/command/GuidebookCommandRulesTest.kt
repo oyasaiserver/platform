@@ -13,6 +13,9 @@ class GuidebookCommandRulesTest {
     assertEquals(GuidebookAction.EditCatalog, GuidebookCommandRules.parse(listOf("edit")))
     assertEquals(GuidebookAction.Edit(12), GuidebookCommandRules.parse(listOf("edit", "12")))
     assertEquals(GuidebookAction.Editor(12), GuidebookCommandRules.parse(listOf("editor", "12")))
+    assertEquals(GuidebookAction.Go(12, 34), GuidebookCommandRules.parse(listOf("go", "12", "34")))
+    assertNull(GuidebookCommandRules.parse(listOf("go", "12", "x")))
+    assertNull(GuidebookCommandRules.parse(listOf("go", "12", "34", "extra")))
   }
 
   @Test

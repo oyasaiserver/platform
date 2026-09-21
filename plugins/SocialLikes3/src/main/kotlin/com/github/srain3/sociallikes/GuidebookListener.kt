@@ -153,12 +153,26 @@ object GuidebookListener : Listener {
     GuidebookBookUI.clear(event.player.uniqueId)
   }
 
-  private fun teleport(player: org.bukkit.entity.Player, guidebookId: Int) {
+  fun teleport(player: org.bukkit.entity.Player, guidebookId: Int, buildId: Int? = null) {
     val guidebook = SLDatabase.loadGuidebookBlocking(guidebookId)
     if (guidebook == null || !guidebook.published) {
       player.sendMessage(Tools.socialLikesLOGO + " &cこのガイドブックは現在公開されていません。".color())
       return
     }
+    if (buildId != null && buildId !in SLDatabase.loadGuidebookEntriesBlocking(guidebookId)) {
+      player.sendMessage(Tools.socialLikesLOGO + " &cこのガイドブックは現在公開されていません。".color())
+      return
+    }
+    withTeleportCooldown(player) {
+      if (buildId == null) GuidebookService.teleportToNext(player, guidebook)
+      else GuidebookService.teleportToBuild(player, buildId)
+    }
+  }
+
+  private fun withTeleportCooldown(
+      player: org.bukkit.entity.Player,
+      teleport: () -> Boolean,
+  ) {
     val now = System.currentTimeMillis()
     val remaining = TELEPORT_COOLDOWN_MILLIS - (now - (lastTeleports[player.uniqueId] ?: 0L))
     if (remaining > 0) {
@@ -167,9 +181,7 @@ object GuidebookListener : Listener {
       )
       return
     }
-    if (GuidebookService.teleportToNext(player, guidebook)) {
-      lastTeleports[player.uniqueId] = now
-    }
+    if (teleport()) lastTeleports[player.uniqueId] = now
   }
 
   private fun openTouristInfo(player: org.bukkit.entity.Player, guidebookId: Int) {

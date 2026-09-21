@@ -20,6 +20,7 @@ import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
@@ -40,6 +41,14 @@ internal object GuidebookBookRules {
         !valid -> "案内不可（進捗対象外）"
         !liked -> "未発見"
         else -> "いいね済み"
+      }
+
+  fun nextLine(entries: List<GuidebookService.EntryView>, complete: Boolean): String =
+      when {
+        complete -> "コンプリート！"
+        else ->
+            entries.firstOrNull(GuidebookService.EntryView::canGuide)?.data?.title?.let { "次: $it" }
+                ?: "次: なし"
       }
 
   fun firstCommentLine(comment: String): String? =
@@ -203,7 +212,16 @@ object GuidebookBookUI {
                     NamedTextColor.DARK_GRAY,
                 )
             )
-            .append(blank())
+            .append(
+                line(
+                    GuidebookBookRules.nextLine(entries, progress.complete),
+                    if (progress.complete) NamedTextColor.DARK_GREEN else NamedTextColor.BLACK,
+                )
+            )
+    if (!progress.complete) {
+      home.append(line("左クリックで次の建築へ案内", NamedTextColor.GRAY))
+    }
+    home.append(blank())
     if (guidebook.description.isNotBlank()) {
       guidebook.description.lines().forEach { home.append(line(it)) }
     }
@@ -215,11 +233,13 @@ object GuidebookBookUI {
           entryPage.forEach { indexed ->
             val entry = indexed.value
             val state = GuidebookBookRules.entryState(entry.valid, entry.liked)
-            content
-                .append(
-                    line("${indexed.index + 1}. ${entry.data?.title ?: "建築ID:${entry.buildId}"}")
-                )
-                .append(line(state, stateColor(entry.valid, entry.liked)))
+            val entryTitle = "${indexed.index + 1}. ${entry.data?.title ?: "建築ID:${entry.buildId}"}"
+            content.append(
+                entry.data?.let {
+                  destination(entryTitle, "$COMMAND go ${guidebook.id} ${entry.buildId}")
+                } ?: line(entryTitle)
+            )
+            content.append(line(state, stateColor(entry.valid, entry.liked)))
             if (guidebook.type == GuidebookType.OFFICIAL) {
               content.append(
                   line(
@@ -502,6 +522,11 @@ object GuidebookBookUI {
       Component.text(text, color)
           .decorate(TextDecoration.UNDERLINED)
           .clickEvent(ClickEvent.runCommand(command))
+
+  private fun destination(text: String, commandText: String): Component =
+      command(text, commandText)
+          .hoverEvent(HoverEvent.showText(Component.text("クリックでこの建築へ案内")))
+          .append(newline())
 
   private fun newline(): Component = Component.newline()
 

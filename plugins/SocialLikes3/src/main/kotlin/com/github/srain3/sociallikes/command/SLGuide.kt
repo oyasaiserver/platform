@@ -1,5 +1,6 @@
 package com.github.srain3.sociallikes.command
 
+import com.github.srain3.sociallikes.GuidebookListener
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
@@ -34,6 +35,8 @@ internal sealed interface GuidebookAction {
   data class Describe(val guidebookId: Int) : GuidebookAction
 
   data class Comment(val guidebookId: Int, val buildId: Int) : GuidebookAction
+
+  data class Go(val guidebookId: Int, val buildId: Int) : GuidebookAction
 
   data class DeleteRequest(val guidebookId: Int) : GuidebookAction
 
@@ -79,6 +82,8 @@ internal object GuidebookCommandRules {
           args.twoIds()?.let { (guidebookId, buildId) ->
             GuidebookAction.Comment(guidebookId, buildId)
           }
+      "go" ->
+          args.twoIds()?.let { (guidebookId, buildId) -> GuidebookAction.Go(guidebookId, buildId) }
       "delete-request" -> args.singleId()?.let(GuidebookAction::DeleteRequest)
       "delete-confirm" -> args.singleId()?.let(GuidebookAction::DeleteConfirm)
       else -> null
@@ -126,6 +131,8 @@ object SLGuide : CommandExecutor {
           GuidebookBookUI.startDescriptionEdit(sender, action.guidebookId)
       is GuidebookAction.Comment ->
           GuidebookBookUI.editComment(sender, action.guidebookId, action.buildId)
+      is GuidebookAction.Go ->
+          GuidebookListener.teleport(sender, action.guidebookId, action.buildId)
       is GuidebookAction.DeleteRequest -> GuidebookBookUI.requestDelete(sender, action.guidebookId)
       is GuidebookAction.DeleteConfirm -> GuidebookBookUI.confirmDelete(sender, action.guidebookId)
       null -> sender.sendMessage(Tools.socialLikesLOGO + " &e使い方: /slguide".color())
