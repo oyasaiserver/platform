@@ -50,12 +50,41 @@ class GuidebookRulesTest {
   }
 
   @Test
-  fun `description keeps only the first eight lines`() {
-    val result = GuidebookRules.description((1..10).joinToString("\n") { "line$it" })
+  fun `description wraps full width characters at the book width`() {
+    assertFalse(GuidebookRules.description("あ".repeat(12), maxLines = 1).truncated)
+    assertFalse(GuidebookRules.description("あ".repeat(13), maxLines = 2).truncated)
 
-    assertEquals((1..8).joinToString("\n") { "line$it" }, result.text)
+    val result = GuidebookRules.description("あ".repeat(13), maxLines = 1)
+
+    assertEquals("あ".repeat(12), result.text)
+    assertTrue(result.truncated)
+  }
+
+  @Test
+  fun `description uses measured ASCII advances with full width text`() {
+    assertFalse(GuidebookRules.description("あ".repeat(12) + "iii", maxLines = 1).truncated)
+
+    val result = GuidebookRules.description("あ".repeat(12) + "iiii", maxLines = 1)
+
+    assertEquals("あ".repeat(12) + "iii", result.text)
+    assertTrue(result.truncated)
+  }
+
+  @Test
+  fun `description counts explicit newlines`() {
+    val result = GuidebookRules.description("one\ntwo\nthree", maxLines = 2)
+
+    assertEquals("one\ntwo", result.text)
     assertTrue(result.truncated)
     assertFalse(GuidebookRules.description("one\ntwo").truncated)
+  }
+
+  @Test
+  fun `description keeps only eight displayed lines`() {
+    val result = GuidebookRules.description("あ".repeat(12 * 8 + 1))
+
+    assertEquals("あ".repeat(12 * 8), result.text)
+    assertTrue(result.truncated)
   }
 
   @Test

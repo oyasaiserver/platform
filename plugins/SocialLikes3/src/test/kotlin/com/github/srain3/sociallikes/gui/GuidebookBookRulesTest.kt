@@ -38,9 +38,18 @@ class GuidebookBookRulesTest {
             entry(5, "その次", valid = true, liked = false),
         )
 
-    assertEquals("次: 次の建築", GuidebookBookRules.nextLine(entries, complete = false))
-    assertEquals("コンプリート！", GuidebookBookRules.nextLine(entries, complete = true))
-    assertEquals("次: なし", GuidebookBookRules.nextLine(entries.take(3), complete = false))
+    assertEquals(
+        GuidebookBookRules.NextLine("Next: 次の建築", buildId = 4),
+        GuidebookBookRules.nextLine(entries, complete = false),
+    )
+    assertEquals(
+        GuidebookBookRules.NextLine("コンプリート！"),
+        GuidebookBookRules.nextLine(entries, complete = true),
+    )
+    assertEquals(
+        GuidebookBookRules.NextLine("Next: なし"),
+        GuidebookBookRules.nextLine(entries.take(3), complete = false),
+    )
   }
 
   @Test

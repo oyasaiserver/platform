@@ -8,6 +8,7 @@ import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.GuidebookData
+import com.github.srain3.sociallikes.datas.GuidebookRules
 import com.github.srain3.sociallikes.datas.GuidebookType
 import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
@@ -31,6 +32,8 @@ import org.bukkit.inventory.meta.BookMeta
 
 internal object GuidebookBookRules {
 
+  data class NextLine(val text: String, val buildId: Int? = null)
+
   fun <T> paginate(items: List<T>, perPage: Int): List<List<T>> {
     require(perPage > 0)
     return items.chunked(perPage).ifEmpty { listOf(emptyList()) }
@@ -43,12 +46,13 @@ internal object GuidebookBookRules {
         else -> "いいね済み"
       }
 
-  fun nextLine(entries: List<GuidebookService.EntryView>, complete: Boolean): String =
+  fun nextLine(entries: List<GuidebookService.EntryView>, complete: Boolean): NextLine =
       when {
-        complete -> "コンプリート！"
+        complete -> NextLine("コンプリート！")
         else ->
-            entries.firstOrNull(GuidebookService.EntryView::canGuide)?.data?.title?.let { "次: $it" }
-                ?: "次: なし"
+            entries.firstOrNull(GuidebookService.EntryView::canGuide)?.let {
+              NextLine("Next: ${it.data!!.title}", it.buildId)
+            } ?: NextLine("Next: なし")
       }
 
   fun firstCommentLine(comment: String): String? =
@@ -202,6 +206,7 @@ object GuidebookBookUI {
     }
     val entries = GuidebookService.entries(guidebook.id, player.uniqueId)
     val progress = GuidebookService.progress(entries)
+    val next = GuidebookBookRules.nextLine(entries, progress.complete)
     val home =
         page()
             .append(title(guidebook.title))
@@ -212,18 +217,12 @@ object GuidebookBookUI {
                     NamedTextColor.DARK_GRAY,
                 )
             )
-            .append(
-                line(
-                    GuidebookBookRules.nextLine(entries, progress.complete),
-                    if (progress.complete) NamedTextColor.DARK_GREEN else NamedTextColor.BLACK,
-                )
-            )
-    if (!progress.complete) {
-      home.append(line("左クリックで次の建築へ案内", NamedTextColor.GRAY))
-    }
+            .append(nextLine(next, guidebook.id, progress.complete))
     home.append(blank())
     if (guidebook.description.isNotBlank()) {
-      guidebook.description.lines().forEach { home.append(line(it)) }
+      GuidebookRules.description(guidebook.description).text.lines().forEach {
+        home.append(line(it))
+      }
     }
     val pages = mutableListOf(home.build())
     GuidebookBookRules.paginate(entries.withIndex().toList(), 3)
@@ -527,6 +526,28 @@ object GuidebookBookUI {
       command(text, commandText)
           .hoverEvent(HoverEvent.showText(Component.text("クリックでこの建築へ案内")))
           .append(newline())
+
+  private fun nextLine(
+      next: GuidebookBookRules.NextLine,
+      guidebookId: Int,
+      complete: Boolean,
+  ): Component {
+    val buildId = next.buildId
+    if (buildId == null) {
+      return line(
+          next.text,
+          if (complete) NamedTextColor.DARK_GREEN else NamedTextColor.BLACK,
+      )
+    }
+    return Component.text("Next: ", NamedTextColor.BLACK)
+        .append(
+            Component.text(next.text.removePrefix("Next: "), NamedTextColor.BLACK)
+                .decoration(TextDecoration.UNDERLINED, false)
+                .clickEvent(ClickEvent.runCommand("$COMMAND go $guidebookId $buildId"))
+                .hoverEvent(HoverEvent.showText(Component.text("クリックでこの建築へ案内")))
+        )
+        .append(newline())
+  }
 
   private fun newline(): Component = Component.newline()
 
