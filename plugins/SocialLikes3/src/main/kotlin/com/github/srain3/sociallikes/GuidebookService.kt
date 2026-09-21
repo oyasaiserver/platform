@@ -42,7 +42,6 @@ object GuidebookService {
       val data: SLData?,
       val valid: Boolean,
       val liked: Boolean,
-      val likedAt: Long?,
   )
 
   fun touristId(item: ItemStack?): Int? =
@@ -139,7 +138,6 @@ object GuidebookService {
                       findValidSign(it) != null
                 } ?: false,
             liked = data?.likes?.contains(playerUuid) == true,
-            likedAt = data?.likesWithTimestamp?.get(playerUuid),
         )
       }
 

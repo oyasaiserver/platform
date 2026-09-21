@@ -15,9 +15,6 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.UUID
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
@@ -32,20 +29,17 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
 
 internal object GuidebookBookRules {
-  private val dateFormatter = DateTimeFormatter.ofPattern("yyyy/M/d")
-  private val dateZone = ZoneId.of("Asia/Tokyo")
 
   fun <T> paginate(items: List<T>, perPage: Int): List<List<T>> {
     require(perPage > 0)
     return items.chunked(perPage).ifEmpty { listOf(emptyList()) }
   }
 
-  fun entryState(valid: Boolean, liked: Boolean, likedAt: Long?): String =
+  fun entryState(valid: Boolean, liked: Boolean): String =
       when {
         !valid -> "案内不可（進捗対象外）"
         !liked -> "未発見"
-        likedAt == null -> "いいね済み"
-        else -> "いいね済み ${Instant.ofEpochMilli(likedAt).atZone(dateZone).format(dateFormatter)}"
+        else -> "いいね済み"
       }
 
   fun firstCommentLine(comment: String): String? =
@@ -220,12 +214,12 @@ object GuidebookBookUI {
           val content = page().append(title("掲載建築"))
           entryPage.forEach { indexed ->
             val entry = indexed.value
-            val state = GuidebookBookRules.entryState(entry.valid, entry.liked, entry.likedAt)
+            val state = GuidebookBookRules.entryState(entry.valid, entry.liked)
             content
                 .append(
                     line("${indexed.index + 1}. ${entry.data?.title ?: "建築ID:${entry.buildId}"}")
                 )
-                .append(line("状態: $state", stateColor(entry.valid, entry.liked)))
+                .append(line(state, stateColor(entry.valid, entry.liked)))
             if (guidebook.type == GuidebookType.OFFICIAL) {
               content.append(
                   line(

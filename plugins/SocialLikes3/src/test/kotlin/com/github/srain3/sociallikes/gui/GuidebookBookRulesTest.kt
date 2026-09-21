@@ -1,6 +1,5 @@
 package com.github.srain3.sociallikes.gui
 
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -17,13 +16,10 @@ class GuidebookBookRulesTest {
   }
 
   @Test
-  fun `liked state includes a Japan date only when timestamp exists`() {
-    val likedAt = Instant.parse("2026-09-20T15:00:00Z").toEpochMilli()
-
-    assertEquals("いいね済み 2026/9/21", GuidebookBookRules.entryState(true, true, likedAt))
-    assertEquals("いいね済み", GuidebookBookRules.entryState(true, true, null))
-    assertEquals("未発見", GuidebookBookRules.entryState(true, false, likedAt))
-    assertEquals("案内不可（進捗対象外）", GuidebookBookRules.entryState(false, true, likedAt))
+  fun `entry state shows validity before like status`() {
+    assertEquals("いいね済み", GuidebookBookRules.entryState(true, true))
+    assertEquals("未発見", GuidebookBookRules.entryState(true, false))
+    assertEquals("案内不可（進捗対象外）", GuidebookBookRules.entryState(false, true))
   }
 
   @Test
