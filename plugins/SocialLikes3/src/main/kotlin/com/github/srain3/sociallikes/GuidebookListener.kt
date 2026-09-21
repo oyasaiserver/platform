@@ -163,6 +163,11 @@ object GuidebookListener : Listener {
       player.sendMessage(Tools.socialLikesLOGO + " &cこのガイドブックは現在公開されていません。".color())
       return
     }
+    // Already-liked builds give no reward, so revisiting them skips the cooldown.
+    if (buildId != null && Data.getSLData(buildId)?.likes?.contains(player.uniqueId) == true) {
+      GuidebookService.teleportToBuild(player, buildId)
+      return
+    }
     withTeleportCooldown(player) {
       if (buildId == null) GuidebookService.teleportToNext(player, guidebook)
       else GuidebookService.teleportToBuild(player, buildId)
