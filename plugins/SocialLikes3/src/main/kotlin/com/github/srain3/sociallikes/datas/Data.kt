@@ -261,6 +261,7 @@ object Data {
 
   /** ファイルからCacheを作成する(別スレッドにして鯖のロードを止めないようにしてる) */
   fun loadFileToDataCache() {
+    val loadStartedAt = System.nanoTime()
     dataMap.clear()
     userLikesInt.clear()
     lastID = 0
@@ -274,6 +275,7 @@ object Data {
             {
               val ids = mutableSetOf<Int>()
               loading = false
+              val sourceLoadStartedAt = System.nanoTime()
               when (readSource) {
                 ReadSource.YAML -> {
                   dir?.forEach dir@{
@@ -300,6 +302,9 @@ object Data {
                   SLDatabase.getMaxBuildIdBlocking()?.let { maxId -> lastID = max(lastID, maxId) }
                 }
               }
+              Tools.plugin.logger.info(
+                  "[SL3] timing ${readSource.configValue}Load=${(System.nanoTime() - sourceLoadStartedAt) / 1_000_000}ms"
+              )
 
               try {
                 AllBuild.createItem(dataMap.toMap())
@@ -317,10 +322,15 @@ object Data {
                 Tools.plugin.logger.severe("slNearLoadTaskにエラー: ${e.toString()}")
               }
 
+              val rankUpStartedAt = System.nanoTime()
               try {
                 SLRankUp.createDataTask()
               } catch (e: Exception) {
                 Tools.plugin.logger.severe("SLRankUp.createDataTaskにエラー: ${e.toString()}")
+              } finally {
+                Tools.plugin.logger.info(
+                    "[SL3] timing slRankUpCreateData=${(System.nanoTime() - rankUpStartedAt) / 1_000_000}ms"
+                )
               }
 
               if (readSource == ReadSource.YAML) {
@@ -332,7 +342,7 @@ object Data {
               }
 
               try {
-                DirtyBuildManager.reconcile(preferYaml = true)
+                DirtyBuildManager.reconcile(preferYaml = true, timingName = "startupReconcile")
               } catch (e: Exception) {
                 Tools.plugin.logger.warning(
                     "[SL3] Startup dirty builds reconciliation failed: ${e.message}"
@@ -344,6 +354,9 @@ object Data {
                   .info(
                       "[SL3] Load completion! source=${readSource.configValue}, builds=${getBuildingInt()}"
                   )
+              Tools.plugin.logger.info(
+                  "[SL3] timing loadFileToDataCache=${(System.nanoTime() - loadStartedAt) / 1_000_000}ms"
+              )
             },
             "SL3-loadFileToDataCache",
         )

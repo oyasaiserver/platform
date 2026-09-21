@@ -161,18 +161,32 @@ object DirtyBuildManager {
    *
    * @param preferYaml true の場合は起動時リコンシリエーションとして YAML を正とし、false の場合は稼働中定期リコンシリエーションとしてメモリを正とする。
    */
-  fun reconcile(preferYaml: Boolean = false) {
+  fun reconcile(preferYaml: Boolean = false, timingName: String? = null) {
+    val startedAt = System.nanoTime()
+    fun logTiming() {
+      if (timingName != null) {
+        Tools.plugin.logger.info(
+            "[SL3] timing $timingName=${(System.nanoTime() - startedAt) / 1_000_000}ms"
+        )
+      }
+    }
+
     val plugin = Tools.plugin
-    if (!plugin.isEnabled) return
+    if (!plugin.isEnabled) {
+      logTiming()
+      return
+    }
 
     if (!isReconciling.compareAndSet(false, true)) {
       Tools.plugin.logger.info("[SL3] Reconciliation is already in progress. Skipping this run.")
+      logTiming()
       return
     }
 
     val currentDirty = getDirtyIds().toList()
     if (currentDirty.isEmpty()) {
       isReconciling.set(false)
+      logTiming()
       return
     }
 
@@ -188,6 +202,7 @@ object DirtyBuildManager {
             if (chunkIndex >= chunks.size) {
               isReconciling.set(false)
               cancel()
+              logTiming()
               return
             }
 
@@ -207,6 +222,7 @@ object DirtyBuildManager {
             if (chunkIndex >= chunks.size) {
               isReconciling.set(false)
               cancel()
+              logTiming()
             }
           }
         }

@@ -44,7 +44,14 @@ internal fun pruneStartupBackups(backupsDir: Path, keepCount: Int): Int {
 
 class SocialLikes : JavaPlugin() {
   override fun onEnable() {
-    backupPluginDataOnStartup()
+    val backupStartedAt = System.nanoTime()
+    try {
+      backupPluginDataOnStartup()
+    } finally {
+      logger.info(
+          "[SL3] timing startupBackup=${(System.nanoTime() - backupStartedAt) / 1_000_000}ms"
+      )
+    }
     saveDefaultConfig()
 
     SLDatabase.init(this)
