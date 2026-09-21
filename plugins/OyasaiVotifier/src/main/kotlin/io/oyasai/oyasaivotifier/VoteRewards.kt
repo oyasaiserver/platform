@@ -23,19 +23,28 @@ internal class VoteRewards(
   private var progress = state.getInt("votes", 0).coerceAtLeast(0)
 
   fun deliver(vote: Vote) {
+    if (!vote.username.matches(MINECRAFT_USERNAME)) {
+      plugin.logger.warning("Skipped vote rewards for unsafe username '${vote.username}'")
+      return
+    }
     val player =
         vote.playerUuid()?.let(Bukkit::getOfflinePlayer) ?: Bukkit.getOfflinePlayer(vote.username)
     deliver(player, vote, config.individual.pick(nextInt), progress)
     val party = config.party
-    if (party.votesNeeded == 0) return
-    progress++
-    if (progress < party.votesNeeded) {
-      save()
-      return
-    }
-    progress = 0
+    val partyVote = recordPartyVote(progress, party.votesNeeded)
+    progress = partyVote.nextProgress
     save()
-    Bukkit.broadcastMessage("§a投票パーティーが始まりました！オンラインの全員に報酬を配布します。")
+    config.messages
+        .voteBroadcastChat(vote.username, partyVote.recordedProgress, party.votesNeeded)
+        ?.let(Bukkit::broadcastMessage)
+    config.messages
+        .voteBroadcastActionBar(vote.username, partyVote.recordedProgress, party.votesNeeded)
+        ?.let { message -> Bukkit.getOnlinePlayers().forEach { it.sendActionBar(message) } }
+    Bukkit.getPlayerExact(vote.username)?.let { player ->
+      config.messages.voteThankYou()?.let(player::sendMessage)
+    }
+    if (!partyVote.reached) return
+    config.messages.partyStart(party.votesNeeded).forEach(Bukkit::broadcastMessage)
     Bukkit.getOnlinePlayers().forEach { recipient ->
       deliver(recipient, vote, party.rewards.pick(nextInt), party.votesNeeded)
     }
@@ -75,7 +84,7 @@ internal class VoteRewards(
   }
 
   private fun command(player: String?, vote: Vote, votes: Int, template: String): String? {
-    if (player == null || !player.matches(USERNAME)) {
+    if (player == null || !player.matches(MINECRAFT_USERNAME)) {
       plugin.logger.warning("Skipped vote command for unsafe username '$player'")
       return null
     }
@@ -121,10 +130,23 @@ internal class VoteRewards(
   }
 
   private companion object {
-    val USERNAME = Regex("[A-Za-z0-9_]{1,16}")
     val SERVICE = Regex("[A-Za-z0-9_-]{1,64}")
   }
 }
+
+internal data class PartyVoteProgress(val recordedProgress: Int, val nextProgress: Int) {
+  val reached: Boolean
+    get() = nextProgress == 0
+}
+
+internal fun recordPartyVote(progress: Int, votesNeeded: Int): PartyVoteProgress {
+  require(progress >= 0)
+  require(votesNeeded > 0)
+  val recorded = progress + 1
+  return PartyVoteProgress(recorded, if (recorded >= votesNeeded) 0 else recorded)
+}
+
+internal val MINECRAFT_USERNAME = Regex("[A-Za-z0-9_]{1,16}")
 
 private val Vote.username: String
   get() = getUsername() ?: ""

@@ -64,6 +64,14 @@ class VotifierConfigTest {
     assertEquals(30_000.0, parsed.individual.pick { 0 }.money)
     assertEquals(20_000.0, parsed.individual.pick { 50 }.money)
     assertEquals(50_000.0, parsed.individual.pick { 90 }.money)
+    assertEquals(
+        "§8(§6zVoteParty§8) §cMR0203§6さんが投票しました！§7(§b6§7/§a60§7)",
+        parsed.messages.voteBroadcastChat("MR0203", 6, 60),
+    )
+    assertEquals(
+        "§6累計投票数が§c60§6に達しました！",
+        parsed.messages.partyStart(60).first(),
+    )
   }
 
   private fun packagedConfig(): YamlConfiguration =

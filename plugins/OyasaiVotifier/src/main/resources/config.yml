@@ -7,6 +7,18 @@ listener:
 protocol-v1:
   enabled: true
 
+# zVoteParty の実運用メッセージ。空文字にすると該当の通知を無効化できる。
+messages:
+  prefix: "&8(&6zVoteParty&8) "
+  vote:
+    broadcast:
+      action-bar: "&c%player%&6さんが投票しました！&7(&b%zvoteparty_votes_recorded%&7/&a%zvoteparty_votes_required_total%&7)"
+      chat: "&c%player%&6さんが投票しました！&7(&b%zvoteparty_votes_recorded%&7/&a%zvoteparty_votes_required_total%&7)"
+    thank-you: "&7投票ありがとうございます！"
+  party-start:
+    - "&6累計投票数が&c%zvoteparty_votes_required_total%&6に達しました！"
+    - "&6オンラインの皆様に報酬が配られます！"
+
 # NuVotifier v2 chooses a service-name key first, then falls back to default.
 # Keep the existing production default token secret; do not commit it.
 tokens:

@@ -1,6 +1,7 @@
 package io.oyasai.oyasaivotifier
 
 import kotlin.random.Random
+import org.bukkit.ChatColor
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -12,6 +13,7 @@ data class VotifierConfig(
     val tokens: Map<String, String>,
     val individual: RewardTable,
     val party: PartyReward,
+    val messages: VoteMessages,
 ) {
   companion object {
     fun load(plugin: JavaPlugin): VotifierConfig {
@@ -49,6 +51,15 @@ data class VotifierConfig(
                       config.getInt("rewards.party.votes-needed").also { require(it > 0) },
                   rewards = config.rewardTable("rewards.party.rewards"),
                   globalCommands = config.getStringList("rewards.party.commands"),
+              ),
+          messages =
+              VoteMessages(
+                  prefix = config.getString("messages.prefix", "")!!,
+                  voteBroadcastChat = config.getString("messages.vote.broadcast.chat", "")!!,
+                  voteBroadcastActionBar =
+                      config.getString("messages.vote.broadcast.action-bar", "")!!,
+                  voteThankYou = config.getString("messages.vote.thank-you", "")!!,
+                  partyStart = config.getStringList("messages.party-start"),
               ),
       )
     }
@@ -106,3 +117,39 @@ data class PartyReward(
     val rewards: RewardTable,
     val globalCommands: List<String>,
 )
+
+data class VoteMessages(
+    val prefix: String,
+    val voteBroadcastChat: String,
+    val voteBroadcastActionBar: String,
+    val voteThankYou: String,
+    val partyStart: List<String>,
+) {
+  fun voteBroadcastChat(player: String, votes: Int, votesNeeded: Int): String? =
+      render(prefix + voteBroadcastChat, player, votes, votesNeeded)
+
+  fun voteBroadcastActionBar(player: String, votes: Int, votesNeeded: Int): String? =
+      render(voteBroadcastActionBar, player, votes, votesNeeded)
+
+  fun voteThankYou(): String? = render(prefix + voteThankYou)
+
+  fun partyStart(votesNeeded: Int): List<String> =
+      partyStart.mapNotNull { render(it, votesNeeded = votesNeeded) }
+
+  private fun render(
+      template: String,
+      player: String? = null,
+      votes: Int = 0,
+      votesNeeded: Int = 0,
+  ): String? {
+    if (player != null) require(player.matches(MINECRAFT_USERNAME)) { "Invalid Minecraft username" }
+    return ChatColor.translateAlternateColorCodes(
+            '&',
+            template
+                .replace("%player%", player ?: "")
+                .replace("%zvoteparty_votes_recorded%", votes.toString())
+                .replace("%zvoteparty_votes_required_total%", votesNeeded.toString()),
+        )
+        .takeIf(String::isNotBlank)
+  }
+}

@@ -140,6 +140,7 @@ class VoteProtocolTest {
               RewardTable(listOf(WeightedReward(1, Reward(0.0, 0, emptyList())))),
               emptyList(),
           ),
+          VoteMessages("", "", "", "", emptyList()),
       )
 
   private fun keyPair(): KeyPair =
