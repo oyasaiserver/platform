@@ -23,6 +23,7 @@ import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
+import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.inventory.LecternMenu
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -596,12 +597,19 @@ object GuidebookBookUI {
       it.persistentDataContainer.set(viewKey, PersistentDataType.STRING, bookmarkKey.orEmpty())
     }
     val handle = (player as CraftPlayer).handle
-    val view =
-        LecternMenu(handle.nextContainerCounter(), handle.inventory)
-            .apply { setTitle(CraftChatMessage.fromStringOrEmpty(bookTitle)) }
-            .bukkitView as LecternView
-    view.topInventory.book = book
-    player.openInventory(view)
+    val opened =
+        handle.openMenu(
+            SimpleMenuProvider(
+                { id, inventory, _ ->
+                  LecternMenu(id, inventory).apply {
+                    (bukkitView as LecternView).topInventory.book = book
+                  }
+                },
+                CraftChatMessage.fromStringOrEmpty(bookTitle),
+            )
+        )
+    if (opened.isEmpty) return
+    val view = (handle.containerMenu as LecternMenu).bukkitView as LecternView
     view.page =
         GuidebookBookRules.bookmarkPage(
             bookmarkKey?.let { bookmarks[player.uniqueId]?.get(it) },
