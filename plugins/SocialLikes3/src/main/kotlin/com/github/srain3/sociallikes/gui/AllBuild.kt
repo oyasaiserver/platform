@@ -6,6 +6,7 @@ import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
+import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
@@ -107,18 +108,24 @@ object AllBuild {
     val thread =
         Thread(
             {
-              dataMap.values.forEach { list ->
-                list
-                    .filter { it.deletedAt == null }
-                    .forEach { slData ->
-                      try {
-                        createSignItem(slData)
-                      } catch (e: Exception) {
-                        Tools.plugin.logger.severe("createSignItemにエラー０００: ${slData.id}")
-                      }
-                    }
+              val startedAt = System.nanoTime()
+              val builds = dataMap.values.flatten().filter { it.deletedAt == null }
+              val ownerNames =
+                  SLDatabase.loadPlayerNamesBlocking(
+                      builds.map { it.owner.toString() },
+                      timingName = "allBuildPlayerNames",
+                  )
+              builds.forEach { slData ->
+                try {
+                  createSignItem(slData, ownerNames[slData.owner.toString()])
+                } catch (e: Exception) {
+                  Tools.plugin.logger.severe("createSignItemにエラー０００: ${slData.id}")
+                }
               }
               allBuildItem.toSortedMap()
+              Tools.plugin.logger.info(
+                  "[SL3] timing allBuildItemGeneration=${(System.nanoTime() - startedAt) / 1_000_000}ms"
+              )
               try {
                 UserBuild.createItem(dataMap)
               } catch (e: Exception) {
@@ -156,19 +163,22 @@ object AllBuild {
   }
 
   /** アイテムを作成する */
-  private fun createSignItem(slData: SLData) {
+  private fun createSignItem(
+      slData: SLData,
+      ownerName: String? =
+          SLDatabase.getCachedPlayerName(slData.owner.toString())
+              ?: try {
+                Bukkit.getOfflinePlayer(slData.owner).name
+              } catch (_: Exception) {
+                null
+              },
+  ) {
     val item = ItemStack(Material.OAK_SIGN)
     item.allFlag()
     item.addText(
         "&f>>&a${slData.title} &rID:${slData.id}",
         mutableListOf(
-            "&3制作者:&f ${
-                try {
-                    Bukkit.getOfflinePlayer(slData.owner).name
-                } catch (_: Exception) {
-                    "不明"
-                }
-            }",
+            "&3制作者:&f ${ownerName ?: "不明"}",
             "&3イイね:&f ${slData.likes.count()}",
             "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
             "&7&nクリックでテレポート&r&7します",

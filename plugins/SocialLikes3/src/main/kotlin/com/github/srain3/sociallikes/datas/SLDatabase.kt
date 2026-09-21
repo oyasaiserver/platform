@@ -655,6 +655,7 @@ object SLDatabase {
           name.trim().takeIf { it.isNotEmpty() }?.let { uuid to it }
         }
     if (normalizedEntries.isEmpty()) return
+    normalizedEntries.forEach { (uuid, name) -> playerNameCache[uuid.toString()] = name }
     val seenAt = System.currentTimeMillis()
 
     submit(taskName) {
@@ -1332,14 +1333,27 @@ object SLDatabase {
 
   private val playerNameCache = java.util.concurrent.ConcurrentHashMap<String, String>()
 
+  fun getCachedPlayerName(uuid: String): String? = playerNameCache[uuid]
+
   /**
    * Resolves the supplied UUIDs with one query, then falls back to Bukkit's offline-player cache.
    */
-  fun loadPlayerNamesBlocking(uuids: List<String>): Map<String, String> {
+  fun loadPlayerNamesBlocking(
+      uuids: List<String>,
+      timingName: String? = null,
+  ): Map<String, String> {
+    val startedAt = System.nanoTime()
     val normalizedUuids = uuids.filter { it.isNotBlank() }.distinct()
-    if (normalizedUuids.isEmpty()) return emptyMap()
+    if (normalizedUuids.isEmpty()) {
+      if (timingName != null) {
+        Tools.plugin.logger.info("[SL3] timing $timingName=0ms uuids=0 cached=0 db=0 bukkit=0")
+      }
+      return emptyMap()
+    }
 
     val uncached = normalizedUuids.filter { !playerNameCache.containsKey(it) }
+    var databaseCount = 0
+    var bukkitCount = 0
     if (uncached.isNotEmpty()) {
       submitBlocking("loadPlayerNames") {
         uncached.chunked(900).forEach { chunk ->
@@ -1356,29 +1370,39 @@ object SLDatabase {
                     val n = results.getString("last_known_name")
                     if (u != null && !n.isNullOrBlank()) {
                       playerNameCache[u] = n
+                      databaseCount++
                     }
                   }
                 }
               }
         }
-
-        val resolvedFromOfflineCache =
-            uncached.mapNotNull { uuidText ->
-              if (playerNameCache.containsKey(uuidText)) return@mapNotNull null
-              val uuid =
-                  runCatching { UUID.fromString(uuidText) }.getOrNull() ?: return@mapNotNull null
-              val name =
-                  runCatching { Bukkit.getPlayer(uuid)?.name ?: Bukkit.getOfflinePlayer(uuid).name }
-                      .getOrNull()
-                      ?.trim()
-                      ?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
-              playerNameCache[uuidText] = name
-              uuid to name
-            }
-        upsertPlayerNames("backfillPlayerNames", resolvedFromOfflineCache)
       }
+
+      val resolvedFromOfflineCache =
+          uncached.mapNotNull { uuidText ->
+            if (playerNameCache.containsKey(uuidText)) return@mapNotNull null
+            val uuid =
+                runCatching { UUID.fromString(uuidText) }.getOrNull() ?: return@mapNotNull null
+            bukkitCount++
+            val name =
+                runCatching { Bukkit.getPlayer(uuid)?.name ?: Bukkit.getOfflinePlayer(uuid).name }
+                    .getOrNull()
+                    ?.trim()
+                    ?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+            playerNameCache[uuidText] = name
+            uuid to name
+          }
+      upsertPlayerNames("backfillPlayerNames", resolvedFromOfflineCache)
     }
-    return normalizedUuids.mapNotNull { u -> playerNameCache[u]?.let { n -> u to n } }.toMap()
+    val result = normalizedUuids.mapNotNull { u -> playerNameCache[u]?.let { n -> u to n } }.toMap()
+    if (timingName != null) {
+      val elapsedMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startedAt)
+      Tools.plugin.logger.info(
+          "[SL3] timing $timingName=${elapsedMs}ms uuids=${normalizedUuids.size} " +
+              "cached=${normalizedUuids.size - uncached.size} db=$databaseCount bukkit=$bukkitCount"
+      )
+    }
+    return result
   }
 
   fun findUuidByNameBlocking(name: String): UUID? {

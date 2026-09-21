@@ -5,6 +5,7 @@ import com.github.srain3.sociallikes.Tools.addText
 import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.SLData
+import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
@@ -147,10 +148,20 @@ object UserBuild {
     userBuildItem.clear()
     Thread(
             {
-              dataMap.values.forEach { list ->
-                list.filter { it.deletedAt == null }.forEach { slData -> createSignItem(slData) }
+              val startedAt = System.nanoTime()
+              val builds = dataMap.values.flatten().filter { it.deletedAt == null }
+              val ownerNames =
+                  SLDatabase.loadPlayerNamesBlocking(
+                      builds.map { it.owner.toString() },
+                      timingName = "userBuildPlayerNames",
+                  )
+              builds.forEach { slData ->
+                createSignItem(slData, ownerNames[slData.owner.toString()])
               }
               userBuildItem.toSortedMap()
+              Tools.plugin.logger.info(
+                  "[SL3] timing userBuildItemGeneration=${(System.nanoTime() - startedAt) / 1_000_000}ms"
+              )
             },
             "SL3-UserBuildGUIItem",
         )
@@ -178,15 +189,18 @@ object UserBuild {
   }
 
   /** アイテムを作成する */
-  private fun createSignItem(slData: SLData) {
+  private fun createSignItem(
+      slData: SLData,
+      ownerName: String? =
+          SLDatabase.getCachedPlayerName(slData.owner.toString())
+              ?: SLPlayerHeads.resolveName(slData.owner),
+  ) {
     val item = ItemStack(Material.OAK_SIGN)
     item.allFlag()
     item.addText(
         "&f>>&a${slData.title} &rID:${slData.id}",
         mutableListOf(
-            "&3制作者:&f ${
-                SLPlayerHeads.resolveName(slData.owner) ?: "不明"
-            }",
+            "&3制作者:&f ${ownerName ?: "不明"}",
             "&3イイね:&f ${slData.likes.count()}",
             "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
             "&7&nクリックでテレポート&r&7します",
