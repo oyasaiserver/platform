@@ -27,14 +27,10 @@ internal data class GuideTeleportRecord(val buildId: Int, val atMillis: Long)
 internal fun canGuideTeleport(
     destinationLiked: Boolean,
     lastTeleport: GuideTeleportRecord?,
-    lastBuildLiked: Boolean,
     nowMillis: Long,
     cooldownMillis: Long,
 ): Boolean =
-    destinationLiked ||
-        lastTeleport == null ||
-        lastBuildLiked ||
-        nowMillis - lastTeleport.atMillis >= cooldownMillis
+    destinationLiked || lastTeleport == null || nowMillis - lastTeleport.atMillis >= cooldownMillis
 
 object GuidebookListener : Listener {
   private const val TELEPORT_COOLDOWN_MILLIS = 30_000L
@@ -205,12 +201,6 @@ object GuidebookListener : Listener {
     }
   }
 
-  fun releaseTeleportCooldown(playerUuid: UUID, buildId: Int) {
-    lastTeleports.computeIfPresent(playerUuid) { _, record ->
-      record.takeUnless { it.buildId == buildId }
-    }
-  }
-
   private fun withTeleportCooldown(
       player: org.bukkit.entity.Player,
       destinationLiked: Boolean,
@@ -218,15 +208,10 @@ object GuidebookListener : Listener {
   ) {
     val now = System.currentTimeMillis()
     val lastTeleport = lastTeleports[player.uniqueId]
-    val lastBuildLiked =
-        lastTeleport?.let {
-          Data.getSLData(it.buildId)?.likes?.contains(player.uniqueId) == true
-        } == true
     if (
         !canGuideTeleport(
             destinationLiked,
             lastTeleport,
-            lastBuildLiked,
             now,
             TELEPORT_COOLDOWN_MILLIS,
         )

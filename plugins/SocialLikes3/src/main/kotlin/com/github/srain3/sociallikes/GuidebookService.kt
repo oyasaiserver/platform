@@ -276,7 +276,6 @@ object GuidebookService {
   }
 
   fun handleLike(player: Player, buildId: Int) {
-    GuidebookListener.releaseTeleportCooldown(player.uniqueId, buildId)
     SLDatabase.loadPublishedGuidebooksContainingBuildBlocking(buildId).forEach { guidebook ->
       val guidebookProgress = progress(entries(guidebook.id, player.uniqueId))
       if (!guidebookProgress.complete) return@forEach
