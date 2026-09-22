@@ -29,8 +29,8 @@ guidebook:
   # sound はバニラ効果音の namespaced key（"minecraft:" 省略可）。空文字にすると音だけ鳴らさない。
   announce:
     enabled: true
-    sound: "ui.toast.challenge_complete"
-    volume: 1.0
+    sound: "entity.player.levelup"
+    volume: 0.75
     pitch: 1.0
 
   # 旅行ガイドブックの配色と文言。booktuner の［設定をコピー］の JSON と同じ中身。書かない項目は既定値。
