@@ -328,7 +328,8 @@ object GuidebookBookUI {
             } ?: name
         )
         content.append(newline())
-        row.sub.forEach { content.append(line(it, "sub")) }
+        // 改行はクライアントに任せる（フォント幅の違いで孤立行ができないように）。行数は row.sub で数える
+        if (row.sub.isNotEmpty()) content.append(line(row.sub.joinToString(""), "sub"))
         content.append(blank())
       }
       pages += content.build()
