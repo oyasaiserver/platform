@@ -557,19 +557,21 @@ object SLDatabase {
   fun loadEditableGuidebooksBlocking(
       creatorUuid: UUID,
       canEditOfficial: Boolean,
+      canEditAll: Boolean,
   ): List<GuidebookData> =
       loadGuidebooksBlocking(
           "loadEditableGuidebooks",
           """
           SELECT id, type, creator_uuid, title, description, published, created_at
           FROM guidebooks
-          WHERE creator_uuid = ? OR (? = 1 AND type = 'OFFICIAL')
+          WHERE ? = 1 OR creator_uuid = ? OR (? = 1 AND type = 'OFFICIAL')
           ORDER BY CASE type WHEN 'OFFICIAL' THEN 0 ELSE 1 END, created_at DESC, id DESC
           """
               .trimIndent(),
       ) { statement ->
-        statement.setString(1, creatorUuid.toString())
-        statement.setInt(2, if (canEditOfficial) 1 else 0)
+        statement.setInt(1, if (canEditAll) 1 else 0)
+        statement.setString(2, creatorUuid.toString())
+        statement.setInt(3, if (canEditOfficial) 1 else 0)
       }
 
   fun countPersonalGuidebooksBlocking(creatorUuid: UUID): Int =

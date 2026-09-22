@@ -38,6 +38,7 @@ import org.bukkit.persistence.PersistentDataType
 
 object GuidebookService {
   const val OFFICIAL_PERMISSION = "sociallikes.guidebook.official"
+  const val ADMIN_PERMISSION = "sociallikes3.admin"
   private const val MAX_TITLE_LENGTH = 32
 
   val touristKey = NamespacedKey(Tools.plugin, "guidebook_id")
@@ -135,10 +136,11 @@ object GuidebookService {
   }
 
   fun canEdit(player: Player, guidebook: GuidebookData): Boolean =
-      when (guidebook.type) {
-        GuidebookType.PERSONAL -> guidebook.creatorUuid == player.uniqueId
-        GuidebookType.OFFICIAL -> player.hasPermission(OFFICIAL_PERMISSION)
-      }
+      player.hasPermission(ADMIN_PERMISSION) ||
+          when (guidebook.type) {
+            GuidebookType.PERSONAL -> guidebook.creatorUuid == player.uniqueId
+            GuidebookType.OFFICIAL -> player.hasPermission(OFFICIAL_PERMISSION)
+          }
 
   fun entries(guidebookId: Int, playerUuid: UUID): List<EntryView> =
       SLDatabase.loadGuidebookEntriesBlocking(guidebookId).map { buildId ->
@@ -164,8 +166,8 @@ object GuidebookService {
 
   fun addBuild(player: Player, guidebookId: Int, build: SLData): Boolean {
     val guidebook = editableGuidebook(player, guidebookId) ?: return false
-    if (guidebook.type == GuidebookType.PERSONAL && build.owner != player.uniqueId) {
-      player.sendMessage(Tools.socialLikesLOGO + " &c個人ガイドには自分の建築だけ追加できます。".color())
+    if (guidebook.type == GuidebookType.PERSONAL && build.owner != guidebook.creatorUuid) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c個人ガイドには作者の建築だけ追加できます。".color())
       return false
     }
     val added = SLDatabase.addGuidebookEntryBlocking(guidebookId, build.id, entryLimit())
