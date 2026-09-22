@@ -7,9 +7,9 @@ import com.github.srain3.sociallikes.datas.BuildTimestamps
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.UserBuild
+import com.github.srain3.sociallikes.resolveWorld
 import java.time.LocalDateTime
 import java.util.*
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockFace.*
@@ -148,14 +148,9 @@ object SLtp : CommandExecutor {
 
     userLastTimeStamp[sender.uniqueId] = slData.time
 
-    if (slData.loc.world == null) {
-      val world = Bukkit.getServer().getWorld(slData.worldName)
-      if (world == null) {
-        sender.sendMessage(Tools.socialLikesLOGO + " &cID:${slData.id}のワールドが存在しません".color())
-        return true
-      } else {
-        slData.loc.world = world
-      }
+    if (slData.resolveWorld() == null) {
+      sender.sendMessage(Tools.socialLikesLOGO + " &cID:${slData.id}のワールドが存在しません".color())
+      return true
     }
     val slLoc = signLocation(slData.loc)
 

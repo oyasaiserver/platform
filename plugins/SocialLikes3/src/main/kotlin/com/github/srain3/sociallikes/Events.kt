@@ -245,6 +245,7 @@ object Events : Listener {
 
       // クリックされた看板の持っているIDのlocデータと一致しない場合
       // SLUpdateモードなら処理を行う、それ以外はreturn
+      data.resolveWorld()
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
           updateSLSign(data, block, e.player.uniqueId)
@@ -589,6 +590,7 @@ object Events : Listener {
       val data = Data.getSLData(id) ?: return
 
       // クリックされた看板の持っているIDのlocデータと一致しない場合return
+      data.resolveWorld()
       if (data.loc != block.location) return
       e.isCancelled = true
     } else if (oldSlSignRegex.containsMatchIn(unColorFrontL0)) {

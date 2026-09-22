@@ -4,6 +4,7 @@ import com.github.srain3.sociallikes.CustomYaml
 import com.github.srain3.sociallikes.CustomYamlFile
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
+import com.github.srain3.sociallikes.WorldLocationListener
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.SLRankUp
 import com.github.srain3.sociallikes.gui.UserBuild
@@ -271,10 +272,10 @@ object Data {
     activeReadSource = readSource
     val dir = if (readSource == ReadSource.YAML) Tools.getFolderToFolder("data") ?: return else null
     Bukkit.getLogger().info("[SL3] ${readSource.logName} Loading...")
+    loading = false
     Thread(
             {
               val ids = mutableSetOf<Int>()
-              loading = false
               val sourceLoadStartedAt = System.nanoTime()
               when (readSource) {
                 ReadSource.YAML -> {
@@ -349,14 +350,22 @@ object Data {
                 )
               }
 
-              loading = true
-              Bukkit.getLogger()
-                  .info(
-                      "[SL3] Load completion! source=${readSource.configValue}, builds=${getBuildingInt()}"
+              if (!Tools.plugin.isEnabled) return@Thread
+              Bukkit.getScheduler()
+                  .runTask(
+                      Tools.plugin,
+                      Runnable {
+                        WorldLocationListener.resolveLoadedWorldLocations()
+                        loading = true
+                        Bukkit.getLogger()
+                            .info(
+                                "[SL3] Load completion! source=${readSource.configValue}, builds=${getBuildingInt()}"
+                            )
+                        Tools.plugin.logger.info(
+                            "[SL3] timing loadFileToDataCache=${(System.nanoTime() - loadStartedAt) / 1_000_000}ms"
+                        )
+                      },
                   )
-              Tools.plugin.logger.info(
-                  "[SL3] timing loadFileToDataCache=${(System.nanoTime() - loadStartedAt) / 1_000_000}ms"
-              )
             },
             "SL3-loadFileToDataCache",
         )
@@ -379,7 +388,7 @@ object Data {
 
                 yml.apply {
                   set("id", data.id)
-                  set("loc.world", data.loc.world?.name ?: data.worldName)
+                  set("loc.world", data.worldName)
                   set("loc.x", data.loc.x)
                   set("loc.y", data.loc.y)
                   set("loc.z", data.loc.z)
@@ -432,7 +441,7 @@ object Data {
         cMap.values.forEach { cList -> cList.removeIf { it.id == data.id } }
       }
     }
-    val nWorld = slNearData.getOrPut(data.loc.world?.name ?: data.worldName) { mutableMapOf() }
+    val nWorld = slNearData.getOrPut(data.worldName) { mutableMapOf() }
     val nChunkX = nWorld.getOrPut(data.loc.blockX shr 4) { mutableMapOf() }
     val nChunkZ = nChunkX.getOrPut(data.loc.blockZ shr 4) { mutableListOf() }
     nChunkZ.add(data)
@@ -643,32 +652,12 @@ object Data {
   private fun slNearLoadTask() {
     val list = getSLDataAll()
     list.forEach { data ->
-      if (data.loc.world != null) {
-        val nWorld =
-            slNearData[data.loc.world?.name]
-                ?: run {
-                  val map = mutableMapOf<Int, MutableMap<Int, MutableList<SLData>>>()
-                  slNearData[data.loc.world?.name ?: "null"] = map
-                  map
-                }
-        val x = data.loc.blockX.shr(4)
-        val nChunkX =
-            nWorld[x]
-                ?: run {
-                  val map = mutableMapOf<Int, MutableList<SLData>>()
-                  nWorld[x] = map
-                  map
-                }
-        val z = data.loc.blockZ.shr(4)
-        val nChunkZ =
-            nChunkX[z]
-                ?: run {
-                  val set = mutableListOf<SLData>()
-                  nChunkX[z] = set
-                  set
-                }
-        nChunkZ.add(data)
-      }
+      val nWorld = slNearData.getOrPut(data.worldName) { mutableMapOf() }
+      val x = data.loc.blockX.shr(4)
+      val nChunkX = nWorld.getOrPut(x) { mutableMapOf() }
+      val z = data.loc.blockZ.shr(4)
+      val nChunkZ = nChunkX.getOrPut(z) { mutableListOf() }
+      nChunkZ.add(data)
     }
   }
 
