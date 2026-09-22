@@ -34,6 +34,14 @@ class GuidebookRulesTest {
   }
 
   @Test
+  fun `announcement fires on first publish and on republish after edits only`() {
+    assertEquals(GuidebookAnnouncement.NEW, GuidebookRules.announcement(false, false))
+    assertEquals(GuidebookAnnouncement.NEW, GuidebookRules.announcement(false, true))
+    assertEquals(GuidebookAnnouncement.UPDATE, GuidebookRules.announcement(true, true))
+    assertEquals(GuidebookAnnouncement.NONE, GuidebookRules.announcement(true, false))
+  }
+
+  @Test
   fun `creation and entry limits reject only exhausted or duplicate cases`() {
     assertTrue(GuidebookRules.canCreatePersonal(4, 5))
     assertFalse(GuidebookRules.canCreatePersonal(5, 5))

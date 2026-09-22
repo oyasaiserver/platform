@@ -484,7 +484,10 @@ object GuidebookBookUI {
       player.sendMessage(Tools.socialLikesLOGO + " &cこの建築のコメントは編集できません。".color())
       return
     }
-    SLSignLikes.commentEdit(player, build) { openEditor(player, guidebookId) }
+    SLSignLikes.commentEdit(player, build) {
+      GuidebookService.markEdited(guidebookId)
+      openEditor(player, guidebookId)
+    }
   }
 
   fun requestDelete(player: Player, guidebookId: Int) {

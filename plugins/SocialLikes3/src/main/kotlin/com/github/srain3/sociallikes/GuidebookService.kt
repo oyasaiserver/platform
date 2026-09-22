@@ -5,6 +5,7 @@ import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.command.SLtp.toYaw
 import com.github.srain3.sociallikes.datas.Data
+import com.github.srain3.sociallikes.datas.GuidebookAnnouncement
 import com.github.srain3.sociallikes.datas.GuidebookCompletion
 import com.github.srain3.sociallikes.datas.GuidebookData
 import com.github.srain3.sociallikes.datas.GuidebookProgress
@@ -13,6 +14,11 @@ import com.github.srain3.sociallikes.datas.GuidebookType
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
 import java.util.UUID
+import net.kyori.adventure.key.Key
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -171,7 +177,7 @@ object GuidebookService {
               " &c追加済み、または1冊の上限${entryLimit()}件に達しています。".color()
             }
     )
-    return added
+    return added.also { if (it) markEdited(guidebookId) }
   }
 
   fun setPublished(player: Player, guidebookId: Int, published: Boolean): Boolean {
@@ -195,6 +201,7 @@ object GuidebookService {
         player.sendMessage(
             Tools.socialLikesLOGO + if (published) " &a公開しました。".color() else " &e非公開にしました。".color()
         )
+        if (published) announce(guidebook)
       }
     }
   }
@@ -206,17 +213,26 @@ object GuidebookService {
           Tools.socialLikesLOGO +
               if (saved) " &a説明文を保存しました。".color() else " &c説明文を保存できませんでした。".color()
       )
+      if (saved) markEdited(guidebookId)
     }
   }
 
   fun removeBuild(player: Player, guidebookId: Int, buildId: Int): Boolean {
     editableGuidebook(player, guidebookId) ?: return false
-    return SLDatabase.removeGuidebookEntryBlocking(guidebookId, buildId)
+    return SLDatabase.removeGuidebookEntryBlocking(guidebookId, buildId).also {
+      if (it) markEdited(guidebookId)
+    }
   }
 
   fun moveBuild(player: Player, guidebookId: Int, buildId: Int, offset: Int): Boolean {
     editableGuidebook(player, guidebookId) ?: return false
-    return SLDatabase.moveGuidebookEntryBlocking(guidebookId, buildId, offset)
+    return SLDatabase.moveGuidebookEntryBlocking(guidebookId, buildId, offset).also {
+      if (it) markEdited(guidebookId)
+    }
+  }
+
+  fun markEdited(guidebookId: Int) {
+    SLDatabase.markGuidebookEditedBlocking(guidebookId)
   }
 
   fun delete(player: Player, guidebookId: Int): Boolean {
@@ -369,6 +385,51 @@ object GuidebookService {
 
   private fun entryLimit(): Int =
       Tools.plugin.config.getInt("guidebook.entriesPerBookLimit", 30).coerceAtLeast(1)
+
+  private fun announce(guidebook: GuidebookData) {
+    val config = Tools.plugin.config
+    if (!config.getBoolean("guidebook.announce.enabled", true)) return
+    val label =
+        when (SLDatabase.takeGuidebookAnnouncementBlocking(guidebook.id)) {
+          GuidebookAnnouncement.NEW -> "新しい旅行ガイド"
+          GuidebookAnnouncement.UPDATE -> "旅行ガイド更新"
+          GuidebookAnnouncement.NONE -> return
+        }
+    val author =
+        if (guidebook.type == GuidebookType.OFFICIAL) "公式" else authorName(guidebook.creatorUuid)
+    val message =
+        Component.text("📖 $label: ", NamedTextColor.GOLD)
+            .append(Component.text("「${guidebook.title}」", NamedTextColor.GREEN))
+            .append(Component.text(" by $author ", NamedTextColor.GRAY))
+            .append(
+                Component.text("[クリックで入手]", NamedTextColor.AQUA)
+                    .clickEvent(ClickEvent.runCommand("/slguide ${guidebook.id}"))
+                    .hoverEvent(HoverEvent.showText(Component.text("クリックでガイドブックを入手")))
+            )
+    val soundName = config.getString("guidebook.announce.sound", "ui.toast.challenge_complete")
+    val sound =
+        soundName
+            ?.takeIf(String::isNotBlank)
+            ?.let { name ->
+              runCatching { Key.key(name.trim()) }
+                  .onFailure {
+                    Tools.plugin.logger.warning("[SL3] Invalid guidebook.announce.sound: $name")
+                  }
+                  .getOrNull()
+            }
+            ?.let {
+              net.kyori.adventure.sound.Sound.sound(
+                  it,
+                  net.kyori.adventure.sound.Sound.Source.MASTER,
+                  config.getDouble("guidebook.announce.volume", 1.0).toFloat(),
+                  config.getDouble("guidebook.announce.pitch", 1.0).toFloat(),
+              )
+            }
+    Bukkit.getOnlinePlayers().forEach { online ->
+      online.sendMessage(message)
+      sound?.let { online.playSound(it) }
+    }
+  }
 
   private fun celebrateFirst(player: Player, guidebook: GuidebookData) {
     Bukkit.broadcastMessage(
