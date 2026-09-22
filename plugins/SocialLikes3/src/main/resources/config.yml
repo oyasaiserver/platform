@@ -25,6 +25,14 @@ guidebook:
   personalBookLimit: 5
   entriesPerBookLimit: 30
 
+  # 公開時の全体告知。初公開は「新しい旅行ガイド」、告知後に編集して再公開したときは「旅行ガイド更新」。
+  # sound はバニラ効果音の namespaced key（"minecraft:" 省略可）。空文字にすると音だけ鳴らさない。
+  announce:
+    enabled: true
+    sound: "ui.toast.challenge_complete"
+    volume: 1.0
+    pitch: 1.0
+
   # 旅行ガイドブックの配色と文言。booktuner の［設定をコピー］の JSON と同じ中身。書かない項目は既定値。
   # booktuner の［config.yml 用にコピー］の出力を guidebook: の style: 部分に貼り替える。反映はサーバー再起動。
   style:
