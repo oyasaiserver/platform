@@ -27,14 +27,10 @@ internal data class GuideTeleportRecord(val buildId: Int, val atMillis: Long)
 internal fun canGuideTeleport(
     destinationLiked: Boolean,
     lastTeleport: GuideTeleportRecord?,
-    lastBuildLiked: Boolean,
     nowMillis: Long,
     cooldownMillis: Long,
 ): Boolean =
-    destinationLiked ||
-        lastTeleport == null ||
-        lastBuildLiked ||
-        nowMillis - lastTeleport.atMillis >= cooldownMillis
+    destinationLiked || lastTeleport == null || nowMillis - lastTeleport.atMillis >= cooldownMillis
 
 object GuidebookListener : Listener {
   private const val TELEPORT_COOLDOWN_MILLIS = 30_000L
@@ -144,10 +140,11 @@ object GuidebookListener : Listener {
     descriptionModes.remove(event.player.uniqueId)
 
     val page = event.newBookMeta.pages().firstOrNull()?.let(plainText::serialize).orEmpty()
-    val description = GuidebookRules.description(page)
+    val maxLines = GuidebookService.descriptionMaxLines()
+    val description = GuidebookRules.description(page, maxLines)
     event.newBookMeta = event.newBookMeta.apply { pages(listOf(Component.text(description.text))) }
     if (description.truncated) {
-      event.player.sendMessage(Tools.socialLikesLOGO + " &e説明文は8行までに切り詰めました。".color())
+      event.player.sendMessage(Tools.socialLikesLOGO + " &e説明文は${maxLines}行までに切り詰めました。".color())
     }
     GuidebookService.setDescription(event.player, guidebookId, description.text)
     Bukkit.getScheduler()
@@ -205,12 +202,6 @@ object GuidebookListener : Listener {
     }
   }
 
-  fun releaseTeleportCooldown(playerUuid: UUID, buildId: Int) {
-    lastTeleports.computeIfPresent(playerUuid) { _, record ->
-      record.takeUnless { it.buildId == buildId }
-    }
-  }
-
   private fun withTeleportCooldown(
       player: org.bukkit.entity.Player,
       destinationLiked: Boolean,
@@ -218,15 +209,10 @@ object GuidebookListener : Listener {
   ) {
     val now = System.currentTimeMillis()
     val lastTeleport = lastTeleports[player.uniqueId]
-    val lastBuildLiked =
-        lastTeleport?.let {
-          Data.getSLData(it.buildId)?.likes?.contains(player.uniqueId) == true
-        } == true
     if (
         !canGuideTeleport(
             destinationLiked,
             lastTeleport,
-            lastBuildLiked,
             now,
             TELEPORT_COOLDOWN_MILLIS,
         )

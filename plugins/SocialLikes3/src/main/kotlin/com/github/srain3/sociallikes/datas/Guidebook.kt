@@ -30,6 +30,12 @@ enum class GuidebookCompletion {
   REPEAT,
 }
 
+enum class GuidebookAnnouncement {
+  NONE,
+  NEW,
+  UPDATE,
+}
+
 object GuidebookRules {
   private const val BOOK_LINE_WIDTH = 114
   // mcfont-data.js の asciiAdv（半角スペースだけ charAdv と同じ 4px に補正）。
@@ -50,6 +56,14 @@ object GuidebookRules {
     if (!causedByLike || !progress.complete) return GuidebookCompletion.NONE
     return if (alreadyCompleted) GuidebookCompletion.REPEAT else GuidebookCompletion.FIRST
   }
+
+  /** 非公開→公開に変わったときの告知。公開/非公開の往復だけでは告知しない。 */
+  fun announcement(announced: Boolean, editedSinceAnnounce: Boolean): GuidebookAnnouncement =
+      when {
+        !announced -> GuidebookAnnouncement.NEW
+        editedSinceAnnounce -> GuidebookAnnouncement.UPDATE
+        else -> GuidebookAnnouncement.NONE
+      }
 
   fun canCreatePersonal(currentCount: Int, limit: Int): Boolean = currentCount < limit
 
@@ -144,14 +158,4 @@ object GuidebookRules {
                 codePoint in 0xFFE0..0xFFE6 ||
                 codePoint in 0x1F200..0x1F2FF
       }
-
-  fun isSafeDestination(
-      signValid: Boolean,
-      worldLoaded: Boolean,
-      feetPassable: Boolean,
-      headPassable: Boolean,
-      supportSolid: Boolean,
-      dangerous: Boolean,
-  ): Boolean =
-      signValid && worldLoaded && feetPassable && headPassable && supportSolid && !dangerous
 }

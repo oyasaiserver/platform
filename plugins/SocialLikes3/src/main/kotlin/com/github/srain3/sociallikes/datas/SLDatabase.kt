@@ -328,6 +328,8 @@ object SLDatabase {
     val description = text("description").default("")
     val published = bool("published")
     val createdAt = long("created_at")
+    val announced = bool("announced").default(false)
+    val editedSinceAnnounce = integer("edited_since_announce").default(0)
 
     override val primaryKey = PrimaryKey(id)
   }
@@ -555,19 +557,21 @@ object SLDatabase {
   fun loadEditableGuidebooksBlocking(
       creatorUuid: UUID,
       canEditOfficial: Boolean,
+      canEditAll: Boolean,
   ): List<GuidebookData> =
       loadGuidebooksBlocking(
           "loadEditableGuidebooks",
           """
           SELECT id, type, creator_uuid, title, description, published, created_at
           FROM guidebooks
-          WHERE creator_uuid = ? OR (? = 1 AND type = 'OFFICIAL')
+          WHERE ? = 1 OR creator_uuid = ? OR (? = 1 AND type = 'OFFICIAL')
           ORDER BY CASE type WHEN 'OFFICIAL' THEN 0 ELSE 1 END, created_at DESC, id DESC
           """
               .trimIndent(),
       ) { statement ->
-        statement.setString(1, creatorUuid.toString())
-        statement.setInt(2, if (canEditOfficial) 1 else 0)
+        statement.setInt(1, if (canEditAll) 1 else 0)
+        statement.setString(2, creatorUuid.toString())
+        statement.setInt(3, if (canEditOfficial) 1 else 0)
       }
 
   fun countPersonalGuidebooksBlocking(creatorUuid: UUID): Int =
@@ -669,6 +673,49 @@ object SLDatabase {
               statement.executeUpdate() == 1
             } ?: false
       } ?: false
+
+  fun markGuidebookEditedBlocking(guidebookId: Int): Boolean =
+      submitWriteBlocking("markGuidebookEdited") {
+        rawConnection()
+            ?.prepareStatement("UPDATE guidebooks SET edited_since_announce = 1 WHERE id = ?")
+            ?.use { statement ->
+              statement.setInt(1, guidebookId)
+              statement.executeUpdate() == 1
+            } ?: false
+      } ?: false
+
+  /** 公開時の告知種別を判定し、告知するなら announced=1, edited_since_announce=0 にする。 */
+  fun takeGuidebookAnnouncementBlocking(guidebookId: Int): GuidebookAnnouncement =
+      submitWriteBlocking("takeGuidebookAnnouncement") {
+        val connection = rawConnection() ?: return@submitWriteBlocking GuidebookAnnouncement.NONE
+        val announcement =
+            connection
+                .prepareStatement(
+                    "SELECT announced, edited_since_announce FROM guidebooks WHERE id = ?"
+                )
+                .use { statement ->
+                  statement.setInt(1, guidebookId)
+                  statement.executeQuery().use { rows ->
+                    if (!rows.next()) GuidebookAnnouncement.NONE
+                    else
+                        GuidebookRules.announcement(
+                            rows.getBoolean("announced"),
+                            rows.getInt("edited_since_announce") != 0,
+                        )
+                  }
+                }
+        if (announcement != GuidebookAnnouncement.NONE) {
+          connection
+              .prepareStatement(
+                  "UPDATE guidebooks SET announced = 1, edited_since_announce = 0 WHERE id = ?"
+              )
+              .use { statement ->
+                statement.setInt(1, guidebookId)
+                statement.executeUpdate()
+              }
+        }
+        announcement
+      } ?: GuidebookAnnouncement.NONE
 
   fun deleteGuidebookBlocking(guidebookId: Int): Boolean =
       submitWriteBlocking("deleteGuidebook") {
@@ -845,6 +892,16 @@ object SLDatabase {
     if ("description" !in columns) {
       conn.createStatement().use {
         it.execute("ALTER TABLE guidebooks ADD COLUMN description TEXT NOT NULL DEFAULT ''")
+      }
+    }
+    if ("announced" !in columns) {
+      conn.createStatement().use {
+        it.execute("ALTER TABLE guidebooks ADD COLUMN announced BOOLEAN NOT NULL DEFAULT 0")
+      }
+    }
+    if ("edited_since_announce" !in columns) {
+      conn.createStatement().use {
+        it.execute("ALTER TABLE guidebooks ADD COLUMN edited_since_announce INT NOT NULL DEFAULT 0")
       }
     }
   }

@@ -3,8 +3,9 @@ package com.github.srain3.sociallikes
 import com.github.srain3.sociallikes.Tools.addText
 import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
-import com.github.srain3.sociallikes.command.SLtp.toYaw
+import com.github.srain3.sociallikes.command.SLtp
 import com.github.srain3.sociallikes.datas.Data
+import com.github.srain3.sociallikes.datas.GuidebookAnnouncement
 import com.github.srain3.sociallikes.datas.GuidebookCompletion
 import com.github.srain3.sociallikes.datas.GuidebookData
 import com.github.srain3.sociallikes.datas.GuidebookProgress
@@ -13,17 +14,18 @@ import com.github.srain3.sociallikes.datas.GuidebookType
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
 import java.util.UUID
+import net.kyori.adventure.key.Key
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
-import org.bukkit.block.BlockFace
 import org.bukkit.block.Sign
-import org.bukkit.block.data.Directional
-import org.bukkit.block.data.Rotatable
 import org.bukkit.entity.Firework
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
@@ -32,6 +34,7 @@ import org.bukkit.persistence.PersistentDataType
 
 object GuidebookService {
   const val OFFICIAL_PERMISSION = "sociallikes.guidebook.official"
+  const val ADMIN_PERMISSION = "sociallikes3.admin"
   private const val MAX_TITLE_LENGTH = 32
 
   val touristKey = NamespacedKey(Tools.plugin, "guidebook_id")
@@ -129,10 +132,11 @@ object GuidebookService {
   }
 
   fun canEdit(player: Player, guidebook: GuidebookData): Boolean =
-      when (guidebook.type) {
-        GuidebookType.PERSONAL -> guidebook.creatorUuid == player.uniqueId
-        GuidebookType.OFFICIAL -> player.hasPermission(OFFICIAL_PERMISSION)
-      }
+      player.hasPermission(ADMIN_PERMISSION) ||
+          when (guidebook.type) {
+            GuidebookType.PERSONAL -> guidebook.creatorUuid == player.uniqueId
+            GuidebookType.OFFICIAL -> player.hasPermission(OFFICIAL_PERMISSION)
+          }
 
   fun entries(guidebookId: Int, playerUuid: UUID): List<EntryView> =
       SLDatabase.loadGuidebookEntriesBlocking(guidebookId).map { buildId ->
@@ -158,8 +162,8 @@ object GuidebookService {
 
   fun addBuild(player: Player, guidebookId: Int, build: SLData): Boolean {
     val guidebook = editableGuidebook(player, guidebookId) ?: return false
-    if (guidebook.type == GuidebookType.PERSONAL && build.owner != player.uniqueId) {
-      player.sendMessage(Tools.socialLikesLOGO + " &c個人ガイドには自分の建築だけ追加できます。".color())
+    if (guidebook.type == GuidebookType.PERSONAL && build.owner != guidebook.creatorUuid) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c個人ガイドには作者の建築だけ追加できます。".color())
       return false
     }
     val added = SLDatabase.addGuidebookEntryBlocking(guidebookId, build.id, entryLimit())
@@ -171,7 +175,7 @@ object GuidebookService {
               " &c追加済み、または1冊の上限${entryLimit()}件に達しています。".color()
             }
     )
-    return added
+    return added.also { if (it) markEdited(guidebookId) }
   }
 
   fun setPublished(player: Player, guidebookId: Int, published: Boolean): Boolean {
@@ -195,6 +199,7 @@ object GuidebookService {
         player.sendMessage(
             Tools.socialLikesLOGO + if (published) " &a公開しました。".color() else " &e非公開にしました。".color()
         )
+        if (published) announce(guidebook)
       }
     }
   }
@@ -206,17 +211,26 @@ object GuidebookService {
           Tools.socialLikesLOGO +
               if (saved) " &a説明文を保存しました。".color() else " &c説明文を保存できませんでした。".color()
       )
+      if (saved) markEdited(guidebookId)
     }
   }
 
   fun removeBuild(player: Player, guidebookId: Int, buildId: Int): Boolean {
     editableGuidebook(player, guidebookId) ?: return false
-    return SLDatabase.removeGuidebookEntryBlocking(guidebookId, buildId)
+    return SLDatabase.removeGuidebookEntryBlocking(guidebookId, buildId).also {
+      if (it) markEdited(guidebookId)
+    }
   }
 
   fun moveBuild(player: Player, guidebookId: Int, buildId: Int, offset: Int): Boolean {
     editableGuidebook(player, guidebookId) ?: return false
-    return SLDatabase.moveGuidebookEntryBlocking(guidebookId, buildId, offset)
+    return SLDatabase.moveGuidebookEntryBlocking(guidebookId, buildId, offset).also {
+      if (it) markEdited(guidebookId)
+    }
+  }
+
+  fun markEdited(guidebookId: Int) {
+    SLDatabase.markGuidebookEditedBlocking(guidebookId)
   }
 
   fun delete(player: Player, guidebookId: Int): Boolean {
@@ -262,7 +276,6 @@ object GuidebookService {
   }
 
   fun handleLike(player: Player, buildId: Int) {
-    GuidebookListener.releaseTeleportCooldown(player.uniqueId, buildId)
     SLDatabase.loadPublishedGuidebooksContainingBuildBlocking(buildId).forEach { guidebook ->
       val guidebookProgress = progress(entries(guidebook.id, player.uniqueId))
       if (!guidebookProgress.complete) return@forEach
@@ -308,39 +321,9 @@ object GuidebookService {
     return sign
   }
 
-  private fun safeDestination(data: SLData): Location? {
-    val sign = findValidSign(data) ?: return null
-    val face =
-        when (val blockData = sign.blockData) {
-          is Directional -> blockData.facing
-          is Rotatable -> blockData.rotation
-          else -> BlockFace.NORTH
-        }
-    val destination =
-        sign.location
-            .clone()
-            .add(face.modX.toDouble(), 0.0, face.modZ.toDouble())
-            .add(0.5, 0.0, 0.5)
-    destination.yaw = face.oppositeFace.toYaw()
-    destination.pitch = 0F
-    val feet = destination.block
-    val head = feet.getRelative(BlockFace.UP)
-    val support = feet.getRelative(BlockFace.DOWN)
-    val dangerous = listOf(feet.type, head.type, support.type).any(::isDangerous)
-    return destination.takeIf {
-      GuidebookRules.isSafeDestination(
-          signValid = true,
-          worldLoaded = Bukkit.getWorld(data.worldName) != null,
-          feetPassable = feet.isPassable,
-          headPassable = head.isPassable,
-          supportSolid = support.type.isSolid,
-          dangerous = dangerous,
-      )
-    }
-  }
-
   private fun teleport(player: Player, data: SLData): TeleportResult {
-    val destination = safeDestination(data) ?: return TeleportResult.UNAVAILABLE
+    val sign = findValidSign(data) ?: return TeleportResult.UNAVAILABLE
+    val destination = SLtp.signLocation(sign.location)
     if (!player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
       player.sendMessage(Tools.socialLikesLOGO + " &cテレポートできませんでした。".color())
       return TeleportResult.FAILED
@@ -349,20 +332,13 @@ object GuidebookService {
     return TeleportResult.SUCCESS
   }
 
-  private fun isDangerous(material: Material): Boolean =
-      material in
-          setOf(
-              Material.LAVA,
-              Material.FIRE,
-              Material.SOUL_FIRE,
-              Material.MAGMA_BLOCK,
-              Material.CACTUS,
-              Material.CAMPFIRE,
-              Material.SOUL_CAMPFIRE,
-              Material.SWEET_BERRY_BUSH,
-              Material.POWDER_SNOW,
-              Material.WITHER_ROSE,
-          )
+  /** 本の1ページは14行。ホームの見出しぶんを残して説明文は8行まで */
+  fun descriptionMaxLines(): Int =
+      Tools.plugin.config.getInt("guidebook.descriptionMaxLines", 8).coerceIn(1, 8)
+
+  /** コメントの入力は金床の50文字までなので、それが収まる5行まで */
+  fun commentMaxLines(): Int =
+      Tools.plugin.config.getInt("guidebook.commentMaxLines", 5).coerceIn(1, 5)
 
   private fun personalBookLimit(): Int =
       Tools.plugin.config.getInt("guidebook.personalBookLimit", 5).coerceAtLeast(1)
@@ -370,10 +346,59 @@ object GuidebookService {
   private fun entryLimit(): Int =
       Tools.plugin.config.getInt("guidebook.entriesPerBookLimit", 30).coerceAtLeast(1)
 
+  private fun announce(guidebook: GuidebookData) {
+    val config = Tools.plugin.config
+    if (!config.getBoolean("guidebook.announce.enabled", true)) return
+    val label =
+        when (SLDatabase.takeGuidebookAnnouncementBlocking(guidebook.id)) {
+          GuidebookAnnouncement.NEW -> "新しい旅行ガイド"
+          GuidebookAnnouncement.UPDATE -> "旅行ガイド更新"
+          GuidebookAnnouncement.NONE -> return
+        }
+    val author =
+        if (guidebook.type == GuidebookType.OFFICIAL) "公式" else authorName(guidebook.creatorUuid)
+    val message =
+        Component.text("📖 $label: ", NamedTextColor.GOLD)
+            .append(Component.text("「${guidebook.title}」", NamedTextColor.GREEN))
+            .append(Component.text(" by $author ", NamedTextColor.GRAY))
+            .append(
+                Component.text("[クリックで入手]", NamedTextColor.AQUA)
+                    .clickEvent(ClickEvent.runCommand("/slguide ${guidebook.id}"))
+                    .hoverEvent(HoverEvent.showText(Component.text("クリックでガイドブックを入手")))
+            )
+    val soundName = config.getString("guidebook.announce.sound", "entity.player.levelup")
+    val sound =
+        soundName
+            ?.takeIf(String::isNotBlank)
+            ?.let { name ->
+              runCatching { Key.key(name.trim()) }
+                  .onFailure {
+                    Tools.plugin.logger.warning("[SL3] Invalid guidebook.announce.sound: $name")
+                  }
+                  .getOrNull()
+            }
+            ?.let {
+              net.kyori.adventure.sound.Sound.sound(
+                  it,
+                  net.kyori.adventure.sound.Sound.Source.MASTER,
+                  config.getDouble("guidebook.announce.volume", 0.75).toFloat(),
+                  config.getDouble("guidebook.announce.pitch", 1.0).toFloat(),
+              )
+            }
+    Bukkit.getOnlinePlayers().forEach { online ->
+      online.sendMessage(message)
+      sound?.let { online.playSound(it) }
+    }
+  }
+
   private fun celebrateFirst(player: Player, guidebook: GuidebookData) {
     Bukkit.broadcastMessage(
         Tools.socialLikesLOGO + " &6${player.name}さんが旅行ガイド「${guidebook.title}」を初コンプリートしました！".color()
     )
+    launchFirework(player)
+  }
+
+  private fun launchFirework(player: Player) {
     player.world.spawn(player.location, Firework::class.java).apply {
       fireworkMeta =
           fireworkMeta.apply {
@@ -393,6 +418,6 @@ object GuidebookService {
     player.sendMessage(
         Tools.socialLikesLOGO + " &a旅行ガイド「${guidebook.title}」をもう一度コンプリートしました！".color()
     )
-    player.playSound(player, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1F, 1F)
+    launchFirework(player)
   }
 }
