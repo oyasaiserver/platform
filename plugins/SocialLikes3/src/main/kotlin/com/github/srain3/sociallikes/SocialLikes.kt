@@ -58,6 +58,7 @@ class SocialLikes : JavaPlugin() {
     SLDatabase.requireReady()
 
     server.pluginManager.registerEvents(Events, this)
+    server.pluginManager.registerEvents(WorldLocationListener, this)
     server.pluginManager.registerEvents(GuidebookListener, this)
     server.pluginManager.registerEvents(FollowBuild, this)
     server.pluginManager.registerEvents(SocialLikesAnvilInput, this)

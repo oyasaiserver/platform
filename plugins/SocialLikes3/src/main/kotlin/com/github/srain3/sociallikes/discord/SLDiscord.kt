@@ -6,7 +6,6 @@ import com.github.srain3.sociallikes.datas.SLData
 import java.awt.Color
 import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.javacord.api.DiscordApi
 import org.javacord.api.DiscordApiBuilder
 import org.javacord.api.entity.message.embed.EmbedBuilder
@@ -67,7 +66,7 @@ object SLDiscord {
                 "Author: " +
                     Bukkit.getPlayer(slData.owner)?.name +
                     " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
-                "BlueMap: ${blueMapURL(slData.loc)}",
+                "BlueMap: ${blueMapURL(slData)}",
             )
             .setColor(Color.PINK)
     val message = textChannel.sendMessage(embed).join()
@@ -75,9 +74,10 @@ object SLDiscord {
     return message.id
   }
 
-  private fun blueMapURL(loc: Location): String {
+  private fun blueMapURL(slData: SLData): String {
     val address = config.getString("Server_IP") ?: return "none"
-    return "http://$address/#${loc.world.name}:${loc.x.toInt()}:${loc.y.toInt()}:${loc.z.toInt()}:40:0:0:0:0:perspective"
+    val loc = slData.loc
+    return "http://$address/#${slData.worldName}:${loc.x.toInt()}:${loc.y.toInt()}:${loc.z.toInt()}:40:0:0:0:0:perspective"
   }
 
   fun deleteSLToMsg(slData: SLData) {
@@ -125,7 +125,7 @@ object SLDiscord {
                       "Author: " +
                           Bukkit.getPlayer(slData.owner)?.name +
                           " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
-                      "BlueMap: ${blueMapURL(slData.loc)}",
+                      "BlueMap: ${blueMapURL(slData)}",
                   )
                   .setColor(Color.PINK)
           val message = textChannel.getMessageById(slData.discordTextID)

@@ -5,6 +5,7 @@ import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
+import com.github.srain3.sociallikes.resolveWorld
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Sign
@@ -93,7 +94,7 @@ object SLSignGet : CommandExecutor {
         ?.let {
           return it
         }
-    slData.loc.world ?: return null
+    slData.resolveWorld() ?: return null
     val sourceState = slData.loc.block.state
     return if (sourceState is Sign) sourceState.type else null
   }
