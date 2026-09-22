@@ -10,6 +10,7 @@ import com.github.srain3.sociallikes.gui.UserBuild
 import java.time.LocalDateTime
 import java.util.*
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockFace.*
 import org.bukkit.block.data.type.HangingSign
@@ -156,7 +157,32 @@ object SLtp : CommandExecutor {
         slData.loc.world = world
       }
     }
-    val block = slData.loc.block
+    val slLoc = signLocation(slData.loc)
+
+    // Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tp ${sender.name} ~ ~ ~")
+    sender.sendMessage("&6テレポートしています…".color())
+    object : BukkitRunnable() {
+          override fun run() {
+            if (sender.teleport(slLoc, PlayerTeleportEvent.TeleportCause.COMMAND)) {
+              sender.sendMessage(
+                  Tools.socialLikesLOGO + " &r「${slData.title}」へテレポートしました(ID:${slData.id})".color()
+              )
+            } else {
+              sender.sendMessage(
+                  Tools.socialLikesLOGO +
+                      " &c何らかの理由で「${slData.title}」へテレポート出来ませんでした(ID:${slData.id})".color()
+              )
+            }
+          }
+        }
+        .runTaskLater(Tools.plugin, 1)
+
+    return true
+  }
+
+  /** 看板の位置に、看板の向きを向いて立つ場所。/sltp とガイドブック案内で共用 */
+  fun signLocation(loc: Location): Location {
+    val block = loc.block
     val yaw =
         if (!block.isEmpty) {
           when (val blockData = block.blockData) {
@@ -179,27 +205,7 @@ object SLtp : CommandExecutor {
         } else {
           0F
         }
-    val slLoc = slData.loc.clone().add(0.5, 0.1, 0.5).apply { setYaw(yaw) }
-
-    // Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tp ${sender.name} ~ ~ ~")
-    sender.sendMessage("&6テレポートしています…".color())
-    object : BukkitRunnable() {
-          override fun run() {
-            if (sender.teleport(slLoc, PlayerTeleportEvent.TeleportCause.COMMAND)) {
-              sender.sendMessage(
-                  Tools.socialLikesLOGO + " &r「${slData.title}」へテレポートしました(ID:${slData.id})".color()
-              )
-            } else {
-              sender.sendMessage(
-                  Tools.socialLikesLOGO +
-                      " &c何らかの理由で「${slData.title}」へテレポート出来ませんでした(ID:${slData.id})".color()
-              )
-            }
-          }
-        }
-        .runTaskLater(Tools.plugin, 1)
-
-    return true
+    return loc.clone().add(0.5, 0.1, 0.5).apply { setYaw(yaw) }
   }
 
   /** ユーザーごとの最後のsltp対象の時間保存 */

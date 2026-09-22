@@ -3,7 +3,7 @@ package com.github.srain3.sociallikes
 import com.github.srain3.sociallikes.Tools.addText
 import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
-import com.github.srain3.sociallikes.command.SLtp.toYaw
+import com.github.srain3.sociallikes.command.SLtp
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.GuidebookAnnouncement
 import com.github.srain3.sociallikes.datas.GuidebookCompletion
@@ -22,14 +22,10 @@ import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
-import org.bukkit.block.BlockFace
 import org.bukkit.block.Sign
-import org.bukkit.block.data.Directional
-import org.bukkit.block.data.Rotatable
 import org.bukkit.entity.Firework
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
@@ -326,39 +322,9 @@ object GuidebookService {
     return sign
   }
 
-  private fun safeDestination(data: SLData): Location? {
-    val sign = findValidSign(data) ?: return null
-    val face =
-        when (val blockData = sign.blockData) {
-          is Directional -> blockData.facing
-          is Rotatable -> blockData.rotation
-          else -> BlockFace.NORTH
-        }
-    val destination =
-        sign.location
-            .clone()
-            .add(face.modX.toDouble(), 0.0, face.modZ.toDouble())
-            .add(0.5, 0.0, 0.5)
-    destination.yaw = face.oppositeFace.toYaw()
-    destination.pitch = 0F
-    val feet = destination.block
-    val head = feet.getRelative(BlockFace.UP)
-    val support = feet.getRelative(BlockFace.DOWN)
-    val dangerous = listOf(feet.type, head.type, support.type).any(::isDangerous)
-    return destination.takeIf {
-      GuidebookRules.isSafeDestination(
-          signValid = true,
-          worldLoaded = Bukkit.getWorld(data.worldName) != null,
-          feetPassable = feet.isPassable,
-          headPassable = head.isPassable,
-          supportSolid = support.type.isSolid,
-          dangerous = dangerous,
-      )
-    }
-  }
-
   private fun teleport(player: Player, data: SLData): TeleportResult {
-    val destination = safeDestination(data) ?: return TeleportResult.UNAVAILABLE
+    val sign = findValidSign(data) ?: return TeleportResult.UNAVAILABLE
+    val destination = SLtp.signLocation(sign.location)
     if (!player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
       player.sendMessage(Tools.socialLikesLOGO + " &cテレポートできませんでした。".color())
       return TeleportResult.FAILED
@@ -366,21 +332,6 @@ object GuidebookService {
     player.sendMessage(Tools.socialLikesLOGO + " &a「${data.title}」へ案内しました。".color())
     return TeleportResult.SUCCESS
   }
-
-  private fun isDangerous(material: Material): Boolean =
-      material in
-          setOf(
-              Material.LAVA,
-              Material.FIRE,
-              Material.SOUL_FIRE,
-              Material.MAGMA_BLOCK,
-              Material.CACTUS,
-              Material.CAMPFIRE,
-              Material.SOUL_CAMPFIRE,
-              Material.SWEET_BERRY_BUSH,
-              Material.POWDER_SNOW,
-              Material.WITHER_ROSE,
-          )
 
   private fun personalBookLimit(): Int =
       Tools.plugin.config.getInt("guidebook.personalBookLimit", 5).coerceAtLeast(1)
