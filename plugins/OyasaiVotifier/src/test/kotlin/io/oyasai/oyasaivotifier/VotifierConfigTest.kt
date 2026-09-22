@@ -10,28 +10,27 @@ import org.bukkit.configuration.file.YamlConfiguration
 
 class VotifierConfigTest {
   @Test
-  fun `legacy schema is rejected even when packaged defaults contain rewards`() {
+  fun `legacy schema falls back to packaged rewards and keeps the on-disk token`() {
     val config =
         YamlConfiguration().apply {
           loadFromString(
               """
               host: 0.0.0.0
               port: 8192
-              tokens: {}
+              tokens:
+                default: secret
               """
                   .trimIndent()
           )
-          setDefaults(
-              YamlConfiguration.loadConfiguration(
-                  InputStreamReader(checkNotNull(javaClass.getResourceAsStream("/config.yml")))
-              )
-          )
+          setDefaults(packagedConfig())
         }
 
-    assertTrue(config.isConfigurationSection("rewards.party"))
     assertFalse(config.contains("rewards.party", true))
-    val error = assertFailsWith<IllegalArgumentException> { VotifierConfig.load(config) }
-    assertTrue(error.message!!.contains("legacy NuVotifier schema"))
+    val parsed = VotifierConfig.load(config)
+
+    assertEquals(listOf(50, 40, 10), parsed.individual.entries.map { it.weight })
+    assertEquals(60, parsed.party.votesNeeded)
+    assertEquals(mapOf("default" to "secret"), parsed.tokens)
   }
 
   @Test
