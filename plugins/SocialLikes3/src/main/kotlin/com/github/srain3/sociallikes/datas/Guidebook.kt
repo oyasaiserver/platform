@@ -158,14 +158,4 @@ object GuidebookRules {
                 codePoint in 0xFFE0..0xFFE6 ||
                 codePoint in 0x1F200..0x1F2FF
       }
-
-  fun isSafeDestination(
-      signValid: Boolean,
-      worldLoaded: Boolean,
-      feetPassable: Boolean,
-      headPassable: Boolean,
-      supportSolid: Boolean,
-      dangerous: Boolean,
-  ): Boolean =
-      signValid && worldLoaded && feetPassable && headPassable && supportSolid && !dangerous
 }

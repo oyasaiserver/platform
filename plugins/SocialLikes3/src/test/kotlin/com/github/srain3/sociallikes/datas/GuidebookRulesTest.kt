@@ -94,28 +94,4 @@ class GuidebookRulesTest {
     assertEquals("あ".repeat(12 * 8), result.text)
     assertTrue(result.truncated)
   }
-
-  @Test
-  fun `safe destination requires space solid support and no hazard`() {
-    assertTrue(
-        GuidebookRules.isSafeDestination(
-            signValid = true,
-            worldLoaded = true,
-            feetPassable = true,
-            headPassable = true,
-            supportSolid = true,
-            dangerous = false,
-        )
-    )
-    assertFalse(
-        GuidebookRules.isSafeDestination(
-            signValid = true,
-            worldLoaded = true,
-            feetPassable = true,
-            headPassable = true,
-            supportSolid = true,
-            dangerous = true,
-        )
-    )
-  }
 }
