@@ -136,6 +136,7 @@ object GuidebookBookUI {
           SLDatabase.loadEditableGuidebooksBlocking(
               player.uniqueId,
               player.hasPermission(GuidebookService.OFFICIAL_PERMISSION),
+              player.hasPermission(GuidebookService.ADMIN_PERMISSION),
           )
         } else {
           SLDatabase.loadPublishedGuidebooksBlocking()
@@ -478,7 +479,7 @@ object GuidebookBookUI {
     if (
         guidebook.type != GuidebookType.PERSONAL ||
             build == null ||
-            build.owner != player.uniqueId ||
+            build.owner != guidebook.creatorUuid ||
             buildId !in SLDatabase.loadGuidebookEntriesBlocking(guidebookId)
     ) {
       player.sendMessage(Tools.socialLikesLOGO + " &cこの建築のコメントは編集できません。".color())
