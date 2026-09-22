@@ -332,6 +332,14 @@ object GuidebookService {
     return TeleportResult.SUCCESS
   }
 
+  /** 本の1ページは14行。ホームの見出しぶんを残して説明文は8行まで */
+  fun descriptionMaxLines(): Int =
+      Tools.plugin.config.getInt("guidebook.descriptionMaxLines", 8).coerceIn(1, 8)
+
+  /** 建築名の1行と空行を残して1ページに収まる11行まで */
+  fun commentMaxLines(): Int =
+      Tools.plugin.config.getInt("guidebook.commentMaxLines", 3).coerceIn(1, 11)
+
   private fun personalBookLimit(): Int =
       Tools.plugin.config.getInt("guidebook.personalBookLimit", 5).coerceAtLeast(1)
 
