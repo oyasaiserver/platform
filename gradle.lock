@@ -2743,6 +2743,20 @@
       "hash": "sha256-32+ZwWxsyuZINOP2mwWjKexCBPVEfNBy7SU5F4mMct4="
     }
   },
+  "org.geysermc.floodgate:api:2.2.5-SNAPSHOT": {
+    "api-2.2.5-SNAPSHOT.jar": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/floodgate/api/2.2.5-SNAPSHOT/api-2.2.5-20260917.145236-21.jar",
+      "hash": "sha256-/foPVZOUOOa6Az+sWNt+TAORpBray/4NvKuQTAb+LkA="
+    },
+    "api-2.2.5-SNAPSHOT.module": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/floodgate/api/2.2.5-SNAPSHOT/api-2.2.5-20260917.145236-21.module",
+      "hash": "sha256-q5PGs1ZIR1gFXpLtDFmUUnqqWJUr09R0h0L6154Awr8="
+    },
+    "api-2.2.5-SNAPSHOT.pom": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/floodgate/api/2.2.5-SNAPSHOT/api-2.2.5-20260917.145236-21.pom",
+      "hash": "sha256-HMXHFf41OqdB/uaqM37UVVh7ZYnzw75qeToEIZPfAOM="
+    }
+  },
   "org.geysermc.geyser:api:2.11.2-SNAPSHOT": {
     "api-2.11.2-SNAPSHOT.jar": {
       "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260910.131131-9.jar",

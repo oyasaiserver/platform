@@ -1,0 +1,14 @@
+{
+  "authors": ["OyasaiServer"],
+  "dependencies": [
+    {
+      "id": "floodgate",
+      "optional": true
+    }
+  ],
+  "description": "Velocity-wide BAN management",
+  "id": "oyasaiban",
+  "main": "io.oyasai.oyasaiban.OyasaiBanPlugin",
+  "name": "OyasaiBan",
+  "version": "0.1.0"
+}

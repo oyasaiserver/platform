@@ -258,6 +258,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       image: images.velocity,
       name: "oyasai-velocity",
       restart: "unless-stopped",
+      tty: true,
+      stdinOpen: true,
       networksAdvanced: [network],
       ports: ports({
         tcp: [25565], // Java

@@ -14,6 +14,7 @@ oyasaiVelocity {
     floodgate
     geyser
     luckperms
+    oyasaiban
     oyasaichat
     oyasaimusic
     oyasaitab
