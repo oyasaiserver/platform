@@ -336,9 +336,9 @@ object GuidebookService {
   fun descriptionMaxLines(): Int =
       Tools.plugin.config.getInt("guidebook.descriptionMaxLines", 8).coerceIn(1, 8)
 
-  /** 建築名の1行と空行を残して1ページに収まる11行まで */
+  /** コメントの入力は金床の50文字までなので、それが収まる5行まで */
   fun commentMaxLines(): Int =
-      Tools.plugin.config.getInt("guidebook.commentMaxLines", 3).coerceIn(1, 11)
+      Tools.plugin.config.getInt("guidebook.commentMaxLines", 5).coerceIn(1, 5)
 
   private fun personalBookLimit(): Int =
       Tools.plugin.config.getInt("guidebook.personalBookLimit", 5).coerceAtLeast(1)

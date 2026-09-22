@@ -24,9 +24,9 @@ migrateNegativeIdsDryRun: false
 guidebook:
   personalBookLimit: 5
   entriesPerBookLimit: 30
-  # 本に表示する行数。説明文は1〜8行、コメントは1〜11行（範囲外は丸める）。変更は再起動で反映
+  # 本に表示する行数。説明文は1〜8行、コメントは1〜5行（範囲外は丸める）。変更は再起動で反映
   descriptionMaxLines: 8
-  commentMaxLines: 3
+  commentMaxLines: 5
 
   # 公開時の全体告知。初公開は「新しい旅行ガイド」、告知後に編集して再公開したときは「旅行ガイド更新」。
   # sound はバニラ効果音の namespaced key（"minecraft:" 省略可）。空文字にすると音だけ鳴らさない。
