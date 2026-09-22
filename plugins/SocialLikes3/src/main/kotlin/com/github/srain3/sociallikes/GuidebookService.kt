@@ -406,7 +406,7 @@ object GuidebookService {
                     .clickEvent(ClickEvent.runCommand("/slguide ${guidebook.id}"))
                     .hoverEvent(HoverEvent.showText(Component.text("クリックでガイドブックを入手")))
             )
-    val soundName = config.getString("guidebook.announce.sound", "ui.toast.challenge_complete")
+    val soundName = config.getString("guidebook.announce.sound", "entity.player.levelup")
     val sound =
         soundName
             ?.takeIf(String::isNotBlank)
@@ -421,7 +421,7 @@ object GuidebookService {
               net.kyori.adventure.sound.Sound.sound(
                   it,
                   net.kyori.adventure.sound.Sound.Source.MASTER,
-                  config.getDouble("guidebook.announce.volume", 1.0).toFloat(),
+                  config.getDouble("guidebook.announce.volume", 0.75).toFloat(),
                   config.getDouble("guidebook.announce.pitch", 1.0).toFloat(),
               )
             }
@@ -435,6 +435,10 @@ object GuidebookService {
     Bukkit.broadcastMessage(
         Tools.socialLikesLOGO + " &6${player.name}さんが旅行ガイド「${guidebook.title}」を初コンプリートしました！".color()
     )
+    launchFirework(player)
+  }
+
+  private fun launchFirework(player: Player) {
     player.world.spawn(player.location, Firework::class.java).apply {
       fireworkMeta =
           fireworkMeta.apply {
@@ -454,6 +458,6 @@ object GuidebookService {
     player.sendMessage(
         Tools.socialLikesLOGO + " &a旅行ガイド「${guidebook.title}」をもう一度コンプリートしました！".color()
     )
-    player.playSound(player, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1F, 1F)
+    launchFirework(player)
   }
 }
