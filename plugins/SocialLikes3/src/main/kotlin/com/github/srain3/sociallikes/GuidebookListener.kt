@@ -140,10 +140,11 @@ object GuidebookListener : Listener {
     descriptionModes.remove(event.player.uniqueId)
 
     val page = event.newBookMeta.pages().firstOrNull()?.let(plainText::serialize).orEmpty()
-    val description = GuidebookRules.description(page)
+    val maxLines = GuidebookService.descriptionMaxLines()
+    val description = GuidebookRules.description(page, maxLines)
     event.newBookMeta = event.newBookMeta.apply { pages(listOf(Component.text(description.text))) }
     if (description.truncated) {
-      event.player.sendMessage(Tools.socialLikesLOGO + " &e説明文は8行までに切り詰めました。".color())
+      event.player.sendMessage(Tools.socialLikesLOGO + " &e説明文は${maxLines}行までに切り詰めました。".color())
     }
     GuidebookService.setDescription(event.player, guidebookId, description.text)
     Bukkit.getScheduler()

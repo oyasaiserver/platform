@@ -66,8 +66,8 @@ internal object GuidebookBookRules {
         else -> "☐"
       }
 
-  fun commentLines(comment: String): List<String> =
-      firstCommentLine(comment)?.let { GuidebookRules.truncateLines(it, 3) }.orEmpty()
+  fun commentLines(comment: String, maxLines: Int = 3): List<String> =
+      firstCommentLine(comment)?.let { GuidebookRules.truncateLines(it, maxLines) }.orEmpty()
 
   /** 見出し1行 + 各建築の行数で1ページ14行に詰める。ページ末尾の空行は数えない。 */
   fun paginateByLines(rows: List<EntryRow>, pageLines: Int = 14): List<List<EntryRow>> {
@@ -288,9 +288,10 @@ object GuidebookBookUI {
             .append(nextLine(next, guidebook.id, progress.complete))
     home.append(blank())
     if (guidebook.description.isNotBlank()) {
-      GuidebookRules.description(guidebook.description).text.lines().forEach {
-        home.append(line(it, "desc"))
-      }
+      GuidebookRules.description(guidebook.description, GuidebookService.descriptionMaxLines())
+          .text
+          .lines()
+          .forEach { home.append(line(it, "desc")) }
     }
     val pages = mutableListOf(home.build())
     val rows =
@@ -309,7 +310,12 @@ object GuidebookBookUI {
                     )
                 )
               } else {
-                entry.data?.comment?.let(GuidebookBookRules::commentLines).orEmpty()
+                entry.data
+                    ?.comment
+                    ?.let {
+                      GuidebookBookRules.commentLines(it, GuidebookService.commentMaxLines())
+                    }
+                    .orEmpty()
               },
               entry.data?.let { entry.buildId },
           )
@@ -471,7 +477,11 @@ object GuidebookBookUI {
     player.inventory.setItemInMainHand(item)
     GuidebookListener.startDescriptionMode(player, guidebookId)
     player.closeInventory()
-    player.sendMessage(Tools.socialLikesLOGO + " &e手に持っている編集ガイドブックを右クリックすると説明文を書けます（8行まで）".color())
+    player.sendMessage(
+        Tools.socialLikesLOGO +
+            " &e手に持っている編集ガイドブックを右クリックすると説明文を書けます（${GuidebookService.descriptionMaxLines()}行まで）"
+                .color()
+    )
   }
 
   fun editComment(player: Player, guidebookId: Int, buildId: Int) {
