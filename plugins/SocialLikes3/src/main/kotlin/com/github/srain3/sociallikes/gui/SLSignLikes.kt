@@ -396,7 +396,7 @@ object SLSignLikes {
     return gui
   }
 
-  private fun commentEdit(player: Player, slData: SLData) {
+  internal fun commentEdit(player: Player, slData: SLData, onSaved: () -> Unit = {}) {
     val item =
         ItemStack(Material.WRITABLE_BOOK)
             .allFlag()
@@ -426,6 +426,7 @@ object SLSignLikes {
       )
 
       p.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
+      onSaved()
     }
   }
 }

@@ -222,6 +222,7 @@ object Events : Listener {
     if (e.action != Action.RIGHT_CLICK_BLOCK) return
     val block = e.clickedBlock?.state
     if (block !is Sign) return
+    if (GuidebookListener.handleSignRightClick(e, block)) return
 
     // 表面の1行目をカラーコードを外して取得、SL3の看板のみ中へ進む
     if (isSLSign(block)) {
@@ -259,11 +260,13 @@ object Events : Listener {
         return
       }
 
+      var newlyLiked = false
       // いいねを行っているか判断
       if (data.likes.none { it == e.player.uniqueId }) {
         // いいねを行う
         // データに記録・保存する
         data.likes.add(e.player.uniqueId)
+        newlyLiked = true
         data.likesWithTimestamp[e.player.uniqueId] = System.currentTimeMillis()
         Data.save(data, e.player.uniqueId)
         SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
@@ -352,6 +355,7 @@ object Events : Listener {
         }
       }
       block.update()
+      if (newlyLiked) GuidebookService.handleLike(e.player, data.id)
     } else if (isLegacySLSign(block)) {
       // 旧Like看板の場合
       // クリックイベントをキャンセルし、埋め込まれたIDからSLDataを取得する。取得できない場合何もしない

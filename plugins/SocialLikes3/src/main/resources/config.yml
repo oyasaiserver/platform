@@ -20,3 +20,88 @@ reconcileIntervalMinutes: 10
 # stop the server, then set migrateNegativeIdsOnStartup back to false before the next restart.
 migrateNegativeIdsOnStartup: false
 migrateNegativeIdsDryRun: false
+
+guidebook:
+  personalBookLimit: 5
+  entriesPerBookLimit: 30
+
+  # 旅行ガイドブックの配色と文言。booktuner の［設定をコピー］の JSON と同じ中身。書かない項目は既定値。
+  # booktuner の［config.yml 用にコピー］の出力を guidebook: の style: 部分に貼り替える。反映はサーバー再起動。
+  style:
+    options:
+      brackets: true
+    roles:
+      title: {color: "#00AA00", bold: true, underline: false}
+      progress: {color: "#00AA00", bold: false, underline: false}
+      author: {color: "#555555", bold: false, underline: false}
+      nextLabel: {color: "#00AAAA", bold: false, underline: false}
+      nextName: {color: "#00AAAA", bold: false, underline: false}
+      complete: {color: "#00AA00", bold: true, underline: false}
+      desc: {color: "#000000", bold: false, underline: false}
+      heading: {color: "#00AA00", bold: true, underline: false}
+      entry: {color: "#00AAAA", bold: false, underline: false}
+      liked: {color: "#00AA00", bold: false, underline: false}
+      unfound: {color: "#AAAAAA", bold: false, underline: false}
+      invalid: {color: "#FF5555", bold: false, underline: false}
+      sub: {color: "#555555", bold: false, underline: false}
+      eTitle: {color: "#00AA00", bold: true, underline: false}
+      ePublic: {color: "#00AA00", bold: false, underline: false}
+      ePrivate: {color: "#AAAAAA", bold: false, underline: false}
+      eButton: {color: "#5555FF", bold: false, underline: false}
+      eDanger: {color: "#FF5555", bold: false, underline: true}
+      eNote: {color: "#AAAAAA", bold: false, underline: false}
+      eEntry: {color: "#000000", bold: false, underline: false}
+      eOk: {color: "#00AA00", bold: false, underline: false}
+      eNg: {color: "#FF5555", bold: false, underline: false}
+      cName: {color: "#FFFFFF", bold: false, underline: false}
+      cOfficial: {color: "#FFAA00", bold: false, underline: false}
+      cLore: {color: "#AAAAAA", bold: false, underline: false}
+      cAction: {color: "#55FF55", bold: false, underline: false}
+      cPublic: {color: "#55FF55", bold: false, underline: false}
+      cPrivate: {color: "#AAAAAA", bold: false, underline: false}
+      hover: {color: "#FFFFFF", bold: false, underline: false}
+    texts:
+      progress: "進捗: {n}/{m}"
+      author: "作者: {author}"
+      next: "Next: "
+      complete: "コンプリート！"
+      heading: "掲載建築"
+      invalid: "案内不可"
+      entryAuthor: "作者: {author}"
+      hNext: "クリックでこの建築へ案内"
+      hEntry: "クリックでこの建築へ案内"
+      eTitle: "編集: {title}"
+      ePublic: "公開中"
+      ePrivate: "非公開"
+      bAdd: "建築追加"
+      bToggle: "非公開にする"
+      bPublish: "公開する"
+      bDesc: "説明を書く"
+      bList: "ガイド一覧へ"
+      bDelete: "このガイドを削除"
+      eNote: "次のページから掲載建築を編集できます。"
+      eEmpty: "掲載建築はありません。"
+      eHeading: "掲載建築の編集"
+      eOk: "案内可能"
+      eNg: "案内不可"
+      bUp: "↑"
+      bDown: "↓"
+      bComment: "コメント"
+      bRemove: "削除"
+      hAdd: ""
+      hToggle: ""
+      hPublish: ""
+      hDesc: ""
+      hList: ""
+      hDelete: ""
+      hUp: ""
+      hDown: ""
+      hComment: ""
+      hRemove: ""
+      cOfficialMark: "★ "
+      cAuthor: "作者: {author}"
+      cProgress: "進捗: {n}/{m}"
+      cGet: "クリックで入手"
+      cPublic: "公開中"
+      cPrivate: "非公開"
+      cGetKey: "クリックで編集キーを入手"

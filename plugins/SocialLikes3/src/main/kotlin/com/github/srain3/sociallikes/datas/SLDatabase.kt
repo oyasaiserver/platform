@@ -4,6 +4,7 @@ import com.github.srain3.sociallikes.Tools
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.Statement
 import java.sql.Types
 import java.time.DayOfWeek
 import java.time.Instant
@@ -21,6 +22,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.logging.Level
 import kotlin.math.floor
 import org.bukkit.Bukkit
@@ -318,6 +320,36 @@ object SLDatabase {
     override val primaryKey = PrimaryKey(key)
   }
 
+  private object Guidebooks : Table("guidebooks") {
+    val id = integer("id").autoIncrement()
+    val type = varchar("type", 16)
+    val creatorUuid = varchar("creator_uuid", 36)
+    val title = text("title")
+    val description = text("description").default("")
+    val published = bool("published")
+    val createdAt = long("created_at")
+
+    override val primaryKey = PrimaryKey(id)
+  }
+
+  private object GuidebookEntries : Table("guidebook_entries") {
+    val guidebookId =
+        integer("guidebook_id").references(Guidebooks.id, onDelete = ReferenceOption.CASCADE)
+    val buildId = integer("build_id").references(Builds.id, onDelete = ReferenceOption.CASCADE)
+    val position = integer("position")
+
+    override val primaryKey = PrimaryKey(guidebookId, buildId)
+  }
+
+  private object GuidebookCompletions : Table("guidebook_completions") {
+    val guidebookId =
+        integer("guidebook_id").references(Guidebooks.id, onDelete = ReferenceOption.CASCADE)
+    val playerUuid = varchar("player_uuid", 36)
+    val completedAt = long("completed_at")
+
+    override val primaryKey = PrimaryKey(guidebookId, playerUuid)
+  }
+
   data class MigrationReadiness(val sqlitePrimaryReady: Boolean, val negativeBuildCount: Int)
 
   private data class BuildSnapshot(
@@ -393,6 +425,9 @@ object SLDatabase {
               SlEventLog,
               IdMigrationMap,
               MigrationState,
+              Guidebooks,
+              GuidebookEntries,
+              GuidebookCompletions,
           )
         }
 
@@ -400,6 +435,7 @@ object SLDatabase {
           rawConnection()?.let { conn ->
             migrateBuildsColumns(conn)
             migrateIdMigrationMapColumns(conn)
+            migrateGuidebookColumns(conn)
             TimestampEpochMigration.initializeEmptyDatabaseOrRequireMigration(conn)
           }
         }
@@ -466,6 +502,289 @@ object SLDatabase {
     check(database != null) { "SocialLikes3 SQLite database is unavailable" }
   }
 
+  fun createGuidebookBlocking(
+      type: GuidebookType,
+      creatorUuid: UUID,
+      title: String,
+  ): Int? =
+      submitWriteBlocking("createGuidebook") {
+        val connection = rawConnection() ?: return@submitWriteBlocking null
+        connection
+            .prepareStatement(
+                "INSERT INTO guidebooks (type, creator_uuid, title, published, created_at) VALUES (?, ?, ?, 0, ?)",
+                Statement.RETURN_GENERATED_KEYS,
+            )
+            .use { statement ->
+              statement.setString(1, type.name)
+              statement.setString(2, creatorUuid.toString())
+              statement.setString(3, title)
+              statement.setLong(4, System.currentTimeMillis())
+              statement.executeUpdate()
+              statement.generatedKeys.use { keys -> if (keys.next()) keys.getInt(1) else null }
+            }
+      }
+
+  fun loadGuidebookBlocking(id: Int): GuidebookData? =
+      submitBlocking("loadGuidebook") {
+        rawConnection()?.let { connection ->
+          connection
+              .prepareStatement(
+                  "SELECT id, type, creator_uuid, title, description, published, created_at FROM guidebooks WHERE id = ?"
+              )
+              .use { statement ->
+                statement.setInt(1, id)
+                statement.executeQuery().use { rows ->
+                  if (rows.next()) rows.toGuidebookData() else null
+                }
+              }
+        }
+      }
+
+  fun loadPublishedGuidebooksBlocking(): List<GuidebookData> =
+      loadGuidebooksBlocking(
+          "loadPublishedGuidebooks",
+          """
+          SELECT id, type, creator_uuid, title, description, published, created_at
+          FROM guidebooks
+          WHERE published = 1
+          ORDER BY CASE type WHEN 'OFFICIAL' THEN 0 ELSE 1 END, created_at DESC, id DESC
+          """
+              .trimIndent(),
+      )
+
+  fun loadEditableGuidebooksBlocking(
+      creatorUuid: UUID,
+      canEditOfficial: Boolean,
+  ): List<GuidebookData> =
+      loadGuidebooksBlocking(
+          "loadEditableGuidebooks",
+          """
+          SELECT id, type, creator_uuid, title, description, published, created_at
+          FROM guidebooks
+          WHERE creator_uuid = ? OR (? = 1 AND type = 'OFFICIAL')
+          ORDER BY CASE type WHEN 'OFFICIAL' THEN 0 ELSE 1 END, created_at DESC, id DESC
+          """
+              .trimIndent(),
+      ) { statement ->
+        statement.setString(1, creatorUuid.toString())
+        statement.setInt(2, if (canEditOfficial) 1 else 0)
+      }
+
+  fun countPersonalGuidebooksBlocking(creatorUuid: UUID): Int =
+      submitBlocking("countPersonalGuidebooks") {
+        countQuery(
+            "SELECT COUNT(*) AS count FROM guidebooks WHERE creator_uuid = ? AND type = 'PERSONAL'"
+        ) {
+          it.setString(1, creatorUuid.toString())
+        }
+      } ?: 0
+
+  fun loadGuidebookEntriesBlocking(guidebookId: Int): List<Int> =
+      submitBlocking("loadGuidebookEntries") {
+            val ids = mutableListOf<Int>()
+            rawConnection()
+                ?.prepareStatement(
+                    "SELECT build_id FROM guidebook_entries WHERE guidebook_id = ? ORDER BY position, build_id"
+                )
+                ?.use { statement ->
+                  statement.setInt(1, guidebookId)
+                  statement.executeQuery().use { rows ->
+                    while (rows.next()) ids += rows.getInt("build_id")
+                  }
+                }
+            ids
+          }
+          .orEmpty()
+
+  fun addGuidebookEntryBlocking(guidebookId: Int, buildId: Int, limit: Int): Boolean =
+      submitWriteBlocking("addGuidebookEntry") {
+        val connection = rawConnection() ?: return@submitWriteBlocking false
+        val entries = loadGuidebookEntryIds(connection, guidebookId)
+        if (!GuidebookRules.canAddEntry(entries.size, limit, buildId in entries)) {
+          return@submitWriteBlocking false
+        }
+        connection
+            .prepareStatement(
+                "INSERT INTO guidebook_entries (guidebook_id, build_id, position) VALUES (?, ?, ?)"
+            )
+            .use { statement ->
+              statement.setInt(1, guidebookId)
+              statement.setInt(2, buildId)
+              statement.setInt(3, entries.size)
+              statement.executeUpdate() == 1
+            }
+      } ?: false
+
+  fun removeGuidebookEntryBlocking(guidebookId: Int, buildId: Int): Boolean =
+      submitWriteBlocking("removeGuidebookEntry") {
+        val connection = rawConnection() ?: return@submitWriteBlocking false
+        val removed =
+            connection
+                .prepareStatement(
+                    "DELETE FROM guidebook_entries WHERE guidebook_id = ? AND build_id = ?"
+                )
+                .use { statement ->
+                  statement.setInt(1, guidebookId)
+                  statement.setInt(2, buildId)
+                  statement.executeUpdate() == 1
+                }
+        if (removed) normalizeGuidebookPositions(connection, guidebookId)
+        removed
+      } ?: false
+
+  fun moveGuidebookEntryBlocking(
+      guidebookId: Int,
+      buildId: Int,
+      offset: Int,
+  ): Boolean =
+      submitWriteBlocking("moveGuidebookEntry") {
+        val connection = rawConnection() ?: return@submitWriteBlocking false
+        val entries = loadGuidebookEntryIds(connection, guidebookId).toMutableList()
+        val from = entries.indexOf(buildId)
+        val to = from + offset
+        if (from < 0 || to !in entries.indices) return@submitWriteBlocking false
+        java.util.Collections.swap(entries, from, to)
+        writeGuidebookPositions(connection, guidebookId, entries)
+        true
+      } ?: false
+
+  fun setGuidebookPublishedBlocking(guidebookId: Int, published: Boolean): Boolean =
+      submitWriteBlocking("setGuidebookPublished") {
+        rawConnection()
+            ?.prepareStatement("UPDATE guidebooks SET published = ? WHERE id = ?")
+            ?.use { statement ->
+              statement.setBoolean(1, published)
+              statement.setInt(2, guidebookId)
+              statement.executeUpdate() == 1
+            } ?: false
+      } ?: false
+
+  fun setGuidebookDescriptionBlocking(guidebookId: Int, description: String): Boolean =
+      submitWriteBlocking("setGuidebookDescription") {
+        rawConnection()
+            ?.prepareStatement("UPDATE guidebooks SET description = ? WHERE id = ?")
+            ?.use { statement ->
+              statement.setString(1, description)
+              statement.setInt(2, guidebookId)
+              statement.executeUpdate() == 1
+            } ?: false
+      } ?: false
+
+  fun deleteGuidebookBlocking(guidebookId: Int): Boolean =
+      submitWriteBlocking("deleteGuidebook") {
+        rawConnection()?.prepareStatement("DELETE FROM guidebooks WHERE id = ?")?.use { statement ->
+          statement.setInt(1, guidebookId)
+          statement.executeUpdate() == 1
+        } ?: false
+      } ?: false
+
+  fun loadPublishedGuidebooksContainingBuildBlocking(buildId: Int): List<GuidebookData> =
+      loadGuidebooksBlocking(
+          "loadGuidebooksContainingBuild",
+          """
+          SELECT g.id, g.type, g.creator_uuid, g.title, g.description, g.published, g.created_at
+          FROM guidebooks g
+          JOIN guidebook_entries e ON e.guidebook_id = g.id
+          WHERE g.published = 1 AND e.build_id = ?
+          ORDER BY g.id
+          """
+              .trimIndent(),
+      ) {
+        it.setInt(1, buildId)
+      }
+
+  fun recordGuidebookCompletion(
+      guidebookId: Int,
+      playerUuid: UUID,
+      onRecorded: (Boolean) -> Unit,
+  ) {
+    val inserted = AtomicBoolean(false)
+    submitWrite(
+        "recordGuidebookCompletion",
+        onSuccess = { onRecorded(inserted.get()) },
+    ) {
+      inserted.set(
+          rawConnection()
+              ?.prepareStatement(
+                  "INSERT OR IGNORE INTO guidebook_completions (guidebook_id, player_uuid, completed_at) VALUES (?, ?, ?)"
+              )
+              ?.use { statement ->
+                statement.setInt(1, guidebookId)
+                statement.setString(2, playerUuid.toString())
+                statement.setLong(3, System.currentTimeMillis())
+                statement.executeUpdate() == 1
+              } ?: false
+      )
+    }
+  }
+
+  private fun loadGuidebooksBlocking(
+      taskName: String,
+      sql: String,
+      bind: (java.sql.PreparedStatement) -> Unit = {},
+  ): List<GuidebookData> =
+      submitBlocking(taskName) {
+            val guidebooks = mutableListOf<GuidebookData>()
+            rawConnection()?.prepareStatement(sql)?.use { statement ->
+              bind(statement)
+              statement.executeQuery().use { rows ->
+                while (rows.next()) guidebooks += rows.toGuidebookData()
+              }
+            }
+            guidebooks
+          }
+          .orEmpty()
+
+  private fun java.sql.ResultSet.toGuidebookData(): GuidebookData =
+      GuidebookData(
+          id = getInt("id"),
+          type = GuidebookType.valueOf(getString("type")),
+          creatorUuid = UUID.fromString(getString("creator_uuid")),
+          title = getString("title"),
+          description = getString("description"),
+          published = getBoolean("published"),
+          createdAt = getLong("created_at"),
+      )
+
+  private fun loadGuidebookEntryIds(connection: Connection, guidebookId: Int): List<Int> {
+    val entries = mutableListOf<Int>()
+    connection
+        .prepareStatement(
+            "SELECT build_id FROM guidebook_entries WHERE guidebook_id = ? ORDER BY position, build_id"
+        )
+        .use { statement ->
+          statement.setInt(1, guidebookId)
+          statement.executeQuery().use { rows ->
+            while (rows.next()) entries += rows.getInt("build_id")
+          }
+        }
+    return entries
+  }
+
+  private fun normalizeGuidebookPositions(connection: Connection, guidebookId: Int) {
+    writeGuidebookPositions(connection, guidebookId, loadGuidebookEntryIds(connection, guidebookId))
+  }
+
+  private fun writeGuidebookPositions(
+      connection: Connection,
+      guidebookId: Int,
+      entries: List<Int>,
+  ) {
+    connection
+        .prepareStatement(
+            "UPDATE guidebook_entries SET position = ? WHERE guidebook_id = ? AND build_id = ?"
+        )
+        .use { statement ->
+          entries.forEachIndexed { position, buildId ->
+            statement.setInt(1, position)
+            statement.setInt(2, guidebookId)
+            statement.setInt(3, buildId)
+            statement.addBatch()
+          }
+          statement.executeBatch()
+        }
+  }
+
   fun timestampHealthBlocking(): TimestampEpochMigration.Report? =
       submitBlocking("timestampHealth") { rawConnection()?.let(TimestampEpochMigration::verify) }
 
@@ -516,6 +835,20 @@ object SLDatabase {
     }
   }
 
+  private fun migrateGuidebookColumns(conn: Connection) {
+    val columns = mutableSetOf<String>()
+    conn.createStatement().use { stmt ->
+      stmt.executeQuery("PRAGMA table_info(guidebooks)").use { rows ->
+        while (rows.next()) columns += rows.getString("name").lowercase(Locale.ROOT)
+      }
+    }
+    if ("description" !in columns) {
+      conn.createStatement().use {
+        it.execute("ALTER TABLE guidebooks ADD COLUMN description TEXT NOT NULL DEFAULT ''")
+      }
+    }
+  }
+
   private fun createViews(conn: Connection) {
     conn.createStatement().use { statement ->
       statement.execute("DROP VIEW IF EXISTS active_builds")
@@ -548,6 +881,8 @@ object SLDatabase {
                 "CREATE INDEX IF NOT EXISTS idx_sl_event_log_event_type ON sl_event_log(event_type)",
             "idx_builds_deleted_at" to
                 "CREATE INDEX IF NOT EXISTS idx_builds_deleted_at ON builds(deleted_at)",
+            "idx_guidebook_entries_build_id" to
+                "CREATE INDEX IF NOT EXISTS idx_guidebook_entries_build_id ON guidebook_entries(build_id)",
         )
 
     for ((indexName, sql) in indexes) {
