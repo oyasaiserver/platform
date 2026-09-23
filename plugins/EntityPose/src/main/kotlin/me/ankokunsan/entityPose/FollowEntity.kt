@@ -109,6 +109,8 @@ object FollowEntity {
       entity.isInvulnerable = false
       entity.isSilent = true
       entity.persistentDataContainer.set(EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
+      entity.persistentDataContainer.set(
+        EntityPose.DEATH_KEY, PersistentDataType.BYTE, 1.toByte())
     }
 
     return entity

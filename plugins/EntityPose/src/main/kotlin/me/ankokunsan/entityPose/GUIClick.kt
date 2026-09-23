@@ -7,6 +7,8 @@ import me.ankokunsan.entityPose.EntityClick.Companion.currentStep
 import me.ankokunsan.entityPose.EntityClick.Companion.currentZah
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.HORSE_COLOR_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.HORSE_STYLE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.KAKUDO_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.PARROT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
@@ -20,6 +22,7 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Cat
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.Horse
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Parrot
 import org.bukkit.entity.Player
@@ -359,6 +362,70 @@ class GUIClick : Listener {
 
     val parrotType = parrotVariantMap[action] ?: return
     FollowEntity.start<Parrot>(player, EntityType.PARROT) { parrot -> parrot.variant = parrotType }
+    player.closeInventory()
+  }
+
+  @EventHandler
+  fun onhorseClick(event: InventoryClickEvent) {
+    val player = event.whoClicked as? Player ?: return
+    if (event.view.title != "§3馬選択") return
+
+    event.isCancelled = true
+
+    val item = event.currentItem ?: return
+    if (!item.hasItemMeta()) return
+
+    val meta = item.itemMeta!!
+    val action = meta.persistentDataContainer.get(HORSE_COLOR_KEY, PersistentDataType.STRING) ?: return
+
+    player.closeInventory()
+    ChooseGUi.openHorseStyleGUI(player, action)
+  }
+
+  @EventHandler
+  fun onHorseStyleClick(event: InventoryClickEvent) {
+    val player = event.whoClicked as? Player ?: return
+    if (event.view.title != "§3馬模様選択") return
+
+    event.isCancelled = true
+
+    val item = event.currentItem ?: return
+    if (!item.hasItemMeta()) return
+
+    val meta = item.itemMeta!!
+    val colorKey = meta.persistentDataContainer.get(HORSE_COLOR_KEY, PersistentDataType.STRING) ?: return
+    val styleKey = meta.persistentDataContainer.get(HORSE_STYLE_KEY, PersistentDataType.STRING) ?: return
+
+    // ここでも map を維持して呼び出し
+    val horseVariantMap =
+      mapOf(
+        "WHITE" to Horse.Color.WHITE,
+        "CHESTNUT" to Horse.Color.CHESTNUT,
+        "CREAM" to Horse.Color.CREAMY,
+        "BROWN" to Horse.Color.BROWN,
+        "BLACK" to Horse.Color.BLACK,
+        "GRAY" to Horse.Color.GRAY,
+        "DARKBROWN" to Horse.Color.DARK_BROWN,
+      )
+
+    val horseStyleMap =
+      mapOf(
+        "NONE" to Horse.Style.NONE,
+        "WHITE" to Horse.Style.WHITE,
+        "WHITEFIELD" to Horse.Style.WHITEFIELD,
+        "WHITE_DOTS" to Horse.Style.WHITE_DOTS,
+        "BLACK_DOTS" to Horse.Style.BLACK_DOTS,
+      )
+
+    val horseColor = horseVariantMap[colorKey] ?: return
+    val horseStyle = horseStyleMap[styleKey] ?: return
+
+    // 決定した色と模様をまとめて適用
+    FollowEntity.start<Horse>(player, EntityType.HORSE) { horse ->
+      horse.color = horseColor
+      horse.style = horseStyle
+    }
+
     player.closeInventory()
   }
 

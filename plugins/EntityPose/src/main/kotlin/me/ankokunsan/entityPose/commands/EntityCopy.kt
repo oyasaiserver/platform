@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Ageable
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Cat
+import org.bukkit.entity.Horse
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Parrot
 import org.bukkit.entity.Player
@@ -49,14 +50,15 @@ class EntityCopy : CommandExecutor {
 
           val container = entity.persistentDataContainer
 
-          val variantStr =
-              when (entity) {
-                is Wolf -> entity.variant.key.toString()
-                is Cat -> entity.catType.key.toString()
-                is Rabbit -> entity.rabbitType.name
-                is Parrot -> entity.variant.name
-                else -> null
-              }
+          val (variantStr, styleStr) = when (entity) {
+            is Wolf -> entity.variant.key.toString() to null
+            is Cat -> entity.catType.key.toString() to null
+            is Rabbit -> entity.rabbitType.name to null
+            is Parrot -> entity.variant.name to null
+            is Horse -> entity.color.name to entity.style.name
+            else -> null to null
+          }
+
           val equipmentMap = mutableMapOf<EquipmentSlot, ItemStack?>()
           val sitting = (entity as? Sittable)?.isSitting ?: false
 
@@ -102,6 +104,7 @@ class EntityCopy : CommandExecutor {
                   },
               isSitting = sitting,
               variant = variantStr,
+              style = styleStr,
               equipment = equipmentMap,
               hasArms = armorStands?.hasArms() ?: true,
               headPose = armorStands?.headPose,

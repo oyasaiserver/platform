@@ -1,6 +1,8 @@
 package me.ankokunsan.entityPose
 
 import me.ankokunsan.entityPose.EntityPose.Companion.GUI_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.HORSE_COLOR_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.HORSE_STYLE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.KAKUDO_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.ZAHYO_KEY
@@ -23,8 +25,8 @@ object ChooseGUi {
   fun openSpawnGUI(player: Player) {
     val inv =
         Bukkit.createInventory(
-            player, // holder（nullでもOK）
-            18, // サイズ（9の倍数）
+            player,
+            18,
             "§3エンティティスポーン",
         )
     val sarmorStandItem = ItemStack(Material.ARMOR_STAND)
@@ -89,6 +91,12 @@ object ChooseGUi {
           setDisplayName("${ChatColor.GREEN}オウム")
           persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "PARROT")
         }
+    val horItem = ItemStack(Material.HORSE_SPAWN_EGG)
+    horItem.itemMeta =
+      horItem.itemMeta!!.apply {
+        setDisplayName("${ChatColor.GREEN}馬")
+        persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "HORSE")
+      }
     inv.setItem(0, sarmorStandItem)
     inv.setItem(1, armorStandItem)
     inv.setItem(2, sminiStandItem)
@@ -99,6 +107,8 @@ object ChooseGUi {
     inv.setItem(7, minicaItem)
     inv.setItem(8, rabItem)
     inv.setItem(9, parItem)
+    inv.setItem(10,horItem)
+
     val filler = getFiller1()
     (0 until inv.size).forEach { i -> if (inv.getItem(i) == null) inv.setItem(i, filler) }
     player.openInventory(inv)
@@ -363,6 +373,31 @@ object ChooseGUi {
     val filler = getFiller1()
     for (i in 0 until invs.size) {
       if (invs.getItem(i) == null) invs.setItem(i, filler)
+    }
+    player.openInventory(invs)
+  }
+
+  fun openHorseStyleGUI(player: Player, selectedColor: String) {
+    val invs = Bukkit.createInventory(player, 9, "§3馬模様選択")
+
+    val styles = listOf(
+      "NONE" to "模様なし",
+      "WHITE" to "足元が白",
+      "WHITEFIELD" to "背中白斑",
+      "WHITE_DOTS" to "白斑点",
+      "BLACK_DOTS" to "黒斑点"
+    )
+
+    styles.forEachIndexed { index, (styleKey, displayName) ->
+      val item = ItemStack(Material.HORSE_SPAWN_EGG).apply {
+        itemMeta = itemMeta?.apply {
+          setDisplayName("${ChatColor.GREEN}$displayName")
+          // 1段階目で選んだ「色」と、この枠の「模様」を両方埋め込む
+          persistentDataContainer.set(HORSE_COLOR_KEY, PersistentDataType.STRING, selectedColor)
+          persistentDataContainer.set(HORSE_STYLE_KEY, PersistentDataType.STRING, styleKey)
+        }
+      }
+      invs.setItem(index, item)
     }
     player.openInventory(invs)
   }
