@@ -21,10 +21,20 @@ import org.bukkit.block.sign.Side
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
-object SLUpdate : CommandExecutor {
+object SLUpdate : CommandExecutor, TabCompleter {
+  // 補完を返さないと Bukkit がオンラインプレイヤー名を出すので、必ず候補を返す
+  override fun onTabComplete(
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
+  ): List<String> =
+      if (args.size == 1) listOf("region").filter { it.startsWith(args[0]) } else emptyList()
+
   val switch = mutableMapOf<UUID, Boolean>()
 
   override fun onCommand(

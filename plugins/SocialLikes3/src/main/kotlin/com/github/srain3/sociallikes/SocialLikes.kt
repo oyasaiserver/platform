@@ -73,6 +73,7 @@ class SocialLikes : JavaPlugin() {
     server.getPluginCommand("slbuild")?.setExecutor(SLBuilds)
     server.getPluginCommand("sluser")?.setExecutor(SLUser)
     server.getPluginCommand("slupdate")?.setExecutor(SLUpdate)
+    server.getPluginCommand("slupdate")?.tabCompleter = SLUpdate
     server.getPluginCommand("slsignget")?.setExecutor(SLSignGet)
     server.getPluginCommand("slmenu")?.setExecutor(SLMenu)
     server.getPluginCommand("slnear")?.setExecutor(SLNear)
