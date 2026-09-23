@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Ageable
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Cat
+import org.bukkit.entity.Horse
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Parrot
 import org.bukkit.entity.Player
@@ -23,7 +24,7 @@ import org.bukkit.persistence.PersistentDataType
 
 class EntityPaste : CommandExecutor {
 
-  private fun applyVariant(entity: LivingEntity, variantStr: String?) {
+  private fun applyVariant(entity: LivingEntity, variantStr: String?, styleStr: String?) {
     if (variantStr == null) return
     when (entity) {
       is Wolf -> {
@@ -46,6 +47,15 @@ class EntityPaste : CommandExecutor {
       is Parrot -> {
         try {
           entity.variant = Parrot.Variant.valueOf(variantStr)
+        } catch (_: Exception) {}
+      }
+      is Horse -> {
+        try {
+          entity.color = Horse.Color.valueOf(variantStr)
+
+          if (styleStr != null) {
+            entity.style = Horse.Style.valueOf(styleStr)
+          }
         } catch (_: Exception) {}
       }
     }
@@ -79,6 +89,7 @@ class EntityPaste : CommandExecutor {
 
         if (this is LivingEntity) {
           setAI(false)
+          container.set(EntityPose.DEATH_KEY, PersistentDataType.BYTE, 1.toByte())
           isSilent = true
           this.getAttribute(Attribute.SCALE)?.baseValue = data.scale
           if (data.hanten) {
@@ -99,7 +110,7 @@ class EntityPaste : CommandExecutor {
           }
 
           data.equipment.forEach { (slot, item) -> this.equipment?.setItem(slot, item) }
-          applyVariant(this, data.variant)
+          applyVariant(this, data.variant, data.style)
           if (this is Ageable) {
             if (data.isMini) setBaby() else setAdult()
           }
