@@ -20,6 +20,7 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.entity.Allay
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
@@ -787,6 +788,10 @@ class EntityClick : Listener {
         val filler = getFiller()
         (0 until inv4.size).forEach { i -> if (inv4.getItem(i) == null) inv4.setItem(i, filler) }
         player.openInventory(inv4)
+      }
+      "ALLAY" -> {
+        FollowEntity.start<Allay>(player, EntityType.ALLAY){}
+        player.closeInventory()
       }
     }
   }
