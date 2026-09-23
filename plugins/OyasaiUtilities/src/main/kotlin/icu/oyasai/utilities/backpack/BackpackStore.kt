@@ -74,6 +74,31 @@ internal class BackpackStore(private val databaseFile: File) : AutoCloseable {
     }
   }
 
+  fun insertIfAbsent(playerUuid: UUID, contents: ByteArray): Boolean =
+      connection
+          .prepareStatement(
+              """
+              INSERT INTO backpacks(player_uuid, data_version, contents, updated_at)
+              VALUES (?, ?, ?, ?)
+              ON CONFLICT(player_uuid) DO NOTHING
+              """
+                  .trimIndent()
+          )
+          .use { statement ->
+            statement.setString(1, playerUuid.toString())
+            statement.setInt(2, DATA_VERSION)
+            statement.setBytes(3, contents)
+            statement.setLong(4, System.currentTimeMillis())
+            statement.executeUpdate() == 1
+          }
+
+  fun delete(playerUuid: UUID) {
+    connection.prepareStatement("DELETE FROM backpacks WHERE player_uuid = ?").use { statement ->
+      statement.setString(1, playerUuid.toString())
+      statement.executeUpdate()
+    }
+  }
+
   override fun close() {
     if (::connection.isInitialized) connection.close()
   }

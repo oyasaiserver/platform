@@ -12,6 +12,8 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.ConsoleCommandSender
+import org.bukkit.command.RemoteConsoleCommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -106,6 +108,32 @@ class BackpackFeature(private val plugin: Main) : Listener, CommandExecutor {
       label: String,
       args: Array<out String>,
   ): Boolean {
+    if (args.firstOrNull()?.equals("migrate-minepacks", ignoreCase = true) == true) {
+      if (sender !is ConsoleCommandSender && sender !is RemoteConsoleCommandSender) {
+        sender.sendMessage("§cMinepacks 移行はコンソール専用です。")
+        return true
+      }
+      if (args.size > 2 || (args.size == 2 && !args[1].equals("confirm", ignoreCase = true))) {
+        sender.sendMessage("Usage: /oyasaibackpack migrate-minepacks [confirm]")
+        return true
+      }
+      if (!ready || stopping) {
+        sender.sendMessage("バックパック DB は現在利用できません。")
+        return true
+      }
+      if (plugin.server.pluginManager.getPlugin("Minepacks")?.isEnabled != true) {
+        sender.sendMessage("Minepacks が無いため移行できません。")
+        return true
+      }
+      if (
+          !MinepacksMigration.start(plugin, store, ioExecutor, sender, args.size == 2) {
+            it in openInventories || it in unsaved
+          }
+      ) {
+        sender.sendMessage("Minepacks 移行はすでに実行中です。")
+      }
+      return true
+    }
     if (sender !is Player) {
       sender.sendMessage("このコマンドはプレイヤー専用です。")
       return true

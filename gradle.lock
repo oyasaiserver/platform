@@ -9,6 +9,16 @@
       "hash": "sha256-JugjMBV9a4RLZ6gGSUXiBlgedyl3GD4+Mf7GBYqppZs="
     }
   },
+  "at.pcgamingfreaks:Minepacks-API:2.5.9": {
+    "Minepacks-API-2.5.9.jar": {
+      "url": "https://repo.pcgamingfreaks.at/repository/maven-everything/at/pcgamingfreaks/Minepacks-API/2.5.9/Minepacks-API-2.5.9.jar",
+      "hash": "sha256-OshgqZzYg+F5HB6p5GVJpcCmjCZ56NsQkEmoz9fUAmE="
+    },
+    "Minepacks-API-2.5.9.pom": {
+      "url": "https://repo.pcgamingfreaks.at/repository/maven-everything/at/pcgamingfreaks/Minepacks-API/2.5.9/Minepacks-API-2.5.9.pom",
+      "hash": "sha256-41ZDYGvOxfgqB+kdFen8dr9OeVawsrsGFyxStmqcCXI="
+    }
+  },
   "at.yawk.lz4:lz4-java:1.11.1": {
     "lz4-java-1.11.1.jar": {
       "url": "https://repo.maven.apache.org/maven2/at/yawk/lz4/lz4-java/1.11.1/lz4-java-1.11.1.jar",
