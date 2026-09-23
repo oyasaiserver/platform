@@ -790,7 +790,7 @@ class EntityClick : Listener {
         player.openInventory(inv4)
       }
       "ALLAY" -> {
-        FollowEntity.start<Allay>(player, EntityType.ALLAY){}
+        FollowEntity.start<Allay>(player, EntityType.ALLAY) {}
         player.closeInventory()
       }
     }

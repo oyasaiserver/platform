@@ -99,10 +99,10 @@ object ChooseGUi {
         }
     val allItem = ItemStack(Material.ALLAY_SPAWN_EGG)
     allItem.itemMeta =
-      allItem.itemMeta!!.apply {
-        setDisplayName("${ChatColor.GREEN}アレイ")
-        persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "ALLAY")
-      }
+        allItem.itemMeta!!.apply {
+          setDisplayName("${ChatColor.GREEN}アレイ")
+          persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "ALLAY")
+        }
     inv.setItem(0, sarmorStandItem)
     inv.setItem(1, armorStandItem)
     inv.setItem(2, sminiStandItem)
