@@ -12,9 +12,3 @@ dependencies {
 
 tasks {
   test { useJUnitPlatform() }
-
-  shadowJar {
-    minimize { exclude(dependency(libs.sqlite.jdbc.get())) }
-    relocate("kotlin", "io.oyasai.oyasaiban.libs.kotlin")
-  }
-}
