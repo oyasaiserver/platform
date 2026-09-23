@@ -21,7 +21,7 @@ object SLDataOp : CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    if (!sender.isOp && !sender.hasPermission("sociallikes.admin")) {
+    if (!sender.isOp) {
       sender.sendMessage(Tools.socialLikesLOGO + " &cこのコマンドを実行する権限がありません。".color())
       SLDataLogger.log(sender, label, args.toList(), 0, false, "Permission denied")
       return true
@@ -272,7 +272,7 @@ object SLDataOp : CommandExecutor, TabCompleter {
       alias: String,
       args: Array<out String>,
   ): MutableList<String> {
-    if (!sender.isOp && !sender.hasPermission("sociallikes.admin")) return mutableListOf()
+    if (!sender.isOp) return mutableListOf()
 
     return when (args.size) {
       1 ->

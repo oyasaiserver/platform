@@ -23,7 +23,7 @@ migrateNegativeIdsDryRun: false
 
 guidebook:
   # 個人ガイドを作れる冊数を LuckPerms のグループごとに決める（group.<名前> を持つ人に適用）。
-  # 複数持っていればいちばん多い値。どれも持っていない人は作れない。sociallikes3.admin はいちばん多い値
+  # 複数持っていればいちばん多い値。どれも持っていない人は作れない。OP はいちばん多い値
   personalBookLimits:
     jokyu: 1
     builder: 2

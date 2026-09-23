@@ -70,6 +70,10 @@ object SLDataFont : CommandExecutor, Listener {
       args: Array<out String>,
   ): Boolean {
     if (command.name != "sldatafont") return false
+    if (!sender.isOp) {
+      sender.sendMessage(Tools.socialLikesLOGO + " &cこのコマンドを実行する権限がありません。".color())
+      return true
+    }
 
     if (sender !is Player) {
       sender.sendMessage(Tools.socialLikesLOGO + " &cプレイヤーから実行してください。".color())

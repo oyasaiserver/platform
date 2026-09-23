@@ -13,8 +13,8 @@ object SLRankUpTAB : TabCompleter {
       args: Array<out String>,
   ): MutableList<String>? {
     if (command.name != "slrankup") return null
-    if (!sender.hasPermission("sociallikes3.slrankup")) {
-      return null
+    if (!sender.isOp) {
+      return mutableListOf()
     }
     if (sender !is Player) return null
 

@@ -17,7 +17,7 @@ object SLRankUp : CommandExecutor {
       args: Array<out String>,
   ): Boolean {
     if (command.name != "slrankup") return false
-    if (!sender.hasPermission("sociallikes3.slrankup")) {
+    if (!sender.isOp) {
       return false
     }
     if (sender !is Player) return false

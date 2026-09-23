@@ -33,8 +33,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 object GuidebookService {
-  const val OFFICIAL_PERMISSION = "sociallikes.guidebook.official"
-  const val ADMIN_PERMISSION = "sociallikes3.admin"
   private const val MAX_TITLE_LENGTH = 32
 
   val touristKey = NamespacedKey(Tools.plugin, "guidebook_id")
@@ -107,7 +105,7 @@ object GuidebookService {
       )
       return null
     }
-    if (type == GuidebookType.OFFICIAL && !player.hasPermission(OFFICIAL_PERMISSION)) {
+    if (type == GuidebookType.OFFICIAL && !player.isOp) {
       player.sendMessage(Tools.socialLikesLOGO + " &c公式ガイドを作成する権限がありません。".color())
       return null
     }
@@ -125,11 +123,8 @@ object GuidebookService {
   }
 
   fun canEdit(player: Player, guidebook: GuidebookData): Boolean =
-      player.hasPermission(ADMIN_PERMISSION) ||
-          when (guidebook.type) {
-            GuidebookType.PERSONAL -> guidebook.creatorUuid == player.uniqueId
-            GuidebookType.OFFICIAL -> player.hasPermission(OFFICIAL_PERMISSION)
-          }
+      player.isOp ||
+          (guidebook.type == GuidebookType.PERSONAL && guidebook.creatorUuid == player.uniqueId)
 
   fun entries(guidebookId: Int, playerUuid: UUID): List<EntryView> =
       SLDatabase.loadGuidebookEntriesBlocking(guidebookId).map { buildId ->
@@ -356,7 +351,7 @@ object GuidebookService {
     val section =
         Tools.plugin.config.getConfigurationSection("guidebook.personalBookLimits") ?: return 0
     val limits = section.getKeys(false).associateWith(section::getInt)
-    if (player.hasPermission(ADMIN_PERMISSION)) return limits.values.maxOrNull() ?: 0
+    if (player.isOp) return limits.values.maxOrNull() ?: 0
     return GuidebookRules.personalBookLimit(limits) { player.hasPermission("group.$it") }
   }
 
