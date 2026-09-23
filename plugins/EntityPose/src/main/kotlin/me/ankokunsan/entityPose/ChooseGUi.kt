@@ -97,6 +97,12 @@ object ChooseGUi {
           setDisplayName("${ChatColor.GREEN}馬")
           persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "HORSE")
         }
+    val allItem = ItemStack(Material.ALLAY_SPAWN_EGG)
+    allItem.itemMeta =
+        allItem.itemMeta!!.apply {
+          setDisplayName("${ChatColor.GREEN}アレイ")
+          persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "ALLAY")
+        }
     inv.setItem(0, sarmorStandItem)
     inv.setItem(1, armorStandItem)
     inv.setItem(2, sminiStandItem)
@@ -108,6 +114,7 @@ object ChooseGUi {
     inv.setItem(8, rabItem)
     inv.setItem(9, parItem)
     inv.setItem(10, horItem)
+    inv.setItem(11, allItem)
 
     val filler = getFiller1()
     (0 until inv.size).forEach { i -> if (inv.getItem(i) == null) inv.setItem(i, filler) }
