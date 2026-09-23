@@ -66,6 +66,10 @@ commands:
   togom:
     description: Togo Mode (DebugOnBE 設定GUI) コマンド
     usage: /togom [types/reset/lim/radius/duration/replace]
+  oholo:
+    description: "ホログラム"
+    usage: /oholo <create|delete|list|near|movehere|line|import>
+    permission: oyasaiutilities.hologram
 
 permissions:
   oyasai.skin:
@@ -80,6 +84,9 @@ permissions:
   oyasaiutilities.timerbar:
     description: "TimerBarコマンドの使用権限"
   oyasaiutilities.tpdata:
+    default: op
+  oyasaiutilities.hologram:
+    description: "ホログラムコマンド"
     default: op
   backpack.user:
     description: "標準サイズのバックパックを使う"
