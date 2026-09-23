@@ -22,11 +22,24 @@ import org.bukkit.block.data.type.WallSign
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.scheduler.BukkitRunnable
 
-object SLtp : CommandExecutor {
+object SLtp : CommandExecutor, TabCompleter {
+  override fun onTabComplete(
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
+  ): MutableList<String> =
+      when (args.size) {
+        1 -> completions(args[0], listOf("next", "back", "unext", "uback", "new"), "<ID>")
+        2 -> if (args[0] == "new") completions(args[1], emptyList(), "[1-10]") else mutableListOf()
+        else -> mutableListOf()
+      }
+
   private const val MAX_HISTORY = 10
 
   private data class SignEvent(val time: LocalDateTime, val signId: Int)

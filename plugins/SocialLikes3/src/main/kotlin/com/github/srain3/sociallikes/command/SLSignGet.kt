@@ -13,12 +13,25 @@ import org.bukkit.block.sign.Side
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BlockStateMeta
 import org.bukkit.persistence.PersistentDataType
 
-object SLSignGet : CommandExecutor {
+object SLSignGet : CommandExecutor, TabCompleter {
+  override fun onTabComplete(
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
+  ): MutableList<String> =
+      when (args.size) {
+        1 -> completions(args[0], emptyList(), "<ID>")
+        2 -> completions(args[1], listOf("hanging"))
+        else -> mutableListOf()
+      }
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
