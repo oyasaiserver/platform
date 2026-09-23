@@ -53,13 +53,18 @@ class GuidebookStyle(section: ConfigurationSection?, warn: (String) -> Unit = {}
   companion object {
     private val PLACEHOLDER = Regex("\\{(\\w+)}")
 
-    // ponytail: 起動時に1回だけ読む。config.yml を書き換えたらサーバー再起動で反映（本プラグインに config の reload 経路は無い）
-    val current: GuidebookStyle by lazy {
-      GuidebookStyle(
-          Tools.plugin.config.getConfigurationSection("guidebook.style"),
-          Tools.plugin.logger::warning,
-      )
-    }
+    // 最初に使ったときに読む。/sldataop reload で読み直す
+    @Volatile private var loaded: GuidebookStyle? = null
+
+    val current: GuidebookStyle
+      get() = loaded ?: load()
+
+    fun load(): GuidebookStyle =
+        GuidebookStyle(
+                Tools.plugin.config.getConfigurationSection("guidebook.style"),
+                Tools.plugin.logger::warning,
+            )
+            .also { loaded = it }
 
     private fun r(hex: String, bold: Boolean = false, underline: Boolean = false) =
         Role(TextColor.fromHexString(hex)!!, bold, underline)

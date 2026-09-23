@@ -45,6 +45,11 @@ object SLDataOp : CommandExecutor, TabCompleter {
         )
       }
       "reload" -> {
+        // config.yml（ガイドの冊数・掲載数・告知・行数など）と本の色・文言を読み直す。
+        // 起動時にだけ使う値（readSource・バックアップ・整合チェック間隔・Discord）は再起動が要る
+        Tools.plugin.reloadConfig()
+        com.github.srain3.sociallikes.gui.GuidebookStyle.load()
+        sender.sendMessage(Tools.socialLikesLOGO + " &fconfig.yml とガイドの表示設定を再読込しました。".color())
         val config = SLData.reloadDialogRenderConfig()
         val preview = SLData.reloadDialogPreviewConfig()
         val statsText = SLData.reloadDialogStatsText()
