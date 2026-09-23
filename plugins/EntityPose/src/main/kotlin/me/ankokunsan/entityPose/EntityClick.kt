@@ -180,7 +180,10 @@ class EntityClick : Listener {
     if (player.isSneaking) return
     event.isCancelled = true
     val result =
-        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.1) { entity -> entity !is Player }
+        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.1) {
+            entity ->
+          entity !is Player
+        }
     val target = result?.hitEntity ?: return
     if (target is LivingEntity && target.hasAI()) {
       player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
@@ -678,73 +681,102 @@ class EntityClick : Listener {
       "HORSE" -> {
         event.isCancelled
         val inv4 =
-          Bukkit.createInventory(
-            player, // holder（nullでもOK）
-            9,
-            "§3馬選択")
+            Bukkit.createInventory(
+                player, // holder（nullでもOK）
+                9,
+                "§3馬選択",
+            )
         val white =
-          CustomHead.get("9f4bdd59d4f8f1d5782e0fee4bd64aed100627f188a91489ba37eeadededd827")
-            .apply {
-              itemMeta =
-                itemMeta!!.apply {
-                  setDisplayName("${ChatColor.GREEN}白色")
-                  persistentDataContainer.set(HORSE_COLOR_KEY, PersistentDataType.STRING, "WHITE")
+            CustomHead.get("9f4bdd59d4f8f1d5782e0fee4bd64aed100627f188a91489ba37eeadededd827")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}白色")
+                        persistentDataContainer.set(
+                            HORSE_COLOR_KEY,
+                            PersistentDataType.STRING,
+                            "WHITE",
+                        )
+                      }
                 }
-            }
         val chestnut =
-          CustomHead.get("9717d71025f7a62c90a333c51663ffeb385a9a0d92af68083c5b045c0524b23f")
-            .apply {
-              itemMeta =
-                itemMeta!!.apply {
-                  setDisplayName("${ChatColor.GREEN}栗色")
-                  persistentDataContainer.set(HORSE_COLOR_KEY, PersistentDataType.STRING, "CHESTNUT")
+            CustomHead.get("9717d71025f7a62c90a333c51663ffeb385a9a0d92af68083c5b045c0524b23f")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}栗色")
+                        persistentDataContainer.set(
+                            HORSE_COLOR_KEY,
+                            PersistentDataType.STRING,
+                            "CHESTNUT",
+                        )
+                      }
                 }
-            }
         val cream =
-          CustomHead.get("a6dae0ade0e0dafb6dbc7786ce4241242b6b6df527a0f7af0a42184c93fd646b")
-            .apply {
-              itemMeta =
-                itemMeta!!.apply {
-                  setDisplayName("${ChatColor.GREEN}クリーム色")
-                  persistentDataContainer.set(HORSE_COLOR_KEY, PersistentDataType.STRING, "CREAM")
+            CustomHead.get("a6dae0ade0e0dafb6dbc7786ce4241242b6b6df527a0f7af0a42184c93fd646b")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}クリーム色")
+                        persistentDataContainer.set(
+                            HORSE_COLOR_KEY,
+                            PersistentDataType.STRING,
+                            "CREAM",
+                        )
+                      }
                 }
-            }
         val brown =
-          CustomHead.get("25e397def0af06feef22421860088186639732aa0a5eb5756e0aa6b03fd092c8")
-            .apply {
-              itemMeta =
-                itemMeta!!.apply {
-                  setDisplayName("${ChatColor.GREEN}茶色")
-                  persistentDataContainer.set(HORSE_COLOR_KEY, PersistentDataType.STRING, "BROWN")
+            CustomHead.get("25e397def0af06feef22421860088186639732aa0a5eb5756e0aa6b03fd092c8")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}茶色")
+                        persistentDataContainer.set(
+                            HORSE_COLOR_KEY,
+                            PersistentDataType.STRING,
+                            "BROWN",
+                        )
+                      }
                 }
-            }
         val black =
-          CustomHead.get("3efb0b9857d7c8d295f6df97b605f40b9d07ebe128a6783d1fa3e1bc6e44117")
-            .apply {
-              itemMeta =
-                itemMeta!!.apply {
-                  setDisplayName("${ChatColor.GREEN}黒色")
-                  persistentDataContainer.set(HORSE_COLOR_KEY, PersistentDataType.STRING, "BLACK")
+            CustomHead.get("3efb0b9857d7c8d295f6df97b605f40b9d07ebe128a6783d1fa3e1bc6e44117")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}黒色")
+                        persistentDataContainer.set(
+                            HORSE_COLOR_KEY,
+                            PersistentDataType.STRING,
+                            "BLACK",
+                        )
+                      }
                 }
-            }
         val gray =
-          CustomHead.get("8f0d955889b0378d4933c956398567e770103ae9eff0f702d0d53d52e7f6a83b")
-            .apply {
-              itemMeta =
-                itemMeta!!.apply {
-                  setDisplayName("${ChatColor.GREEN}灰色")
-                  persistentDataContainer.set(HORSE_COLOR_KEY, PersistentDataType.STRING, "GRAY")
+            CustomHead.get("8f0d955889b0378d4933c956398567e770103ae9eff0f702d0d53d52e7f6a83b")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}灰色")
+                        persistentDataContainer.set(
+                            HORSE_COLOR_KEY,
+                            PersistentDataType.STRING,
+                            "GRAY",
+                        )
+                      }
                 }
-            }
         val darkbrown =
-          CustomHead.get("156b7bc1a4836eb428ea8925eceb5e01dfbd30c7deff6c9482689823203cfd2f")
-            .apply {
-              itemMeta =
-                itemMeta!!.apply {
-                  setDisplayName("${ChatColor.GREEN}暗い茶色")
-                  persistentDataContainer.set(HORSE_COLOR_KEY, PersistentDataType.STRING, "DARKBROWN")
+            CustomHead.get("156b7bc1a4836eb428ea8925eceb5e01dfbd30c7deff6c9482689823203cfd2f")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}暗い茶色")
+                        persistentDataContainer.set(
+                            HORSE_COLOR_KEY,
+                            PersistentDataType.STRING,
+                            "DARKBROWN",
+                        )
+                      }
                 }
-            }
         inv4.setItem(0, white)
         inv4.setItem(1, chestnut)
         inv4.setItem(2, cream)
@@ -756,7 +788,6 @@ class EntityClick : Listener {
         (0 until inv4.size).forEach { i -> if (inv4.getItem(i) == null) inv4.setItem(i, filler) }
         player.openInventory(inv4)
       }
-
     }
   }
 

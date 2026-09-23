@@ -50,8 +50,6 @@ class EntityPose : JavaPlugin() {
     lateinit var HORSE_STYLE_KEY: NamespacedKey
     lateinit var DEATH_KEY: NamespacedKey
     lateinit var INSTANCE: EntityPose
-
-
       private set
   }
 
@@ -71,9 +69,9 @@ class EntityPose : JavaPlugin() {
     INVINCIBLE = NamespacedKey(this, "custom_invincible")
     ITEMLOCK = NamespacedKey(this, "item_lock")
     ARRANGELOCK = NamespacedKey(this, "arrange_lock")
-    HORSE_COLOR_KEY = NamespacedKey(this,"horse_color")
-    HORSE_STYLE_KEY = NamespacedKey(this,"horse_style")
-    DEATH_KEY = NamespacedKey(this,"death_key")
+    HORSE_COLOR_KEY = NamespacedKey(this, "horse_color")
+    HORSE_STYLE_KEY = NamespacedKey(this, "horse_style")
+    DEATH_KEY = NamespacedKey(this, "death_key")
 
     Bou.create()
     CopyWand.create1()

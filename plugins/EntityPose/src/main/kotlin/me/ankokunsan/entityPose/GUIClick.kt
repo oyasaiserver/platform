@@ -376,7 +376,8 @@ class GUIClick : Listener {
     if (!item.hasItemMeta()) return
 
     val meta = item.itemMeta!!
-    val action = meta.persistentDataContainer.get(HORSE_COLOR_KEY, PersistentDataType.STRING) ?: return
+    val action =
+        meta.persistentDataContainer.get(HORSE_COLOR_KEY, PersistentDataType.STRING) ?: return
 
     player.closeInventory()
     ChooseGUi.openHorseStyleGUI(player, action)
@@ -393,29 +394,31 @@ class GUIClick : Listener {
     if (!item.hasItemMeta()) return
 
     val meta = item.itemMeta!!
-    val colorKey = meta.persistentDataContainer.get(HORSE_COLOR_KEY, PersistentDataType.STRING) ?: return
-    val styleKey = meta.persistentDataContainer.get(HORSE_STYLE_KEY, PersistentDataType.STRING) ?: return
+    val colorKey =
+        meta.persistentDataContainer.get(HORSE_COLOR_KEY, PersistentDataType.STRING) ?: return
+    val styleKey =
+        meta.persistentDataContainer.get(HORSE_STYLE_KEY, PersistentDataType.STRING) ?: return
 
     // ここでも map を維持して呼び出し
     val horseVariantMap =
-      mapOf(
-        "WHITE" to Horse.Color.WHITE,
-        "CHESTNUT" to Horse.Color.CHESTNUT,
-        "CREAM" to Horse.Color.CREAMY,
-        "BROWN" to Horse.Color.BROWN,
-        "BLACK" to Horse.Color.BLACK,
-        "GRAY" to Horse.Color.GRAY,
-        "DARKBROWN" to Horse.Color.DARK_BROWN,
-      )
+        mapOf(
+            "WHITE" to Horse.Color.WHITE,
+            "CHESTNUT" to Horse.Color.CHESTNUT,
+            "CREAM" to Horse.Color.CREAMY,
+            "BROWN" to Horse.Color.BROWN,
+            "BLACK" to Horse.Color.BLACK,
+            "GRAY" to Horse.Color.GRAY,
+            "DARKBROWN" to Horse.Color.DARK_BROWN,
+        )
 
     val horseStyleMap =
-      mapOf(
-        "NONE" to Horse.Style.NONE,
-        "WHITE" to Horse.Style.WHITE,
-        "WHITEFIELD" to Horse.Style.WHITEFIELD,
-        "WHITE_DOTS" to Horse.Style.WHITE_DOTS,
-        "BLACK_DOTS" to Horse.Style.BLACK_DOTS,
-      )
+        mapOf(
+            "NONE" to Horse.Style.NONE,
+            "WHITE" to Horse.Style.WHITE,
+            "WHITEFIELD" to Horse.Style.WHITEFIELD,
+            "WHITE_DOTS" to Horse.Style.WHITE_DOTS,
+            "BLACK_DOTS" to Horse.Style.BLACK_DOTS,
+        )
 
     val horseColor = horseVariantMap[colorKey] ?: return
     val horseStyle = horseStyleMap[styleKey] ?: return

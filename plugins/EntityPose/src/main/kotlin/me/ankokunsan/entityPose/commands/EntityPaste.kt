@@ -89,7 +89,7 @@ class EntityPaste : CommandExecutor {
 
         if (this is LivingEntity) {
           setAI(false)
-          container.set(EntityPose.DEATH_KEY, PersistentDataType.BYTE,1.toByte())
+          container.set(EntityPose.DEATH_KEY, PersistentDataType.BYTE, 1.toByte())
           isSilent = true
           this.getAttribute(Attribute.SCALE)?.baseValue = data.scale
           if (data.hanten) {
@@ -110,7 +110,7 @@ class EntityPaste : CommandExecutor {
           }
 
           data.equipment.forEach { (slot, item) -> this.equipment?.setItem(slot, item) }
-          applyVariant(this, data.variant,data.style)
+          applyVariant(this, data.variant, data.style)
           if (this is Ageable) {
             if (data.isMini) setBaby() else setAdult()
           }

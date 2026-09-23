@@ -50,14 +50,15 @@ class EntityCopy : CommandExecutor {
 
           val container = entity.persistentDataContainer
 
-          val (variantStr, styleStr) = when (entity) {
-            is Wolf -> entity.variant.key.toString() to null
-            is Cat -> entity.catType.key.toString() to null
-            is Rabbit -> entity.rabbitType.name to null
-            is Parrot -> entity.variant.name to null
-            is Horse -> entity.color.name to entity.style.name
-            else -> null to null
-          }
+          val (variantStr, styleStr) =
+              when (entity) {
+                is Wolf -> entity.variant.key.toString() to null
+                is Cat -> entity.catType.key.toString() to null
+                is Rabbit -> entity.rabbitType.name to null
+                is Parrot -> entity.variant.name to null
+                is Horse -> entity.color.name to entity.style.name
+                else -> null to null
+              }
 
           val equipmentMap = mutableMapOf<EquipmentSlot, ItemStack?>()
           val sitting = (entity as? Sittable)?.isSitting ?: false

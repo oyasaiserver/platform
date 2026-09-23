@@ -33,5 +33,5 @@ data class EntityCopyData(
     val hasArms: Boolean = true,
     val equipment: Map<EquipmentSlot, ItemStack?> = emptyMap(),
     val variant: String? = null,
-    val style: String? = null
+    val style: String? = null,
 )
