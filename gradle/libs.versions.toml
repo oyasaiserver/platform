@@ -1,5 +1,6 @@
 [libraries]
 sqlite-jdbc = {module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc"}
+floodgate-api = {module = "org.geysermc.floodgate:api", version.ref = "floodgate-api"}
 coreprotect-api = {module = "net.coreprotect:coreprotect", version.ref = "coreprotect"}
 anvilgui = {module = "net.wesjd:anvilgui", version.ref = "anvilgui"}
 discord-webhooks = {module = "club.minnced:discord-webhooks", version.ref = "discord-webhooks"}
@@ -31,6 +32,7 @@ paperweight-userdev = {id = "io.papermc.paperweight.userdev", version.ref = "pap
 
 [versions]
 sqlite-jdbc = "3.53.4.0"
+floodgate-api = "2.2.5-SNAPSHOT"
 coreprotect = "22.4"
 anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
