@@ -25,6 +25,6 @@ agent_task: null
 | 主要コード | `OyasaiAdminTools.kt`（メイン）、`bulletin/`（お知らせ・アンケート）、`commands/syokaku/`、`commands/playerManager/` |
 | README | `plugins/OyasaiAdminTools/README.md`（コマンド一覧・データファイル） |
 | コマンド | `/anke`, `/bulletin`（`bl`/`anno`）, `/syokaku`, `/syokakumanager`, `/playermanager`（`pm`）, `/kakutyo`, `/ban` |
-| 依存 | AdvancedBan, TokenManager, WorldBorder（softdepend） |
+| 依存 | AdvancedBan, TokenManager（ワールドボーダーは `worldborder/` に内製済み） |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:OyasaiAdminTools:compileKotlin` |
 | 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置く |
