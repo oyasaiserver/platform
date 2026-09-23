@@ -41,7 +41,6 @@ commands:
     description: "SocialLikes データ管理・他者閲覧・検証用コマンド"
     permission: sociallikes3.admin
   sllucky:
-    aliases: [lucky]
     description: "未いいねの他者建築をランダムに案内するコマンド"
   sldatapack:
     description: "フォントグラフPOC用リソースパックを再配布するコマンド"

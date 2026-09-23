@@ -308,10 +308,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             "Legacy dialog command",
         )
       }
-      "lucky" -> {
-        sender.sendMessage(Tools.socialLikesLOGO + " &7※ /lucky または /sllucky でも直接実行できます。".color())
-        SLLucky.onCommand(sender, command, "sllucky", args.drop(1).toTypedArray())
-      }
       "help" -> {
         sendModeList(sender)
         SLDataLogger.log(
@@ -373,7 +369,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     player.sendMessage("&7/sldata &f- あなたの総合統計ダイアログを開く".color())
     player.sendMessage("&7/sldata ranking &f- 今週の制作者別いいね数Top5を表示".color())
     player.sendMessage("&7/sldata server &f- 全員に公開する宣伝効果・掲載回数のサーバー集計を表示".color())
-    player.sendMessage("&7/sldata lucky &f- 未いいねの他者建築をランダムに1件案内".color())
     if (player.isOp || player.hasPermission("sociallikes.admin")) {
       player.sendMessage("&e/sldataop &7- 管理者用コマンド（マップ・ボード・他プレイヤー統計等）".color())
     }
