@@ -33,8 +33,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 object GuidebookService {
-  const val OFFICIAL_PERMISSION = "sociallikes.guidebook.official"
-  const val ADMIN_PERMISSION = "sociallikes3.admin"
   private const val MAX_TITLE_LENGTH = 32
 
   val touristKey = NamespacedKey(Tools.plugin, "guidebook_id")
@@ -107,18 +105,11 @@ object GuidebookService {
       )
       return null
     }
-    if (type == GuidebookType.OFFICIAL && !player.hasPermission(OFFICIAL_PERMISSION)) {
+    if (type == GuidebookType.OFFICIAL && !player.isOp) {
       player.sendMessage(Tools.socialLikesLOGO + " &c公式ガイドを作成する権限がありません。".color())
       return null
     }
-    if (type == GuidebookType.PERSONAL) {
-      val limit = personalBookLimit()
-      val count = SLDatabase.countPersonalGuidebooksBlocking(player.uniqueId)
-      if (!GuidebookRules.canCreatePersonal(count, limit)) {
-        player.sendMessage(Tools.socialLikesLOGO + " &c個人ガイドは${limit}冊までです。".color())
-        return null
-      }
-    }
+    if (type == GuidebookType.PERSONAL && !canCreatePersonal(player)) return null
     val id =
         SLDatabase.createGuidebookBlocking(type, player.uniqueId, title)
             ?: run {
@@ -132,11 +123,8 @@ object GuidebookService {
   }
 
   fun canEdit(player: Player, guidebook: GuidebookData): Boolean =
-      player.hasPermission(ADMIN_PERMISSION) ||
-          when (guidebook.type) {
-            GuidebookType.PERSONAL -> guidebook.creatorUuid == player.uniqueId
-            GuidebookType.OFFICIAL -> player.hasPermission(OFFICIAL_PERMISSION)
-          }
+      player.isOp ||
+          (guidebook.type == GuidebookType.PERSONAL && guidebook.creatorUuid == player.uniqueId)
 
   fun entries(guidebookId: Int, playerUuid: UUID): List<EntryView> =
       SLDatabase.loadGuidebookEntriesBlocking(guidebookId).map { buildId ->
@@ -340,8 +328,32 @@ object GuidebookService {
   fun commentMaxLines(): Int =
       Tools.plugin.config.getInt("guidebook.commentMaxLines", 5).coerceIn(1, 5)
 
-  private fun personalBookLimit(): Int =
-      Tools.plugin.config.getInt("guidebook.personalBookLimit", 5).coerceAtLeast(1)
+  /** ランクごとの冊数（config の guidebook.personalBookLimits）で、まだ作れるか。作れないときは理由を送る */
+  fun canCreatePersonal(player: Player): Boolean {
+    val limit = personalBookLimit(player)
+    if (limit == 0) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c今のランクでは個人ガイドを作れません。".color())
+      return false
+    }
+    if (
+        !GuidebookRules.canCreatePersonal(
+            SLDatabase.countPersonalGuidebooksBlocking(player.uniqueId),
+            limit,
+        )
+    ) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c今のランクで作れる個人ガイドは${limit}冊までです。".color())
+      return false
+    }
+    return true
+  }
+
+  private fun personalBookLimit(player: Player): Int {
+    val section =
+        Tools.plugin.config.getConfigurationSection("guidebook.personalBookLimits") ?: return 0
+    val limits = section.getKeys(false).associateWith(section::getInt)
+    if (player.isOp) return limits.values.maxOrNull() ?: 0
+    return GuidebookRules.personalBookLimit(limits) { player.hasPermission("group.$it") }
+  }
 
   private fun entryLimit(): Int =
       Tools.plugin.config.getInt("guidebook.entriesPerBookLimit", 30).coerceAtLeast(1)

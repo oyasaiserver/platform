@@ -19,6 +19,7 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit
+import org.bukkit.command.TabCompleter
 import org.bukkit.plugin.java.JavaPlugin
 
 internal fun pruneStartupBackups(backupsDir: Path, keepCount: Int): Int {
@@ -69,19 +70,24 @@ class SocialLikes : JavaPlugin() {
     SLData.init()
 
     server.getPluginCommand("sltp")?.setExecutor(SLtp)
-    server.getPluginCommand("sla")?.setExecutor(SLA)
+    server.getPluginCommand("sltp")?.tabCompleter = SLtp
     server.getPluginCommand("slbuild")?.setExecutor(SLBuilds)
     server.getPluginCommand("sluser")?.setExecutor(SLUser)
+    server.getPluginCommand("sluser")?.tabCompleter = SLUser
     server.getPluginCommand("slupdate")?.setExecutor(SLUpdate)
+    server.getPluginCommand("slupdate")?.tabCompleter = SLUpdate
     server.getPluginCommand("slsignget")?.setExecutor(SLSignGet)
+    server.getPluginCommand("slsignget")?.tabCompleter = SLSignGet
     server.getPluginCommand("slmenu")?.setExecutor(SLMenu)
     server.getPluginCommand("slnear")?.setExecutor(SLNear)
+    server.getPluginCommand("slnear")?.tabCompleter = SLNear
     server.getPluginCommand("slsignbreak")?.setExecutor(SLTPSignBreak)
     server.getPluginCommand("vacanttp")?.setExecutor(VacantTeleport)
     server.getPluginCommand("vacanttp")?.tabCompleter = VacantTeleportTAB
     server.getPluginCommand("slrankup")?.setExecutor(SLRankUp)
     server.getPluginCommand("slrankup")?.tabCompleter = SLRankUpTAB
     server.getPluginCommand("sldatafont")?.setExecutor(SLDataFont)
+    server.getPluginCommand("sldatafont")?.tabCompleter = SLDataFont
     server.getPluginCommand("sldata")?.setExecutor(SLData)
     server.getPluginCommand("sldata")?.tabCompleter = SLData
     server.getPluginCommand("sldataop")?.setExecutor(SLDataOp)
@@ -90,6 +96,14 @@ class SocialLikes : JavaPlugin() {
     server.getPluginCommand("sllucky")?.tabCompleter = SLLucky
     server.getPluginCommand("sldatapack")?.setExecutor(SLDataPack)
     server.getPluginCommand("slguide")?.setExecutor(SLGuide)
+    server.getPluginCommand("slguide")?.tabCompleter = SLGuide
+    // 補完が無いと Bukkit がオンラインプレイヤー名を出すため、未設定のコマンドは空にする
+    description.commands.keys.forEach { name ->
+      getCommand(name)?.let {
+        if (it.tabCompleter == null)
+            it.tabCompleter = TabCompleter { _, _, _, _ -> mutableListOf() }
+      }
+    }
 
     if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
       PlaceHolder(this).register()

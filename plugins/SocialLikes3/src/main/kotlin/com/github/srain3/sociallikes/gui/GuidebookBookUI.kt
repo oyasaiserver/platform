@@ -135,8 +135,8 @@ object GuidebookBookUI {
         if (editable) {
           SLDatabase.loadEditableGuidebooksBlocking(
               player.uniqueId,
-              player.hasPermission(GuidebookService.OFFICIAL_PERMISSION),
-              player.hasPermission(GuidebookService.ADMIN_PERMISSION),
+              player.isOp,
+              player.isOp,
           )
         } else {
           SLDatabase.loadPublishedGuidebooksBlocking()
@@ -189,7 +189,7 @@ object GuidebookBookUI {
           0,
       )
     }
-    val canCreateOfficial = player.hasPermission(GuidebookService.OFFICIAL_PERMISSION)
+    val canCreateOfficial = player.isOp
     navigation.addItem(
         GuiItem(navigationItem(Material.WRITABLE_BOOK, "&a新しいガイドを作る")) { event ->
           val clicker = event.whoClicked as Player
@@ -423,14 +423,12 @@ object GuidebookBookUI {
   }
 
   fun openTitleInput(player: Player, type: GuidebookType) {
-    if (
-        type == GuidebookType.OFFICIAL &&
-            !player.hasPermission(GuidebookService.OFFICIAL_PERMISSION)
-    ) {
+    if (type == GuidebookType.OFFICIAL && !player.isOp) {
       player.sendMessage(Tools.socialLikesLOGO + " &c公式ガイドを作成する権限がありません。".color())
       openCatalog(player)
       return
     }
+    if (type == GuidebookType.PERSONAL && !GuidebookService.canCreatePersonal(player)) return
     val item =
         ItemStack(Material.WRITABLE_BOOK)
             .allFlag()

@@ -67,6 +67,10 @@ object GuidebookRules {
 
   fun canCreatePersonal(currentCount: Int, limit: Int): Boolean = currentCount < limit
 
+  /** 持っているランクのうち、いちばん多い冊数。どのランクも無ければ 0（作れない） */
+  fun personalBookLimit(limitsByGroup: Map<String, Int>, hasGroup: (String) -> Boolean): Int =
+      limitsByGroup.filterKeys(hasGroup).values.maxOrNull()?.coerceAtLeast(0) ?: 0
+
   fun canAddEntry(currentCount: Int, limit: Int, alreadyIncluded: Boolean): Boolean =
       !alreadyIncluded && currentCount < limit
 

@@ -308,10 +308,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             "Legacy dialog command",
         )
       }
-      "lucky" -> {
-        sender.sendMessage(Tools.socialLikesLOGO + " &7※ /lucky または /sllucky でも直接実行できます。".color())
-        SLLucky.onCommand(sender, command, "sllucky", args.drop(1).toTypedArray())
-      }
       "help" -> {
         sendModeList(sender)
         SLDataLogger.log(
@@ -373,8 +369,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     player.sendMessage("&7/sldata &f- あなたの総合統計ダイアログを開く".color())
     player.sendMessage("&7/sldata ranking &f- 今週の制作者別いいね数Top5を表示".color())
     player.sendMessage("&7/sldata server &f- 全員に公開する宣伝効果・掲載回数のサーバー集計を表示".color())
-    player.sendMessage("&7/sldata lucky &f- 未いいねの他者建築をランダムに1件案内".color())
-    if (player.isOp || player.hasPermission("sociallikes.admin")) {
+    if (player.isOp) {
       player.sendMessage("&e/sldataop &7- 管理者用コマンド（マップ・ボード・他プレイヤー統計等）".color())
     }
   }
@@ -1222,7 +1217,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       SLDataStatsService.loadWeeklySeries(GRAPH_COLUMNS)
 
   internal fun openSlots(player: Player) {
-    if (!player.isOp && !player.hasPermission("sociallikes.admin")) {
+    if (!player.isOp) {
       player.sendMessage(Tools.socialLikesLOGO + " &cスロット表示は管理者専用です。/sldata をご利用ください。".color())
       return
     }
@@ -1303,7 +1298,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   internal fun openDisplay(player: Player, period: Period = Period.WEEK) {
-    if (!player.isOp && !player.hasPermission("sociallikes.admin")) {
+    if (!player.isOp) {
       player.sendMessage(Tools.socialLikesLOGO + " &cディスプレイ表示は管理者専用です。/sldata をご利用ください。".color())
       return
     }
@@ -1570,7 +1565,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun giveMap(player: Player) {
-    if (!player.isOp && !player.hasPermission("sociallikes.admin")) {
+    if (!player.isOp) {
       player.sendMessage(Tools.socialLikesLOGO + " &cマップ表示は管理者専用です。/sldata をご利用ください。".color())
       return
     }
@@ -2022,7 +2017,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       dialogExperimentalPalettes[player.uniqueId] ?: DialogTextPalette.DEFAULT
 
   private fun openDialogOtherFormats(player: Player) {
-    val isOp = player.isOp || player.hasPermission("sociallikes.admin")
+    val isOp = player.isOp
     val actions = buildList {
       add(dialogButton("ランキング", "制作者別いいね数 Top5", dialogRankingKey))
       if (isOp) {
@@ -2527,7 +2522,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun openDialogStatsSettings(player: Player) {
     val includeLifeWorld = dialogStatsIncludeLifeWorld[player.uniqueId] == true
-    val isOp = player.isOp || player.hasPermission("sociallikes.admin")
+    val isOp = player.isOp
     val actions = buildList {
       add(
           dialogButton(

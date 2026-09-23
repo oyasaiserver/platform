@@ -18,6 +18,7 @@ import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -29,7 +30,16 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 
-object SLDataFont : CommandExecutor, Listener {
+object SLDataFont : CommandExecutor, TabCompleter, Listener {
+  override fun onTabComplete(
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
+  ): MutableList<String> =
+      if (args.size == 1 && sender.isOp) completions(args[0], listOf("vanilla"))
+      else mutableListOf()
+
   private const val DEFAULT_DISPLAY_WEEKS = 9
   private const val DISPLAY_COLUMNS = 9
   private const val DISPLAY_ROWS = 5
@@ -70,6 +80,10 @@ object SLDataFont : CommandExecutor, Listener {
       args: Array<out String>,
   ): Boolean {
     if (command.name != "sldatafont") return false
+    if (!sender.isOp) {
+      sender.sendMessage(Tools.socialLikesLOGO + " &cこのコマンドを実行する権限がありません。".color())
+      return true
+    }
 
     if (sender !is Player) {
       sender.sendMessage(Tools.socialLikesLOGO + " &cプレイヤーから実行してください。".color())

@@ -21,7 +21,7 @@ object SLDataOp : CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    if (!sender.isOp && !sender.hasPermission("sociallikes.admin")) {
+    if (!sender.isOp) {
       sender.sendMessage(Tools.socialLikesLOGO + " &cこのコマンドを実行する権限がありません。".color())
       SLDataLogger.log(sender, label, args.toList(), 0, false, "Permission denied")
       return true
@@ -45,6 +45,11 @@ object SLDataOp : CommandExecutor, TabCompleter {
         )
       }
       "reload" -> {
+        // config.yml（ガイドの冊数・掲載数・告知・行数など）と本の色・文言を読み直す。
+        // 起動時にだけ使う値（readSource・バックアップ・整合チェック間隔・Discord）は再起動が要る
+        Tools.plugin.reloadConfig()
+        com.github.srain3.sociallikes.gui.GuidebookStyle.load()
+        sender.sendMessage(Tools.socialLikesLOGO + " &fconfig.yml とガイドの表示設定を再読込しました。".color())
         val config = SLData.reloadDialogRenderConfig()
         val preview = SLData.reloadDialogPreviewConfig()
         val statsText = SLData.reloadDialogStatsText()
@@ -267,7 +272,7 @@ object SLDataOp : CommandExecutor, TabCompleter {
       alias: String,
       args: Array<out String>,
   ): MutableList<String> {
-    if (!sender.isOp && !sender.hasPermission("sociallikes.admin")) return mutableListOf()
+    if (!sender.isOp) return mutableListOf()
 
     return when (args.size) {
       1 ->

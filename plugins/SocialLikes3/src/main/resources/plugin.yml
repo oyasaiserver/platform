@@ -13,9 +13,6 @@ softdepend:
 commands:
   sltp:
     description: "SL看板へ飛ぶコマンド"
-  sla:
-    aliases: [alw]
-    description: "直近に設置・宣伝されたSL看板へ飛ぶコマンド"
   slbuild:
     description: "全ての建築一覧GUI"
   sluser:
@@ -42,21 +39,9 @@ commands:
   sldataop:
     aliases: [slop, sldataadmin]
     description: "SocialLikes データ管理・他者閲覧・検証用コマンド"
-    permission: sociallikes3.admin
   sllucky:
-    aliases: [lucky]
     description: "未いいねの他者建築をランダムに案内するコマンド"
   sldatapack:
     description: "フォントグラフPOC用リソースパックを再配布するコマンド"
   slguide:
     description: "旅行ガイドブックの一覧・入手・作成・編集コマンド"
-permissions:
-  sociallikes3.admin:
-    description: "SocialLikes 管理者権限"
-    default: op
-  sociallikes3.slrankup:
-    description: "/slrankup commnad use permission"
-    default: op
-  sociallikes.guidebook.official:
-    description: "公式旅行ガイドブックの作成・編集・公開権限"
-    default: op

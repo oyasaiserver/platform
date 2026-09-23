@@ -9,6 +9,7 @@ import com.github.srain3.sociallikes.gui.GuidebookBookUI
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 internal sealed interface GuidebookAction {
@@ -102,7 +103,25 @@ internal object GuidebookCommandRules {
           }
 }
 
-object SLGuide : CommandExecutor {
+object SLGuide : CommandExecutor, TabCompleter {
+  override fun onTabComplete(
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
+  ): MutableList<String> =
+      when (args.size) {
+        1 -> completions(args[0], listOf("create", "edit"), "<ID>")
+        2 ->
+            when (args[0]) {
+              "create" ->
+                  if (sender.isOp) completions(args[1], listOf("official")) else mutableListOf()
+              "edit" -> completions(args[1], emptyList(), "<ID>")
+              else -> mutableListOf()
+            }
+        else -> mutableListOf()
+      }
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,

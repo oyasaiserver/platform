@@ -10,9 +10,18 @@ import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-object SLNear : CommandExecutor {
+object SLNear : CommandExecutor, TabCompleter {
+  override fun onTabComplete(
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
+  ): MutableList<String> =
+      if (args.size == 1) completions(args[0], emptyList(), "[件数]") else mutableListOf()
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
