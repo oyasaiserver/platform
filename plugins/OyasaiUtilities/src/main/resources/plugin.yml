@@ -31,6 +31,7 @@ commands:
     description: "個人バックパックを開く / Minepacks データを移行する"
     usage: /oyasaibackpack [migrate-minepacks [confirm]]
     aliases: [obp]
+    permission: backpack.use
   oresmelter:
     description: "OreSmelterのコマンド"
     aliases: [os]
