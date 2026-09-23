@@ -201,15 +201,6 @@
       "type": "modrinth"
     }
   },
-  "worldborder": {
-    "paper": {
-      "name": "WorldBorder.jar",
-      "owner": "PryPurity",
-      "repo": "WorldBorder",
-      "tag": "v2.1.5",
-      "type": "github"
-    }
-  },
   "worldguard": {
     "paper": {
       "slug": "worldguard",

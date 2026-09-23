@@ -261,14 +261,6 @@
       }
     }
   },
-  "worldborder": {
-    "paper": {
-      "26.2": {
-        "url": "https://github.com/PryPurity/WorldBorder/releases/download/v2.1.5/WorldBorder.jar",
-        "hash": "sha256-n8w7xj+ii6vHJJTRKbiu3wNK4kdhu2bRCuGatPmW3io="
-      }
-    }
-  },
   "worldguard": {
     "paper": {
       "26.2": {

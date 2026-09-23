@@ -95,7 +95,6 @@ oyasaiPurpur rec {
     vault
     vertex
     viaversion
-    worldborder
     worldguard
     # keep-sorted end
   ];
