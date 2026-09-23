@@ -69,7 +69,6 @@ class SocialLikes : JavaPlugin() {
     SLData.init()
 
     server.getPluginCommand("sltp")?.setExecutor(SLtp)
-    server.getPluginCommand("sla")?.setExecutor(SLA)
     server.getPluginCommand("slbuild")?.setExecutor(SLBuilds)
     server.getPluginCommand("sluser")?.setExecutor(SLUser)
     server.getPluginCommand("slupdate")?.setExecutor(SLUpdate)

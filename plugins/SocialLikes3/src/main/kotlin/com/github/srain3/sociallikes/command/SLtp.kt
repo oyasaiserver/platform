@@ -5,11 +5,13 @@ import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.BuildTimestamps
 import com.github.srain3.sociallikes.datas.Data
+import com.github.srain3.sociallikes.datas.PublicityHistory
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.UserBuild
 import com.github.srain3.sociallikes.resolveWorld
 import java.time.LocalDateTime
 import java.util.*
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockFace.*
@@ -25,6 +27,10 @@ import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.scheduler.BukkitRunnable
 
 object SLtp : CommandExecutor {
+  private const val MAX_HISTORY = 10
+
+  private data class SignEvent(val time: LocalDateTime, val signId: Int)
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
@@ -38,6 +44,11 @@ object SLtp : CommandExecutor {
     if (!Data.loading) {
       // ファイルのロードが終わっていない場合の処理
       sender.sendMessage(Tools.socialLikesLOGO + " &e現在ロード作業中です、しばらくお待ち下さい。".color())
+      return true
+    }
+
+    if (args[0] == "new") {
+      teleportRecent(sender, args.drop(1))
       return true
     }
 
@@ -173,6 +184,46 @@ object SLtp : CommandExecutor {
         .runTaskLater(Tools.plugin, 1)
 
     return true
+  }
+
+  /** /sltp new [1-10]: 直近に設置・宣伝されたSL看板へテレポートする */
+  private fun teleportRecent(sender: Player, args: List<String>) {
+    val historyNumber =
+        when {
+          args.isEmpty() -> 1
+          args.size > 1 -> {
+            sender.sendMessage(Tools.socialLikesLOGO + " &e使い方: /sltp new [1-10]".color())
+            return
+          }
+          else ->
+              args[0].toIntOrNull()
+                  ?: run {
+                    sender.sendMessage(Tools.socialLikesLOGO + " &e使い方: /sltp new [1-10]".color())
+                    return
+                  }
+        }
+    if (historyNumber !in 1..MAX_HISTORY) {
+      sender.sendMessage(Tools.socialLikesLOGO + " &e指定できる履歴は1〜10です。".color())
+      return
+    }
+
+    val signEvents =
+        buildList {
+              Data.getSLDataAll().forEach { add(SignEvent(it.time, it.id)) }
+              PublicityHistory.getData().values.forEach { add(SignEvent(it.timeStamp, it.slid)) }
+            }
+            .mapNotNull { event -> Data.getSLData(event.signId)?.let { event } }
+            .sortedByDescending { it.time }
+            .take(MAX_HISTORY)
+
+    val event =
+        signEvents.getOrNull(historyNumber - 1)
+            ?: run {
+              sender.sendMessage(Tools.socialLikesLOGO + " &e指定された履歴の看板はありません。".color())
+              return
+            }
+
+    Bukkit.dispatchCommand(sender, "sltp ${event.signId}")
   }
 
   /** 看板の位置に、看板の向きを向いて立つ場所。/sltp とガイドブック案内で共用 */
