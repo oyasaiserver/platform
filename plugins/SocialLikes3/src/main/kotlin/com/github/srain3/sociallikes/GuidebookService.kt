@@ -111,14 +111,7 @@ object GuidebookService {
       player.sendMessage(Tools.socialLikesLOGO + " &c公式ガイドを作成する権限がありません。".color())
       return null
     }
-    if (type == GuidebookType.PERSONAL) {
-      val limit = personalBookLimit()
-      val count = SLDatabase.countPersonalGuidebooksBlocking(player.uniqueId)
-      if (!GuidebookRules.canCreatePersonal(count, limit)) {
-        player.sendMessage(Tools.socialLikesLOGO + " &c個人ガイドは${limit}冊までです。".color())
-        return null
-      }
-    }
+    if (type == GuidebookType.PERSONAL && !canCreatePersonal(player)) return null
     val id =
         SLDatabase.createGuidebookBlocking(type, player.uniqueId, title)
             ?: run {
@@ -340,8 +333,32 @@ object GuidebookService {
   fun commentMaxLines(): Int =
       Tools.plugin.config.getInt("guidebook.commentMaxLines", 5).coerceIn(1, 5)
 
-  private fun personalBookLimit(): Int =
-      Tools.plugin.config.getInt("guidebook.personalBookLimit", 5).coerceAtLeast(1)
+  /** ランクごとの冊数（config の guidebook.personalBookLimits）で、まだ作れるか。作れないときは理由を送る */
+  fun canCreatePersonal(player: Player): Boolean {
+    val limit = personalBookLimit(player)
+    if (limit == 0) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c今のランクでは個人ガイドを作れません。".color())
+      return false
+    }
+    if (
+        !GuidebookRules.canCreatePersonal(
+            SLDatabase.countPersonalGuidebooksBlocking(player.uniqueId),
+            limit,
+        )
+    ) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c今のランクで作れる個人ガイドは${limit}冊までです。".color())
+      return false
+    }
+    return true
+  }
+
+  private fun personalBookLimit(player: Player): Int {
+    val section =
+        Tools.plugin.config.getConfigurationSection("guidebook.personalBookLimits") ?: return 0
+    val limits = section.getKeys(false).associateWith(section::getInt)
+    if (player.hasPermission(ADMIN_PERMISSION)) return limits.values.maxOrNull() ?: 0
+    return GuidebookRules.personalBookLimit(limits) { player.hasPermission("group.$it") }
+  }
 
   private fun entryLimit(): Int =
       Tools.plugin.config.getInt("guidebook.entriesPerBookLimit", 30).coerceAtLeast(1)

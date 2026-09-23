@@ -431,6 +431,7 @@ object GuidebookBookUI {
       openCatalog(player)
       return
     }
+    if (type == GuidebookType.PERSONAL && !GuidebookService.canCreatePersonal(player)) return
     val item =
         ItemStack(Material.WRITABLE_BOOK)
             .allFlag()

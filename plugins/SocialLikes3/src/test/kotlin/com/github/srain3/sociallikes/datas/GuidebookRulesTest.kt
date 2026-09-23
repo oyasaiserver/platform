@@ -45,6 +45,15 @@ class GuidebookRulesTest {
   fun `creation and entry limits reject only exhausted or duplicate cases`() {
     assertTrue(GuidebookRules.canCreatePersonal(4, 5))
     assertFalse(GuidebookRules.canCreatePersonal(5, 5))
+  }
+
+  @Test
+  fun `personal book limit takes the highest owned rank`() {
+    val limits = mapOf("jokyu" to 1, "builder" to 2, "takumi" to 3)
+
+    assertEquals(0, GuidebookRules.personalBookLimit(limits) { false })
+    assertEquals(1, GuidebookRules.personalBookLimit(limits) { it == "jokyu" })
+    assertEquals(3, GuidebookRules.personalBookLimit(limits) { it != "builder" })
     assertTrue(GuidebookRules.canAddEntry(29, 30, alreadyIncluded = false))
     assertFalse(GuidebookRules.canAddEntry(30, 30, alreadyIncluded = false))
     assertFalse(GuidebookRules.canAddEntry(1, 30, alreadyIncluded = true))
