@@ -229,31 +229,6 @@ object RoadBuilder {
     return if (step > 0) (cell + 1).toDouble() - origin else origin - cell.toDouble()
   }
 
-  private fun sharesEdge(a: BlockPos, b: BlockPos): Boolean {
-    val dx = abs(a.x - b.x)
-    val dz = abs(a.z - b.z)
-    return (dx == 1 && dz == 0) || (dx == 0 && dz == 1)
-  }
-
-  private fun hasCardinalNeighbor(pos: BlockPos, set: Set<BlockPos>): Boolean {
-    val dirs = arrayOf(intArrayOf(1, 0), intArrayOf(-1, 0), intArrayOf(0, 1), intArrayOf(0, -1))
-    for (dir in dirs) {
-      val neighbor = BlockPos(pos.x + dir[0], pos.y, pos.z + dir[1])
-      if (neighbor in set) return true
-    }
-    return false
-  }
-
-  private fun isCardinal(dir: Pair<Int, Int>): Boolean {
-    val absX = abs(dir.first)
-    val absZ = abs(dir.second)
-    return absX + absZ == 1
-  }
-
-  private fun isDiagonal(dir: Pair<Int, Int>): Boolean {
-    return abs(dir.first) == 1 && abs(dir.second) == 1
-  }
-
   private fun MutableList<TracedBlock>.removeRightAngleCornerIfNeeded(): TracedBlock? {
     if (size < 3) return null
     val c = this[size - 1].pos
