@@ -1,12 +1,4 @@
 {
-  "advancedban": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/8695.jar",
-        "hash": "sha256-e0llrauKgRDij8wUYDvnFIJzwuVDAU2RXd9EpjkDHdg="
-      }
-    }
-  },
   "axiom-paper-plugin": {
     "paper": {
       "26.2": {

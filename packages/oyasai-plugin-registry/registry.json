@@ -1,10 +1,4 @@
 {
-  "advancedban": {
-    "paper": {
-      "id": 8695,
-      "type": "spiget"
-    }
-  },
   "axiom-paper-plugin": {
     "paper": {
       "slug": "axiom-paper-plugin",

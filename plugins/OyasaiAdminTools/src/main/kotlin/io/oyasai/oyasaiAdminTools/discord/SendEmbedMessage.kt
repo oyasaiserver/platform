@@ -12,33 +12,6 @@ import java.util.UUID
 
 object SendEmbedMessage {
   var url_promotion = plugin.config.getString("webhook-url", "") ?: ""
-  var url_ban = plugin.config.getString("webhook-ban-url", "") ?: ""
-
-  fun sendBanNotification(
-      targetName: String,
-      bannerName: String?,
-      reason: String,
-      duration: String,
-  ) {
-    if (url_ban.isEmpty()) {
-      plugin.logger.warning("Webhook URL is not set.")
-      return
-    }
-    val client = WebhookClient.withUrl(url_ban)
-
-    val emb =
-        WebhookEmbedBuilder()
-            .setColor(0xFF0000)
-            .setThumbnailUrl("https://vzge.me/bust/${targetName}?y=-40")
-            .setTitle(WebhookEmbed.EmbedTitle("プレイヤーがBANされました", null))
-            .setDescription("対象: $targetName")
-            .addField(WebhookEmbed.EmbedField(true, "執行", bannerName ?: "Unknown"))
-            .addField(WebhookEmbed.EmbedField(true, "期間", duration))
-            .addField(WebhookEmbed.EmbedField(false, "理由", reason))
-            .build()
-    val message = WebhookMessageBuilder().addEmbeds(emb).build()
-    client.send(message)
-  }
 
   fun sendPromotionNotification(
       targetUUID: UUID,
