@@ -9,7 +9,6 @@ import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
 import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
-import kotlin.math.roundToInt
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.command.Command
@@ -156,7 +155,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       region: CuboidRegion,
       directions: List<String>,
   ): StackOffset {
-    val facing = yawFace(player.location.yaw)
+    val facing = player.facing
     val forward = horizontalUnit(facing)
     val left = HorizontalUnit(forward.z, -forward.x)
     val right = HorizontalUnit(-left.x, -left.z)
@@ -293,15 +292,6 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         "下" -> DirectionToken.DOWN
         else -> null
       }
-
-  private fun yawFace(yaw: Float): BlockFace {
-    return when (Math.floorMod((yaw / 90.0f).roundToInt(), 4)) {
-      1 -> BlockFace.WEST
-      2 -> BlockFace.NORTH
-      3 -> BlockFace.EAST
-      else -> BlockFace.SOUTH
-    }
-  }
 
   private fun horizontalUnit(face: BlockFace): HorizontalUnit =
       when (face) {

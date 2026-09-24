@@ -20,7 +20,6 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.roundToInt
 import org.bukkit.World
-import org.bukkit.block.BlockFace
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -408,7 +407,7 @@ class SchematicCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
   private fun frontOrigin(player: Player): TargetOrigin {
     val base = player.location.block
-    val face = yawFace(player.location.yaw)
+    val face = player.facing
     val origin =
         BlockVector3.at(
             base.x + face.modX,
@@ -467,14 +466,6 @@ class SchematicCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       else AffineTransform().rotateY(turns.floorMod(4) * 90.0)
 
   private fun yawTurns(yaw: Float): Int = (yaw / 90.0f).roundToInt().floorMod(4)
-
-  private fun yawFace(yaw: Float): BlockFace =
-      when (yawTurns(yaw)) {
-        0 -> BlockFace.SOUTH
-        1 -> BlockFace.WEST
-        2 -> BlockFace.NORTH
-        else -> BlockFace.EAST
-      }
 
   private fun Int.floorMod(divisor: Int): Int = Math.floorMod(this, divisor)
 

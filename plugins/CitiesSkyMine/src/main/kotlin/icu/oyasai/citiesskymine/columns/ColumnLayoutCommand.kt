@@ -13,7 +13,6 @@ import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.roundToInt
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.command.Command
@@ -48,7 +47,7 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
     val parsed = parseArgs(sender, label, args) ?: return true
     val region = selectedCuboid(sender) ?: return true
     val bounds = CuboidBounds.from(region)
-    val facing = yawFace(sender.location.yaw)
+    val facing = sender.facing
     val depthAxis = horizontalUnit(facing)
     val lateralAxis = leftUnit(depthAxis)
 
@@ -785,14 +784,6 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
         "<gray>横方向はプレイヤーの視線から見た左右方向を使います。素材はメインハンド、空なら stone です。</gray>",
     )
   }
-
-  private fun yawFace(yaw: Float): BlockFace =
-      when (Math.floorMod((yaw / 90.0f).roundToInt(), 4)) {
-        1 -> BlockFace.WEST
-        2 -> BlockFace.NORTH
-        3 -> BlockFace.EAST
-        else -> BlockFace.SOUTH
-      }
 
   private fun horizontalUnit(face: BlockFace): HorizontalUnit =
       when (face) {

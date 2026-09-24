@@ -12,7 +12,6 @@ import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.roundToInt
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.BlockData
@@ -50,7 +49,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val parsed = parseArgs(sender, label, args) ?: return true
     val region = selectedCuboid(sender) ?: return true
     val bounds = CuboidBounds.from(region)
-    val facing = yawFace(sender.location.yaw)
+    val facing = sender.facing
     val depthAxis = horizontalUnit(facing)
     val lateralAxis = leftUnit(depthAxis)
     val maxBlocks =
@@ -234,7 +233,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         parsed.counts.depth?.let { centeredStarts(it, parsed.gap, depthLength, "奥行き") }
             ?: listOf((depthLength - 1) / 2)
     val bodyData = crowdWallData(parsed.wallMaterial, lateralAxis)
-    val headData = headData(parsed.headMaterial, yawFace(player.location.yaw))
+    val headData = headData(parsed.headMaterial, player.facing)
     val placements = ArrayList<CrowdPlacement>()
 
     for (lateralOffset in lateralStarts) {
@@ -394,14 +393,6 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         1 -> bounds.minZ + offset
         -1 -> bounds.maxZ - offset
         else -> null
-      }
-
-  private fun yawFace(yaw: Float): BlockFace =
-      when (Math.floorMod((yaw / 90.0f).roundToInt(), 4)) {
-        1 -> BlockFace.WEST
-        2 -> BlockFace.NORTH
-        3 -> BlockFace.EAST
-        else -> BlockFace.SOUTH
       }
 
   private fun horizontalUnit(face: BlockFace): HorizontalUnit =
