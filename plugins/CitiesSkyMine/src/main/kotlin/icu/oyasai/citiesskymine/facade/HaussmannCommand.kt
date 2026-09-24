@@ -65,8 +65,7 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
         if (fileArg != null) {
           File(fileArg)
         } else {
-          File(plugin.dataFolder, "fasard.schem").takeIf { it.exists() }
-              ?: File("/Users/aa/Downloads/fasard.schem") // dev fallback
+          File(plugin.dataFolder, "fasard.schem")
         }
 
     if (!schemFile.exists()) {

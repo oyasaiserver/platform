@@ -13,8 +13,8 @@ set -euo pipefail
 
 MODE="${1:-dialog}"
 SIZE="${2:-}"
-BRIDGE_DIR="/private/tmp/claude-501/-Users-aa-Desktop-Cogito/7e97829e-4526-4181-8fce-5f2a5bed462e/scratchpad"
-YML="/Users/aa/platform/local/paperclip-tmp/plugins/SocialLikes3/sldata-dialog.yml"
+BRIDGE_DIR="${SLDATA_BRIDGE_DIR:?SLDATA_BRIDGE_DIR に AI Bridge のディレクトリを指定してください}"
+YML="$(git -C "$(dirname "$0")" rev-parse --show-toplevel)/local/paperclip-tmp/plugins/SocialLikes3/sldata-dialog.yml"
 OUT_DIR="/tmp/sldata-uiloop"
 STAMP="$(date +%H%M%S)"
 SHOT="$OUT_DIR/${MODE}${SIZE:+-$SIZE}-$STAMP.png"
@@ -93,7 +93,7 @@ EOF
 )
 PROMPT="${PROMPT//REVIEW_DIR/$REVIEW_DIR}"
 
-/Users/aa/.local/bin/agy -p "$PROMPT" \
+agy -p "$PROMPT" \
   --model "Gemini 3.1 Pro (High)" \
   --add-dir "$REVIEW_DIR" \
   --sandbox --dangerously-skip-permissions \

@@ -225,7 +225,6 @@ object SLResourcePack : Listener {
     val workingDir = Path.of("").toAbsolutePath().normalize()
     val candidates =
         listOf(
-            Path.of("/Users/aa/platform").resolve(PACK_RELATIVE_PATH),
             workingDir.resolve(PACK_RELATIVE_PATH),
             workingDir.parent?.parent?.resolve(PACK_RELATIVE_PATH),
         )

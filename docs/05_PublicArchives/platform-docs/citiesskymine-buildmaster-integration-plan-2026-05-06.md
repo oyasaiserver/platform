@@ -1,7 +1,7 @@
 # CitiesSkyMine 統合計画書
 
 作成日: 2026-05-06  
-対象リポジトリ: `/Users/aa/platform`  
+対象リポジトリ: `~/platform`  
 統合先: `plugins/CitiesSkyMine`  
 統合元: `/Volumes/SamsungSSD/Antigravity/01_Projects/BuildMaster/build/libs/BuildMaster-1.0.0.jar`  
 参照元ソース: `/Volumes/SamsungSSD/Antigravity/01_Projects/BuildMaster/src/main`

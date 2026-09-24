@@ -2,15 +2,17 @@
 """Minecraft の実フォントアセットから、チューナー用の埋め込みデータを作る。
  - ascii.png: 字幅を実測（advance = 右端の不透明列 + 2）し、PNG は base64 で埋め込む
  - unifont(_jp).zip: 日本語で使う範囲の .hex を抽出して圧縮エンコード
+
+使い方: build_mcfont.py <展開したフォントアセットのディレクトリ> <出力 .js>
 """
 import json, os, base64, zipfile, io, sys
 from PIL import Image
 
-BASE = "/private/tmp/claude-501/-Users-aa-Desktop-Cogito/7e97829e-4526-4181-8fce-5f2a5bed462e/scratchpad/mcfont"
+BASE = sys.argv[1]
 FONT = BASE + "/assets/minecraft/font"
 TEX  = BASE + "/assets/minecraft/textures/font"
 STORE= BASE + "/store"
-OUT  = "/private/tmp/claude-501/-Users-aa-Desktop-Cogito/7e97829e-4526-4181-8fce-5f2a5bed462e/scratchpad/mcfont_data.js"
+OUT  = sys.argv[2]
 
 # ---------- 1. ASCII ----------
 inc = json.load(open(FONT + "/include/default.json"))
