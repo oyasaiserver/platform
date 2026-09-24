@@ -39,7 +39,6 @@ oyasaiPurpur rec {
 
   plugins = with oyasai-plugin-registry.forPlatform "paper" version; [
     # keep-sorted start
-    advancedban
     arceon
     bluemap
     citiesskymine

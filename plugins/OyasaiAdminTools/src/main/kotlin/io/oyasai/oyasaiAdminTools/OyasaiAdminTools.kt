@@ -25,19 +25,12 @@ class OyasaiAdminTools : JavaPlugin() {
     SurveyManager.load()
     WorldBorderManager.enable()
 
-    val commandMap = Bukkit.getCommandMap()
-    val knownCommands = commandMap.knownCommands
-    knownCommands.remove("ban")
-    knownCommands.remove("advancedban:ban")
-
     this.getCommand("syokaku")?.setExecutor(SyokakuCommandExecutor)
     this.getCommand("syokaku")?.tabCompleter = SyokakuCommandExecutor
     this.getCommand("syokakumanager")?.setExecutor(SyokakuManagerCommandExecutor)
     this.getCommand("syokakumanager")?.tabCompleter = SyokakuManagerCommandExecutor
     this.getCommand("playermanager")?.setExecutor(PlayerManagerCommandExecutor)
     this.getCommand("playermanager")?.tabCompleter = PlayerManagerCommandExecutor
-    this.getCommand("ban")?.setExecutor(GrieferCommandExecutor)
-    this.getCommand("ban")?.tabCompleter = GrieferCommandExecutor
     this.getCommand("kakutyo")?.setExecutor(KakutyoCommandExecutor)
     this.getCommand("kakutyo")?.tabCompleter = KakutyoCommandExecutor
     this.getCommand("wborder")?.setExecutor(WorldBorderCommandExecutor)
