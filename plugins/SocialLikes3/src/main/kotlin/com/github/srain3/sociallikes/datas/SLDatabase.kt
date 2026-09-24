@@ -125,21 +125,6 @@ object SLDatabase {
       val intervalSincePreviousHours: Long?,
   )
 
-  data class HomeGround(
-      val worldName: String,
-      val chunkX: Int,
-      val chunkZ: Int,
-      val buildCount: Int,
-      val receivedLikes: Int,
-  )
-
-  data class HomeGroundPoint(
-      val chunkX: Int,
-      val chunkZ: Int,
-      val buildCount: Int,
-      val receivedLikes: Int,
-  )
-
   data class LuckyBuild(
       val id: Int,
       val title: String,
@@ -1004,10 +989,6 @@ object SLDatabase {
     }
   }
 
-  fun deleteBuild(id: Int) {
-    softDeleteBuild(id, null, LocalDateTime.now(BuildTimestamps.ZONE_JST))
-  }
-
   internal fun clearBuildWriteFailures(id: Int) {
     writeFailureRetries.remove("saveBuild[$id]")
     writeFailureRetries.remove("softDeleteBuild[$id]")
@@ -1117,12 +1098,6 @@ object SLDatabase {
     }
     idMigrationCache.putAll(map)
     return map
-  }
-
-  fun loadIdMigrationMapBlocking(): Map<Int, Int> {
-    return submitBlocking("loadIdMigrationMap") {
-      rawConnection()?.let { loadIdMigrationMapDirect(it) } ?: emptyMap()
-    } ?: emptyMap()
   }
 
   /**
@@ -1256,14 +1231,6 @@ object SLDatabase {
   fun savePublicityHistory(data: PublicityData) {
     val snapshot = data.toPublicityHistorySnapshot()
     submit("savePublicityHistory") { upsertPublicityHistory(snapshot) }
-  }
-
-  fun savePublicityHistoryBlocking(data: PublicityData): Boolean {
-    val snapshot = data.toPublicityHistorySnapshot()
-    return submitWriteBlocking("savePublicityHistory") {
-      upsertPublicityHistory(snapshot)
-      true
-    } ?: false
   }
 
   fun deletePublicityHistoryBySLID(slid: Int) {
@@ -1401,76 +1368,6 @@ object SLDatabase {
               firstWeekStart,
               firstWeekStartMillis,
           )
-        }
-        .orEmpty()
-  }
-
-  /** The most established own chunk: build count first, then received likes as a tie-breaker. */
-  fun loadHomeGroundBlocking(playerUuid: String): HomeGround? {
-    return submitBlocking("loadHomeGround") {
-      rawConnection()
-          ?.prepareStatement(
-              """
-              SELECT b.world_name, b.chunk_x, b.chunk_z,
-                     COUNT(DISTINCT b.id) AS build_count,
-                     COUNT(bl.player_id) AS received_likes
-              FROM active_builds b
-              LEFT JOIN build_likes bl ON bl.build_id = b.id
-              WHERE b.owner_uuid = ?
-              GROUP BY b.world_name, b.chunk_x, b.chunk_z
-              ORDER BY build_count DESC, received_likes DESC, b.world_name ASC, b.chunk_x ASC, b.chunk_z ASC
-              LIMIT 1
-              """
-                  .trimIndent()
-          )
-          ?.use { statement ->
-            statement.setString(1, playerUuid)
-            statement.executeQuery().use { results ->
-              if (!results.next()) return@submitBlocking null
-              HomeGround(
-                  worldName = results.getString("world_name"),
-                  chunkX = results.getInt("chunk_x"),
-                  chunkZ = results.getInt("chunk_z"),
-                  buildCount = results.getInt("build_count"),
-                  receivedLikes = results.getInt("received_likes"),
-              )
-            }
-          }
-    }
-  }
-
-  fun loadHomeGroundPointsBlocking(playerUuid: String, worldName: String): List<HomeGroundPoint> {
-    return submitBlocking("loadHomeGroundPoints") {
-          val points = mutableListOf<HomeGroundPoint>()
-          rawConnection()
-              ?.prepareStatement(
-                  """
-                  SELECT b.chunk_x, b.chunk_z, COUNT(DISTINCT b.id) AS build_count,
-                         COUNT(bl.player_id) AS received_likes
-                  FROM active_builds b
-                  LEFT JOIN build_likes bl ON bl.build_id = b.id
-                  WHERE b.owner_uuid = ? AND b.world_name = ?
-                  GROUP BY b.chunk_x, b.chunk_z
-                  ORDER BY build_count DESC, received_likes DESC, b.chunk_x ASC, b.chunk_z ASC
-                  """
-                      .trimIndent()
-              )
-              ?.use { statement ->
-                statement.setString(1, playerUuid)
-                statement.setString(2, worldName)
-                statement.executeQuery().use { results ->
-                  while (results.next()) {
-                    points +=
-                        HomeGroundPoint(
-                            chunkX = results.getInt("chunk_x"),
-                            chunkZ = results.getInt("chunk_z"),
-                            buildCount = results.getInt("build_count"),
-                            receivedLikes = results.getInt("received_likes"),
-                        )
-                  }
-                }
-              }
-          points
         }
         .orEmpty()
   }
