@@ -82,7 +82,6 @@ oyasaiPurpur rec {
     sba
     screamingbedwars
     signshop
-    simpleelevator
     skript
     slotmachine
     sociallikes3

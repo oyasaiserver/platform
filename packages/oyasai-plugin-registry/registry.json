@@ -147,12 +147,6 @@
       "type": "spiget"
     }
   },
-  "simpleelevator": {
-    "paper": {
-      "id": 44462,
-      "type": "spiget"
-    }
-  },
   "skript": {
     "paper": {
       "slug": "skript",
