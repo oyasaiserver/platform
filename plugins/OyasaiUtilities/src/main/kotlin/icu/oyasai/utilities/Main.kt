@@ -4,6 +4,7 @@ import icu.oyasai.utilities.adminbp.AdminBP
 import icu.oyasai.utilities.backpack.BackpackFeature
 import icu.oyasai.utilities.creative_management.CreativeManagement
 import icu.oyasai.utilities.debugonbe.DebugOnBE
+import icu.oyasai.utilities.elevator.ElevatorListener
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
 import icu.oyasai.utilities.hats.Hats
 import icu.oyasai.utilities.hologram.HologramFeature
@@ -38,6 +39,7 @@ class Main : JavaPlugin() {
     server.pluginManager.registerEvents(NotNBTEvent, this) // NotNBTのイベント登録
     server.pluginManager.registerEvents(OreSmelterEvent, this) // OreSmelterのイベント登録
     server.pluginManager.registerEvents(VeinminerEvent, this)
+    server.pluginManager.registerEvents(ElevatorListener(this), this)
     server.pluginManager.registerEvents(TimerBarEvent, this) // TimerBar用のイベント登録
     server.pluginManager.registerEvents(TeleportListener, this) // TPathのイベント登録
     server.pluginManager.registerEvents(Pita, this) // Pitaのイベント

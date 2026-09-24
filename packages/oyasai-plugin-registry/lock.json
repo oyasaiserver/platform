@@ -205,14 +205,6 @@
       }
     }
   },
-  "simpleelevator": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/44462.jar",
-        "hash": "sha256-tnP1YIToVRxL3ejCkCK8pwYi6M/8TSbnPp2jvhDckjk="
-      }
-    }
-  },
   "skript": {
     "paper": {
       "26.2": {
