@@ -29,7 +29,7 @@ object HologramFeature : Listener {
     get() = File(plugin.dataFolder.parentFile, "DecentHolograms/holograms")
 
   private val holograms = linkedMapOf<String, Hologram>()
-  private val spawned = mutableMapOf<String, TextDisplay>()
+  private val spawned = mutableMapOf<String, List<TextDisplay>>()
 
   fun onEnable() {
     holograms.clear()
@@ -53,7 +53,9 @@ object HologramFeature : Listener {
       }
     }
     for (holo in holograms.values) sync(holo)
-    plugin.logger.info("Holograms: ${holograms.size} loaded, ${spawned.size} spawned")
+    plugin.logger.info(
+        "Holograms: ${holograms.size} loaded, ${spawned.values.sumOf { it.size }} spawned",
+    )
   }
 
   fun onDisable() {
@@ -153,35 +155,29 @@ object HologramFeature : Listener {
       if (holo.world != chunk.world.name) continue
       if (chunkCoord(holo.x) != chunk.x || chunkCoord(holo.z) != chunk.z) continue
       val existing = spawned[holo.name]
-      if (existing != null && existing.isValid) continue
+      if (existing != null && existing.size == holo.lines.size && existing.all { it.isValid }) {
+        continue
+      }
       sync(holo)
     }
   }
 
   private fun sync(holo: Hologram) {
-    val world = Bukkit.getWorld(holo.world)
-    if (!holo.enabled || world == null) {
-      despawn(holo.name)
-      return
-    }
-    if (!world.isChunkLoaded(chunkCoord(holo.x), chunkCoord(holo.z))) {
-      despawn(holo.name)
-      return
-    }
-    val at = HologramDisplay.location(world, holo)
-    val existing = spawned[holo.name]
-    if (existing != null && existing.isValid && existing.world == world) {
-      existing.text(hologramComponent(holo.lines))
-      existing.teleport(at)
-      return
-    }
     despawn(holo.name)
-    spawned[holo.name] = HologramDisplay.spawn(world, at, holo)
+    val world = Bukkit.getWorld(holo.world)
+    if (!holo.enabled || world == null) return
+    if (!world.isChunkLoaded(chunkCoord(holo.x), chunkCoord(holo.z))) return
+    spawned[holo.name] =
+        holo.lines.mapIndexed { index, line ->
+          HologramDisplay.spawn(world, HologramDisplay.location(world, holo, index), holo, line)
+        }
   }
 
   private fun despawn(name: String) {
-    val entity = spawned.remove(name) ?: return
-    if (entity.isValid) entity.remove()
+    val entities = spawned.remove(name) ?: return
+    for (entity in entities) {
+      if (entity.isValid) entity.remove()
+    }
   }
 
   private fun chunkCoord(block: Double): Int = floor(block).toInt() shr 4

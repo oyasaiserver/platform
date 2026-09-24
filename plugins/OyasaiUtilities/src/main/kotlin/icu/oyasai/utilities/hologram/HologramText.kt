@@ -18,5 +18,4 @@ fun normalizeHologramText(raw: String): String =
         .replace(animOpen, "")
         .replace(animClose, "")
 
-fun hologramComponent(lines: List<String>): Component =
-    legacy.deserialize(lines.joinToString("\n", transform = ::normalizeHologramText))
+fun hologramComponent(line: String): Component = legacy.deserialize(normalizeHologramText(line))

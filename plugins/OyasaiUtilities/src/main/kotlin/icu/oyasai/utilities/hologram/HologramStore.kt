@@ -12,6 +12,8 @@ data class Hologram(
     val z: Double,
     val lines: List<String>,
     val enabled: Boolean,
+    val viewRange: Float? = null,
+    val seeThrough: Boolean = true,
 )
 
 /** DecentHolograms の holograms/<name>.yml 1件。location が読めなければ null。 */
@@ -46,15 +48,17 @@ fun writeHolograms(file: File, holograms: Collection<Hologram>) {
   yaml.set(
       "holograms",
       holograms.map { holo ->
-        mapOf(
-            "name" to holo.name,
-            "world" to holo.world,
-            "x" to holo.x,
-            "y" to holo.y,
-            "z" to holo.z,
-            "enabled" to holo.enabled,
-            "lines" to holo.lines,
-        )
+        buildMap {
+          put("name", holo.name)
+          put("world", holo.world)
+          put("x", holo.x)
+          put("y", holo.y)
+          put("z", holo.z)
+          put("enabled", holo.enabled)
+          put("seeThrough", holo.seeThrough)
+          holo.viewRange?.let { put("viewRange", it) }
+          put("lines", holo.lines)
+        }
       },
   )
   file.parentFile.mkdirs()
@@ -86,5 +90,7 @@ private fun fromMap(raw: Map<*, *>): Hologram? {
   val z = (raw["z"] as? Number)?.toDouble() ?: return null
   val enabled = raw["enabled"] as? Boolean ?: true
   val lines = (raw["lines"] as? List<*>)?.map { it?.toString() ?: "" } ?: emptyList()
-  return Hologram(name, world, x, y, z, lines, enabled)
+  val viewRange = (raw["viewRange"] as? Number)?.toFloat()
+  val seeThrough = raw["seeThrough"] as? Boolean ?: true
+  return Hologram(name, world, x, y, z, lines, enabled, viewRange, seeThrough)
 }

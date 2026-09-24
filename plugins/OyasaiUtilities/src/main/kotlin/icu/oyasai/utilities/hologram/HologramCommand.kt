@@ -8,7 +8,18 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 object HologramCommand : CommandExecutor, TabCompleter {
-  private val subs = listOf("create", "delete", "list", "near", "movehere", "line", "import")
+  private val subs =
+      listOf(
+          "create",
+          "delete",
+          "list",
+          "near",
+          "movehere",
+          "line",
+          "import",
+          "range",
+          "seethrough",
+      )
   private val lineSubs = listOf("add", "set", "remove")
 
   override fun onCommand(
@@ -30,6 +41,8 @@ object HologramCommand : CommandExecutor, TabCompleter {
       "movehere" -> moveHere(sender, args)
       "line" -> line(sender, args)
       "import" -> import(sender)
+      "range" -> range(sender, args)
+      "seethrough" -> seeThrough(sender, args)
       else -> help(sender)
     }
     return true
@@ -52,10 +65,17 @@ object HologramCommand : CommandExecutor, TabCompleter {
     }
     if (
         args.size == 2 &&
-            (args[0].equals("delete", ignoreCase = true) ||
-                args[0].equals("movehere", ignoreCase = true))
+            listOf("delete", "movehere", "range", "seethrough").any {
+              it.equals(args[0], ignoreCase = true)
+            }
     ) {
       return names(args[1])
+    }
+    if (args.size == 3 && args[0].equals("seethrough", ignoreCase = true)) {
+      return listOf("on", "off").filter { it.startsWith(args[2], ignoreCase = true) }
+    }
+    if (args.size == 3 && args[0].equals("range", ignoreCase = true)) {
+      return listOf("default").filter { it.startsWith(args[2], ignoreCase = true) }
     }
     return emptyList()
   }
@@ -84,9 +104,7 @@ object HologramCommand : CommandExecutor, TabCompleter {
     val all = HologramFeature.all().sortedBy { it.name }
     sender.sendMessage("[oholo] ${all.size}件")
     for (holo in all) {
-      sender.sendMessage(
-          "[oholo] ${holo.name} ${holo.world} ${holo.x} ${holo.y} ${holo.z} lines=${holo.lines.size} enabled=${holo.enabled}",
-      )
+      sender.sendMessage("[oholo] ${holo.name} ${summary(holo)}")
     }
   }
 
@@ -109,7 +127,7 @@ object HologramCommand : CommandExecutor, TabCompleter {
             .sortedBy { it.second }
     sender.sendMessage("[oholo] near ${rows.size}件 radius=$radius")
     for ((holo, distance) in rows) {
-      sender.sendMessage("[oholo] ${holo.name} ${"%.1f".format(distance)}")
+      sender.sendMessage("[oholo] ${holo.name} ${"%.1f".format(distance)} ${summary(holo)}")
     }
   }
 
@@ -164,6 +182,33 @@ object HologramCommand : CommandExecutor, TabCompleter {
     sender.sendMessage("[oholo] 行削除: $name $index")
   }
 
+  private fun range(sender: CommandSender, args: Array<out String>) {
+    val name = args.getOrNull(1) ?: return help(sender)
+    val raw = args.getOrNull(2) ?: return help(sender)
+    val holo = HologramFeature.get(name) ?: return sender.sendMessage("[oholo] 無い: $name")
+    val viewRange =
+        if (raw.equals("default", ignoreCase = true)) {
+          null
+        } else {
+          raw.toFloatOrNull() ?: return sender.sendMessage("[oholo] 距離は数値か default")
+        }
+    HologramFeature.put(holo.copy(viewRange = viewRange))
+    sender.sendMessage("[oholo] range: $name ${viewRange ?: "default"}")
+  }
+
+  private fun seeThrough(sender: CommandSender, args: Array<out String>) {
+    val name = args.getOrNull(1) ?: return help(sender)
+    val on =
+        when (args.getOrNull(2)?.lowercase()) {
+          "on" -> true
+          "off" -> false
+          else -> return help(sender)
+        }
+    val holo = HologramFeature.get(name) ?: return sender.sendMessage("[oholo] 無い: $name")
+    HologramFeature.put(holo.copy(seeThrough = on))
+    sender.sendMessage("[oholo] seethrough: $name ${if (on) "on" else "off"}")
+  }
+
   private fun import(sender: CommandSender) {
     val result = HologramFeature.importDecent()
     if (result.missingDir) {
@@ -181,7 +226,11 @@ object HologramCommand : CommandExecutor, TabCompleter {
         "[oholo] create <name> [text] / delete <name> / list / near [radius] / movehere <name> / import",
     )
     sender.sendMessage(
-        "[oholo] line add <name> <text> / line set <name> <index> <text> / line remove <name> <index>"
+        "[oholo] line add <name> <text> / line set <name> <index> <text> / line remove <name> <index>",
     )
+    sender.sendMessage("[oholo] range <name> <数値|default> / seethrough <name> <on|off>")
   }
+
+  private fun summary(holo: Hologram): String =
+      "${holo.world} ${holo.x} ${holo.y} ${holo.z} lines=${holo.lines.size} enabled=${holo.enabled} range=${holo.viewRange ?: "default"} seethrough=${holo.seeThrough}"
 }

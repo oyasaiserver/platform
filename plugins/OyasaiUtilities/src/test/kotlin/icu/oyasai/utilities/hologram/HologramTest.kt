@@ -1,10 +1,12 @@
 package icu.oyasai.utilities.hologram
 
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 
 class HologramTest {
@@ -25,13 +27,12 @@ class HologramTest {
     )
     val legacy = LegacyComponentSerializer.builder().character('&').hexColors().build()
     assertEquals(
-        legacy.deserialize("&#B22AFE&l&nSocial Likes\nこれはなに？"),
-        hologramComponent(
-            listOf(
-                "<#B22AFE>&l&nSocial Likes</#ff8157>",
-                "<ANIM:wave:&b,&f>これはなに？</ANIM>",
-            ),
-        ),
+        legacy.deserialize("&#B22AFE&l&nSocial Likes"),
+        hologramComponent("<#B22AFE>&l&nSocial Likes</#ff8157>"),
+    )
+    assertEquals(
+        legacy.deserialize("これはなに？"),
+        hologramComponent("<ANIM:wave:&b,&f>これはなに？</ANIM>"),
     )
   }
 
@@ -63,6 +64,55 @@ class HologramTest {
     assertFalse(disabled.enabled)
     assertEquals(emptyList(), disabled.lines)
     assertNull(parseDecentHologram("bad", "enabled: true\n"))
+    assertNull(holo.viewRange)
+    assertTrue(holo.seeThrough)
+    assertEquals(41.750 - TEXT_HEIGHT, lineY(holo.y, 0), 0.000_000_1)
+    assertEquals(41.750 - LINE_HEIGHT - TEXT_HEIGHT, lineY(holo.y, 1), 0.000_000_1)
+  }
+
+  @Test
+  fun `roundtrips view range and see through and reads files without them`() {
+    val file = File.createTempFile("holograms", ".yml")
+    file.deleteOnExit()
+    val tuned =
+        Hologram(
+            "tuned",
+            "world",
+            1.0,
+            2.0,
+            3.0,
+            listOf("a"),
+            enabled = true,
+            viewRange = 2.5f,
+            seeThrough = false,
+        )
+    val plain = tuned.copy(name = "plain", viewRange = null, seeThrough = true)
+    writeHolograms(file, listOf(tuned, plain))
+    val read = readHolograms(file)
+    assertEquals(2.5f, read["tuned"]?.viewRange)
+    assertEquals(false, read["tuned"]?.seeThrough)
+    assertNull(read["plain"]?.viewRange)
+    assertEquals(true, read["plain"]?.seeThrough)
+
+    file.writeText(
+        """
+        holograms:
+        - name: old
+          world: world
+          x: 1
+          y: 2
+          z: 3
+          enabled: true
+          lines:
+          - hello
+        """
+            .trimIndent(),
+    )
+    val old = readHolograms(file)["old"]
+    assertNotNull(old)
+    assertNull(old.viewRange)
+    assertTrue(old.seeThrough)
+    assertEquals(listOf("hello"), old.lines)
   }
 }
 

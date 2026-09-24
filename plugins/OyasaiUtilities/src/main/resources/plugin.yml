@@ -68,7 +68,7 @@ commands:
     usage: /togom [types/reset/lim/radius/duration/replace]
   oholo:
     description: "ホログラム"
-    usage: /oholo <create|delete|list|near|movehere|line|import>
+    usage: /oholo <create|delete|list|near|movehere|line|import|range|seethrough>
     permission: oyasaiutilities.hologram
 
 permissions:
