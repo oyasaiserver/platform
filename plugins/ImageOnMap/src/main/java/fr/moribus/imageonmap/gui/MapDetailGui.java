@@ -44,19 +44,23 @@ import fr.moribus.imageonmap.map.PosterMap;
 import fr.moribus.imageonmap.map.SingleMap;
 import fr.moribus.imageonmap.ui.MapItemManager;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.conversations.Prompt;
-import org.bukkit.conversations.StringPrompt;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 
 public class MapDetailGui extends ExplorerGui<Integer> {
@@ -233,47 +237,63 @@ public class MapDetailGui extends ExplorerGui<Integer> {
             return;
         }
 
-        ConversationFactory cf = new ConversationFactory(ImageOnMap.getPlugin(ImageOnMap.class));
-        cf.withLocalEcho(false);
-        cf.withFirstPrompt(new StringPrompt() {
+        // The Bukkit conversations API is deprecated for removal (it cannot handle
+        // component-based chat), so capture the next chat message directly instead.
+        // Paper recommends listening to AsyncChatEvent for this use case.
+        final UUID playerId = getPlayer().getUniqueId();
 
-            @Override
-            public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input) {
-                if (!Permissions.RENAME.grantedTo(getPlayer())) {
-                    I.sendT(getPlayer(), "{ce}You are no longer allowed to do that.");
-                    return END_OF_CONVERSATION;
+        final Listener chatListener = new Listener() {
+            @EventHandler(priority = EventPriority.LOWEST)
+            public void onChat(AsyncChatEvent event) {
+                if (!event.getPlayer().getUniqueId().equals(playerId)) {
+                    return;
                 }
-    
-                if (input == null || input.isEmpty()) {
-                    I.sendT(getPlayer(), "{ce}Map names can't be empty.");
-                    return END_OF_CONVERSATION;
-                }
-                if (input.equals(map.getName())) {
-                    return END_OF_CONVERSATION;
-                }
-    
-                map.rename(input);
-                I.sendT(getPlayer(), "{cs}Map successfully renamed.");
-    
-                if (getParent() != null) {
-                    RunTask.later(() -> Gui.open(getPlayer(), MapDetailGui.this), 1L);
-    
-                } else {
-                    close();
-                }
-                
-                return END_OF_CONVERSATION;
+                // Swallow the message so it never reaches public chat,
+                // replacing the modal conversation's interception and local echo.
+                event.setCancelled(true);
+                HandlerList.unregisterAll(this);
+                final String input =
+                        PlainTextComponentSerializer.plainText().serialize(event.message());
+                // AsyncChatEvent fires off the main thread; Bukkit calls below need the server thread.
+                RunTask.nextTick(() -> acceptRenameInput(input));
             }
 
-            @Override
-            public @NotNull String getPromptText(@NotNull ConversationContext arg0) {
-                return "";
+            @EventHandler
+            public void onQuit(PlayerQuitEvent event) {
+                if (event.getPlayer().getUniqueId().equals(playerId)) {
+                    HandlerList.unregisterAll(this);
+                }
             }
-            
-        });
+        };
 
         close();
-        cf.buildConversation(getPlayer()).begin();
+        Bukkit.getPluginManager().registerEvents(chatListener, ImageOnMap.getPlugin());
+    }
+
+    private void acceptRenameInput(String input) {
+        final Player player = getPlayer();
+        if (!Permissions.RENAME.grantedTo(player)) {
+            I.sendT(player, "{ce}You are no longer allowed to do that.");
+            return;
+        }
+
+        if (input == null || input.isEmpty()) {
+            I.sendT(player, "{ce}Map names can't be empty.");
+            return;
+        }
+        if (input.equals(map.getName())) {
+            return;
+        }
+
+        map.rename(input);
+        I.sendT(player, "{cs}Map successfully renamed.");
+
+        if (getParent() != null) {
+            RunTask.later(() -> Gui.open(player, MapDetailGui.this), 1L);
+
+        } else {
+            close();
+        }
     }
 
     @GuiAction("delete")
