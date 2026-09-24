@@ -50,24 +50,4 @@ class BackpackStoreTest {
     assertEquals(0, BackpackFeature.backpackRows { false })
     assertEquals(1, BackpackFeature.backpackRows { it == "backpack.use" })
   }
-
-  @Test
-  fun `minepacks migration routes empty oversized conflict and new data`() {
-    assertEquals(
-        MinepacksMigrationDisposition.EMPTY,
-        classifyMinepacksBackpack(slotCount = 54, hasItems = false, targetExists = false),
-    )
-    assertEquals(
-        MinepacksMigrationDisposition.TOO_LARGE,
-        classifyMinepacksBackpack(slotCount = 55, hasItems = true, targetExists = false),
-    )
-    assertEquals(
-        MinepacksMigrationDisposition.CONFLICT,
-        classifyMinepacksBackpack(slotCount = 54, hasItems = true, targetExists = true),
-    )
-    assertEquals(
-        MinepacksMigrationDisposition.MIGRATE,
-        classifyMinepacksBackpack(slotCount = 54, hasItems = true, targetExists = false),
-    )
-  }
 }

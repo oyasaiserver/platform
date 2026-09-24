@@ -64,7 +64,6 @@ oyasaiPurpur rec {
     luckperms
     lunachat
     lwc
-    minepacks
     multiversecore
     multiverseportals
     oyasaiadmintools

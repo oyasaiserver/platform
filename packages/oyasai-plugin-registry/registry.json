@@ -110,12 +110,6 @@
       "type": "modrinth"
     }
   },
-  "minepacks": {
-    "paper": {
-      "id": 19286,
-      "type": "spiget"
-    }
-  },
   "multiversecore": {
     "paper": {
       "slug": "multiverse-core",
