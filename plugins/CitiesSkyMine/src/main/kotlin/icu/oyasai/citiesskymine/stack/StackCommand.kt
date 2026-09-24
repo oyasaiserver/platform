@@ -1,13 +1,13 @@
 package icu.oyasai.citiesskymine.stack
 
-import com.sk89q.worldedit.IncompleteRegionException
-import com.sk89q.worldedit.WorldEdit
-import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.regions.CuboidRegion
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
 import icu.oyasai.citiesskymine.shared.ArgSuggest
+import icu.oyasai.citiesskymine.util.HorizontalUnit
 import icu.oyasai.citiesskymine.util.MessageUtil
+import icu.oyasai.citiesskymine.util.horizontalUnit
+import icu.oyasai.citiesskymine.util.selectedCuboid
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
@@ -37,7 +37,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
 
     val parsed = parseArgs(sender, args) ?: return true
-    val region = selectedCuboid(sender) ?: return true
+    val region = selectedCuboid(sender, "stack は cuboid 選択にだけ対応しています。") ?: return true
     val offset =
         try {
           computeOffset(sender, region, parsed.directions)
@@ -130,24 +130,6 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val times = args[timesIndex].toInt().coerceAtLeast(1)
     val skipIds = args.drop(timesIndex + 1).mapNotNull { normalizeSkipId(it) }.toSet()
     return ParsedStackArgs(directions, times, skipIds)
-  }
-
-  private fun selectedCuboid(player: Player): CuboidRegion? {
-    val actor = BukkitAdapter.adapt(player)
-    val weWorld = BukkitAdapter.adapt(player.world)
-    val session = WorldEdit.getInstance().sessionManager.get(actor)
-    val region =
-        try {
-          session.getRegionSelector(weWorld).getRegion()
-        } catch (_: IncompleteRegionException) {
-          MessageUtil.error(player, "WorldEdit で範囲を2点選択してから実行してください。")
-          return null
-        }
-    return region as? CuboidRegion
-        ?: run {
-          MessageUtil.error(player, "stack は cuboid 選択にだけ対応しています。")
-          null
-        }
   }
 
   private fun computeOffset(
@@ -293,15 +275,6 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         else -> null
       }
 
-  private fun horizontalUnit(face: BlockFace): HorizontalUnit =
-      when (face) {
-        BlockFace.NORTH -> HorizontalUnit(0, -1)
-        BlockFace.EAST -> HorizontalUnit(1, 0)
-        BlockFace.SOUTH -> HorizontalUnit(0, 1)
-        BlockFace.WEST -> HorizontalUnit(-1, 0)
-        else -> HorizontalUnit(0, 1)
-      }
-
   private fun horizontalMagnitude(region: CuboidRegion, unit: HorizontalUnit): Int =
       when {
         unit.x != 0 -> region.width
@@ -316,8 +289,6 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val times: Int,
       val skipIds: Set<String>,
   )
-
-  private data class HorizontalUnit(val x: Int, val z: Int)
 
   private data class StackOffset(val x: Int, val y: Int, val z: Int, val facing: BlockFace)
 
