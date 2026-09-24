@@ -175,16 +175,6 @@ object Tools {
     return this
   }
 
-  /** プラグイン用フォルダからnameのディレクトリ内にあるファイルを返す */
-  fun getFolderToFile(name: String): List<File>? {
-    val file = File(plugin.dataFolder, name)
-    return if (file.isDirectory) {
-      file.listFiles()?.filter { it.isFile }
-    } else {
-      null
-    }
-  }
-
   /** 指定されたディレクトリ内にあるファイルを返す */
   fun getFolderToFile(file: File): List<File>? {
     return if (file.isDirectory) {
@@ -197,15 +187,6 @@ object Tools {
   /** プラグイン用フォルダからnameのディレクトリ内にあるディレクトリを返す */
   fun getFolderToFolder(name: String): List<File>? {
     val file = File(plugin.dataFolder, name)
-    return if (file.isDirectory) {
-      file.listFiles()?.filter { it.isDirectory }
-    } else {
-      null
-    }
-  }
-
-  /** 指定されたディレクトリ内にあるディレクトリを返す */
-  fun getFolderToFolder(file: File): List<File>? {
     return if (file.isDirectory) {
       file.listFiles()?.filter { it.isDirectory }
     } else {
@@ -226,6 +207,12 @@ object Tools {
   }
 
   fun updateSLSign(currentSLData: SLData, block: BlockState, actorUuid: UUID? = null) {
+    moveAndSaveSign(currentSLData, block, actorUuid)
+    // Discordへ反映
+    SLDiscord.changeSLDataToMsg(currentSLData)
+  }
+
+  private fun moveAndSaveSign(currentSLData: SLData, block: BlockState, actorUuid: UUID?) {
     val beforeJson =
         com.google.gson
             .Gson()
@@ -267,8 +254,6 @@ object Tools {
         state.update()
       }
     }
-    // Discordへ反映
-    SLDiscord.changeSLDataToMsg(currentSLData)
   }
 
   fun updateLegacySLSign(currentSLData: SLData, block: BlockState, actorUuid: UUID? = null) {
@@ -285,47 +270,7 @@ object Tools {
     id = -id
     val resolvedId = SLDatabase.resolveMigratedId(id)
 
-    val beforeJson =
-        com.google.gson
-            .Gson()
-            .toJson(
-                mapOf(
-                    "world" to currentSLData.worldName,
-                    "x" to currentSLData.loc.x,
-                    "y" to currentSLData.loc.y,
-                    "z" to currentSLData.loc.z,
-                    "sign_material" to currentSLData.signMaterial,
-                )
-            )
-
-    val oldLoc = currentSLData.loc
-    currentSLData.loc = block.location
-    currentSLData.worldName = block.world.name
-    currentSLData.signMaterial = block.type.name
-
-    Data.save(currentSLData, actorUuid)
-
-    val afterJson =
-        com.google.gson
-            .Gson()
-            .toJson(
-                mapOf(
-                    "world" to block.world.name,
-                    "x" to block.location.x,
-                    "y" to block.location.y,
-                    "z" to block.location.z,
-                    "sign_material" to block.type.name,
-                )
-            )
-    SLDatabase.recordEvent(currentSLData.id, "moved", actorUuid, beforeJson, afterJson)
-
-    if (oldLoc.world != null) {
-      val state = oldLoc.block.state
-      if (state is Sign && state.location != block.location) {
-        state.block.blockData = Material.AIR.createBlockData()
-        state.update()
-      }
-    }
+    moveAndSaveSign(currentSLData, block, actorUuid)
 
     // 看板の装飾
     block.setLine(0, Tools.socialLikesLOGO)

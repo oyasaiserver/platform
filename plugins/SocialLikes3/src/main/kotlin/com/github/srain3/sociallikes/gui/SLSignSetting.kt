@@ -153,14 +153,7 @@ object SLSignSetting {
             3,
             Tools.socialLikesLOGOShort + "&0ID:${slData.id}「&a${slData.title}&0」Setting".color(),
         )
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val player = it.whoClicked as Player
-        player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val config = CustomYaml("sltpsign.yml")
     val sltpSignCostCreative = config.getLong("priceSltpSignCreative", 100L)
