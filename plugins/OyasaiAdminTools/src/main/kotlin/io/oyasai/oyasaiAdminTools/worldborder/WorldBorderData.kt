@@ -12,7 +12,6 @@ data class WorldBorderData(
     var radiusX: Int,
     var radiusZ: Int,
     var shapeRound: Boolean? = null,
-    var wrapping: Boolean = false,
 ) {
   val minX: Double
     get() = x - radiusX
@@ -70,16 +69,8 @@ data class WorldBorderData(
           )
       if (dT == 0.0) return loc.clone()
       val f = 1 / dT - knockBack / dU
-      if (wrapping) {
-        xLoc = x - dX * f
-        zLoc = z - dZ * f
-      } else {
-        xLoc = x + dX * f
-        zLoc = z + dZ * f
-      }
-    } else if (wrapping) {
-      if (xLoc <= minX) xLoc = maxX - knockBack else if (xLoc >= maxX) xLoc = minX + knockBack
-      if (zLoc <= minZ) zLoc = maxZ - knockBack else if (zLoc >= maxZ) zLoc = minZ + knockBack
+      xLoc = x + dX * f
+      zLoc = z + dZ * f
     } else {
       if (xLoc <= minX) xLoc = minX + knockBack else if (xLoc >= maxX) xLoc = maxX - knockBack
       if (zLoc <= minZ) zLoc = minZ + knockBack else if (zLoc >= maxZ) zLoc = maxZ - knockBack
@@ -98,8 +89,7 @@ data class WorldBorderData(
           false -> " (shape override: rectangular/square)"
           null -> ""
         }
-    val wrap = if (wrapping) " (wrapping)" else ""
-    return "radius $radius at X: ${formatCoord(x)} Z: ${formatCoord(z)}$shape$wrap"
+    return "radius $radius at X: ${formatCoord(x)} Z: ${formatCoord(z)}$shape"
   }
 
   companion object {
