@@ -22,7 +22,14 @@ object WhiteLineSmoother {
     require(lineData is Stairs) { "白線素材には階段ブロックを設定してください。" }
     if (path.isEmpty()) return SmoothResult(0)
 
-    val slots = buildOffsetSlots(settings).filter { it.zone.isLine() }
+    val slots =
+        buildOffsetSlots(
+                (settings.centerLineWidth + 1) / 2,
+                settings.laneWidth,
+                settings.outerLineWidth,
+                settings.sidewalkWidth,
+            )
+            .filter { it.zone.isLine() }
     var affected = 0
     for (slot in slots) {
       val traced = traceBlocksForOffset(path, slot.offset)
@@ -183,72 +190,6 @@ object WhiteLineSmoother {
     return traced
   }
 
-  private fun walkGrid(
-      startX: Double,
-      startY: Double,
-      startZ: Double,
-      endX: Double,
-      endY: Double,
-      endZ: Double,
-      defaultHeading: Double,
-  ): List<TracedBlock> {
-    val result = mutableListOf<TracedBlock>()
-    val startBlockX = floor(startX).toInt()
-    val startBlockZ = floor(startZ).toInt()
-    val targetBlockX = floor(endX).toInt()
-    val targetBlockZ = floor(endZ).toInt()
-    if (startBlockX == targetBlockX && startBlockZ == targetBlockZ) return result
-
-    val dx = endX - startX
-    val dz = endZ - startZ
-    val heading = if (abs(dx) + abs(dz) < 1e-6) defaultHeading else atan2(dz, dx)
-
-    var currentX = startBlockX
-    var currentZ = startBlockZ
-
-    val stepX = dx.compareTo(0.0)
-    val stepZ = dz.compareTo(0.0)
-
-    val invDx = if (dx != 0.0) 1.0 / kotlin.math.abs(dx) else Double.POSITIVE_INFINITY
-    val invDz = if (dz != 0.0) 1.0 / kotlin.math.abs(dz) else Double.POSITIVE_INFINITY
-    var tMaxX =
-        if (stepX != 0) distanceToGridBoundary(startX, currentX, stepX) * invDx
-        else Double.POSITIVE_INFINITY
-    var tMaxZ =
-        if (stepZ != 0) distanceToGridBoundary(startZ, currentZ, stepZ) * invDz
-        else Double.POSITIVE_INFINITY
-    val tDeltaX = if (stepX != 0) invDx else Double.POSITIVE_INFINITY
-    val tDeltaZ = if (stepZ != 0) invDz else Double.POSITIVE_INFINITY
-
-    var t = 0.0
-    while (currentX != targetBlockX || currentZ != targetBlockZ) {
-      if (tMaxX < tMaxZ) {
-        currentX += stepX
-        t = tMaxX
-        tMaxX += tDeltaX
-      } else if (tMaxZ < tMaxX) {
-        currentZ += stepZ
-        t = tMaxZ
-        tMaxZ += tDeltaZ
-      } else {
-        if (stepX != 0) currentX += stepX
-        if (stepZ != 0) currentZ += stepZ
-        t = tMaxX
-        tMaxX += tDeltaX
-        tMaxZ += tDeltaZ
-      }
-
-      val interpY = startY + (endY - startY) * t.coerceIn(0.0, 1.0)
-      result += TracedBlock(BlockPos(currentX, floor(interpY).toInt(), currentZ), heading)
-    }
-
-    return result
-  }
-
-  private fun distanceToGridBoundary(origin: Double, cell: Int, step: Int): Double {
-    return if (step > 0) (cell + 1).toDouble() - origin else origin - cell.toDouble()
-  }
-
   private fun MutableList<TracedBlock>.removeRightAngleCornerIfNeeded() {
     if (size < 3) return
     val c = this[size - 1].pos
@@ -264,49 +205,11 @@ object WhiteLineSmoother {
     removeAt(size - 2)
   }
 
-  private fun buildOffsetSlots(settings: RoadSettings): List<OffsetSlot> {
-    val cHW = (settings.centerLineWidth + 1) / 2
-    val lW = settings.laneWidth
-    val olW = settings.outerLineWidth
-    val swW = settings.sidewalkWidth
-    val totalHW = cHW + lW + olW + swW
-    val slots = mutableListOf<OffsetSlot>()
-    for (offset in -totalHW..totalHW) {
-      val zone = classifyZone(abs(offset), cHW, lW, olW, swW) ?: continue
-      slots += OffsetSlot(offset, zone)
-    }
-    return slots
-  }
-
-  private fun classifyZone(absOffset: Int, cHW: Int, lW: Int, olW: Int, swW: Int): OffsetZone? =
-      when {
-        absOffset < cHW -> OffsetZone.CENTER_LINE
-        absOffset < cHW + lW -> OffsetZone.LANE
-        absOffset < cHW + lW + olW -> OffsetZone.OUTER_LINE
-        absOffset < cHW + lW + olW + swW -> OffsetZone.SIDEWALK
-        else -> null
-      }
-
-  private fun OffsetZone.isLine() = this == OffsetZone.CENTER_LINE || this == OffsetZone.OUTER_LINE
-
   private data class Orientation(val facing: BlockFace, val shape: Stairs.Shape)
 
-  private data class OffsetSlot(val offset: Int, val zone: OffsetZone)
-
-  private enum class OffsetZone {
-    CENTER_LINE,
-    LANE,
-    OUTER_LINE,
-    SIDEWALK,
+  private fun BlockPos.vectorTo(other: BlockPos): Vec {
+    return Vec(other.x - x, other.z - z)
   }
-
-  private data class BlockPos(val x: Int, val y: Int, val z: Int) {
-    fun vectorTo(other: BlockPos): Vec {
-      return Vec(other.x - x, other.z - z)
-    }
-  }
-
-  private data class TracedBlock(val pos: BlockPos, val heading: Double)
 
   private data class Vec(val dx: Int, val dz: Int) {
     fun isCardinal() = (abs(dx) + abs(dz) == 1)
