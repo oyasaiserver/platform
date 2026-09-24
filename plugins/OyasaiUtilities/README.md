@@ -2,6 +2,10 @@
 
 おやさい鯖の小物系便利Plugin
 
+## JoinCommands
+
+参加時に `plugins/OyasaiUtilities/JoinCommands/config.yml` の `server-join-commands` を記述順に判定し、指定した遅延後にコマンドを実行する。各定義は `command-list`（文字列リスト）、`permission`（任意）、`first-join-only`（既定 false）、`delay`（tick、既定 0）を指定できる。`[PLAYER]` 付きはプレイヤー、それ以外はコンソールとして実行し、`{player}` を参加者名に置換する。変更は再起動で反映され、設定ファイルが無ければ何もしない。
+
 ## NotNBT (by Srain3)
 
 クリエインベントリから保存されたホットバー経由でサバイバルへアイテムを渡す行為を防ぐ機能`アイテム内のNBTタグ{item:}か{items:}`に反応してNBTタグを消す

@@ -60,7 +60,6 @@ oyasaiPurpur rec {
     gsit
     headhuntplugin
     imageonmap
-    joincommands
     luckperms
     lunachat
     lwc
