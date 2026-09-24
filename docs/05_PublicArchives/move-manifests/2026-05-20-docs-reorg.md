@@ -2,8 +2,8 @@
 
 ## Scope
 
-- Source workspace: `/Users/aa/Desktop/Antigravity`
-- Destination workspace: `/Users/aa/platform/docs`
+- Source workspace: `~/Desktop/Antigravity`
+- Destination workspace: `~/platform/docs`
 - Date boundary used for "today": `2026-05-20 00:00:00` to `2026-05-21 00:00:00` in local time.
 - VCS/runtime metadata excluded from project sync: `.git/`, `node_modules/`, `__pycache__/`, `.DS_Store`.
 
@@ -13,12 +13,12 @@ These Antigravity `01_Projects` projects had non-metadata files edited on 2026-0
 
 | Source | Destination | Files in destination after sync |
 |---|---:|---:|
-| `/Users/aa/Desktop/Antigravity/01_Projects/ai-debate/` | `docs/01_Projects/ai-debate/` | 22 |
-| `/Users/aa/Desktop/Antigravity/01_Projects/anamorph-voxel/` | `docs/01_Projects/anamorph-voxel/` | 9 |
-| `/Users/aa/Desktop/Antigravity/01_Projects/citygml-converter/` | `docs/01_Projects/citygml-converter/` | 12 |
-| `/Users/aa/Desktop/Antigravity/01_Projects/minecraft-analyzer/` | `docs/01_Projects/minecraft-analyzer/` | 43 |
-| `/Users/aa/Desktop/Antigravity/01_Projects/minecraft-glass-gradient/` | `docs/01_Projects/minecraft-glass-gradient/` | 27 |
-| `/Users/aa/Desktop/Antigravity/01_Projects/plateau-viewer/` | `docs/01_Projects/plateau-viewer/` | 18 |
+| `~/Desktop/Antigravity/01_Projects/ai-debate/` | `docs/01_Projects/ai-debate/` | 22 |
+| `~/Desktop/Antigravity/01_Projects/anamorph-voxel/` | `docs/01_Projects/anamorph-voxel/` | 9 |
+| `~/Desktop/Antigravity/01_Projects/citygml-converter/` | `docs/01_Projects/citygml-converter/` | 12 |
+| `~/Desktop/Antigravity/01_Projects/minecraft-analyzer/` | `docs/01_Projects/minecraft-analyzer/` | 43 |
+| `~/Desktop/Antigravity/01_Projects/minecraft-glass-gradient/` | `docs/01_Projects/minecraft-glass-gradient/` | 27 |
+| `~/Desktop/Antigravity/01_Projects/plateau-viewer/` | `docs/01_Projects/plateau-viewer/` | 18 |
 
 ## Markdown Moves
 
@@ -52,7 +52,7 @@ Loose project Markdown files under `docs/01_Projects/` were moved into per-proje
 | `archive/citiesskymine-buildmaster-integration-plan-2026-05-06.md` | `docs/05_Archives/platform-docs/citiesskymine-buildmaster-integration-plan-2026-05-06.md` |
 | `archive/docs/GUIMAKER_GUIDE-20260516-171621.md` | `docs/05_Archives/platform-docs/GUIMAKER_GUIDE-20260516-171621.md` |
 | `archive/docs/UX_REFACTOR_PLAN.md` | `docs/05_Archives/platform-docs/UX_REFACTOR_PLAN.md` |
-| `/Users/aa/Desktop/Antigravity/01_Projects/03_Outputs/cache/palette_cache_2L_bg255-255-255_a40.pkl` | `docs/03_Outputs/minecraft-glass-gradient/cache/palette_cache_2L_bg255-255-255_a40.pkl` |
+| `~/Desktop/Antigravity/01_Projects/03_Outputs/cache/palette_cache_2L_bg255-255-255_a40.pkl` | `docs/03_Outputs/minecraft-glass-gradient/cache/palette_cache_2L_bg255-255-255_a40.pkl` |
 
 ## Verification
 

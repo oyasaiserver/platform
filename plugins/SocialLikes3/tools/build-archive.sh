@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/aa/platform"
+ROOT="$(git -C "$(dirname "$0")" rev-parse --show-toplevel)"
 PLUGIN_DIR="$ROOT/plugins/SocialLikes3"
 ARCHIVE_ROOT="$ROOT/archive/sldata-builds"
 LATEST_SRC="$ARCHIVE_ROOT/latest-src"

@@ -3,11 +3,11 @@
 #
 #   ./localserver.sh start|stop|restart|status|log|rcon <cmd>
 #
-# 本番（192.168.0.22）には一切触らない。ここが操作するのは
-# /Users/aa/platform/local/paperclip-tmp だけ。
+# 本番には一切触らない。ここが操作するのは
+# リポジトリ直下の local/paperclip-tmp だけ。
 set -euo pipefail
 
-SERVER_DIR="/Users/aa/platform/local/paperclip-tmp"
+SERVER_DIR="$(git -C "$(dirname "$0")" rev-parse --show-toplevel)/local/paperclip-tmp"
 JAR="paper-paperclip.jar"
 PORT=8000
 RCON_PORT=25575
