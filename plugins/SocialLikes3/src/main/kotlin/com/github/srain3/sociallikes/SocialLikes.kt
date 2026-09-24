@@ -3,7 +3,6 @@ package com.github.srain3.sociallikes
 import com.github.srain3.sociallikes.command.*
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.DirtyBuildManager
-import com.github.srain3.sociallikes.datas.NegativeIdMigrator
 import com.github.srain3.sociallikes.datas.PlaceHolder
 import com.github.srain3.sociallikes.datas.PublicityHistory
 import com.github.srain3.sociallikes.datas.SLDatabase
@@ -66,7 +65,6 @@ class SocialLikes : JavaPlugin() {
     server.pluginManager.registerEvents(SLDataFont, this)
     server.pluginManager.registerEvents(SLData, this)
     server.pluginManager.registerEvents(SLResourcePack, this)
-    SLData.cleanupLingeringDisplays()
     SLData.init()
 
     server.getPluginCommand("sltp")?.setExecutor(SLtp)
@@ -109,8 +107,6 @@ class SocialLikes : JavaPlugin() {
       PlaceHolder(this).register()
     }
 
-    NegativeIdMigrator.runIfConfigured(this)
-
     DirtyBuildManager.loadFromDisk()
     DirtyBuildManager.startPeriodicReconciliation(this)
 
@@ -135,7 +131,6 @@ class SocialLikes : JavaPlugin() {
     }
     SLtp.userLastSLTPTimeSave()
     Events.offlineLikePointSave()
-    SLData.cleanupLingeringDisplays()
     SLDatabase.close()
   }
 

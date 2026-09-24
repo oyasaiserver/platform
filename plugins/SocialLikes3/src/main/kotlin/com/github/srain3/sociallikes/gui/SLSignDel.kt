@@ -12,22 +12,13 @@ import com.github.stefvanschie.inventoryframework.gui.type.HopperGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import org.bukkit.Material
-import org.bukkit.Sound
 import org.bukkit.block.Sign
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object SLSignDel {
   fun createGUI(sign: Sign, slData: SLData): HopperGui {
     val gui = HopperGui(Tools.socialLikesLOGOShort + "&cLike看板を消去しますか？".color())
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val player = it.whoClicked as Player
-        player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val pane = StaticPane(5, 1)
     val buttonY =

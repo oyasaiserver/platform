@@ -7,18 +7,13 @@ import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.PublicityData
 import com.github.srain3.sociallikes.datas.PublicityHistory
-import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
-import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.Sound
-import org.bukkit.entity.Player
-import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
@@ -26,14 +21,7 @@ object PublicityHistoryGUI {
   /** GUIを返す */
   fun createGUI(): ChestGui {
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r 宣伝履歴 p1".color())
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val player = it.whoClicked as Player
-        player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val itemList = mutableListOf<ItemStack>()
     val thread =
@@ -69,52 +57,9 @@ object PublicityHistoryGUI {
     }
     gui.addPane(Slot.fromXY(0, 0), pagePane)
 
-    val navigation = StaticPane(9, 1)
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.RED_WOOL).apply {
-              allFlag()
-              addText("&f前のページへ", mutableListOf())
-            }
-        ) { _: InventoryClickEvent? ->
-          if (pagePane.page > 0) {
-            pagePane.setPage(pagePane.page - 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r 宣伝履歴 p${pagePane.page + 1}".color()
-            gui.update()
-          }
-        },
-        0,
-        0,
-    )
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.GREEN_WOOL).apply {
-              allFlag()
-              addText("&f次のページへ", mutableListOf())
-            }
-        ) { _: InventoryClickEvent? ->
-          if (pagePane.page < pagePane.pages - 1) {
-            pagePane.setPage(pagePane.page + 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r 宣伝履歴 p${pagePane.page + 1}".color()
-            gui.update()
-          }
-        },
-        8,
-        0,
-    )
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.BARRIER).apply {
-              allFlag()
-              addText("&c閉じる", mutableListOf())
-            }
-        ) { event: InventoryClickEvent ->
-          event.whoClicked.closeInventory()
-        },
-        4,
-        0,
-    )
-    gui.addPane(Slot.fromXY(0, 5), navigation)
+    gui.addPageNav(pagePane) {
+      Tools.socialLikesLOGOShort + "&r 宣伝履歴 p${pagePane.page + 1}".color()
+    }
 
     gui.update()
     return gui

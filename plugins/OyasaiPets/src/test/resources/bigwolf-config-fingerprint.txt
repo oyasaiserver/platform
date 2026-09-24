@@ -1,0 +1,46 @@
+{breed.bonusLevelMax=5, breed.bonusLevelPerGen=1, breed.cost=100, breed.genBonusMax=0.2, breed.genBonusPerGen=0.02, breed.maxCount=3, breed.minLevel=10, breed.mutationBoost=0.15, breed.mutationChance=0.1, breed.randomMax=1.1, breed.randomMin=0.9, breed.statCap=1.5, breed.variantWeights.other=3, breed.variantWeights.parent=7, economy.foodPointCost=10, items.healAmount=10, itemshop.healPotionCost=30, itemshop.particleCost=200, itemshop.petBrushCost=15, itemshop.petFoodCost=20, itemshop.petTreatCost=15, itemshop.toyCost=50, pets.freeRoamFlyingSpeedMultiplier=0.5, pets.freeRoamSpeedMultiplier=0.5, pets.maxFoodLevel=50, pets.spawnAiEnabled=true, play.levelUpChance=0.05, play.levelUpMaxLevel=10, recover.cost=50, revive.cost=50, shop.defaultCost=100, skillbook.costLv1=50, skillbook.costLv2=100, skillbook.costLv3=150, skillbook.shopCostLv1=50, skillbook.shopCostLv2=100, skillbook.shopCostLv3=150, skillbook.useCostLv1=50, skillbook.useCostLv2=100, skillbook.useCostLv3=150, traits.atypicalAffectionBonus=1.3, traits.atypicalBaseChance=0.07, traits.atypicalBothParentChance=0.35, traits.atypicalLevelUpBonus=1.5, traits.atypicalOneParentChance=0.15, traits.childAiEnabled=true}
+[(foodPointCost, 1015), (maxFoodLevel, 1025), (defaultShopCost, 1030), (skillBookShopCostLv1, 1034), (skillBookShopCostLv2, 1032), (skillBookShopCostLv3, 1035), (skillBookUseCostLv1, 1036), (skillBookUseCostLv2, 1032), (skillBookUseCostLv3, 1037), (reviveCost, 1029), (recoverCost, 1028), (healItemAmount, 1016), (breedMinLevel, 1007), (breedCost, 1003), (maxBreedCount, 1006), (breedRandomMin, 11.25), (breedRandomMax, 10.25), (breedGenBonusPerGen, 5.25), (breedGenBonusMax, 4.25), (breedMutationChance, 9.25), (breedMutationBoost, 8.25), (breedStatCap, 12.25), (breedBonusLevelPerGen, 1002), (breedBonusLevelMax, 1001), (breedParentVariantWeight, 1014), (breedOtherVariantWeight, 1013), (playLevelUpChance, 26.25), (playLevelUpMaxLevel, 1027), (spawnAiEnabled, false), (freeRoamSpeedMultiplier, 24.25), (freeRoamFlyingSpeedMultiplier, 23.25), (atypicalBaseChance, 39.25), (atypicalOneParentChance, 42.25), (atypicalBothParentChance, 40.25), (atypicalLevelUpBonus, 41.25), (atypicalAffectionBonus, 38.25), (childAiEnabled, false)]
+[1020, 1019, 1021, 1017, 1018, 1022]
+[(foodPointCost, 1015), (maxFoodLevel, 1025), (defaultShopCost, 1030), (skillBookShopCostLv1, 1034), (skillBookShopCostLv2, 1032), (skillBookShopCostLv3, 1035), (skillBookUseCostLv1, 1036), (skillBookUseCostLv2, 1032), (skillBookUseCostLv3, 1037), (reviveCost, 1029), (recoverCost, 1028), (healItemAmount, 1016), (breedMinLevel, 1007), (breedCost, 1003), (maxBreedCount, 1006), (breedRandomMin, 11.25), (breedRandomMax, 10.25), (breedGenBonusPerGen, 5.25), (breedGenBonusMax, 4.25), (breedMutationChance, 9.25), (breedMutationBoost, 8.25), (breedStatCap, 12.25), (breedBonusLevelPerGen, 1002), (breedBonusLevelMax, 1001), (breedParentVariantWeight, 1014), (breedOtherVariantWeight, 1013), (playLevelUpChance, 26.25), (playLevelUpMaxLevel, 1027), (spawnAiEnabled, false), (freeRoamSpeedMultiplier, 24.25), (freeRoamFlyingSpeedMultiplier, 23.25), (atypicalBaseChance, 39.25), (atypicalOneParentChance, 42.25), (atypicalBothParentChance, 40.25), (atypicalLevelUpBonus, 41.25), (atypicalAffectionBonus, 38.25), (childAiEnabled, false), (skillBookCostLv1, 1036), (skillBookCostLv2, 1032), (skillBookCostLv3, 1037), (unknownKey, null)]
+foodPointCost bad=false good=true
+maxFoodLevel bad=false good=true
+defaultShopCost bad=false good=true
+skillBookShopCostLv1 bad=false good=true
+skillBookShopCostLv2 bad=false good=true
+skillBookShopCostLv3 bad=false good=true
+skillBookUseCostLv1 bad=false good=true
+skillBookUseCostLv2 bad=false good=true
+skillBookUseCostLv3 bad=false good=true
+reviveCost bad=false good=true
+recoverCost bad=false good=true
+healItemAmount bad=false good=true
+breedMinLevel bad=false good=true
+breedCost bad=false good=true
+maxBreedCount bad=false good=true
+breedRandomMin bad=false good=true
+breedRandomMax bad=false good=true
+breedGenBonusPerGen bad=false good=true
+breedGenBonusMax bad=false good=true
+breedMutationChance bad=false good=true
+breedMutationBoost bad=false good=true
+breedStatCap bad=false good=true
+breedBonusLevelPerGen bad=false good=true
+breedBonusLevelMax bad=false good=true
+breedParentVariantWeight bad=false good=true
+breedOtherVariantWeight bad=false good=true
+playLevelUpChance bad=false good=true
+playLevelUpMaxLevel bad=false good=true
+spawnAiEnabled bad=false good=true
+freeRoamSpeedMultiplier bad=false good=true
+freeRoamFlyingSpeedMultiplier bad=false good=true
+atypicalBaseChance bad=false good=true
+atypicalOneParentChance bad=false good=true
+atypicalBothParentChance bad=false good=true
+atypicalLevelUpBonus bad=false good=true
+atypicalAffectionBonus bad=false good=true
+childAiEnabled bad=false good=true
+skillBookCostLv1 bad=false good=true
+skillBookCostLv2 bad=false good=true
+skillBookCostLv3 bad=false good=true
+unknownKey bad=false good=false
+[(foodPointCost, 7), (maxFoodLevel, 7), (defaultShopCost, 7), (skillBookShopCostLv1, 7), (skillBookShopCostLv2, 7), (skillBookShopCostLv3, 7), (skillBookUseCostLv1, 7), (skillBookUseCostLv2, 7), (skillBookUseCostLv3, 7), (reviveCost, 7), (recoverCost, 7), (healItemAmount, 7), (breedMinLevel, 7), (breedCost, 7), (maxBreedCount, 7), (breedRandomMin, 0.5), (breedRandomMax, 0.5), (breedGenBonusPerGen, 0.5), (breedGenBonusMax, 0.5), (breedMutationChance, 0.5), (breedMutationBoost, 0.5), (breedStatCap, 0.5), (breedBonusLevelPerGen, 7), (breedBonusLevelMax, 7), (breedParentVariantWeight, 7), (breedOtherVariantWeight, 7), (playLevelUpChance, 0.5), (playLevelUpMaxLevel, 7), (spawnAiEnabled, true), (freeRoamSpeedMultiplier, 0.5), (freeRoamFlyingSpeedMultiplier, 0.5), (atypicalBaseChance, 0.5), (atypicalOneParentChance, 0.5), (atypicalBothParentChance, 0.5), (atypicalLevelUpBonus, 0.5), (atypicalAffectionBonus, 0.5), (childAiEnabled, true)]

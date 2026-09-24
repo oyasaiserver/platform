@@ -1,8 +1,6 @@
 package com.github.srain3.sociallikes.command
 
 import com.github.srain3.sociallikes.Tools
-import com.github.srain3.sociallikes.Tools.addText
-import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.stats.SLDataLogger
@@ -19,18 +17,8 @@ import io.papermc.paper.registry.data.dialog.action.DialogAction
 import io.papermc.paper.registry.data.dialog.body.DialogBody
 import io.papermc.paper.registry.data.dialog.body.PlainMessageDialogBody
 import io.papermc.paper.registry.data.dialog.type.DialogType
-import java.awt.BasicStroke
-import java.awt.Color
-import java.awt.Font
-import java.awt.FontMetrics
-import java.awt.Graphics2D
-import java.awt.RenderingHints
-import java.awt.Shape
-import java.awt.image.BufferedImage
 import java.io.File
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 import java.util.UUID
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -43,76 +31,27 @@ import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
-import org.bukkit.Rotation
-import org.bukkit.Sound
-import org.bukkit.block.BlockFace
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.entity.BlockDisplay
-import org.bukkit.entity.Display
-import org.bukkit.entity.Entity
-import org.bukkit.entity.Interaction
-import org.bukkit.entity.ItemDisplay
-import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
-import org.bukkit.entity.TextDisplay
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.PlayerDeathEvent
-import org.bukkit.event.hanging.HangingBreakByEntityEvent
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCreativeEvent
-import org.bukkit.event.inventory.InventoryDragEvent
-import org.bukkit.event.player.PlayerChangedWorldEvent
-import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.SkullMeta
-import org.bukkit.map.MapCanvas
-import org.bukkit.map.MapRenderer
-import org.bukkit.map.MapView
-import org.bukkit.persistence.PersistentDataType
-import org.bukkit.util.Transformation
-import org.bukkit.util.Vector
-import org.joml.AxisAngle4f
-import org.joml.Vector3f
 
 @Suppress("UnstableApiUsage")
 object SLData : CommandExecutor, TabCompleter, Listener {
-  private const val GRAPH_COLUMNS = 9
-  private const val GRAPH_ROWS = 5
-  private const val DISPLAY_LIFETIME_TICKS = 20L * 90L
-  private const val DISPLAY_BACKGROUND_Z = 0.000
-  private const val DISPLAY_GRID_Z = 0.005
-  private const val DISPLAY_BAR_Z = 0.010
-  private const val DISPLAY_TEXT_Z = 0.020
-  private const val DISPLAY_BUTTON_BACK_Z = 0.030
-  private const val DISPLAY_BUTTON_FACE_Z = 0.035
-  private const val DISPLAY_BUTTON_TEXT_Z = 0.045
-  private const val DISPLAY_BUTTON_HIT_Z = 0.055
-  private const val DISPLAY_RENDER_MAX_Z = DISPLAY_BUTTON_TEXT_Z
-  private const val DISPLAY_PANEL_WIDTH = 3.8
-  private const val DISPLAY_PANEL_HEIGHT = 2.55
-  private const val DISPLAY_CHART_WIDTH = 2.85
-  private const val DISPLAY_CHART_HEIGHT = 1.35
-  private const val DISPLAY_BAR_WIDTH = 0.18
   private const val DIALOG_AXIS_MAX = 7500
   private const val DIALOG_AXIS_DIVISIONS = 5
   private const val DIALOG_GRAPH_ROWS = DIALOG_AXIS_DIVISIONS
   private const val DIALOG_BODY_WIDTH = 520
   private const val DIALOG_BUTTON_WIDTH = 130
   private const val DIALOG_ACTION_COLUMNS = 2
-  private const val DIALOG_FIXED_RANK_NAME_COLUMNS = 16
   private const val DIALOG_RANKING_NAME_COLUMNS = 10
   private const val DIALOG_BUILD_TITLE_COLUMNS = 10
   private const val DIALOG_RANK_BAR_COLUMNS = 24
@@ -132,28 +71,15 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   // \u8272\u3060\u3051\u3067\u6FC3\u6DE1\u3092\u8868\u3059(DIALOG_STYLE.md\u300C\u4F7F\u3046\u6587\u5B57\u300D\u53C2\u7167\u3001`\u2581\u2591\u2592\u2593\u2588`\u306E\u9001\u308A\u5E45\u4E0D\u4E00\u81F4\u3092\u56DE\u907F)\u3002
   private const val ACTIVITY_HEATMAP_CELL = '\u2B1B'
   private const val DIALOG_CONFIG_FILE_NAME = "sldata-dialog.yml"
-  private const val DIALOG_PREVIEW_FILE_NAME = "sldata-dialog-preview.yml"
   private const val DIALOG_STATS_TEXT_FILE_NAME = "sldata-stats2-text.md"
   private const val DIALOG_STATS_DUMP_FILE_NAME = "sldata-stats2-dump.txt"
   private val dialogStatsAliases = setOf("stats2", "stats", "detail", "details")
-  private const val BOARD_COLUMNS = 2
-  private const val BOARD_ROWS = 2
-  private const val WALL_MAP_COLUMNS = 2
-  private const val WALL_MAP_ROWS = 3
-  private val displayPanelKey = NamespacedKey(Tools.plugin, "sldata_display_panel")
-  private val displayOwnerKey = NamespacedKey(Tools.plugin, "sldata_display_owner")
-  private val displayActionKey = NamespacedKey(Tools.plugin, "sldata_display_action")
-  private val mapItemKey = NamespacedKey(Tools.plugin, "sldata_map_item")
-  private val boardFrameKey = NamespacedKey(Tools.plugin, "sldata_board_frame")
-  private val wallMapFrameKey = NamespacedKey(Tools.plugin, "sldata_wall_map_frame")
-  private val activeDisplays = mutableMapOf<UUID, DisplaySession>()
   private val activeDialogRequests = mutableMapOf<UUID, DialogRequest>()
   private val activeDialogRankingPeriods = mutableMapOf<UUID, RankingPeriod>()
   private val activeDialogStatsTargets = mutableMapOf<UUID, DialogStatsTarget>()
   private val activeDialogStatsCategories = mutableMapOf<UUID, DialogStatsCategory>()
   private val dialogStatsIncludeLifeWorld = mutableMapOf<UUID, Boolean>()
   @Volatile private var dialogRenderConfig: DialogRenderConfig? = null
-  @Volatile private var dialogPreviewConfig: DialogPreviewConfig? = null
   @Volatile private var dialogStatsText: DialogStatsText? = null
   private val dialogStatsPlainTextSerializer = PlainTextComponentSerializer.plainText()
   private val dialogWeekKey = Key.key("sociallikes3", "sldata_week")
@@ -161,10 +87,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private val dialogYearKey = Key.key("sociallikes3", "sldata_year")
   private val dialogOtherFormatsKey = Key.key("sociallikes3", "sldata_other_formats")
   private val dialogOtherFormatsBackKey = Key.key("sociallikes3", "sldata_other_formats_back")
-  private val dialogMapKey = Key.key("sociallikes3", "sldata_map")
-  private val dialogSlotsKey = Key.key("sociallikes3", "sldata_slots")
-  private val dialogDisplayKey = Key.key("sociallikes3", "sldata_display")
-  private val dialogPreviewReloadKey = Key.key("sociallikes3", "sldata_preview_reload")
   private val dialogPreviewGraphKey = Key.key("sociallikes3", "sldata_preview_graph")
   private val dialogRankingKey = Key.key("sociallikes3", "sldata_ranking")
   private val dialogRankingWeekKey = Key.key("sociallikes3", "sldata_ranking_week")
@@ -185,18 +107,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private val dialogStatsServerKey = Key.key("sociallikes3", "sldata_stats2_server")
   private val dialogCloseKey = Key.key("sociallikes3", "sldata_close")
   private val DIALOG_FONT = Key.key("minecraft", "uniform")
-  // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-  private val dialogExperimentalColorPickerKey =
-      Key.key("sociallikes3", "sldata_experimental_color_picker")
-  // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-  private val dialogExperimentalDefaultColorsKey =
-      Key.key("sociallikes3", "sldata_experimental_colors_default")
-  // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-  private val dialogExperimentalHighContrastColorsKey =
-      Key.key("sociallikes3", "sldata_experimental_colors_high_contrast")
-  // EXPERIMENTAL: per-player display-only palette state; it must not affect statistics or data
-  // loading.
-  private val dialogExperimentalPalettes = mutableMapOf<UUID, DialogTextPalette>()
 
   /**
    * Loads the editable stats2 copy on enable so syntax errors are visible before a player opens it.
@@ -355,33 +265,23 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     }
   }
 
-  fun cleanupLingeringDisplays() {
-    Bukkit.getWorlds().forEach { world ->
-      world.entities
-          .filter { it.persistentDataContainer.has(displayPanelKey, PersistentDataType.STRING) }
-          .forEach { it.remove() }
-    }
-    activeDisplays.clear()
-  }
-
   private fun sendModeList(player: Player) {
     player.sendMessage(Tools.socialLikesLOGO + " &f/sldata コマンド一覧".color())
     player.sendMessage("&7/sldata &f- あなたの総合統計ダイアログを開く".color())
     player.sendMessage("&7/sldata ranking &f- 今週の制作者別いいね数Top5を表示".color())
     player.sendMessage("&7/sldata server &f- 全員に公開する宣伝効果・掲載回数のサーバー集計を表示".color())
     if (player.isOp) {
-      player.sendMessage("&e/sldataop &7- 管理者用コマンド（マップ・ボード・他プレイヤー統計等）".color())
+      player.sendMessage("&e/sldataop &7- 管理者用コマンド（他プレイヤー統計等）".color())
     }
   }
 
   private fun handleDialog(player: Player, args: List<String>) {
     if (args.firstOrNull()?.equals("reload", ignoreCase = true) == true) {
       val config = reloadDialogRenderConfig()
-      val preview = reloadDialogPreviewConfig()
       val statsText = reloadDialogStatsText()
       player.sendMessage(
           Tools.socialLikesLOGO +
-              " &fdialog設定を再読込しました。style=${config.widthStyle.name.lowercase()} line='${config.lineChar}' empty='${config.emptyChar}' labels=${config.labelStyle.name.lowercase()} preview='${preview.title}' stats2-text=${statsText.loadedEntryCount}項目"
+              " &fdialog設定を再読込しました。style=${config.widthStyle.name.lowercase()} line='${config.lineChar}' empty='${config.emptyChar}' labels=${config.labelStyle.name.lowercase()} stats2-text=${statsText.loadedEntryCount}項目"
                   .color()
       )
       return
@@ -390,16 +290,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       openDialogRanking(player)
       return
     }
-    if (args.firstOrNull()?.lowercase() in setOf("fast", "test", "speed", "light")) {
-      handleDialogFast(player, args)
-      return
-    }
     if (args.firstOrNull()?.lowercase() in dialogStatsAliases) {
       handleDialogStats(player, args)
-      return
-    }
-    if (args.firstOrNull()?.lowercase() in setOf("preview", "file", "yaml")) {
-      openDialogPreview(player)
       return
     }
     openDialog(player, parseDialogRequest(args))
@@ -491,26 +383,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         }
         .filter { it.startsWith(input, ignoreCase = true) }
         .sortedBy { it.lowercase() }
-  }
-
-  private fun handleDialogFast(player: Player, args: List<String>) {
-    val targetName = args.getOrNull(1)
-    if (targetName == null) {
-      openDialogFast(player)
-      return
-    }
-    if (!player.isOp) {
-      player.sendMessage(Tools.socialLikesLOGO + " &c他プレイヤーの詳細統計を表示できるのはOPのみです。".color())
-      return
-    }
-    val target = Bukkit.getOfflinePlayer(targetName)
-    if (!target.isOnline && !target.hasPlayedBefore()) {
-      player.sendMessage(
-          Tools.socialLikesLOGO + " &cプレイヤー「$targetName」が見つかりません。参加済みのプレイヤー名を指定してください。".color()
-      )
-      return
-    }
-    openDialogFast(player, target.uniqueId, target.name ?: targetName)
   }
 
   private fun handleDialogStats(player: Player, args: List<String>) {
@@ -664,9 +536,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return config
   }
 
-  private fun currentDialogPreviewConfig(): DialogPreviewConfig =
-      dialogPreviewConfig ?: reloadDialogPreviewConfig()
-
   private fun currentDialogStatsText(): DialogStatsText = dialogStatsText ?: reloadDialogStatsText()
 
   internal fun reloadDialogStatsText(): DialogStatsText {
@@ -793,270 +662,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     }
   }
 
-  internal fun reloadDialogPreviewConfig(): DialogPreviewConfig {
-    val configFile = File(Tools.plugin.dataFolder, DIALOG_PREVIEW_FILE_NAME)
-    writeDefaultDialogPreviewConfigIfMissing(configFile)
-    val yaml = YamlConfiguration.loadConfiguration(configFile)
-    val title = yaml.getString("title")?.takeIf { it.isNotBlank() } ?: "SocialLikes3 Dialog Preview"
-    val subtitle = yaml.getString("subtitle") ?: ""
-    val body = readDialogPreviewBody(yaml)
-    val elements = parseDialogPreviewElements(yaml)
-    val config =
-        DialogPreviewConfig(
-            title = title,
-            subtitle = subtitle,
-            body = body,
-            elements = elements,
-            bodyWidth = yaml.getInt("body-width", DIALOG_BODY_WIDTH).coerceIn(160, 720),
-            useUniformFont = yaml.getBoolean("use-uniform-font", true),
-            showPlayerHead = yaml.getBoolean("show-player-head", true),
-            playerHeadWidth = yaml.getInt("player-head-width", 32).coerceIn(1, 256),
-            playerHeadHeight = yaml.getInt("player-head-height", 32).coerceIn(1, 256),
-            playerHeadAlign = DialogPreviewItemAlign.parse(yaml.getString("player-head-align")),
-            playerHeadSizes =
-                yaml
-                    .getIntegerList("player-head-sizes")
-                    .map { it.coerceIn(1, 256) }
-                    .distinct()
-                    .takeIf { it.isNotEmpty() },
-            columns = yaml.getInt("columns", 2).coerceIn(1, 4),
-        )
-    dialogPreviewConfig = config
-    Tools.plugin.logger.info(
-        "[SLData] Dialog preview loaded file=${configFile.absolutePath} title='${config.title}'" +
-            " bodyChars=${config.body.length} elements=${config.elements.size} width=${config.bodyWidth}"
-    )
-    return config
-  }
-
-  private fun parseDialogPreviewElements(yaml: YamlConfiguration): List<DialogPreviewElement> =
-      yaml.getMapList("elements").mapIndexedNotNull { index, raw ->
-        when (raw.previewString("type")?.trim()?.lowercase()) {
-          "plain-message",
-          "plain_message",
-          "message",
-          "text" ->
-              parseDialogPreviewMessage(raw, yaml.getInt("body-width", DIALOG_BODY_WIDTH))
-                  ?.let(DialogPreviewElement::Message)
-          "item",
-          "player-head",
-          "player_head" -> parseDialogPreviewItem(raw)
-          else -> {
-            Tools.plugin.logger.warning(
-                "[SLData] Dialog preview element #${index + 1} has an unknown type='${raw["type"]}'"
-            )
-            null
-          }
-        }
-      }
-
-  private fun parseDialogPreviewItem(raw: Map<*, *>): DialogPreviewElement.Item {
-    val materialName = raw.previewString("material") ?: "PLAYER_HEAD"
-    val material = Material.matchMaterial(materialName) ?: Material.PLAYER_HEAD
-    val description = raw.previewMap("description")?.let { parseDialogPreviewMessage(it, 200) }
-    val itemName =
-        raw.previewString("item-name")?.let { text ->
-          DialogPreviewMessage(
-              width = 200,
-              segments =
-                  listOf(
-                      DialogPreviewSegment(
-                          text = text,
-                          repeat = 1,
-                          color =
-                              previewColor(
-                                  raw.previewString("item-name-color"),
-                                  NamedTextColor.WHITE,
-                              ),
-                          font = parseDialogPreviewFont(raw.previewString("item-name-font")),
-                          hover = null,
-                          hoverColor = NamedTextColor.YELLOW,
-                      )
-                  ),
-          )
-        }
-    val lore =
-        raw.previewList("lore").mapNotNull { entry ->
-          when (entry) {
-            is Map<*, *> -> parseDialogPreviewMessage(entry, 200)
-            null -> null
-            else ->
-                DialogPreviewMessage(
-                    width = 200,
-                    segments =
-                        listOf(
-                            DialogPreviewSegment(
-                                text = entry.toString(),
-                                repeat = 1,
-                                color = NamedTextColor.GRAY,
-                                font = DIALOG_FONT,
-                                hover = null,
-                                hoverColor = NamedTextColor.YELLOW,
-                            )
-                        ),
-                )
-          }
-        }
-    return DialogPreviewElement.Item(
-        material = material,
-        playerUuid = raw.previewString("player-uuid"),
-        playerName = raw.previewString("player-name"),
-        itemName = itemName,
-        lore = lore,
-        description = description,
-        showTooltip = raw.previewBoolean("show-tooltip", true),
-        showDecorations = raw.previewBoolean("show-decorations", false),
-        width = raw.previewInt("width", 16).coerceIn(1, 256),
-        height = raw.previewInt("height", 16).coerceIn(1, 256),
-    )
-  }
-
-  private fun parseDialogPreviewMessage(
-      raw: Map<*, *>,
-      defaultWidth: Int,
-  ): DialogPreviewMessage? {
-    val segmentEntries = raw.previewList("segments")
-    val segments =
-        if (segmentEntries.isNotEmpty()) {
-          segmentEntries.mapNotNull { entry ->
-            when (entry) {
-              is Map<*, *> -> parseDialogPreviewSegment(entry)
-              null -> null
-              else ->
-                  DialogPreviewSegment(
-                      text = entry.toString(),
-                      repeat = 1,
-                      color = NamedTextColor.GRAY,
-                      font = DIALOG_FONT,
-                      hover = null,
-                      hoverColor = NamedTextColor.YELLOW,
-                  )
-            }
-          }
-        } else {
-          val text = raw.previewString("text") ?: raw.previewString("contents") ?: return null
-          listOf(
-              DialogPreviewSegment(
-                  text = text,
-                  repeat = raw.previewInt("repeat", 1).coerceIn(0, 512),
-                  color = previewColor(raw.previewString("color"), NamedTextColor.GRAY),
-                  font = parseDialogPreviewFont(raw.previewString("font")),
-                  hover = raw.previewString("hover"),
-                  hoverColor =
-                      previewColor(raw.previewString("hover-color"), NamedTextColor.YELLOW),
-              )
-          )
-        }
-    if (segments.isEmpty()) return null
-    return DialogPreviewMessage(
-        width = raw.previewInt("width", defaultWidth).coerceIn(1, 1024),
-        segments = segments,
-    )
-  }
-
-  private fun parseDialogPreviewSegment(raw: Map<*, *>): DialogPreviewSegment? {
-    val text = raw.previewString("text") ?: return null
-    return DialogPreviewSegment(
-        text = text,
-        repeat = raw.previewInt("repeat", 1).coerceIn(0, 512),
-        color = previewColor(raw.previewString("color"), NamedTextColor.GRAY),
-        font = parseDialogPreviewFont(raw.previewString("font")),
-        hover = raw.previewString("hover"),
-        hoverColor = previewColor(raw.previewString("hover-color"), NamedTextColor.YELLOW),
-    )
-  }
-
-  private fun parseDialogPreviewFont(raw: String?): Key? {
-    val normalized = raw?.trim()?.lowercase()
-    if (normalized in setOf("default", "none", "vanilla")) return null
-    if (normalized.isNullOrEmpty() || normalized == "uniform") return DIALOG_FONT
-    return runCatching { Key.key(if (':' in normalized) normalized else "minecraft:$normalized") }
-        .getOrDefault(DIALOG_FONT)
-  }
-
-  private fun previewColor(raw: String?, fallback: TextColor): TextColor {
-    val normalized = raw?.trim()?.lowercase() ?: return fallback
-    return when (normalized) {
-      "black" -> NamedTextColor.BLACK
-      "dark_blue" -> NamedTextColor.DARK_BLUE
-      "dark_green" -> NamedTextColor.DARK_GREEN
-      "dark_aqua" -> NamedTextColor.DARK_AQUA
-      "dark_red" -> NamedTextColor.DARK_RED
-      "dark_purple" -> NamedTextColor.DARK_PURPLE
-      "gold" -> NamedTextColor.GOLD
-      "gray",
-      "grey" -> NamedTextColor.GRAY
-      "dark_gray",
-      "dark_grey" -> NamedTextColor.DARK_GRAY
-      "blue" -> NamedTextColor.BLUE
-      "green" -> NamedTextColor.GREEN
-      "aqua" -> NamedTextColor.AQUA
-      "red" -> NamedTextColor.RED
-      "light_purple" -> NamedTextColor.LIGHT_PURPLE
-      "yellow" -> NamedTextColor.YELLOW
-      "white" -> NamedTextColor.WHITE
-      else ->
-          if (normalized.matches(Regex("#[0-9a-f]{6}"))) {
-            TextColor.color(normalized.drop(1).toInt(16))
-          } else {
-            fallback
-          }
-    }
-  }
-
-  private fun Map<*, *>.previewString(key: String): String? =
-      this[key]?.toString()?.takeIf { it.isNotBlank() }
-
-  private fun Map<*, *>.previewInt(key: String, fallback: Int): Int =
-      when (val value = this[key]) {
-        is Number -> value.toInt()
-        else -> value?.toString()?.toIntOrNull() ?: fallback
-      }
-
-  private fun Map<*, *>.previewBoolean(key: String, fallback: Boolean): Boolean =
-      when (val value = this[key]) {
-        is Boolean -> value
-        else -> value?.toString()?.toBooleanStrictOrNull() ?: fallback
-      }
-
-  private fun Map<*, *>.previewMap(key: String): Map<*, *>? = this[key] as? Map<*, *>
-
-  private fun Map<*, *>.previewList(key: String): List<*> =
-      this[key] as? List<*> ?: emptyList<Any>()
-
-  private fun readDialogPreviewBody(yaml: YamlConfiguration): String {
-    val stringBody = yaml.getString("body")
-    if (stringBody != null) return stringBody
-    val listBody = yaml.getStringList("body")
-    if (listBody.isNotEmpty()) return listBody.joinToString("\n")
-    return defaultDialogPreviewBody()
-  }
-
-  private fun writeDefaultDialogPreviewConfigIfMissing(configFile: File) {
-    if (configFile.isFile) return
-    configFile.parentFile?.mkdirs()
-    configFile.writeText(
-        """
-        # SocialLikes3 /sldata dialog preview.
-        # Change this file, then run /sldata dialog reload and /sldata dialog preview.
-        # This is rendered by the SocialLikes3 plugin through Paper Dialog API, not by a datapack.
-        title: "SocialLikes3 JSON/YAML Preview"
-        subtitle: "週間 ／ ２倍 ／ 合計 33,378 ／ ピーク 6,093"
-        body-width: 520
-        use-uniform-font: true
-        show-player-head: true
-        player-head-width: 32
-        player-head-height: 32
-        player-head-align: "left"
-        # player-head-sizes: [16, 32, 48, 64, 96, 128, 192, 256]
-        columns: 2
-        body: |-
-        ${defaultDialogPreviewBody().prependIndent("  ")}
-        """
-            .trimIndent() + "\n"
-    )
-  }
-
   private fun writeDefaultDialogConfigIfMissing(configFile: File) {
     if (configFile.isFile) return
     configFile.parentFile?.mkdirs()
@@ -1084,19 +689,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             .trimIndent() + "\n"
     )
   }
-
-  private fun defaultDialogPreviewBody(): String =
-      """
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁７，５００
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁６，０００
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁３，０００
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　　　
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁１，５００
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　　　
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　　０
-      ６月８日▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁７月６日▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁８月３日▁
-      """
-          .trimIndent()
 
   private fun parseDialogWidthStyle(yaml: YamlConfiguration): DialogWidthStyle {
     val explicitStyle = yaml.getString("style")?.trim()?.takeIf { it.isNotEmpty() }
@@ -1213,615 +805,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         else -> value.replace(' ', DIALOG_NBSP)
       }
 
-  private fun loadWeekly(): SLDataStatsService.LikeSeries =
-      SLDataStatsService.loadWeeklySeries(GRAPH_COLUMNS)
-
-  internal fun openSlots(player: Player) {
-    if (!player.isOp) {
-      player.sendMessage(Tools.socialLikesLOGO + " &cスロット表示は管理者専用です。/sldata をご利用ください。".color())
-      return
-    }
-    val series = loadWeekly()
-    val holder = SlotsInventoryHolder()
-    val inventory =
-        Bukkit.createInventory(
-            holder,
-            54,
-            Component.text(
-                "SL ${series.sparkline} ${series.total} likes",
-                NamedTextColor.LIGHT_PURPLE,
-            ),
-        )
-    holder.bind(inventory)
-
-    val niceMax = SLDataStatsService.niceMax(series.peak)
-    series.buckets.take(GRAPH_COLUMNS).forEachIndexed { column, bucket ->
-      val height = SLDataStatsService.scaleLevel(bucket.count, niceMax, GRAPH_ROWS)
-      (0 until GRAPH_ROWS).forEach { rowFromTop ->
-        val filled = GRAPH_ROWS - rowFromTop <= height
-        val material =
-            if (!filled) {
-              Material.GRAY_STAINED_GLASS_PANE
-            } else {
-              when (rowFromTop) {
-                0 -> Material.LIME_CONCRETE
-                1 -> Material.GREEN_CONCRETE
-                2 -> Material.LIME_WOOL
-                3 -> Material.YELLOW_STAINED_GLASS_PANE
-                else -> Material.ORANGE_STAINED_GLASS_PANE
-              }
-            }
-        inventory.setItem(
-            column + rowFromTop * GRAPH_COLUMNS,
-            ItemStack(material)
-                .allFlag()
-                .addText(
-                    "&f${bucket.label}",
-                    mutableListOf(
-                        "&7いいね: &e${bucket.count}",
-                        "&7表示高: $height/$GRAPH_ROWS",
-                        "&7最大目盛: $niceMax",
-                    ),
-                ),
-        )
-      }
-    }
-
-    listOf(
-            45 to
-                ItemStack(Material.ARROW)
-                    .allFlag()
-                    .addText("&f前へ", mutableListOf("&7実験POC: 直近9週固定")),
-            49 to
-                ItemStack(Material.CLOCK).allFlag().addText("&e週間", mutableListOf("&7期間切替の見た目確認用")),
-            53 to
-                ItemStack(Material.ARROW)
-                    .allFlag()
-                    .addText("&f次へ", mutableListOf("&7実験POC: 直近9週固定")),
-            48 to
-                ItemStack(Material.PAPER)
-                    .allFlag()
-                    .addText("&b合計", mutableListOf("&7${series.total} likes")),
-            50 to
-                ItemStack(Material.EMERALD)
-                    .allFlag()
-                    .addText("&aピーク", mutableListOf("&7${series.peak} likes")),
-            52 to
-                ItemStack(Material.BARRIER)
-                    .allFlag()
-                    .addText("&c閉じる", mutableListOf("&7クリックで閉じます")),
-        )
-        .forEach { (slot, item) -> inventory.setItem(slot, item) }
-
-    player.openInventory(inventory)
-    player.sendMessage(Tools.socialLikesLOGO + " &fslots: 統合版でも見える想定のバニラスロットGUIです。".color())
-  }
-
-  internal fun openDisplay(player: Player, period: Period = Period.WEEK) {
-    if (!player.isOp) {
-      player.sendMessage(Tools.socialLikesLOGO + " &cディスプレイ表示は管理者専用です。/sldata をご利用ください。".color())
-      return
-    }
-    val eye = player.eyeLocation
-    val forward =
-        eye.direction.clone().setY(0).let {
-          if (it.lengthSquared() <= 0.0001) Vector(0, 0, 1) else it.normalize()
-        }
-    val base = eye.clone().add(forward.clone().multiply(2.8))
-    base.y -= 0.35
-    base.yaw = normalizeYaw(eye.yaw + 180f)
-    base.pitch = 0f
-    openDisplayAt(
-        player,
-        period,
-        DisplayGeometry(
-            base,
-            forward,
-            forward.clone().crossProduct(Vector(0, 1, 0)).normalize(),
-            Vector(0, 1, 0),
-        ),
-    )
-  }
-
-  private fun openDisplayAt(player: Player, period: Period, geometry: DisplayGeometry) {
-    val series = SLDataStatsService.loadSeries(period, GRAPH_COLUMNS)
-    clearDisplay(player.uniqueId)
-
-    val base = geometry.base.clone()
-    val forward = geometry.forward.clone()
-    val right = geometry.right.clone()
-    val up = geometry.up.clone()
-    val ids = mutableSetOf<UUID>()
-    val niceMax = SLDataStatsService.niceMax(series.peak)
-    val ticks = SLDataStatsService.axisTicks(niceMax)
-    val chartLeft = -1.32
-    val chartBottom = -0.42
-    val title = summaryTitle(series)
-    val buttonHitLogs = mutableListOf<String>()
-    Tools.plugin.logger.info(
-        "[SLData] Display ${period.name.lowercase()} bucketOrder(oldToNew)=" +
-            series.buckets.joinToString(" -> ") { "${it.label}:${it.count}" }
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Display ${period.name.lowercase()} layers z background=$DISPLAY_BACKGROUND_Z grid=$DISPLAY_GRID_Z" +
-            " bar=$DISPLAY_BAR_Z text=$DISPLAY_TEXT_Z buttonBack=$DISPLAY_BUTTON_BACK_Z" +
-            " buttonFace=$DISPLAY_BUTTON_FACE_Z buttonText=$DISPLAY_BUTTON_TEXT_Z hit=$DISPLAY_BUTTON_HIT_Z" +
-            " hitAhead=${DISPLAY_BUTTON_HIT_Z > DISPLAY_RENDER_MAX_Z}"
-    )
-
-    fun track(entity: Entity) {
-      entity.persistentDataContainer.set(displayPanelKey, PersistentDataType.STRING, "1")
-      entity.persistentDataContainer.set(
-          displayOwnerKey,
-          PersistentDataType.STRING,
-          player.uniqueId.toString(),
-      )
-      ids += entity.uniqueId
-    }
-
-    fun panelLoc(x: Double, y: Double, z: Double): Location =
-        base
-            .clone()
-            .add(right.clone().multiply(x))
-            .add(up.clone().multiply(y))
-            .add(forward.clone().multiply(-z))
-
-    fun prepareDisplay(entity: Display) {
-      entity.setBillboard(Display.Billboard.FIXED)
-      entity.setRotation(base.yaw, 0f)
-      entity.setBrightness(Display.Brightness(15, 15))
-      track(entity)
-    }
-
-    fun spawnBlock(
-        x: Double,
-        y: Double,
-        z: Double,
-        width: Float,
-        height: Float,
-        depth: Float,
-        material: Material,
-    ) {
-      player.world.spawn(panelLoc(x, y, z), BlockDisplay::class.java) {
-        it.setBlock(material.createBlockData())
-        prepareDisplay(it)
-        it.setTransformation(centeredBlockTransform(width, height, depth))
-      }
-    }
-
-    fun spawnText(
-        x: Double,
-        y: Double,
-        z: Double,
-        text: Component,
-        scale: Float,
-        lineWidth: Int,
-        alignment: TextDisplay.TextAlignment = TextDisplay.TextAlignment.CENTER,
-    ) {
-      player.world.spawn(panelLoc(x, y, z), TextDisplay::class.java) {
-        it.text(text)
-        prepareDisplay(it)
-        it.setAlignment(alignment)
-        it.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0))
-        it.setShadowed(true)
-        it.setLineWidth(lineWidth)
-        it.setTransformation(scaleTransform(scale, scale, scale))
-      }
-    }
-
-    fun spawnButton(x: Double, label: String, action: String, selected: Boolean = false) {
-      val y = -1.03
-      spawnBlock(x, y, DISPLAY_BUTTON_BACK_Z, 0.78f, 0.32f, 0.001f, Material.WHITE_CONCRETE)
-      spawnBlock(
-          x,
-          y,
-          DISPLAY_BUTTON_FACE_Z,
-          0.72f,
-          0.26f,
-          0.001f,
-          if (selected) Material.LIME_CONCRETE else Material.GRAY_CONCRETE,
-      )
-      spawnText(
-          x,
-          y - 0.045,
-          DISPLAY_BUTTON_TEXT_Z,
-          Component.text(label, if (selected) NamedTextColor.BLACK else NamedTextColor.WHITE),
-          0.30f,
-          78,
-      )
-      player.world.spawn(panelLoc(x, y, DISPLAY_BUTTON_HIT_Z), Interaction::class.java) {
-        it.setInteractionWidth(0.82f)
-        it.setInteractionHeight(0.38f)
-        it.setResponsive(true)
-        it.persistentDataContainer.set(displayActionKey, PersistentDataType.STRING, action)
-        track(it)
-      }
-      buttonHitLogs +=
-          "$action=center(${String.format("%.2f", x)},${String.format("%.2f", y)},z=$DISPLAY_BUTTON_HIT_Z)" +
-              " size(0.82x0.38) renderMaxZ=$DISPLAY_RENDER_MAX_Z"
-    }
-
-    player.world.spawn(panelLoc(0.0, 0.0, DISPLAY_BACKGROUND_Z), BlockDisplay::class.java) {
-      it.setBlock(Material.BLACK_CONCRETE.createBlockData())
-      prepareDisplay(it)
-      it.setTransformation(
-          centeredBlockTransform(
-              DISPLAY_PANEL_WIDTH.toFloat(),
-              DISPLAY_PANEL_HEIGHT.toFloat(),
-              0.001f,
-          )
-      )
-    }
-
-    spawnText(
-        0.0,
-        0.92,
-        DISPLAY_TEXT_Z,
-        Component.text(title, NamedTextColor.WHITE),
-        0.55f,
-        320,
-    )
-    spawnText(
-        0.0,
-        0.72,
-        DISPLAY_TEXT_Z,
-        Component.text(
-            "${series.period.label} / 合計 ${formatCount(series.total)} / ピーク ${formatCount(series.peak)}",
-            NamedTextColor.GRAY,
-        ),
-        0.42f,
-        320,
-    )
-
-    ticks.forEach { tick ->
-      val y = chartBottom + DISPLAY_CHART_HEIGHT * tick.toDouble() / niceMax.toDouble()
-      spawnBlock(
-          0.0,
-          y,
-          DISPLAY_GRID_Z,
-          DISPLAY_CHART_WIDTH.toFloat(),
-          if (tick == 0) 0.018f else 0.010f,
-          0.001f,
-          Material.GRAY_CONCRETE,
-      )
-      spawnText(
-          1.62,
-          y - 0.035,
-          DISPLAY_TEXT_Z,
-          Component.text(formatCount(tick), NamedTextColor.GRAY),
-          0.30f,
-          60,
-          TextDisplay.TextAlignment.LEFT,
-      )
-    }
-
-    series.buckets.forEachIndexed { index, bucket ->
-      val x = chartLeft + index * (DISPLAY_CHART_WIDTH / (GRAPH_COLUMNS - 1))
-      val height = bucket.count.toDouble() / niceMax.toDouble() * DISPLAY_CHART_HEIGHT
-      if (bucket.count > 0) {
-        spawnBlock(
-            x,
-            chartBottom + height / 2.0,
-            DISPLAY_BAR_Z,
-            DISPLAY_BAR_WIDTH.toFloat(),
-            height.toFloat(),
-            0.001f,
-            Material.LIME_CONCRETE,
-        )
-      }
-
-      if (
-          index == 0 || index == series.buckets.lastIndex || index == series.buckets.lastIndex / 2
-      ) {
-        spawnText(
-            x,
-            chartBottom - 0.20,
-            DISPLAY_TEXT_Z,
-            Component.text(bucket.label.replace("週", ""), NamedTextColor.GRAY),
-            0.28f,
-            52,
-        )
-      }
-
-      if (bucket.count == series.peak) {
-        spawnText(
-            x,
-            chartBottom + height + 0.08,
-            DISPLAY_TEXT_Z,
-            Component.text(formatCount(bucket.count), NamedTextColor.YELLOW),
-            0.28f,
-            64,
-        )
-      }
-    }
-
-    player.world.spawn(panelLoc(-1.68, 0.92, DISPLAY_TEXT_Z), ItemDisplay::class.java) {
-      it.setItemStack(ItemStack(Material.EMERALD))
-      prepareDisplay(it)
-      it.setTransformation(scaleTransform(0.45f, 0.45f, 0.45f))
-    }
-
-    spawnButton(-1.23, "週間", "week", period == Period.WEEK)
-    spawnButton(-0.41, "月間", "month", period == Period.MONTH)
-    spawnButton(0.41, "年間", "year", period == Period.YEAR)
-    spawnButton(1.23, "閉じる", "close")
-    Tools.plugin.logger.info(
-        "[SLData] Display ${period.name.lowercase()} interactionHitboxes " +
-            buttonHitLogs.joinToString("; ")
-    )
-
-    val session = DisplaySession(ids.toMutableSet(), DisplayGeometry(base, forward, right, up))
-    activeDisplays[player.uniqueId] = session
-    Bukkit.getScheduler()
-        .runTaskLater(
-            Tools.plugin,
-            Runnable { clearDisplay(player.uniqueId, expectedIds = session.ids.toSet()) },
-            DISPLAY_LIFETIME_TICKS,
-        )
-    player.sendMessage(
-        Tools.socialLikesLOGO +
-            " &fdisplay: ${series.period.label}パネルを90秒表示しました。Geyser統合版は不可見込みです。".color()
-    )
-  }
-
-  private fun giveMap(player: Player) {
-    if (!player.isOp) {
-      player.sendMessage(Tools.socialLikesLOGO + " &cマップ表示は管理者専用です。/sldata をご利用ください。".color())
-      return
-    }
-    val series = loadWeekly()
-    GraphImageRenderer.logTextFit("handheld", series, "SL Weekly - ${player.name}", 128, 128)
-    val item = findReusableMap(player) ?: ItemStack(Material.FILLED_MAP)
-    val mapView = Bukkit.createMap(player.world)
-    mapView.setTrackingPosition(false)
-    mapView.setUnlimitedTracking(false)
-    mapView.setLocked(true)
-    mapView.renderers.toList().forEach { mapView.removeRenderer(it) }
-    mapView.addRenderer(SeriesMapRenderer(series, "SL Weekly - ${player.name}", 128, 128, 0, 0))
-
-    val meta = item.itemMeta as MapMeta
-    meta.setMapView(mapView)
-    meta.persistentDataContainer.set(mapItemKey, PersistentDataType.STRING, "1")
-    meta.setDisplayName("&dSocialLikes 統計マップ".color())
-    meta.lore = listOf("&7直近9週 / ${series.total} likes".color(), "&7/sldata map で再利用更新".color())
-    item.itemMeta = meta
-
-    if (!player.inventory.contents.any { it === item }) {
-      val leftover = player.inventory.addItem(item)
-      leftover.values.forEach { player.world.dropItemNaturally(player.location, it) }
-    }
-    player.sendMessage(Tools.socialLikesLOGO + " &fmap: 手持ちマップを渡しました。統合版でも見える想定です。".color())
-  }
-
-  internal fun handleMap(player: Player, args: List<String>) {
-    when (args.firstOrNull()?.lowercase()) {
-      "wall" -> placeWallMap(player)
-      "remove" -> removeWallMap(player)
-      "home" -> giveHomeGroundMap(player)
-      else -> giveMap(player)
-    }
-  }
-
-  private fun giveHomeGroundMap(player: Player) {
-    val home = SLDatabase.loadHomeGroundBlocking(player.uniqueId.toString())
-    if (home == null) {
-      player.sendMessage(Tools.socialLikesLOGO + " &e自分の登録済み建築がないため、ホームグラウンドを描けません。".color())
-      return
-    }
-    val world = Bukkit.getWorld(home.worldName)
-    if (world == null) {
-      player.sendMessage(
-          Tools.socialLikesLOGO + " &c${home.worldName} が読み込まれていないため、マップを作れません。".color()
-      )
-      return
-    }
-    val points = SLDatabase.loadHomeGroundPointsBlocking(player.uniqueId.toString(), home.worldName)
-    val item = findReusableMap(player) ?: ItemStack(Material.FILLED_MAP)
-    val mapView = Bukkit.createMap(world)
-    mapView.setTrackingPosition(false)
-    mapView.setUnlimitedTracking(false)
-    mapView.setLocked(true)
-    mapView.renderers.toList().forEach { mapView.removeRenderer(it) }
-    mapView.addRenderer(HomeGroundMapRenderer(home, points))
-
-    val meta = item.itemMeta as MapMeta
-    meta.setMapView(mapView)
-    meta.persistentDataContainer.set(mapItemKey, PersistentDataType.STRING, "1")
-    meta.setDisplayName("&dSocialLikes ホームグラウンド".color())
-    meta.lore =
-        listOf(
-            "&7${home.worldName} chunk (${home.chunkX}, ${home.chunkZ})".color(),
-            "&7建築 ${home.buildCount} / 受けたいいね ${home.receivedLikes}".color(),
-            "&7紫=自作品 / 赤=ホームグラウンド".color(),
-        )
-    item.itemMeta = meta
-    if (!player.inventory.contents.any { it === item }) {
-      val leftover = player.inventory.addItem(item)
-      leftover.values.forEach { player.world.dropItemNaturally(player.location, it) }
-    }
-    player.sendMessage(
-        Tools.socialLikesLOGO +
-            " &fホームグラウンド: ${home.worldName} chunk (${home.chunkX}, ${home.chunkZ}) をマップにプロットしました。"
-                .color()
-    )
-  }
-
-  private fun openLuckyBuild(player: Player) {
-    val build = SLDatabase.loadLuckyUnlikedBuildBlocking(player.uniqueId.toString())
-    if (build == null) {
-      player.sendMessage(Tools.socialLikesLOGO + " &e未いいねの他者建築は見つかりませんでした。".color())
-      return
-    }
-    val owner =
-        SLDatabase.loadPlayerNamesBlocking(listOf(build.ownerUuid))[build.ownerUuid] ?: "unknown"
-    player.sendMessage(
-        Tools.socialLikesLOGO +
-            " &dLucky! &f${owner}さんの「${build.title}」(ID:${build.id}) を案内します。".color()
-    )
-    Bukkit.dispatchCommand(player, "sltp ${build.id}")
-  }
-
-  private fun placeWallMap(player: Player) {
-    val trace = player.world.rayTraceBlocks(player.eyeLocation, player.eyeLocation.direction, 6.0)
-    val hitBlock = trace?.hitBlock
-    val face = trace?.hitBlockFace
-    if (hitBlock == null || face == null || face == BlockFace.UP || face == BlockFace.DOWN) {
-      player.sendMessage(Tools.socialLikesLOGO + " &c設置先の壁を6ブロック以内で見てください。".color())
-      return
-    }
-
-    val horizontal = horizontalForWall(face)
-    val origin = hitBlock.getRelative(face).location
-    val frameLocations =
-        (0 until WALL_MAP_ROWS).flatMap { row ->
-          (0 until WALL_MAP_COLUMNS).map { column ->
-            origin.clone().add(horizontal.clone().multiply(column)).add(0.0, -row.toDouble(), 0.0)
-          }
-        }
-    val blocked =
-        frameLocations.firstOrNull { location ->
-          val frameBlock = location.block
-          val support = frameBlock.getRelative(face.oppositeFace)
-          !support.type.isSolid || !(frameBlock.type.isAir || frameBlock.isPassable)
-        }
-    if (blocked != null) {
-      player.sendMessage(
-          Tools.socialLikesLOGO +
-              " &c2x3の設置空間が足りません: ${blocked.blockX},${blocked.blockY},${blocked.blockZ}".color()
-      )
-      return
-    }
-
-    removeWallMap(player, silent = true)
-    val stats = SLDataStatsService.loadBoardStats()
-    val image = WallMapImageRenderer.render(stats, "SL Weekly - ${player.name}", 256, 384)
-    WallMapImageRenderer.logTextFit("wall", stats, "SL Weekly - ${player.name}", 256, 384)
-    var placed = 0
-
-    for (row in 0 until WALL_MAP_ROWS) {
-      for (column in 0 until WALL_MAP_COLUMNS) {
-        val frameLocation =
-            origin.clone().add(horizontal.clone().multiply(column)).add(0.0, -row.toDouble(), 0.0)
-        val mapView = Bukkit.createMap(player.world)
-        mapView.setTrackingPosition(false)
-        mapView.setUnlimitedTracking(false)
-        mapView.setLocked(true)
-        mapView.renderers.toList().forEach { mapView.removeRenderer(it) }
-        mapView.addRenderer(ImageTileMapRenderer(image, column * 128, row * 128))
-
-        val mapItem = ItemStack(Material.FILLED_MAP)
-        val meta = mapItem.itemMeta as MapMeta
-        meta.setMapView(mapView)
-        meta.setDisplayName("&dSocialLikes 壁掛け統計マップ".color())
-        mapItem.itemMeta = meta
-
-        val frame =
-            player.world.spawn(frameLocation, ItemFrame::class.java) {
-              it.setFacingDirection(face, true)
-              it.setItem(mapItem, false)
-              it.setRotation(Rotation.NONE)
-              it.setFixed(true)
-              it.setVisible(false)
-              it.persistentDataContainer.set(wallMapFrameKey, PersistentDataType.STRING, "1")
-            }
-        placed += if (frame.isValid) 1 else 0
-      }
-    }
-
-    player.sendMessage(Tools.socialLikesLOGO + " &fmap wall: 2x3の壁掛けマップを${placed}枚で設置しました。".color())
-  }
-
-  private fun removeWallMap(player: Player, silent: Boolean = false) {
-    val removed =
-        player.location
-            .getNearbyEntities(12.0, 8.0, 12.0)
-            .filter { it.persistentDataContainer.has(wallMapFrameKey, PersistentDataType.STRING) }
-            .onEach { it.remove() }
-            .size
-    if (!silent) {
-      player.sendMessage(
-          Tools.socialLikesLOGO + " &fmap wall: 近くの壁掛けマップを${removed}件撤去しました。".color()
-      )
-    }
-  }
-
-  internal fun handleBoard(player: Player, args: List<String>) {
-    when (args.firstOrNull()?.lowercase()) {
-      "remove" -> removeBoard(player)
-      else -> placeBoard(player)
-    }
-  }
-
-  private fun placeBoard(player: Player) {
-    val trace = player.world.rayTraceBlocks(player.eyeLocation, player.eyeLocation.direction, 6.0)
-    val hitBlock = trace?.hitBlock
-    val face = trace?.hitBlockFace
-    if (hitBlock == null || face == null || face == BlockFace.UP || face == BlockFace.DOWN) {
-      player.sendMessage(Tools.socialLikesLOGO + " &c設置先の壁を6ブロック以内で見てください。".color())
-      return
-    }
-
-    removeBoard(player, silent = true)
-    val stats = SLDataStatsService.loadBoardStats()
-    val image = BoardImageRenderer.render(stats, 256, 256)
-    val horizontal = horizontalForWall(face)
-    val origin = hitBlock.getRelative(face).location
-    var placed = 0
-
-    for (row in 0 until BOARD_ROWS) {
-      for (column in 0 until BOARD_COLUMNS) {
-        val frameLocation =
-            origin.clone().add(horizontal.clone().multiply(column)).add(0.0, -row.toDouble(), 0.0)
-        val mapView = Bukkit.createMap(player.world)
-        mapView.setTrackingPosition(false)
-        mapView.setUnlimitedTracking(false)
-        mapView.setLocked(true)
-        mapView.renderers.toList().forEach { mapView.removeRenderer(it) }
-        mapView.addRenderer(ImageTileMapRenderer(image, column * 128, row * 128))
-
-        val mapItem = ItemStack(Material.FILLED_MAP)
-        val meta = mapItem.itemMeta as MapMeta
-        meta.setMapView(mapView)
-        meta.setDisplayName("&dSocialLikes 公共統計ボード".color())
-        mapItem.itemMeta = meta
-
-        val frame =
-            player.world.spawn(frameLocation, ItemFrame::class.java) {
-              it.setFacingDirection(face, true)
-              it.setItem(mapItem, false)
-              it.setRotation(Rotation.NONE)
-              it.setFixed(true)
-              it.setVisible(false)
-              it.persistentDataContainer.set(boardFrameKey, PersistentDataType.STRING, "1")
-            }
-        placed += if (frame.isValid) 1 else 0
-      }
-    }
-
-    player.sendMessage(
-        Tools.socialLikesLOGO + " &fboard: ${placed}枚のマップで公共統計ボードを設置しました。統合版でも見える想定です。".color()
-    )
-  }
-
-  private fun removeBoard(player: Player, silent: Boolean = false) {
-    val removed =
-        player.location
-            .getNearbyEntities(12.0, 8.0, 12.0)
-            .filter { it.persistentDataContainer.has(boardFrameKey, PersistentDataType.STRING) }
-            .onEach { it.remove() }
-            .size
-    if (!silent) {
-      player.sendMessage(Tools.socialLikesLOGO + " &fboard: 近くの実験ボードを${removed}件撤去しました。".color())
-    }
-  }
-
-  private fun horizontalForWall(face: BlockFace): Vector =
-      when (face) {
-        BlockFace.NORTH,
-        BlockFace.SOUTH -> Vector(1, 0, 0)
-        else -> Vector(0, 0, 1)
-      }
-
   private fun openDialog(player: Player, request: DialogRequest) {
     openDialog(player, request.period)
   }
@@ -1836,8 +819,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val subtitle = dialogSubtitle(series, size, config)
     val graph = buildDialogGraph(series, size, config)
     val bodyWidth = dialogBodyWidth(graph)
-    val playerHeadBody =
-        dialogPlayerHeadBody(player, series, bodyWidth, 32, 32, DialogPreviewItemAlign.LEFT)
+    val playerHeadBody = dialogPlayerHeadBody(player, series, bodyWidth, 32, 32)
     logDialogGraphPreview(period, size, graph, subtitle)
 
     val actions =
@@ -1855,7 +837,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogButton(
                 stats2Text("Section.stats2.actions.other_formats_label", "他の形式で見る"),
-                "ランキング、Map、Slots、Display",
+                "ランキング",
                 dialogOtherFormatsKey,
             ),
         )
@@ -1901,134 +883,14 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     )
   }
 
-  internal fun openDialogPreview(player: Player) {
-    val preview = currentDialogPreviewConfig()
-    val series = loadWeekly()
-    val bodyText =
-        if (preview.useUniformFont)
-            Component.text(preview.body, NamedTextColor.GRAY).font(DIALOG_FONT)
-        else Component.text(preview.body, NamedTextColor.GRAY)
-    val body = mutableListOf<DialogBody>()
-    if (preview.subtitle.isNotBlank()) {
-      val subtitle =
-          if (preview.useUniformFont) {
-            Component.text(preview.subtitle, NamedTextColor.GRAY).font(DIALOG_FONT)
-          } else {
-            Component.text(preview.subtitle, NamedTextColor.GRAY)
-          }
-      body += DialogBody.plainMessage(subtitle, preview.bodyWidth)
-    }
-    if (preview.elements.isNotEmpty()) {
-      body += preview.elements.map { renderDialogPreviewElement(it, player) }
-    } else {
-      if (preview.showPlayerHead) {
-        body += dialogPlayerHeadBodies(player, series, preview)
-      }
-      body += DialogBody.plainMessage(bodyText, preview.bodyWidth)
-    }
-
-    val actions =
-        listOf(
-            dialogButton("再読込", "$DIALOG_PREVIEW_FILE_NAME を再読込", dialogPreviewReloadKey),
-            dialogButton("通常グラフ", "生成済み統計グラフへ戻る", dialogPreviewGraphKey),
-        )
-    val dialog =
-        Dialog.create { builder ->
-          builder
-              .empty()
-              .base(
-                  DialogBase.builder(Component.text(preview.title, NamedTextColor.LIGHT_PURPLE))
-                      .canCloseWithEscape(true)
-                      .afterAction(DialogBase.DialogAfterAction.CLOSE)
-                      .body(body)
-                      .build()
-              )
-              .type(
-                  DialogType.multiAction(actions)
-                      .columns(preview.columns)
-                      .exitAction(dialogButton("閉じる", "閉じます", dialogCloseKey))
-                      .build()
-              )
-        }
-    player.showDialog(dialog)
-    player.sendMessage(
-        Tools.socialLikesLOGO +
-            " &fdialog preview: $DIALOG_PREVIEW_FILE_NAME をPaper Dialog APIで送信しました。".color()
-    )
-  }
-
-  private fun renderDialogPreviewElement(
-      element: DialogPreviewElement,
-      player: Player,
-  ): DialogBody =
-      when (element) {
-        is DialogPreviewElement.Message ->
-            DialogBody.plainMessage(
-                dialogPreviewComponent(element.message),
-                element.message.width,
-            )
-        is DialogPreviewElement.Item -> {
-          val item = ItemStack(element.material)
-          val meta = item.itemMeta
-          if (meta is SkullMeta && element.material == Material.PLAYER_HEAD) {
-            val owner =
-                element.playerUuid?.let(::parseUuid)?.let(Bukkit::getOfflinePlayer)
-                    ?: element.playerName?.let(Bukkit::getOfflinePlayer)
-                    ?: player
-            meta.owningPlayer = owner
-          }
-          element.itemName?.let { meta.displayName(dialogPreviewComponent(it)) }
-          if (element.lore.isNotEmpty()) {
-            meta.lore(element.lore.map(::dialogPreviewComponent))
-          }
-          item.itemMeta = meta
-
-          val builder =
-              DialogBody.item(item)
-                  .showTooltip(element.showTooltip)
-                  .showDecorations(element.showDecorations)
-                  .width(element.width)
-                  .height(element.height)
-          element.description?.let {
-            builder.description(DialogBody.plainMessage(dialogPreviewComponent(it), it.width))
-          }
-          builder.build()
-        }
-      }
-
-  private fun dialogPreviewComponent(message: DialogPreviewMessage): Component {
-    var result: Component = Component.empty()
-    message.segments.forEach { segment ->
-      var part: Component = Component.text(segment.text.repeat(segment.repeat), segment.color)
-      segment.font?.let { part = part.font(it) }
-      segment.hover?.let { hover ->
-        var hoverComponent: Component = Component.text(hover, segment.hoverColor)
-        segment.font?.let { hoverComponent = hoverComponent.font(it) }
-        part = part.hoverEvent(hoverComponent)
-      }
-      result = result.append(part)
-    }
-    return result
-  }
-
-  // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-  // This presentation-only layer deliberately has no access to statistics or database code.
-  private fun dialogTextPalette(player: Player): DialogTextPalette =
-      dialogExperimentalPalettes[player.uniqueId] ?: DialogTextPalette.DEFAULT
+  private fun dialogTextPalette(player: Player): DialogTextPalette = DialogTextPalette.DEFAULT
 
   private fun openDialogOtherFormats(player: Player) {
-    val isOp = player.isOp
-    val actions = buildList {
-      add(dialogButton("ランキング", "制作者別いいね数 Top5", dialogRankingKey))
-      if (isOp) {
-        add(dialogButton("Mapで見る", "/sldataop map を実行", dialogMapKey))
-        add(dialogButton("Slotsで見る", "/sldataop slots を実行", dialogSlotsKey))
-        add(dialogButton("Displayで見る", "/sldataop display を実行", dialogDisplayKey))
-        // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-        add(dialogButton("実験: 文字色", "UIチューニング用。採用未定", dialogExperimentalColorPickerKey))
-      }
-      add(dialogButton("グラフへ戻る", "通常のグラフへ戻る", dialogOtherFormatsBackKey))
-    }
+    val actions =
+        listOf(
+            dialogButton("ランキング", "制作者別いいね数 Top5", dialogRankingKey),
+            dialogButton("グラフへ戻る", "通常のグラフへ戻る", dialogOtherFormatsBackKey),
+        )
     player.showDialog(
         Dialog.create { builder ->
           builder
@@ -2043,47 +905,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                                   Component.text(
                                           "ランキングや別の表示方式を選べます。",
                                           dialogTextPalette(player).secondary,
-                                      )
-                                      .font(DIALOG_FONT),
-                                  DIALOG_BODY_WIDTH,
-                              )
-                          )
-                      )
-                      .build()
-              )
-              .type(
-                  DialogType.multiAction(actions)
-                      .columns(2)
-                      .exitAction(dialogButton("閉じる", "閉じます", dialogCloseKey))
-                      .build()
-              )
-        }
-    )
-  }
-
-  // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-  private fun openDialogExperimentalColorPicker(player: Player) {
-    val selected = dialogTextPalette(player)
-    val actions =
-        listOf(
-            dialogButton("標準（明るい）", "現在の標準配色", dialogExperimentalDefaultColorsKey),
-            dialogButton("高コントラスト", "白と黄を強めた検証配色", dialogExperimentalHighContrastColorsKey),
-            dialogButton("戻る", "他の形式で見るへ戻る", dialogOtherFormatsKey),
-        )
-    player.showDialog(
-        Dialog.create { builder ->
-          builder
-              .empty()
-              .base(
-                  DialogBase.builder(Component.text("実験: 文字色チューニング", NamedTextColor.YELLOW))
-                      .canCloseWithEscape(true)
-                      .afterAction(DialogBase.DialogAfterAction.CLOSE)
-                      .body(
-                          listOf(
-                              DialogBody.plainMessage(
-                                  Component.text(
-                                          "この画面は UI 調整専用です（採用未定）。現在: ${selected.label}",
-                                          selected.primary,
                                       )
                                       .font(DIALOG_FONT),
                                   DIALOG_BODY_WIDTH,
@@ -2175,7 +996,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 stats2Text("Section.stats2.actions.other_formats_label", "他の形式で見る"),
                 stats2Text(
                     "Section.stats2.actions.other_formats_tooltip",
-                    "Map、Slots、Displayを選択",
+                    "ランキングを選択",
                 ),
                 dialogOtherFormatsKey,
             ),
@@ -2206,206 +1027,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     player.showDialog(dialog)
     player.sendMessage(
         Tools.socialLikesLOGO + " &fdialog ranking: ヘッド付きTop5をPaper Dialog APIで送信しました。".color()
-    )
-  }
-
-  private fun openDialogFast(
-      player: Player,
-      targetUuid: UUID = player.uniqueId,
-      targetName: String = player.name,
-  ) {
-    val tStart = System.currentTimeMillis()
-
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            Tools.plugin,
-            Runnable {
-              val tAsyncStart = System.currentTimeMillis()
-              val stats = getOrLoadExtendedStats(targetUuid, false)
-              val tStatsDone = System.currentTimeMillis()
-
-              val bodies = buildDialogFastBodies(stats, targetName)
-              val tContentDone = System.currentTimeMillis()
-
-              val actions =
-                  listOf(
-                      dialogButton("閉じる", "閉じます", dialogCloseKey),
-                      dialogButton("通常版 (stats2)", "従来のstats2を開く", dialogStatsReloadKey),
-                  )
-              val dialog =
-                  Dialog.create { builder ->
-                    builder
-                        .empty()
-                        .base(
-                            DialogBase.builder(
-                                    Component.text(
-                                        "SocialLikes 高速統計: $targetName",
-                                        NamedTextColor.LIGHT_PURPLE,
-                                    )
-                                )
-                                .canCloseWithEscape(true)
-                                .afterAction(DialogBase.DialogAfterAction.CLOSE)
-                                .body(bodies)
-                                .build()
-                        )
-                        .type(
-                            DialogType.multiAction(actions)
-                                .columns(2)
-                                .exitAction(dialogButton("閉じる", "閉じます", dialogCloseKey))
-                                .build()
-                        )
-                  }
-              val tDialogCreated = System.currentTimeMillis()
-              Bukkit.getScheduler()
-                  .runTask(
-                      Tools.plugin,
-                      Runnable {
-                        val tMainThread = System.currentTimeMillis()
-                        if (player.isOnline) {
-                          player.showDialog(dialog)
-                          player.sendMessage(
-                              Tools.socialLikesLOGO +
-                                  " &a[Fast Dialog]&f $targetName の高速版統計を送信しました。(集計: ${tStatsDone - tAsyncStart}ms, 構築: ${tDialogCreated - tStatsDone}ms, 総計: ${tMainThread - tStart}ms)"
-                                      .color()
-                          )
-                        }
-                      },
-                  )
-            },
-        )
-  }
-
-  private fun buildDialogFastBodies(
-      stats: SLDataStatsService.ExtendedStats,
-      targetName: String,
-  ): List<DialogBody> {
-    fun formatBar(
-        label: String,
-        value: Double,
-        max: Double,
-        unit: String,
-        isCount: Boolean = false,
-    ): Component {
-      val filled = if (max <= 0.0) 0 else ((value / max) * 10.0).toInt().coerceIn(0, 10)
-      val remaining = 10 - filled
-      val percent = if (max <= 0.0) 0 else (value / max * 100.0).toInt().coerceIn(0, 100)
-      val valStr =
-          if (isCount) "${value.toInt()}$unit"
-          else String.format(java.util.Locale.ROOT, "%.1f%s", value, unit)
-      val paddedLabel = label.padEnd(5, '　')
-      val percentStr = percent.toString().padStart(3, ' ')
-
-      return Component.text(
-              "§f${paddedLabel} §a${"█".repeat(filled)}§8${"█".repeat(remaining)} §7${percentStr}% §8= §e${valStr}"
-          )
-          .hoverEvent(
-              net.kyori.adventure.text.event.HoverEvent.showText(
-                  Component.text("§e${label}: §f${valStr} (§a${percentStr}%§f)")
-              )
-          )
-    }
-
-    val maxAvg = maxOf(stats.comparison.ownAverage, stats.comparison.globalAverage, 1.0)
-    val maxMedian = maxOf(stats.comparison.ownMedian, stats.comparison.globalMedian, 1.0)
-    val maxGiveReceive =
-        maxOf(stats.balance.received.toDouble(), stats.balance.given.toDouble(), 1.0)
-    val maxMutual = 100.0
-    val maxDelta =
-        maxOf(
-            stats.publicity.reactionDelta,
-            stats.serverPublicity.publicityReactionAverage -
-                stats.serverPublicity.normalReactionAverage,
-            1.0,
-        )
-
-    val comp1 =
-        Component.text()
-            .append(Component.text("§d【1作品あたりのいいね（平均）】\n§7作品がどれだけ反応を集めたか\n"))
-            .append(formatBar("あなた", stats.comparison.ownAverage, maxAvg, "いいね/作品"))
-            .append(Component.newline())
-            .append(formatBar("全体平均", stats.comparison.globalAverage, maxAvg, "いいね/作品"))
-            .build()
-
-    val comp2 =
-        Component.text()
-            .append(Component.text("§d【1作品あたりのいいね（中央値）】\n§7突出した1作に引っ張られない実力\n"))
-            .append(formatBar("あなた", stats.comparison.ownMedian, maxMedian, "いいね/作品"))
-            .append(Component.newline())
-            .append(formatBar("全体中央値", stats.comparison.globalMedian, maxMedian, "いいね/作品"))
-            .build()
-
-    val comp3 =
-        Component.text()
-            .append(Component.text("§d【もらった数と送った数】\n§7受け取る側か、応援する側か\n"))
-            .append(
-                formatBar(
-                    "もらった",
-                    stats.balance.received.toDouble(),
-                    maxGiveReceive,
-                    "いいね",
-                    isCount = true,
-                )
-            )
-            .append(Component.newline())
-            .append(
-                formatBar(
-                    "送った",
-                    stats.balance.given.toDouble(),
-                    maxGiveReceive,
-                    "いいね",
-                    isCount = true,
-                )
-            )
-            .build()
-
-    val comp4 =
-        Component.text()
-            .append(Component.text("§d【相互になっている割合】\n§7片思いか、応え合えているか\n"))
-            .append(
-                formatBar(
-                    "応援側",
-                    if (stats.mutualLikes.likedOwnerCount > 0)
-                        (stats.mutualLikes.pairCount * 100.0 / stats.mutualLikes.likedOwnerCount)
-                    else 0.0,
-                    maxMutual,
-                    "%",
-                )
-            )
-            .append(Component.newline())
-            .append(
-                formatBar(
-                    "受取側",
-                    if (stats.mutualLikes.likerCount > 0)
-                        (stats.mutualLikes.pairCount * 100.0 / stats.mutualLikes.likerCount)
-                    else 0.0,
-                    maxMutual,
-                    "%",
-                )
-            )
-            .build()
-
-    val comp5 =
-        Component.text()
-            .append(Component.text("§d【宣伝による伸び】\n§7宣伝1回あたりの効果\n"))
-            .append(formatBar("あなた", stats.publicity.reactionDelta, maxDelta, "いいね/回"))
-            .append(Component.newline())
-            .append(
-                formatBar(
-                    "全体平均",
-                    stats.serverPublicity.publicityReactionAverage -
-                        stats.serverPublicity.normalReactionAverage,
-                    maxDelta,
-                    "いいね/回",
-                )
-            )
-            .build()
-
-    return listOf(
-        DialogBody.plainMessage(comp1, 560),
-        DialogBody.plainMessage(comp2, 560),
-        DialogBody.plainMessage(comp3, 560),
-        DialogBody.plainMessage(comp4, 560),
-        DialogBody.plainMessage(comp5, 560),
     )
   }
 
@@ -2522,7 +1143,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun openDialogStatsSettings(player: Player) {
     val includeLifeWorld = dialogStatsIncludeLifeWorld[player.uniqueId] == true
-    val isOp = player.isOp
     val actions = buildList {
       add(
           dialogButton(
@@ -2536,29 +1156,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
               dialogStatsWorldFilterKey,
           )
       )
-      if (isOp) {
-        add(
-            dialogButton(
-                "Mapで見る",
-                "/sldataop map を実行",
-                dialogMapKey,
-            )
-        )
-        add(
-            dialogButton(
-                "Slotsで見る",
-                "/sldataop slots を実行",
-                dialogSlotsKey,
-            )
-        )
-        add(
-            dialogButton(
-                "Displayで見る",
-                "/sldataop display を実行",
-                dialogDisplayKey,
-            )
-        )
-      }
       add(
           dialogButton(
               "戻る ↩",
@@ -4084,69 +2681,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private fun dialogPercentValue(numerator: Int, denominator: Int): Double =
       if (denominator <= 0) 0.0 else numerator.toDouble() * 100.0 / denominator.toDouble()
 
-  private fun dialogBuildAgeRows(stats: SLDataStatsService.AgeDistributionStats): List<String> =
-      listOf("受けたいいね: ${dialogAgeBucketText(stats.received)}")
-
-  private fun dialogGiveReceiveRows(
-      stats: SLDataStatsService.ExtendedStats,
-      targetName: String,
-  ): List<String> =
-      listOf(
-          "受けた ${formatCount(stats.balance.received)} / 送った ${formatCount(stats.balance.given)} / 差 ${formatCount(stats.balance.received - stats.balance.given)} / 受÷送 ${formatRatio(stats.balance.receivePerGiven)} — ${stats.balance.diagnosis}",
-          "$targetName の建築へ押してくれた人 Top5:",
-      ) +
-          stats.benefactors.mapIndexed { index, row ->
-            dialogPlayerCountLine(index, row.playerUuid, row.count, "いいね", stats.playerNames)
-          }
-
-  private fun dialogTwoBarRows(
-      firstLabel: String,
-      first: Double,
-      secondLabel: String,
-      second: Double,
-  ): List<String> {
-    val maximum = max(first, second).coerceAtLeast(1.0)
-    fun bar(value: Double): String {
-      val filled = ceil(value / maximum * 12.0).toInt().coerceIn(0, 12)
-      return "█".repeat(filled) + "█".repeat(12 - filled)
-    }
-    return listOf(
-        "$firstLabel ${bar(first)} ${formatAverageCount(first)}",
-        "$secondLabel ${bar(second)} ${formatAverageCount(second)}",
-    )
-  }
-
   private fun formatSignedAverage(value: Double): String =
       (if (value >= 0.0) "+" else "") + formatAverageCount(value)
 
   private fun formatRatio(value: Double): String =
       if (value.isFinite()) String.format("%.2f", value) else "-"
-
-  private fun dialogLikeTimestampCoverage(stats: SLDataStatsService.ExtendedStats): String {
-    val coverage = stats.likeTimestampCoverage
-    return "${formatCount(coverage.timestampedLikes)} / ${formatCount(coverage.totalLikes)}件"
-  }
-
-  private fun comparisonDiagnosis(stats: SLDataStatsService.ComparisonStats): String {
-    val delta = stats.ownAverage - stats.globalAverage
-    return when {
-      stats.ownAverage == 0.0 && stats.globalAverage == 0.0 -> "まだ平均との差を読めるだけのデータがありません。"
-      delta >= 1.0 -> "全体平均より高く、自作品は平均より反応を集めています。"
-      delta <= -1.0 -> "全体平均より低く、反応は伸びしろがあります。"
-      else -> "全体平均に近く、反応はサーバー標準的です。"
-    }
-  }
-
-  private fun balanceDiagnosis(stats: SLDataStatsService.GiveReceiveBalance): String =
-      when (stats.diagnosis) {
-        "受取寄り" -> "受け取る反応が送る反応より多い状態です。"
-        "応援寄り" -> "自分から応援している比重が高い状態です。"
-        "バランス型" -> "送る量と受け取る量が近い状態です。"
-        else -> stats.diagnosis
-      }
-
-  private fun likeConcentrationDiagnosis(stats: SLDataStatsService.LikeConcentration): String =
-      if (stats.hhi >= 0.25) "人気が一部の作品に強く集まっています。" else "人気が複数の作品に分散しています。"
 
   private fun streakTitle(streak: SLDataStatsService.StreakStats): String =
       when {
@@ -4174,37 +2713,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             )
         else -> stats2Text("Section.stats2.given.streak.future_title", "称号: これから")
       }
-
-  private fun givenLikeDeviationDiagnosis(stats: SLDataStatsService.ComparisonStats): String =
-      when {
-        stats.givenTargetAverage == 0.0 -> "押した作品はまだありません"
-        stats.givenTargetAverage >= stats.globalAverage &&
-            stats.givenTargetAverage >= stats.globalMedian -> "人気作を選びがち"
-        stats.givenTargetAverage < stats.globalMedian -> "埋もれた作品を掘りがち"
-        else -> "全体の中ほどを選ぶ傾向"
-      }
-
-  private fun dialogOverviewDashboardRows(
-      stats: SLDataStatsService.ExtendedStats,
-      targetName: String,
-  ): List<String> {
-    val favoriteOwner =
-        stats.likeDiversity.ownerTop.firstOrNull()?.let {
-          "${dialogPlayerName(it.label, stats.playerNames)} ${formatCount(it.count)}件"
-        } ?: "なし"
-    val topBuilds =
-        stats.ownBuilds.take(5).joinToString(" / ") { row ->
-          "${dialogBuildTitleLabel(row.title, 10)} ${formatCount(row.likeCount)}"
-        }
-    return listOf(
-        "あなたがいいねした作者 ${formatCount(stats.socialOverview.supportedOwnerCount)}人 / あなたにいいねした人数 ${formatCount(stats.socialOverview.supporterCount)}人",
-        "送 ${formatCount(stats.balance.given)} / 受 ${formatCount(stats.balance.received)} / 差 ${formatCount(stats.balance.received - stats.balance.given)} / 受÷送 ${formatRatio(stats.balance.receivePerGiven)} — ${stats.balance.diagnosis}",
-        "自作品いいね 平均 ${formatAverageCount(stats.likeDistribution.average)} / 中央値 ${formatAverageCount(stats.likeDistribution.median)} / 最大 ${formatCount(stats.likeDistribution.maximum)}",
-        "集中度 上位${stats.likeConcentration.topCount}作品 ${formatDoublePercent(stats.likeConcentration.topShare)} / 偏り ${String.format("%.2f", stats.likeConcentration.hhi)} — ${stats.likeConcentration.diagnosis}",
-        "応援先の偏り ${stats.likeDiversity.diagnosis}（スコア ${stats.likeDiversity.score}/100） / 最多 ${favoriteOwner}",
-        if (topBuilds.isBlank()) "$targetName の建築Top5: なし" else "$targetName の建築Top5: $topBuilds",
-    )
-  }
 
   private fun reliablePublishedScope(stats: SLDataStatsService.ExtendedStats): String {
     val population = stats.reliableTimestampPopulation
@@ -4250,21 +2758,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                   formatCount(stats.activityRhythm.weekdayCounts.flatten().sum())
           ),
       )
-
-  private fun dialogAgeDistributionRows(
-      stats: SLDataStatsService.AgeDistributionStats
-  ): List<String> =
-      listOf(
-          "受けたいいね: ${dialogAgeBucketText(stats.received)}",
-          "押したいいね: ${dialogAgeBucketText(stats.given)}",
-      )
-
-  private fun dialogAgeBucketText(buckets: List<SLDataStatsService.AgeBucket>): String {
-    val total = buckets.sumOf { it.count }
-    return buckets.joinToString(" / ") { bucket ->
-      "${bucket.label} ${formatCount(bucket.count)}件 (${formatDialogPercent(bucket.count, total)})"
-    }
-  }
 
   // 2026-08-17: `▁░▒▓█`の文字差し替え方式(送り幅が`░`だけ1px狭く列がずれる、DIALOG_STYLE.md
   // 「未解決」参照)をやめ、`⬛`1種類の色分けに変更した。文字を変えないので列ズレが原理的に起きない。
@@ -4469,29 +2962,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       records: List<SLDataStatsService.PersonalBestRecord>
   ): String = records.lastOrNull()?.let { "${it.count}件" } ?: "なし"
 
-  private fun dialogDiversityRows(
-      stats: SLDataStatsService.LikeDiversityStats,
-      playerNames: Map<String, String>,
-  ): List<String> =
-      listOf(
-          "多様性スコア ${formatCount(stats.score)} / 100 — ${stats.diagnosis}",
-          if (stats.diagnosis == "分散型") {
-            "応援先が広く、特定の作者や場所だけに偏っていません。"
-          } else {
-            "応援先が絞られており、よく見る作者や場所がはっきりしています。"
-          },
-          "制作者 Top3: ${dialogDimensionTopText(stats.ownerTop) { dialogPlayerName(it, playerNames) }}",
-          "world Top3: ${dialogDimensionTopText(stats.worldTop) { it }}",
-          "chunk Top3: ${dialogDimensionTopText(stats.chunkTop) { it }}",
-      )
-
-  private fun dialogDimensionTopText(
-      rows: List<SLDataStatsService.DimensionTop>,
-      label: (String) -> String,
-  ): String =
-      if (rows.isEmpty()) "なし"
-      else rows.joinToString(" / ") { "${label(it.label)} ${formatCount(it.count)}件" }
-
   private fun formatDialogDuration(millis: Long): String {
     val nonNegativeMillis = millis.coerceAtLeast(0L)
     if (nonNegativeMillis < 60_000L) {
@@ -4529,35 +2999,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     }
   }
 
-  private fun formatDoublePercent(value: Double): String =
-      "${"%.1f".format(java.util.Locale.ROOT, value)}%"
-
-  private fun dialogPlayerCountLine(
-      index: Int,
-      playerUuid: String,
-      count: Int,
-      suffix: String,
-      playerNames: Map<String, String>,
-  ): String =
-      dialogFixedRankLine(
-          index,
-          dialogPlayerName(playerUuid, playerNames),
-          "${formatCount(count)}$suffix",
-      )
-
-  private fun dialogOwnerCountLine(
-      index: Int,
-      ownerUuid: String,
-      count: Int,
-      suffix: String,
-      playerNames: Map<String, String>,
-  ): String =
-      dialogFixedRankLine(
-          index,
-          dialogPlayerName(ownerUuid, playerNames),
-          "${formatCount(count)}$suffix",
-      )
-
   private fun dialogPlayerName(uuidText: String, playerNames: Map<String, String>): String {
     val uuid = parseUuid(uuidText)
     val resolvedName =
@@ -4574,16 +3015,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   // 2026-08-17: 省略記号`…`を付けず、そのまま切り詰めるだけに変更(ユーザー判断)。
   // プレイヤー名の切り詰め(dialogRankingDisplayName)と同じ挙動に揃える。
   private fun compactDialogText(text: String, maxLength: Int): String = text.take(maxLength)
-
-  /**
-   * Paper Dialog bodies are centre aligned. Keep the name and value in fixed uniform-font blocks so
-   * each ranking value begins at the same column even when a player name has a different length.
-   */
-  private fun dialogFixedRankLine(index: Int, playerName: String, value: String): String {
-    val fixedName = compactDialogText(playerName, DIALOG_FIXED_RANK_NAME_COLUMNS)
-    val padding = DIALOG_NBSP.toString().repeat(DIALOG_FIXED_RANK_NAME_COLUMNS - fixedName.length)
-    return "${index + 1}. $fixedName$padding  $value"
-  }
 
   private fun dialogRankingRowBody(
       index: Int,
@@ -4797,32 +3228,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     )
   }
 
-  fun logWeeklyDialogGraphPreview() {
-    val series = loadWeekly()
-    val config = currentDialogRenderConfig()
-    DialogGraphSize.entries.forEach { size ->
-      logDialogGraphPreview(
-          Period.WEEK,
-          size,
-          buildDialogGraph(series, size, config),
-          dialogSubtitle(series, size, config),
-      )
-    }
-    Tools.plugin.logger.info(
-        "[SLData] Display week expected bucketOrder(oldToNew)=" +
-            series.buckets.joinToString(" -> ") { "${it.label}:${it.count}" }
-    )
-    logDisplayInteractionGeometryPreview()
-    GraphImageRenderer.logTextFit("handheld-startup", series, "SL Weekly - marzipan99", 128, 128)
-    WallMapImageRenderer.logTextFit(
-        "wall-startup",
-        SLDataStatsService.loadBoardStats(),
-        "SL Weekly - marzipan99",
-        256,
-        384,
-    )
-  }
-
   private fun logDialogGraphPreview(
       period: Period,
       size: DialogGraphSize,
@@ -4911,30 +3316,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun dialogBodyWidth(graph: DialogGraph): Int = max(DIALOG_BODY_WIDTH, graph.width)
 
-  private fun logDisplayInteractionGeometryPreview() {
-    val buttonY = -1.03
-    val hitboxes =
-        listOf(-1.23 to "week", -0.41 to "month", 0.41 to "year", 1.23 to "close").joinToString(
-            "; "
-        ) { (x, action) ->
-          "$action=center(${String.format("%.2f", x)},${String.format("%.2f", buttonY)},z=$DISPLAY_BUTTON_HIT_Z)" +
-              " size(0.82x0.38)"
-        }
-    Tools.plugin.logger.info(
-        "[SLData] Display interactionRoutes right=PlayerInteractEntityEvent left=EntityDamageByEntityEvent" +
-            " leftDamageCancelled=true interactionResponsive=true"
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Display expectedLayers z background=$DISPLAY_BACKGROUND_Z grid=$DISPLAY_GRID_Z" +
-            " bar=$DISPLAY_BAR_Z text=$DISPLAY_TEXT_Z buttonBack=$DISPLAY_BUTTON_BACK_Z" +
-            " buttonFace=$DISPLAY_BUTTON_FACE_Z buttonText=$DISPLAY_BUTTON_TEXT_Z hit=$DISPLAY_BUTTON_HIT_Z" +
-            " hitAhead=${DISPLAY_BUTTON_HIT_Z > DISPLAY_RENDER_MAX_Z}"
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Display expectedHitboxes $hitboxes renderMaxZ=$DISPLAY_RENDER_MAX_Z"
-    )
-  }
-
   private fun dialogButton(label: String, tooltip: String, key: Key): ActionButton =
       ActionButton.builder(Component.text(label))
           .tooltip(Component.text(tooltip))
@@ -4942,33 +3323,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           .action(DialogAction.customClick(key, null))
           .build()
 
-  private fun dialogPlayerHeadBodies(
-      player: Player,
-      series: LikeSeries,
-      preview: DialogPreviewConfig,
-  ): List<DialogBody> {
-    val sizes =
-        preview.playerHeadSizes?.map { it to it }
-            ?: listOf(preview.playerHeadWidth to preview.playerHeadHeight)
-    return sizes.map { (width, height) ->
-      dialogPlayerHeadBody(
-          player,
-          series,
-          preview.bodyWidth,
-          width,
-          height,
-          preview.playerHeadAlign,
-      )
-    }
-  }
-
   private fun dialogPlayerHeadBody(
       player: Player,
       series: LikeSeries,
       bodyWidth: Int,
       iconWidth: Int,
       iconHeight: Int,
-      align: DialogPreviewItemAlign,
   ): DialogBody {
     val head = ItemStack(Material.PLAYER_HEAD)
     val meta = head.itemMeta as? SkullMeta
@@ -4983,16 +3343,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 NamedTextColor.GRAY,
             )
             .font(DIALOG_FONT)
-    val itemWidth =
-        when (align) {
-          DialogPreviewItemAlign.LEFT -> iconWidth
-          DialogPreviewItemAlign.CENTER -> bodyWidth
-        }
     return DialogBody.item(head)
         .description(DialogBody.plainMessage(description, bodyWidth))
         .showTooltip(true)
         .showDecorations(false)
-        .width(itemWidth.coerceIn(1, 256))
+        .width(iconWidth.coerceIn(1, 256))
         .height(iconHeight)
         .build()
   }
@@ -5013,25 +3368,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       dialogYearKey -> openDialog(player, Period.YEAR)
       dialogOtherFormatsKey -> openDialogOtherFormats(player)
       dialogOtherFormatsBackKey -> openDialog(player, current.period)
-      dialogMapKey -> giveMap(player)
-      dialogSlotsKey -> openSlots(player)
-      dialogDisplayKey -> openDisplay(player)
-      // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-      dialogExperimentalColorPickerKey -> openDialogExperimentalColorPicker(player)
-      // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-      dialogExperimentalDefaultColorsKey -> {
-        dialogExperimentalPalettes[player.uniqueId] = DialogTextPalette.DEFAULT
-        openDialogExperimentalColorPicker(player)
-      }
-      // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-      dialogExperimentalHighContrastColorsKey -> {
-        dialogExperimentalPalettes[player.uniqueId] = DialogTextPalette.HIGH_CONTRAST
-        openDialogExperimentalColorPicker(player)
-      }
-      dialogPreviewReloadKey -> {
-        reloadDialogPreviewConfig()
-        openDialogPreview(player)
-      }
       dialogPreviewGraphKey -> openDialog(player, current)
       dialogRankingWeekKey -> openDialogRanking(player, RankingPeriod.WEEK)
       dialogRankingMonthKey -> openDialogRanking(player, RankingPeriod.MONTH)
@@ -5078,111 +3414,19 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         activeDialogStatsTargets.remove(player.uniqueId)
         activeDialogStatsCategories.remove(player.uniqueId)
         dialogStatsIncludeLifeWorld.remove(player.uniqueId)
-        dialogExperimentalPalettes.remove(player.uniqueId)
         player.closeInventory()
       }
     }
   }
 
-  @EventHandler(ignoreCancelled = false)
-  fun onSlotsClick(event: InventoryClickEvent) {
-    if (event.view.topInventory.holder is SlotsInventoryHolder) {
-      event.isCancelled = true
-      if (event.rawSlot == 52) event.whoClicked.closeInventory()
-    }
-  }
-
-  @EventHandler(ignoreCancelled = false)
-  fun onSlotsDrag(event: InventoryDragEvent) {
-    if (event.view.topInventory.holder is SlotsInventoryHolder) event.isCancelled = true
-  }
-
-  @EventHandler(ignoreCancelled = false)
-  fun onSlotsCreative(event: InventoryCreativeEvent) {
-    if (event.view.topInventory.holder is SlotsInventoryHolder) event.isCancelled = true
-  }
-
-  @EventHandler(ignoreCancelled = false)
-  fun onInteraction(event: PlayerInteractEntityEvent) {
-    val entity = event.rightClicked
-    if (!entity.persistentDataContainer.has(displayPanelKey, PersistentDataType.STRING)) return
-    event.isCancelled = true
-    handleDisplayInteraction(event.player, entity, "right")
-  }
-
-  @EventHandler(ignoreCancelled = false)
-  fun onInteractionDamage(event: EntityDamageByEntityEvent) {
-    val entity = event.entity
-    if (!entity.persistentDataContainer.has(displayPanelKey, PersistentDataType.STRING)) return
-    event.isCancelled = true
-    val player = event.damager as? Player ?: return
-    handleDisplayInteraction(player, entity, "left")
-    Tools.plugin.logger.info(
-        "[SLData] Display left-click damage cancelled entity=${entity.uniqueId} type=${entity.type}" +
-            " validAfterCancel=${entity.isValid} dead=${entity.isDead}" +
-            " activeInteractions=${activeDisplayInteractionCount(player.uniqueId)}"
-    )
-  }
-
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
-    clearDisplay(event.player.uniqueId)
     activeDialogRequests.remove(event.player.uniqueId)
     activeDialogRankingPeriods.remove(event.player.uniqueId)
     activeDialogStatsTargets.remove(event.player.uniqueId)
     activeDialogStatsCategories.remove(event.player.uniqueId)
     dialogStatsIncludeLifeWorld.remove(event.player.uniqueId)
-    dialogExperimentalPalettes.remove(event.player.uniqueId)
   }
-
-  @EventHandler
-  fun onWorldChange(event: PlayerChangedWorldEvent) {
-    clearDisplay(event.player.uniqueId)
-  }
-
-  @EventHandler
-  fun onDeath(event: PlayerDeathEvent) {
-    clearDisplay(event.player.uniqueId)
-  }
-
-  @EventHandler(ignoreCancelled = false)
-  fun onBoardBreak(event: HangingBreakByEntityEvent) {
-    if (
-        event.entity.persistentDataContainer.has(boardFrameKey, PersistentDataType.STRING) ||
-            event.entity.persistentDataContainer.has(wallMapFrameKey, PersistentDataType.STRING)
-    ) {
-      event.isCancelled = true
-    }
-  }
-
-  private fun redrawDisplay(player: Player, period: Period) {
-    val geometry = activeDisplays[player.uniqueId]?.geometry ?: return openDisplay(player, period)
-    openDisplayAt(player, period, geometry)
-  }
-
-  private fun handleDisplayInteraction(player: Player, entity: Entity, input: String) {
-    val owner = entity.persistentDataContainer.get(displayOwnerKey, PersistentDataType.STRING)
-    if (owner != player.uniqueId.toString()) return
-
-    val action =
-        entity.persistentDataContainer.get(displayActionKey, PersistentDataType.STRING) ?: return
-    player.playSound(player.location, Sound.UI_BUTTON_CLICK, 0.65f, 1.15f)
-    Tools.plugin.logger.info(
-        "[SLData] Display button input=$input action=$action player=${player.name}"
-    )
-    when (action) {
-      "week" -> redrawDisplay(player, Period.WEEK)
-      "month" -> redrawDisplay(player, Period.MONTH)
-      "year" -> redrawDisplay(player, Period.YEAR)
-      "close" -> {
-        clearDisplay(player.uniqueId)
-        player.sendMessage(Tools.socialLikesLOGO + " &fdisplay: パネルを閉じました。".color())
-      }
-    }
-  }
-
-  private fun activeDisplayInteractionCount(playerId: UUID): Int =
-      activeDisplays[playerId]?.ids?.count { Bukkit.getEntity(it) is Interaction } ?: 0
 
   private fun likeAxisMaxForDisplay(peak: Int): Int =
       if (peak <= DIALOG_AXIS_MAX) DIALOG_AXIS_MAX else SLDataStatsService.niceMax(peak)
@@ -5194,65 +3438,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         null
       }
 
-  private fun clearDisplay(playerId: UUID, expectedIds: Set<UUID>? = null) {
-    val current = activeDisplays[playerId]
-    if (expectedIds != null && current != null && current.ids.toSet() != expectedIds) return
-    activeDisplays.remove(playerId)?.ids?.forEach { id -> Bukkit.getEntity(id)?.remove() }
-    Bukkit.getWorlds().forEach { world ->
-      world.entities
-          .filter {
-            it.persistentDataContainer.get(displayOwnerKey, PersistentDataType.STRING) ==
-                playerId.toString()
-          }
-          .forEach { it.remove() }
-    }
-  }
-
-  private fun scaleTransform(x: Float, y: Float, z: Float): Transformation =
-      Transformation(Vector3f(0f, 0f, 0f), AxisAngle4f(), Vector3f(x, y, z), AxisAngle4f())
-
-  private fun centeredBlockTransform(x: Float, y: Float, z: Float): Transformation =
-      Transformation(
-          Vector3f(-x / 2f, -y / 2f, -z / 2f),
-          AxisAngle4f(),
-          Vector3f(x, y, z),
-          AxisAngle4f(),
-      )
-
-  private fun normalizeYaw(yaw: Float): Float {
-    var normalized = yaw % 360f
-    if (normalized < -180f) normalized += 360f
-    if (normalized > 180f) normalized -= 360f
-    return normalized
-  }
-
   private fun formatCount(value: Int): String = String.format("%,d", value)
 
   private fun formatDialogPercent(numerator: Int, denominator: Int): String {
     if (denominator <= 0) return "0.0%"
     return String.format("%.1f%%", numerator.toDouble() * 100.0 / denominator.toDouble())
-  }
-
-  private fun dialogProgressBar(current: Int, total: Int, width: Int = 16): String {
-    if (total <= 0) return "█".repeat(width)
-    val filled =
-        ceil(current.toDouble() / total.toDouble() * width.toDouble()).toInt().coerceIn(0, width)
-    return "█".repeat(filled) + "█".repeat(width - filled)
-  }
-
-  private fun dialogDateLabel(epochMillis: Long): String {
-    val date = Instant.ofEpochMilli(epochMillis).atZone(ZoneId.of("UTC")).toLocalDate()
-    return "${date.year}/${date.monthValue}/${date.dayOfMonth}"
-  }
-
-  private fun repeaterRateDiagnosis(repeaterCount: Int, uniqueLikerCount: Int): String {
-    if (uniqueLikerCount <= 0) return "まだ診断できるだけのいいねがありません。"
-    val rate = repeaterCount.toDouble() / uniqueLikerCount.toDouble()
-    return when {
-      rate >= 0.7 -> "常連の輪がしっかり育っています。"
-      rate >= 0.35 -> "リピーターが育ちつつあります。"
-      else -> "新しい応援者が中心です。"
-    }
   }
 
   private fun formatAverageCount(value: Double): String = String.format("%.1f", value)
@@ -5296,18 +3486,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         }
     return "$currentLabel ${formatCount(latestCount)} いいね（$deltaLabel ${formatDelta(latestCount - previousCount)} / ${series.buckets.size}$averageUnit 平均 ${String.format("%,.0f", series.average)}）"
   }
-
-  private data class DisplayGeometry(
-      val base: Location,
-      val forward: Vector,
-      val right: Vector,
-      val up: Vector,
-  )
-
-  private data class DisplaySession(
-      val ids: MutableSet<UUID>,
-      val geometry: DisplayGeometry,
-  )
 
   private enum class DialogGraphSize(
       val label: String,
@@ -5424,75 +3602,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val sample: String? = null,
   )
 
-  // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
   private enum class DialogTextPalette(
-      val label: String,
       val primary: TextColor,
       val secondary: TextColor,
   ) {
-    DEFAULT("標準（明るい）", NamedTextColor.WHITE, TextColor.color(205, 214, 229)),
-    HIGH_CONTRAST("高コントラスト", NamedTextColor.WHITE, NamedTextColor.YELLOW),
-  }
-
-  internal data class DialogPreviewConfig(
-      val title: String,
-      val subtitle: String,
-      val body: String,
-      val elements: List<DialogPreviewElement>,
-      val bodyWidth: Int,
-      val useUniformFont: Boolean,
-      val showPlayerHead: Boolean,
-      val playerHeadWidth: Int,
-      val playerHeadHeight: Int,
-      val playerHeadAlign: DialogPreviewItemAlign,
-      val playerHeadSizes: List<Int>?,
-      val columns: Int,
-  )
-
-  internal sealed interface DialogPreviewElement {
-    data class Message(val message: DialogPreviewMessage) : DialogPreviewElement
-
-    data class Item(
-        val material: Material,
-        val playerUuid: String?,
-        val playerName: String?,
-        val itemName: DialogPreviewMessage?,
-        val lore: List<DialogPreviewMessage>,
-        val description: DialogPreviewMessage?,
-        val showTooltip: Boolean,
-        val showDecorations: Boolean,
-        val width: Int,
-        val height: Int,
-    ) : DialogPreviewElement
-  }
-
-  internal data class DialogPreviewMessage(
-      val width: Int,
-      val segments: List<DialogPreviewSegment>,
-  )
-
-  internal data class DialogPreviewSegment(
-      val text: String,
-      val repeat: Int,
-      val color: TextColor,
-      val font: Key?,
-      val hover: String?,
-      val hoverColor: TextColor,
-  )
-
-  internal enum class DialogPreviewItemAlign {
-    LEFT,
-    CENTER;
-
-    companion object {
-      fun parse(raw: String?): DialogPreviewItemAlign =
-          when (raw?.trim()?.lowercase()) {
-            "center",
-            "centre",
-            "middle" -> CENTER
-            else -> LEFT
-          }
-    }
+    DEFAULT(NamedTextColor.WHITE, TextColor.color(205, 214, 229)),
   }
 
   internal enum class DialogLabelStyle {
@@ -6449,679 +4563,5 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val left = (width - clipped.length) / 2
     val right = width - clipped.length - left
     return " ".repeat(left) + clipped + " ".repeat(right)
-  }
-
-  private data class TextFitCheck(val name: String, val width: Int, val maxWidth: Int) {
-    val fits: Boolean = width <= maxWidth
-  }
-
-  private data class TextDrawCheck(
-      val name: String,
-      val text: String,
-      val width: Int,
-      val maxWidth: Int,
-  ) {
-    val fits: Boolean = width <= maxWidth
-  }
-
-  private data class PixelRect(
-      val name: String,
-      val x: Int,
-      val y: Int,
-      val width: Int,
-      val height: Int,
-  ) {
-    val right: Int
-      get() = x + width
-
-    val bottom: Int
-      get() = y + height
-
-    override fun toString(): String = "$name=($x,$y ${width}x$height)"
-  }
-
-  private data class WallMapLayout(
-      val title: PixelRect,
-      val chart: PixelRect,
-      val plot: PixelRect,
-      val lists: PixelRect,
-      val weeklyMvp: PixelRect,
-      val growing: PixelRect,
-  )
-
-  private fun fitText(metrics: FontMetrics, text: String, maxWidth: Int): String {
-    if (metrics.stringWidth(text) <= maxWidth) return text
-    var clipped = text
-    while (clipped.isNotEmpty() && metrics.stringWidth("$clipped...") > maxWidth) {
-      clipped = clipped.dropLast(1)
-    }
-    return if (clipped.isEmpty()) "" else "$clipped..."
-  }
-
-  private fun fitTextEllipsis(metrics: FontMetrics, text: String, maxWidth: Int): String {
-    if (metrics.stringWidth(text) <= maxWidth) return text
-    var clipped = text
-    while (clipped.isNotEmpty() && metrics.stringWidth("$clipped…") > maxWidth) {
-      clipped = clipped.dropLast(1)
-    }
-    return if (clipped.isEmpty()) "" else "$clipped…"
-  }
-
-  private inline fun withClip(g: Graphics2D, rect: PixelRect, block: () -> Unit) {
-    val previousClip: Shape? = g.clip
-    g.clipRect(rect.x, rect.y, rect.width, rect.height)
-    try {
-      block()
-    } finally {
-      g.clip = previousClip
-    }
-  }
-
-  private fun compactCount(value: Int): String =
-      if (value >= 1000) String.format("%.1fk", value.toDouble() / 1000.0) else value.toString()
-
-  private fun drawCenteredClamped(
-      g: Graphics2D,
-      text: String,
-      centerX: Int,
-      y: Int,
-      minX: Int,
-      maxX: Int,
-  ) {
-    val width = g.fontMetrics.stringWidth(text)
-    val x = (centerX - width / 2).coerceIn(minX, maxX - width)
-    g.drawString(text, x, y)
-  }
-
-  private fun findReusableMap(player: Player): ItemStack? =
-      player.inventory.contents.firstOrNull {
-        it != null &&
-            it.type == Material.FILLED_MAP &&
-            it.itemMeta?.persistentDataContainer?.has(mapItemKey, PersistentDataType.STRING) == true
-      }
-
-  private class SlotsInventoryHolder : InventoryHolder {
-    private lateinit var backingInventory: Inventory
-
-    fun bind(inventory: Inventory) {
-      backingInventory = inventory
-    }
-
-    override fun getInventory(): Inventory = backingInventory
-  }
-
-  private class SeriesMapRenderer(
-      private val series: LikeSeries,
-      private val title: String,
-      private val width: Int,
-      private val height: Int,
-      private val offsetX: Int,
-      private val offsetY: Int,
-  ) : MapRenderer(true) {
-    override fun render(map: MapView, canvas: MapCanvas, player: Player) {
-      val image = GraphImageRenderer.render(series, title, width, height)
-      canvas.drawImage(0, 0, image.getSubimage(offsetX, offsetY, 128, 128))
-    }
-
-    override fun isExplorerMap(): Boolean = false
-  }
-
-  /** A compact coordinate plot using the same per-map MapRenderer pattern as the weekly graph. */
-  private class HomeGroundMapRenderer(
-      private val home: SLDatabase.HomeGround,
-      private val points: List<SLDatabase.HomeGroundPoint>,
-  ) : MapRenderer(true) {
-    override fun render(map: MapView, canvas: MapCanvas, player: Player) {
-      canvas.drawImage(0, 0, HomeGroundMapImageRenderer.render(home, points))
-    }
-
-    override fun isExplorerMap(): Boolean = false
-  }
-
-  private object HomeGroundMapImageRenderer {
-    fun render(
-        home: SLDatabase.HomeGround,
-        points: List<SLDatabase.HomeGroundPoint>,
-    ): BufferedImage {
-      val image = BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      try {
-        g.color = Color(25, 22, 38)
-        g.fillRect(0, 0, 128, 128)
-        g.color = Color(68, 61, 92)
-        g.fillRect(8, 28, 112, 84)
-        g.color = Color(124, 106, 169)
-        g.drawRect(8, 28, 111, 83)
-        g.font = Font(Font.SANS_SERIF, Font.BOLD, 10)
-        g.color = Color(243, 236, 255)
-        g.drawString("HOME GROUND", 10, 14)
-        g.font = Font(Font.MONOSPACED, Font.PLAIN, 8)
-        g.color = Color(206, 194, 237)
-        g.drawString(compactMapText(home.worldName, 17), 10, 24)
-
-        val all =
-            points +
-                SLDatabase.HomeGroundPoint(
-                    home.chunkX,
-                    home.chunkZ,
-                    home.buildCount,
-                    home.receivedLikes,
-                )
-        val minX = all.minOf { it.chunkX } - 1
-        val maxX = all.maxOf { it.chunkX } + 1
-        val minZ = all.minOf { it.chunkZ } - 1
-        val maxZ = all.maxOf { it.chunkZ } + 1
-        fun x(chunkX: Int): Int =
-            10 + ((chunkX - minX).toDouble() / (maxX - minX).coerceAtLeast(1) * 108).toInt()
-        fun y(chunkZ: Int): Int =
-            110 - ((chunkZ - minZ).toDouble() / (maxZ - minZ).coerceAtLeast(1) * 80).toInt()
-
-        points.forEach { point ->
-          g.color = Color(181, 124, 255)
-          val size = (2 + point.buildCount.coerceAtMost(3)).coerceAtMost(5)
-          g.fillOval(x(point.chunkX) - size / 2, y(point.chunkZ) - size / 2, size, size)
-        }
-        g.color = Color(255, 81, 99)
-        g.fillOval(x(home.chunkX) - 4, y(home.chunkZ) - 4, 9, 9)
-        g.color = Color.WHITE
-        g.drawOval(x(home.chunkX) - 5, y(home.chunkZ) - 5, 10, 10)
-        g.font = Font(Font.MONOSPACED, Font.PLAIN, 8)
-        g.color = Color(243, 236, 255)
-        g.drawString("(${home.chunkX}, ${home.chunkZ})", 10, 122)
-      } finally {
-        g.dispose()
-      }
-      return image
-    }
-
-    private fun compactMapText(value: String, maxLength: Int): String =
-        if (value.length <= maxLength) value else value.take(maxLength - 1) + "…"
-  }
-
-  private class ImageTileMapRenderer(
-      private val image: BufferedImage,
-      private val offsetX: Int,
-      private val offsetY: Int,
-  ) : MapRenderer(false) {
-    override fun render(map: MapView, canvas: MapCanvas, player: Player) {
-      canvas.drawImage(0, 0, image.getSubimage(offsetX, offsetY, 128, 128))
-    }
-
-    override fun isExplorerMap(): Boolean = false
-  }
-
-  private object GraphImageRenderer {
-    fun render(series: LikeSeries, title: String, width: Int, height: Int): BufferedImage {
-      return if (width <= 128 && height <= 128) renderCompact(series, title, width, height)
-      else renderDetailed(series, title, width, height)
-    }
-
-    fun logTextFit(label: String, series: LikeSeries, title: String, width: Int, height: Int) {
-      val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      val checks =
-          if (width <= 128 && height <= 128) compactTextChecks(g, series, title, width)
-          else detailedTextChecks(g, series, title, width)
-      Tools.plugin.logger.info(
-          "[SLData] Map $label textFit " +
-              checks.joinToString("; ") { "${it.name}=${it.width}/${it.maxWidth}:${it.fits}" }
-      )
-      g.dispose()
-    }
-
-    private fun renderCompact(
-        series: LikeSeries,
-        title: String,
-        width: Int,
-        height: Int,
-    ): BufferedImage {
-      val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-      g.color = Color(24, 28, 33)
-      g.fillRect(0, 0, width, height)
-
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 10)
-      g.color = Color(238, 242, 247)
-      g.drawString(fitText(g.fontMetrics, title, width - 16), 8, 12)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 8)
-      g.color = Color(180, 226, 120)
-      g.drawString(
-          fitText(
-              g.fontMetrics,
-              "total ${compactCount(series.total)}  peak ${compactCount(series.peak)}",
-              width - 16,
-          ),
-          8,
-          23,
-      )
-
-      val left = 8
-      val top = 32
-      val right = width - 8
-      val bottom = height - 17
-      val chartW = right - left
-      val chartH = bottom - top
-      val niceMax = SLDataStatsService.niceMax(series.peak)
-
-      g.stroke = BasicStroke(1f)
-      g.color = Color(220, 220, 220)
-      g.drawLine(left, bottom, right, bottom)
-
-      val gap = max(2, chartW / (series.buckets.size * 5))
-      val barW = max(3, (chartW - gap * (series.buckets.size + 1)) / series.buckets.size)
-      series.buckets.forEachIndexed { index, bucket ->
-        val barH =
-            if (niceMax <= 0) 0 else (bucket.count.toDouble() / niceMax.toDouble() * chartH).toInt()
-        val x = left + gap + index * (barW + gap)
-        val y = bottom - barH
-        g.color = Color(108, 205, 117)
-        g.fillRect(x, y, barW, barH)
-        if (bucket.count == series.peak) {
-          g.font = Font(Font.SANS_SERIF, Font.BOLD, 7)
-          g.color = Color(247, 188, 72)
-          drawCenteredClamped(
-              g,
-              formatCount(bucket.count),
-              x + barW / 2,
-              max(top + 8, y - 2),
-              2,
-              width - 2,
-          )
-        }
-        if (
-            index == 0 || index == series.buckets.lastIndex || index == series.buckets.lastIndex / 2
-        ) {
-          g.font = Font(Font.SANS_SERIF, Font.PLAIN, 7)
-          g.color = Color(180, 188, 198)
-          drawCenteredClamped(
-              g,
-              bucket.label.replace("週", ""),
-              x + barW / 2,
-              bottom + 10,
-              2,
-              width - 2,
-          )
-        }
-      }
-      g.dispose()
-      return image
-    }
-
-    private fun renderDetailed(
-        series: LikeSeries,
-        title: String,
-        width: Int,
-        height: Int,
-    ): BufferedImage {
-      val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-      g.color = Color(24, 28, 33)
-      g.fillRect(0, 0, width, height)
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 18)
-      g.color = Color(238, 242, 247)
-      g.drawString(fitText(g.fontMetrics, title, width - 16), 8, 24)
-      g.font = Font(Font.MONOSPACED, Font.PLAIN, 14)
-      g.color = Color(180, 226, 120)
-      g.drawString(
-          fitText(
-              g.fontMetrics,
-              "${series.sparkline} total=${series.total} peak=${series.peak}",
-              width - 16,
-          ),
-          8,
-          44,
-      )
-
-      val left = 30
-      val top = 58
-      val right = width - 36
-      val bottom = height - 42
-      val chartW = right - left
-      val chartH = bottom - top
-      val niceMax = SLDataStatsService.niceMax(series.peak)
-      g.stroke = BasicStroke(1f)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-      for (i in 0..4) {
-        val y = bottom - (chartH * i / 4)
-        val value = niceMax * i / 4
-        g.color = if (i == 0) Color(220, 220, 220) else Color(66, 75, 86)
-        g.drawLine(left, y, right, y)
-        g.color = Color(180, 188, 198)
-        g.drawString(value.toString(), right + 5, y + 3)
-      }
-
-      val gap = max(3, chartW / (series.buckets.size * 5))
-      val barW = max(5, (chartW - gap * (series.buckets.size + 1)) / series.buckets.size)
-      series.buckets.forEachIndexed { index, bucket ->
-        val barH =
-            if (niceMax <= 0) 0 else (bucket.count.toDouble() / niceMax.toDouble() * chartH).toInt()
-        val x = left + gap + index * (barW + gap)
-        val y = bottom - barH
-        g.color = Color(108, 205, 117)
-        g.fillRect(x, y, barW, barH)
-        if (bucket.count == series.peak) {
-          g.color = Color(247, 188, 72)
-          g.drawString(formatCount(bucket.count), x - 4, max(top + 10, y - 3))
-        }
-        if (
-            index == 0 || index == series.buckets.lastIndex || index == series.buckets.lastIndex / 2
-        ) {
-          g.color = Color(180, 188, 198)
-          g.drawString(bucket.label.replace("週", ""), x - 1, bottom + 16)
-        }
-      }
-      g.dispose()
-      return image
-    }
-
-    private fun compactTextChecks(
-        g: Graphics2D,
-        series: LikeSeries,
-        title: String,
-        width: Int,
-    ): List<TextFitCheck> {
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 10)
-      val titleText = fitText(g.fontMetrics, title, width - 16)
-      val titleCheck = TextFitCheck("title", g.fontMetrics.stringWidth(titleText), width - 16)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 8)
-      val summary =
-          fitText(
-              g.fontMetrics,
-              "total ${compactCount(series.total)}  peak ${compactCount(series.peak)}",
-              width - 16,
-          )
-      return listOf(
-          titleCheck,
-          TextFitCheck("summary", g.fontMetrics.stringWidth(summary), width - 16),
-      )
-    }
-
-    private fun detailedTextChecks(
-        g: Graphics2D,
-        series: LikeSeries,
-        title: String,
-        width: Int,
-    ): List<TextFitCheck> {
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 18)
-      val titleText = fitText(g.fontMetrics, title, width - 16)
-      val titleCheck = TextFitCheck("title", g.fontMetrics.stringWidth(titleText), width - 16)
-      g.font = Font(Font.MONOSPACED, Font.PLAIN, 14)
-      val summary =
-          fitText(
-              g.fontMetrics,
-              "${series.sparkline} total=${series.total} peak=${series.peak}",
-              width - 16,
-          )
-      return listOf(
-          titleCheck,
-          TextFitCheck("summary", g.fontMetrics.stringWidth(summary), width - 16),
-      )
-    }
-  }
-
-  private object WallMapImageRenderer {
-    fun render(
-        stats: SLDataStatsService.BoardStats,
-        title: String,
-        width: Int,
-        height: Int,
-    ): BufferedImage {
-      val series = stats.weekly
-      val layout = layout(width, height)
-      val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-      g.color = Color(24, 28, 33)
-      g.fillRect(0, 0, width, height)
-
-      withClip(g, layout.title) {
-        g.font = Font(Font.SANS_SERIF, Font.BOLD, 16)
-        g.color = Color(238, 242, 247)
-        g.drawString(
-            fitTextEllipsis(g.fontMetrics, title, layout.title.width),
-            layout.title.x,
-            layout.title.y + 18,
-        )
-        g.font = Font(Font.SANS_SERIF, Font.PLAIN, 11)
-        g.color = Color(180, 226, 120)
-        val summary =
-            "total=${formatCount(series.total)} latest=${formatCount(series.latest?.count ?: 0)} peak=${formatCount(series.peak)}"
-        g.drawString(
-            fitTextEllipsis(g.fontMetrics, summary, layout.title.width),
-            layout.title.x,
-            layout.title.y + 36,
-        )
-      }
-
-      withClip(g, layout.chart) {
-        val axisMax = likeAxisMaxForDisplay(series.peak)
-        val ticks = SLDataStatsService.axisTicks(axisMax, DIALOG_AXIS_DIVISIONS)
-        val left = layout.plot.x
-        val top = layout.plot.y
-        val right = layout.plot.right
-        val bottom = layout.plot.bottom
-        val chartW = layout.plot.width
-        val chartH = layout.plot.height
-        g.stroke = BasicStroke(1f)
-        g.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        ticks.forEach { value ->
-          val y = bottom - (chartH * value / axisMax)
-          g.color = if (value == 0) Color(220, 220, 220) else Color(66, 75, 86)
-          g.drawLine(left, y, right, y)
-          g.color = Color(180, 188, 198)
-          g.drawString(formatCount(value), right + 7, y + 4)
-        }
-
-        val gap = max(4, chartW / (series.buckets.size * 6))
-        val barW = max(8, (chartW - gap * (series.buckets.size + 1)) / series.buckets.size)
-        series.buckets.forEachIndexed { index, bucket ->
-          val barH =
-              if (axisMax <= 0) 0
-              else (bucket.count.toDouble() / axisMax.toDouble() * chartH).toInt()
-          val x = left + gap + index * (barW + gap)
-          val y = bottom - barH
-          g.color = if (bucket.count == series.peak) Color(126, 224, 142) else Color(108, 205, 117)
-          if (barH > 0) g.fillRect(x, y, barW, barH)
-          if (bucket.count == series.peak) {
-            g.font = Font(Font.SANS_SERIF, Font.BOLD, 10)
-            g.color = Color(247, 188, 72)
-            drawCenteredClamped(
-                g,
-                formatCount(bucket.count),
-                x + barW / 2,
-                max(top + 10, y - 4),
-                left,
-                right,
-            )
-          }
-          if (
-              index == 0 ||
-                  index == series.buckets.lastIndex ||
-                  index == series.buckets.lastIndex / 2
-          ) {
-            g.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-            g.color = Color(180, 188, 198)
-            drawCenteredClamped(
-                g,
-                compactBucketLabel(series.period, bucket.label),
-                x + barW / 2,
-                bottom + 16,
-                left,
-                right,
-            )
-          }
-        }
-      }
-
-      withClip(g, layout.lists) {
-        g.color = Color(34, 40, 48)
-        g.fillRoundRect(
-            layout.lists.x,
-            layout.lists.y,
-            layout.lists.width,
-            layout.lists.height,
-            6,
-            6,
-        )
-      }
-      drawSummaryColumn(g, layout.weeklyMvp, "Weekly MVP", stats.weeklyMvp.take(3)) { index, summary
-        ->
-        "${index + 1}. #${summary.buildId} ${summary.title} ${summary.currentCount}"
-      }
-      drawSummaryColumn(g, layout.growing, "Growing", stats.growingBuilds.take(3)) { _, summary ->
-        "#${summary.buildId} ${summary.title} ${formatDelta(summary.delta)} (${summary.currentCount})"
-      }
-
-      g.dispose()
-      return image
-    }
-
-    fun logTextFit(
-        label: String,
-        stats: SLDataStatsService.BoardStats,
-        title: String,
-        width: Int,
-        height: Int,
-    ) {
-      val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      val layout = layout(width, height)
-      val checks = textChecks(g, stats, title, layout)
-      Tools.plugin.logger.info(
-          "[SLData] Map $label layout ${layout.title}; ${layout.chart}; ${layout.plot}; ${layout.lists};" +
-              " ${layout.weeklyMvp}; ${layout.growing}"
-      )
-      Tools.plugin.logger.info(
-          "[SLData] Map $label textFit " +
-              checks.joinToString("; ") {
-                "${it.name}=${it.width}/${it.maxWidth}:${it.fits} text='${it.text}'"
-              }
-      )
-      g.dispose()
-    }
-
-    private fun layout(width: Int, height: Int): WallMapLayout {
-      val title = PixelRect("title", 12, 8, width - 24, 46)
-      val chart = PixelRect("chart", 12, 64, width - 24, 214)
-      val plot = PixelRect("plot", 22, 84, 166, 162)
-      val lists = PixelRect("lists", 12, height - 90, width - 24, 78)
-      val columnWidth = (lists.width - 22) / 2
-      val weeklyMvp =
-          PixelRect("weeklyMvp", lists.x + 8, lists.y + 10, columnWidth, lists.height - 18)
-      val growing =
-          PixelRect("growing", weeklyMvp.right + 10, weeklyMvp.y, columnWidth, weeklyMvp.height)
-      return WallMapLayout(title, chart, plot, lists, weeklyMvp, growing)
-    }
-
-    private fun drawSummaryColumn(
-        g: Graphics2D,
-        rect: PixelRect,
-        heading: String,
-        rows: List<com.github.srain3.sociallikes.datas.SLDatabase.BuildLikeSummary>,
-        rowText: (Int, com.github.srain3.sociallikes.datas.SLDatabase.BuildLikeSummary) -> String,
-    ) {
-      withClip(g, rect) {
-        g.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
-        g.color = Color(238, 242, 247)
-        g.drawString(fitTextEllipsis(g.fontMetrics, heading, rect.width), rect.x, rect.y + 12)
-        g.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        g.color = Color(180, 188, 198)
-        rows.forEachIndexed { index, summary ->
-          g.drawString(
-              fitTextEllipsis(g.fontMetrics, rowText(index, summary), rect.width),
-              rect.x,
-              rect.y + 28 + index * 14,
-          )
-        }
-      }
-    }
-
-    private fun textChecks(
-        g: Graphics2D,
-        stats: SLDataStatsService.BoardStats,
-        title: String,
-        layout: WallMapLayout,
-    ): List<TextDrawCheck> {
-      val series = stats.weekly
-      val checks = mutableListOf<TextDrawCheck>()
-      fun add(name: String, text: String, maxWidth: Int) {
-        val fitted = fitTextEllipsis(g.fontMetrics, text, maxWidth)
-        checks += TextDrawCheck(name, fitted, g.fontMetrics.stringWidth(fitted), maxWidth)
-      }
-
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 16)
-      add("title", title, layout.title.width)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 11)
-      add(
-          "summary",
-          "total=${formatCount(series.total)} latest=${formatCount(series.latest?.count ?: 0)} peak=${formatCount(series.peak)}",
-          layout.title.width,
-      )
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-      SLDataStatsService.axisTicks(likeAxisMaxForDisplay(series.peak), DIALOG_AXIS_DIVISIONS)
-          .forEach {
-            add("yLabel-$it", formatCount(it), layout.chart.right - layout.plot.right - 7)
-          }
-      listOf(0, series.buckets.lastIndex / 2, series.buckets.lastIndex).distinct().forEach { index
-        ->
-        series.buckets.getOrNull(index)?.let {
-          add("xLabel-$index", compactBucketLabel(series.period, it.label), 34)
-        }
-      }
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
-      add("weeklyMvp-heading", "Weekly MVP", layout.weeklyMvp.width)
-      add("growing-heading", "Growing", layout.growing.width)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-      stats.weeklyMvp.take(3).forEachIndexed { index, summary ->
-        add(
-            "weeklyMvp-${index + 1}",
-            "${index + 1}. #${summary.buildId} ${summary.title} ${summary.currentCount}",
-            layout.weeklyMvp.width,
-        )
-      }
-      stats.growingBuilds.take(3).forEachIndexed { index, summary ->
-        add(
-            "growing-${index + 1}",
-            "#${summary.buildId} ${summary.title} ${formatDelta(summary.delta)} (${summary.currentCount})",
-            layout.growing.width,
-        )
-      }
-      return checks
-    }
-  }
-
-  private object BoardImageRenderer {
-    fun render(stats: SLDataStatsService.BoardStats, width: Int, height: Int): BufferedImage {
-      val image = GraphImageRenderer.render(stats.weekly, "SocialLikes Public Board", width, height)
-      val g = image.createGraphics()
-      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-      g.color = Color(18, 22, 27, 220)
-      g.fillRoundRect(14, 154, 228, 86, 8, 8)
-      g.color = Color(238, 242, 247)
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 13)
-      g.drawString("Weekly MVP", 24, 174)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 11)
-      stats.weeklyMvp.take(3).forEachIndexed { index, summary ->
-        g.drawString(
-            "${index + 1}. #${summary.buildId} ${summary.title.take(14)} ${summary.currentCount}",
-            24,
-            192 + index * 14,
-        )
-      }
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 13)
-      g.drawString("Growing", 140, 174)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 11)
-      stats.growingBuilds.take(3).forEachIndexed { index, summary ->
-        g.drawString(
-            "#${summary.buildId} +${summary.delta} (${summary.currentCount})",
-            140,
-            192 + index * 14,
-        )
-      }
-      g.dispose()
-      return image
-    }
   }
 }

@@ -9,10 +9,8 @@ import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
-import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import org.bukkit.*
 import org.bukkit.entity.HumanEntity
@@ -36,14 +34,7 @@ object UserBuild {
   fun createGUI(user: OfflinePlayer, player: Player): ChestGui {
     val name = SLPlayerHeads.resolveName(user.uniqueId) ?: user.name ?: "Unknown"
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r ${name}の建築 p1".color())
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val p = it.whoClicked as Player
-        p.playSound(p, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val pagePane = PaginatedPane(9, 5)
     pagePane.populateWithItemStacks(
@@ -58,51 +49,10 @@ object UserBuild {
     }
     gui.addPane(Slot.fromXY(0, 0), pagePane)
 
-    val navigation = StaticPane(9, 1)
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.RED_WOOL).apply {
-              allFlag()
-              addText("&f前のページへ", mutableListOf())
-            }
-        ) { _: InventoryClickEvent? ->
-          if (pagePane.page > 0) {
-            pagePane.setPage(pagePane.page - 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r ${name}の建築 p${pagePane.page+1}".color()
-            gui.update()
-          }
-        },
-        0,
-        0,
-    )
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.GREEN_WOOL).apply {
-              allFlag()
-              addText("&f次のページへ", mutableListOf())
-            }
-        ) { _: InventoryClickEvent? ->
-          if (pagePane.page < pagePane.pages - 1) {
-            pagePane.setPage(pagePane.page + 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r ${name}の建築 p${pagePane.page+1}".color()
-            gui.update()
-          }
-        },
-        8,
-        0,
-    )
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.BARRIER).apply {
-              allFlag()
-              addText("&c閉じる", mutableListOf())
-            }
-        ) { event: InventoryClickEvent ->
-          event.whoClicked.closeInventory()
-        },
-        4,
-        0,
-    )
+    val navigation =
+        gui.addPageNav(pagePane) {
+          Tools.socialLikesLOGOShort + "&r ${name}の建築 p${pagePane.page+1}".color()
+        }
     if (FollowBuild.isFollow(user.uniqueId, player)) {
       navigation.addItem(
           GuiItem(
@@ -137,7 +87,6 @@ object UserBuild {
           0,
       )
     }
-    gui.addPane(Slot.fromXY(0, 5), navigation)
 
     gui.update()
     return gui
@@ -181,13 +130,6 @@ object UserBuild {
 
   val idKey = NamespacedKey(Tools.plugin, "SocialLikes_ID-UserBuildGUI")
 
-  /** アイテムにIDを埋め込む */
-  private fun addItemMetaID(item: ItemStack, id: Int) {
-    val meta = item.itemMeta ?: return
-    meta.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
-    item.itemMeta = meta
-  }
-
   /** アイテムを作成する */
   private fun createSignItem(
       slData: SLData,
@@ -195,20 +137,8 @@ object UserBuild {
           SLDatabase.getCachedPlayerName(slData.owner.toString())
               ?: SLPlayerHeads.resolveName(slData.owner),
   ) {
-    val item = ItemStack(Material.OAK_SIGN)
-    item.allFlag()
-    item.addText(
-        "&f>>&a${slData.title} &rID:${slData.id}",
-        mutableListOf(
-            "&3制作者:&f ${ownerName ?: "不明"}",
-            "&3イイね:&f ${slData.likes.count()}",
-            "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
-            "&7&nクリックでテレポート&r&7します",
-        ),
-    )
-    addItemMetaID(item, slData.id)
     val map = userBuildItem[slData.owner] ?: mutableMapOf()
-    map[slData.time] = item
+    map[slData.time] = buildSignItem(slData, idKey, ownerName ?: "不明")
     userBuildItem[slData.owner] = map
   }
 
@@ -235,14 +165,7 @@ object UserBuild {
   /** オンラインプレイヤー一覧GUIを表示する */
   fun openOnlinePlayerGUI(p: HumanEntity) {
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p1".color())
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val player = it.whoClicked as Player
-        player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val pagePane = PaginatedPane(9, 5)
     pagePane.populateWithItemStacks(onlinePlayerHeadItem())
@@ -257,51 +180,10 @@ object UserBuild {
     }
     gui.addPane(Slot.fromXY(0, 0), pagePane)
 
-    val navigation = StaticPane(9, 1)
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.RED_WOOL).apply {
-              allFlag()
-              addText("&f前のページへ", mutableListOf())
-            }
-        ) { _: InventoryClickEvent? ->
-          if (pagePane.page > 0) {
-            pagePane.setPage(pagePane.page - 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p${pagePane.page+1}".color()
-            gui.update()
-          }
-        },
-        0,
-        0,
-    )
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.GREEN_WOOL).apply {
-              allFlag()
-              addText("&f次のページへ", mutableListOf())
-            }
-        ) { _: InventoryClickEvent? ->
-          if (pagePane.page < pagePane.pages - 1) {
-            pagePane.setPage(pagePane.page + 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p${pagePane.page+1}".color()
-            gui.update()
-          }
-        },
-        8,
-        0,
-    )
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.BARRIER).apply {
-              allFlag()
-              addText("&c閉じる", mutableListOf())
-            }
-        ) { event: InventoryClickEvent ->
-          event.whoClicked.closeInventory()
-        },
-        4,
-        0,
-    )
+    val navigation =
+        gui.addPageNav(pagePane) {
+          Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p${pagePane.page+1}".color()
+        }
     navigation.addItem(
         GuiItem(
             ItemStack(Material.NAME_TAG).apply {
@@ -315,7 +197,6 @@ object UserBuild {
         6,
         0,
     )
-    gui.addPane(Slot.fromXY(0, 5), navigation)
 
     gui.update()
     gui.show(p)

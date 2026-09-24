@@ -155,14 +155,7 @@ object SLSignLikes {
   fun createGUI(sign: Sign, slData: SLData, owner: Boolean, isOP: Boolean): ChestGui {
     val gui =
         ChestGui(6, Tools.socialLikesLOGOShort + "&0ID:${slData.id}「&2${slData.title}&0」p1".color())
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val player = it.whoClicked as Player
-        player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val pagePane = PaginatedPane(9, 5)
     val headStacks =

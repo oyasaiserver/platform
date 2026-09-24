@@ -1,18 +1,18 @@
 package icu.oyasai.citiesskymine.crowd
 
-import com.sk89q.worldedit.IncompleteRegionException
-import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
-import com.sk89q.worldedit.regions.CuboidRegion
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
 import icu.oyasai.citiesskymine.shared.ArgSuggest
+import icu.oyasai.citiesskymine.util.CuboidBounds
+import icu.oyasai.citiesskymine.util.HorizontalUnit
 import icu.oyasai.citiesskymine.util.MessageUtil
+import icu.oyasai.citiesskymine.util.blockAt
+import icu.oyasai.citiesskymine.util.horizontalUnit
+import icu.oyasai.citiesskymine.util.lengthAlong
+import icu.oyasai.citiesskymine.util.selectedCuboid
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.roundToInt
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.BlockData
@@ -48,9 +48,9 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
 
     val parsed = parseArgs(sender, label, args) ?: return true
-    val region = selectedCuboid(sender) ?: return true
+    val region = selectedCuboid(sender, "群衆生成は cuboid 選択にだけ対応しています。") ?: return true
     val bounds = CuboidBounds.from(region)
-    val facing = yawFace(sender.location.yaw)
+    val facing = sender.facing
     val depthAxis = horizontalUnit(facing)
     val lateralAxis = leftUnit(depthAxis)
     val maxBlocks =
@@ -196,24 +196,6 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     MessageUtil.info(sender, "例: /$label 8x4 1 polished_blackstone_wall player_head")
   }
 
-  private fun selectedCuboid(player: Player): CuboidRegion? {
-    val actor = BukkitAdapter.adapt(player)
-    val weWorld = BukkitAdapter.adapt(player.world)
-    val session = WorldEdit.getInstance().sessionManager.get(actor)
-    val region =
-        try {
-          session.getRegionSelector(weWorld).getRegion()
-        } catch (_: IncompleteRegionException) {
-          MessageUtil.error(player, "WorldEdit で範囲を2点選択してから実行してください。")
-          return null
-        }
-    return region as? CuboidRegion
-        ?: run {
-          MessageUtil.error(player, "群衆生成は cuboid 選択にだけ対応しています。")
-          null
-        }
-  }
-
   private fun buildPlan(
       player: Player,
       bounds: CuboidBounds,
@@ -234,7 +216,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         parsed.counts.depth?.let { centeredStarts(it, parsed.gap, depthLength, "奥行き") }
             ?: listOf((depthLength - 1) / 2)
     val bodyData = crowdWallData(parsed.wallMaterial, lateralAxis)
-    val headData = headData(parsed.headMaterial, yawFace(player.location.yaw))
+    val headData = headData(parsed.headMaterial, player.facing)
     val placements = ArrayList<CrowdPlacement>()
 
     for (lateralOffset in lateralStarts) {
@@ -357,62 +339,6 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           .take(20)
           .toList()
 
-  private fun lengthAlong(bounds: CuboidBounds, axis: HorizontalUnit): Int =
-      if (axis.x != 0) {
-        bounds.maxX - bounds.minX + 1
-      } else {
-        bounds.maxZ - bounds.minZ + 1
-      }
-
-  private fun blockAt(
-      bounds: CuboidBounds,
-      lateralAxis: HorizontalUnit,
-      lateralOffset: Int,
-      depthAxis: HorizontalUnit,
-      depthOffset: Int,
-  ): HorizontalPoint {
-    val x =
-        coordinateAlongX(bounds, lateralAxis, lateralOffset)
-            ?: coordinateAlongX(bounds, depthAxis, depthOffset)
-            ?: bounds.minX
-    val z =
-        coordinateAlongZ(bounds, lateralAxis, lateralOffset)
-            ?: coordinateAlongZ(bounds, depthAxis, depthOffset)
-            ?: bounds.minZ
-    return HorizontalPoint(x, z)
-  }
-
-  private fun coordinateAlongX(bounds: CuboidBounds, axis: HorizontalUnit, offset: Int): Int? =
-      when (axis.x) {
-        1 -> bounds.minX + offset
-        -1 -> bounds.maxX - offset
-        else -> null
-      }
-
-  private fun coordinateAlongZ(bounds: CuboidBounds, axis: HorizontalUnit, offset: Int): Int? =
-      when (axis.z) {
-        1 -> bounds.minZ + offset
-        -1 -> bounds.maxZ - offset
-        else -> null
-      }
-
-  private fun yawFace(yaw: Float): BlockFace =
-      when (Math.floorMod((yaw / 90.0f).roundToInt(), 4)) {
-        1 -> BlockFace.WEST
-        2 -> BlockFace.NORTH
-        3 -> BlockFace.EAST
-        else -> BlockFace.SOUTH
-      }
-
-  private fun horizontalUnit(face: BlockFace): HorizontalUnit =
-      when (face) {
-        BlockFace.NORTH -> HorizontalUnit(0, -1)
-        BlockFace.EAST -> HorizontalUnit(1, 0)
-        BlockFace.SOUTH -> HorizontalUnit(0, 1)
-        BlockFace.WEST -> HorizontalUnit(-1, 0)
-        else -> HorizontalUnit(0, 1)
-      }
-
   private fun leftUnit(forward: HorizontalUnit): HorizontalUnit =
       HorizontalUnit(forward.z, -forward.x)
 
@@ -445,40 +371,12 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     fun figureCount(): Long = lateral.toLong() * (depth ?: 1).toLong()
   }
 
-  private data class CuboidBounds(
-      val minX: Int,
-      val maxX: Int,
-      val minY: Int,
-      val maxY: Int,
-      val minZ: Int,
-      val maxZ: Int,
-  ) {
-    companion object {
-      fun from(region: CuboidRegion): CuboidBounds {
-        val a = region.pos1
-        val b = region.pos2
-        return CuboidBounds(
-            min(a.x(), b.x()),
-            max(a.x(), b.x()),
-            min(a.y(), b.y()),
-            max(a.y(), b.y()),
-            min(a.z(), b.z()),
-            max(a.z(), b.z()),
-        )
-      }
-    }
-  }
-
   private data class CrowdBuildPlan(
       val placements: List<CrowdPlacement>,
       val figures: Int,
   )
 
   private data class CrowdPlacement(val x: Int, val y: Int, val z: Int, val data: BlockData)
-
-  private data class HorizontalUnit(val x: Int, val z: Int)
-
-  private data class HorizontalPoint(val x: Int, val z: Int)
 
   companion object {
     private const val BLOCKS_PER_FIGURE = 3L

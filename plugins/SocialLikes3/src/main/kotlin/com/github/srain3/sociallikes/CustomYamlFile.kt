@@ -12,22 +12,6 @@ open class CustomYamlFile(private val file: File) : YamlConfiguration() {
     reload()
   }
 
-  /*
-  fun saveDefault() {
-      val dataFolder = plugin.dataFolder
-      if (!dataFolder.exists() || !dataFolder.isDirectory) {
-          dataFolder.mkdir()
-      }
-      if (!file.exists()) {
-          if (fromJar) {
-              plugin.saveResource(fileName, false)
-          } else {
-              save()
-          }
-      }
-  }
-   */
-
   fun save() {
     try {
       this.save(file)
@@ -38,11 +22,5 @@ open class CustomYamlFile(private val file: File) : YamlConfiguration() {
 
   fun reload() {
     this.load(file)
-  }
-
-  fun delete() {
-    if (file.exists()) { // 存在するファイルの場合
-      file.delete()
-    }
   }
 }

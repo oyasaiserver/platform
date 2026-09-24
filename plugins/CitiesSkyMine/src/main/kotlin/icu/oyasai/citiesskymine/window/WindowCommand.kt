@@ -10,7 +10,6 @@ import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.util.LinkedHashMap
-import kotlin.math.roundToInt
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -59,7 +58,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val materials = parsed.materials
     saveWindowDefaults(sender, width, height, materials)
 
-    val facing = yawFace(sender.location.yaw)
+    val facing = sender.facing
     val lateralPositive = lateralPositiveFace(facing)
     val base = sender.location.block.getRelative(facing)
     val leftOffset = -(width / 2)
@@ -455,19 +454,6 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
     val midpoint = (leftOffset + rightOffset) / 2.0
     return if (offset <= midpoint) lateralPositive else lateralPositive.oppositeFace
-  }
-
-  private fun yawFace(yaw: Float): BlockFace {
-    return when (yawToQuadrant(yaw)) {
-      1 -> BlockFace.WEST
-      2 -> BlockFace.NORTH
-      3 -> BlockFace.EAST
-      else -> BlockFace.SOUTH
-    }
-  }
-
-  private fun yawToQuadrant(yaw: Float): Int {
-    return Math.floorMod((yaw / 90.0f).roundToInt(), 4)
   }
 
   private fun lateralPositiveFace(face: BlockFace): BlockFace {

@@ -16,7 +16,6 @@ import java.util.*
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -32,14 +31,7 @@ object FollowBuild : Listener {
     var filterSwitch = true
 
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p1".color())
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val player = it.whoClicked as Player
-        player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val itemListALL0 = mutableMapOf<LocalDateTime, ItemStack>()
     userList.forEach { uuid -> itemListALL0.putAll(UserBuild.getUserBuildItem(uuid)) }
@@ -254,14 +246,7 @@ object FollowBuild : Listener {
   /** フォロー中の一覧GUI */
   private fun followHeadListGUI(userList: MutableSet<UUID>): ChestGui {
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r フォロー中の人 p1".color())
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val player = it.whoClicked as Player
-        player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val pane = PaginatedPane(9, 5)
     val headItemList = mutableListOf<ItemStack>()
@@ -289,52 +274,7 @@ object FollowBuild : Listener {
     }
     gui.addPane(Slot.fromXY(0, 0), pane)
 
-    val navigation = StaticPane(9, 1)
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.RED_WOOL).apply {
-              allFlag()
-              addText("&f前のページへ", mutableListOf())
-            }
-        ) { _: InventoryClickEvent? ->
-          if (pane.page > 0) {
-            pane.setPage(pane.page - 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
-            gui.update()
-          }
-        },
-        0,
-        0,
-    )
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.GREEN_WOOL).apply {
-              allFlag()
-              addText("&f次のページへ", mutableListOf())
-            }
-        ) { _: InventoryClickEvent? ->
-          if (pane.page < pane.pages - 1) {
-            pane.setPage(pane.page + 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
-            gui.update()
-          }
-        },
-        8,
-        0,
-    )
-    navigation.addItem(
-        GuiItem(
-            ItemStack(Material.BARRIER).apply {
-              allFlag()
-              addText("&c閉じる", mutableListOf())
-            }
-        ) { event: InventoryClickEvent ->
-          event.whoClicked.closeInventory()
-        },
-        4,
-        0,
-    )
-    gui.addPane(Slot.fromXY(0, 5), navigation)
+    gui.addPageNav(pane) { Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color() }
 
     return gui
   }

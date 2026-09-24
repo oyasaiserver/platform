@@ -79,13 +79,6 @@ object SLDataStatsService {
       val incompleteBucketIndex: Int?,
   )
 
-  data class BoardStats(
-      val weekly: LikeSeries,
-      val weeklyMvp: List<SLDatabase.BuildLikeSummary>,
-      val weeklyOwnerMvp: List<SLDatabase.OwnerLikeSummary>,
-      val growingBuilds: List<SLDatabase.BuildLikeSummary>,
-  )
-
   data class OwnerLikeRanking(
       val period: RankingPeriod,
       val startDate: LocalDate?,
@@ -443,69 +436,6 @@ object SLDataStatsService {
         }
 
     return LikeSeries(period, bucketsList)
-  }
-
-  fun loadBoardStats(): BoardStats {
-    val currentWeekStart = currentWeekStart()
-    val previousWeekStart = currentWeekStart.minusWeeks(1)
-    val currentWeekMillis = toMillis(currentWeekStart)
-    val previousWeekMillis = toMillis(previousWeekStart)
-    val allBuilds = Data.getSLDataAll()
-
-    val weeklyMvp =
-        allBuilds
-            .map { build ->
-              val recentCount = build.likesWithTimestamp.values.count { it >= currentWeekMillis }
-              SLDatabase.BuildLikeSummary(
-                  build.id,
-                  build.title,
-                  build.owner.toString(),
-                  recentCount,
-              )
-            }
-            .filter { it.currentCount > 0 }
-            .sortedByDescending { it.currentCount }
-            .take(5)
-
-    val weeklyOwnerMvp =
-        allBuilds
-            .groupBy { it.owner.toString() }
-            .map { (owner, builds) ->
-              val count =
-                  builds.sumOf { b ->
-                    b.likesWithTimestamp.values.count { it >= currentWeekMillis }
-                  }
-              SLDatabase.OwnerLikeSummary(owner, count)
-            }
-            .filter { it.currentCount > 0 }
-            .sortedByDescending { it.currentCount }
-            .take(5)
-
-    val growingBuilds =
-        allBuilds
-            .map { build ->
-              val currentCount = build.likesWithTimestamp.values.count { it >= currentWeekMillis }
-              val previousCount =
-                  build.likesWithTimestamp.values.count {
-                    it in previousWeekMillis until currentWeekMillis
-                  }
-              SLDatabase.BuildLikeSummary(
-                  build.id,
-                  build.title,
-                  build.owner.toString(),
-                  currentCount - previousCount,
-              )
-            }
-            .filter { it.currentCount > 0 }
-            .sortedByDescending { it.currentCount }
-            .take(5)
-
-    return BoardStats(
-        weekly = loadWeeklySeries(DEFAULT_BUCKETS),
-        weeklyMvp = weeklyMvp,
-        weeklyOwnerMvp = weeklyOwnerMvp,
-        growingBuilds = growingBuilds,
-    )
   }
 
   /**
@@ -1210,45 +1140,6 @@ object SLDataStatsService {
     return calculatePublicityStats(reactions, limit)
   }
 
-  private fun calculateWorldReactionsFromMemory(
-      allBuilds: Collection<SLData>,
-      playerUuid: String,
-      targetUuid: UUID?,
-  ): List<WorldReactionRow> {
-    val receivedByWorld = mutableMapOf<String, Int>()
-    val givenByWorld = mutableMapOf<String, Int>()
-
-    for (b in allBuilds) {
-      val w = b.worldName
-      if (b.owner.toString() == playerUuid) {
-        receivedByWorld[w] = (receivedByWorld[w] ?: 0) + b.likes.size
-      }
-      if (targetUuid != null && b.likes.contains(targetUuid)) {
-        givenByWorld[w] = (givenByWorld[w] ?: 0) + 1
-      }
-    }
-
-    val allWorlds = (receivedByWorld.keys + givenByWorld.keys).distinct()
-    return allWorlds
-        .mapNotNull { world ->
-          val ownReceived = receivedByWorld[world] ?: 0
-          val givenInWorld = givenByWorld[world] ?: 0
-          if (givenInWorld == 0 && ownReceived == 0) null
-          else {
-            WorldReactionRow(
-                worldName = world,
-                receivedLikes = ownReceived,
-                givenLikes = givenInWorld,
-            )
-          }
-        }
-        .filter { it.givenLikes > 0 }
-        .sortedWith(
-            compareByDescending<WorldReactionRow> { it.likeRatio ?: Double.NEGATIVE_INFINITY }
-                .thenBy { it.worldName }
-        )
-  }
-
   private fun calculateRecentBuildComparisonFromMemory(
       ownBuilds: List<SLData>,
   ): RecentBuildComparison? {
@@ -1700,49 +1591,6 @@ object SLDataStatsService {
           -probability * kotlin.math.ln(probability)
         }
     return entropy / kotlin.math.ln(counts.size.toDouble())
-  }
-
-  private fun calculateWorldReactions(
-      rows: List<SLDatabase.WorldReactionSummary>
-  ): List<WorldReactionRow> {
-    return rows
-        .filter { it.givenLikes > 0 }
-        .map { row ->
-          WorldReactionRow(
-              worldName = row.worldName,
-              receivedLikes = row.ownReceivedLikes,
-              givenLikes = row.givenLikes,
-          )
-        }
-        .sortedWith(
-            compareByDescending<WorldReactionRow> { it.likeRatio ?: Double.NEGATIVE_INFINITY }
-                .thenBy { it.worldName }
-        )
-  }
-
-  private fun calculateRecentBuildComparison(
-      history: List<SLDatabase.BuildHistoryEntry>
-  ): RecentBuildComparison? {
-    if (history.size < 2) return null
-    val split = history.size / 2
-    val older = history.take(split)
-    val newer = history.drop(split)
-    val completeDay = LocalDate.now(analysisZoneId).minusDays(1)
-    fun averageLikesPerDay(rows: List<SLDatabase.BuildHistoryEntry>): Double =
-        rows
-            .map { row ->
-              val ageDays =
-                  ChronoUnit.DAYS.between(row.createdAt.toLocalDate(), completeDay)
-                      .coerceAtLeast(1L)
-              row.likesReceived.toDouble() / ageDays.toDouble()
-            }
-            .average()
-    return RecentBuildComparison(
-        olderCount = older.size,
-        newerCount = newer.size,
-        olderLikesPerDay = averageLikesPerDay(older),
-        newerLikesPerDay = averageLikesPerDay(newer),
-    )
   }
 
   private fun calculateLikeConcentration(counts: List<Int>, topCount: Int = 3): LikeConcentration {

@@ -44,10 +44,4 @@ open class CustomYaml(
   fun reload() {
     this.load(file)
   }
-
-  fun delete() {
-    if (file.exists()) { // 存在するファイルの場合
-      file.delete()
-    }
-  }
 }

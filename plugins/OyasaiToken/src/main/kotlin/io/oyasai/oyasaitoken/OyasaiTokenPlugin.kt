@@ -29,7 +29,6 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
 import java.util.logging.Level
-import me.realized.tokenmanager.TokenManagerPlugin
 import me.realized.tokenmanager.api.TokenManager
 import me.realized.tokenmanager.api.event.TMTokenBalanceChangeEvent
 import me.realized.tokenmanager.api.event.TMTokenSendEvent
@@ -43,10 +42,12 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.ServicePriority
+import org.bukkit.plugin.java.JavaPlugin
 import org.yaml.snakeyaml.Yaml
 
 class OyasaiTokenPlugin :
-    TokenManagerPlugin(),
+    JavaPlugin(),
+    TokenManager,
     OyasaiTokenApi,
     OyasaiTokenCommitApi,
     OyasaiTokenService,
@@ -63,7 +64,6 @@ class OyasaiTokenPlugin :
   private var tabPlaceholderIntegration: TabPlaceholderIntegration? = null
 
   override fun onEnable() {
-    registerCompatInstance()
     saveDefaultConfig()
     dataFolder.mkdirs()
     saveNotificationDefaults()
@@ -154,7 +154,6 @@ class OyasaiTokenPlugin :
     server.servicesManager.unregisterAll(this)
     tabPlaceholderIntegration?.disable()
     tabPlaceholderIntegration = null
-    unregisterCompatInstance()
   }
 
   @EventHandler
@@ -324,20 +323,6 @@ class OyasaiTokenPlugin :
 
   override fun addTokens(playerName: String, tokens: Long) {
     addTokens(playerName, tokens, false)
-  }
-
-  override fun removeTokens(playerName: String, tokens: Long, silent: Boolean) {
-    val target = resolveTarget(playerName)
-    removeTokensInternal(
-        target.uuid,
-        target.name,
-        tokens,
-        notificationContext(NotificationType.REMOVE, silent),
-    )
-  }
-
-  override fun removeTokens(playerName: String, tokens: Long) {
-    removeTokens(playerName, tokens, false)
   }
 
   override fun reload(): Boolean {
@@ -765,12 +750,7 @@ class OyasaiTokenPlugin :
       context: MutationContext = MutationContext.SILENT,
       completion: CompletableFuture<Boolean>? = null,
   ): BalanceChange? {
-    val change =
-        if (completion == null) {
-          ledger.add(uuid, name, amount, context)
-        } else {
-          ledger.add(uuid, name, amount, context, completion)
-        }
+    val change = ledger.add(uuid, name, amount, context, completion)
     change?.let { dispatchBalanceChange(it) }
     return change
   }

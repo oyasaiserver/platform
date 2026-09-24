@@ -74,98 +74,10 @@ object SLtp : CommandExecutor, TabCompleter {
                 sender.sendMessage(Tools.socialLikesLOGO + " &cID:${id}は存在しません".color())
                 return true
               }
-        } else if (args[0] == "next") {
-          val time =
-              userLastTimeStamp[sender.uniqueId]
-                  ?: run {
-                    sender.sendMessage(Tools.socialLikesLOGO + "&r 一度sltpを行ってください".color())
-                    return true
-                  }
-          val getID =
-              AllBuild.timeToNextID(time)
-                  ?: run {
-                    sender.sendMessage(Tools.socialLikesLOGO + "&e 次の新着Likeは有りませんでした".color())
-                    return true
-                  }
-
-          Data.getSLData(getID)
-              ?: run {
-                sender.sendMessage(Tools.socialLikesLOGO + " &cID:${getID}は存在しません".color())
-                return true
-              }
-        } else if (args[0] == "unext") {
-          val time =
-              userLastTimeStamp[sender.uniqueId]
-                  ?: run {
-                    sender.sendMessage(Tools.socialLikesLOGO + "&r 一度sltpを行ってください".color())
-                    return true
-                  }
-          val getOwnerUUID =
-              AllBuild.timeToUser(time)
-                  ?: run {
-                    sender.sendMessage(
-                        Tools.socialLikesLOGO + "&c 情報が欠けているためユーザーの次の建築を返せませんでした".color()
-                    )
-                    return true
-                  }
-          val getID =
-              UserBuild.timeToNextID(time, getOwnerUUID)
-                  ?: run {
-                    sender.sendMessage(Tools.socialLikesLOGO + "&e 次の新着Likeは有りませんでした".color())
-                    return true
-                  }
-
-          Data.getSLData(getID)
-              ?: run {
-                sender.sendMessage(Tools.socialLikesLOGO + " &cID:${getID}は存在しません".color())
-                return true
-              }
-        } else if (args[0] == "back") {
-          val time =
-              userLastTimeStamp[sender.uniqueId]
-                  ?: run {
-                    sender.sendMessage(Tools.socialLikesLOGO + "&r 一度sltpを行ってください".color())
-                    return true
-                  }
-          val getID =
-              AllBuild.timeToPrevID(time)
-                  ?: run {
-                    sender.sendMessage(Tools.socialLikesLOGO + "&e 前の新着Likeは有りませんでした".color())
-                    return true
-                  }
-
-          Data.getSLData(getID)
-              ?: run {
-                sender.sendMessage(Tools.socialLikesLOGO + " &cID:${getID}は存在しません".color())
-                return true
-              }
-        } else if (args[0] == "uback") {
-          val time =
-              userLastTimeStamp[sender.uniqueId]
-                  ?: run {
-                    sender.sendMessage(Tools.socialLikesLOGO + "&r 一度sltpを行ってください".color())
-                    return true
-                  }
-          val getOwnerUUID =
-              AllBuild.timeToUser(time)
-                  ?: run {
-                    sender.sendMessage(
-                        Tools.socialLikesLOGO + "&c 情報が欠けているためユーザーの前の建築を返せませんでした".color()
-                    )
-                    return true
-                  }
-          val getID =
-              UserBuild.timeToPrevID(time, getOwnerUUID)
-                  ?: run {
-                    sender.sendMessage(Tools.socialLikesLOGO + "&e 前の新着Likeは有りませんでした".color())
-                    return true
-                  }
-
-          Data.getSLData(getID)
-              ?: run {
-                sender.sendMessage(Tools.socialLikesLOGO + " &cID:${getID}は存在しません".color())
-                return true
-              }
+        } else if (
+            args[0] == "next" || args[0] == "back" || args[0] == "unext" || args[0] == "uback"
+        ) {
+          adjacentSlData(sender, args[0]) ?: return true
         } else {
           return true
         }
@@ -197,6 +109,45 @@ object SLtp : CommandExecutor, TabCompleter {
         .runTaskLater(Tools.plugin, 1)
 
     return true
+  }
+
+  private fun adjacentSlData(
+      sender: Player,
+      mode: String,
+  ): com.github.srain3.sociallikes.datas.SLData? {
+    val forward = mode == "next" || mode == "unext"
+    val userScoped = mode == "unext" || mode == "uback"
+    val time =
+        userLastTimeStamp[sender.uniqueId]
+            ?: run {
+              sender.sendMessage(Tools.socialLikesLOGO + "&r 一度sltpを行ってください".color())
+              return null
+            }
+    val getID =
+        if (userScoped) {
+          val owner =
+              AllBuild.timeToUser(time)
+                  ?: run {
+                    val missing =
+                        if (forward) "&c 情報が欠けているためユーザーの次の建築を返せませんでした"
+                        else "&c 情報が欠けているためユーザーの前の建築を返せませんでした"
+                    sender.sendMessage(Tools.socialLikesLOGO + missing.color())
+                    return null
+                  }
+          if (forward) UserBuild.timeToNextID(time, owner) else UserBuild.timeToPrevID(time, owner)
+        } else {
+          if (forward) AllBuild.timeToNextID(time) else AllBuild.timeToPrevID(time)
+        }
+            ?: run {
+              val missing = if (forward) "&e 次の新着Likeは有りませんでした" else "&e 前の新着Likeは有りませんでした"
+              sender.sendMessage(Tools.socialLikesLOGO + missing.color())
+              return null
+            }
+    return Data.getSLData(getID)
+        ?: run {
+          sender.sendMessage(Tools.socialLikesLOGO + " &cID:${getID}は存在しません".color())
+          null
+        }
   }
 
   /** /sltp new [1-10]: 直近に設置・宣伝されたSL看板へテレポートする */

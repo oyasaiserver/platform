@@ -16,6 +16,7 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Logger
 import kotlin.random.Random
+import kotlin.reflect.KMutableProperty0
 import me.realized.tm.api.TMAPI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -81,7 +82,8 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private lateinit var transferService: TransferService
   private lateinit var petCommandService: PetCommandService
   private lateinit var petShopGuiService: PetShopGuiService
-  private lateinit var commandManager: CommandManager
+  private lateinit var playerCommands: PlayerCommands
+  private lateinit var opCommands: OpCommands
 
   private val guiTitle = Component.text("ペットステータス", BLACK)
   private val shopGuiTitle = Component.text("購入確認", BLACK)
@@ -363,7 +365,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
               PetDataManager.clearPlayerCache(player.uniqueId)
               mountCooldowns.remove(player.uniqueId)
               dropCooldowns.remove(player.uniqueId)
-              PetDebugger.disable(player.uniqueId)
             },
         )
     server.pluginManager.registerEvents(petLifecycleListener, this)
@@ -375,7 +376,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
         }
     server.pluginManager.registerEvents(shopListener, this)
 
-    val playerCommands =
+    playerCommands =
         PlayerCommands(
             this::openMainMenu,
             petShopGuiService::openMainShopGui,
@@ -395,7 +396,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
             queryService::handlePetDetail,
             { player, filter -> guiManager.openPetListGui(player, player.uniqueId, filter) },
         )
-    val opCommands =
+    opCommands =
         OpCommands(
             this,
             this::showOpUsage,
@@ -403,7 +404,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
             this::handleForceStoreAll,
             queryService::handlePetHistory,
         )
-    commandManager = CommandManager(playerCommands, opCommands)
 
     logger.info("BigWolfPlugin enabled with TokenManager integration")
   }
@@ -419,7 +419,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     }
     // アクティブペットレジストリをリセット
     ActivePetRegistry.clear()
-    PetDebugger.clear()
     logger.info("BigWolfPlugin disabled")
   }
 
@@ -430,10 +429,22 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    if (sender !is Player)
-        return true.also { sender.sendMessage(Component.text("プレイヤーのみ可能です。", RED)) }
+    if (sender !is Player) {
+      sender.sendMessage(Component.text("プレイヤーのみ可能です。", RED))
+      return true
+    }
 
-    return commandManager.onCommand(sender, command, label, args)
+    return when (command.name.lowercase()) {
+      "bigwolf" -> playerCommands.handleCommand(sender, args)
+      "bigwolfop" -> {
+        if (!sender.isOp) {
+          sender.sendMessage(Component.text("このコマンドはOP専用です。", RED))
+          return true
+        }
+        opCommands.handleCommand(sender, args)
+      }
+      else -> true
+    }
   }
 
   private fun showOpUsage(player: Player) {
@@ -776,177 +787,158 @@ object BigWolfConfig {
   const val SKILL_COOLDOWN_MS = 5000L
   const val MAX_PET_COUNT = 3
 
+  private class Field<T>(val key: String, val path: String, val prop: KMutableProperty0<T>) {
+    fun read(config: FileConfiguration, intDefault: Int? = null) {
+      when (val cur = prop.get()) {
+        is Int -> put(config.getInt(path, intDefault ?: cur))
+        is Double -> put(config.getDouble(path, cur))
+        is Boolean -> put(config.getBoolean(path, cur))
+      }
+    }
+
+    fun write(raw: String): Boolean =
+        when (prop.get()) {
+          is Int -> raw.toIntOrNull()?.also { put(it) } != null
+          is Double -> raw.toDoubleOrNull()?.also { put(it) } != null
+          is Boolean ->
+              when (raw.lowercase()) {
+                "true" -> {
+                  put(true)
+                  true
+                }
+                "false" -> {
+                  put(false)
+                  true
+                }
+                else -> false
+              }
+          else -> false
+        }
+
+    private fun put(value: Any) {
+      @Suppress("UNCHECKED_CAST") (prop as KMutableProperty0<Any>).set(value)
+    }
+  }
+
+  // parent: 親のバリアントが選ばれる重み（デフォルト: 7）
+  // other: その他のバリアントが選ばれる重み（デフォルト: 3）
+  //
+  // 計算例（オオカミ9種類, parent=7, other=3 の場合）:
+  //   親1: 7個, 親2: 7個, その他7種: 各3個
+  //   合計: 35個 → 親1=20%, 親2=20%, その他各=8.6%
+  //
+  // 設定例:
+  //   parent=10, other=0  : 親のバリアントのみ（100%遺伝）
+  //   parent=7,  other=3  : デフォルト（親40%, その他60%）
+  //   parent=5,  other=5  : 均等（各約11%）
+  //   parent=0,  other=10 : 完全ランダム
+  private val fields =
+      listOf(
+          Field("foodPointCost", "economy.foodPointCost", ::foodPointCost),
+          Field("maxFoodLevel", "pets.maxFoodLevel", ::maxFoodLevel),
+          Field("defaultShopCost", "shop.defaultCost", ::defaultShopCost),
+          Field("skillBookShopCostLv1", "skillbook.shopCostLv1", ::skillBookShopCostLv1),
+          Field("skillBookShopCostLv2", "skillbook.shopCostLv2", ::skillBookShopCostLv2),
+          Field("skillBookShopCostLv3", "skillbook.shopCostLv3", ::skillBookShopCostLv3),
+          Field("skillBookUseCostLv1", "skillbook.useCostLv1", ::skillBookUseCostLv1),
+          Field("skillBookUseCostLv2", "skillbook.useCostLv2", ::skillBookUseCostLv2),
+          Field("skillBookUseCostLv3", "skillbook.useCostLv3", ::skillBookUseCostLv3),
+          Field("reviveCost", "revive.cost", ::reviveCost),
+          Field("recoverCost", "recover.cost", ::recoverCost),
+          Field("healItemAmount", "items.healAmount", ::healItemAmount),
+          Field("breedMinLevel", "breed.minLevel", ::breedMinLevel),
+          Field("breedCost", "breed.cost", ::breedCost),
+          Field("maxBreedCount", "breed.maxCount", ::maxBreedCount),
+          Field("breedRandomMin", "breed.randomMin", ::breedRandomMin),
+          Field("breedRandomMax", "breed.randomMax", ::breedRandomMax),
+          Field("breedGenBonusPerGen", "breed.genBonusPerGen", ::breedGenBonusPerGen),
+          Field("breedGenBonusMax", "breed.genBonusMax", ::breedGenBonusMax),
+          Field("breedMutationChance", "breed.mutationChance", ::breedMutationChance),
+          Field("breedMutationBoost", "breed.mutationBoost", ::breedMutationBoost),
+          Field("breedStatCap", "breed.statCap", ::breedStatCap),
+          Field("breedBonusLevelPerGen", "breed.bonusLevelPerGen", ::breedBonusLevelPerGen),
+          Field("breedBonusLevelMax", "breed.bonusLevelMax", ::breedBonusLevelMax),
+          Field(
+              "breedParentVariantWeight",
+              "breed.variantWeights.parent",
+              ::breedParentVariantWeight,
+          ),
+          Field("breedOtherVariantWeight", "breed.variantWeights.other", ::breedOtherVariantWeight),
+          Field("playLevelUpChance", "play.levelUpChance", ::playLevelUpChance),
+          Field("playLevelUpMaxLevel", "play.levelUpMaxLevel", ::playLevelUpMaxLevel),
+          Field("spawnAiEnabled", "pets.spawnAiEnabled", ::spawnAiEnabled),
+          Field(
+              "freeRoamSpeedMultiplier",
+              "pets.freeRoamSpeedMultiplier",
+              ::freeRoamSpeedMultiplier,
+          ),
+          Field(
+              "freeRoamFlyingSpeedMultiplier",
+              "pets.freeRoamFlyingSpeedMultiplier",
+              ::freeRoamFlyingSpeedMultiplier,
+          ),
+          Field("atypicalBaseChance", "traits.atypicalBaseChance", ::atypicalBaseChance),
+          Field(
+              "atypicalOneParentChance",
+              "traits.atypicalOneParentChance",
+              ::atypicalOneParentChance,
+          ),
+          Field(
+              "atypicalBothParentChance",
+              "traits.atypicalBothParentChance",
+              ::atypicalBothParentChance,
+          ),
+          Field("atypicalLevelUpBonus", "traits.atypicalLevelUpBonus", ::atypicalLevelUpBonus),
+          Field(
+              "atypicalAffectionBonus",
+              "traits.atypicalAffectionBonus",
+              ::atypicalAffectionBonus,
+          ),
+          Field("childAiEnabled", "traits.childAiEnabled", ::childAiEnabled),
+      )
+
   /** config.ymlから設定を読み込む */
   fun loadFrom(config: FileConfiguration) {
-    // 経済設定
-    foodPointCost = config.getInt("economy.foodPointCost", foodPointCost)
-
-    // ペット設定
-    maxFoodLevel = config.getInt("pets.maxFoodLevel", maxFoodLevel)
-
-    // ショップ設定
-    defaultShopCost = config.getInt("shop.defaultCost", defaultShopCost)
-
-    // スキルブック設定（購入/使用で別コスト対応）
     val legacySkillCostLv1 = config.getInt("skillbook.costLv1", skillBookShopCostLv1)
     val legacySkillCostLv2 = config.getInt("skillbook.costLv2", skillBookShopCostLv2)
     val legacySkillCostLv3 = config.getInt("skillbook.costLv3", skillBookShopCostLv3)
-    skillBookShopCostLv1 = config.getInt("skillbook.shopCostLv1", legacySkillCostLv1)
-    skillBookShopCostLv2 = config.getInt("skillbook.shopCostLv2", legacySkillCostLv2)
-    skillBookShopCostLv3 = config.getInt("skillbook.shopCostLv3", legacySkillCostLv3)
-    skillBookUseCostLv1 = config.getInt("skillbook.useCostLv1", legacySkillCostLv1)
-    skillBookUseCostLv2 = config.getInt("skillbook.useCostLv2", legacySkillCostLv2)
-    skillBookUseCostLv3 = config.getInt("skillbook.useCostLv3", legacySkillCostLv3)
+    for (f in fields) {
+      val fallback =
+          when (f.key) {
+            "skillBookShopCostLv1",
+            "skillBookUseCostLv1" -> legacySkillCostLv1
+            "skillBookShopCostLv2",
+            "skillBookUseCostLv2" -> legacySkillCostLv2
+            "skillBookShopCostLv3",
+            "skillBookUseCostLv3" -> legacySkillCostLv3
+            else -> null
+          }
+      f.read(config, fallback)
+    }
 
-    // 復活設定
-    reviveCost = config.getInt("revive.cost", reviveCost)
-
-    // 回復設定
-    recoverCost = config.getInt("recover.cost", recoverCost)
-
-    // アイテム設定
-    healItemAmount = config.getInt("items.healAmount", healItemAmount)
-
-    // アイテムショップ価格
+    // アイテムショップ価格（一覧・変更・保存・補完には出さない）
     itemShopPetFoodCost = config.getInt("itemshop.petFoodCost", itemShopPetFoodCost)
     itemShopPetBrushCost = config.getInt("itemshop.petBrushCost", itemShopPetBrushCost)
     itemShopPetTreatCost = config.getInt("itemshop.petTreatCost", itemShopPetTreatCost)
     itemShopHealPotionCost = config.getInt("itemshop.healPotionCost", itemShopHealPotionCost)
     itemShopParticleCost = config.getInt("itemshop.particleCost", itemShopParticleCost)
     itemShopToyCost = config.getInt("itemshop.toyCost", itemShopToyCost)
-
-    // 遊び機能設定
-    playLevelUpChance = config.getDouble("play.levelUpChance", playLevelUpChance)
-    playLevelUpMaxLevel = config.getInt("play.levelUpMaxLevel", playLevelUpMaxLevel)
-
-    // ペットスポーン時AI設定
-    spawnAiEnabled = config.getBoolean("pets.spawnAiEnabled", spawnAiEnabled)
-
-    // ペット自由移動時の速度倍率
-    freeRoamSpeedMultiplier =
-        config.getDouble("pets.freeRoamSpeedMultiplier", freeRoamSpeedMultiplier)
-    freeRoamFlyingSpeedMultiplier =
-        config.getDouble("pets.freeRoamFlyingSpeedMultiplier", freeRoamFlyingSpeedMultiplier)
-
-    // 交配設定
-    breedMinLevel = config.getInt("breed.minLevel", breedMinLevel)
-    breedCost = config.getInt("breed.cost", breedCost)
-    maxBreedCount = config.getInt("breed.maxCount", maxBreedCount)
-    breedRandomMin = config.getDouble("breed.randomMin", breedRandomMin)
-    breedRandomMax = config.getDouble("breed.randomMax", breedRandomMax)
-    breedGenBonusPerGen = config.getDouble("breed.genBonusPerGen", breedGenBonusPerGen)
-    breedGenBonusMax = config.getDouble("breed.genBonusMax", breedGenBonusMax)
-    breedMutationChance = config.getDouble("breed.mutationChance", breedMutationChance)
-    breedMutationBoost = config.getDouble("breed.mutationBoost", breedMutationBoost)
-    breedStatCap = config.getDouble("breed.statCap", breedStatCap)
-    breedBonusLevelPerGen = config.getInt("breed.bonusLevelPerGen", breedBonusLevelPerGen)
-    breedBonusLevelMax = config.getInt("breed.bonusLevelMax", breedBonusLevelMax)
-
-    // バリアント遺伝確率設定
-    breedParentVariantWeight =
-        config.getInt("breed.variantWeights.parent", breedParentVariantWeight)
-    breedOtherVariantWeight = config.getInt("breed.variantWeights.other", breedOtherVariantWeight)
-
-    // 性質設定
-    atypicalBaseChance = config.getDouble("traits.atypicalBaseChance", atypicalBaseChance)
-    atypicalOneParentChance =
-        config.getDouble("traits.atypicalOneParentChance", atypicalOneParentChance)
-    atypicalBothParentChance =
-        config.getDouble("traits.atypicalBothParentChance", atypicalBothParentChance)
-    atypicalLevelUpBonus = config.getDouble("traits.atypicalLevelUpBonus", atypicalLevelUpBonus)
-    atypicalAffectionBonus =
-        config.getDouble("traits.atypicalAffectionBonus", atypicalAffectionBonus)
-    childAiEnabled = config.getBoolean("traits.childAiEnabled", childAiEnabled)
   }
 
   /** config.ymlにデフォルト値を設定 */
   fun applyDefaultsTo(config: FileConfiguration) {
-    // 経済設定
-    config.addDefault("economy.foodPointCost", foodPointCost)
-
-    // ペット設定
-    config.addDefault("pets.maxFoodLevel", maxFoodLevel)
-
-    // ショップ設定
-    config.addDefault("shop.defaultCost", defaultShopCost)
-
-    // スキルブック設定
-    // 旧キー（costLv*）は互換性維持のため残しつつ、新しいshop/useキーも設定
+    for (f in fields) config.addDefault(f.path, f.prop.get())
+    // 旧キー（costLv*）は互換性維持のため残す
     config.addDefault("skillbook.costLv1", skillBookShopCostLv1)
     config.addDefault("skillbook.costLv2", skillBookShopCostLv2)
     config.addDefault("skillbook.costLv3", skillBookShopCostLv3)
-    config.addDefault("skillbook.shopCostLv1", skillBookShopCostLv1)
-    config.addDefault("skillbook.shopCostLv2", skillBookShopCostLv2)
-    config.addDefault("skillbook.shopCostLv3", skillBookShopCostLv3)
-    config.addDefault("skillbook.useCostLv1", skillBookUseCostLv1)
-    config.addDefault("skillbook.useCostLv2", skillBookUseCostLv2)
-    config.addDefault("skillbook.useCostLv3", skillBookUseCostLv3)
-
-    // 復活設定
-    config.addDefault("revive.cost", reviveCost)
-
-    // 回復設定
-    config.addDefault("recover.cost", recoverCost)
-
-    // アイテム設定
-    config.addDefault("items.healAmount", healItemAmount)
-
-    // アイテムショップ価格
+    // アイテムショップ価格（一覧・変更・保存・補完には出さない）
     config.addDefault("itemshop.petFoodCost", itemShopPetFoodCost)
     config.addDefault("itemshop.petBrushCost", itemShopPetBrushCost)
     config.addDefault("itemshop.petTreatCost", itemShopPetTreatCost)
     config.addDefault("itemshop.healPotionCost", itemShopHealPotionCost)
     config.addDefault("itemshop.particleCost", itemShopParticleCost)
     config.addDefault("itemshop.toyCost", itemShopToyCost)
-
-    // 遊び機能設定
-    config.addDefault("play.levelUpChance", playLevelUpChance)
-    config.addDefault("play.levelUpMaxLevel", playLevelUpMaxLevel)
-
-    // ペットスポーン時AI設定
-    config.addDefault("pets.spawnAiEnabled", spawnAiEnabled)
-
-    // ペット自由移動時の速度倍率
-    config.addDefault("pets.freeRoamSpeedMultiplier", freeRoamSpeedMultiplier)
-    config.addDefault("pets.freeRoamFlyingSpeedMultiplier", freeRoamFlyingSpeedMultiplier)
-
-    // 交配設定
-    config.addDefault("breed.minLevel", breedMinLevel)
-    config.addDefault("breed.cost", breedCost)
-    config.addDefault("breed.maxCount", maxBreedCount)
-    config.addDefault("breed.randomMin", breedRandomMin)
-    config.addDefault("breed.randomMax", breedRandomMax)
-    config.addDefault("breed.genBonusPerGen", breedGenBonusPerGen)
-    config.addDefault("breed.genBonusMax", breedGenBonusMax)
-    config.addDefault("breed.mutationChance", breedMutationChance)
-    config.addDefault("breed.mutationBoost", breedMutationBoost)
-    config.addDefault("breed.statCap", breedStatCap)
-    config.addDefault("breed.bonusLevelPerGen", breedBonusLevelPerGen)
-    config.addDefault("breed.bonusLevelMax", breedBonusLevelMax)
-
-    // バリアント遺伝確率設定
-    // parent: 親のバリアントが選ばれる重み（デフォルト: 7）
-    // other: その他のバリアントが選ばれる重み（デフォルト: 3）
-    //
-    // 計算例（オオカミ9種類, parent=7, other=3 の場合）:
-    //   親1: 7個, 親2: 7個, その他7種: 各3個
-    //   合計: 35個 → 親1=20%, 親2=20%, その他各=8.6%
-    //
-    // 設定例:
-    //   parent=10, other=0  : 親のバリアントのみ（100%遺伝）
-    //   parent=7,  other=3  : デフォルト（親40%, その他60%）
-    //   parent=5,  other=5  : 均等（各約11%）
-    //   parent=0,  other=10 : 完全ランダム
-    config.addDefault("breed.variantWeights.parent", breedParentVariantWeight)
-    config.addDefault("breed.variantWeights.other", breedOtherVariantWeight)
-
-    // 性質設定
-    config.addDefault("traits.atypicalBaseChance", atypicalBaseChance)
-    config.addDefault("traits.atypicalOneParentChance", atypicalOneParentChance)
-    config.addDefault("traits.atypicalBothParentChance", atypicalBothParentChance)
-    config.addDefault("traits.atypicalLevelUpBonus", atypicalLevelUpBonus)
-    config.addDefault("traits.atypicalAffectionBonus", atypicalAffectionBonus)
-    config.addDefault("traits.childAiEnabled", childAiEnabled)
   }
 
   /** スキルブック購入時のコスト */
@@ -968,46 +960,7 @@ object BigWolfConfig {
       }
 
   /** 全コンフィグキーと現在値のリストを返す */
-  fun asEntryList(): List<Pair<String, Any>> =
-      listOf(
-          "foodPointCost" to foodPointCost,
-          "maxFoodLevel" to maxFoodLevel,
-          "defaultShopCost" to defaultShopCost,
-          "skillBookShopCostLv1" to skillBookShopCostLv1,
-          "skillBookShopCostLv2" to skillBookShopCostLv2,
-          "skillBookShopCostLv3" to skillBookShopCostLv3,
-          "skillBookUseCostLv1" to skillBookUseCostLv1,
-          "skillBookUseCostLv2" to skillBookUseCostLv2,
-          "skillBookUseCostLv3" to skillBookUseCostLv3,
-          "reviveCost" to reviveCost,
-          "recoverCost" to recoverCost,
-          "healItemAmount" to healItemAmount,
-          "breedMinLevel" to breedMinLevel,
-          "breedCost" to breedCost,
-          "maxBreedCount" to maxBreedCount,
-          "breedRandomMin" to breedRandomMin,
-          "breedRandomMax" to breedRandomMax,
-          "breedGenBonusPerGen" to breedGenBonusPerGen,
-          "breedGenBonusMax" to breedGenBonusMax,
-          "breedMutationChance" to breedMutationChance,
-          "breedMutationBoost" to breedMutationBoost,
-          "breedStatCap" to breedStatCap,
-          "breedBonusLevelPerGen" to breedBonusLevelPerGen,
-          "breedBonusLevelMax" to breedBonusLevelMax,
-          "breedParentVariantWeight" to breedParentVariantWeight,
-          "breedOtherVariantWeight" to breedOtherVariantWeight,
-          "playLevelUpChance" to playLevelUpChance,
-          "playLevelUpMaxLevel" to playLevelUpMaxLevel,
-          "spawnAiEnabled" to spawnAiEnabled,
-          "freeRoamSpeedMultiplier" to freeRoamSpeedMultiplier,
-          "freeRoamFlyingSpeedMultiplier" to freeRoamFlyingSpeedMultiplier,
-          "atypicalBaseChance" to atypicalBaseChance,
-          "atypicalOneParentChance" to atypicalOneParentChance,
-          "atypicalBothParentChance" to atypicalBothParentChance,
-          "atypicalLevelUpBonus" to atypicalLevelUpBonus,
-          "atypicalAffectionBonus" to atypicalAffectionBonus,
-          "childAiEnabled" to childAiEnabled,
-      )
+  fun asEntryList(): List<Pair<String, Any>> = fields.map { it.key to it.prop.get() }
 
   /** キー名から現在値を取得 */
   fun getField(key: String): Any? =
@@ -1015,21 +968,12 @@ object BigWolfConfig {
         "skillBookCostLv1" -> skillBookUseCostLv1
         "skillBookCostLv2" -> skillBookUseCostLv2
         "skillBookCostLv3" -> skillBookUseCostLv3
-        else -> asEntryList().find { it.first == key }?.second
+        else -> fields.find { it.key == key }?.prop?.get()
       }
 
   /** キー名と文字列値でコンフィグを変更（成功時true） */
   fun setField(key: String, raw: String): Boolean =
       when (key) {
-        "foodPointCost" -> raw.toIntOrNull()?.also { foodPointCost = it } != null
-        "maxFoodLevel" -> raw.toIntOrNull()?.also { maxFoodLevel = it } != null
-        "defaultShopCost" -> raw.toIntOrNull()?.also { defaultShopCost = it } != null
-        "skillBookShopCostLv1" -> raw.toIntOrNull()?.also { skillBookShopCostLv1 = it } != null
-        "skillBookShopCostLv2" -> raw.toIntOrNull()?.also { skillBookShopCostLv2 = it } != null
-        "skillBookShopCostLv3" -> raw.toIntOrNull()?.also { skillBookShopCostLv3 = it } != null
-        "skillBookUseCostLv1" -> raw.toIntOrNull()?.also { skillBookUseCostLv1 = it } != null
-        "skillBookUseCostLv2" -> raw.toIntOrNull()?.also { skillBookUseCostLv2 = it } != null
-        "skillBookUseCostLv3" -> raw.toIntOrNull()?.also { skillBookUseCostLv3 = it } != null
         "skillBookCostLv1" ->
             raw.toIntOrNull()?.also {
               skillBookShopCostLv1 = it
@@ -1045,60 +989,7 @@ object BigWolfConfig {
               skillBookShopCostLv3 = it
               skillBookUseCostLv3 = it
             } != null
-        "reviveCost" -> raw.toIntOrNull()?.also { reviveCost = it } != null
-        "recoverCost" -> raw.toIntOrNull()?.also { recoverCost = it } != null
-        "healItemAmount" -> raw.toIntOrNull()?.also { healItemAmount = it } != null
-        "breedMinLevel" -> raw.toIntOrNull()?.also { breedMinLevel = it } != null
-        "breedCost" -> raw.toIntOrNull()?.also { breedCost = it } != null
-        "maxBreedCount" -> raw.toIntOrNull()?.also { maxBreedCount = it } != null
-        "breedRandomMin" -> raw.toDoubleOrNull()?.also { breedRandomMin = it } != null
-        "breedRandomMax" -> raw.toDoubleOrNull()?.also { breedRandomMax = it } != null
-        "breedGenBonusPerGen" -> raw.toDoubleOrNull()?.also { breedGenBonusPerGen = it } != null
-        "breedGenBonusMax" -> raw.toDoubleOrNull()?.also { breedGenBonusMax = it } != null
-        "breedMutationChance" -> raw.toDoubleOrNull()?.also { breedMutationChance = it } != null
-        "breedMutationBoost" -> raw.toDoubleOrNull()?.also { breedMutationBoost = it } != null
-        "breedStatCap" -> raw.toDoubleOrNull()?.also { breedStatCap = it } != null
-        "breedBonusLevelPerGen" -> raw.toIntOrNull()?.also { breedBonusLevelPerGen = it } != null
-        "breedBonusLevelMax" -> raw.toIntOrNull()?.also { breedBonusLevelMax = it } != null
-        "breedParentVariantWeight" ->
-            raw.toIntOrNull()?.also { breedParentVariantWeight = it } != null
-        "breedOtherVariantWeight" ->
-            raw.toIntOrNull()?.also { breedOtherVariantWeight = it } != null
-        "playLevelUpChance" -> raw.toDoubleOrNull()?.also { playLevelUpChance = it } != null
-        "playLevelUpMaxLevel" -> raw.toIntOrNull()?.also { playLevelUpMaxLevel = it } != null
-        "spawnAiEnabled" -> {
-          val value =
-              when (raw.lowercase()) {
-                "true" -> true
-                "false" -> false
-                else -> return false
-              }
-          spawnAiEnabled = value
-          true
-        }
-        "freeRoamSpeedMultiplier" ->
-            raw.toDoubleOrNull()?.also { freeRoamSpeedMultiplier = it } != null
-        "freeRoamFlyingSpeedMultiplier" ->
-            raw.toDoubleOrNull()?.also { freeRoamFlyingSpeedMultiplier = it } != null
-        "atypicalBaseChance" -> raw.toDoubleOrNull()?.also { atypicalBaseChance = it } != null
-        "atypicalOneParentChance" ->
-            raw.toDoubleOrNull()?.also { atypicalOneParentChance = it } != null
-        "atypicalBothParentChance" ->
-            raw.toDoubleOrNull()?.also { atypicalBothParentChance = it } != null
-        "atypicalLevelUpBonus" -> raw.toDoubleOrNull()?.also { atypicalLevelUpBonus = it } != null
-        "atypicalAffectionBonus" ->
-            raw.toDoubleOrNull()?.also { atypicalAffectionBonus = it } != null
-        "childAiEnabled" -> {
-          val value =
-              when (raw.lowercase()) {
-                "true" -> true
-                "false" -> false
-                else -> return false
-              }
-          childAiEnabled = value
-          true
-        }
-        else -> false
+        else -> fields.find { it.key == key }?.write(raw) ?: false
       }
 
   /** 変更したキーをconfig.ymlに永続化 */
@@ -1126,47 +1017,7 @@ object BigWolfConfig {
         return
       }
     }
-    val path =
-        when (key) {
-          "foodPointCost" -> "economy.foodPointCost"
-          "maxFoodLevel" -> "pets.maxFoodLevel"
-          "defaultShopCost" -> "shop.defaultCost"
-          "skillBookShopCostLv1" -> "skillbook.shopCostLv1"
-          "skillBookShopCostLv2" -> "skillbook.shopCostLv2"
-          "skillBookShopCostLv3" -> "skillbook.shopCostLv3"
-          "skillBookUseCostLv1" -> "skillbook.useCostLv1"
-          "skillBookUseCostLv2" -> "skillbook.useCostLv2"
-          "skillBookUseCostLv3" -> "skillbook.useCostLv3"
-          "reviveCost" -> "revive.cost"
-          "recoverCost" -> "recover.cost"
-          "healItemAmount" -> "items.healAmount"
-          "breedMinLevel" -> "breed.minLevel"
-          "breedCost" -> "breed.cost"
-          "maxBreedCount" -> "breed.maxCount"
-          "breedRandomMin" -> "breed.randomMin"
-          "breedRandomMax" -> "breed.randomMax"
-          "breedGenBonusPerGen" -> "breed.genBonusPerGen"
-          "breedGenBonusMax" -> "breed.genBonusMax"
-          "breedMutationChance" -> "breed.mutationChance"
-          "breedMutationBoost" -> "breed.mutationBoost"
-          "breedStatCap" -> "breed.statCap"
-          "breedBonusLevelPerGen" -> "breed.bonusLevelPerGen"
-          "breedBonusLevelMax" -> "breed.bonusLevelMax"
-          "breedParentVariantWeight" -> "breed.variantWeights.parent"
-          "breedOtherVariantWeight" -> "breed.variantWeights.other"
-          "playLevelUpChance" -> "play.levelUpChance"
-          "playLevelUpMaxLevel" -> "play.levelUpMaxLevel"
-          "spawnAiEnabled" -> "pets.spawnAiEnabled"
-          "freeRoamSpeedMultiplier" -> "pets.freeRoamSpeedMultiplier"
-          "freeRoamFlyingSpeedMultiplier" -> "pets.freeRoamFlyingSpeedMultiplier"
-          "atypicalBaseChance" -> "traits.atypicalBaseChance"
-          "atypicalOneParentChance" -> "traits.atypicalOneParentChance"
-          "atypicalBothParentChance" -> "traits.atypicalBothParentChance"
-          "atypicalLevelUpBonus" -> "traits.atypicalLevelUpBonus"
-          "atypicalAffectionBonus" -> "traits.atypicalAffectionBonus"
-          "childAiEnabled" -> "traits.childAiEnabled"
-          else -> return
-        }
+    val path = fields.find { it.key == key }?.path ?: return
     plugin.config.set(path, getField(key))
     plugin.saveConfig()
   }
@@ -1907,112 +1758,6 @@ object ParrotFloatEffectRegistry {
   fun isRunning(entityUuid: UUID) = tasks.containsKey(entityUuid)
 }
 
-// ===== File: debug/PetDebugger.kt =====
-/** パフォーマンスデバッグ用の集計機能。 有効化中のプレイヤーに対してのみ動作し、無効時はほぼゼロコスト。 */
-object PetDebugger {
-  private val debugTargets = ConcurrentHashMap.newKeySet<UUID>()
-
-  // ControlTask 統計（UUID ごと）
-  private data class ControlStats(
-      var tickCount: Int = 0,
-      var totalNs: Long = 0L,
-      var maxNs: Long = 0L,
-      var jumpCount: Int = 0,
-      var statWrites: Int = 0,
-  )
-
-  private val controlStats = ConcurrentHashMap<UUID, ControlStats>()
-
-  fun disable(playerUuid: UUID) {
-    debugTargets.remove(playerUuid)
-    controlStats.remove(playerUuid)
-  }
-
-  fun isEnabled(playerUuid: UUID): Boolean = playerUuid in debugTargets
-
-  fun hasAnyEnabled(): Boolean = debugTargets.isNotEmpty()
-
-  fun clear() {
-    debugTargets.clear()
-    controlStats.clear()
-  }
-
-  /**
-   * startControlTask の毎 tick 末尾から呼ぶ。
-   *
-   * @param tickNs このtickの処理時間 (nanoseconds)
-   * @param jumpOccurred このtickにジャンプが発生したか
-   * @param statWriteOccurred このtickにPDC書き込みが発生したか
-   */
-  fun recordControlTick(
-      playerUuid: UUID,
-      tickNs: Long,
-      jumpOccurred: Boolean,
-      statWriteOccurred: Boolean,
-  ) {
-    val stats = controlStats[playerUuid] ?: return
-    stats.tickCount++
-    stats.totalNs += tickNs
-    if (tickNs > stats.maxNs) stats.maxNs = tickNs
-    if (jumpOccurred) stats.jumpCount++
-    if (statWriteOccurred) stats.statWrites++
-  }
-
-  /** 20 tick ごとに 1 秒サマリーをチャットへ送信してリセット。 */
-  fun flushControlSummary(player: Player, food: Int, speed: Double) {
-    val uuid = player.uniqueId
-    val stats = controlStats[uuid] ?: return
-    if (stats.tickCount == 0) return
-    val avgMs = stats.totalNs / stats.tickCount / 1_000_000.0
-    val maxMs = stats.maxNs / 1_000_000.0
-    player.sendMessage(
-        Component.text(
-            "[PetDebug/Ctrl] ticks=${stats.tickCount} avg=${String.format("%.3f", avgMs)}ms " +
-                "max=${String.format("%.3f", maxMs)}ms | " +
-                "food=$food speed=${String.format("%.2f", speed)} | " +
-                "jumps=${stats.jumpCount} pdcWrites=${stats.statWrites}",
-            net.kyori.adventure.text.format.NamedTextColor.AQUA,
-        )
-    )
-    // リセット
-    controlStats[uuid] = ControlStats()
-  }
-
-  /** startControlTask の毎 tick でアクションバーを更新。 */
-  fun updateActionBar(
-      player: Player,
-      tickNum: Int,
-      food: Int,
-      speed: Double,
-      cachedSkillType: Int,
-      jumpOccurred: Boolean,
-      tickNs: Long,
-  ) {
-    val jumpMark = if (jumpOccurred) " jump↑" else ""
-    val ms = tickNs / 1_000_000.0
-    player.sendActionBar(
-        Component.text(
-            "[Tick #$tickNum] food=$food spd=${String.format("%.2f", speed)} " +
-                "skl=$cachedSkillType${jumpMark} | ${String.format("%.3f", ms)}ms",
-            net.kyori.adventure.text.format.NamedTextColor.AQUA,
-        )
-    )
-  }
-
-  /** startGlobalAITask の実行結果を全デバッグ有効プレイヤーへ送信。 */
-  fun sendAiTaskResult(petsTotal: Int, atypical: Int, acted: Int, elapsedMs: Double) {
-    if (debugTargets.isEmpty()) return
-    val msg =
-        Component.text(
-            "[PetDebug/AI] pets=$petsTotal atypical=$atypical acted=$acted time=${String.format("%.3f", elapsedMs)}ms",
-            net.kyori.adventure.text.format.NamedTextColor.YELLOW,
-        )
-    for (uuid in debugTargets) {
-      Bukkit.getPlayer(uuid)?.sendMessage(msg)
-    }
-  }
-}
-
 object PetSynchronizer {
   @Suppress("UnstableApiUsage") private val logger = Bukkit.getLogger()
 
@@ -2261,47 +2006,6 @@ fun String.containsDefaultPetMarker(): Boolean = this.contains("'s Big ") || thi
 fun String.startsWithDefaultPetName(playerName: String): Boolean =
     this.startsWith("${playerName}'s Big ") || this.startsWith("${playerName}の大")
 
-/** PCDのマイグレーション - 古いバージョンのデータを最新に更新 */
-@Suppress("unused")
-fun LivingEntity.migratePcdIfNeeded() {
-  val version = pcdVersion
-  if (version < BigWolfKeys.CURRENT_PCD_VERSION) {
-    // v1 → v2 マイグレーション
-    if (version < 2) {
-      // originalOwnerが未設定なら現在のownerを設定
-      if (originalOwnerId == null && ownerId != null) {
-        originalOwnerId = ownerId
-      }
-      // transferCountが未設定なら0
-      if (
-          persistentDataContainer.get(BigWolfKeys.TRANSFER_COUNT, PersistentDataType.INTEGER) ==
-              null
-      ) {
-        transferCount = 0
-      }
-      // particleUnlockedが未設定なら"0"（デフォルトパーティクルのみ）
-      if (
-          persistentDataContainer.get(BigWolfKeys.PARTICLE_UNLOCKED, PersistentDataType.STRING) ==
-              null
-      ) {
-        particleUnlocked = "0"
-      }
-      // generationが未設定なら1（第1世代）
-      if (persistentDataContainer.get(BigWolfKeys.GENERATION, PersistentDataType.INTEGER) == null) {
-        generation = 1
-      }
-      // breedCountが未設定なら0
-      if (
-          persistentDataContainer.get(BigWolfKeys.BREED_COUNT, PersistentDataType.INTEGER) == null
-      ) {
-        breedCount = 0
-      }
-    }
-    // 最新バージョンに更新
-    pcdVersion = BigWolfKeys.CURRENT_PCD_VERSION
-  }
-}
-
 object SpawnUtils {
   private const val MAX_CLEARANCE_SEARCH = 6
 
@@ -2370,44 +2074,6 @@ object SpawnUtils {
   }
 }
 
-// ===== File: commands/CommandManager.kt =====
-/** コマンドマネージャー コマンドのルーティングとディスパッチを管理 */
-class CommandManager(
-    private val playerCommands: PlayerCommands,
-    private val opCommands: OpCommands,
-) : CommandExecutor {
-
-  override fun onCommand(
-      sender: CommandSender,
-      command: Command,
-      label: String,
-      args: Array<out String>,
-  ): Boolean {
-    if (sender !is Player) {
-      sender.sendMessage(Component.text("プレイヤーのみ可能です。", RED))
-      return true
-    }
-
-    return when (command.name.lowercase()) {
-      "bigwolf" -> handlePlayerCommand(sender, args)
-      "bigwolfop" -> handleOpCommand(sender, args)
-      else -> true
-    }
-  }
-
-  private fun handlePlayerCommand(player: Player, args: Array<out String>): Boolean =
-      playerCommands.handleCommand(player, args)
-
-  private fun handleOpCommand(player: Player, args: Array<out String>): Boolean {
-    if (!player.isOp) {
-      player.sendMessage(Component.text("このコマンドはOP専用です。", RED))
-      return true
-    }
-
-    return opCommands.handleCommand(player, args)
-  }
-}
-
 // ===== File: commands/CommandTabCompleter.kt =====
 /** タブ補完を提供 BigWolf.ktのonTabComplete実装を分離したもの */
 object CommandTabCompleter {
@@ -2448,48 +2114,14 @@ object CommandTabCompleter {
     }
 
     val configGlobalKeys =
-        listOf(
-            "foodPointCost",
-            "maxFoodLevel",
-            "defaultShopCost",
-            "skillBookShopCostLv1",
-            "skillBookShopCostLv2",
-            "skillBookShopCostLv3",
-            "skillBookUseCostLv1",
-            "skillBookUseCostLv2",
-            "skillBookUseCostLv3",
-            "skillBookCostLv1",
-            "skillBookCostLv2",
-            "skillBookCostLv3",
-            "reviveCost",
-            "recoverCost",
-            "healItemAmount",
-            "breedMinLevel",
-            "breedCost",
-            "maxBreedCount",
-            "breedRandomMin",
-            "breedRandomMax",
-            "breedGenBonusPerGen",
-            "breedGenBonusMax",
-            "breedMutationChance",
-            "breedMutationBoost",
-            "breedStatCap",
-            "breedBonusLevelPerGen",
-            "breedBonusLevelMax",
-            "breedParentVariantWeight",
-            "breedOtherVariantWeight",
-            "playLevelUpChance",
-            "playLevelUpMaxLevel",
-            "spawnAiEnabled",
-            "freeRoamSpeedMultiplier",
-            "freeRoamFlyingSpeedMultiplier",
-            "atypicalBaseChance",
-            "atypicalOneParentChance",
-            "atypicalBothParentChance",
-            "atypicalLevelUpBonus",
-            "atypicalAffectionBonus",
-            "childAiEnabled",
-        )
+        BigWolfConfig.asEntryList()
+            .map { it.first }
+            .let { keys ->
+              val at = keys.indexOf("skillBookUseCostLv3") + 1
+              keys.take(at) +
+                  listOf("skillBookCostLv1", "skillBookCostLv2", "skillBookCostLv3") +
+                  keys.drop(at)
+            }
     val configMobKeys = listOf("baseSpeed", "maxSpeed", "jumpPower", "scaleMin", "scaleMax")
     val configMobNames = PetRegistry.allConfigurableTypes().map { it.name.lowercase() }.sorted()
 
@@ -9199,11 +8831,7 @@ class ChildAISystem(private val plugin: JavaPlugin) {
           override fun run() {
             if (!BigWolfConfig.childAiEnabled) return
 
-            val aiStartNs = if (PetDebugger.hasAnyEnabled()) System.nanoTime() else 0L
-
             val activePets = ActivePetRegistry.getAll()
-            var atypicalCount = 0
-            var actedCount = 0
 
             // 不要になった lastActionTime エントリをクリーンアップ
             val activeUuids = activePets.mapTo(HashSet()) { it.uniqueId }
@@ -9211,7 +8839,6 @@ class ChildAISystem(private val plugin: JavaPlugin) {
 
             for (entity in activePets) {
               if (!ActivePetRegistry.isAtypical(entity.uniqueId)) continue
-              atypicalCount++
 
               // 騎乗中はスキップ
               if (entity.passengers.isNotEmpty()) continue
@@ -9234,12 +8861,6 @@ class ChildAISystem(private val plugin: JavaPlugin) {
               // ランダムアクション実行
               performRandomAction(entity, owner)
               lastActionTime[uuid] = now
-              actedCount++
-            }
-
-            if (PetDebugger.hasAnyEnabled()) {
-              val elapsedMs = (System.nanoTime() - aiStartNs) / 1_000_000.0
-              PetDebugger.sendAiTaskResult(activePets.size, atypicalCount, actedCount, elapsedMs)
             }
           }
         }
@@ -10029,9 +9650,6 @@ class PetControlSystem(
           var internalYVel = 0.0 // サーバー重力干渉を排除した内部管理Y速度
 
           override fun run() {
-            val debugEnabled = PetDebugger.isEnabled(player.uniqueId)
-            val tickStartNs = if (debugEnabled) System.nanoTime() else 0L
-
             if (!entity.isValid || !player.isOnline || player !in entity.passengers) {
               if (entity.isValid) {
                 entity.isSilent = false
@@ -10310,32 +9928,6 @@ class PetControlSystem(
                 localJumps = 0
               }
             }
-
-            if (debugEnabled) {
-              val tickNs = System.nanoTime() - tickStartNs
-              val jumpThisTick = input.isJump && !lastJumpPressed
-              PetDebugger.recordControlTick(
-                  player.uniqueId,
-                  tickNs,
-                  jumpThisTick,
-                  statWriteThisTick,
-              )
-              val progress = cachedFood.toDouble() / BigWolfConfig.maxFoodLevel
-              val curSpeed =
-                  spec.baseSpeed + (spec.maxSpeed - spec.baseSpeed) * progress * cachedSpeed
-              PetDebugger.updateActionBar(
-                  player,
-                  ticks,
-                  cachedFood,
-                  curSpeed,
-                  cachedSkillType,
-                  jumpThisTick,
-                  tickNs,
-              )
-              if (ticks % 20 == 0) {
-                PetDebugger.flushControlSummary(player, cachedFood, curSpeed)
-              }
-            }
           }
         }
 
@@ -10446,91 +10038,6 @@ class PetSpawnSystem(
 // ===== File: systems/ShopSystem.kt =====
 /** ショップシステム ショップMOBの生成・管理、削除 */
 class ShopSystem {
-
-  /** ショップMOBを生成 */
-  @Suppress("unused")
-  fun spawnShopMob(admin: Player, type: EntityType, variant: String?, cost: Int, yawDeg: Float?) {
-    val loc = admin.location.block.location.add(0.5, 0.0, 0.5)
-    val safeLoc =
-        SpawnUtils.findSafeGroundLocation(loc)
-            ?: run {
-              admin.sendMessage(Component.text("ここにはショップMOBを設置できません（足場と空間が必要です）。", RED))
-              return
-            }
-
-    val ent = admin.world.spawnEntity(safeLoc, type) as? LivingEntity ?: return
-    ent.setAI(false)
-    ent.isInvulnerable = true
-    ent.isSilent = true
-    ent.setRemoveWhenFarAway(false)
-
-    // 向きを設定（45度単位）
-    val yaw = yawDeg ?: admin.location.yaw
-    val newLoc = safeLoc.clone()
-    newLoc.yaw = yaw
-    ent.teleport(newLoc)
-
-    // PDCにショップ情報を設定
-    val pdc = ent.persistentDataContainer
-    pdc.set(BigWolfKeys.SHOP_FLAG, PersistentDataType.BYTE, 1)
-    pdc.set(BigWolfKeys.SHOP_TYPE, PersistentDataType.STRING, type.name)
-    if (variant != null) {
-      pdc.set(BigWolfKeys.SHOP_VARIANT, PersistentDataType.STRING, variant)
-    }
-    pdc.set(BigWolfKeys.SHOP_COST, PersistentDataType.INTEGER, cost)
-
-    // バリアント適用
-    if (variant != null) {
-      VariantHandler.applyVariant(ent, variant)
-    }
-
-    // カスタム名
-    val label = if (variant != null) "${type.name} ($variant)" else type.name
-    ent.customName(Component.text("★ $label - ${cost}pt", GOLD))
-    ent.isCustomNameVisible = true
-
-    admin.sendMessage(Component.text("ショップMOBを設置しました: $label (${cost}pt)", GREEN))
-  }
-
-  /** 最も近いショップMOBを削除 */
-  @Suppress("unused")
-  fun removeNearestShopMob(admin: Player): Boolean {
-    val nearbyEntities = admin.getNearbyEntities(10.0, 10.0, 10.0)
-    val shopMob =
-        nearbyEntities.filterIsInstance<LivingEntity>().firstOrNull {
-          val pdc = it.persistentDataContainer
-          (pdc.get(BigWolfKeys.SHOP_FLAG, PersistentDataType.BYTE) ?: 0).toInt() == 1
-        }
-
-    if (shopMob != null) {
-      val typeStr =
-          shopMob.persistentDataContainer.get(BigWolfKeys.SHOP_TYPE, PersistentDataType.STRING)
-              ?: "UNKNOWN"
-      shopMob.remove()
-      admin.sendMessage(Component.text("ショップMOBを削除しました: $typeStr", YELLOW))
-      return true
-    } else {
-      admin.sendMessage(Component.text("近くにショップMOBが見つかりません。", RED))
-      return false
-    }
-  }
-
-  /** ワールド内のすべてのショップMOBを削除 */
-  @Suppress("unused")
-  fun removeAllShopMobs(admin: Player): Int {
-    var count = 0
-    for (world in Bukkit.getWorlds()) {
-      for (entity in world.livingEntities) {
-        val pdc = entity.persistentDataContainer
-        if ((pdc.get(BigWolfKeys.SHOP_FLAG, PersistentDataType.BYTE) ?: 0).toInt() == 1) {
-          entity.remove()
-          count++
-        }
-      }
-    }
-    admin.sendMessage(Component.text("すべてのショップMOBを削除しました (${count}体)", GREEN))
-    return count
-  }
 
   /** エンティティがショップMOBかチェック */
   fun isShopMob(entity: LivingEntity): Boolean {

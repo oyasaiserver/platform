@@ -31,28 +31,6 @@ data class CloudPlacement(val x: Int, val y: Int, val z: Int, val material: Mate
 
 object CloudGenerator {
 
-  fun estimateBlockCount(options: CloudOptions): Long {
-    val step = max(1, maxOf(options.size, options.height) / 32)
-    var sampled = 0L
-    var filled = 0L
-    var y = 0
-    while (y < options.height) {
-      var z = 0
-      while (z < options.size) {
-        var x = 0
-        while (x < options.size) {
-          sampled++
-          if (isCloud(density(x, y, z, options))) filled++
-          x += step
-        }
-        z += step
-      }
-      y += step
-    }
-    val total = options.size.toLong() * options.height.toLong() * options.size.toLong()
-    return if (sampled == 0L) 0L else (filled * total) / sampled
-  }
-
   fun buildPlan(origin: Location, options: CloudOptions): CloudBuildPlan {
     val placements = ArrayList<CloudPlacement>()
     val baseX = origin.blockX
@@ -83,18 +61,6 @@ object CloudGenerator {
   }
 
   private fun isCloud(density: Double): Boolean = density >= 0.25
-
-  private fun density(x: Int, y: Int, z: Int, options: CloudOptions): Double {
-    val hp =
-        exp(
-            -0.5 *
-                square(
-                    (y - options.height * options.yCenter) /
-                        max(options.height * options.ySigma, 0.1)
-                )
-        )
-    return density(x, y, z, options, hp)
-  }
 
   private fun density(
       x: Int,

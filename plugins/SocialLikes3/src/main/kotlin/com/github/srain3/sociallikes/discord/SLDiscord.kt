@@ -53,23 +53,8 @@ object SLDiscord {
   }
 
   fun sendSLEmbedMsg(slData: SLData): Long {
-    val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
-    if (textChannel == null) {
-      Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
-      return 0L
-    }
-    val embed =
-        EmbedBuilder()
-            .setTitle("【SocialLikes】" + slData.title)
-            .setDescription("ID:${slData.id}")
-            .addField(
-                "Author: " +
-                    Bukkit.getPlayer(slData.owner)?.name +
-                    " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
-                "BlueMap: ${blueMapURL(slData)}",
-            )
-            .setColor(Color.PINK)
-    val message = textChannel.sendMessage(embed).join()
+    val textChannel = textChannelOrWarn() ?: return 0L
+    val message = textChannel.sendMessage(slEmbed(slData)).join()
     message.addReaction("👍")
     return message.id
   }
@@ -84,11 +69,7 @@ object SLDiscord {
     if (slData.discordTextID == 0L) return
     Thread {
           try {
-            val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
-            if (textChannel == null) {
-              Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
-              return@Thread
-            }
+            val textChannel = textChannelOrWarn() ?: return@Thread
             val embed =
                 EmbedBuilder()
                     .setTitle("【削除済み】【SocialLikes】" + slData.title)
@@ -112,26 +93,32 @@ object SLDiscord {
   fun changeSLDataToMsg(slData: SLData) {
     if (slData.discordTextID == 0L) return
     Thread {
-          val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
-          if (textChannel == null) {
-            Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
-            return@Thread
-          }
-          val embed =
-              EmbedBuilder()
-                  .setTitle("【SocialLikes】" + slData.title)
-                  .setDescription("ID:${slData.id}")
-                  .addField(
-                      "Author: " +
-                          Bukkit.getPlayer(slData.owner)?.name +
-                          " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
-                      "BlueMap: ${blueMapURL(slData)}",
-                  )
-                  .setColor(Color.PINK)
+          val textChannel = textChannelOrWarn() ?: return@Thread
           val message = textChannel.getMessageById(slData.discordTextID)
-          message.join().edit(embed).join()
+          message.join().edit(slEmbed(slData)).join()
           return@Thread
         }
         .start()
   }
+
+  private fun textChannelOrWarn() =
+      textChID
+          ?.let { discordApi?.getTextChannelById(it)?.get() }
+          .also {
+            if (it == null) {
+              Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
+            }
+          }
+
+  private fun slEmbed(slData: SLData) =
+      EmbedBuilder()
+          .setTitle("【SocialLikes】" + slData.title)
+          .setDescription("ID:${slData.id}")
+          .addField(
+              "Author: " +
+                  Bukkit.getPlayer(slData.owner)?.name +
+                  " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
+              "BlueMap: ${blueMapURL(slData)}",
+          )
+          .setColor(Color.PINK)
 }

@@ -97,7 +97,6 @@ object WorldBorderManager {
             radiusX = radiusX,
             radiusZ = radiusZ,
             shapeRound = previous?.shapeRound,
-            wrapping = previous?.wrapping ?: false,
         )
     borders[worldName] = data
     save()
@@ -237,7 +236,6 @@ object WorldBorderManager {
               radiusX = radiusX,
               radiusZ = radiusZ,
               shapeRound = shapeRound,
-              wrapping = section.getBoolean("wrapping", false),
           )
     }
   }
@@ -260,7 +258,6 @@ object WorldBorderManager {
       yaml.set("worlds.$key.z", border.z)
       yaml.set("worlds.$key.radiusX", border.radiusX)
       yaml.set("worlds.$key.radiusZ", border.radiusZ)
-      yaml.set("worlds.$key.wrapping", border.wrapping)
       border.shapeRound?.let { yaml.set("worlds.$key.shape-round", it) }
     }
     yaml.save(ownFile)

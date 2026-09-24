@@ -28,7 +28,6 @@ import net.minecraft.world.inventory.LecternMenu
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.Sound
 import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.craftbukkit.util.CraftChatMessage
 import org.bukkit.entity.Player
@@ -143,14 +142,7 @@ object GuidebookBookUI {
         }
     val heading = if (editable) "編集用ガイド" else "旅行ガイド"
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r $heading p1".color())
-    gui.setOnTopClick {
-      it.isCancelled = true
-      if (it.currentItem != null) {
-        val clicker = it.whoClicked as Player
-        clicker.playSound(clicker, Sound.UI_BUTTON_CLICK, 1F, 1F)
-      }
-    }
-    gui.setOnTopDrag { it.isCancelled = true }
+    gui.cancelClickWithSound()
 
     val pagePane = PaginatedPane(9, 5)
     pagePane.populateWithGuiItems(

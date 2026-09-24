@@ -5,7 +5,6 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import javax.imageio.ImageIO
 import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
@@ -100,20 +99,6 @@ internal object HatsRenderer {
     val frames = getFrames(hat.type)
     if (frames.isEmpty()) return
 
-    val location = if (hat.tracking == HatTracking.HEAD) player.eyeLocation else player.location
-    val yaw = Math.toRadians(location.yaw.toDouble())
-    val cos = cos(yaw)
-    val sin = sin(yaw)
-
-    val offset = hat.offset
-    val offsetX = offset.x * cos - offset.z * sin
-    val offsetZ = offset.x * sin + offset.z * cos
-
-    val angle = hat.angle
-    val angleXRad = Math.toRadians(angle.x)
-    val angleYRad = Math.toRadians(angle.y)
-    val angleZRad = Math.toRadians(angle.z)
-
     val isAnimated = hat.animated && supportsAnimation(hat.type)
     val animMap =
         if (isAnimated) {
@@ -129,25 +114,15 @@ internal object HatsRenderer {
         if (size > 0) {
           val idx = (animMap[frameIndex] ?: 0) % size
           val target = frame[idx]
-          var v = target.clone().multiply(hat.scale)
-          v = getAngleVector(v, angleXRad, angleYRad, angleZRad)
-          val spawnLoc =
-              location
-                  .clone()
-                  .add(offsetX, 0.0, offsetZ)
-                  .add(getTrackingPosition(hat, v, location, cos, sin))
+          val v = target.clone().multiply(hat.scale)
+          val spawnLoc = spawnLocation(player, hat, v)
           spawn(world, spawnLoc, particle, spec, hat.count, hat.randomOffset, speed = hat.speed)
           animMap[frameIndex] = (idx + 1) % size
         }
       } else {
         for (target in frame) {
-          var v = target.clone().multiply(hat.scale)
-          v = getAngleVector(v, angleXRad, angleYRad, angleZRad)
-          val spawnLoc =
-              location
-                  .clone()
-                  .add(offsetX, 0.0, offsetZ)
-                  .add(getTrackingPosition(hat, v, location, cos, sin))
+          val v = target.clone().multiply(hat.scale)
+          val spawnLoc = spawnLocation(player, hat, v)
           spawn(world, spawnLoc, particle, spec, hat.count, hat.randomOffset, speed = hat.speed)
         }
       }
@@ -166,28 +141,9 @@ internal object HatsRenderer {
     val particle = resolve(spec.name) ?: return
     val world = player.world
 
-    val location = if (hat.tracking == HatTracking.HEAD) player.eyeLocation else player.location
-    val yaw = Math.toRadians(location.yaw.toDouble())
-    val cos = cos(yaw)
-    val sin = sin(yaw)
-
-    val offset = hat.offset
-    val offsetX = offset.x * cos - offset.z * sin
-    val offsetZ = offset.x * sin + offset.z * cos
-
-    val angle = hat.angle
-    val angleXRad = Math.toRadians(angle.x)
-    val angleYRad = Math.toRadians(angle.y)
-    val angleZRad = Math.toRadians(angle.z)
-
     for (pixel in pixels) {
-      var v = pixel.position.clone().multiply(hat.scale)
-      v = getAngleVector(v, angleXRad, angleYRad, angleZRad)
-      val spawnLoc =
-          location
-              .clone()
-              .add(offsetX, 0.0, offsetZ)
-              .add(getTrackingPosition(hat, v, location, cos, sin))
+      val v = pixel.position.clone().multiply(hat.scale)
+      val spawnLoc = spawnLocation(player, hat, v)
       val isWhite = pixel.color.red > 245 && pixel.color.green > 245 && pixel.color.blue > 245
       val finalColor = if (isWhite && spec.color != null) spec.color else pixel.color
       spawn(
@@ -204,14 +160,13 @@ internal object HatsRenderer {
 
   private fun renderTrail(player: Player, hat: HatDefinition) {
     val spec = hat.particles.firstOrNull() ?: return
+    val o = 0.3
+    val rx = (Random.nextDouble() * 2.0 - 1.0) * o
+    val ry = (Random.nextDouble() * 2.0 - 1.0) * o
+    val rz = (Random.nextDouble() * 2.0 - 1.0) * o
 
     // Thief!: 実際にアイテムを落とし、1秒後に消去
     if (spec.items.isNotEmpty()) {
-      if (hat.mode == HatMode.SPRINTING && !player.isSprinting) return
-      val o = 0.3
-      val rx = (Random.nextDouble() * 2.0 - 1.0) * o
-      val ry = (Random.nextDouble() * 2.0 - 1.0) * o
-      val rz = (Random.nextDouble() * 2.0 - 1.0) * o
       val loc = player.location.clone().add(rx, ry, rz)
       val mat = spec.items.randomOrNull() ?: return
       val dropped = player.world.dropItem(loc, ItemStack(mat))
@@ -229,21 +184,11 @@ internal object HatsRenderer {
 
     // Rocket, Magic Aura など
     val particle = resolve(spec.name) ?: return
-    val o = 0.3
-    val rx = (Random.nextDouble() * 2.0 - 1.0) * o
-    val ry = (Random.nextDouble() * 2.0 - 1.0) * o
-    val rz = (Random.nextDouble() * 2.0 - 1.0) * o
-    val baseHeight =
-        when (hat.location) {
-          HatAnchor.HEAD -> 2.3
-          HatAnchor.CHEST -> 1.3
-          HatAnchor.FEET -> 0.0
-        }
     val loc =
         player.location
             .clone()
             .add(rx, ry, rz)
-            .add(hat.offset.x, baseHeight + hat.offset.y, hat.offset.z)
+            .add(hat.offset.x, baseHeight(hat) + hat.offset.y, hat.offset.z)
     spawn(player.world, loc, particle, spec, hat.count, hat.randomOffset, speed = hat.speed)
   }
 
@@ -424,12 +369,6 @@ internal object HatsRenderer {
     return v.setX(x).setZ(z)
   }
 
-  private fun rotateZAxis(v: Vector, c: Double): Vector {
-    val x = cos(c) * v.x - sin(c) * v.y
-    val y = sin(c) * v.x + cos(c) * v.y
-    return v.setX(x).setY(y)
-  }
-
   private fun rotateVector(v: Vector, location: Location): Vector {
     val yaw = Math.toRadians(location.yaw.toDouble())
     val pitch = Math.toRadians(location.pitch.toDouble())
@@ -438,18 +377,26 @@ internal object HatsRenderer {
     return res
   }
 
-  private fun getAngleVector(
-      target: Vector,
-      angleXRad: Double,
-      angleYRad: Double,
-      angleZRad: Double,
-  ): Vector {
-    var t = target
-    if (abs(angleZRad) > 0.0) t = rotateXAxis(t, angleZRad)
-    if (abs(angleYRad) > 0.0) t = rotateYAxis(t, angleYRad)
-    if (abs(angleXRad) > 0.0) t = rotateZAxis(t, -angleXRad)
-    return t
+  private fun spawnLocation(player: Player, hat: HatDefinition, v: Vector): Location {
+    val location = if (hat.tracking == HatTracking.HEAD) player.eyeLocation else player.location
+    val yaw = Math.toRadians(location.yaw.toDouble())
+    val cos = cos(yaw)
+    val sin = sin(yaw)
+    val offset = hat.offset
+    val offsetX = offset.x * cos - offset.z * sin
+    val offsetZ = offset.x * sin + offset.z * cos
+    return location
+        .clone()
+        .add(offsetX, 0.0, offsetZ)
+        .add(getTrackingPosition(hat, v, location, cos, sin))
   }
+
+  private fun baseHeight(hat: HatDefinition): Double =
+      when (hat.location) {
+        HatAnchor.HEAD -> 2.3
+        HatAnchor.CHEST -> 1.3
+        HatAnchor.FEET -> 0.0
+      }
 
   private fun getTrackingPosition(
       hat: HatDefinition,
@@ -458,13 +405,7 @@ internal object HatsRenderer {
       cos: Double,
       sin: Double,
   ): Vector {
-    val baseHeight =
-        when (hat.location) {
-          HatAnchor.HEAD -> 2.3
-          HatAnchor.CHEST -> 1.3
-          HatAnchor.FEET -> 0.0
-        }
-    val offsetY = baseHeight + hat.offset.y
+    val offsetY = baseHeight(hat) + hat.offset.y
     return when (hat.tracking) {
       HatTracking.NONE -> Vector(target.x, target.y + offsetY, target.z)
       HatTracking.BODY -> {
@@ -483,8 +424,6 @@ internal object HatsRenderer {
   }
 
   private fun resolve(name: String): Particle? {
-    if (name.equals("EMPTY_SPACE", ignoreCase = true) || name.equals("NONE", ignoreCase = true))
-        return null
     val key = name.uppercase()
     if (particleCache.containsKey(key)) return particleCache[key]
     val mapped = particleAliases[key] ?: key

@@ -13,14 +13,6 @@ backupKeepCount: 5
 # Interval in minutes for periodic dirty build reconciliation (SQLite retry).
 reconcileIntervalMinutes: 10
 
-# Negative build ID migration settings (one-shot migration from negative to positive IDs).
-# Keep both false unless running the maintenance migration.
-# Procedure: stop player access, set migrateNegativeIdsOnStartup: true, choose dry-run or
-# execution with migrateNegativeIdsDryRun, start the server, confirm the backup and migration logs,
-# stop the server, then set migrateNegativeIdsOnStartup back to false before the next restart.
-migrateNegativeIdsOnStartup: false
-migrateNegativeIdsDryRun: false
-
 guidebook:
   # 個人ガイドを作れる冊数を LuckPerms のグループごとに決める（group.<名前> を持つ人に適用）。
   # 複数持っていればいちばん多い値。どれも持っていない人は作れない。OP はいちばん多い値

@@ -320,40 +320,23 @@ object Events : Listener {
         e.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, text)
       }
       // 看板ブロックへlike数を反映させる
-      if (checkMarkRegex.containsMatchIn(block.getSide(Side.FRONT).getLine(3))) {
-        block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
-        if (e.player.isOp) {
-          if (!data.check) {
-            val beforeCheck = data.check
-            data.check = true
-            Data.save(data, e.player.uniqueId)
-            SLDatabase.recordEvent(
-                data.id,
-                "checked_changed",
-                e.player.uniqueId,
-                com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
-                com.google.gson.Gson().toJson(mapOf("checked" to true)),
-            )
-          }
-        }
+      val front = block.getSide(Side.FRONT)
+      if (checkMarkRegex.containsMatchIn(front.getLine(3)) || e.player.isOp) {
+        front.setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
       } else {
-        if (e.player.isOp) {
-          block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
-          if (!data.check) {
-            val beforeCheck = data.check
-            data.check = true
-            Data.save(data, e.player.uniqueId)
-            SLDatabase.recordEvent(
-                data.id,
-                "checked_changed",
-                e.player.uniqueId,
-                com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
-                com.google.gson.Gson().toJson(mapOf("checked" to true)),
-            )
-          }
-        } else {
-          block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()}".color())
-        }
+        front.setLine(3, "&7Likes&8: &6${data.likes.count()}".color())
+      }
+      if (e.player.isOp && !data.check) {
+        val beforeCheck = data.check
+        data.check = true
+        Data.save(data, e.player.uniqueId)
+        SLDatabase.recordEvent(
+            data.id,
+            "checked_changed",
+            e.player.uniqueId,
+            com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
+            com.google.gson.Gson().toJson(mapOf("checked" to true)),
+        )
       }
       block.update()
       if (newlyLiked) GuidebookService.handleLike(e.player, data.id)

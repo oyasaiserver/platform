@@ -78,25 +78,6 @@ object RoadBuilder {
     }
   }
 
-  private fun buildOffsetSlots(cHW: Int, lW: Int, olW: Int, swW: Int): List<OffsetSlot> {
-    val totalHW = cHW + lW + olW + swW
-    val slots = mutableListOf<OffsetSlot>()
-    for (offset in -totalHW..totalHW) {
-      val zone = classifyZone(abs(offset), cHW, lW, olW, swW) ?: continue
-      slots += OffsetSlot(offset, zone)
-    }
-    return slots
-  }
-
-  private fun classifyZone(absOffset: Int, cHW: Int, lW: Int, olW: Int, swW: Int): OffsetZone? =
-      when {
-        absOffset < cHW -> OffsetZone.CENTER_LINE
-        absOffset < cHW + lW -> OffsetZone.LANE
-        absOffset < cHW + lW + olW -> OffsetZone.OUTER_LINE
-        absOffset < cHW + lW + olW + swW -> OffsetZone.SIDEWALK
-        else -> null
-      }
-
   private fun traceBlocksForOffset(
       path: List<PathPoint>,
       offset: Int,
@@ -151,107 +132,6 @@ object RoadBuilder {
     }
 
     return TraceResult(traced, removedCorners)
-  }
-
-  private fun walkGrid(
-      startX: Double,
-      startY: Double,
-      startZ: Double,
-      endX: Double,
-      endY: Double,
-      endZ: Double,
-      defaultHeading: Double,
-  ): List<TracedBlock> {
-    val result = mutableListOf<TracedBlock>()
-    val startBlockX = floor(startX).toInt()
-    val startBlockZ = floor(startZ).toInt()
-    val targetBlockX = floor(endX).toInt()
-    val targetBlockZ = floor(endZ).toInt()
-    if (startBlockX == targetBlockX && startBlockZ == targetBlockZ) return result
-
-    val dx = endX - startX
-    val dz = endZ - startZ
-    val heading = if (abs(dx) + abs(dz) < 1e-6) defaultHeading else atan2(dz, dx)
-
-    var currentX = startBlockX
-    var currentZ = startBlockZ
-
-    val stepX =
-        when {
-          dx > 0 -> 1
-          dx < 0 -> -1
-          else -> 0
-        }
-    val stepZ =
-        when {
-          dz > 0 -> 1
-          dz < 0 -> -1
-          else -> 0
-        }
-
-    val invDx = if (dx != 0.0) 1.0 / abs(dx) else Double.POSITIVE_INFINITY
-    val invDz = if (dz != 0.0) 1.0 / abs(dz) else Double.POSITIVE_INFINITY
-    var tMaxX =
-        if (stepX != 0) distanceToGridBoundary(startX, currentX, stepX) * invDx
-        else Double.POSITIVE_INFINITY
-    var tMaxZ =
-        if (stepZ != 0) distanceToGridBoundary(startZ, currentZ, stepZ) * invDz
-        else Double.POSITIVE_INFINITY
-    val tDeltaX = if (stepX != 0) invDx else Double.POSITIVE_INFINITY
-    val tDeltaZ = if (stepZ != 0) invDz else Double.POSITIVE_INFINITY
-
-    var t = 0.0
-    while (currentX != targetBlockX || currentZ != targetBlockZ) {
-      if (tMaxX < tMaxZ) {
-        currentX += stepX
-        t = tMaxX
-        tMaxX += tDeltaX
-      } else if (tMaxZ < tMaxX) {
-        currentZ += stepZ
-        t = tMaxZ
-        tMaxZ += tDeltaZ
-      } else {
-        if (stepX != 0) currentX += stepX
-        if (stepZ != 0) currentZ += stepZ
-        t = tMaxX
-        tMaxX += tDeltaX
-        tMaxZ += tDeltaZ
-      }
-
-      val interpY = startY + (endY - startY) * t.coerceIn(0.0, 1.0)
-      result += TracedBlock(BlockPos(currentX, floor(interpY).toInt(), currentZ), heading)
-    }
-
-    return result
-  }
-
-  private fun distanceToGridBoundary(origin: Double, cell: Int, step: Int): Double {
-    return if (step > 0) (cell + 1).toDouble() - origin else origin - cell.toDouble()
-  }
-
-  private fun sharesEdge(a: BlockPos, b: BlockPos): Boolean {
-    val dx = abs(a.x - b.x)
-    val dz = abs(a.z - b.z)
-    return (dx == 1 && dz == 0) || (dx == 0 && dz == 1)
-  }
-
-  private fun hasCardinalNeighbor(pos: BlockPos, set: Set<BlockPos>): Boolean {
-    val dirs = arrayOf(intArrayOf(1, 0), intArrayOf(-1, 0), intArrayOf(0, 1), intArrayOf(0, -1))
-    for (dir in dirs) {
-      val neighbor = BlockPos(pos.x + dir[0], pos.y, pos.z + dir[1])
-      if (neighbor in set) return true
-    }
-    return false
-  }
-
-  private fun isCardinal(dir: Pair<Int, Int>): Boolean {
-    val absX = abs(dir.first)
-    val absZ = abs(dir.second)
-    return absX + absZ == 1
-  }
-
-  private fun isDiagonal(dir: Pair<Int, Int>): Boolean {
-    return abs(dir.first) == 1 && abs(dir.second) == 1
   }
 
   private fun MutableList<TracedBlock>.removeRightAngleCornerIfNeeded(): TracedBlock? {
@@ -406,25 +286,120 @@ object RoadBuilder {
         }
       }
 
-  private fun OffsetZone.isLine() = this == OffsetZone.CENTER_LINE || this == OffsetZone.OUTER_LINE
-
   private data class TraceResult(
       val blocks: List<TracedBlock>,
       val removedCorners: List<TracedBlock>,
   )
 
   private data class CornerFillRequest(val slot: OffsetSlot, val corners: List<TracedBlock>)
+}
 
-  private data class BlockPos(val x: Int, val y: Int, val z: Int)
-
-  private data class TracedBlock(val pos: BlockPos, val heading: Double)
-
-  private data class OffsetSlot(val offset: Int, val zone: OffsetZone)
-
-  private enum class OffsetZone {
-    CENTER_LINE,
-    LANE,
-    OUTER_LINE,
-    SIDEWALK,
+internal fun buildOffsetSlots(cHW: Int, lW: Int, olW: Int, swW: Int): List<OffsetSlot> {
+  val totalHW = cHW + lW + olW + swW
+  val slots = mutableListOf<OffsetSlot>()
+  for (offset in -totalHW..totalHW) {
+    val zone = classifyZone(abs(offset), cHW, lW, olW, swW) ?: continue
+    slots += OffsetSlot(offset, zone)
   }
+  return slots
+}
+
+internal fun classifyZone(absOffset: Int, cHW: Int, lW: Int, olW: Int, swW: Int): OffsetZone? =
+    when {
+      absOffset < cHW -> OffsetZone.CENTER_LINE
+      absOffset < cHW + lW -> OffsetZone.LANE
+      absOffset < cHW + lW + olW -> OffsetZone.OUTER_LINE
+      absOffset < cHW + lW + olW + swW -> OffsetZone.SIDEWALK
+      else -> null
+    }
+
+internal fun walkGrid(
+    startX: Double,
+    startY: Double,
+    startZ: Double,
+    endX: Double,
+    endY: Double,
+    endZ: Double,
+    defaultHeading: Double,
+): List<TracedBlock> {
+  val result = mutableListOf<TracedBlock>()
+  val startBlockX = floor(startX).toInt()
+  val startBlockZ = floor(startZ).toInt()
+  val targetBlockX = floor(endX).toInt()
+  val targetBlockZ = floor(endZ).toInt()
+  if (startBlockX == targetBlockX && startBlockZ == targetBlockZ) return result
+
+  val dx = endX - startX
+  val dz = endZ - startZ
+  val heading = if (abs(dx) + abs(dz) < 1e-6) defaultHeading else atan2(dz, dx)
+
+  var currentX = startBlockX
+  var currentZ = startBlockZ
+
+  val stepX =
+      when {
+        dx > 0 -> 1
+        dx < 0 -> -1
+        else -> 0
+      }
+  val stepZ =
+      when {
+        dz > 0 -> 1
+        dz < 0 -> -1
+        else -> 0
+      }
+
+  val invDx = if (dx != 0.0) 1.0 / abs(dx) else Double.POSITIVE_INFINITY
+  val invDz = if (dz != 0.0) 1.0 / abs(dz) else Double.POSITIVE_INFINITY
+  var tMaxX =
+      if (stepX != 0) distanceToGridBoundary(startX, currentX, stepX) * invDx
+      else Double.POSITIVE_INFINITY
+  var tMaxZ =
+      if (stepZ != 0) distanceToGridBoundary(startZ, currentZ, stepZ) * invDz
+      else Double.POSITIVE_INFINITY
+  val tDeltaX = if (stepX != 0) invDx else Double.POSITIVE_INFINITY
+  val tDeltaZ = if (stepZ != 0) invDz else Double.POSITIVE_INFINITY
+
+  var t = 0.0
+  while (currentX != targetBlockX || currentZ != targetBlockZ) {
+    if (tMaxX < tMaxZ) {
+      currentX += stepX
+      t = tMaxX
+      tMaxX += tDeltaX
+    } else if (tMaxZ < tMaxX) {
+      currentZ += stepZ
+      t = tMaxZ
+      tMaxZ += tDeltaZ
+    } else {
+      if (stepX != 0) currentX += stepX
+      if (stepZ != 0) currentZ += stepZ
+      t = tMaxX
+      tMaxX += tDeltaX
+      tMaxZ += tDeltaZ
+    }
+
+    val interpY = startY + (endY - startY) * t.coerceIn(0.0, 1.0)
+    result += TracedBlock(BlockPos(currentX, floor(interpY).toInt(), currentZ), heading)
+  }
+
+  return result
+}
+
+internal fun distanceToGridBoundary(origin: Double, cell: Int, step: Int): Double {
+  return if (step > 0) (cell + 1).toDouble() - origin else origin - cell.toDouble()
+}
+
+internal fun OffsetZone.isLine() = this == OffsetZone.CENTER_LINE || this == OffsetZone.OUTER_LINE
+
+internal data class BlockPos(val x: Int, val y: Int, val z: Int)
+
+internal data class TracedBlock(val pos: BlockPos, val heading: Double)
+
+internal data class OffsetSlot(val offset: Int, val zone: OffsetZone)
+
+internal enum class OffsetZone {
+  CENTER_LINE,
+  LANE,
+  OUTER_LINE,
+  SIDEWALK,
 }
