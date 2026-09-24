@@ -41,7 +41,7 @@ object VeinminerEvent : Listener {
     )
         return
     if (!isVeinmineable(event.block, tool) || !canVeinmine(player)) return
-    if (!miningPlayers.add(player.uniqueId)) return
+    miningPlayers.add(player.uniqueId)
 
     try {
       cooldowns[player.uniqueId] = Bukkit.getCurrentTick()
