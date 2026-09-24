@@ -101,6 +101,9 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       // keep-sorted end
     } as const;
 
+    // Docker の json-file ログは既定で上限が無く、Velocity などのログが際限なくたまるため
+    const logOpts = { "max-size": "50m", "max-file": "3" };
+
     const network = new Network(this, this.t("network"), {
       name: "network",
     });
@@ -109,6 +112,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       name: "alloy",
       image: images.alloy,
       restart: "unless-stopped",
+      logOpts,
       env: envs({
         ENVIRONMENT: this.environment,
         GRAFANA_LOKI_URL: `${commonInfra.platformCloudGrafanaStack.logsUrl}/loki/api/v1/push`,
@@ -136,6 +140,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       image: images.mariadb,
       name: "mariadb",
       restart: "unless-stopped",
+      logOpts,
       env: envs({
         MARIADB_ROOT_PASSWORD: secrets.get("MARIADB_PASSWORD"),
       }),
@@ -160,6 +165,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         name: "oyasai-minecraft-main",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
+        logOpts,
         tty: true,
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
@@ -208,6 +214,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         name: "oyasai-minecraft-lobby",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
+        logOpts,
         tty: true,
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
@@ -235,6 +242,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         name: "oyasai-minecraft-axiom",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
+        logOpts,
         tty: true,
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
@@ -258,6 +266,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       image: images.velocity,
       name: "oyasai-velocity",
       restart: "unless-stopped",
+      logOpts,
       tty: true,
       stdinOpen: true,
       networksAdvanced: [network],
@@ -285,6 +294,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         image: images.oyasaiWeb,
         name: "oyasai-web",
         restart: "unless-stopped",
+        logOpts,
         networksAdvanced: [network],
         env: envs({
           OYASAI_LISTEN_PORT: 80,
@@ -296,6 +306,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       image: images.caddy,
       name: "caddy",
       restart: "unless-stopped",
+      logOpts,
       networksAdvanced: [network],
       ports: ports({
         tcp: [
@@ -335,6 +346,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           image: images.minecraftBackup,
           networksAdvanced: [network],
           restart: "unless-stopped",
+          logOpts,
           env: envs({
             // keep-sorted start block=yes
             AWS_ACCESS_KEY_ID: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
@@ -374,6 +386,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         dependsOn: [mariadbContainer],
         image: images.mysqlBackup,
         restart: "unless-stopped",
+        logOpts,
         networksAdvanced: [network],
         command: ["dump"],
         env: envs({
@@ -399,6 +412,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         image: images.oyasaiCron,
         name: "oyasai-cron",
         restart: "unless-stopped",
+        logOpts,
         env: envs({
           // keep-sorted start
           DISCORD_WEBHOOK_URL: secrets.get("DISCORD_X_CRON_WEBHOOK_URL"),
