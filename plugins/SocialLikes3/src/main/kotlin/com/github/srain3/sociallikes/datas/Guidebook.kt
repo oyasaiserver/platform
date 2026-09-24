@@ -1,6 +1,8 @@
 package com.github.srain3.sociallikes.datas
 
 import java.util.UUID
+import org.bukkit.configuration.Configuration
+import org.bukkit.configuration.ConfigurationSection
 
 enum class GuidebookType {
   PERSONAL,
@@ -66,6 +68,13 @@ object GuidebookRules {
       }
 
   fun canCreatePersonal(currentCount: Int, limit: Int): Boolean = currentCount < limit
+
+  fun personalBookLimits(config: Configuration): Map<String, Int> {
+    // getConfigurationSection はファイルに節がないと空の節を作り、jar 内の既定値を読めない。
+    val section =
+        config.get("guidebook.personalBookLimits") as? ConfigurationSection ?: return emptyMap()
+    return section.getKeys(false).associateWith(section::getInt)
+  }
 
   /** 持っているランクのうち、いちばん多い冊数。どのランクも無ければ 0（作れない） */
   fun personalBookLimit(limitsByGroup: Map<String, Int>, hasGroup: (String) -> Boolean): Int =
