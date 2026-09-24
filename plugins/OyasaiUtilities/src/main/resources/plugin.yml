@@ -5,7 +5,7 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
-softdepend: [Vault, TokenManager, LuckPerms, floodgate, Minepacks]
+softdepend: [Vault, TokenManager, LuckPerms, floodgate]
 commands:
   skin:
     description: "自分のスキンを変更する"
@@ -28,8 +28,7 @@ commands:
     description: "AdminBPのコマンド"
     aliases: [abp]
   oyasaibackpack:
-    description: "個人バックパックを開く / Minepacks データを移行する"
-    usage: /oyasaibackpack [migrate-minepacks [confirm]]
+    description: "個人バックパックを開く"
     aliases: [obp]
     permission: backpack.use
   oresmelter:
