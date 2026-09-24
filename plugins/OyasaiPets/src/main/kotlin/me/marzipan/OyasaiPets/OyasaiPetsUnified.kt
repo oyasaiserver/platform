@@ -81,7 +81,8 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private lateinit var transferService: TransferService
   private lateinit var petCommandService: PetCommandService
   private lateinit var petShopGuiService: PetShopGuiService
-  private lateinit var commandManager: CommandManager
+  private lateinit var playerCommands: PlayerCommands
+  private lateinit var opCommands: OpCommands
 
   private val guiTitle = Component.text("ペットステータス", BLACK)
   private val shopGuiTitle = Component.text("購入確認", BLACK)
@@ -363,7 +364,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
               PetDataManager.clearPlayerCache(player.uniqueId)
               mountCooldowns.remove(player.uniqueId)
               dropCooldowns.remove(player.uniqueId)
-              PetDebugger.disable(player.uniqueId)
             },
         )
     server.pluginManager.registerEvents(petLifecycleListener, this)
@@ -375,7 +375,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
         }
     server.pluginManager.registerEvents(shopListener, this)
 
-    val playerCommands =
+    playerCommands =
         PlayerCommands(
             this::openMainMenu,
             petShopGuiService::openMainShopGui,
@@ -395,7 +395,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
             queryService::handlePetDetail,
             { player, filter -> guiManager.openPetListGui(player, player.uniqueId, filter) },
         )
-    val opCommands =
+    opCommands =
         OpCommands(
             this,
             this::showOpUsage,
@@ -403,7 +403,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
             this::handleForceStoreAll,
             queryService::handlePetHistory,
         )
-    commandManager = CommandManager(playerCommands, opCommands)
 
     logger.info("BigWolfPlugin enabled with TokenManager integration")
   }
@@ -419,7 +418,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     }
     // アクティブペットレジストリをリセット
     ActivePetRegistry.clear()
-    PetDebugger.clear()
     logger.info("BigWolfPlugin disabled")
   }
 
@@ -430,10 +428,22 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    if (sender !is Player)
-        return true.also { sender.sendMessage(Component.text("プレイヤーのみ可能です。", RED)) }
+    if (sender !is Player) {
+      sender.sendMessage(Component.text("プレイヤーのみ可能です。", RED))
+      return true
+    }
 
-    return commandManager.onCommand(sender, command, label, args)
+    return when (command.name.lowercase()) {
+      "bigwolf" -> playerCommands.handleCommand(sender, args)
+      "bigwolfop" -> {
+        if (!sender.isOp) {
+          sender.sendMessage(Component.text("このコマンドはOP専用です。", RED))
+          return true
+        }
+        opCommands.handleCommand(sender, args)
+      }
+      else -> true
+    }
   }
 
   private fun showOpUsage(player: Player) {
@@ -1907,112 +1917,6 @@ object ParrotFloatEffectRegistry {
   fun isRunning(entityUuid: UUID) = tasks.containsKey(entityUuid)
 }
 
-// ===== File: debug/PetDebugger.kt =====
-/** パフォーマンスデバッグ用の集計機能。 有効化中のプレイヤーに対してのみ動作し、無効時はほぼゼロコスト。 */
-object PetDebugger {
-  private val debugTargets = ConcurrentHashMap.newKeySet<UUID>()
-
-  // ControlTask 統計（UUID ごと）
-  private data class ControlStats(
-      var tickCount: Int = 0,
-      var totalNs: Long = 0L,
-      var maxNs: Long = 0L,
-      var jumpCount: Int = 0,
-      var statWrites: Int = 0,
-  )
-
-  private val controlStats = ConcurrentHashMap<UUID, ControlStats>()
-
-  fun disable(playerUuid: UUID) {
-    debugTargets.remove(playerUuid)
-    controlStats.remove(playerUuid)
-  }
-
-  fun isEnabled(playerUuid: UUID): Boolean = playerUuid in debugTargets
-
-  fun hasAnyEnabled(): Boolean = debugTargets.isNotEmpty()
-
-  fun clear() {
-    debugTargets.clear()
-    controlStats.clear()
-  }
-
-  /**
-   * startControlTask の毎 tick 末尾から呼ぶ。
-   *
-   * @param tickNs このtickの処理時間 (nanoseconds)
-   * @param jumpOccurred このtickにジャンプが発生したか
-   * @param statWriteOccurred このtickにPDC書き込みが発生したか
-   */
-  fun recordControlTick(
-      playerUuid: UUID,
-      tickNs: Long,
-      jumpOccurred: Boolean,
-      statWriteOccurred: Boolean,
-  ) {
-    val stats = controlStats[playerUuid] ?: return
-    stats.tickCount++
-    stats.totalNs += tickNs
-    if (tickNs > stats.maxNs) stats.maxNs = tickNs
-    if (jumpOccurred) stats.jumpCount++
-    if (statWriteOccurred) stats.statWrites++
-  }
-
-  /** 20 tick ごとに 1 秒サマリーをチャットへ送信してリセット。 */
-  fun flushControlSummary(player: Player, food: Int, speed: Double) {
-    val uuid = player.uniqueId
-    val stats = controlStats[uuid] ?: return
-    if (stats.tickCount == 0) return
-    val avgMs = stats.totalNs / stats.tickCount / 1_000_000.0
-    val maxMs = stats.maxNs / 1_000_000.0
-    player.sendMessage(
-        Component.text(
-            "[PetDebug/Ctrl] ticks=${stats.tickCount} avg=${String.format("%.3f", avgMs)}ms " +
-                "max=${String.format("%.3f", maxMs)}ms | " +
-                "food=$food speed=${String.format("%.2f", speed)} | " +
-                "jumps=${stats.jumpCount} pdcWrites=${stats.statWrites}",
-            net.kyori.adventure.text.format.NamedTextColor.AQUA,
-        )
-    )
-    // リセット
-    controlStats[uuid] = ControlStats()
-  }
-
-  /** startControlTask の毎 tick でアクションバーを更新。 */
-  fun updateActionBar(
-      player: Player,
-      tickNum: Int,
-      food: Int,
-      speed: Double,
-      cachedSkillType: Int,
-      jumpOccurred: Boolean,
-      tickNs: Long,
-  ) {
-    val jumpMark = if (jumpOccurred) " jump↑" else ""
-    val ms = tickNs / 1_000_000.0
-    player.sendActionBar(
-        Component.text(
-            "[Tick #$tickNum] food=$food spd=${String.format("%.2f", speed)} " +
-                "skl=$cachedSkillType${jumpMark} | ${String.format("%.3f", ms)}ms",
-            net.kyori.adventure.text.format.NamedTextColor.AQUA,
-        )
-    )
-  }
-
-  /** startGlobalAITask の実行結果を全デバッグ有効プレイヤーへ送信。 */
-  fun sendAiTaskResult(petsTotal: Int, atypical: Int, acted: Int, elapsedMs: Double) {
-    if (debugTargets.isEmpty()) return
-    val msg =
-        Component.text(
-            "[PetDebug/AI] pets=$petsTotal atypical=$atypical acted=$acted time=${String.format("%.3f", elapsedMs)}ms",
-            net.kyori.adventure.text.format.NamedTextColor.YELLOW,
-        )
-    for (uuid in debugTargets) {
-      Bukkit.getPlayer(uuid)?.sendMessage(msg)
-    }
-  }
-}
-
 object PetSynchronizer {
   @Suppress("UnstableApiUsage") private val logger = Bukkit.getLogger()
 
@@ -2261,47 +2165,6 @@ fun String.containsDefaultPetMarker(): Boolean = this.contains("'s Big ") || thi
 fun String.startsWithDefaultPetName(playerName: String): Boolean =
     this.startsWith("${playerName}'s Big ") || this.startsWith("${playerName}の大")
 
-/** PCDのマイグレーション - 古いバージョンのデータを最新に更新 */
-@Suppress("unused")
-fun LivingEntity.migratePcdIfNeeded() {
-  val version = pcdVersion
-  if (version < BigWolfKeys.CURRENT_PCD_VERSION) {
-    // v1 → v2 マイグレーション
-    if (version < 2) {
-      // originalOwnerが未設定なら現在のownerを設定
-      if (originalOwnerId == null && ownerId != null) {
-        originalOwnerId = ownerId
-      }
-      // transferCountが未設定なら0
-      if (
-          persistentDataContainer.get(BigWolfKeys.TRANSFER_COUNT, PersistentDataType.INTEGER) ==
-              null
-      ) {
-        transferCount = 0
-      }
-      // particleUnlockedが未設定なら"0"（デフォルトパーティクルのみ）
-      if (
-          persistentDataContainer.get(BigWolfKeys.PARTICLE_UNLOCKED, PersistentDataType.STRING) ==
-              null
-      ) {
-        particleUnlocked = "0"
-      }
-      // generationが未設定なら1（第1世代）
-      if (persistentDataContainer.get(BigWolfKeys.GENERATION, PersistentDataType.INTEGER) == null) {
-        generation = 1
-      }
-      // breedCountが未設定なら0
-      if (
-          persistentDataContainer.get(BigWolfKeys.BREED_COUNT, PersistentDataType.INTEGER) == null
-      ) {
-        breedCount = 0
-      }
-    }
-    // 最新バージョンに更新
-    pcdVersion = BigWolfKeys.CURRENT_PCD_VERSION
-  }
-}
-
 object SpawnUtils {
   private const val MAX_CLEARANCE_SEARCH = 6
 
@@ -2367,44 +2230,6 @@ object SpawnUtils {
       }
     }
     return true
-  }
-}
-
-// ===== File: commands/CommandManager.kt =====
-/** コマンドマネージャー コマンドのルーティングとディスパッチを管理 */
-class CommandManager(
-    private val playerCommands: PlayerCommands,
-    private val opCommands: OpCommands,
-) : CommandExecutor {
-
-  override fun onCommand(
-      sender: CommandSender,
-      command: Command,
-      label: String,
-      args: Array<out String>,
-  ): Boolean {
-    if (sender !is Player) {
-      sender.sendMessage(Component.text("プレイヤーのみ可能です。", RED))
-      return true
-    }
-
-    return when (command.name.lowercase()) {
-      "bigwolf" -> handlePlayerCommand(sender, args)
-      "bigwolfop" -> handleOpCommand(sender, args)
-      else -> true
-    }
-  }
-
-  private fun handlePlayerCommand(player: Player, args: Array<out String>): Boolean =
-      playerCommands.handleCommand(player, args)
-
-  private fun handleOpCommand(player: Player, args: Array<out String>): Boolean {
-    if (!player.isOp) {
-      player.sendMessage(Component.text("このコマンドはOP専用です。", RED))
-      return true
-    }
-
-    return opCommands.handleCommand(player, args)
   }
 }
 
@@ -9199,11 +9024,7 @@ class ChildAISystem(private val plugin: JavaPlugin) {
           override fun run() {
             if (!BigWolfConfig.childAiEnabled) return
 
-            val aiStartNs = if (PetDebugger.hasAnyEnabled()) System.nanoTime() else 0L
-
             val activePets = ActivePetRegistry.getAll()
-            var atypicalCount = 0
-            var actedCount = 0
 
             // 不要になった lastActionTime エントリをクリーンアップ
             val activeUuids = activePets.mapTo(HashSet()) { it.uniqueId }
@@ -9211,7 +9032,6 @@ class ChildAISystem(private val plugin: JavaPlugin) {
 
             for (entity in activePets) {
               if (!ActivePetRegistry.isAtypical(entity.uniqueId)) continue
-              atypicalCount++
 
               // 騎乗中はスキップ
               if (entity.passengers.isNotEmpty()) continue
@@ -9234,12 +9054,6 @@ class ChildAISystem(private val plugin: JavaPlugin) {
               // ランダムアクション実行
               performRandomAction(entity, owner)
               lastActionTime[uuid] = now
-              actedCount++
-            }
-
-            if (PetDebugger.hasAnyEnabled()) {
-              val elapsedMs = (System.nanoTime() - aiStartNs) / 1_000_000.0
-              PetDebugger.sendAiTaskResult(activePets.size, atypicalCount, actedCount, elapsedMs)
             }
           }
         }
@@ -10029,9 +9843,6 @@ class PetControlSystem(
           var internalYVel = 0.0 // サーバー重力干渉を排除した内部管理Y速度
 
           override fun run() {
-            val debugEnabled = PetDebugger.isEnabled(player.uniqueId)
-            val tickStartNs = if (debugEnabled) System.nanoTime() else 0L
-
             if (!entity.isValid || !player.isOnline || player !in entity.passengers) {
               if (entity.isValid) {
                 entity.isSilent = false
@@ -10310,32 +10121,6 @@ class PetControlSystem(
                 localJumps = 0
               }
             }
-
-            if (debugEnabled) {
-              val tickNs = System.nanoTime() - tickStartNs
-              val jumpThisTick = input.isJump && !lastJumpPressed
-              PetDebugger.recordControlTick(
-                  player.uniqueId,
-                  tickNs,
-                  jumpThisTick,
-                  statWriteThisTick,
-              )
-              val progress = cachedFood.toDouble() / BigWolfConfig.maxFoodLevel
-              val curSpeed =
-                  spec.baseSpeed + (spec.maxSpeed - spec.baseSpeed) * progress * cachedSpeed
-              PetDebugger.updateActionBar(
-                  player,
-                  ticks,
-                  cachedFood,
-                  curSpeed,
-                  cachedSkillType,
-                  jumpThisTick,
-                  tickNs,
-              )
-              if (ticks % 20 == 0) {
-                PetDebugger.flushControlSummary(player, cachedFood, curSpeed)
-              }
-            }
           }
         }
 
@@ -10446,91 +10231,6 @@ class PetSpawnSystem(
 // ===== File: systems/ShopSystem.kt =====
 /** ショップシステム ショップMOBの生成・管理、削除 */
 class ShopSystem {
-
-  /** ショップMOBを生成 */
-  @Suppress("unused")
-  fun spawnShopMob(admin: Player, type: EntityType, variant: String?, cost: Int, yawDeg: Float?) {
-    val loc = admin.location.block.location.add(0.5, 0.0, 0.5)
-    val safeLoc =
-        SpawnUtils.findSafeGroundLocation(loc)
-            ?: run {
-              admin.sendMessage(Component.text("ここにはショップMOBを設置できません（足場と空間が必要です）。", RED))
-              return
-            }
-
-    val ent = admin.world.spawnEntity(safeLoc, type) as? LivingEntity ?: return
-    ent.setAI(false)
-    ent.isInvulnerable = true
-    ent.isSilent = true
-    ent.setRemoveWhenFarAway(false)
-
-    // 向きを設定（45度単位）
-    val yaw = yawDeg ?: admin.location.yaw
-    val newLoc = safeLoc.clone()
-    newLoc.yaw = yaw
-    ent.teleport(newLoc)
-
-    // PDCにショップ情報を設定
-    val pdc = ent.persistentDataContainer
-    pdc.set(BigWolfKeys.SHOP_FLAG, PersistentDataType.BYTE, 1)
-    pdc.set(BigWolfKeys.SHOP_TYPE, PersistentDataType.STRING, type.name)
-    if (variant != null) {
-      pdc.set(BigWolfKeys.SHOP_VARIANT, PersistentDataType.STRING, variant)
-    }
-    pdc.set(BigWolfKeys.SHOP_COST, PersistentDataType.INTEGER, cost)
-
-    // バリアント適用
-    if (variant != null) {
-      VariantHandler.applyVariant(ent, variant)
-    }
-
-    // カスタム名
-    val label = if (variant != null) "${type.name} ($variant)" else type.name
-    ent.customName(Component.text("★ $label - ${cost}pt", GOLD))
-    ent.isCustomNameVisible = true
-
-    admin.sendMessage(Component.text("ショップMOBを設置しました: $label (${cost}pt)", GREEN))
-  }
-
-  /** 最も近いショップMOBを削除 */
-  @Suppress("unused")
-  fun removeNearestShopMob(admin: Player): Boolean {
-    val nearbyEntities = admin.getNearbyEntities(10.0, 10.0, 10.0)
-    val shopMob =
-        nearbyEntities.filterIsInstance<LivingEntity>().firstOrNull {
-          val pdc = it.persistentDataContainer
-          (pdc.get(BigWolfKeys.SHOP_FLAG, PersistentDataType.BYTE) ?: 0).toInt() == 1
-        }
-
-    if (shopMob != null) {
-      val typeStr =
-          shopMob.persistentDataContainer.get(BigWolfKeys.SHOP_TYPE, PersistentDataType.STRING)
-              ?: "UNKNOWN"
-      shopMob.remove()
-      admin.sendMessage(Component.text("ショップMOBを削除しました: $typeStr", YELLOW))
-      return true
-    } else {
-      admin.sendMessage(Component.text("近くにショップMOBが見つかりません。", RED))
-      return false
-    }
-  }
-
-  /** ワールド内のすべてのショップMOBを削除 */
-  @Suppress("unused")
-  fun removeAllShopMobs(admin: Player): Int {
-    var count = 0
-    for (world in Bukkit.getWorlds()) {
-      for (entity in world.livingEntities) {
-        val pdc = entity.persistentDataContainer
-        if ((pdc.get(BigWolfKeys.SHOP_FLAG, PersistentDataType.BYTE) ?: 0).toInt() == 1) {
-          entity.remove()
-          count++
-        }
-      }
-    }
-    admin.sendMessage(Component.text("すべてのショップMOBを削除しました (${count}体)", GREEN))
-    return count
-  }
 
   /** エンティティがショップMOBかチェック */
   fun isShopMob(entity: LivingEntity): Boolean {
