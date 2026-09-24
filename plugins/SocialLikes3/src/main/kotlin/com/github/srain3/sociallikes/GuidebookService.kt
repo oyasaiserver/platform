@@ -348,9 +348,7 @@ object GuidebookService {
   }
 
   private fun personalBookLimit(player: Player): Int {
-    val section =
-        Tools.plugin.config.getConfigurationSection("guidebook.personalBookLimits") ?: return 0
-    val limits = section.getKeys(false).associateWith(section::getInt)
+    val limits = GuidebookRules.personalBookLimits(Tools.plugin.config)
     if (player.isOp) return limits.values.maxOrNull() ?: 0
     return GuidebookRules.personalBookLimit(limits) { player.hasPermission("group.$it") }
   }

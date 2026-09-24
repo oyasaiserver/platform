@@ -4,6 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import org.bukkit.configuration.file.YamlConfiguration
 
 class GuidebookRulesTest {
   @Test
@@ -57,6 +58,27 @@ class GuidebookRulesTest {
     assertTrue(GuidebookRules.canAddEntry(29, 30, alreadyIncluded = false))
     assertFalse(GuidebookRules.canAddEntry(30, 30, alreadyIncluded = false))
     assertFalse(GuidebookRules.canAddEntry(1, 30, alreadyIncluded = true))
+  }
+
+  @Test
+  fun `personal book limits use defaults only when file section is absent`() {
+    val defaults =
+        GuidebookRulesTest::class.java.getResourceAsStream("/config.yml")!!.bufferedReader().use {
+          YamlConfiguration.loadConfiguration(it)
+        }
+    val oldConfig = YamlConfiguration.loadConfiguration("readSource: sqlite".reader())
+    oldConfig.setDefaults(defaults)
+    assertEquals(
+        mapOf("jokyu" to 1, "builder" to 2, "takumi" to 3, "blue" to 4, "white" to 5),
+        GuidebookRules.personalBookLimits(oldConfig),
+    )
+
+    val customConfig =
+        YamlConfiguration.loadConfiguration(
+            "guidebook:\n  personalBookLimits:\n    takumi: 7".reader()
+        )
+    customConfig.setDefaults(defaults)
+    assertEquals(mapOf("takumi" to 7), GuidebookRules.personalBookLimits(customConfig))
   }
 
   @Test
