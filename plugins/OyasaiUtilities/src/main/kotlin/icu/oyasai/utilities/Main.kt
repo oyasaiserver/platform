@@ -7,6 +7,7 @@ import icu.oyasai.utilities.debugonbe.DebugOnBE
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
 import icu.oyasai.utilities.hats.Hats
 import icu.oyasai.utilities.hologram.HologramFeature
+import icu.oyasai.utilities.joincommands.JoinCommands
 import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
 import icu.oyasai.utilities.oresmelter.OreSmelter
@@ -60,6 +61,7 @@ class Main : JavaPlugin() {
     AdminBP.onEnable()
     Hats.onEnable()
     HologramFeature.onEnable()
+    JoinCommands.onEnable()
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
     VeinminerConfig.reloadConfig()

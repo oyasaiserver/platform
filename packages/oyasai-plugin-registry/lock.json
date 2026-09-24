@@ -97,14 +97,6 @@
       }
     }
   },
-  "joincommands": {
-    "paper": {
-      "26.2": {
-        "url": "https://hangarcdn.papermc.io/plugins/SirBlobman/JoinCommands/versions/3.1.0.120/PAPER/JoinCommands-3.1.0.120.jar",
-        "hash": "sha256-nvbcJR9gp3CFlY+bxe+iBxeDVi21YoOY7YIjsCRgwu0="
-      }
-    }
-  },
   "luckperms": {
     "paper": {
       "26.2": {
