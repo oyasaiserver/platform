@@ -79,13 +79,6 @@ object SLDataStatsService {
       val incompleteBucketIndex: Int?,
   )
 
-  data class BoardStats(
-      val weekly: LikeSeries,
-      val weeklyMvp: List<SLDatabase.BuildLikeSummary>,
-      val weeklyOwnerMvp: List<SLDatabase.OwnerLikeSummary>,
-      val growingBuilds: List<SLDatabase.BuildLikeSummary>,
-  )
-
   data class OwnerLikeRanking(
       val period: RankingPeriod,
       val startDate: LocalDate?,
@@ -443,69 +436,6 @@ object SLDataStatsService {
         }
 
     return LikeSeries(period, bucketsList)
-  }
-
-  fun loadBoardStats(): BoardStats {
-    val currentWeekStart = currentWeekStart()
-    val previousWeekStart = currentWeekStart.minusWeeks(1)
-    val currentWeekMillis = toMillis(currentWeekStart)
-    val previousWeekMillis = toMillis(previousWeekStart)
-    val allBuilds = Data.getSLDataAll()
-
-    val weeklyMvp =
-        allBuilds
-            .map { build ->
-              val recentCount = build.likesWithTimestamp.values.count { it >= currentWeekMillis }
-              SLDatabase.BuildLikeSummary(
-                  build.id,
-                  build.title,
-                  build.owner.toString(),
-                  recentCount,
-              )
-            }
-            .filter { it.currentCount > 0 }
-            .sortedByDescending { it.currentCount }
-            .take(5)
-
-    val weeklyOwnerMvp =
-        allBuilds
-            .groupBy { it.owner.toString() }
-            .map { (owner, builds) ->
-              val count =
-                  builds.sumOf { b ->
-                    b.likesWithTimestamp.values.count { it >= currentWeekMillis }
-                  }
-              SLDatabase.OwnerLikeSummary(owner, count)
-            }
-            .filter { it.currentCount > 0 }
-            .sortedByDescending { it.currentCount }
-            .take(5)
-
-    val growingBuilds =
-        allBuilds
-            .map { build ->
-              val currentCount = build.likesWithTimestamp.values.count { it >= currentWeekMillis }
-              val previousCount =
-                  build.likesWithTimestamp.values.count {
-                    it in previousWeekMillis until currentWeekMillis
-                  }
-              SLDatabase.BuildLikeSummary(
-                  build.id,
-                  build.title,
-                  build.owner.toString(),
-                  currentCount - previousCount,
-              )
-            }
-            .filter { it.currentCount > 0 }
-            .sortedByDescending { it.currentCount }
-            .take(5)
-
-    return BoardStats(
-        weekly = loadWeeklySeries(DEFAULT_BUCKETS),
-        weeklyMvp = weeklyMvp,
-        weeklyOwnerMvp = weeklyOwnerMvp,
-        growingBuilds = growingBuilds,
-    )
   }
 
   /**
