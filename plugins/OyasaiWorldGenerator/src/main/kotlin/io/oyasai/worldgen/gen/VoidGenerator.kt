@@ -4,41 +4,8 @@ import java.util.Random
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.generator.ChunkGenerator
-import org.bukkit.generator.WorldInfo
 
 class VoidGenerator(private val spawnY: Int) : ChunkGenerator() {
-  override fun generateNoise(
-      worldInfo: WorldInfo,
-      random: Random,
-      chunkX: Int,
-      chunkZ: Int,
-      chunkData: ChunkData,
-  ) = Unit
-
-  override fun generateSurface(
-      worldInfo: WorldInfo,
-      random: Random,
-      chunkX: Int,
-      chunkZ: Int,
-      chunkData: ChunkData,
-  ) = Unit
-
-  override fun generateBedrock(
-      worldInfo: WorldInfo,
-      random: Random,
-      chunkX: Int,
-      chunkZ: Int,
-      chunkData: ChunkData,
-  ) = Unit
-
-  override fun generateCaves(
-      worldInfo: WorldInfo,
-      random: Random,
-      chunkX: Int,
-      chunkZ: Int,
-      chunkData: ChunkData,
-  ) = Unit
-
   override fun shouldGenerateNoise(): Boolean = false
 
   override fun shouldGenerateSurface(): Boolean = false
