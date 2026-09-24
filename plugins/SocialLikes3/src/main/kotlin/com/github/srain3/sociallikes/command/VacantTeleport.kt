@@ -29,55 +29,23 @@ object VacantTeleport : CommandExecutor {
       Data.vacantTPTask(sender, 8, 2, null)
       return true
     }
-    if (checkBiomeString(args[0])) {
-      val radius =
-          if (args.size >= 2) {
-            if (args[1].toIntOrNull() != null) {
-              args[1].toInt()
-            } else {
-              sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
-              return false
-            }
-          } else {
-            8
-          }
-      val maxCount =
-          if (args.size >= 3) {
-            if (args[2].toIntOrNull() != null) {
-              args[2].toInt()
-            } else {
-              sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
-              return false
-            }
-          } else {
-            radius / 3
-          }
-
-      Data.vacantTPTask(sender, radius, maxCount, args[0])
-      return true
-    } else {
-      val radius =
-          if (args[0].toIntOrNull() != null) {
-            args[0].toInt()
-          } else {
-            sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
-            return false
-          }
-      val maxCount =
-          if (args.size >= 2) {
-            if (args[1].toIntOrNull() != null) {
-              args[1].toInt()
-            } else {
-              sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
-              return false
-            }
-          } else {
-            radius / 3
-          }
-
-      Data.vacantTPTask(sender, radius, maxCount, null)
-    }
+    val biome = if (checkBiomeString(args[0])) args[0] else null
+    val radius =
+        intArg(sender, if (biome != null) args.getOrNull(1) else args[0], 8) ?: return false
+    val maxCount =
+        intArg(sender, if (biome != null) args.getOrNull(2) else args.getOrNull(1), radius / 3)
+            ?: return false
+    Data.vacantTPTask(sender, radius, maxCount, biome)
     return true
+  }
+
+  private fun intArg(sender: Player, raw: String?, default: Int): Int? {
+    if (raw == null) return default
+    return raw.toIntOrNull()
+        ?: run {
+          sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
+          null
+        }
   }
 
   @Suppress("UnstableApiUsage", "removal")

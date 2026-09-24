@@ -28,9 +28,7 @@ import java.awt.RenderingHints
 import java.awt.Shape
 import java.awt.image.BufferedImage
 import java.io.File
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 import java.util.UUID
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -112,7 +110,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private const val DIALOG_BODY_WIDTH = 520
   private const val DIALOG_BUTTON_WIDTH = 130
   private const val DIALOG_ACTION_COLUMNS = 2
-  private const val DIALOG_FIXED_RANK_NAME_COLUMNS = 16
   private const val DIALOG_RANKING_NAME_COLUMNS = 10
   private const val DIALOG_BUILD_TITLE_COLUMNS = 10
   private const val DIALOG_RANK_BAR_COLUMNS = 24
@@ -1570,7 +1567,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       return
     }
     val series = loadWeekly()
-    GraphImageRenderer.logTextFit("handheld", series, "SL Weekly - ${player.name}", 128, 128)
     val item = findReusableMap(player) ?: ItemStack(Material.FILLED_MAP)
     val mapView = Bukkit.createMap(player.world)
     mapView.setTrackingPosition(false)
@@ -1646,21 +1642,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     )
   }
 
-  private fun openLuckyBuild(player: Player) {
-    val build = SLDatabase.loadLuckyUnlikedBuildBlocking(player.uniqueId.toString())
-    if (build == null) {
-      player.sendMessage(Tools.socialLikesLOGO + " &e未いいねの他者建築は見つかりませんでした。".color())
-      return
-    }
-    val owner =
-        SLDatabase.loadPlayerNamesBlocking(listOf(build.ownerUuid))[build.ownerUuid] ?: "unknown"
-    player.sendMessage(
-        Tools.socialLikesLOGO +
-            " &dLucky! &f${owner}さんの「${build.title}」(ID:${build.id}) を案内します。".color()
-    )
-    Bukkit.dispatchCommand(player, "sltp ${build.id}")
-  }
-
   private fun placeWallMap(player: Player) {
     val trace = player.world.rayTraceBlocks(player.eyeLocation, player.eyeLocation.direction, 6.0)
     val hitBlock = trace?.hitBlock
@@ -1695,7 +1676,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     removeWallMap(player, silent = true)
     val stats = SLDataStatsService.loadBoardStats()
     val image = WallMapImageRenderer.render(stats, "SL Weekly - ${player.name}", 256, 384)
-    WallMapImageRenderer.logTextFit("wall", stats, "SL Weekly - ${player.name}", 256, 384)
     var placed = 0
 
     for (row in 0 until WALL_MAP_ROWS) {
@@ -4084,69 +4064,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private fun dialogPercentValue(numerator: Int, denominator: Int): Double =
       if (denominator <= 0) 0.0 else numerator.toDouble() * 100.0 / denominator.toDouble()
 
-  private fun dialogBuildAgeRows(stats: SLDataStatsService.AgeDistributionStats): List<String> =
-      listOf("受けたいいね: ${dialogAgeBucketText(stats.received)}")
-
-  private fun dialogGiveReceiveRows(
-      stats: SLDataStatsService.ExtendedStats,
-      targetName: String,
-  ): List<String> =
-      listOf(
-          "受けた ${formatCount(stats.balance.received)} / 送った ${formatCount(stats.balance.given)} / 差 ${formatCount(stats.balance.received - stats.balance.given)} / 受÷送 ${formatRatio(stats.balance.receivePerGiven)} — ${stats.balance.diagnosis}",
-          "$targetName の建築へ押してくれた人 Top5:",
-      ) +
-          stats.benefactors.mapIndexed { index, row ->
-            dialogPlayerCountLine(index, row.playerUuid, row.count, "いいね", stats.playerNames)
-          }
-
-  private fun dialogTwoBarRows(
-      firstLabel: String,
-      first: Double,
-      secondLabel: String,
-      second: Double,
-  ): List<String> {
-    val maximum = max(first, second).coerceAtLeast(1.0)
-    fun bar(value: Double): String {
-      val filled = ceil(value / maximum * 12.0).toInt().coerceIn(0, 12)
-      return "█".repeat(filled) + "█".repeat(12 - filled)
-    }
-    return listOf(
-        "$firstLabel ${bar(first)} ${formatAverageCount(first)}",
-        "$secondLabel ${bar(second)} ${formatAverageCount(second)}",
-    )
-  }
-
   private fun formatSignedAverage(value: Double): String =
       (if (value >= 0.0) "+" else "") + formatAverageCount(value)
 
   private fun formatRatio(value: Double): String =
       if (value.isFinite()) String.format("%.2f", value) else "-"
-
-  private fun dialogLikeTimestampCoverage(stats: SLDataStatsService.ExtendedStats): String {
-    val coverage = stats.likeTimestampCoverage
-    return "${formatCount(coverage.timestampedLikes)} / ${formatCount(coverage.totalLikes)}件"
-  }
-
-  private fun comparisonDiagnosis(stats: SLDataStatsService.ComparisonStats): String {
-    val delta = stats.ownAverage - stats.globalAverage
-    return when {
-      stats.ownAverage == 0.0 && stats.globalAverage == 0.0 -> "まだ平均との差を読めるだけのデータがありません。"
-      delta >= 1.0 -> "全体平均より高く、自作品は平均より反応を集めています。"
-      delta <= -1.0 -> "全体平均より低く、反応は伸びしろがあります。"
-      else -> "全体平均に近く、反応はサーバー標準的です。"
-    }
-  }
-
-  private fun balanceDiagnosis(stats: SLDataStatsService.GiveReceiveBalance): String =
-      when (stats.diagnosis) {
-        "受取寄り" -> "受け取る反応が送る反応より多い状態です。"
-        "応援寄り" -> "自分から応援している比重が高い状態です。"
-        "バランス型" -> "送る量と受け取る量が近い状態です。"
-        else -> stats.diagnosis
-      }
-
-  private fun likeConcentrationDiagnosis(stats: SLDataStatsService.LikeConcentration): String =
-      if (stats.hhi >= 0.25) "人気が一部の作品に強く集まっています。" else "人気が複数の作品に分散しています。"
 
   private fun streakTitle(streak: SLDataStatsService.StreakStats): String =
       when {
@@ -4174,37 +4096,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             )
         else -> stats2Text("Section.stats2.given.streak.future_title", "称号: これから")
       }
-
-  private fun givenLikeDeviationDiagnosis(stats: SLDataStatsService.ComparisonStats): String =
-      when {
-        stats.givenTargetAverage == 0.0 -> "押した作品はまだありません"
-        stats.givenTargetAverage >= stats.globalAverage &&
-            stats.givenTargetAverage >= stats.globalMedian -> "人気作を選びがち"
-        stats.givenTargetAverage < stats.globalMedian -> "埋もれた作品を掘りがち"
-        else -> "全体の中ほどを選ぶ傾向"
-      }
-
-  private fun dialogOverviewDashboardRows(
-      stats: SLDataStatsService.ExtendedStats,
-      targetName: String,
-  ): List<String> {
-    val favoriteOwner =
-        stats.likeDiversity.ownerTop.firstOrNull()?.let {
-          "${dialogPlayerName(it.label, stats.playerNames)} ${formatCount(it.count)}件"
-        } ?: "なし"
-    val topBuilds =
-        stats.ownBuilds.take(5).joinToString(" / ") { row ->
-          "${dialogBuildTitleLabel(row.title, 10)} ${formatCount(row.likeCount)}"
-        }
-    return listOf(
-        "あなたがいいねした作者 ${formatCount(stats.socialOverview.supportedOwnerCount)}人 / あなたにいいねした人数 ${formatCount(stats.socialOverview.supporterCount)}人",
-        "送 ${formatCount(stats.balance.given)} / 受 ${formatCount(stats.balance.received)} / 差 ${formatCount(stats.balance.received - stats.balance.given)} / 受÷送 ${formatRatio(stats.balance.receivePerGiven)} — ${stats.balance.diagnosis}",
-        "自作品いいね 平均 ${formatAverageCount(stats.likeDistribution.average)} / 中央値 ${formatAverageCount(stats.likeDistribution.median)} / 最大 ${formatCount(stats.likeDistribution.maximum)}",
-        "集中度 上位${stats.likeConcentration.topCount}作品 ${formatDoublePercent(stats.likeConcentration.topShare)} / 偏り ${String.format("%.2f", stats.likeConcentration.hhi)} — ${stats.likeConcentration.diagnosis}",
-        "応援先の偏り ${stats.likeDiversity.diagnosis}（スコア ${stats.likeDiversity.score}/100） / 最多 ${favoriteOwner}",
-        if (topBuilds.isBlank()) "$targetName の建築Top5: なし" else "$targetName の建築Top5: $topBuilds",
-    )
-  }
 
   private fun reliablePublishedScope(stats: SLDataStatsService.ExtendedStats): String {
     val population = stats.reliableTimestampPopulation
@@ -4250,21 +4141,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                   formatCount(stats.activityRhythm.weekdayCounts.flatten().sum())
           ),
       )
-
-  private fun dialogAgeDistributionRows(
-      stats: SLDataStatsService.AgeDistributionStats
-  ): List<String> =
-      listOf(
-          "受けたいいね: ${dialogAgeBucketText(stats.received)}",
-          "押したいいね: ${dialogAgeBucketText(stats.given)}",
-      )
-
-  private fun dialogAgeBucketText(buckets: List<SLDataStatsService.AgeBucket>): String {
-    val total = buckets.sumOf { it.count }
-    return buckets.joinToString(" / ") { bucket ->
-      "${bucket.label} ${formatCount(bucket.count)}件 (${formatDialogPercent(bucket.count, total)})"
-    }
-  }
 
   // 2026-08-17: `▁░▒▓█`の文字差し替え方式(送り幅が`░`だけ1px狭く列がずれる、DIALOG_STYLE.md
   // 「未解決」参照)をやめ、`⬛`1種類の色分けに変更した。文字を変えないので列ズレが原理的に起きない。
@@ -4469,29 +4345,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       records: List<SLDataStatsService.PersonalBestRecord>
   ): String = records.lastOrNull()?.let { "${it.count}件" } ?: "なし"
 
-  private fun dialogDiversityRows(
-      stats: SLDataStatsService.LikeDiversityStats,
-      playerNames: Map<String, String>,
-  ): List<String> =
-      listOf(
-          "多様性スコア ${formatCount(stats.score)} / 100 — ${stats.diagnosis}",
-          if (stats.diagnosis == "分散型") {
-            "応援先が広く、特定の作者や場所だけに偏っていません。"
-          } else {
-            "応援先が絞られており、よく見る作者や場所がはっきりしています。"
-          },
-          "制作者 Top3: ${dialogDimensionTopText(stats.ownerTop) { dialogPlayerName(it, playerNames) }}",
-          "world Top3: ${dialogDimensionTopText(stats.worldTop) { it }}",
-          "chunk Top3: ${dialogDimensionTopText(stats.chunkTop) { it }}",
-      )
-
-  private fun dialogDimensionTopText(
-      rows: List<SLDataStatsService.DimensionTop>,
-      label: (String) -> String,
-  ): String =
-      if (rows.isEmpty()) "なし"
-      else rows.joinToString(" / ") { "${label(it.label)} ${formatCount(it.count)}件" }
-
   private fun formatDialogDuration(millis: Long): String {
     val nonNegativeMillis = millis.coerceAtLeast(0L)
     if (nonNegativeMillis < 60_000L) {
@@ -4529,35 +4382,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     }
   }
 
-  private fun formatDoublePercent(value: Double): String =
-      "${"%.1f".format(java.util.Locale.ROOT, value)}%"
-
-  private fun dialogPlayerCountLine(
-      index: Int,
-      playerUuid: String,
-      count: Int,
-      suffix: String,
-      playerNames: Map<String, String>,
-  ): String =
-      dialogFixedRankLine(
-          index,
-          dialogPlayerName(playerUuid, playerNames),
-          "${formatCount(count)}$suffix",
-      )
-
-  private fun dialogOwnerCountLine(
-      index: Int,
-      ownerUuid: String,
-      count: Int,
-      suffix: String,
-      playerNames: Map<String, String>,
-  ): String =
-      dialogFixedRankLine(
-          index,
-          dialogPlayerName(ownerUuid, playerNames),
-          "${formatCount(count)}$suffix",
-      )
-
   private fun dialogPlayerName(uuidText: String, playerNames: Map<String, String>): String {
     val uuid = parseUuid(uuidText)
     val resolvedName =
@@ -4574,16 +4398,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   // 2026-08-17: 省略記号`…`を付けず、そのまま切り詰めるだけに変更(ユーザー判断)。
   // プレイヤー名の切り詰め(dialogRankingDisplayName)と同じ挙動に揃える。
   private fun compactDialogText(text: String, maxLength: Int): String = text.take(maxLength)
-
-  /**
-   * Paper Dialog bodies are centre aligned. Keep the name and value in fixed uniform-font blocks so
-   * each ranking value begins at the same column even when a player name has a different length.
-   */
-  private fun dialogFixedRankLine(index: Int, playerName: String, value: String): String {
-    val fixedName = compactDialogText(playerName, DIALOG_FIXED_RANK_NAME_COLUMNS)
-    val padding = DIALOG_NBSP.toString().repeat(DIALOG_FIXED_RANK_NAME_COLUMNS - fixedName.length)
-    return "${index + 1}. $fixedName$padding  $value"
-  }
 
   private fun dialogRankingRowBody(
       index: Int,
@@ -4797,32 +4611,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     )
   }
 
-  fun logWeeklyDialogGraphPreview() {
-    val series = loadWeekly()
-    val config = currentDialogRenderConfig()
-    DialogGraphSize.entries.forEach { size ->
-      logDialogGraphPreview(
-          Period.WEEK,
-          size,
-          buildDialogGraph(series, size, config),
-          dialogSubtitle(series, size, config),
-      )
-    }
-    Tools.plugin.logger.info(
-        "[SLData] Display week expected bucketOrder(oldToNew)=" +
-            series.buckets.joinToString(" -> ") { "${it.label}:${it.count}" }
-    )
-    logDisplayInteractionGeometryPreview()
-    GraphImageRenderer.logTextFit("handheld-startup", series, "SL Weekly - marzipan99", 128, 128)
-    WallMapImageRenderer.logTextFit(
-        "wall-startup",
-        SLDataStatsService.loadBoardStats(),
-        "SL Weekly - marzipan99",
-        256,
-        384,
-    )
-  }
-
   private fun logDialogGraphPreview(
       period: Period,
       size: DialogGraphSize,
@@ -4910,30 +4698,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun dialogBodyWidth(graph: DialogGraph): Int = max(DIALOG_BODY_WIDTH, graph.width)
-
-  private fun logDisplayInteractionGeometryPreview() {
-    val buttonY = -1.03
-    val hitboxes =
-        listOf(-1.23 to "week", -0.41 to "month", 0.41 to "year", 1.23 to "close").joinToString(
-            "; "
-        ) { (x, action) ->
-          "$action=center(${String.format("%.2f", x)},${String.format("%.2f", buttonY)},z=$DISPLAY_BUTTON_HIT_Z)" +
-              " size(0.82x0.38)"
-        }
-    Tools.plugin.logger.info(
-        "[SLData] Display interactionRoutes right=PlayerInteractEntityEvent left=EntityDamageByEntityEvent" +
-            " leftDamageCancelled=true interactionResponsive=true"
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Display expectedLayers z background=$DISPLAY_BACKGROUND_Z grid=$DISPLAY_GRID_Z" +
-            " bar=$DISPLAY_BAR_Z text=$DISPLAY_TEXT_Z buttonBack=$DISPLAY_BUTTON_BACK_Z" +
-            " buttonFace=$DISPLAY_BUTTON_FACE_Z buttonText=$DISPLAY_BUTTON_TEXT_Z hit=$DISPLAY_BUTTON_HIT_Z" +
-            " hitAhead=${DISPLAY_BUTTON_HIT_Z > DISPLAY_RENDER_MAX_Z}"
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Display expectedHitboxes $hitboxes renderMaxZ=$DISPLAY_RENDER_MAX_Z"
-    )
-  }
 
   private fun dialogButton(label: String, tooltip: String, key: Key): ActionButton =
       ActionButton.builder(Component.text(label))
@@ -5231,28 +4995,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private fun formatDialogPercent(numerator: Int, denominator: Int): String {
     if (denominator <= 0) return "0.0%"
     return String.format("%.1f%%", numerator.toDouble() * 100.0 / denominator.toDouble())
-  }
-
-  private fun dialogProgressBar(current: Int, total: Int, width: Int = 16): String {
-    if (total <= 0) return "█".repeat(width)
-    val filled =
-        ceil(current.toDouble() / total.toDouble() * width.toDouble()).toInt().coerceIn(0, width)
-    return "█".repeat(filled) + "█".repeat(width - filled)
-  }
-
-  private fun dialogDateLabel(epochMillis: Long): String {
-    val date = Instant.ofEpochMilli(epochMillis).atZone(ZoneId.of("UTC")).toLocalDate()
-    return "${date.year}/${date.monthValue}/${date.dayOfMonth}"
-  }
-
-  private fun repeaterRateDiagnosis(repeaterCount: Int, uniqueLikerCount: Int): String {
-    if (uniqueLikerCount <= 0) return "まだ診断できるだけのいいねがありません。"
-    val rate = repeaterCount.toDouble() / uniqueLikerCount.toDouble()
-    return when {
-      rate >= 0.7 -> "常連の輪がしっかり育っています。"
-      rate >= 0.35 -> "リピーターが育ちつつあります。"
-      else -> "新しい応援者が中心です。"
-    }
   }
 
   private fun formatAverageCount(value: Double): String = String.format("%.1f", value)
@@ -6451,19 +6193,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return " ".repeat(left) + clipped + " ".repeat(right)
   }
 
-  private data class TextFitCheck(val name: String, val width: Int, val maxWidth: Int) {
-    val fits: Boolean = width <= maxWidth
-  }
-
-  private data class TextDrawCheck(
-      val name: String,
-      val text: String,
-      val width: Int,
-      val maxWidth: Int,
-  ) {
-    val fits: Boolean = width <= maxWidth
-  }
-
   private data class PixelRect(
       val name: String,
       val x: Int,
@@ -6656,19 +6385,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       else renderDetailed(series, title, width, height)
     }
 
-    fun logTextFit(label: String, series: LikeSeries, title: String, width: Int, height: Int) {
-      val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      val checks =
-          if (width <= 128 && height <= 128) compactTextChecks(g, series, title, width)
-          else detailedTextChecks(g, series, title, width)
-      Tools.plugin.logger.info(
-          "[SLData] Map $label textFit " +
-              checks.joinToString("; ") { "${it.name}=${it.width}/${it.maxWidth}:${it.fits}" }
-      )
-      g.dispose()
-    }
-
     private fun renderCompact(
         series: LikeSeries,
         title: String,
@@ -6815,50 +6531,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       g.dispose()
       return image
     }
-
-    private fun compactTextChecks(
-        g: Graphics2D,
-        series: LikeSeries,
-        title: String,
-        width: Int,
-    ): List<TextFitCheck> {
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 10)
-      val titleText = fitText(g.fontMetrics, title, width - 16)
-      val titleCheck = TextFitCheck("title", g.fontMetrics.stringWidth(titleText), width - 16)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 8)
-      val summary =
-          fitText(
-              g.fontMetrics,
-              "total ${compactCount(series.total)}  peak ${compactCount(series.peak)}",
-              width - 16,
-          )
-      return listOf(
-          titleCheck,
-          TextFitCheck("summary", g.fontMetrics.stringWidth(summary), width - 16),
-      )
-    }
-
-    private fun detailedTextChecks(
-        g: Graphics2D,
-        series: LikeSeries,
-        title: String,
-        width: Int,
-    ): List<TextFitCheck> {
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 18)
-      val titleText = fitText(g.fontMetrics, title, width - 16)
-      val titleCheck = TextFitCheck("title", g.fontMetrics.stringWidth(titleText), width - 16)
-      g.font = Font(Font.MONOSPACED, Font.PLAIN, 14)
-      val summary =
-          fitText(
-              g.fontMetrics,
-              "${series.sparkline} total=${series.total} peak=${series.peak}",
-              width - 16,
-          )
-      return listOf(
-          titleCheck,
-          TextFitCheck("summary", g.fontMetrics.stringWidth(summary), width - 16),
-      )
-    }
   }
 
   private object WallMapImageRenderer {
@@ -6978,30 +6650,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       return image
     }
 
-    fun logTextFit(
-        label: String,
-        stats: SLDataStatsService.BoardStats,
-        title: String,
-        width: Int,
-        height: Int,
-    ) {
-      val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      val layout = layout(width, height)
-      val checks = textChecks(g, stats, title, layout)
-      Tools.plugin.logger.info(
-          "[SLData] Map $label layout ${layout.title}; ${layout.chart}; ${layout.plot}; ${layout.lists};" +
-              " ${layout.weeklyMvp}; ${layout.growing}"
-      )
-      Tools.plugin.logger.info(
-          "[SLData] Map $label textFit " +
-              checks.joinToString("; ") {
-                "${it.name}=${it.width}/${it.maxWidth}:${it.fits} text='${it.text}'"
-              }
-      )
-      g.dispose()
-    }
-
     private fun layout(width: Int, height: Int): WallMapLayout {
       val title = PixelRect("title", 12, 8, width - 24, 46)
       val chart = PixelRect("chart", 12, 64, width - 24, 214)
@@ -7036,59 +6684,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           )
         }
       }
-    }
-
-    private fun textChecks(
-        g: Graphics2D,
-        stats: SLDataStatsService.BoardStats,
-        title: String,
-        layout: WallMapLayout,
-    ): List<TextDrawCheck> {
-      val series = stats.weekly
-      val checks = mutableListOf<TextDrawCheck>()
-      fun add(name: String, text: String, maxWidth: Int) {
-        val fitted = fitTextEllipsis(g.fontMetrics, text, maxWidth)
-        checks += TextDrawCheck(name, fitted, g.fontMetrics.stringWidth(fitted), maxWidth)
-      }
-
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 16)
-      add("title", title, layout.title.width)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 11)
-      add(
-          "summary",
-          "total=${formatCount(series.total)} latest=${formatCount(series.latest?.count ?: 0)} peak=${formatCount(series.peak)}",
-          layout.title.width,
-      )
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-      SLDataStatsService.axisTicks(likeAxisMaxForDisplay(series.peak), DIALOG_AXIS_DIVISIONS)
-          .forEach {
-            add("yLabel-$it", formatCount(it), layout.chart.right - layout.plot.right - 7)
-          }
-      listOf(0, series.buckets.lastIndex / 2, series.buckets.lastIndex).distinct().forEach { index
-        ->
-        series.buckets.getOrNull(index)?.let {
-          add("xLabel-$index", compactBucketLabel(series.period, it.label), 34)
-        }
-      }
-      g.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
-      add("weeklyMvp-heading", "Weekly MVP", layout.weeklyMvp.width)
-      add("growing-heading", "Growing", layout.growing.width)
-      g.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-      stats.weeklyMvp.take(3).forEachIndexed { index, summary ->
-        add(
-            "weeklyMvp-${index + 1}",
-            "${index + 1}. #${summary.buildId} ${summary.title} ${summary.currentCount}",
-            layout.weeklyMvp.width,
-        )
-      }
-      stats.growingBuilds.take(3).forEachIndexed { index, summary ->
-        add(
-            "growing-${index + 1}",
-            "#${summary.buildId} ${summary.title} ${formatDelta(summary.delta)} (${summary.currentCount})",
-            layout.growing.width,
-        )
-      }
-      return checks
     }
   }
 
