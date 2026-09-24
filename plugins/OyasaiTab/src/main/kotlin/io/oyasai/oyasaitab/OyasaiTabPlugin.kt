@@ -228,9 +228,15 @@ private class FullOyasaiTabRuntime(
 
     if (currentTeam != null && !ownsTeam(currentTeam.name)) return
 
+    // 値が変わったときだけ設定する（毎回設定すると、そのたびにチームの UPDATE が全員に飛ぶ）。
+    // Paper に保存すると部品の構造が変わるので、比較は legacy 文字列に戻してから行う
     val team = scoreboard.getTeam(teamName) ?: scoreboard.registerNewTeam(teamName)
-    team.prefix(legacy.deserialize(prefix))
-    team.suffix(legacy.deserialize(suffix))
+    if (legacy.serialize(team.prefix()) != legacy.serialize(legacy.deserialize(prefix))) {
+      team.prefix(legacy.deserialize(prefix))
+    }
+    if (legacy.serialize(team.suffix()) != legacy.serialize(legacy.deserialize(suffix))) {
+      team.suffix(legacy.deserialize(suffix))
+    }
     if (currentTeam != null && currentTeam.name != teamName) {
       currentTeam.removeEntry(player.name)
       unregisterIfEmptyOwnTeam(currentTeam)
@@ -239,9 +245,11 @@ private class FullOyasaiTabRuntime(
   }
 
   private fun updatePing(player: Player) {
-    ensurePingObjective().getScore(player.name).score = player.ping
+    val score = ensurePingObjective().getScore(player.name)
+    if (!score.isScoreSet || score.score != player.ping) score.score = player.ping
   }
 
+  // 値が変わったときだけ設定する。毎回設定すると、objective の UPDATE が毎秒・人数分、全員に飛ぶ
   private fun ensurePingObjective() =
       (scoreboard.getObjective(PING_OBJECTIVE)
               ?: scoreboard.registerNewObjective(
@@ -251,9 +259,11 @@ private class FullOyasaiTabRuntime(
                   RenderType.INTEGER,
               ))
           .also {
-            it.displayName(Component.text("TAB"))
-            it.setRenderType(RenderType.INTEGER)
-            it.displaySlot = DisplaySlot.PLAYER_LIST
+            if (legacy.serialize(it.displayName()) != PING_TITLE) {
+              it.displayName(Component.text(PING_TITLE))
+            }
+            if (it.renderType != RenderType.INTEGER) it.setRenderType(RenderType.INTEGER)
+            if (it.displaySlot != DisplaySlot.PLAYER_LIST) it.displaySlot = DisplaySlot.PLAYER_LIST
           }
 
   private fun removeOwnTeamEntry(entry: String) {
@@ -283,6 +293,7 @@ private class FullOyasaiTabRuntime(
 
   companion object {
     private const val PING_OBJECTIVE = "oyasaitab_ping"
+    private const val PING_TITLE = "TAB"
   }
 }
 
