@@ -1,23 +1,5 @@
 # OyasaiPets MANIFEST
 
-## AIエージェント向け作業規約
-
-### バックアップ必須ルール
-
-**コードを変更する前に必ず以下を実行すること:**
-
-```bash
-# バックアップ先: /Users/aa/platform/archive/
-# ファイル名形式: OyasaiPetsUnified-YYYY-MM-DD-HHmm.kt.bak
-
-cp plugins/OyasaiPets/src/main/kotlin/me/marzipan/OyasaiPets/OyasaiPetsUnified.kt \
-   archive/OyasaiPetsUnified-$(date +%Y-%m-%d-%H%M).kt.bak
-```
-
-バックアップなしでの変更は禁止。
-
----
-
 ## プロジェクト概要
 
 - **プラグイン名**: OyasaiPets（旧称 BigWolf）
