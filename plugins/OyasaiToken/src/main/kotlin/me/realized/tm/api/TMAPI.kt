@@ -13,11 +13,6 @@ import org.bukkit.entity.Player
 open class TMAPI {
   companion object {
     @JvmStatic
-    fun addTokens(player: Player, amount: Int) {
-      tokenManager()?.addTokens(player, amount.toLong())
-    }
-
-    @JvmStatic
     fun addTokens(uuid: UUID, amount: Int) {
       oyasaiToken()?.addTokens(uuid, amount.toLong())
           ?: tokenManager()
@@ -32,11 +27,6 @@ open class TMAPI {
     }
 
     @JvmStatic
-    fun removeTokens(player: Player, amount: Int): Boolean {
-      return tokenManager()?.removeTokens(player, amount.toLong()) ?: false
-    }
-
-    @JvmStatic
     fun removeTokens(uuid: UUID, amount: Int): Boolean {
       oyasaiToken()?.let {
         return it.removeTokens(uuid, amount.toLong())
@@ -47,11 +37,6 @@ open class TMAPI {
         return manager.removeTokens(player, amount.toLong())
       }
       return false
-    }
-
-    @JvmStatic
-    fun setTokens(player: Player, amount: Int) {
-      tokenManager()?.setTokens(player, amount.toLong())
     }
 
     @JvmStatic

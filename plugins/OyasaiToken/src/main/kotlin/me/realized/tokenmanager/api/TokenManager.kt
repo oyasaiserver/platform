@@ -18,9 +18,5 @@ interface TokenManager {
 
   fun addTokens(playerName: String, tokens: Long)
 
-  fun removeTokens(playerName: String, tokens: Long, silent: Boolean)
-
-  fun removeTokens(playerName: String, tokens: Long)
-
   fun reload(): Boolean
 }

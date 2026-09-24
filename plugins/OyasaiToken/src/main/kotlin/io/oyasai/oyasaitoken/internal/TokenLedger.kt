@@ -97,15 +97,6 @@ internal class TokenLedger(
     }
   }
 
-  fun add(
-      uuid: UUID,
-      name: String?,
-      amount: Long,
-      context: MutationContext = MutationContext.SILENT,
-  ): BalanceChange? {
-    return add(uuid, name, amount, context, completion = null)
-  }
-
   fun addWithCommit(
       uuid: UUID,
       name: String?,
