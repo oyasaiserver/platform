@@ -3,7 +3,6 @@ package com.github.srain3.sociallikes.datas
 import com.github.srain3.sociallikes.Tools
 import java.io.File
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.Statement
 import java.sql.Types
 import java.time.DayOfWeek
@@ -303,14 +302,6 @@ object SLDatabase {
       val slId: Int,
   )
 
-  sealed interface MigrationResult {
-    data class Success(val migratedCount: Int, val idMap: Map<Int, Int>) : MigrationResult
-
-    data object NoTarget : MigrationResult
-
-    data class Failure(val cause: Throwable) : MigrationResult
-  }
-
   fun init(plugin: JavaPlugin) {
     this.plugin = plugin
     dbFile = File(plugin.dataFolder, "SocialLikesShadow.db")
@@ -356,30 +347,10 @@ object SLDatabase {
         transaction(database) {
           rawConnection()?.let { conn ->
             migrateBuildsColumns(conn)
-            migrateIdMigrationMapColumns(conn)
             migrateGuidebookColumns(conn)
-            TimestampEpochMigration.initializeEmptyDatabaseOrRequireMigration(conn)
+            createPlayersAndBuildLikesSchema(conn)
           }
         }
-
-        // Normalize only after every readiness check passes, so a refused startup leaves the
-        // legacy schema intact for the previous jar.
-        val normalization =
-            DriverManager.getConnection(dbUrl).use { connection ->
-              connection.createStatement().use { it.execute("PRAGMA busy_timeout = 30000") }
-              BuildLikesNormalization.migrate(connection)
-            }
-        if (normalization.status == BuildLikesNormalization.Status.MIGRATED) {
-          DriverManager.getConnection(dbUrl).use { connection ->
-            connection.createStatement().use { it.execute("VACUUM") }
-          }
-        }
-        plugin.logger.info(
-            "[SL3] Build likes normalization: status=${normalization.status} " +
-                "likes=${normalization.after.totalLikes} " +
-                "timestamped=${normalization.after.timestampedLikes} " +
-                "players=${normalization.after.distinctPlayers}"
-        )
 
         transaction(database) { rawConnection()?.let { conn -> createViews(conn) } }
 
@@ -410,9 +381,7 @@ object SLDatabase {
     }
   }
 
-  /**
-   * Blocks plugin enable until SQLite is initialized and the offline timestamp migration is ready.
-   */
+  /** Blocks plugin enable until SQLite is initialized. */
   fun requireReady() {
     check(awaitInit()) { "Timed out while initializing the SocialLikes3 SQLite database" }
     initializationFailure?.let { failure ->
@@ -752,9 +721,6 @@ object SLDatabase {
         }
   }
 
-  fun timestampHealthBlocking(): TimestampEpochMigration.Report? =
-      submitBlocking("timestampHealth") { rawConnection()?.let(TimestampEpochMigration::verify) }
-
   private fun migrateBuildsColumns(conn: Connection) {
     val existingColumns = mutableSetOf<String>()
     conn.createStatement().use { stmt ->
@@ -781,24 +747,37 @@ object SLDatabase {
     }
   }
 
-  private fun migrateIdMigrationMapColumns(conn: Connection) {
-    val existingColumns = mutableSetOf<String>()
-    conn.createStatement().use { stmt ->
-      stmt.executeQuery("PRAGMA table_info(id_migration_map)").use { rs ->
-        while (rs.next()) {
-          existingColumns.add(rs.getString("name").lowercase(Locale.ROOT))
-        }
-      }
-    }
-    if (existingColumns.contains("old_negative_id") && !existingColumns.contains("old_id")) {
-      conn.createStatement().use { stmt ->
-        stmt.execute("ALTER TABLE id_migration_map RENAME COLUMN old_negative_id TO old_id")
-      }
-    }
-    if (existingColumns.contains("new_positive_id") && !existingColumns.contains("new_id")) {
-      conn.createStatement().use { stmt ->
-        stmt.execute("ALTER TABLE id_migration_map RENAME COLUMN new_positive_id TO new_id")
-      }
+  internal fun createPlayersAndBuildLikesSchema(conn: Connection) {
+    conn.createStatement().use { statement ->
+      statement.execute(
+          """
+          CREATE TABLE IF NOT EXISTS players (
+            id INTEGER PRIMARY KEY,
+            uuid VARCHAR(36) NOT NULL UNIQUE,
+            last_known_name TEXT NULL,
+            last_seen_at BIGINT NULL
+          )
+          """
+              .trimIndent()
+      )
+      statement.execute(
+          """
+          CREATE TABLE IF NOT EXISTS build_likes (
+            build_id INT NOT NULL,
+            player_id INT NOT NULL REFERENCES players(id),
+            liked_at BIGINT NULL,
+            PRIMARY KEY(build_id, player_id),
+            FOREIGN KEY(build_id) REFERENCES builds(id) ON DELETE CASCADE ON UPDATE RESTRICT
+          ) WITHOUT ROWID
+          """
+              .trimIndent()
+      )
+      statement.execute(
+          "CREATE INDEX IF NOT EXISTS idx_build_likes_player_liked_at ON build_likes(player_id, liked_at)"
+      )
+      statement.execute(
+          "CREATE INDEX IF NOT EXISTS idx_build_likes_liked_at ON build_likes(liked_at) WHERE liked_at IS NOT NULL"
+      )
     }
   }
 
@@ -1128,7 +1107,6 @@ object SLDatabase {
   }
 
   private fun loadIdMigrationMapDirect(conn: Connection): Map<Int, Int> {
-    migrateIdMigrationMapColumns(conn)
     val map = mutableMapOf<Int, Int>()
     conn.prepareStatement("SELECT old_id, new_id FROM id_migration_map").use { stmt ->
       stmt.executeQuery().use { rs ->
@@ -1258,340 +1236,6 @@ object SLDatabase {
       return resolved
     }
     return id
-  }
-
-  fun migrateNegativeIds(dryRun: Boolean = false): MigrationResult {
-    val service = writeExecutor
-    if (service == null) {
-      val err = IllegalStateException("Database write executor is not initialized")
-      Tools.plugin.logger.log(
-          Level.SEVERE,
-          "[SL3] SQLite shadow migrateNegativeIds failed: database not initialized",
-          err,
-      )
-      return MigrationResult.Failure(err)
-    }
-
-    val future =
-        service.submit(
-            Callable<MigrationResult> {
-              if (!awaitInit()) {
-                val err = TimeoutException("Database initialization timed out")
-                Tools.plugin.logger.log(
-                    Level.SEVERE,
-                    "[SL3] SQLite shadow migrateNegativeIds failed: initialization timeout",
-                    err,
-                )
-                return@Callable MigrationResult.Failure(err)
-              }
-
-              try {
-                if (!::dbFile.isInitialized || !dbFile.exists()) {
-                  val err =
-                      IllegalStateException(
-                          "Database file does not exist: ${if (::dbFile.isInitialized) dbFile.absolutePath else "uninitialized"}"
-                      )
-                  return@Callable MigrationResult.Failure(err)
-                }
-
-                val dbUrl = "jdbc:sqlite:${dbFile.absolutePath}?busy_timeout=10000"
-                java.sql.DriverManager.getConnection(dbUrl).use { conn ->
-                  val result = migrateNegativeIdsDirect(conn, dryRun)
-                  if (result is MigrationResult.Success && !dryRun) {
-                    idMigrationCache.putAll(result.idMap)
-                  }
-                  result
-                }
-              } catch (e: Exception) {
-                Tools.plugin.logger.log(
-                    Level.SEVERE,
-                    "[SL3] SQLite shadow migrateNegativeIds failed: ${e.message ?: e.javaClass.simpleName}",
-                    e,
-                )
-                MigrationResult.Failure(e)
-              }
-            }
-        )
-
-    return try {
-      future.get(BLOCKING_TIMEOUT_SECONDS * 4, TimeUnit.SECONDS)
-    } catch (e: TimeoutException) {
-      val err =
-          TimeoutException(
-              "SQLite shadow migrateNegativeIds timed out after ${BLOCKING_TIMEOUT_SECONDS * 4}s"
-          )
-      Tools.plugin.logger.log(Level.SEVERE, "[SL3] SQLite shadow migrateNegativeIds timed out", err)
-      future.cancel(true)
-      MigrationResult.Failure(err)
-    } catch (e: Exception) {
-      Tools.plugin.logger.log(
-          Level.SEVERE,
-          "[SL3] SQLite shadow migrateNegativeIds execution failed: ${e.message ?: e.javaClass.simpleName}",
-          e,
-      )
-      MigrationResult.Failure(e)
-    }
-  }
-
-  fun migrateNegativeIdsDirect(conn: Connection, dryRun: Boolean = false): MigrationResult {
-    migrateIdMigrationMapColumns(conn)
-
-    val positiveIds = mutableListOf<Int>()
-    conn.prepareStatement("SELECT id FROM builds WHERE id > 0 ORDER BY id DESC").use { stmt ->
-      stmt.executeQuery().use { rs -> while (rs.next()) positiveIds += rs.getInt("id") }
-    }
-    val negativeIds = mutableListOf<Int>()
-    conn.prepareStatement("SELECT id FROM builds WHERE id < 0 ORDER BY id ASC").use { stmt ->
-      stmt.executeQuery().use { rs -> while (rs.next()) negativeIds += rs.getInt("id") }
-    }
-
-    if (negativeIds.isEmpty()) {
-      return MigrationResult.NoTarget
-    }
-
-    val existingMap = mutableMapOf<Int, Int>()
-    conn.prepareStatement("SELECT old_id, new_id FROM id_migration_map").use { stmt ->
-      stmt.executeQuery().use { rs ->
-        while (rs.next()) {
-          existingMap[rs.getInt("old_id")] = rs.getInt("new_id")
-        }
-      }
-    }
-
-    // 1〜9,999 のうち、絶対値 < 10000 の負IDによって使用されるスロットを算出
-    val usedSlots = mutableSetOf<Int>()
-    for (oldId in negativeIds) {
-      if (existingMap.containsKey(oldId)) {
-        val newId = existingMap[oldId]!!
-        if (newId in 1..9999) {
-          usedSlots.add(newId)
-        }
-      } else if (kotlin.math.abs(oldId) < 10000) {
-        usedSlots.add(kotlin.math.abs(oldId))
-      }
-    }
-
-    // 1〜9,999 の空きスロットを昇順でリスト化
-    val availableSlots = (1..9999).filter { it !in usedSlots }.toMutableList()
-
-    // 絶対値が 10000 以上の負ID（空きスロット割り当て対象）
-    // 決定的な規則として、絶対値の昇順でソート
-    val overflowNegativeIds =
-        negativeIds
-            .filter { !existingMap.containsKey(it) && kotlin.math.abs(it) >= 10000 }
-            .sortedBy { kotlin.math.abs(it) }
-
-    // 事前検証 1: 空きスロット数の検証
-    if (availableSlots.size < overflowNegativeIds.size) {
-      val err =
-          IllegalStateException(
-              "Insufficient vacant slots in 1..9,999 for negative IDs >= 10,000. " +
-                  "Required: ${overflowNegativeIds.size}, Available: ${availableSlots.size}"
-          )
-      return MigrationResult.Failure(err)
-    }
-
-    // 事前検証 2: 正IDの最大値 + 10,000 が INT 範囲に収まるかの検証
-    val maxPositiveId = positiveIds.maxOrNull() ?: 0
-    if (maxPositiveId.toLong() + 10000 > Int.MAX_VALUE) {
-      val err =
-          IllegalStateException(
-              "Positive ID exceeds integer max value when adding offset 10000: $maxPositiveId"
-          )
-      return MigrationResult.Failure(err)
-    }
-
-    // マッピングテーブルの構築
-    val mapToApply = mutableMapOf<Int, Int>()
-
-    // 1. 正ID: 新ID = 旧ID + 10000 (全件)
-    for (oldId in positiveIds) {
-      val newId = existingMap[oldId] ?: (oldId + 10000)
-      mapToApply[oldId] = newId
-    }
-
-    // 2. 負ID (絶対値 < 10000): 新ID = 絶対値
-    for (oldId in negativeIds) {
-      if (existingMap.containsKey(oldId)) {
-        mapToApply[oldId] = existingMap[oldId]!!
-      } else if (kotlin.math.abs(oldId) < 10000) {
-        mapToApply[oldId] = kotlin.math.abs(oldId)
-      }
-    }
-
-    // 3. 負ID (絶対値 >= 10000): 空きスロットを昇順に割り当て
-    for ((index, oldId) in overflowNegativeIds.withIndex()) {
-      val slot = availableSlots[index]
-      mapToApply[oldId] = slot
-    }
-
-    // 事前検証 3: 新IDの割り当てに重複が無いかの検証
-    val assignedNewIds = mapToApply.values
-    if (assignedNewIds.toSet().size != assignedNewIds.size) {
-      val duplicates = assignedNewIds.groupingBy { it }.eachCount().filter { it.value > 1 }.keys
-      val err =
-          IllegalStateException("Duplicate new IDs detected in migration mapping: $duplicates")
-      return MigrationResult.Failure(err)
-    }
-
-    if (dryRun) {
-      try {
-        validateUpdatesInTemporaryDb(conn, positiveIds, negativeIds, mapToApply)
-      } catch (e: Exception) {
-        return MigrationResult.Failure(e)
-      }
-      return MigrationResult.Success(mapToApply.size, mapToApply)
-    }
-
-    try {
-      applyUpdatesToDatabase(conn, positiveIds, negativeIds, mapToApply)
-      return MigrationResult.Success(mapToApply.size, mapToApply)
-    } catch (e: Exception) {
-      return MigrationResult.Failure(e)
-    }
-  }
-
-  private fun validateUpdatesInTemporaryDb(
-      conn: Connection,
-      positiveIds: List<Int>,
-      negativeIds: List<Int>,
-      mapToApply: Map<Int, Int>,
-  ) {
-    val tempFile = File.createTempFile("sl3_dryrun_validate_", ".db")
-    try {
-      // 現在のデータベース状態を一時ファイルにバックアップして実UPDATEを検証
-      conn.createStatement().use { stmt ->
-        stmt.execute("VACUUM INTO '${tempFile.absolutePath.replace("'", "''")}';")
-      }
-      val tempDbUrl = "jdbc:sqlite:${tempFile.absolutePath}?busy_timeout=5000"
-      java.sql.DriverManager.getConnection(tempDbUrl).use { tempConn ->
-        applyUpdatesToDatabase(tempConn, positiveIds, negativeIds, mapToApply)
-      }
-    } finally {
-      tempFile.delete()
-    }
-  }
-
-  private fun applyUpdatesToDatabase(
-      conn: Connection,
-      positiveIds: List<Int>,
-      negativeIds: List<Int>,
-      mapToApply: Map<Int, Int>,
-  ) {
-    // 外部キー制約を確実に無効化するため、トランザクション開始前（autoCommit = true）に PRAGMA を実行
-    // SQLite仕様: PRAGMA foreign_keys はトランザクション内（BEGIN下）では no-op のため
-    conn.autoCommit = true
-    conn.createStatement().use { it.execute("PRAGMA foreign_keys = OFF;") }
-
-    try {
-      conn.autoCommit = false
-      try {
-        // 0. id_migration_map に全マッピングを登録
-        conn
-            .prepareStatement(
-                "INSERT OR REPLACE INTO id_migration_map (old_id, new_id) VALUES (?, ?)"
-            )
-            .use { stmt ->
-              for ((oldId, newId) in mapToApply) {
-                stmt.setInt(1, oldId)
-                stmt.setInt(2, newId)
-                stmt.addBatch()
-              }
-              stmt.executeBatch()
-            }
-
-        // 1. 【更新順序必須】先に正IDを大きい順（降順）に処理する（例: 12,519 -> 22,519, 12,518 -> 22,518, ...）。
-        //    降順に更新することで移動先（newId = oldId + 10000）が常に空いており、PK衝突（主キー重複エラー）を完全に回避できる。
-        conn.prepareStatement("UPDATE builds SET id = ? WHERE id = ?").use { stmt ->
-          for (oldId in positiveIds.sortedDescending()) {
-            val newId = mapToApply[oldId] ?: continue
-            stmt.setInt(1, newId)
-            stmt.setInt(2, oldId)
-            stmt.addBatch()
-          }
-          stmt.executeBatch()
-        }
-
-        // 2. 【更新順序必須】その後に負IDを処理する。
-        //    正IDが 1〜9,999 から 10,001〜 へすべて退避済みのため、1〜9,999 の移動先領域が完全に空いており衝突しない。
-        conn.prepareStatement("UPDATE builds SET id = ? WHERE id = ?").use { stmt ->
-          for (oldId in negativeIds) {
-            val newId = mapToApply[oldId] ?: continue
-            stmt.setInt(1, newId)
-            stmt.setInt(2, oldId)
-            stmt.addBatch()
-          }
-          stmt.executeBatch()
-        }
-
-        // 3. 関連テーブル（外部キー参照元）の更新
-        conn.prepareStatement("UPDATE build_likes SET build_id = ? WHERE build_id = ?").use { stmt
-          ->
-          for (oldId in positiveIds.sortedDescending()) {
-            val newId = mapToApply[oldId] ?: continue
-            stmt.setInt(1, newId)
-            stmt.setInt(2, oldId)
-            stmt.addBatch()
-          }
-          for (oldId in negativeIds) {
-            val newId = mapToApply[oldId] ?: continue
-            stmt.setInt(1, newId)
-            stmt.setInt(2, oldId)
-            stmt.addBatch()
-          }
-          stmt.executeBatch()
-        }
-
-        conn.prepareStatement("UPDATE publicity_history SET sl_id = ? WHERE sl_id = ?").use { stmt
-          ->
-          for (oldId in positiveIds.sortedDescending()) {
-            val newId = mapToApply[oldId] ?: continue
-            stmt.setInt(1, newId)
-            stmt.setInt(2, oldId)
-            stmt.addBatch()
-          }
-          for (oldId in negativeIds) {
-            val newId = mapToApply[oldId] ?: continue
-            stmt.setInt(1, newId)
-            stmt.setInt(2, oldId)
-            stmt.addBatch()
-          }
-          stmt.executeBatch()
-        }
-
-        conn.prepareStatement("UPDATE sl_event_log SET build_id = ? WHERE build_id = ?").use { stmt
-          ->
-          for (oldId in positiveIds.sortedDescending()) {
-            val newId = mapToApply[oldId] ?: continue
-            stmt.setInt(1, newId)
-            stmt.setInt(2, oldId)
-            stmt.addBatch()
-          }
-          for (oldId in negativeIds) {
-            val newId = mapToApply[oldId] ?: continue
-            stmt.setInt(1, newId)
-            stmt.setInt(2, oldId)
-            stmt.addBatch()
-          }
-          stmt.executeBatch()
-        }
-
-        conn.commit()
-      } catch (e: Exception) {
-        try {
-          conn.rollback()
-        } catch (rbEx: Exception) {
-          // ロールバック失敗時の例外
-        }
-        throw e
-      }
-    } finally {
-      // 処理の成否にかかわらず、確実に foreign_keys を ON に戻す
-      try {
-        conn.autoCommit = true
-        conn.createStatement().use { it.execute("PRAGMA foreign_keys = ON;") }
-      } catch (ignored: Exception) {}
-    }
   }
 
   fun getMaxBuildIdBlocking(): Int? {
