@@ -19,6 +19,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -371,11 +372,7 @@ object GuidebookService {
         Component.text("📖 $label: ", NamedTextColor.GOLD)
             .append(Component.text("「${guidebook.title}」", NamedTextColor.GREEN))
             .append(Component.text(" by $author ", NamedTextColor.GRAY))
-            .append(
-                Component.text("[クリックで入手]", NamedTextColor.AQUA)
-                    .clickEvent(ClickEvent.runCommand("/slguide ${guidebook.id}"))
-                    .hoverEvent(HoverEvent.showText(Component.text("クリックでガイドブックを入手")))
-            )
+            .append(getButton(guidebook))
     val soundName = config.getString("guidebook.announce.sound", "entity.player.levelup")
     val sound =
         soundName
@@ -401,9 +398,21 @@ object GuidebookService {
     }
   }
 
+  private fun getButton(guidebook: GuidebookData): Component =
+      Component.text("[クリックで入手]", NamedTextColor.AQUA)
+          .clickEvent(ClickEvent.runCommand("/slguide ${guidebook.id}"))
+          .hoverEvent(HoverEvent.showText(Component.text("クリックでガイドブックを入手")))
+
   private fun celebrateFirst(player: Player, guidebook: GuidebookData) {
-    Bukkit.broadcastMessage(
-        Tools.socialLikesLOGO + " &6${player.name}さんが旅行ガイド「${guidebook.title}」を初コンプリートしました！".color()
+    Bukkit.broadcast(
+        LegacyComponentSerializer.legacySection()
+            .deserialize(
+                (Tools.socialLikesLOGO +
+                        " &6${player.name}さんが旅行ガイド「${guidebook.title}」を初コンプリートしました！")
+                    .color()
+            )
+            .append(Component.space())
+            .append(getButton(guidebook))
     )
     launchFirework(player)
   }
