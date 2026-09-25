@@ -107,6 +107,8 @@ class ImageOnMapTest {
   @Test
   fun sizingAndTiles() {
     assertEquals(2 to 3, ImageSource.dimensions(129, 257, null, false))
+    assertEquals(4 to 4, ImageSource.dimensions(498, 498, null, false))
+    assertEquals(4 to 4, ImageSource.dimensions(512, 512, null, false))
     val sized = ImageSource.dimensions(8192, 8192, null, false)
     assertTrue(sized.first * sized.second <= 100)
     assertEquals(3 to 2, ImageSource.dimensions(500, 100, 3 to 2, false))
