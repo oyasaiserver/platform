@@ -1,0 +1,28 @@
+name: OyasaiGames
+version: ${version}
+main: icu.oyasai.games.OyasaiGamesPlugin
+api-version: '1.21'
+author: ukieo
+description: おやさい鯖 ミニゲーム統合プラットフォーム (OyasaiGames)
+commands:
+  oyasaigames:
+    description: おやさいゲームズのメニューを開きます
+    aliases: [games, og]
+    permission: oyasaigames.use
+  roulette:
+    description: 建築用アイテム抽選ルーレットGUIを開きます
+    aliases: [oroulette]
+    permission: oyasaigames.roulette.use
+permissions:
+  oyasaigames.use:
+    description: おやさいゲームズを使用する権限
+    default: true
+  oyasaigames.admin:
+    description: おやさいゲームズの管理権限
+    default: op
+  oyasaigames.roulette.use:
+    description: ルーレットを使用する権限
+    default: true
+  oyasaigames.roulette.admin:
+    description: ルーレットの管理権限
+    default: op
