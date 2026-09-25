@@ -368,8 +368,9 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
           openList(player, 0, player.uniqueId, false, false)
         } else if (args.size == 2) {
           if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
-          val target = Bukkit.getOfflinePlayer(args[1])
-          if (!target.hasPlayedBefore() && !target.isOnline) message(sender, "プレイヤーが見つかりません")
+          // getOfflinePlayer(name) は未知の名前で Mojang へ同期問い合わせしうるので、キャッシュだけ引く
+          val target = server.getOfflinePlayerIfCached(args[1])
+          if (target == null) message(sender, "プレイヤーが見つかりません")
           else openList(player, 0, target.uniqueId, true, false)
         } else usage(sender)
       }
