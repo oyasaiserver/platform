@@ -281,7 +281,11 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         } == true
     )
         return
-    val updated = current.copy(placedAt = old?.placedAt ?: current.placedAt)
+    val updated =
+        current.copy(
+            placedAt = old?.placedAt ?: current.placedAt,
+            detected = old?.detected ?: !current.legacy,
+        )
     frameRecords[frame.uniqueId] = updated
     database { store.saveFrames(listOf(updated)) }
         .whenComplete { _, failure ->
@@ -960,6 +964,9 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         }
   }
 
+  private fun tileName(index: Int, columns: Int, rows: Int): String =
+      if (columns * rows == 1) "1枚物" else "左上から ${index / columns + 1}行${index % columns + 1}列目"
+
   private fun showInfo(player: Player) {
     val hand = player.inventory.itemInMainHand.itemMeta as? MapMeta
     val frame = player.getTargetEntity(5) as? ItemFrame
@@ -992,7 +999,9 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             val found = result.first
             val placement =
                 result.third?.let { row ->
-                  " / 持ち主: ${frame?.let(::lockOwner)?.let(::ownerName) ?: "ロックなし"} / 貼った日時: ${DATE.format(Instant.ofEpochMilli(row.placedAt))} / ${if (row.legacy) "置き換え" else "新規設置"}"
+                  " / 持ち主: ${frame?.let(::lockOwner)?.let(::ownerName) ?: "ロックなし"} / 記録した日時: ${DATE.format(Instant.ofEpochMilli(row.placedAt))} / ${when { row.legacy -> "旧版から置き換え"
+ row.detected -> "自動で記録（コピーなど）"
+ else -> "/tomap で設置" }}"
                 } ?: ""
             if (found == null) {
               message(
@@ -1005,7 +1014,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             val date = details.createdAt?.let { DATE.format(Instant.ofEpochMilli(it)) } ?: "不明（移行前）"
             message(
                 player,
-                "画像ID: ${details.id} / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"} / idx: $index$placement",
+                "画像ID: ${details.id}（地図ID #$id、${tileName(index, details.columns, details.rows)}） / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"}$placement",
             )
           }
         }

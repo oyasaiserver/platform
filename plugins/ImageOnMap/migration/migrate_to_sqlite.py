@@ -26,7 +26,8 @@ CREATE INDEX images_owner ON images(owner, hidden);
 CREATE TABLE frames (
  frame_uuid TEXT PRIMARY KEY, map_id INTEGER NOT NULL, world TEXT NOT NULL,
  x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, facing TEXT NOT NULL,
- placed_at INTEGER NOT NULL, legacy INTEGER NOT NULL DEFAULT 0
+ placed_at INTEGER NOT NULL, legacy INTEGER NOT NULL DEFAULT 0,
+ detected INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX frames_map ON frames(map_id);
 PRAGMA user_version = 1;
