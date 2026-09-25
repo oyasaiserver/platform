@@ -3,6 +3,9 @@ package icu.oyasai.imageonmap
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.net.URI
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
@@ -23,6 +26,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -41,6 +45,28 @@ import org.bukkit.map.MapView
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 
+internal enum class TomapAction {
+  CREATE,
+  LIST,
+  ALL,
+  INFO,
+  GIVE,
+  DELETE,
+  USAGE,
+}
+
+internal fun tomapAction(args: List<String>): TomapAction =
+    when {
+      args.firstOrNull()?.startsWith("http://") == true ||
+          args.firstOrNull()?.startsWith("https://") == true -> TomapAction.CREATE
+      args.firstOrNull() == "list" -> TomapAction.LIST
+      args.firstOrNull() == "all" -> TomapAction.ALL
+      args.firstOrNull() == "info" -> TomapAction.INFO
+      args.firstOrNull() == "give" -> TomapAction.GIVE
+      args.firstOrNull() == "delete" -> TomapAction.DELETE
+      else -> TomapAction.USAGE
+    }
+
 class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private val dbThread = Executors.newSingleThreadExecutor { r -> Thread(r, "imageonmap-db") }
   private val imageThreads = Executors.newFixedThreadPool(2) { r -> Thread(r, "imageonmap-image") }
@@ -56,7 +82,11 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       val inventory: Inventory,
       val page: Int,
       val entries: List<Listing>,
+      val owner: UUID? = null,
+      val admin: Boolean = false,
+      val all: Boolean = false,
       val confirm: Long? = null,
+      val deleteStage: Int = 0,
   )
 
   override fun onEnable() {
@@ -72,7 +102,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       return
     }
     server.pluginManager.registerEvents(this, this)
-    listOf("tomap", "maptool", "maps", "givemap").forEach { getCommand(it)?.setExecutor(this) }
+    getCommand("tomap")?.setExecutor(this)
     server.worlds.forEach { world ->
       world.loadedChunks.forEach { chunk ->
         chunk.entities.filterIsInstance<ItemFrame>().forEach { attachItem(it.item) }
@@ -110,9 +140,27 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     }
   }
 
+  private class BlankRenderer : MapRenderer(false) {
+    private var drawn = false
+
+    override fun isExplorerMap(): Boolean = false
+
+    override fun render(view: MapView, canvas: MapCanvas, player: Player) {
+      if (drawn) return
+      val clear = java.awt.Color(0, 0, 0, 0)
+      for (x in 0 until 128) for (y in 0 until 128) canvas.setPixelColor(x, y, clear)
+      drawn = true
+    }
+  }
+
   private fun attach(view: MapView) {
     val id = view.id
-    if (!ready || view.renderers.any { it is OnceRenderer } || !pendingMaps.add(id)) return
+    if (
+        !ready ||
+            view.renderers.any { it is OnceRenderer || it is BlankRenderer } ||
+            !pendingMaps.add(id)
+    )
+        return
     database { store.png(id)?.let { ImageIO.read(ByteArrayInputStream(it)) } }
         .whenComplete { image, failure ->
           main {
@@ -122,7 +170,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                 image != null &&
                     image.width == 128 &&
                     image.height == 128 &&
-                    view.renderers.none { it is OnceRenderer }
+                    view.renderers.none { it is OnceRenderer || it is BlankRenderer }
             ) {
               view.renderers.toList().forEach(view::removeRenderer)
               view.addRenderer(OnceRenderer(image))
@@ -134,6 +182,16 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private fun attachItem(item: ItemStack?) {
     val meta = item?.itemMeta as? MapMeta ?: return
     if (meta.hasMapId()) server.getMap(meta.mapId)?.let(::attach)
+  }
+
+  private fun blank(ids: List<Int>) {
+    ids.forEach { id ->
+      val view = server.getMap(id) ?: return@forEach
+      view.renderers.toList().forEach(view::removeRenderer)
+      view.addRenderer(BlankRenderer())
+      view.setLocked(true)
+      server.onlinePlayers.forEach { it.sendMap(view) }
+    }
   }
 
   private fun inspectInventory(player: Player) {
@@ -152,6 +210,12 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   @EventHandler
   fun quit(e: PlayerQuitEvent) {
     gui.remove(e.player.uniqueId)
+  }
+
+  @EventHandler
+  fun inventoryClose(e: InventoryCloseEvent) {
+    val player = e.player as? Player ?: return
+    if (gui[player.uniqueId]?.inventory === e.inventory) gui.remove(player.uniqueId)
   }
 
   @EventHandler
@@ -178,22 +242,37 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       e.isCancelled = true
       if (e.clickedInventory !== state.inventory) return
       if (state.confirm != null) {
-        if (e.rawSlot == 22) {
+        if (state.deleteStage > 0) {
+          if (!player.hasPermission("imageonmap.deleteother")) return
+          if (state.deleteStage == 1 && e.rawSlot == 22) openDeleteStage2(player, state)
+          else if (state.deleteStage == 2 && e.rawSlot == 40) deleteImage(player, state)
+          else if (e.rawSlot == 31) returnFromConfirm(player, state)
+        } else if (e.rawSlot == 22) {
           val owner = player.uniqueId
           database { store.hide(owner, state.confirm) }
               .whenComplete { _, failure ->
                 main {
+                  if (gui[player.uniqueId] !== state) return@main
                   if (failure != null) message(player, "非表示にできません: ${error(failure)}")
-                  else openList(player, state.page)
+                  else openList(player, state.page, owner, false, false)
                 }
               }
-        } else if (e.rawSlot == 31) openList(player, state.page)
+        } else if (e.rawSlot == 31) returnFromConfirm(player, state)
       } else if (e.rawSlot in 0 until state.entries.size) {
         val entry = state.entries[e.rawSlot]
-        if (e.isRightClick) openConfirm(player, state, entry.id)
-        else if (player.hasPermission("imageonmap.get")) givePoster(player, entry.id)
-      } else if (e.rawSlot == 45 && state.page > 0) openList(player, state.page - 1)
-      else if (e.rawSlot == 53 && state.entries.size == 45) openList(player, state.page + 1)
+        if (e.isRightClick) {
+          if (state.admin) {
+            if (player.hasPermission("imageonmap.deleteother"))
+                openDeleteConfirm(player, entry.id, state)
+          } else openConfirm(player, state, entry.id)
+        } else if (
+            player.hasPermission(if (state.admin) "imageonmap.getother" else "imageonmap.get")
+        )
+            givePoster(player, entry.id)
+      } else if (e.rawSlot == 45 && state.page > 0)
+          openList(player, state.page - 1, state.owner, state.admin, state.all)
+      else if (e.rawSlot == 53 && state.entries.size == 45)
+          openList(player, state.page + 1, state.owner, state.admin, state.all)
       return
     }
     main { inspectInventory(player) }
@@ -258,35 +337,17 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       args: Array<out String>,
   ): Boolean {
     if (!ready) return true
-    when (command.name.lowercase()) {
-      "tomap",
-      "maptool" -> {
-        val player =
-            sender as? Player
-                ?: run {
-                  message(sender, "プレイヤー専用です")
-                  return true
-                }
-        if (!player.hasPermission("imageonmap.new")) {
-          message(sender, "権限がありません")
-          return true
-        }
-        if (command.name.equals("maptool", true) && args.firstOrNull() != "new") {
-          message(sender, "使えない引数です")
-          return true
-        }
-        val parts = if (command.name.equals("maptool", true)) args.drop(1) else args.toList()
-        if (parts.isEmpty()) {
-          message(sender, "使い方: /tomap <URL> [resize [幅 高さ]]")
-          return true
-        }
+    when (tomapAction(args.toList())) {
+      TomapAction.CREATE -> {
+        if (!sender.hasPermission("imageonmap.new")) return denied(sender)
+        val player = sender as? Player ?: return playerOnly(sender)
         val resize =
             when {
-              parts.size == 1 -> null
-              parts.size == 2 && parts[1] == "resize" -> 1 to 1
-              parts.size == 4 && parts[1] == "resize" -> {
-                val w = parts[2].toIntOrNull()
-                val h = parts[3].toIntOrNull()
+              args.size == 1 -> null
+              args.size == 2 && args[1] == "resize" -> 1 to 1
+              args.size == 4 && args[1] == "resize" -> {
+                val w = args[2].toIntOrNull()
+                val h = args[3].toIntOrNull()
                 if (w == null || h == null || w <= 0 || h <= 0) {
                   message(sender, "使えない引数です")
                   return true
@@ -298,25 +359,67 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                 return true
               }
             }
-        create(player, parts[0], resize)
+        create(player, args[0], resize)
       }
-      "maps" -> {
-        val player = sender as? Player ?: return true
-        if (player.hasPermission("imageonmap.list")) openList(player, 0)
-        else message(player, "権限がありません")
+      TomapAction.LIST -> {
+        val player = sender as? Player ?: return playerOnly(sender)
+        if (args.size == 1) {
+          if (!sender.hasPermission("imageonmap.list")) return denied(sender)
+          openList(player, 0, player.uniqueId, false, false)
+        } else if (args.size == 2) {
+          if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
+          val target = Bukkit.getOfflinePlayer(args[1])
+          if (!target.hasPlayedBefore() && !target.isOnline) message(sender, "プレイヤーが見つかりません")
+          else openList(player, 0, target.uniqueId, true, false)
+        } else usage(sender)
       }
-      "givemap" -> {
-        if (!sender.hasPermission("imageonmap.give")) {
-          message(sender, "権限がありません")
-          return true
-        }
-        val target = args.getOrNull(0)?.let(server::getPlayerExact)
-        val id = args.getOrNull(1)?.toLongOrNull()
-        if (target == null || id == null) message(sender, "使い方: /givemap <プレイヤー> <画像ID>")
+      TomapAction.ALL -> {
+        if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
+        val player = sender as? Player ?: return playerOnly(sender)
+        if (args.size == 1) openList(player, 0, null, true, true) else usage(sender)
+      }
+      TomapAction.INFO -> {
+        if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
+        val player = sender as? Player ?: return playerOnly(sender)
+        if (args.size == 1) showInfo(player) else usage(sender)
+      }
+      TomapAction.GIVE -> {
+        if (!sender.hasPermission("imageonmap.give")) return denied(sender)
+        val target = args.getOrNull(1)?.let(server::getPlayerExact)
+        val id = args.getOrNull(2)?.toLongOrNull()
+        if (args.size != 3 || target == null || id == null) usage(sender)
         else givePoster(target, id)
       }
+      TomapAction.DELETE -> {
+        if (!sender.hasPermission("imageonmap.deleteother")) return denied(sender)
+        val player = sender as? Player ?: return playerOnly(sender)
+        val id = args.getOrNull(1)?.toLongOrNull()
+        if (args.size != 2 || id == null) usage(sender) else openDeleteConfirm(player, id, null)
+      }
+      TomapAction.USAGE -> usage(sender)
     }
     return true
+  }
+
+  private fun denied(sender: CommandSender): Boolean {
+    message(sender, "権限がありません")
+    return true
+  }
+
+  private fun playerOnly(sender: CommandSender): Boolean {
+    message(sender, "プレイヤー専用です")
+    return true
+  }
+
+  private fun usage(sender: CommandSender) {
+    message(sender, "使い方:")
+    if (sender.hasPermission("imageonmap.new")) message(sender, "/tomap <URL> [resize [幅 高さ]]")
+    if (sender.hasPermission("imageonmap.list")) message(sender, "/tomap list")
+    if (sender.hasPermission("imageonmap.listother")) {
+      message(sender, "/tomap list <プレイヤー> / all / info")
+    }
+    if (sender.hasPermission("imageonmap.give")) message(sender, "/tomap give <プレイヤー> <画像ID>")
+    if (sender.hasPermission("imageonmap.deleteother")) message(sender, "/tomap delete <画像ID>")
   }
 
   override fun onTabComplete(
@@ -324,7 +427,29 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       command: Command,
       alias: String,
       args: Array<out String>,
-  ): List<String> = emptyList()
+  ): List<String> {
+    val options =
+        when {
+          args.size == 1 ->
+              buildList {
+                if (sender.hasPermission("imageonmap.list")) add("list")
+                if (sender.hasPermission("imageonmap.listother")) {
+                  add("all")
+                  add("info")
+                }
+                if (sender.hasPermission("imageonmap.give")) add("give")
+                if (sender.hasPermission("imageonmap.deleteother")) add("delete")
+              }
+          args.size == 2 && args[0] == "list" && sender.hasPermission("imageonmap.listother") ->
+              server.onlinePlayers.map { it.name }
+          args.size == 2 && args[0] == "give" && sender.hasPermission("imageonmap.give") ->
+              server.onlinePlayers.map { it.name }
+          args.size == 2 && args[0].startsWith("http") && sender.hasPermission("imageonmap.new") ->
+              listOf("resize")
+          else -> emptyList()
+        }
+    return options.filter { it.startsWith(args.last(), ignoreCase = true) }
+  }
 
   private fun create(player: Player, url: String, resize: Pair<Int, Int>?) {
     val bypass = player.hasPermission("imageonmap.bypasssize")
@@ -403,33 +528,46 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     message(player, "画像を作成できません: $reason")
   }
 
-  private fun openList(player: Player, page: Int) {
-    val owner = player.uniqueId
-    database { store.list(owner, page * 45) }
+  private fun show(player: Player, state: Gui) {
+    player.openInventory(state.inventory)
+    gui[player.uniqueId] = state
+  }
+
+  private fun ownerName(id: UUID): String = Bukkit.getOfflinePlayer(id).name ?: id.toString()
+
+  private fun openList(player: Player, page: Int, owner: UUID?, admin: Boolean, all: Boolean) {
+    database { store.listings(owner, page * 45, admin) }
         .whenComplete { entries, failure ->
           main {
+            if (!player.isOnline) return@main
             if (failure != null) {
               message(player, "一覧を読めません: ${error(failure)}")
               return@main
             }
-            val inv = server.createInventory(null, 54, "自分の画像 ${page+1}")
+            val inv =
+                server.createInventory(
+                    null,
+                    54,
+                    "${if (all) "全員" else if (admin) "指定プレイヤー" else "自分"}の画像 ${page+1}",
+                )
             entries.forEachIndexed { i, entry ->
-              val icon = item(entry.firstMap)
-              val meta = icon.itemMeta as MapMeta
+              val icon = entry.firstMap?.let(::item) ?: icon(Material.PAPER, "地図なし")
+              val meta = icon.itemMeta
               meta.displayName(Component.text(entry.name ?: "画像 #${entry.id}"))
               meta.lore(
-                  listOf(
-                      Component.text("${entry.columns}×${entry.rows}"),
-                      Component.text("左: 受け取る / 右: 非表示"),
-                  )
+                  buildList {
+                    add(Component.text("${entry.columns}×${entry.rows}"))
+                    if (admin) add(Component.text("作成者: ${ownerName(entry.owner)}"))
+                    if (entry.hidden) add(Component.text("隠し中"))
+                    add(Component.text(if (admin) "左: 受け取る / 右: 削除" else "左: 受け取る / 右: 非表示"))
+                  }
               )
               icon.itemMeta = meta
               inv.setItem(i, icon)
             }
             if (page > 0) inv.setItem(45, icon(Material.ARROW, "前のページ"))
             if (entries.size == 45) inv.setItem(53, icon(Material.ARROW, "次のページ"))
-            gui[player.uniqueId] = Gui(inv, page, entries)
-            player.openInventory(inv)
+            show(player, Gui(inv, page, entries, owner, admin, all))
           }
         }
   }
@@ -438,8 +576,128 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val inv = server.createInventory(null, 54, "画像を一覧から隠す")
     inv.setItem(22, icon(Material.LIME_WOOL, "非表示にする"))
     inv.setItem(31, icon(Material.RED_WOOL, "戻る"))
-    gui[player.uniqueId] = Gui(inv, state.page, state.entries, id)
-    player.openInventory(inv)
+    show(player, state.copy(inventory = inv, confirm = id))
+  }
+
+  private fun returnFromConfirm(player: Player, state: Gui) {
+    if (state.entries.isEmpty()) player.closeInventory()
+    else openList(player, state.page, state.owner, state.admin, state.all)
+  }
+
+  private fun openDeleteConfirm(player: Player, id: Long, back: Gui?) {
+    val previous = player.openInventory.topInventory
+    database { store.details(id) }
+        .whenComplete { details, failure ->
+          main {
+            if (
+                !player.isOnline ||
+                    player.openInventory.topInventory !== previous ||
+                    (back != null && gui[player.uniqueId] !== back)
+            )
+                return@main
+            if (failure != null) {
+              message(player, "画像を読めません: ${error(failure)}")
+              return@main
+            }
+            if (details == null) {
+              message(player, "画像が見つかりません")
+              return@main
+            }
+            val inv = server.createInventory(null, 54, "画像 #$id を削除")
+            val preview = details.mapIds.firstOrNull()?.let(::item) ?: icon(Material.PAPER, "地図なし")
+            val meta = preview.itemMeta
+            meta.displayName(Component.text("画像 #$id"))
+            meta.lore(
+                listOf(
+                    Component.text("作成者: ${ownerName(details.owner)}"),
+                    Component.text("${details.columns}×${details.rows} / ${details.mapIds.size}枚"),
+                )
+            )
+            preview.itemMeta = meta
+            inv.setItem(13, preview)
+            inv.setItem(22, icon(Material.LIME_WOOL, "削除する"))
+            inv.setItem(31, icon(Material.RED_WOOL, "やめる"))
+            show(
+                player,
+                (back ?: Gui(inv, 0, emptyList(), admin = true)).copy(
+                    inventory = inv,
+                    confirm = id,
+                    deleteStage = 1,
+                ),
+            )
+          }
+        }
+  }
+
+  private fun openDeleteStage2(player: Player, state: Gui) {
+    val inv = server.createInventory(null, 54, "削除の最終確認")
+    inv.setItem(40, icon(Material.RED_WOOL, "本当に削除（取り消せません。額縁に飾った絵も消えます）"))
+    inv.setItem(31, icon(Material.LIME_WOOL, "やめる"))
+    show(player, state.copy(inventory = inv, deleteStage = 2))
+  }
+
+  private fun deleteImage(player: Player, state: Gui) {
+    val id = state.confirm ?: return
+    gui.remove(player.uniqueId)
+    player.closeInventory()
+    database { store.delete(id) }
+        .whenComplete { deleted, failure ->
+          main {
+            if (failure != null) {
+              message(player, "削除できません: ${error(failure)}")
+              return@main
+            }
+            if (deleted == null) {
+              message(player, "画像は既にありません")
+              return@main
+            }
+            blank(deleted.mapIds)
+            logger.info(
+                "Image deleted by=${player.uniqueId} image=$id owner=${deleted.owner} size=${deleted.columns}x${deleted.rows} maps=${deleted.mapIds.size}"
+            )
+            message(player, "画像 #$id を削除しました")
+          }
+        }
+  }
+
+  private fun showInfo(player: Player) {
+    val hand = player.inventory.itemInMainHand.itemMeta as? MapMeta
+    val frame = if (hand?.hasMapId() == true) null else player.getTargetEntity(5) as? ItemFrame
+    val frameMap = frame?.item?.itemMeta as? MapMeta
+    val id =
+        when {
+          hand?.hasMapId() == true -> hand.mapId
+          frameMap?.hasMapId() == true -> frameMap.mapId
+          else -> {
+            message(player, "ImageOnMap の地図ではありません")
+            return
+          }
+        }
+    database { store.detailsByMap(id) to (store.png(id) != null) }
+        .whenComplete { result, failure ->
+          main {
+            if (failure != null) {
+              message(player, "索引を読めません: ${error(failure)}")
+              return@main
+            }
+            val found = result.first
+            if (found == null) {
+              message(player, if (result.second) "索引なし（map ID $id）" else "ImageOnMap の地図ではありません")
+              return@main
+            }
+            val (details, index) = found
+            val date = details.createdAt?.let { DATE.format(Instant.ofEpochMilli(it)) } ?: "不明（移行前）"
+            message(
+                player,
+                "画像ID: ${details.id} / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"} / idx: $index",
+            )
+          }
+        }
+  }
+
+  private companion object {
+    val DATE: DateTimeFormatter =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("Asia/Tokyo"))
   }
 
   private fun marked(item: ItemStack): Int? {

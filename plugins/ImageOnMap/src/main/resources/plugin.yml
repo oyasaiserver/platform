@@ -4,13 +4,7 @@ version: ${version}
 api-version: "1.21"
 commands:
   tomap:
-    usage: /tomap <URL> [resize [幅 高さ]]
-  maptool:
-    usage: /maptool new <URL> [resize [幅 高さ]]
-  maps:
-    usage: /maps
-  givemap:
-    usage: /givemap <プレイヤー> <画像ID>
+    usage: /tomap
 permissions:
   imageonmap.*:
     default: true
@@ -20,6 +14,9 @@ permissions:
       imageonmap.get: true
       imageonmap.give: false
       imageonmap.bypasssize: false
+      imageonmap.listother: false
+      imageonmap.getother: false
+      imageonmap.deleteother: false
       imageonmap.placesplattermap: true
       imageonmap.removesplattermap: true
   imageonmap.new:
@@ -31,6 +28,12 @@ permissions:
   imageonmap.give:
     default: op
   imageonmap.bypasssize:
+    default: op
+  imageonmap.listother:
+    default: op
+  imageonmap.getother:
+    default: op
+  imageonmap.deleteother:
     default: op
   imageonmap.placesplattermap:
     default: true

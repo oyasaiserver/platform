@@ -23,6 +23,48 @@ class ImageOnMapTest {
           .toByteArray()
 
   @Test
+  fun commandRouting() {
+    assertEquals(TomapAction.CREATE, tomapAction(listOf("https://")))
+    assertEquals(
+        TomapAction.CREATE,
+        tomapAction(listOf("http://", "resize")),
+    )
+    assertEquals(TomapAction.LIST, tomapAction(listOf("list")))
+    assertEquals(TomapAction.ALL, tomapAction(listOf("all")))
+    assertEquals(TomapAction.INFO, tomapAction(listOf("info")))
+    assertEquals(TomapAction.GIVE, tomapAction(listOf("give")))
+    assertEquals(TomapAction.DELETE, tomapAction(listOf("delete")))
+    assertEquals(TomapAction.USAGE, tomapAction(listOf("unknown")))
+    assertEquals(TomapAction.USAGE, tomapAction(emptyList()))
+  }
+
+  @Test
+  fun adminListingsAndDelete() {
+    val file = Files.createTempDirectory("imageonmap-admin-test").resolve("image.db").toFile()
+    val owner = UUID.randomUUID()
+    val other = UUID.randomUUID()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      val first = store.create(owner, 2, 1, listOf(1, 2), listOf(bytes, bytes))
+      store.hide(owner, first)
+      val later = (3..48).map { id -> store.create(other, listOf(id), listOf(bytes)) }
+      assertTrue(store.list(owner, 0).isEmpty())
+      assertEquals(listOf(first), store.listings(owner, 0).map { it.id })
+      assertTrue(store.listings(owner, 0).single().hidden)
+      assertEquals(later.last(), store.listings(null, 0).first().id)
+      assertEquals(45, store.listings(null, 0).size)
+      assertEquals(listOf(later.first(), first), store.listings(null, 45).map { it.id })
+      assertEquals(listOf(1, 2), store.delete(first)?.mapIds)
+      assertNull(store.poster(first))
+      assertNull(store.png(1))
+      assertNull(store.png(2))
+      assertNotNull(store.png(3))
+      assertNull(store.delete(first))
+    }
+  }
+
+  @Test
   fun storePersistsAndRollsBack() {
     val dir = Files.createTempDirectory("imageonmap-test")
     val file = dir.resolve("image.db").toFile()
