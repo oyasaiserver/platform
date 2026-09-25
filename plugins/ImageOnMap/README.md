@@ -1,7 +1,37 @@
 # ImageOnMap
 
-Image-on-map plugin for the OyasaiServer platform.
+おやさいサーバー用に Kotlin と Paper の公開 API だけで作った独自実装です。旧版のフォークではありません。プラグイン名を維持し、旧データフォルダを引き継ぎます。
 
-Hard fork of [okocraft/ImageOnMap](https://github.com/okocraft/ImageOnMap).
+## コマンド
 
-Licensed under CeCILL - see [`LICENSE`](./LICENSE).
+| コマンド                            | 内容                                                           |
+| ----------------------------------- | -------------------------------------------------------------- |
+| `/tomap`                            | 権限のあるコマンドの使い方を表示                               |
+| `/tomap <URL> [resize [幅 高さ]]`   | 画像を取り込む                                                 |
+| `/tomap list`                       | 自分の画像一覧。左クリックで受け取り、右クリックで一覧から隠す |
+| `/tomap list <プレイヤー>`          | 指定プレイヤーの画像一覧（管理者向け）                         |
+| `/tomap all`                        | 全員の画像一覧を新しい順に表示（管理者向け）                   |
+| `/tomap info`                       | 手持ちまたは視線の先の額縁の地図情報（管理者向け）             |
+| `/tomap give <プレイヤー> <画像ID>` | 指定画像を渡す。コンソールでも可（管理者向け）                 |
+| `/tomap delete <画像ID>`            | 画像の削除確認を開く（管理者向け）                             |
+| `/tomap remove`                     | 視線の先の画像と管理額縁を外す                                 |
+| `/tomap where <画像ID>`             | 画像の額縁の記録場所を表示（管理者向け）                       |
+
+管理者向け一覧では隠した画像も表示し、左クリックで受け取り、右クリックで削除確認を開きます。削除は二重確認後に実行され、取り消せません。額縁に飾った絵も消えます。
+
+2枚以上の画像はポスターになります。地図を持ち、貼りたい面の左下のブロックを右クリックすると、プラグインが透明な額縁を並べます。壁・床・天井に貼れます。地図は減りません。額縁を直接右クリックしても貼れません。外すときは5ブロック以内から額縁を見て `/tomap remove` を実行します。額縁アイテムは貼る時も外す時もやり取りしません。旧版の額縁は外すと空の額縁に戻ります。
+
+額縁の持ち主とロックは GakubuchiLocker、区域の建築権限は WorldGuard、画像と額縁の場所の一覧は ImageOnMap が管理します。GakubuchiLocker または WorldGuard が無い場合、それぞれロックなし・区域制限なしとして扱います。ロックがあるポスターは持ち主か op、ロックがないポスターは建築権限のある人か op が外せます。
+
+## データと移行
+
+正データは `plugins/ImageOnMap/image.db` です。`maps` 表の PNG は `map_id` ごとに保持され、索引のない PNG も描画します。`frames` 表に貼った額縁の場所と日時を保存します。スキーマ `user_version = 1` では、`maps.png` は **128×128 の PNG バイト列**です。GUI の非表示は索引に印を付けるだけで、PNG は消しません。
+
+旧データからの移行は、プラグインを停止し、`plugins/ImageOnMap/` 全体をバックアップしてから一度だけ実行します。Python 3 と PyYAML が必要です。
+
+```sh
+python3 plugins/ImageOnMap/migration/migrate_to_sqlite.py --self-test
+python3 plugins/ImageOnMap/migration/migrate_to_sqlite.py --data-dir plugins/ImageOnMap
+```
+
+スクリプトは `maps/*.yml` と `images/map*.png` を読み、一時 DB を検査してから `image.db` に改名します。元ファイルには書きません。索引にあるが PNG がない地図 ID は報告され、その画像はポスターの形が完全でないため貼り直しには使えません。既存の `image.db` や調査待ちの `image.db.tmp` があれば上書きしません。検査結果と欠けた ID を確認してからプラグインを有効にしてください。
