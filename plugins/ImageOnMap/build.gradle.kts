@@ -2,6 +2,7 @@ version = "6.0.0"
 
 dependencies {
   compileOnly(libs.purpur.api)
+  compileOnly(project(":plugins:GakubuchiLocker"))
   implementation(libs.sqlite.jdbc)
   implementation(libs.imageio.webp)
   testImplementation(libs.purpur.api)

@@ -1,23 +1,17 @@
 package icu.oyasai.imageonmap
 
 import org.bukkit.Location
-import org.bukkit.Material
 import org.bukkit.Rotation
 import org.bukkit.block.BlockFace
+import org.bukkit.entity.Hanging
 import org.bukkit.entity.ItemFrame
-import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.MapMeta
+import org.bukkit.util.BoundingBox
 
 internal object PosterFrames {
   private val directions = listOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
 
-  internal fun mapIndex(
-      columns: Int,
-      rows: Int,
-      face: BlockFace,
-      col: Int,
-      rowFromBottom: Int,
-  ): Int =
+  fun mapIndex(columns: Int, rows: Int, face: BlockFace, col: Int, rowFromBottom: Int): Int =
       (rows - rowFromBottom - 1) * columns + if (face == BlockFace.DOWN) columns - 1 - col else col
 
   private fun vectors(face: BlockFace, up: BlockFace): Pair<Pair<Int, Int>, Pair<Int, Int>> =
@@ -37,36 +31,43 @@ internal object PosterFrames {
         else -> error("unsupported face")
       }
 
-  private fun at(
+  // Block coordinates relative to the clicked face's lower-left target cell.
+  fun offset(face: BlockFace, up: BlockFace, col: Int, row: Int): Triple<Int, Int, Int> {
+    val (right, rise) = vectors(face, up)
+    return Triple(
+        right.first * col + rise.first * row,
+        if (face == BlockFace.UP || face == BlockFace.DOWN) 0 else row,
+        right.second * col + rise.second * row,
+    )
+  }
+
+  fun cells(
       origin: Location,
       face: BlockFace,
       up: BlockFace,
-      col: Int,
-      rowFromBottom: Int,
-  ): Location {
-    val (right, rise) = vectors(face, up)
-    return origin
-        .clone()
-        .add(
-            (right.first * col + rise.first * rowFromBottom).toDouble(),
-            if (face in listOf(BlockFace.UP, BlockFace.DOWN)) 0.0 else rowFromBottom.toDouble(),
-            (right.second * col + rise.second * rowFromBottom).toDouble(),
-        )
+      columns: Int,
+      rows: Int,
+  ): List<Location> = buildList {
+    for (row in 0 until rows) for (col in 0 until columns) {
+      val (x, y, z) = offset(face, up, col, row)
+      add(origin.clone().add(x.toDouble(), y.toDouble(), z.toDouble()))
+    }
   }
 
-  private fun frame(at: Location, face: BlockFace): ItemFrame? =
+  fun occupying(at: Location, face: BlockFace): Hanging? =
       at.world
-          .getNearbyEntities(at.clone().add(0.5, 0.5, 0.5), 0.75, 0.75, 0.75)
-          .filterIsInstance<ItemFrame>()
+          .getNearbyEntities(at.clone().add(0.5, 0.5, 0.5), 1.0, 1.0, 1.0)
+          .filterIsInstance<Hanging>()
           .firstOrNull {
             it.facing == face &&
-                it.location.blockX == at.blockX &&
-                it.location.blockY == at.blockY &&
-                it.location.blockZ == at.blockZ
+                (it.boundingBox.overlaps(BoundingBox.of(at.block)) ||
+                    (it.location.blockX == at.blockX &&
+                        it.location.blockY == at.blockY &&
+                        it.location.blockZ == at.blockZ))
           }
 
-  private fun rotation(face: BlockFace, up: BlockFace, first: Boolean): Rotation {
-    if (face !in listOf(BlockFace.UP, BlockFace.DOWN)) return Rotation.NONE
+  fun rotation(face: BlockFace, up: BlockFace, first: Boolean): Rotation {
+    if (face != BlockFace.UP && face != BlockFace.DOWN) return Rotation.NONE
     val quarter = directions.indexOf(up).let { if (it < 0) 0 else it }
     val steps = if (face == BlockFace.UP) quarter else (4 - quarter) % 4
     val adjusted = (steps + if (first) 3 else 0) % 4
@@ -74,60 +75,45 @@ internal object PosterFrames {
         adjusted]
   }
 
-  fun place(clicked: ItemFrame, up: BlockFace, poster: Poster): Boolean {
-    val frames = buildList {
-      for (row in 0 until poster.rows) for (col in 0 until poster.columns) {
-        val next = frame(at(clicked.location, clicked.facing, up, col, row), clicked.facing)
-        if (next == null || next.item.type != Material.AIR) return false
-        add(next)
-      }
-    }
-    frames.forEachIndexed { i, next ->
-      val col = i % poster.columns
-      val row = i / poster.columns
-      val id = poster.ids[mapIndex(poster.columns, poster.rows, next.facing, col, row)]
-      val item = ItemStack(Material.FILLED_MAP)
-      val meta = item.itemMeta as MapMeta
-      meta.mapId = id
-      item.itemMeta = meta
-      next.setItem(item, false)
-      next.rotation = rotation(next.facing, up, i == 0)
-    }
-    return true
-  }
-
-  fun remove(hit: ItemFrame, poster: Poster, index: Int): Int {
+  fun matches(
+      hit: ItemFrame,
+      poster: Poster,
+      index: Int,
+      managed: (ItemFrame) -> Boolean,
+  ): List<ItemFrame> {
     val col =
         if (hit.facing == BlockFace.DOWN) poster.columns - 1 - index % poster.columns
         else index % poster.columns
-    val rowFromBottom = poster.rows - 1 - index / poster.columns
+    val row = poster.rows - 1 - index / poster.columns
     val orientations =
-        if (hit.facing in listOf(BlockFace.UP, BlockFace.DOWN)) directions
+        if (hit.facing == BlockFace.UP || hit.facing == BlockFace.DOWN) directions
         else listOf(BlockFace.NORTH)
-    val candidates =
-        orientations.map { up ->
-          val (right, rise) = vectors(hit.facing, up)
-          val origin =
-              hit.location
-                  .clone()
-                  .add(
-                      (-right.first * col - rise.first * rowFromBottom).toDouble(),
-                      if (hit.facing in listOf(BlockFace.UP, BlockFace.DOWN)) 0.0
-                      else -rowFromBottom.toDouble(),
-                      (-right.second * col - rise.second * rowFromBottom).toDouble(),
-                  )
-          buildList {
-            for (row in 0 until poster.rows) for (c in 0 until poster.columns) {
-              val next = frame(at(origin, hit.facing, up, c, row), hit.facing) ?: continue
-              val meta = next.item.itemMeta as? MapMeta
-              val mapId = if (meta?.hasMapId() == true) meta.mapId else null
-              if (mapId == poster.ids[mapIndex(poster.columns, poster.rows, hit.facing, c, row)])
-                  add(next)
-            }
-          }
+    return orientations
+        .map { up ->
+          val (x, y, z) = offset(hit.facing, up, col, row)
+          cells(
+                  hit.location.clone().add(-x.toDouble(), -y.toDouble(), -z.toDouble()),
+                  hit.facing,
+                  up,
+                  poster.columns,
+                  poster.rows,
+              )
+              .mapIndexedNotNull { i, at ->
+                val frame = occupying(at, hit.facing) as? ItemFrame ?: return@mapIndexedNotNull null
+                val meta = frame.item.itemMeta as? MapMeta
+                val expected =
+                    poster.ids[
+                            mapIndex(
+                                poster.columns,
+                                poster.rows,
+                                hit.facing,
+                                i % poster.columns,
+                                i / poster.columns,
+                            )]
+                if (managed(frame) && meta?.hasMapId() == true && meta.mapId == expected) frame
+                else null
+              }
         }
-    val matches = candidates.maxByOrNull { it.size } ?: return 0
-    matches.forEach { it.setItem(ItemStack(Material.AIR), false) }
-    return matches.size
+        .maxByOrNull { it.size } ?: emptyList()
   }
 }

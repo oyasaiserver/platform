@@ -1,11 +1,13 @@
 package icu.oyasai.imageonmap
 
+import com.gakubuchilocker.GakubuchiLockerPlugin
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.net.URI
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.BitSet
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
@@ -18,17 +20,27 @@ import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
+import org.bukkit.damage.DamageSource
+import org.bukkit.damage.DamageType
+import org.bukkit.entity.GlowItemFrame
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.entity.EntityRemoveEvent
+import org.bukkit.event.hanging.HangingBreakByEntityEvent
+import org.bukkit.event.hanging.HangingBreakEvent
+import org.bukkit.event.hanging.HangingPlaceEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -52,6 +64,8 @@ internal enum class TomapAction {
   INFO,
   GIVE,
   DELETE,
+  REMOVE,
+  WHERE,
   USAGE,
 }
 
@@ -64,6 +78,8 @@ internal fun tomapAction(args: List<String>): TomapAction =
       args.firstOrNull() == "info" -> TomapAction.INFO
       args.firstOrNull() == "give" -> TomapAction.GIVE
       args.firstOrNull() == "delete" -> TomapAction.DELETE
+      args.firstOrNull() == "remove" -> TomapAction.REMOVE
+      args.firstOrNull() == "where" -> TomapAction.WHERE
       else -> TomapAction.USAGE
     }
 
@@ -73,9 +89,13 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private val permits = Semaphore(2)
   private val active = mutableSetOf<UUID>()
   private val pendingMaps = mutableSetOf<Int>()
+  private val mapIds = BitSet()
+  private val removing = mutableSetOf<UUID>()
   private val gui = mutableMapOf<UUID, Gui>()
   private lateinit var store: MapStore
   private lateinit var marker: NamespacedKey
+  private lateinit var managedKey: NamespacedKey
+  private lateinit var legacyKey: NamespacedKey
   private var ready = false
 
   private data class Gui(
@@ -91,10 +111,21 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   override fun onEnable() {
     marker = NamespacedKey("imageonmap", "splatter")
+    managedKey = NamespacedKey("imageonmap", "managed")
+    legacyKey = NamespacedKey("imageonmap", "legacy")
     try {
       ImageSource.registerWebp()
       store = MapStore(dataFolder.resolve("image.db"))
-      dbThread.submit { store.open() }.get()
+      mapIds.or(
+          dbThread
+              .submit(
+                  java.util.concurrent.Callable {
+                    store.open()
+                    store.mapIds()
+                  }
+              )
+              .get()
+      )
       ready = true
     } catch (e: Exception) {
       logger.severe("ImageOnMap disabled: ${e.cause?.message ?: e.message}")
@@ -105,7 +136,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     getCommand("tomap")?.setExecutor(this)
     server.worlds.forEach { world ->
       world.loadedChunks.forEach { chunk ->
-        chunk.entities.filterIsInstance<ItemFrame>().forEach { attachItem(it.item) }
+        inspectFrames(chunk.entities.filterIsInstance<ItemFrame>())
       }
     }
     server.onlinePlayers.forEach { inspectInventory(it) }
@@ -130,7 +161,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   private fun message(sender: CommandSender, text: String) = sender.sendMessage(text)
 
-  private class OnceRenderer(private var picture: BufferedImage?) : MapRenderer(false) {
+  private class OnceRenderer(@Volatile var picture: BufferedImage? = null) : MapRenderer(false) {
     override fun isExplorerMap(): Boolean = false
 
     override fun render(view: MapView, canvas: MapCanvas, player: Player) {
@@ -157,24 +188,21 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val id = view.id
     if (
         !ready ||
+            !mapIds[id] ||
             view.renderers.any { it is OnceRenderer || it is BlankRenderer } ||
             !pendingMaps.add(id)
     )
         return
+    view.renderers.toList().forEach(view::removeRenderer)
+    val renderer = OnceRenderer()
+    view.addRenderer(renderer)
     database { store.png(id)?.let { ImageIO.read(ByteArrayInputStream(it)) } }
         .whenComplete { image, failure ->
           main {
             pendingMaps.remove(id)
             if (failure != null) logger.warning("Map $id: ${error(failure)}")
-            else if (
-                image != null &&
-                    image.width == 128 &&
-                    image.height == 128 &&
-                    view.renderers.none { it is OnceRenderer || it is BlankRenderer }
-            ) {
-              view.renderers.toList().forEach(view::removeRenderer)
-              view.addRenderer(OnceRenderer(image))
-            }
+            else if (image?.width == 128 && image.height == 128 && renderer in view.renderers)
+                renderer.picture = image
           }
         }
   }
@@ -202,7 +230,121 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   @EventHandler
   fun entitiesLoad(e: EntitiesLoadEvent) {
-    e.entities.filterIsInstance<ItemFrame>().forEach { attachItem(it.item) }
+    inspectFrames(e.entities.filterIsInstance<ItemFrame>())
+  }
+
+  private fun mapId(item: ItemStack): Int? =
+      (item.itemMeta as? MapMeta)?.let { if (it.hasMapId()) it.mapId else null }
+
+  private fun managed(frame: ItemFrame): Boolean =
+      frame.persistentDataContainer.get(managedKey, PersistentDataType.BYTE) == 1.toByte()
+
+  private fun mark(frame: ItemFrame, legacy: Boolean) {
+    frame.persistentDataContainer.set(managedKey, PersistentDataType.BYTE, 1)
+    frame.persistentDataContainer.set(legacyKey, PersistentDataType.BYTE, if (legacy) 1 else 0)
+    frame.isFixed = true
+    frame.setItemDropChance(0f)
+  }
+
+  private fun record(frame: ItemFrame, id: Int, owner: UUID?, legacy: Boolean) =
+      FrameRecord(
+          frame.uniqueId,
+          id,
+          frame.world.uid,
+          frame.location.blockX,
+          frame.location.blockY,
+          frame.location.blockZ,
+          frame.facing.name,
+          owner,
+          System.currentTimeMillis(),
+          legacy,
+      )
+
+  private fun clearDeleted(frame: ItemFrame) {
+    if (frame.persistentDataContainer.get(legacyKey, PersistentDataType.BYTE) == 1.toByte()) {
+      frame.setItem(ItemStack(Material.AIR), false)
+      frame.persistentDataContainer.remove(managedKey)
+      frame.persistentDataContainer.remove(legacyKey)
+      frame.isFixed = false
+    } else discard(frame)
+  }
+
+  private fun discard(frame: ItemFrame) {
+    removing.add(frame.uniqueId)
+    frame.remove()
+    removing.remove(frame.uniqueId)
+  }
+
+  private fun inspectFrames(frames: List<ItemFrame>) {
+    val adopted = mutableListOf<Pair<ItemFrame, Int>>()
+    frames.forEach { frame ->
+      val id = mapId(frame.item)
+      if (managed(frame) && (id == null || !mapIds[id])) {
+        clearDeleted(frame)
+        database { store.deleteFrames(listOf(frame.uniqueId)) }
+      } else if (id != null && mapIds[id]) {
+        attachItem(frame.item)
+        if (!managed(frame)) {
+          mark(frame, true)
+          adopted.add(frame to id)
+        }
+      }
+    }
+    if (adopted.isEmpty()) return
+    val locker = server.pluginManager.getPlugin("Gakubuchi-Locker") as? GakubuchiLockerPlugin
+    val locks =
+        adopted.associate { (frame, _) -> frame.uniqueId to locker?.db?.getOwner(frame.uniqueId) }
+    val snapshots = adopted.map { (frame, id) -> record(frame, id, locks[frame.uniqueId], true) }
+    database {
+          val records =
+              snapshots.map { snapshot ->
+                snapshot.copy(owner = snapshot.owner ?: store.ownerByMap(snapshot.mapId))
+              }
+          store.saveFrames(records)
+        }
+        .whenComplete { _, failure ->
+          if (failure != null) logger.warning("Frame adoption: ${error(failure)}")
+        }
+  }
+
+  @EventHandler
+  fun entityRemoved(e: EntityRemoveEvent) {
+    val frame = e.entity as? ItemFrame ?: return
+    if (!managed(frame) || e.cause == EntityRemoveEvent.Cause.UNLOAD || frame.uniqueId in removing)
+        return
+    database { store.deleteFrames(listOf(frame.uniqueId)) }
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  fun protectBreak(e: HangingBreakEvent) {
+    val frame = e.entity as? ItemFrame ?: return
+    if (managed(frame) && frame.uniqueId !in removing) e.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  fun protectDamage(e: EntityDamageByEntityEvent) {
+    val frame = e.entity as? ItemFrame ?: return
+    if (managed(frame)) e.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  fun protectInteract(e: PlayerInteractEntityEvent) {
+    val frame = e.rightClicked as? ItemFrame ?: return
+    if (managed(frame)) e.isCancelled = true
+    if (
+        e.hand == EquipmentSlot.HAND &&
+            mapId(e.player.inventory.itemInMainHand)?.let(mapIds::get) == true
+    ) {
+      e.isCancelled = true
+      message(e.player, "壁を直接右クリックしてください")
+    }
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  fun protectInteractAt(e: PlayerInteractAtEntityEvent) {
+    val frame = e.rightClicked as? ItemFrame ?: return
+    if (managed(frame)) e.isCancelled = true
+    if (mapId(e.player.inventory.itemInMainHand)?.let(mapIds::get) == true) e.isCancelled = true
   }
 
   @EventHandler fun join(e: PlayerJoinEvent) = inspectInventory(e.player)
@@ -300,7 +442,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         meta.persistentDataContainer.set(marker, PersistentDataType.BYTE, 1)
         meta.setEnchantmentGlintOverride(true)
         meta.displayName(Component.text("ポスター ${poster.columns}×${poster.rows}"))
-        meta.lore(listOf(Component.text("空の額縁を並べて左下を右クリック"), Component.text("スニークして1枚を叩くと全体を外す")))
+        meta.lore(listOf(Component.text("壁の左下を右クリックして貼る"), Component.text("/tomap remove で外す")))
         it.itemMeta = meta
       }
 
@@ -397,6 +539,16 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         val id = args.getOrNull(1)?.toLongOrNull()
         if (args.size != 2 || id == null) usage(sender) else openDeleteConfirm(player, id, null)
       }
+      TomapAction.REMOVE -> {
+        if (!sender.hasPermission("imageonmap.removesplattermap")) return denied(sender)
+        val player = sender as? Player ?: return playerOnly(sender)
+        if (args.size == 1) removeFrames(player) else usage(sender)
+      }
+      TomapAction.WHERE -> {
+        if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
+        val id = args.getOrNull(1)?.toLongOrNull()
+        if (args.size != 2 || id == null) usage(sender) else where(sender, id)
+      }
       TomapAction.USAGE -> usage(sender)
     }
     return true
@@ -418,9 +570,11 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     if (sender.hasPermission("imageonmap.list")) message(sender, "/tomap list")
     if (sender.hasPermission("imageonmap.listother")) {
       message(sender, "/tomap list <プレイヤー> / all / info")
+      message(sender, "/tomap where <画像ID>")
     }
     if (sender.hasPermission("imageonmap.give")) message(sender, "/tomap give <プレイヤー> <画像ID>")
     if (sender.hasPermission("imageonmap.deleteother")) message(sender, "/tomap delete <画像ID>")
+    if (sender.hasPermission("imageonmap.removesplattermap")) message(sender, "/tomap remove")
   }
 
   override fun onTabComplete(
@@ -437,9 +591,11 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                 if (sender.hasPermission("imageonmap.listother")) {
                   add("all")
                   add("info")
+                  add("where")
                 }
                 if (sender.hasPermission("imageonmap.give")) add("give")
                 if (sender.hasPermission("imageonmap.deleteother")) add("delete")
+                if (sender.hasPermission("imageonmap.removesplattermap")) add("remove")
               }
           args.size == 2 && args[0] == "list" && sender.hasPermission("imageonmap.listother") ->
               server.onlinePlayers.map { it.name }
@@ -497,6 +653,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                   main {
                     if (saveFailure != null) failCreate(player, url, saveFailure)
                     else {
+                      ids.forEach(mapIds::set)
                       database { store.poster(id) }
                           .whenComplete { poster, readFailure ->
                             main {
@@ -641,7 +798,12 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val id = state.confirm ?: return
     gui.remove(player.uniqueId)
     player.closeInventory()
-    database { store.delete(id) }
+    database {
+          val deleted = store.delete(id)
+          if (deleted != null)
+              store.deleteFrames(store.framesForMaps(deleted.mapIds).map { it.uuid })
+          deleted
+        }
         .whenComplete { deleted, failure ->
           main {
             if (failure != null) {
@@ -651,6 +813,15 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             if (deleted == null) {
               message(player, "画像は既にありません")
               return@main
+            }
+            deleted.mapIds.forEach(mapIds::clear)
+            val deletedIds = deleted.mapIds.toSet()
+            server.worlds.forEach { world ->
+              world.loadedChunks.forEach { chunk ->
+                chunk.entities.filterIsInstance<ItemFrame>().forEach { frame ->
+                  if (managed(frame) && mapId(frame.item) in deletedIds) clearDeleted(frame)
+                }
+              }
             }
             blank(deleted.mapIds)
             logger.info(
@@ -663,18 +834,25 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   private fun showInfo(player: Player) {
     val hand = player.inventory.itemInMainHand.itemMeta as? MapMeta
-    val frame = if (hand?.hasMapId() == true) null else player.getTargetEntity(5) as? ItemFrame
+    val frame = player.getTargetEntity(5) as? ItemFrame
     val frameMap = frame?.item?.itemMeta as? MapMeta
     val id =
         when {
-          hand?.hasMapId() == true -> hand.mapId
           frameMap?.hasMapId() == true -> frameMap.mapId
+          hand?.hasMapId() == true -> hand.mapId
           else -> {
             message(player, "ImageOnMap の地図ではありません")
             return
           }
         }
-    database { store.detailsByMap(id) to (store.png(id) != null) }
+    val frameUuid = if (frameMap?.hasMapId() == true) frame.uniqueId else null
+    database {
+          Triple(
+              store.detailsByMap(id),
+              store.png(id) != null,
+              frameUuid?.let(store::frame),
+          )
+        }
         .whenComplete { result, failure ->
           main {
             if (failure != null) {
@@ -682,15 +860,22 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               return@main
             }
             val found = result.first
+            val placement =
+                result.third?.let { row ->
+                  " / 貼った人: ${row.owner?.let(::ownerName) ?: "op のみ"} / 貼った日時: ${DATE.format(Instant.ofEpochMilli(row.placedAt))} / ${if (row.legacy) "置き換え" else "新規設置"}"
+                } ?: ""
             if (found == null) {
-              message(player, if (result.second) "索引なし（map ID $id）" else "ImageOnMap の地図ではありません")
+              message(
+                  player,
+                  (if (result.second) "索引なし（map ID $id）" else "ImageOnMap の地図ではありません") + placement,
+              )
               return@main
             }
             val (details, index) = found
             val date = details.createdAt?.let { DATE.format(Instant.ofEpochMilli(it)) } ?: "不明（移行前）"
             message(
                 player,
-                "画像ID: ${details.id} / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"} / idx: $index",
+                "画像ID: ${details.id} / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"} / idx: $index$placement",
             )
           }
         }
@@ -701,75 +886,230 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("Asia/Tokyo"))
   }
 
-  private fun marked(item: ItemStack): Int? {
-    val meta = item.itemMeta as? MapMeta ?: return null
-    if (
-        !meta.hasMapId() ||
-            meta.persistentDataContainer.get(marker, PersistentDataType.BYTE) != 1.toByte()
-    )
-        return null
-    return meta.mapId
-  }
-
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  fun place(e: PlayerInteractEntityEvent) {
-    if (e.hand != EquipmentSlot.HAND) return
-    val frame = e.rightClicked as? ItemFrame ?: return
+  fun place(e: PlayerInteractEvent) {
+    if (e.action != Action.RIGHT_CLICK_BLOCK || e.hand != EquipmentSlot.HAND) return
     val player = e.player
-    val id = marked(player.inventory.itemInMainHand) ?: return
-    val up = player.facing
+    val id = mapId(player.inventory.itemInMainHand) ?: return
+    if (!mapIds[id]) return
     e.isCancelled = true
     if (!player.hasPermission("imageonmap.placesplattermap")) {
       message(player, "権限がありません")
       return
     }
-    if (frame.item.type != Material.AIR) return
-    database { store.mapIndex(id) }
-        .whenComplete { found, failure ->
+    val clicked = e.clickedBlock ?: return
+    val face = e.blockFace
+    val up = player.facing
+    database { store.mapIndex(id)?.first ?: Poster(0, null, 1, 1, listOf(id)) }
+        .whenComplete { poster, failure ->
           main {
-            val poster = found?.first
-            val held = player.inventory.itemInMainHand
-            if (!player.isOnline || marked(held) != id || frame.item.type != Material.AIR)
-                return@main
-            if (failure != null || poster == null || found.second != 0 || poster.ids.size == 1) {
-              message(player, "ポスターの索引を読めません")
+            if (failure != null || poster == null) {
+              message(player, "画像の索引を読めません")
               return@main
             }
-            if (!PosterFrames.place(frame, up, poster))
-                message(player, "額縁が ${poster.columns}×${poster.rows} 必要です")
-            else {
-              if (player.gameMode != org.bukkit.GameMode.CREATIVE) held.amount -= 1
-              poster.ids.forEach { server.getMap(it)?.let(::attach) }
+            if (!player.isOnline || mapId(player.inventory.itemInMainHand) != id || !mapIds[id])
+                return@main
+            val cells =
+                PosterFrames.cells(
+                    clicked.getRelative(face).location,
+                    face,
+                    up,
+                    poster.columns,
+                    poster.rows,
+                )
+            val reason =
+                cells.firstNotNullOfOrNull { cell ->
+                  val back = cell.block.getRelative(face.oppositeFace)
+                  when {
+                    !back.type.isSolid -> "後ろのブロックが固体ではありません"
+                    !cell.block.isPassable -> "手前にブロックがあります"
+                    PosterFrames.occupying(cell, face) != null -> "額縁か絵画があります"
+                    else -> null
+                  }
+                }
+            if (reason != null) {
+              message(player, "ここには貼れません（$reason）")
+              return@main
             }
+            val spawned = mutableListOf<ItemFrame>()
+            val records = mutableListOf<FrameRecord>()
+            for ((i, cell) in cells.withIndex()) {
+              val map =
+                  poster.ids[
+                          PosterFrames.mapIndex(
+                              poster.columns,
+                              poster.rows,
+                              face,
+                              i % poster.columns,
+                              i / poster.columns,
+                          )]
+              val frame =
+                  try {
+                    cell.world.spawn(cell.clone().add(0.5, 0.5, 0.5), ItemFrame::class.java) { f ->
+                      f.setFacingDirection(face, true)
+                      f.isVisible = false
+                      mark(f, false)
+                      f.setItem(item(map), false)
+                      f.rotation = PosterFrames.rotation(face, up, i == 0)
+                    }
+                  } catch (failure: Exception) {
+                    spawned.forEach { rollbackFrame(it, player) }
+                    message(player, "ここには貼れません（額縁を出せませんでした）")
+                    logger.warning("Frame spawn: ${error(failure)}")
+                    return@main
+                  }
+              val event =
+                  HangingPlaceEvent(
+                      frame,
+                      player,
+                      cell.block.getRelative(face.oppositeFace),
+                      face,
+                      EquipmentSlot.HAND,
+                      player.inventory.itemInMainHand,
+                  )
+              server.pluginManager.callEvent(event)
+              if (event.isCancelled) {
+                rollbackFrame(frame, player)
+                spawned.forEach { rollbackFrame(it, player) }
+                message(player, "ここには貼れません（設置が許可されませんでした）")
+                return@main
+              }
+              spawned.add(frame)
+              records.add(record(frame, map, player.uniqueId, false))
+            }
+            database { store.saveFrames(records) }
+                .whenComplete { _, saveFailure ->
+                  if (saveFailure != null)
+                      main {
+                        spawned.forEach { rollbackFrame(it, player) }
+                        message(player, "額縁を記録できません: ${error(saveFailure)}")
+                      }
+                }
           }
         }
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  fun remove(e: EntityDamageByEntityEvent) {
-    val player = e.damager as? Player ?: return
-    val frame = e.entity as? ItemFrame ?: return
-    if (frame.isFixed) return
-    if (!player.isSneaking || !player.hasPermission("imageonmap.removesplattermap")) return
-    val meta = frame.item.itemMeta as? MapMeta ?: return
-    if (!meta.hasMapId()) return
-    val id = meta.mapId
-    e.isCancelled = true
-    val original = frame.item.clone()
-    database { store.mapIndex(id) }
-        .whenComplete { found, failure ->
+  private fun breakEvent(frame: ItemFrame, player: Player): HangingBreakByEntityEvent =
+      HangingBreakByEntityEvent(
+          frame,
+          player,
+          DamageSource.builder(DamageType.PLAYER_ATTACK)
+              .withCausingEntity(player)
+              .withDirectEntity(player)
+              .build(),
+          HangingBreakEvent.RemoveCause.ENTITY,
+      )
+
+  private fun rollbackFrame(frame: ItemFrame, player: Player) {
+    removing.add(frame.uniqueId)
+    server.pluginManager.callEvent(breakEvent(frame, player))
+    (server.pluginManager.getPlugin("Gakubuchi-Locker") as? GakubuchiLockerPlugin)
+        ?.db
+        ?.unlockFrame(frame)
+    discard(frame)
+    removing.remove(frame.uniqueId)
+  }
+
+  private fun removeFrames(player: Player) {
+    val hit = player.getTargetEntity(5) as? ItemFrame
+    if (hit == null || !managed(hit)) {
+      message(player, "管理している額縁が見つかりません")
+      return
+    }
+    val id = mapId(hit.item) ?: return
+    database {
+          val found = store.mapIndex(id)
+          val poster = found?.first
+          val ids = poster?.ids ?: listOf(id)
+          Triple(found, store.framesForMaps(ids), poster)
+        }
+        .whenComplete { result, failure ->
           main {
-            val current = frame.item.itemMeta as? MapMeta ?: return@main
-            if (!current.hasMapId() || current.mapId != id) return@main
-            if (failure != null) {
-              message(player, "画像の索引を読めません")
+            if (failure != null || result == null) {
+              message(player, "額縁の記録を読めません: ${error(failure ?: IllegalStateException())}")
               return@main
             }
-            if (found == null || found.first.ids.size == 1) {
-              frame.setItem(ItemStack(Material.AIR), false)
-              frame.world.dropItemNaturally(frame.location, original)
-            } else if (PosterFrames.remove(frame, found.first, found.second) > 0)
-                deliver(player, splatter(found.first))
+            if (!hit.isValid || !managed(hit) || mapId(hit.item) != id) return@main
+            val found = result.first
+            val targets =
+                if (found == null) listOf(hit)
+                else PosterFrames.matches(hit, found.first, found.second, ::managed)
+            val byId = result.second.associateBy { it.uuid }
+            if (targets.isEmpty() || targets.any { it.uniqueId !in byId }) {
+              message(player, "額縁の記録が見つかりません")
+              return@main
+            }
+            if (targets.any { byId[it.uniqueId]?.owner != player.uniqueId && !player.isOp }) {
+              message(player, "外す権限がありません")
+              return@main
+            }
+            val locker =
+                server.pluginManager.getPlugin("Gakubuchi-Locker") as? GakubuchiLockerPlugin
+            val passed = mutableListOf<Pair<ItemFrame, UUID?>>()
+            for (frame in targets) {
+              val lockOwner = locker?.db?.getOwner(frame.uniqueId)
+              removing.add(frame.uniqueId)
+              val event = breakEvent(frame, player)
+              server.pluginManager.callEvent(event)
+              removing.remove(frame.uniqueId)
+              if (event.isCancelled) {
+                lockOwner?.let { locker.db.lockFrame(frame, it) }
+                passed.forEach { (prior, owner) -> owner?.let { locker?.db?.lockFrame(prior, it) } }
+                message(player, "額縁を外せません（保護されています）")
+                return@main
+              }
+              passed.add(frame to lockOwner)
+            }
+            targets.forEach { frame ->
+              if (byId[frame.uniqueId]?.legacy == true)
+                  deliver(
+                      player,
+                      ItemStack(
+                          if (frame is GlowItemFrame) Material.GLOW_ITEM_FRAME
+                          else Material.ITEM_FRAME
+                      ),
+                  )
+              discard(frame)
+            }
+            database { store.deleteFrames(targets.map { it.uniqueId }) }
+                .whenComplete { _, deleteFailure ->
+                  if (deleteFailure != null)
+                      logger.warning("Frame deletion: ${error(deleteFailure)}")
+                }
+            message(player, "額縁を ${targets.size} 枚外しました")
+          }
+        }
+  }
+
+  private fun where(sender: CommandSender, imageId: Long) {
+    database {
+          val details = store.details(imageId)
+          details to store.framesForMaps(details?.mapIds ?: emptyList())
+        }
+        .whenComplete { result, failure ->
+          main {
+            if (failure != null || result == null) {
+              message(sender, "場所を読めません: ${error(failure ?: IllegalStateException())}")
+              return@main
+            }
+            if (result.first == null) {
+              message(sender, "画像が見つかりません")
+              return@main
+            }
+            message(sender, "画像 #$imageId: ${result.second.size} 枚")
+            result.second.take(20).forEach { row ->
+              val world = server.getWorld(row.world)
+              val status =
+                  when {
+                    world == null -> " [ワールドなし]"
+                    !world.isChunkLoaded(row.x shr 4, row.z shr 4) -> " [未読み込み]"
+                    world.getChunkAt(row.x shr 4, row.z shr 4).entities.none {
+                      it.uniqueId == row.uuid
+                    } -> " [見つからない]"
+                    else -> ""
+                  }
+              message(sender, "${world?.name ?: row.world} ${row.x},${row.y},${row.z}$status")
+            }
           }
         }
   }

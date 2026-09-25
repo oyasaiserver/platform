@@ -34,6 +34,8 @@ class ImageOnMapTest {
     assertEquals(TomapAction.INFO, tomapAction(listOf("info")))
     assertEquals(TomapAction.GIVE, tomapAction(listOf("give")))
     assertEquals(TomapAction.DELETE, tomapAction(listOf("delete")))
+    assertEquals(TomapAction.REMOVE, tomapAction(listOf("remove")))
+    assertEquals(TomapAction.WHERE, tomapAction(listOf("where")))
     assertEquals(TomapAction.USAGE, tomapAction(listOf("unknown")))
     assertEquals(TomapAction.USAGE, tomapAction(emptyList()))
   }
@@ -91,6 +93,31 @@ class ImageOnMapTest {
       assertEquals(2, store.posterByMap(11)?.ids?.size)
       assertNotNull(store.png(99))
       assertNull(store.posterByMap(99))
+    }
+  }
+
+  @Test
+  fun frameRecordsAndMapIds() {
+    val file = Files.createTempDirectory("imageonmap-frames").resolve("image.db").toFile()
+    val owner = UUID.randomUUID()
+    val frameId = UUID.randomUUID()
+    val world = UUID.randomUUID()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      val image = store.create(owner, 2, 1, listOf(4, 150000), listOf(bytes, bytes))
+      assertTrue(store.mapIds()[4])
+      assertTrue(store.mapIds()[150000])
+      assertFalse(store.mapIds()[5])
+      val frame = FrameRecord(frameId, 4, world, 1, 2, 3, "NORTH", owner, 42, false)
+      store.saveFrames(listOf(frame))
+      store.saveFrames(listOf(frame.copy(owner = null, x = 9)))
+      assertEquals(frame, store.frame(frameId))
+      assertEquals(listOf(frame), store.framesForMaps(listOf(4, 150000)))
+      store.delete(image)
+      assertEquals(frame, store.frame(frameId))
+      store.deleteFrames(listOf(frameId))
+      assertNull(store.frame(frameId))
     }
   }
 
@@ -174,6 +201,9 @@ class ImageOnMapTest {
     assertEquals(1, PosterFrames.mapIndex(3, 2, BlockFace.NORTH, 1, 1))
     assertEquals(5, PosterFrames.mapIndex(3, 2, BlockFace.DOWN, 0, 0))
     assertEquals(2, PosterFrames.mapIndex(3, 2, BlockFace.DOWN, 0, 1))
+    assertEquals(Triple(-1, 1, 0), PosterFrames.offset(BlockFace.NORTH, BlockFace.SOUTH, 1, 1))
+    assertEquals(Triple(1, 0, -1), PosterFrames.offset(BlockFace.UP, BlockFace.NORTH, 1, 1))
+    assertEquals(Triple(-1, 0, 1), PosterFrames.offset(BlockFace.DOWN, BlockFace.SOUTH, 1, 1))
   }
 
   @Test

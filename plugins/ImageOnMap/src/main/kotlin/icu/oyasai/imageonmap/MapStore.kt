@@ -3,7 +3,21 @@ package icu.oyasai.imageonmap
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
+import java.util.BitSet
 import java.util.UUID
+
+internal data class FrameRecord(
+    val uuid: UUID,
+    val mapId: Int,
+    val world: UUID,
+    val x: Int,
+    val y: Int,
+    val z: Int,
+    val facing: String,
+    val owner: UUID?,
+    val placedAt: Long,
+    val legacy: Boolean,
+)
 
 internal data class Poster(
     val id: Long,
@@ -78,6 +92,10 @@ internal class MapStore(private val file: File) : AutoCloseable {
                 "CREATE TABLE maps (map_id INTEGER PRIMARY KEY, image_id INTEGER REFERENCES images(id), idx INTEGER, png BLOB NOT NULL, UNIQUE(image_id, idx))"
             )
             s.execute("CREATE INDEX images_owner ON images(owner, hidden)")
+            s.execute(
+                "CREATE TABLE frames (frame_uuid TEXT PRIMARY KEY, map_id INTEGER NOT NULL, world TEXT NOT NULL, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, facing TEXT NOT NULL, owner TEXT, placed_at INTEGER NOT NULL, legacy INTEGER NOT NULL DEFAULT 0)"
+            )
+            s.execute("CREATE INDEX frames_map ON frames(map_id)")
             s.execute("PRAGMA user_version = 1")
           }
         }
@@ -89,6 +107,10 @@ internal class MapStore(private val file: File) : AutoCloseable {
                 )
                 .close()
             s.executeQuery("SELECT map_id, image_id, idx, png FROM maps LIMIT 1").close()
+            s.executeQuery(
+                    "SELECT frame_uuid,map_id,world,x,y,z,facing,owner,placed_at,legacy FROM frames LIMIT 1"
+                )
+                .close()
           }
       else -> error("unsupported image database version $version")
     }
@@ -108,11 +130,96 @@ internal class MapStore(private val file: File) : AutoCloseable {
     }
   }
 
+  fun mapIds(): BitSet =
+      BitSet().also { ids ->
+        db.createStatement().use { s ->
+          s.executeQuery("SELECT map_id FROM maps").use { r ->
+            while (r.next()) ids.set(r.getInt(1))
+          }
+        }
+      }
+
+  fun saveFrames(frames: List<FrameRecord>) = transaction {
+    db.prepareStatement(
+            "INSERT OR IGNORE INTO frames(frame_uuid,map_id,world,x,y,z,facing,owner,placed_at,legacy) VALUES(?,?,?,?,?,?,?,?,?,?)"
+        )
+        .use { s ->
+          frames.forEach { f ->
+            s.setString(1, f.uuid.toString())
+            s.setInt(2, f.mapId)
+            s.setString(3, f.world.toString())
+            s.setInt(4, f.x)
+            s.setInt(5, f.y)
+            s.setInt(6, f.z)
+            s.setString(7, f.facing)
+            s.setString(8, f.owner?.toString())
+            s.setLong(9, f.placedAt)
+            s.setInt(10, if (f.legacy) 1 else 0)
+            s.addBatch()
+          }
+          s.executeBatch()
+        }
+  }
+
+  fun frame(uuid: UUID): FrameRecord? =
+      db.prepareStatement(
+              "SELECT frame_uuid,map_id,world,x,y,z,facing,owner,placed_at,legacy FROM frames WHERE frame_uuid=?"
+          )
+          .use { s ->
+            s.setString(1, uuid.toString())
+            s.executeQuery().use { r -> if (r.next()) readFrame(r) else null }
+          }
+
+  fun framesForMaps(ids: List<Int>): List<FrameRecord> {
+    if (ids.isEmpty()) return emptyList()
+    val placeholders = ids.joinToString(",") { "?" }
+    return db.prepareStatement(
+            "SELECT frame_uuid,map_id,world,x,y,z,facing,owner,placed_at,legacy FROM frames WHERE map_id IN ($placeholders) ORDER BY placed_at"
+        )
+        .use { s ->
+          ids.forEachIndexed { i, id -> s.setInt(i + 1, id) }
+          s.executeQuery().use { r -> buildList { while (r.next()) add(readFrame(r)) } }
+        }
+  }
+
+  private fun readFrame(r: java.sql.ResultSet) =
+      FrameRecord(
+          UUID.fromString(r.getString(1)),
+          r.getInt(2),
+          UUID.fromString(r.getString(3)),
+          r.getInt(4),
+          r.getInt(5),
+          r.getInt(6),
+          r.getString(7),
+          r.getString(8)?.let(UUID::fromString),
+          r.getLong(9),
+          r.getInt(10) != 0,
+      )
+
+  fun deleteFrames(ids: List<UUID>) = transaction {
+    db.prepareStatement("DELETE FROM frames WHERE frame_uuid=?").use { s ->
+      ids.forEach {
+        s.setString(1, it.toString())
+        s.addBatch()
+      }
+      s.executeBatch()
+    }
+  }
+
   fun png(mapId: Int): ByteArray? =
       db.prepareStatement("SELECT png FROM maps WHERE map_id=?").use { s ->
         s.setInt(1, mapId)
         s.executeQuery().use { r -> if (r.next()) r.getBytes(1) else null }
       }
+
+  fun ownerByMap(mapId: Int): UUID? =
+      db.prepareStatement(
+              "SELECT i.owner FROM maps m JOIN images i ON i.id=m.image_id WHERE m.map_id=?"
+          )
+          .use { s ->
+            s.setInt(1, mapId)
+            s.executeQuery().use { r -> if (r.next()) UUID.fromString(r.getString(1)) else null }
+          }
 
   fun create(owner: UUID, ids: List<Int>, pngs: List<ByteArray>): Long {
     require(ids.isNotEmpty() && ids.size == pngs.size)
