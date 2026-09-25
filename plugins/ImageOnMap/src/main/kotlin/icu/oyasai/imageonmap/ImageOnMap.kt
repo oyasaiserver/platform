@@ -331,10 +331,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   fun protectInteract(e: PlayerInteractEntityEvent) {
     val frame = e.rightClicked as? ItemFrame ?: return
     if (managed(frame)) e.isCancelled = true
-    if (
-        e.hand == EquipmentSlot.HAND &&
-            mapId(e.player.inventory.itemInMainHand)?.let(mapIds::get) == true
-    ) {
+    if (mapId(e.player.inventory.getItem(e.hand))?.let(mapIds::get) == true) {
       e.isCancelled = true
       message(e.player, "壁を直接右クリックしてください")
     }
@@ -344,7 +341,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   fun protectInteractAt(e: PlayerInteractAtEntityEvent) {
     val frame = e.rightClicked as? ItemFrame ?: return
     if (managed(frame)) e.isCancelled = true
-    if (mapId(e.player.inventory.itemInMainHand)?.let(mapIds::get) == true) e.isCancelled = true
+    if (mapId(e.player.inventory.getItem(e.hand))?.let(mapIds::get) == true) e.isCancelled = true
   }
 
   @EventHandler fun join(e: PlayerJoinEvent) = inspectInventory(e.player)
@@ -892,6 +889,8 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val player = e.player
     val id = mapId(player.inventory.itemInMainHand) ?: return
     if (!mapIds[id]) return
+    // チェストやドアはスニークしていなければ普通に開けさせる（vanilla と同じ）
+    if (e.clickedBlock?.type?.isInteractable == true && !player.isSneaking) return
     e.isCancelled = true
     if (!player.hasPermission("imageonmap.placesplattermap")) {
       message(player, "権限がありません")
