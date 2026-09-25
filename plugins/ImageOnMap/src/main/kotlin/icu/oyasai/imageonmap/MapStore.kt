@@ -50,15 +50,13 @@ internal class MapStore(private val file: File) : AutoCloseable {
       0 -> {
         val existing =
             db.createStatement().use { s ->
-              s.executeQuery(
-                      "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
-                  )
+              s.executeQuery("SELECT COUNT(*) FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'")
                   .use { r ->
                     r.next()
                     r.getInt(1)
                   }
             }
-        check(existing == 0) { "unversioned database contains tables" }
+        check(existing == 0) { "unversioned database is not empty" }
         transaction {
           db.createStatement().use { s ->
             s.execute(

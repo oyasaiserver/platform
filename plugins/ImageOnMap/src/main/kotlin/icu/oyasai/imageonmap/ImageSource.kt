@@ -11,8 +11,10 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import javax.imageio.ImageIO
 import javax.imageio.spi.IIORegistry
 import kotlin.math.ceil
@@ -73,7 +75,7 @@ internal object ImageSource {
     return b.size == 16 && (b[0].toInt() and 0xfe) == 0xfc
   }
 
-  private fun validate(uri: URI) {
+  private fun validateUri(uri: URI) {
     require(
         uri.scheme?.lowercase() in setOf("http", "https") &&
             uri.host != null &&
@@ -83,13 +85,18 @@ internal object ImageSource {
     }
     val default = if (uri.scheme.equals("https", true)) 443 else 80
     require(uri.port == -1 || uri.port == default) { "標準以外のポートは使えません" }
-    // ponytail: JDK の名前解決キャッシュ内では検査と接続が同じ IP になる前提。失効境界の差は許容し、接続先 IP の固定が必要なら OkHttp の Dns フックを使う。
+  }
+
+  private fun validate(uri: URI) {
+    validateUri(uri)
+    // ponytail: JDK の名前解決キャッシュ（既定30秒）で検査と接続は同じ IP とみなす。失効境界の差は許容し、画像として読めない応答は捨てる。接続 IP を固定するなら
+    // OkHttp の Dns フック。
     require(InetAddress.getAllByName(uri.host).all { !forbidden(it) }) { "接続できないアドレスです" }
   }
 
   private fun candidates(url: String): List<URI> {
     val uri = URI(url)
-    validate(uri)
+    validateUri(uri)
     if (uri.host.equals("imgur.com", true)) {
       if (uri.path.startsWith("/gallery/")) error("直接の画像リンクを使ってください")
       val id = uri.path.removePrefix("/")
@@ -106,10 +113,20 @@ internal object ImageSource {
       try {
         var uri = start
         repeat(4) { hop ->
-          validate(uri)
+          val target = uri
           val left = deadline - System.nanoTime()
           require(left > 0) { "取得がタイムアウトしました" }
-          val request = HttpRequest.newBuilder(uri).timeout(Duration.ofNanos(left)).GET().build()
+          val resolved = CompletableFuture.runAsync { validate(target) }
+          try {
+            resolved.get(left, TimeUnit.NANOSECONDS)
+          } catch (e: TimeoutException) {
+            resolved.cancel(true)
+            throw IllegalArgumentException("取得がタイムアウトしました")
+          }
+          val remaining = deadline - System.nanoTime()
+          require(remaining > 0) { "取得がタイムアウトしました" }
+          val request =
+              HttpRequest.newBuilder(target).timeout(Duration.ofNanos(remaining)).GET().build()
           val response = client.send(request, HttpResponse.BodyHandlers.ofInputStream())
           response.body().use { body ->
             val timeout =
@@ -139,7 +156,13 @@ internal object ImageSource {
                   out.write(buf, 0, n)
                 }
                 require(System.nanoTime() < deadline) { "取得がタイムアウトしました" }
-                return decode(out.toByteArray())
+                val decoded = CompletableFuture.supplyAsync { decode(out.toByteArray()) }
+                try {
+                  return decoded.get(deadline - System.nanoTime(), TimeUnit.NANOSECONDS)
+                } catch (e: TimeoutException) {
+                  decoded.cancel(true)
+                  throw IllegalArgumentException("取得がタイムアウトしました")
+                }
               }
             } finally {
               timeout.cancel(false)
@@ -204,8 +227,8 @@ internal object ImageSource {
     val (cols, rows) = dimensions(source.width, source.height, resize, bypass)
     val maxWidth = cols * 128
     val maxHeight = rows * 128
-    val scale =
-        min(1.0, min(maxWidth.toDouble() / source.width, maxHeight.toDouble() / source.height))
+    val fit = min(maxWidth.toDouble() / source.width, maxHeight.toDouble() / source.height)
+    val scale = if (resize == null) min(1.0, fit) else fit
     val width = (source.width * scale).toInt().coerceAtLeast(1)
     val height = (source.height * scale).toInt().coerceAtLeast(1)
     val canvas = BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_ARGB)

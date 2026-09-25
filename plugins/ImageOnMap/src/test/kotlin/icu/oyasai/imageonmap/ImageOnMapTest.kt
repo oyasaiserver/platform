@@ -115,6 +115,12 @@ class ImageOnMapTest {
         ImageSource.tiles(BufferedImage(500, 100, BufferedImage.TYPE_INT_ARGB), 3 to 2, false)
     assertEquals(6, tiles.pngs.size)
     assertEquals(128, ImageIO.read(tiles.pngs[0].inputStream()).width)
+    val small = BufferedImage(2, 1, BufferedImage.TYPE_INT_ARGB)
+    small.setRGB(0, 0, 0xffff0000.toInt())
+    small.setRGB(1, 0, 0xffff0000.toInt())
+    val resized = ImageIO.read(ImageSource.tiles(small, 1 to 1, false).pngs[0].inputStream())
+    assertEquals(0, resized.getRGB(64, 0) ushr 24)
+    assertEquals(255, resized.getRGB(64, 64) ushr 24)
     assertFails { ImageSource.dimensions(100, 100, 11 to 10, false) }
   }
 

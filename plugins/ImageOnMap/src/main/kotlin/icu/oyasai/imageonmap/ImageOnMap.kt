@@ -27,6 +27,7 @@ import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.MapInitializeEvent
 import org.bukkit.event.world.ChunkLoadEvent
@@ -148,6 +149,11 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   @EventHandler fun join(e: PlayerJoinEvent) = inspectInventory(e.player)
 
   @EventHandler
+  fun quit(e: PlayerQuitEvent) {
+    gui.remove(e.player.uniqueId)
+  }
+
+  @EventHandler
   fun held(e: PlayerItemHeldEvent) {
     main { attachItem(e.player.inventory.getItem(e.newSlot)) }
   }
@@ -223,6 +229,13 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       player.world.dropItemNaturally(player.location, it)
     }
   }
+
+  private fun icon(material: Material, name: String): ItemStack =
+      ItemStack(material).also {
+        val meta = it.itemMeta
+        meta.displayName(Component.text(name))
+        it.itemMeta = meta
+      }
 
   private fun givePoster(player: Player, id: Long) {
     database { store.poster(id) }
@@ -313,13 +326,17 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   ): List<String> = emptyList()
 
   private fun create(player: Player, url: String, resize: Pair<Int, Int>?) {
+    val bypass = player.hasPermission("imageonmap.bypasssize")
+    if (resize != null && !bypass && resize.first.toLong() * resize.second > 100) {
+      message(player, "100 枚を超えています")
+      return
+    }
     if (player.uniqueId in active || !permits.tryAcquire()) {
       message(player, "混雑しています")
       return
     }
     active.add(player.uniqueId)
     val owner = player.uniqueId
-    val bypass = player.hasPermission("imageonmap.bypasssize")
     player.sendActionBar(Component.text("画像を読み込み中…"))
     CompletableFuture.supplyAsync(
             {
@@ -408,8 +425,8 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               icon.itemMeta = meta
               inv.setItem(i, icon)
             }
-            if (page > 0) inv.setItem(45, ItemStack(Material.ARROW))
-            if (entries.size == 45) inv.setItem(53, ItemStack(Material.ARROW))
+            if (page > 0) inv.setItem(45, icon(Material.ARROW, "前のページ"))
+            if (entries.size == 45) inv.setItem(53, icon(Material.ARROW, "次のページ"))
             gui[player.uniqueId] = Gui(inv, page, entries)
             player.openInventory(inv)
           }
@@ -418,8 +435,8 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   private fun openConfirm(player: Player, state: Gui, id: Long) {
     val inv = server.createInventory(null, 54, "画像を一覧から隠す")
-    inv.setItem(22, ItemStack(Material.LIME_WOOL))
-    inv.setItem(31, ItemStack(Material.RED_WOOL))
+    inv.setItem(22, icon(Material.LIME_WOOL, "非表示にする"))
+    inv.setItem(31, icon(Material.RED_WOOL, "戻る"))
     gui[player.uniqueId] = Gui(inv, state.page, state.entries, id)
     player.openInventory(inv)
   }
@@ -438,8 +455,8 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   fun place(e: PlayerInteractEntityEvent) {
     val frame = e.rightClicked as? ItemFrame ?: return
     val player = e.player
-    val held = player.inventory.itemInMainHand
-    val id = marked(held) ?: return
+    val id = marked(player.inventory.itemInMainHand) ?: return
+    val up = player.facing
     e.isCancelled = true
     if (!player.hasPermission("imageonmap.placesplattermap")) {
       message(player, "権限がありません")
@@ -450,16 +467,13 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         .whenComplete { found, failure ->
           main {
             val poster = found?.first
-            if (
-                (player.inventory.itemInMainHand.itemMeta as? MapMeta)?.mapId != id ||
-                    frame.item.type != Material.AIR
-            )
+            val held = player.inventory.itemInMainHand
+            if (!player.isOnline || marked(held) != id || frame.item.type != Material.AIR)
                 return@main
             if (failure != null || poster == null || found.second != 0 || poster.ids.size == 1) {
               message(player, "ポスターの索引を読めません")
               return@main
             }
-            val up = player.facing
             if (!PosterFrames.place(frame, up, poster))
                 message(player, "額縁が ${poster.columns}×${poster.rows} 必要です")
             else {
