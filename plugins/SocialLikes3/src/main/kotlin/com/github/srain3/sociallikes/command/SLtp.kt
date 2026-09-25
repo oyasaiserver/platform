@@ -34,9 +34,13 @@ object SLtp : CommandExecutor, TabCompleter {
       alias: String,
       args: Array<out String>,
   ): MutableList<String> =
-      when (args.size) {
-        1 -> completions(args[0], listOf("next", "back", "unext", "uback", "new"), "<ID>")
-        2 -> if (args[0] == "new") completions(args[1], emptyList(), "[1-10]") else mutableListOf()
+      when {
+        command.name == "sla" ->
+            if (args.size == 1) completions(args[0], emptyList(), "[1-10]") else mutableListOf()
+        args.size == 1 ->
+            completions(args[0], listOf("next", "back", "unext", "uback", "new"), "<ID>")
+        args.size == 2 ->
+            if (args[0] == "new") completions(args[1], emptyList(), "[1-10]") else mutableListOf()
         else -> mutableListOf()
       }
 
@@ -50,8 +54,8 @@ object SLtp : CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    if (command.name != "sltp") return false
-    if (args.isEmpty()) return false
+    if (command.name != "sltp" && command.name != "sla") return false
+    if (command.name == "sltp" && args.isEmpty()) return false
     if (sender !is Player) return false
 
     if (!Data.loading) {
@@ -60,6 +64,11 @@ object SLtp : CommandExecutor, TabCompleter {
       return true
     }
 
+    // /sla（/alw）は統合版で打ちやすい /sltp new の短縮形
+    if (command.name == "sla") {
+      teleportRecent(sender, args.toList())
+      return true
+    }
     if (args[0] == "new") {
       teleportRecent(sender, args.drop(1))
       return true

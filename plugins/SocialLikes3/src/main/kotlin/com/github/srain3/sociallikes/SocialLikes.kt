@@ -69,6 +69,8 @@ class SocialLikes : JavaPlugin() {
 
     server.getPluginCommand("sltp")?.setExecutor(SLtp)
     server.getPluginCommand("sltp")?.tabCompleter = SLtp
+    server.getPluginCommand("sla")?.setExecutor(SLtp)
+    server.getPluginCommand("sla")?.tabCompleter = SLtp
     server.getPluginCommand("slbuild")?.setExecutor(SLBuilds)
     server.getPluginCommand("sluser")?.setExecutor(SLUser)
     server.getPluginCommand("sluser")?.tabCompleter = SLUser

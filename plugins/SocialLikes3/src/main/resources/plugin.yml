@@ -13,6 +13,9 @@ softdepend:
 commands:
   sltp:
     description: "SL看板へ飛ぶコマンド"
+  sla:
+    aliases: [alw]
+    description: "/sltp new の短縮形（統合版向け）"
   slbuild:
     description: "全ての建築一覧GUI"
   sluser:
