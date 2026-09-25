@@ -3657,14 +3657,14 @@
       "hash": "sha256-zauSmjuVIR9D0gkMXi0N/oRllg43i8MrNYQdqzJEM6Y="
     }
   },
-  "org.junit:junit-bom:6.1.3": {
-    "junit-bom-6.1.3.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/6.1.3/junit-bom-6.1.3.module",
-      "hash": "sha256-n11X2tz6B/ezjvz7IrBS7OGIkiod92tamORKHfencBs="
+  "org.junit:junit-bom:6.0.3": {
+    "junit-bom-6.0.3.module": {
+      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/6.0.3/junit-bom-6.0.3.module",
+      "hash": "sha256-KA48NIVfKhPeJBIZN+TPl+S565IG5g+JHk8KHPDnq6E="
     },
-    "junit-bom-6.1.3.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/6.1.3/junit-bom-6.1.3.pom",
-      "hash": "sha256-qQAAQ2EKPpDIUud5prGo63JKnzEs9ffd1XhisBDGXcg="
+    "junit-bom-6.0.3.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/6.0.3/junit-bom-6.0.3.pom",
+      "hash": "sha256-plW2pdwA0b68kfsrFcDH6K6snWvc+HlZVQU3DidTAoc="
     }
   },
   "org.junit:junit-bom:5.14.2": {
