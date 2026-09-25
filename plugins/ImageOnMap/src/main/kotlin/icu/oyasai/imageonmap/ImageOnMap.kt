@@ -1114,7 +1114,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   private fun rollbackFrame(frame: ItemFrame) {
     locker()?.db?.unlockFrame(frame.uniqueId)
-    frameRecords.remove(frame.uniqueId)
+    forget(frame.uniqueId)
     discard(frame)
   }
 
@@ -1137,7 +1137,8 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             val targets =
                 if (result == null) listOf(hit)
                 else PosterFrames.matches(hit, result.first, result.second, ::managed)
-            if (targets.isEmpty() || (result != null && targets.size != result.first.ids.size)) {
+            // 旧版のポスターには一部のタイルが欠けたものがある（本番で約180件）ので、見つかった分だけ外す
+            if (targets.isEmpty()) {
               message(player, "額縁の記録が見つかりません")
               return@main
             }
