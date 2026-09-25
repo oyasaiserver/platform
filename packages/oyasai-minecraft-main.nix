@@ -56,7 +56,6 @@ oyasaiPurpur rec {
     fastasyncworldedit
     floodgate
     gakubuchilocker
-    gsit
     headhuntplugin
     imageonmap
     luckperms

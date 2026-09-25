@@ -69,12 +69,6 @@
       "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity"
     }
   },
-  "gsit": {
-    "paper": {
-      "slug": "gsit",
-      "type": "modrinth"
-    }
-  },
   "luckperms": {
     "paper": {
       "slug": "luckperms",

@@ -2,6 +2,11 @@
 
 おやさい鯖の小物系便利Plugin
 
+## Sit
+
+`/sit`、`/lay`、`/bellyflop`、`/spin`、`/crawl` で座る・ポーズを切り替える。`/sit toggle` で右クリック座りを切り替える。
+`Sit/` フォルダがあるサーバーだけで有効。
+
 ## JoinCommands
 
 参加時に `plugins/OyasaiUtilities/JoinCommands/config.yml` の `server-join-commands` を記述順に判定し、指定した遅延後にコマンドを実行する。各定義は `command-list`（文字列リスト）、`permission`（任意）、`first-join-only`（既定 false）、`delay`（tick、既定 0）を指定できる。`[PLAYER]` 付きはプレイヤー、それ以外はコンソールとして実行し、`{player}` を参加者名に置換する。変更は再起動で反映され、設定ファイルが無ければ何もしない。

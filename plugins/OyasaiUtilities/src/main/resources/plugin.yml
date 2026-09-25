@@ -7,6 +7,21 @@ api-version: "1.21"
 version: "0.1.0"
 softdepend: [Vault, TokenManager, LuckPerms, floodgate]
 commands:
+  sit:
+    description: "座る・右クリック座りを切り替える"
+    aliases: [gsit]
+  lay:
+    description: "仰向けに寝そべる"
+    aliases: [glay, layback, glayback]
+  bellyflop:
+    description: "うつ伏せになる"
+    aliases: [gbellyflop]
+  spin:
+    description: "回転する"
+    aliases: [gspin]
+  crawl:
+    description: "這う"
+    aliases: [gcrawl]
   skin:
     description: "自分のスキンを変更する"
     usage: /skin <set <MCID>|reset>

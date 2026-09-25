@@ -16,6 +16,7 @@ import icu.oyasai.utilities.oresmelter.OreSmelterEvent
 import icu.oyasai.utilities.pita.Pita
 import icu.oyasai.utilities.redbull.RedBullCommand
 import icu.oyasai.utilities.redbull.RedBullFeature
+import icu.oyasai.utilities.sit.SitFeature
 import icu.oyasai.utilities.skin.SkinFeature
 import icu.oyasai.utilities.timerbar.TimerBarEvent
 import icu.oyasai.utilities.timerbar.TimerCmd
@@ -29,10 +30,13 @@ import org.bukkit.plugin.java.JavaPlugin
 class Main : JavaPlugin() {
   private lateinit var backpackFeature: BackpackFeature
   private lateinit var skinFeature: SkinFeature
+  private lateinit var sitFeature: SitFeature
 
   override fun onLoad() {}
 
   override fun onEnable() {
+    sitFeature = SitFeature(this)
+    sitFeature.enable()
     skinFeature = SkinFeature(this)
     skinFeature.enable()
     backpackFeature = BackpackFeature(this)
@@ -73,6 +77,7 @@ class Main : JavaPlugin() {
   }
 
   override fun onDisable() {
+    if (::sitFeature.isInitialized) sitFeature.disable()
     if (::skinFeature.isInitialized) skinFeature.disable()
     OreReappears.onDisable() // OreReappearsの無効化
     AdminBP.onDisable()

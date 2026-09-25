@@ -89,14 +89,6 @@
       "hash": "sha256-FwiMfqofE+4dLhJhoL5NCzpW/+RaVQTHdPbjFFSQdi0="
     }
   },
-  "gsit": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/gnY5Flgo/GSit-3.7.0.jar",
-        "hash": "sha256-FD04UJ9JxAshSIetPGgsjbf92BxhB4fQGG1l9RJW9NI="
-      }
-    }
-  },
   "luckperms": {
     "paper": {
       "26.2": {
