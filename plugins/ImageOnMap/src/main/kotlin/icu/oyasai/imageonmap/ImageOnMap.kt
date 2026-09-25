@@ -1,6 +1,11 @@
 package icu.oyasai.imageonmap
 
+import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
 import com.gakubuchilocker.GakubuchiLockerPlugin
+import com.sk89q.worldedit.bukkit.BukkitAdapter
+import com.sk89q.worldguard.WorldGuard
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.net.URI
@@ -15,14 +20,12 @@ import java.util.concurrent.Semaphore
 import javax.imageio.ImageIO
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
-import org.bukkit.damage.DamageSource
-import org.bukkit.damage.DamageType
-import org.bukkit.entity.GlowItemFrame
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -31,10 +34,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
-import org.bukkit.event.entity.EntityRemoveEvent
-import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.hanging.HangingBreakEvent
-import org.bukkit.event.hanging.HangingPlaceEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
@@ -46,7 +46,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.MapInitializeEvent
-import org.bukkit.event.world.EntitiesLoadEvent
+import org.bukkit.event.world.EntitiesUnloadEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -91,6 +91,13 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private val pendingMaps = mutableSetOf<Int>()
   private val mapIds = BitSet()
   private val removing = mutableSetOf<UUID>()
+  private val frameRecords = mutableMapOf<UUID, FrameRecord>()
+  private val suspected = mutableSetOf<UUID>()
+  private val unloaded = mutableSetOf<UUID>()
+  private var removalScheduled = false
+  private val frameQueue = ArrayDeque<UUID>()
+  private val queued = mutableSetOf<UUID>()
+  private var adoptionInFlight = false
   private val gui = mutableMapOf<UUID, Gui>()
   private lateinit var store: MapStore
   private lateinit var marker: NamespacedKey
@@ -116,16 +123,17 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     try {
       ImageSource.registerWebp()
       store = MapStore(dataFolder.resolve("image.db"))
-      mapIds.or(
+      val (ids, frames) =
           dbThread
               .submit(
                   java.util.concurrent.Callable {
                     store.open()
-                    store.mapIds()
+                    store.mapIds() to store.allFrames()
                   }
               )
               .get()
-      )
+      mapIds.or(ids)
+      frames.forEach { frameRecords[it.uuid] = it }
       ready = true
     } catch (e: Exception) {
       logger.severe("ImageOnMap disabled: ${e.cause?.message ?: e.message}")
@@ -134,9 +142,10 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     }
     server.pluginManager.registerEvents(this, this)
     getCommand("tomap")?.setExecutor(this)
+    server.scheduler.runTaskTimer(this, Runnable(::processFrameQueue), 1L, 1L)
     server.worlds.forEach { world ->
       world.loadedChunks.forEach { chunk ->
-        inspectFrames(chunk.entities.filterIsInstance<ItemFrame>())
+        chunk.entities.filterIsInstance<ItemFrame>().forEach(::considerFrame)
       }
     }
     server.onlinePlayers.forEach { inspectInventory(it) }
@@ -228,16 +237,14 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   @EventHandler fun mapInit(e: MapInitializeEvent) = attach(e.map)
 
-  @EventHandler
-  fun entitiesLoad(e: EntitiesLoadEvent) {
-    inspectFrames(e.entities.filterIsInstance<ItemFrame>())
-  }
-
   private fun mapId(item: ItemStack): Int? =
       (item.itemMeta as? MapMeta)?.let { if (it.hasMapId()) it.mapId else null }
 
   private fun managed(frame: ItemFrame): Boolean =
       frame.persistentDataContainer.get(managedKey, PersistentDataType.BYTE) == 1.toByte()
+
+  private fun legacy(frame: ItemFrame): Boolean =
+      frame.persistentDataContainer.get(legacyKey, PersistentDataType.BYTE) == 1.toByte()
 
   private fun mark(frame: ItemFrame, legacy: Boolean) {
     frame.persistentDataContainer.set(managedKey, PersistentDataType.BYTE, 1)
@@ -246,7 +253,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     frame.setItemDropChance(0f)
   }
 
-  private fun record(frame: ItemFrame, id: Int, owner: UUID?, legacy: Boolean) =
+  private fun record(frame: ItemFrame, id: Int, legacy: Boolean) =
       FrameRecord(
           frame.uniqueId,
           id,
@@ -255,18 +262,74 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
           frame.location.blockY,
           frame.location.blockZ,
           frame.facing.name,
-          owner,
           System.currentTimeMillis(),
           legacy,
       )
 
+  private fun remember(frame: ItemFrame, id: Int, legacy: Boolean) {
+    val old = frameRecords[frame.uniqueId]
+    val current = record(frame, id, legacy)
+    if (
+        old?.let {
+          it.mapId == current.mapId &&
+              it.world == current.world &&
+              it.x == current.x &&
+              it.y == current.y &&
+              it.z == current.z &&
+              it.facing == current.facing &&
+              it.legacy == current.legacy
+        } == true
+    )
+        return
+    val updated = current.copy(placedAt = old?.placedAt ?: current.placedAt)
+    frameRecords[frame.uniqueId] = updated
+    database { store.saveFrames(listOf(updated)) }
+        .whenComplete { _, failure ->
+          if (failure != null) logger.warning("Frame save: ${error(failure)}")
+        }
+  }
+
+  private fun forget(uuid: UUID) {
+    frameRecords.remove(uuid)
+    database { store.deleteFrames(listOf(uuid)) }
+        .whenComplete { _, failure ->
+          if (failure != null) logger.warning("Frame deletion: ${error(failure)}")
+        }
+  }
+
+  private fun locker(): GakubuchiLockerPlugin? =
+      (server.pluginManager.getPlugin("Gakubuchi-Locker") as? GakubuchiLockerPlugin)?.takeIf {
+        it.isEnabled
+      }
+
+  private fun lockOwner(frame: ItemFrame): UUID? {
+    val locker = locker() ?: return null
+    return locker.db.getOwner(frame.uniqueId)
+        ?: frame.persistentDataContainer.get(locker.ownerKey, PersistentDataType.STRING)?.let {
+          runCatching { UUID.fromString(it) }.getOrNull()
+        }
+  }
+
+  private fun canBuild(player: Player, at: Location): Boolean {
+    if (!server.pluginManager.isPluginEnabled("WorldGuard")) return true
+    val local = WorldGuardPlugin.inst().wrapPlayer(player)
+    val world = BukkitAdapter.adapt(at.world)
+    val platform = WorldGuard.getInstance().platform
+    return platform.sessionManager.hasBypass(local, world) ||
+        platform.regionContainer.createQuery().testBuild(BukkitAdapter.adapt(at), local)
+  }
+
   private fun clearDeleted(frame: ItemFrame) {
-    if (frame.persistentDataContainer.get(legacyKey, PersistentDataType.BYTE) == 1.toByte()) {
+    if (legacy(frame)) {
       frame.setItem(ItemStack(Material.AIR), false)
       frame.persistentDataContainer.remove(managedKey)
       frame.persistentDataContainer.remove(legacyKey)
       frame.isFixed = false
-    } else discard(frame)
+      frame.setItemDropChance(1f)
+    } else {
+      locker()?.db?.unlockFrame(frame.uniqueId)
+      discard(frame)
+    }
   }
 
   private fun discard(frame: ItemFrame) {
@@ -275,44 +338,103 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     removing.remove(frame.uniqueId)
   }
 
-  private fun inspectFrames(frames: List<ItemFrame>) {
-    val adopted = mutableListOf<Pair<ItemFrame, Int>>()
-    frames.forEach { frame ->
-      val id = mapId(frame.item)
-      if (managed(frame) && (id == null || !mapIds[id])) {
-        clearDeleted(frame)
-        database { store.deleteFrames(listOf(frame.uniqueId)) }
-      } else if (id != null && mapIds[id]) {
+  private fun considerFrame(frame: ItemFrame) {
+    val id = mapId(frame.item)
+    if (managed(frame)) {
+      if (id == null || !mapIds[id]) enqueue(frame)
+      else {
         attachItem(frame.item)
-        if (!managed(frame)) {
-          mark(frame, true)
-          adopted.add(frame to id)
-        }
+        remember(frame, id, legacy(frame))
       }
+    } else if (id != null && mapIds[id]) {
+      attachItem(frame.item)
+      enqueue(frame)
     }
-    if (adopted.isEmpty()) return
-    val locker = server.pluginManager.getPlugin("Gakubuchi-Locker") as? GakubuchiLockerPlugin
-    val locks =
-        adopted.associate { (frame, _) -> frame.uniqueId to locker?.db?.getOwner(frame.uniqueId) }
-    val snapshots = adopted.map { (frame, id) -> record(frame, id, locks[frame.uniqueId], true) }
-    database {
-          val records =
-              snapshots.map { snapshot ->
-                snapshot.copy(owner = snapshot.owner ?: store.ownerByMap(snapshot.mapId))
-              }
-          store.saveFrames(records)
-        }
-        .whenComplete { _, failure ->
-          if (failure != null) logger.warning("Frame adoption: ${error(failure)}")
-        }
+  }
+
+  private fun enqueue(frame: ItemFrame) {
+    if (queued.add(frame.uniqueId)) frameQueue.addLast(frame.uniqueId)
   }
 
   @EventHandler
-  fun entityRemoved(e: EntityRemoveEvent) {
+  fun entityAdded(e: EntityAddToWorldEvent) {
     val frame = e.entity as? ItemFrame ?: return
-    if (!managed(frame) || e.cause == EntityRemoveEvent.Cause.UNLOAD || frame.uniqueId in removing)
-        return
-    database { store.deleteFrames(listOf(frame.uniqueId)) }
+    considerFrame(frame)
+  }
+
+  @EventHandler
+  fun entityRemoved(e: EntityRemoveFromWorldEvent) {
+    val frame = e.entity as? ItemFrame ?: return
+    if (!managed(frame) || frame.uniqueId in removing) return
+    suspected.add(frame.uniqueId)
+    scheduleRemovalCheck()
+  }
+
+  private fun scheduleRemovalCheck() {
+    if (!removalScheduled) {
+      removalScheduled = true
+      server.scheduler.runTaskLater(this, Runnable(::resolveRemovals), 1L)
+    }
+  }
+
+  @EventHandler
+  fun entitiesUnload(e: EntitiesUnloadEvent) {
+    e.entities.filterIsInstance<ItemFrame>().forEach { unloaded.add(it.uniqueId) }
+    if (unloaded.isNotEmpty()) scheduleRemovalCheck()
+  }
+
+  private fun resolveRemovals() {
+    removedFrames(suspected, unloaded) { server.getEntity(it) != null }
+        .forEach { uuid ->
+          forget(uuid)
+          locker()?.db?.unlockFrame(uuid)
+        }
+    suspected.clear()
+    unloaded.clear()
+    removalScheduled = false
+  }
+
+  private fun processFrameQueue() {
+    if (adoptionInFlight) return
+    val frames = buildList {
+      repeat(minOf(50, frameQueue.size)) {
+        val uuid = frameQueue.removeFirst()
+        queued.remove(uuid)
+        val frame = server.getEntity(uuid) as? ItemFrame
+        if (frame?.isValid == true) add(frame)
+      }
+    }
+    if (frames.isEmpty()) return
+    adoptionInFlight = true
+    val ids = frames.mapNotNull { mapId(it.item) }.distinct()
+    database { ids.associateWith(store::ownerByMap) }
+        .whenComplete { owners, failure ->
+          main {
+            adoptionInFlight = false
+            if (failure != null) {
+              logger.warning("Frame adoption: ${error(failure)}")
+              return@main
+            }
+            frames.forEach { frame ->
+              if (!frame.isValid) return@forEach
+              val id = mapId(frame.item)
+              if (managed(frame)) {
+                if (id == null || !mapIds[id]) {
+                  forget(frame.uniqueId)
+                  clearDeleted(frame)
+                } else remember(frame, id, legacy(frame))
+              } else if (id != null && mapIds[id]) {
+                if (id !in owners) {
+                  enqueue(frame)
+                  return@forEach
+                }
+                mark(frame, true)
+                remember(frame, id, true)
+                if (lockOwner(frame) == null) owners[id]?.let { locker()?.db?.lockFrame(frame, it) }
+              }
+            }
+          }
+        }
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
@@ -797,26 +919,35 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     player.closeInventory()
     database {
           val deleted = store.delete(id)
-          if (deleted != null)
-              store.deleteFrames(store.framesForMaps(deleted.mapIds).map { it.uuid })
+          val frameIds =
+              deleted?.let { store.framesForMaps(it.mapIds).map(FrameRecord::uuid) } ?: emptyList()
+          if (frameIds.isNotEmpty()) store.deleteFrames(frameIds)
           deleted
         }
-        .whenComplete { deleted, failure ->
+        .whenComplete { result, failure ->
           main {
             if (failure != null) {
               message(player, "削除できません: ${error(failure)}")
               return@main
             }
+            val deleted = result
             if (deleted == null) {
               message(player, "画像は既にありません")
               return@main
             }
             deleted.mapIds.forEach(mapIds::clear)
             val deletedIds = deleted.mapIds.toSet()
+            frameRecords.entries.removeIf { it.value.mapId in deletedIds }
+            database {
+              store.deleteFrames(store.framesForMaps(deleted.mapIds).map(FrameRecord::uuid))
+            }
             server.worlds.forEach { world ->
               world.loadedChunks.forEach { chunk ->
                 chunk.entities.filterIsInstance<ItemFrame>().forEach { frame ->
-                  if (managed(frame) && mapId(frame.item) in deletedIds) clearDeleted(frame)
+                  if (managed(frame) && mapId(frame.item) in deletedIds) {
+                    clearDeleted(frame)
+                    frameRecords.remove(frame.uniqueId)
+                  }
                 }
               }
             }
@@ -843,6 +974,8 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
           }
         }
     val frameUuid = if (frameMap?.hasMapId() == true) frame.uniqueId else null
+    if (frame != null && managed(frame) && frameMap?.hasMapId() == true)
+        remember(frame, frameMap.mapId, legacy(frame))
     database {
           Triple(
               store.detailsByMap(id),
@@ -859,7 +992,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             val found = result.first
             val placement =
                 result.third?.let { row ->
-                  " / 貼った人: ${row.owner?.let(::ownerName) ?: "op のみ"} / 貼った日時: ${DATE.format(Instant.ofEpochMilli(row.placedAt))} / ${if (row.legacy) "置き換え" else "新規設置"}"
+                  " / 持ち主: ${frame?.let(::lockOwner)?.let(::ownerName) ?: "ロックなし"} / 貼った日時: ${DATE.format(Instant.ofEpochMilli(row.placedAt))} / ${if (row.legacy) "置き換え" else "新規設置"}"
                 } ?: ""
             if (found == null) {
               message(
@@ -930,6 +1063,10 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               message(player, "ここには貼れません（$reason）")
               return@main
             }
+            if (cells.any { !canBuild(player, it) }) {
+              message(player, "ここは建築できません")
+              return@main
+            }
             val spawned = mutableListOf<ItemFrame>()
             val records = mutableListOf<FrameRecord>()
             for ((i, cell) in cells.withIndex()) {
@@ -952,61 +1089,33 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                       f.rotation = PosterFrames.rotation(face, up, i == 0)
                     }
                   } catch (failure: Exception) {
-                    spawned.forEach { rollbackFrame(it, player) }
+                    spawned.forEach(::rollbackFrame)
                     message(player, "ここには貼れません（額縁を出せませんでした）")
                     logger.warning("Frame spawn: ${error(failure)}")
                     return@main
                   }
-              val event =
-                  HangingPlaceEvent(
-                      frame,
-                      player,
-                      cell.block.getRelative(face.oppositeFace),
-                      face,
-                      EquipmentSlot.HAND,
-                      player.inventory.itemInMainHand,
-                  )
-              server.pluginManager.callEvent(event)
-              if (event.isCancelled) {
-                rollbackFrame(frame, player)
-                spawned.forEach { rollbackFrame(it, player) }
-                message(player, "ここには貼れません（設置が許可されませんでした）")
-                return@main
-              }
+              locker()?.db?.lockFrame(frame, player.uniqueId)
               spawned.add(frame)
-              records.add(record(frame, map, player.uniqueId, false))
+              records.add(record(frame, map, false))
             }
+            records.forEach { frameRecords[it.uuid] = it }
             database { store.saveFrames(records) }
                 .whenComplete { _, saveFailure ->
-                  if (saveFailure != null)
-                      main {
-                        spawned.forEach { rollbackFrame(it, player) }
-                        message(player, "額縁を記録できません: ${error(saveFailure)}")
-                      }
+                  main {
+                    if (saveFailure != null) {
+                      spawned.forEach(::rollbackFrame)
+                      message(player, "額縁を記録できません: ${error(saveFailure)}")
+                    }
+                  }
                 }
           }
         }
   }
 
-  private fun breakEvent(frame: ItemFrame, player: Player): HangingBreakByEntityEvent =
-      HangingBreakByEntityEvent(
-          frame,
-          player,
-          DamageSource.builder(DamageType.PLAYER_ATTACK)
-              .withCausingEntity(player)
-              .withDirectEntity(player)
-              .build(),
-          HangingBreakEvent.RemoveCause.ENTITY,
-      )
-
-  private fun rollbackFrame(frame: ItemFrame, player: Player) {
-    removing.add(frame.uniqueId)
-    server.pluginManager.callEvent(breakEvent(frame, player))
-    (server.pluginManager.getPlugin("Gakubuchi-Locker") as? GakubuchiLockerPlugin)
-        ?.db
-        ?.unlockFrame(frame)
+  private fun rollbackFrame(frame: ItemFrame) {
+    locker()?.db?.unlockFrame(frame.uniqueId)
+    frameRecords.remove(frame.uniqueId)
     discard(frame)
-    removing.remove(frame.uniqueId)
   }
 
   private fun removeFrames(player: Player) {
@@ -1016,65 +1125,44 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       return
     }
     val id = mapId(hit.item) ?: return
-    database {
-          val found = store.mapIndex(id)
-          val poster = found?.first
-          val ids = poster?.ids ?: listOf(id)
-          Triple(found, store.framesForMaps(ids), poster)
-        }
+    remember(hit, id, legacy(hit))
+    database { store.mapIndex(id) }
         .whenComplete { result, failure ->
           main {
-            if (failure != null || result == null) {
-              message(player, "額縁の記録を読めません: ${error(failure ?: IllegalStateException())}")
+            if (failure != null) {
+              message(player, "額縁の記録を読めません: ${error(failure)}")
               return@main
             }
             if (!hit.isValid || !managed(hit) || mapId(hit.item) != id) return@main
-            val found = result.first
             val targets =
-                if (found == null) listOf(hit)
-                else PosterFrames.matches(hit, found.first, found.second, ::managed)
-            val byId = result.second.associateBy { it.uuid }
-            if (targets.isEmpty() || targets.any { it.uniqueId !in byId }) {
+                if (result == null) listOf(hit)
+                else PosterFrames.matches(hit, result.first, result.second, ::managed)
+            if (targets.isEmpty() || (result != null && targets.size != result.first.ids.size)) {
               message(player, "額縁の記録が見つかりません")
               return@main
             }
-            if (targets.any { byId[it.uniqueId]?.owner != player.uniqueId && !player.isOp }) {
+            targets.forEach { frame ->
+              mapId(frame.item)?.let { remember(frame, it, legacy(frame)) }
+            }
+            if (
+                !player.isOp &&
+                    targets.any { frame ->
+                      val owner = lockOwner(frame)
+                      if (owner != null) owner != player.uniqueId
+                      else !canBuild(player, frame.location)
+                    }
+            ) {
               message(player, "外す権限がありません")
               return@main
             }
-            val locker =
-                server.pluginManager.getPlugin("Gakubuchi-Locker") as? GakubuchiLockerPlugin
-            val passed = mutableListOf<Pair<ItemFrame, UUID?>>()
             for (frame in targets) {
-              val lockOwner = locker?.db?.getOwner(frame.uniqueId)
-              removing.add(frame.uniqueId)
-              val event = breakEvent(frame, player)
-              server.pluginManager.callEvent(event)
-              removing.remove(frame.uniqueId)
-              if (event.isCancelled) {
-                lockOwner?.let { locker.db.lockFrame(frame, it) }
-                passed.forEach { (prior, owner) -> owner?.let { locker?.db?.lockFrame(prior, it) } }
-                message(player, "額縁を外せません（保護されています）")
-                return@main
+              if (frameRecords[frame.uniqueId]?.legacy == true) clearDeleted(frame)
+              else {
+                locker()?.db?.unlockFrame(frame.uniqueId)
+                discard(frame)
               }
-              passed.add(frame to lockOwner)
+              forget(frame.uniqueId)
             }
-            targets.forEach { frame ->
-              if (byId[frame.uniqueId]?.legacy == true)
-                  deliver(
-                      player,
-                      ItemStack(
-                          if (frame is GlowItemFrame) Material.GLOW_ITEM_FRAME
-                          else Material.ITEM_FRAME
-                      ),
-                  )
-              discard(frame)
-            }
-            database { store.deleteFrames(targets.map { it.uniqueId }) }
-                .whenComplete { _, deleteFailure ->
-                  if (deleteFailure != null)
-                      logger.warning("Frame deletion: ${error(deleteFailure)}")
-                }
             message(player, "額縁を ${targets.size} 枚外しました")
           }
         }

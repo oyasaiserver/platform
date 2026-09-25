@@ -2,7 +2,7 @@ name: ImageOnMap
 main: icu.oyasai.imageonmap.ImageOnMap
 version: ${version}
 api-version: "1.21"
-softdepend: [Gakubuchi-Locker]
+softdepend: [Gakubuchi-Locker, WorldGuard]
 commands:
   tomap:
     usage: /tomap

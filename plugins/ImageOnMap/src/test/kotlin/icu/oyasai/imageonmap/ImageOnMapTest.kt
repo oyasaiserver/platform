@@ -17,6 +17,17 @@ import kotlin.test.assertTrue
 import org.bukkit.block.BlockFace
 
 class ImageOnMapTest {
+  @Test
+  fun removedFrameDecision() {
+    val gone = UUID.randomUUID()
+    val unloaded = UUID.randomUUID()
+    val returned = UUID.randomUUID()
+    assertEquals(
+        setOf(gone),
+        removedFrames(setOf(gone, unloaded, returned), setOf(unloaded)) { it == returned },
+    )
+  }
+
   private fun png(): ByteArray =
       ByteArrayOutputStream()
           .also { ImageIO.write(BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB), "png", it) }
@@ -109,13 +120,15 @@ class ImageOnMapTest {
       assertTrue(store.mapIds()[4])
       assertTrue(store.mapIds()[150000])
       assertFalse(store.mapIds()[5])
-      val frame = FrameRecord(frameId, 4, world, 1, 2, 3, "NORTH", owner, 42, false)
+      val frame = FrameRecord(frameId, 4, world, 1, 2, 3, "NORTH", 42, false)
       store.saveFrames(listOf(frame))
-      store.saveFrames(listOf(frame.copy(owner = null, x = 9)))
-      assertEquals(frame, store.frame(frameId))
-      assertEquals(listOf(frame), store.framesForMaps(listOf(4, 150000)))
+      val moved = frame.copy(mapId = 150000, x = 9)
+      store.saveFrames(listOf(moved))
+      assertEquals(moved, store.frame(frameId))
+      assertEquals(listOf(moved), store.allFrames())
+      assertEquals(listOf(moved), store.framesForMaps(listOf(4, 150000)))
       store.delete(image)
-      assertEquals(frame, store.frame(frameId))
+      assertEquals(moved, store.frame(frameId))
       store.deleteFrames(listOf(frameId))
       assertNull(store.frame(frameId))
     }

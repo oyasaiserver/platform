@@ -26,7 +26,7 @@ CREATE INDEX images_owner ON images(owner, hidden);
 CREATE TABLE frames (
  frame_uuid TEXT PRIMARY KEY, map_id INTEGER NOT NULL, world TEXT NOT NULL,
  x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, facing TEXT NOT NULL,
- owner TEXT, placed_at INTEGER NOT NULL, legacy INTEGER NOT NULL DEFAULT 0
+ placed_at INTEGER NOT NULL, legacy INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX frames_map ON frames(map_id);
 PRAGMA user_version = 1;
@@ -136,6 +136,7 @@ def self_test():
             assert db.execute("SELECT COUNT(*) FROM maps").fetchone()[0] == 3
             assert db.execute("SELECT COUNT(*) FROM images").fetchone()[0] == 2
             assert db.execute("SELECT COUNT(*) FROM frames").fetchone()[0] == 0
+            assert "owner" not in [row[1] for row in db.execute("PRAGMA table_info(frames)")]
             assert db.execute("SELECT image_id FROM maps WHERE map_id=99").fetchone()[0] is None
             assert db.execute("SELECT COUNT(*) FROM maps WHERE map_id=12").fetchone()[0] == 0
         migrate(root)
