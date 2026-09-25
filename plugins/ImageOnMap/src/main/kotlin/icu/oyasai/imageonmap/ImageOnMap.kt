@@ -30,7 +30,8 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.MapInitializeEvent
-import org.bukkit.event.world.ChunkLoadEvent
+import org.bukkit.event.world.EntitiesLoadEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.MapMeta
@@ -142,8 +143,8 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   @EventHandler fun mapInit(e: MapInitializeEvent) = attach(e.map)
 
   @EventHandler
-  fun chunkLoad(e: ChunkLoadEvent) {
-    e.chunk.entities.filterIsInstance<ItemFrame>().forEach { attachItem(it.item) }
+  fun entitiesLoad(e: EntitiesLoadEvent) {
+    e.entities.filterIsInstance<ItemFrame>().forEach { attachItem(it.item) }
   }
 
   @EventHandler fun join(e: PlayerJoinEvent) = inspectInventory(e.player)
@@ -453,6 +454,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun place(e: PlayerInteractEntityEvent) {
+    if (e.hand != EquipmentSlot.HAND) return
     val frame = e.rightClicked as? ItemFrame ?: return
     val player = e.player
     val id = marked(player.inventory.itemInMainHand) ?: return
@@ -488,6 +490,7 @@ class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   fun remove(e: EntityDamageByEntityEvent) {
     val player = e.damager as? Player ?: return
     val frame = e.entity as? ItemFrame ?: return
+    if (frame.isFixed) return
     if (!player.isSneaking || !player.hasPermission("imageonmap.removesplattermap")) return
     val meta = frame.item.itemMeta as? MapMeta ?: return
     if (!meta.hasMapId()) return

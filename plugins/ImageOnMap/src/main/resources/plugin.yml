@@ -13,13 +13,13 @@ commands:
     usage: /givemap <プレイヤー> <画像ID>
 permissions:
   imageonmap.*:
-    default: op
+    default: true
     children:
       imageonmap.new: true
       imageonmap.list: true
       imageonmap.get: true
-      imageonmap.give: true
-      imageonmap.bypasssize: true
+      imageonmap.give: false
+      imageonmap.bypasssize: false
       imageonmap.placesplattermap: true
       imageonmap.removesplattermap: true
   imageonmap.new:
