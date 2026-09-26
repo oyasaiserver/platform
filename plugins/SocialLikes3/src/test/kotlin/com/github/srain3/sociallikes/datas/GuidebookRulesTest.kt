@@ -106,6 +106,22 @@ class GuidebookRulesTest {
   }
 
   @Test
+  fun `repost price uses valid entry count and defaults without config keys`() {
+    val oldConfig = YamlConfiguration.loadConfiguration("guidebook: {}".reader())
+    assertEquals(
+        10,
+        GuidebookRules.repostPrice(
+            oldConfig.getInt("guidebook.repost.basePrice", 10),
+            oldConfig.getInt("guidebook.repost.pricePerEntry", 1),
+            0,
+        ),
+    )
+    assertEquals(40, GuidebookRules.repostPrice(10, 1, 30))
+    assertEquals(70, GuidebookRules.repostPrice(10, 2, 30))
+    assertEquals(Int.MAX_VALUE, GuidebookRules.repostPrice(Int.MAX_VALUE, Int.MAX_VALUE, 30))
+  }
+
+  @Test
   fun `title validation rejects formatting and control characters`() {
     assertTrue(GuidebookRules.isValidTitle("海辺の建築めぐり", 32))
     assertFalse(GuidebookRules.isValidTitle("&c偽の色", 32))

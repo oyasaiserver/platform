@@ -283,6 +283,7 @@ object GuidebookBookUI {
     }
     val entries = GuidebookService.entries(guidebook.id, player.uniqueId)
     val progress = GuidebookService.progress(entries)
+    val repostPrice = GuidebookService.repostPrice(progress.total)
     val next = GuidebookBookRules.nextLine(entries, progress.complete)
     val s = style
     val vars =
@@ -298,6 +299,17 @@ object GuidebookBookUI {
             .append(line(s.text("progress", vars), "progress"))
             .append(line(s.text("author", vars), "author"))
             .append(nextLine(next, guidebook.id, progress.complete))
+            .append(
+                button(
+                        "リポスト ${repostPrice}P",
+                        "$COMMAND repost ${guidebook.id} $repostPrice",
+                        "eButton",
+                    )
+                    .hoverEvent(
+                        HoverEvent.showText(Component.text("${repostPrice}Pを消費してオンラインのプレイヤーへ宣伝します"))
+                    )
+            )
+            .append(newline())
     home.append(blank())
     if (guidebook.description.isNotBlank()) {
       GuidebookRules.description(guidebook.description, GuidebookService.descriptionMaxLines())

@@ -13,6 +13,7 @@ import com.github.srain3.sociallikes.datas.GuidebookRules
 import com.github.srain3.sociallikes.datas.GuidebookType
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
+import com.github.srain3.sociallikes.gui.GuidebookBookUI
 import io.oyasai.oyasaitoken.api.OyasaiTokenService
 import io.oyasai.oyasaitoken.api.TokenRequest
 import io.oyasai.oyasaitoken.api.TokenResult
@@ -40,6 +41,7 @@ import org.bukkit.persistence.PersistentDataType
 object GuidebookService {
   private const val MAX_TITLE_LENGTH = 32
   private val purchasesInProgress = ConcurrentHashMap.newKeySet<UUID>()
+  private val repostsInProgress = ConcurrentHashMap.newKeySet<UUID>()
 
   data class SlotOffer(val rankLimit: Int, val extraSlots: Int, val price: Int) {
     val totalLimit: Int
@@ -363,6 +365,131 @@ object GuidebookService {
         slots,
         GuidebookRules.extraSlotPrice(GuidebookRules.extraSlotPrices(Tools.plugin.config), slots),
     )
+  }
+
+  fun repostPrice(validEntries: Int): Int =
+      GuidebookRules.repostPrice(
+          Tools.plugin.config.getInt("guidebook.repost.basePrice", 10),
+          Tools.plugin.config.getInt("guidebook.repost.pricePerEntry", 1),
+          validEntries,
+      )
+
+  fun repost(player: Player, guidebookId: Int, expectedPrice: Int) {
+    val uuid = player.uniqueId
+    if (!repostsInProgress.add(uuid)) {
+      player.sendMessage(Tools.socialLikesLOGO + " &e前の宣伝処理が終わるまでお待ちください。".color())
+      return
+    }
+    val guidebook = SLDatabase.loadGuidebookBlocking(guidebookId)
+    if (guidebook == null || !guidebook.published) {
+      repostsInProgress.remove(uuid)
+      player.sendMessage(Tools.socialLikesLOGO + " &cこのガイドブックは現在公開されていません。".color())
+      return
+    }
+    val validEntries = progress(entries(guidebookId, uuid)).total
+    val price = repostPrice(validEntries)
+    if (price != expectedPrice) {
+      repostsInProgress.remove(uuid)
+      player.sendMessage(Tools.socialLikesLOGO + " &c価格が変わりました。もう一度確認してください。".color())
+      GuidebookBookUI.openInfo(player, guidebook)
+      return
+    }
+    val tokens =
+        if (Tools.getTokenManager() == null) null
+        else Bukkit.getServicesManager().getRegistration(OyasaiTokenService::class.java)?.provider
+    if (tokens == null) {
+      repostsInProgress.remove(uuid)
+      player.sendMessage(Tools.socialLikesLOGO + " &c現在ポイントを利用できません。".color())
+      return
+    }
+    val request = TokenRequest(uuid, price.toLong(), player.name)
+    val charge =
+        runCatching { tokens.charge(request) }
+            .getOrElse { error ->
+              repostsInProgress.remove(uuid)
+              Tools.plugin.logger.severe(
+                  "[SL3] Guidebook repost charge failed for $uuid: ${error.message}"
+              )
+              player.sendMessage(Tools.socialLikesLOGO + " &cポイントの処理に失敗しました。".color())
+              return
+            }
+    charge.whenComplete { result, error ->
+      Bukkit.getScheduler()
+          .runTask(
+              Tools.plugin,
+              Runnable {
+                when {
+                  error != null -> {
+                    Tools.plugin.logger.severe(
+                        "[SL3] Guidebook repost charge failed for $uuid: ${error.message}"
+                    )
+                    repostMessage(uuid, "&cポイントの処理に失敗しました。")
+                  }
+                  result is TokenResult.InsufficientFunds ->
+                      repostMessage(uuid, "&cポイントが足りません（${price}P必要）。")
+                  result !is TokenResult.Success -> repostMessage(uuid, "&cポイントを引き落とせませんでした。")
+                  else -> {
+                    val current = SLDatabase.loadGuidebookBlocking(guidebookId)
+                    val currentEntries = progress(entries(guidebookId, uuid)).total
+                    if (
+                        current == null ||
+                            !current.published ||
+                            repostPrice(currentEntries) != price ||
+                            !SLDatabase.recordGuidebookPublicityBlocking(guidebookId, uuid, price)
+                    ) {
+                      refundRepost(tokens, request, uuid)
+                      return@Runnable
+                    }
+                    Bukkit.broadcast(
+                        Component.text("[${player.name}さんからの宣伝]", NamedTextColor.LIGHT_PURPLE)
+                            .append(Component.newline())
+                            .append(Component.text("📖「${current.title}」", NamedTextColor.GREEN))
+                            .append(
+                                Component.text(
+                                    " by ${if (current.type == GuidebookType.OFFICIAL) "公式" else authorName(current.creatorUuid)}・${currentEntries}件の建築 ",
+                                    NamedTextColor.GRAY,
+                                )
+                            )
+                            .append(getButton(current))
+                    )
+                    repostMessage(uuid, "&a${price}Pでガイドを宣伝しました。")
+                  }
+                }
+                repostsInProgress.remove(uuid)
+              },
+          )
+    }
+  }
+
+  private fun refundRepost(tokens: OyasaiTokenService, request: TokenRequest, uuid: UUID) {
+    val refund = runCatching { tokens.grant(request) }.getOrNull()
+    if (refund == null) {
+      Tools.plugin.logger.severe("[SL3] Guidebook repost refund failed for $uuid")
+      repostMessage(uuid, "&c宣伝できず、返金にも失敗しました。運営に連絡してください。")
+      repostsInProgress.remove(uuid)
+      return
+    }
+    refund.whenComplete { result, error ->
+      Bukkit.getScheduler()
+          .runTask(
+              Tools.plugin,
+              Runnable {
+                if (error != null || result !is TokenResult.Success) {
+                  Tools.plugin.logger.severe(
+                      "[SL3] Guidebook repost refund failed for $uuid: ${error?.message ?: result}"
+                  )
+                  repostMessage(uuid, "&c宣伝できず、返金にも失敗しました。運営に連絡してください。")
+                } else {
+                  repostMessage(uuid, "&cガイドの状態が変わったか、履歴を保存できなかったため返金しました。")
+                }
+                repostsInProgress.remove(uuid)
+              },
+          )
+    }
+  }
+
+  private fun repostMessage(uuid: UUID, message: String) {
+    Bukkit.getPlayer(uuid)?.sendMessage(Tools.socialLikesLOGO + " $message".color())
   }
 
   fun purchaseExtraSlot(player: Player, expectedSlots: Int, expectedPrice: Int) {

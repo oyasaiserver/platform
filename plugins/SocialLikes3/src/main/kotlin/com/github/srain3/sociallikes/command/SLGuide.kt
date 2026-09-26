@@ -1,6 +1,7 @@
 package com.github.srain3.sociallikes.command
 
 import com.github.srain3.sociallikes.GuidebookListener
+import com.github.srain3.sociallikes.GuidebookService
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
@@ -40,6 +41,8 @@ internal sealed interface GuidebookAction {
   data class Comment(val guidebookId: Int, val buildId: Int) : GuidebookAction
 
   data class Go(val guidebookId: Int, val buildId: Int) : GuidebookAction
+
+  data class Repost(val guidebookId: Int, val price: Int) : GuidebookAction
 
   data class DeleteRequest(val guidebookId: Int) : GuidebookAction
 
@@ -92,6 +95,11 @@ internal object GuidebookCommandRules {
           }
       "go" ->
           args.twoIds()?.let { (guidebookId, buildId) -> GuidebookAction.Go(guidebookId, buildId) }
+      "repost" ->
+          args
+              .twoIds()
+              ?.takeIf { it.second > 0 }
+              ?.let { (guidebookId, price) -> GuidebookAction.Repost(guidebookId, price) }
       "delete-request" -> args.singleId()?.let(GuidebookAction::DeleteRequest)
       "delete-confirm" -> args.singleId()?.let(GuidebookAction::DeleteConfirm)
       "slot-request" -> if (args.size == 1) GuidebookAction.SlotRequest else null
@@ -162,6 +170,7 @@ object SLGuide : CommandExecutor, TabCompleter {
           GuidebookBookUI.editComment(sender, action.guidebookId, action.buildId)
       is GuidebookAction.Go ->
           GuidebookListener.teleport(sender, action.guidebookId, action.buildId)
+      is GuidebookAction.Repost -> GuidebookService.repost(sender, action.guidebookId, action.price)
       is GuidebookAction.DeleteRequest -> GuidebookBookUI.requestDelete(sender, action.guidebookId)
       is GuidebookAction.DeleteConfirm -> GuidebookBookUI.confirmDelete(sender, action.guidebookId)
       GuidebookAction.SlotRequest -> GuidebookBookUI.requestSlot(sender)

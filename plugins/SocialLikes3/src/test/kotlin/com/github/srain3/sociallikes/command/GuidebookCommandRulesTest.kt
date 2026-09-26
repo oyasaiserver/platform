@@ -16,6 +16,12 @@ class GuidebookCommandRulesTest {
     assertEquals(GuidebookAction.Go(12, 34), GuidebookCommandRules.parse(listOf("go", "12", "34")))
     assertNull(GuidebookCommandRules.parse(listOf("go", "12", "x")))
     assertNull(GuidebookCommandRules.parse(listOf("go", "12", "34", "extra")))
+    assertEquals(
+        GuidebookAction.Repost(12, 40),
+        GuidebookCommandRules.parse(listOf("repost", "12", "40")),
+    )
+    assertNull(GuidebookCommandRules.parse(listOf("repost", "12", "0")))
+    assertNull(GuidebookCommandRules.parse(listOf("repost", "12", "40", "extra")))
   }
 
   @Test

@@ -24,6 +24,10 @@ guidebook:
     white: 5
   # 追加枠の価格。リストの最後の価格を6枠目以降にも使う。
   extraSlotPrices: [150, 400, 800, 1200, 1500]
+  # リポストの価格は基本額＋有効な掲載建築1件ごとの額（30件なら40P）。
+  repost:
+    basePrice: 10
+    pricePerEntry: 1
   # 旅行ガイドの次の建築へ案内する間隔（秒）。0で待機なし。/sldataop reload で反映。
   teleportCooldownSeconds: 30
   entriesPerBookLimit: 30

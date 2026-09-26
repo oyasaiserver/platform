@@ -82,6 +82,12 @@ object GuidebookRules {
   fun extraSlotPrice(prices: List<Int>, purchasedSlots: Int): Int =
       prices[purchasedSlots.coerceAtLeast(0).coerceAtMost(prices.lastIndex)]
 
+  fun repostPrice(basePrice: Int, pricePerEntry: Int, validEntries: Int): Int =
+      (basePrice.coerceAtLeast(1).toLong() +
+              pricePerEntry.coerceAtLeast(0).toLong() * validEntries.coerceAtLeast(0))
+          .coerceAtMost(Int.MAX_VALUE.toLong())
+          .toInt()
+
   fun personalBookLimits(config: Configuration): Map<String, Int> {
     // getConfigurationSection はファイルに節がないと空の節を作り、jar 内の既定値を読めない。
     val section =
