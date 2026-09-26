@@ -169,6 +169,10 @@ hud:
 sui:
   # WorldEdit 選択範囲パーティクル表示 (SUI) の既定ON/OFF。各自 /.sui on|off で上書き可
   default-enabled: true
+  max-selection-size-to-display: 10000000 # 0 で無制限
+  enable-max-selection-bypass-perm: true
+  particle-viewdistance: 99
+  max-ping: 150 # -1 で無効
 
 prefix: "<gray>[<gold>CitiesSkyMine</gold>]</gray> "
 debug: false

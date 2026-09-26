@@ -113,12 +113,16 @@ permissions:
       citiesskymine.schematic: true
       citiesskymine.hud: true
       citiesskymine.sui: true
+      citiesskymine.sui.maxselectionsize.bypass: true
   citiesskymine.hud:
     description: "WorldEdit 状態HUDの自己表示"
     default: true
   citiesskymine.sui:
     description: "WorldEdit 選択範囲パーティクル表示 (SUI) の切り替え"
     default: true
+  citiesskymine.sui.maxselectionsize.bypass:
+    description: "SUI の選択範囲体積上限を無視"
+    default: op
   citiesskymine.role.admin:
     description: "CSM アドミンロール"
     default: op
