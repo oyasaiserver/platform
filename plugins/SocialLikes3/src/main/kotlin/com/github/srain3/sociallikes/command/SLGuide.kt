@@ -42,6 +42,10 @@ internal sealed interface GuidebookAction {
   data class DeleteRequest(val guidebookId: Int) : GuidebookAction
 
   data class DeleteConfirm(val guidebookId: Int) : GuidebookAction
+
+  data object SlotRequest : GuidebookAction
+
+  data object SlotConfirm : GuidebookAction
 }
 
 internal object GuidebookCommandRules {
@@ -87,6 +91,8 @@ internal object GuidebookCommandRules {
           args.twoIds()?.let { (guidebookId, buildId) -> GuidebookAction.Go(guidebookId, buildId) }
       "delete-request" -> args.singleId()?.let(GuidebookAction::DeleteRequest)
       "delete-confirm" -> args.singleId()?.let(GuidebookAction::DeleteConfirm)
+      "slot-request" -> if (args.size == 1) GuidebookAction.SlotRequest else null
+      "slot-confirm" -> if (args.size == 1) GuidebookAction.SlotConfirm else null
       else -> null
     }
   }
@@ -154,6 +160,8 @@ object SLGuide : CommandExecutor, TabCompleter {
           GuidebookListener.teleport(sender, action.guidebookId, action.buildId)
       is GuidebookAction.DeleteRequest -> GuidebookBookUI.requestDelete(sender, action.guidebookId)
       is GuidebookAction.DeleteConfirm -> GuidebookBookUI.confirmDelete(sender, action.guidebookId)
+      GuidebookAction.SlotRequest -> GuidebookBookUI.requestSlot(sender)
+      GuidebookAction.SlotConfirm -> GuidebookBookUI.confirmSlot(sender)
       null -> sender.sendMessage(Tools.socialLikesLOGO + " &e使い方: /slguide".color())
     }
     return true

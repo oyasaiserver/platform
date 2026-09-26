@@ -59,6 +59,13 @@ class GuidebookCommandRulesTest {
   }
 
   @Test
+  fun `slot purchase requires the explicit confirmation command`() {
+    assertEquals(GuidebookAction.SlotRequest, GuidebookCommandRules.parse(listOf("slot-request")))
+    assertEquals(GuidebookAction.SlotConfirm, GuidebookCommandRules.parse(listOf("slot-confirm")))
+    assertNull(GuidebookCommandRules.parse(listOf("slot-confirm", "1")))
+  }
+
+  @Test
   fun `removed book catalog commands stay removed`() {
     assertNull(GuidebookCommandRules.parse(listOf("catalog")))
     assertNull(GuidebookCommandRules.parse(listOf("info", "10")))

@@ -69,6 +69,19 @@ object GuidebookRules {
 
   fun canCreatePersonal(currentCount: Int, limit: Int): Boolean = currentCount < limit
 
+  fun totalPersonalBookLimit(rankLimit: Int, extraSlots: Int): Int =
+      (rankLimit.toLong().coerceAtLeast(0) + extraSlots.coerceAtLeast(0))
+          .coerceAtMost(Int.MAX_VALUE.toLong())
+          .toInt()
+
+  fun extraSlotPrices(config: Configuration): List<Int> =
+      (config.get("guidebook.extraSlotPrices") as? List<*>)
+          ?.mapNotNull { (it as? Number)?.toInt()?.takeIf { price -> price > 0 } }
+          ?.takeIf(List<Int>::isNotEmpty) ?: listOf(150, 400, 800, 1200, 1500)
+
+  fun extraSlotPrice(prices: List<Int>, purchasedSlots: Int): Int =
+      prices[purchasedSlots.coerceAtLeast(0).coerceAtMost(prices.lastIndex)]
+
   fun personalBookLimits(config: Configuration): Map<String, Int> {
     // getConfigurationSection はファイルに節がないと空の節を作り、jar 内の既定値を読めない。
     val section =

@@ -82,6 +82,30 @@ class GuidebookRulesTest {
   }
 
   @Test
+  fun `extra slots add to rank limit and repeat last configured price`() {
+    val defaults =
+        GuidebookRulesTest::class.java.getResourceAsStream("/config.yml")!!.bufferedReader().use {
+          YamlConfiguration.loadConfiguration(it)
+        }
+    val oldConfig = YamlConfiguration.loadConfiguration("readSource: sqlite".reader())
+    oldConfig.setDefaults(defaults)
+    val prices = GuidebookRules.extraSlotPrices(oldConfig)
+    assertEquals(listOf(150, 400, 800, 1200, 1500), prices)
+    assertEquals(
+        listOf(150, 400, 800, 1200, 1500, 1500),
+        (0..5).map { GuidebookRules.extraSlotPrice(prices, it) },
+    )
+    assertEquals(0, GuidebookRules.totalPersonalBookLimit(0, 0))
+    assertEquals(1, GuidebookRules.totalPersonalBookLimit(0, 1))
+    assertEquals(8, GuidebookRules.totalPersonalBookLimit(5, 3))
+    assertEquals(Int.MAX_VALUE, GuidebookRules.totalPersonalBookLimit(Int.MAX_VALUE, 1))
+    val custom =
+        YamlConfiguration.loadConfiguration("guidebook:\n  extraSlotPrices: [25, 50]".reader())
+    custom.setDefaults(defaults)
+    assertEquals(50, GuidebookRules.extraSlotPrice(GuidebookRules.extraSlotPrices(custom), 10))
+  }
+
+  @Test
   fun `title validation rejects formatting and control characters`() {
     assertTrue(GuidebookRules.isValidTitle("海辺の建築めぐり", 32))
     assertFalse(GuidebookRules.isValidTitle("&c偽の色", 32))

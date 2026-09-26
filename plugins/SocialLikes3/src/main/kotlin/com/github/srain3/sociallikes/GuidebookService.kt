@@ -13,7 +13,11 @@ import com.github.srain3.sociallikes.datas.GuidebookRules
 import com.github.srain3.sociallikes.datas.GuidebookType
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
+import io.oyasai.oyasaitoken.api.OyasaiTokenService
+import io.oyasai.oyasaitoken.api.TokenRequest
+import io.oyasai.oyasaitoken.api.TokenResult
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -35,6 +39,12 @@ import org.bukkit.persistence.PersistentDataType
 
 object GuidebookService {
   private const val MAX_TITLE_LENGTH = 32
+  private val purchasesInProgress = ConcurrentHashMap.newKeySet<UUID>()
+
+  data class SlotOffer(val rankLimit: Int, val extraSlots: Int, val price: Int) {
+    val totalLimit: Int
+      get() = GuidebookRules.totalPersonalBookLimit(rankLimit, extraSlots)
+  }
 
   val touristKey = NamespacedKey(Tools.plugin, "guidebook_id")
   val editorKey = NamespacedKey(Tools.plugin, "guidebook_editor_id")
@@ -329,20 +339,112 @@ object GuidebookService {
   fun commentMaxLines(): Int =
       Tools.plugin.config.getInt("guidebook.commentMaxLines", 5).coerceIn(1, 5)
 
-  /** ランクごとの冊数（config の guidebook.personalBookLimits）で、まだ作れるか。作れないときは理由を送る */
+  fun slotOffer(player: Player): SlotOffer? {
+    val slots = SLDatabase.extraSlotsBlocking(player.uniqueId) ?: return null
+    return SlotOffer(
+        personalBookLimit(player),
+        slots,
+        GuidebookRules.extraSlotPrice(GuidebookRules.extraSlotPrices(Tools.plugin.config), slots),
+    )
+  }
+
+  fun purchaseExtraSlot(player: Player, expectedSlots: Int, expectedPrice: Int) {
+    if (!purchasesInProgress.add(player.uniqueId)) {
+      player.sendMessage(Tools.socialLikesLOGO + " &e前の購入処理が終わるまでお待ちください。".color())
+      return
+    }
+    val offer = slotOffer(player)
+    if (offer == null || offer.extraSlots != expectedSlots || offer.price != expectedPrice) {
+      purchasesInProgress.remove(player.uniqueId)
+      player.sendMessage(Tools.socialLikesLOGO + " &c追加枠の価格が変わりました。もう一度確認してください。".color())
+      return
+    }
+    val tokens =
+        if (Tools.getTokenManager() == null) null
+        else Bukkit.getServicesManager().getRegistration(OyasaiTokenService::class.java)?.provider
+    if (tokens == null) {
+      purchasesInProgress.remove(player.uniqueId)
+      player.sendMessage(Tools.socialLikesLOGO + " &c現在ポイントを利用できません。".color())
+      return
+    }
+    val request = TokenRequest(player.uniqueId, offer.price.toLong(), player.name)
+    runCatching { tokens.charge(request) }
+        .getOrElse { error ->
+          purchasesInProgress.remove(player.uniqueId)
+          Tools.plugin.logger.severe(
+              "[SL3] Extra guidebook slot charge failed for ${player.uniqueId}: ${error.message}"
+          )
+          player.sendMessage(Tools.socialLikesLOGO + " &cポイントの処理に失敗しました。".color())
+          return
+        }
+        .whenComplete { result, error ->
+          when {
+            error != null -> {
+              purchasesInProgress.remove(player.uniqueId)
+              Tools.plugin.logger.severe(
+                  "[SL3] Extra guidebook slot charge failed for ${player.uniqueId}: ${error.message}"
+              )
+              purchaseMessage(player.uniqueId, "&cポイントの処理に失敗しました。")
+            }
+            result is TokenResult.InsufficientFunds -> {
+              purchasesInProgress.remove(player.uniqueId)
+              purchaseMessage(player.uniqueId, "&cポイントが足りません（${offer.price}P必要）。")
+            }
+            result !is TokenResult.Success -> {
+              purchasesInProgress.remove(player.uniqueId)
+              purchaseMessage(player.uniqueId, "&cポイントを引き落とせませんでした。")
+            }
+            SLDatabase.addExtraSlotBlocking(player.uniqueId, offer.extraSlots) -> {
+              purchasesInProgress.remove(player.uniqueId)
+              purchaseMessage(player.uniqueId, "&a追加枠を1つ購入しました（${offer.price}P）。")
+            }
+            else -> {
+              Tools.plugin.logger.severe(
+                  "[SL3] Extra guidebook slot save failed for ${player.uniqueId}; refunding ${offer.price}P"
+              )
+              tokens.grant(request).whenComplete { refund, refundError ->
+                purchasesInProgress.remove(player.uniqueId)
+                if (refundError != null || refund !is TokenResult.Success) {
+                  Tools.plugin.logger.severe(
+                      "[SL3] Extra guidebook slot refund FAILED for ${player.uniqueId}: ${refundError?.message ?: refund}"
+                  )
+                  purchaseMessage(player.uniqueId, "&c追加枠を保存できず、返金にも失敗しました。運営に連絡してください。")
+                } else {
+                  purchaseMessage(player.uniqueId, "&c追加枠を保存できず、ポイントを返金しました。")
+                }
+              }
+            }
+          }
+        }
+  }
+
+  private fun purchaseMessage(uuid: UUID, message: String) {
+    Bukkit.getScheduler()
+        .runTask(
+            Tools.plugin,
+            Runnable {
+              Bukkit.getPlayer(uuid)?.sendMessage(Tools.socialLikesLOGO + " $message".color())
+            },
+        )
+  }
+
+  /** ランク上限と購入済み追加枠で、まだ作れるか。 */
   fun canCreatePersonal(player: Player): Boolean {
-    val limit = personalBookLimit(player)
-    if (limit == 0) {
-      player.sendMessage(Tools.socialLikesLOGO + " &c今のランクでは個人ガイドを作れません。".color())
+    val offer = slotOffer(player)
+    if (offer == null) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c追加枠を確認できませんでした。".color())
       return false
     }
+    val limit = offer.totalLimit
     if (
         !GuidebookRules.canCreatePersonal(
             SLDatabase.countPersonalGuidebooksBlocking(player.uniqueId),
             limit,
         )
     ) {
-      player.sendMessage(Tools.socialLikesLOGO + " &c今のランクで作れる個人ガイドは${limit}冊までです。".color())
+      player.sendMessage(
+          Tools.socialLikesLOGO + " &c個人ガイドは${limit}冊までです。/slguide edit から追加枠を購入できます。".color()
+      )
       return false
     }
     return true

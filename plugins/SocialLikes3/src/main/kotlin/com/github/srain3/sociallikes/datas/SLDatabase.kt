@@ -256,6 +256,12 @@ object SLDatabase {
     override val primaryKey = PrimaryKey(guidebookId, playerUuid)
   }
 
+  private object GuidebookExtraSlots : Table("guidebook_extra_slots") {
+    val playerUuid = varchar("player_uuid", 36)
+    val slots = integer("slots").default(0)
+    override val primaryKey = PrimaryKey(playerUuid)
+  }
+
   data class MigrationReadiness(val sqlitePrimaryReady: Boolean, val negativeBuildCount: Int)
 
   private data class BuildSnapshot(
@@ -326,6 +332,7 @@ object SLDatabase {
               Guidebooks,
               GuidebookEntries,
               GuidebookCompletions,
+              GuidebookExtraSlots,
           )
         }
 
@@ -456,6 +463,32 @@ object SLDatabase {
           it.setString(1, creatorUuid.toString())
         }
       } ?: 0
+
+  fun extraSlotsBlocking(playerUuid: UUID): Int? =
+      submitBlocking("extraSlots") {
+        val connection = rawConnection() ?: return@submitBlocking null
+        connection
+            .prepareStatement("SELECT slots FROM guidebook_extra_slots WHERE player_uuid = ?")
+            .use { statement ->
+              statement.setString(1, playerUuid.toString())
+              statement.executeQuery().use { rows -> if (rows.next()) rows.getInt(1) else 0 }
+            }
+      }
+
+  fun addExtraSlotBlocking(playerUuid: UUID, expectedSlots: Int): Boolean =
+      submitWriteBlocking("addExtraSlot") {
+        val connection = rawConnection() ?: return@submitWriteBlocking false
+        connection
+            .prepareStatement(
+                "INSERT INTO guidebook_extra_slots (player_uuid, slots) VALUES (?, 1) " +
+                    "ON CONFLICT(player_uuid) DO UPDATE SET slots = slots + 1 WHERE slots = ?"
+            )
+            .use { statement ->
+              statement.setString(1, playerUuid.toString())
+              statement.setInt(2, expectedSlots)
+              statement.executeUpdate() == 1
+            }
+      } == true
 
   fun loadGuidebookEntriesBlocking(guidebookId: Int): List<Int> =
       submitBlocking("loadGuidebookEntries") {
