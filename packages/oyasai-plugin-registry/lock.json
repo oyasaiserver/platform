@@ -10,8 +10,8 @@
   "bluemap": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/w7JKRF0Q/bluemap-5.27-paper.jar",
-        "hash": "sha256-2DbQBMc9gWPWqtbCCORODh15RNNGFailsVWKIKVw3oQ="
+        "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/pILlMIlN/bluemap-5.28-paper.jar",
+        "hash": "sha256-TPtKmWMTLVvgqdsDGiipjp35Le7TfrsHVtOn3Ychq5g="
       }
     }
   },
@@ -85,8 +85,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.3/builds/1246/downloads/velocity",
-      "hash": "sha256-FwiMfqofE+4dLhJhoL5NCzpW/+RaVQTHdPbjFFSQdi0="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.3/builds/1247/downloads/velocity",
+      "hash": "sha256-PvZLiv6HeIc8BuVeiac/gQkhR4GrH5ZGNgMaUtLu5hk="
     }
   },
   "luckperms": {
