@@ -15,6 +15,8 @@
 
 `owg_selftest` は、対象ワールドより先に同じ高さパッチを試すための使い捨てワールドです。起動前から同名フォルダがある場合は再利用も削除もせず、fail closed します。削除コードは、現在の起動で作成した `owg_selftest` のみに限定し、従来形式のワールド直下と 26.2 の namespaced dimension 配下を完全一致の allowlist で検査します。
 
+試作: `startup-worlds` に普通のワールド名を並べると、STARTUP 中に初期化された既定ワールドすべての `WorldLoadEvent` が終わった時点で `WorldCreator` で読み込みます。高さパッチ、Multiverse の設定・ポータル・コマンドは適用しません。空リストなら何もしません。
+
 Multiverse-Core の `auto-import-3rd-party-worlds` が有効な場合、ロード後に OWG 対象が自動登録されることがあります。OWG は Multiverse 5 の `removeWorld` を `unloadBukkitWorld=false` / `saveBukkitWorld=false` で呼び、Bukkit ワールドをロードしたまま登録簿だけから外します。`deleteWorld` は呼びません。
 
 ## 高さ適用の設計

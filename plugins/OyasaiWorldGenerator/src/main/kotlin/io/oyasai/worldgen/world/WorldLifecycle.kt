@@ -25,6 +25,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.server.ServerLoadEvent
 import org.bukkit.event.world.WorldInitEvent
+import org.bukkit.event.world.WorldLoadEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class WorldLifecycle(
@@ -46,6 +47,8 @@ class WorldLifecycle(
   private val managedLoadRequests = ConcurrentHashMap.newKeySet<String>()
   private val observedTargets = ConcurrentHashMap.newKeySet<String>()
   private val externallyLoaded = ConcurrentHashMap.newKeySet<String>()
+  private val initialWorldsPending = mutableSetOf<NamespacedKey>()
+  private var initialWorldsLoaded = false
   @Volatile private var currentConfig: OwgConfig = initialConfig
   @Volatile
   var selfTestResult: SelfTestResult = SelfTestResult.NOT_RUN
@@ -61,6 +64,7 @@ class WorldLifecycle(
 
   @EventHandler(priority = EventPriority.NORMAL)
   fun onWorldInit(event: WorldInitEvent) {
+    if (!initialWorldsLoaded) initialWorldsPending += event.world.key
     val worldName = event.world.name
     if (!managedSpecs.containsKey(worldName) && worldName !in currentConfig.configuredWorldNames)
         return
@@ -102,6 +106,41 @@ class WorldLifecycle(
       plugin.logger.severe(
           "[OWG][lifecycle] WorldInitEvent verification failed for $worldName; the event handler will not unload the world"
       )
+    }
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  fun onWorldLoad(event: WorldLoadEvent) {
+    if (
+        initialWorldsLoaded ||
+            !initialWorldsPending.remove(event.world.key) ||
+            initialWorldsPending.isNotEmpty()
+    )
+        return
+    initialWorldsLoaded = true
+    for (name in plugin.config.getStringList("startup-worlds").distinct()) {
+      if (
+          !OwgConfig.isSafeWorldName(name) ||
+              name == "." ||
+              name == ".." ||
+              name in currentConfig.configuredWorldNames ||
+              name == SELF_TEST_WORLD ||
+              Bukkit.getWorld(name) != null
+      ) {
+        plugin.logger.warning(
+            "[OWG][startup-world] Skipping invalid or already loaded world: $name"
+        )
+        continue
+      }
+      try {
+        val world =
+            Bukkit.createWorld(WorldCreator(name)) ?: error("createWorld returned null for $name")
+        plugin.logger.info(
+            "[OWG][startup-world] Loaded ${world.name}: min=${world.minHeight} max=${world.maxHeight}"
+        )
+      } catch (exception: Exception) {
+        plugin.logger.log(Level.SEVERE, "[OWG][startup-world] Failed to load $name", exception)
+      }
     }
   }
 
