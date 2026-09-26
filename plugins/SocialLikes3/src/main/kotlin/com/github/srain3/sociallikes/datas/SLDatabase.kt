@@ -256,6 +256,22 @@ object SLDatabase {
     override val primaryKey = PrimaryKey(guidebookId, playerUuid)
   }
 
+  private object GuidebookExtraSlots : Table("guidebook_extra_slots") {
+    val playerUuid = varchar("player_uuid", 36)
+    val slots = integer("slots").default(0)
+    override val primaryKey = PrimaryKey(playerUuid)
+  }
+
+  private object GuidebookPublicity : Table("guidebook_publicity") {
+    val id = integer("id").autoIncrement()
+    val guidebookId = integer("guidebook_id")
+    val userUuid = varchar("user_uuid", 36)
+    val price = integer("price")
+    val createdAt = long("created_at")
+
+    override val primaryKey = PrimaryKey(id)
+  }
+
   data class MigrationReadiness(val sqlitePrimaryReady: Boolean, val negativeBuildCount: Int)
 
   private data class BuildSnapshot(
@@ -326,6 +342,8 @@ object SLDatabase {
               Guidebooks,
               GuidebookEntries,
               GuidebookCompletions,
+              GuidebookExtraSlots,
+              GuidebookPublicity,
           )
         }
 
@@ -457,6 +475,32 @@ object SLDatabase {
         }
       } ?: 0
 
+  fun extraSlotsBlocking(playerUuid: UUID): Int? =
+      submitBlocking("extraSlots") {
+        val connection = rawConnection() ?: return@submitBlocking null
+        connection
+            .prepareStatement("SELECT slots FROM guidebook_extra_slots WHERE player_uuid = ?")
+            .use { statement ->
+              statement.setString(1, playerUuid.toString())
+              statement.executeQuery().use { rows -> if (rows.next()) rows.getInt(1) else 0 }
+            }
+      }
+
+  fun addExtraSlotBlocking(playerUuid: UUID, expectedSlots: Int): Boolean =
+      submitWriteBlocking("addExtraSlot") {
+        val connection = rawConnection() ?: return@submitWriteBlocking false
+        connection
+            .prepareStatement(
+                "INSERT INTO guidebook_extra_slots (player_uuid, slots) VALUES (?, 1) " +
+                    "ON CONFLICT(player_uuid) DO UPDATE SET slots = slots + 1 WHERE slots = ?"
+            )
+            .use { statement ->
+              statement.setString(1, playerUuid.toString())
+              statement.setInt(2, expectedSlots)
+              statement.executeUpdate() == 1
+            }
+      } == true
+
   fun loadGuidebookEntriesBlocking(guidebookId: Int): List<Int> =
       submitBlocking("loadGuidebookEntries") {
             val ids = mutableListOf<Int>()
@@ -537,6 +581,19 @@ object SLDatabase {
             } ?: false
       } ?: false
 
+  fun setGuidebookTitleBlocking(guidebookId: Int, title: String): Boolean =
+      submitWriteBlocking("setGuidebookTitle") {
+        rawConnection()
+            ?.prepareStatement(
+                "UPDATE guidebooks SET title = ?, edited_since_announce = 1 WHERE id = ?"
+            )
+            ?.use { statement ->
+              statement.setString(1, title)
+              statement.setInt(2, guidebookId)
+              statement.executeUpdate() == 1
+            } ?: false
+      } ?: false
+
   fun setGuidebookDescriptionBlocking(guidebookId: Int, description: String): Boolean =
       submitWriteBlocking("setGuidebookDescription") {
         rawConnection()
@@ -597,6 +654,21 @@ object SLDatabase {
           statement.setInt(1, guidebookId)
           statement.executeUpdate() == 1
         } ?: false
+      } ?: false
+
+  fun recordGuidebookPublicityBlocking(guidebookId: Int, userUuid: UUID, price: Int): Boolean =
+      submitWriteBlocking("recordGuidebookPublicity") {
+        rawConnection()
+            ?.prepareStatement(
+                "INSERT INTO guidebook_publicity (guidebook_id, user_uuid, price, created_at) VALUES (?, ?, ?, ?)"
+            )
+            ?.use { statement ->
+              statement.setInt(1, guidebookId)
+              statement.setString(2, userUuid.toString())
+              statement.setInt(3, price)
+              statement.setLong(4, System.currentTimeMillis())
+              statement.executeUpdate() == 1
+            } ?: false
       } ?: false
 
   fun loadPublishedGuidebooksContainingBuildBlocking(buildId: Int): List<GuidebookData> =

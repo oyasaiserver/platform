@@ -32,8 +32,9 @@ internal fun canGuideTeleport(
 ): Boolean =
     destinationLiked || lastTeleport == null || nowMillis - lastTeleport.atMillis >= cooldownMillis
 
+internal fun guidebookCooldownMillis(seconds: Int): Long = seconds.coerceAtLeast(0).toLong() * 1000
+
 object GuidebookListener : Listener {
-  private const val TELEPORT_COOLDOWN_MILLIS = 30_000L
 
   private val addModes = mutableMapOf<UUID, Int>()
   private val descriptionModes = mutableMapOf<UUID, Int>()
@@ -208,16 +209,18 @@ object GuidebookListener : Listener {
       teleport: () -> Int?,
   ) {
     val now = System.currentTimeMillis()
+    val cooldownMillis =
+        guidebookCooldownMillis(Tools.plugin.config.getInt("guidebook.teleportCooldownSeconds", 30))
     val lastTeleport = lastTeleports[player.uniqueId]
     if (
         !canGuideTeleport(
             destinationLiked,
             lastTeleport,
             now,
-            TELEPORT_COOLDOWN_MILLIS,
+            cooldownMillis,
         )
     ) {
-      val remaining = TELEPORT_COOLDOWN_MILLIS - (now - lastTeleport!!.atMillis)
+      val remaining = cooldownMillis - (now - lastTeleport!!.atMillis)
       player.sendMessage(
           Tools.socialLikesLOGO + " &eあと${(remaining + 999) / 1000}秒で再び案内できます。".color()
       )

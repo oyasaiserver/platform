@@ -1,6 +1,7 @@
 package com.github.srain3.sociallikes.command
 
 import com.github.srain3.sociallikes.GuidebookListener
+import com.github.srain3.sociallikes.GuidebookService
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
@@ -35,13 +36,21 @@ internal sealed interface GuidebookAction {
 
   data class Describe(val guidebookId: Int) : GuidebookAction
 
+  data class Title(val guidebookId: Int) : GuidebookAction
+
   data class Comment(val guidebookId: Int, val buildId: Int) : GuidebookAction
 
   data class Go(val guidebookId: Int, val buildId: Int) : GuidebookAction
 
+  data class Repost(val guidebookId: Int, val price: Int) : GuidebookAction
+
   data class DeleteRequest(val guidebookId: Int) : GuidebookAction
 
   data class DeleteConfirm(val guidebookId: Int) : GuidebookAction
+
+  data object SlotRequest : GuidebookAction
+
+  data object SlotConfirm : GuidebookAction
 }
 
 internal object GuidebookCommandRules {
@@ -79,14 +88,22 @@ internal object GuidebookCommandRules {
       "add" -> args.singleId()?.let(GuidebookAction::Add)
       "toggle" -> args.singleId()?.let(GuidebookAction::Toggle)
       "describe" -> args.singleId()?.let(GuidebookAction::Describe)
+      "title" -> args.singleId()?.let(GuidebookAction::Title)
       "comment" ->
           args.twoIds()?.let { (guidebookId, buildId) ->
             GuidebookAction.Comment(guidebookId, buildId)
           }
       "go" ->
           args.twoIds()?.let { (guidebookId, buildId) -> GuidebookAction.Go(guidebookId, buildId) }
+      "repost" ->
+          args
+              .twoIds()
+              ?.takeIf { it.second > 0 }
+              ?.let { (guidebookId, price) -> GuidebookAction.Repost(guidebookId, price) }
       "delete-request" -> args.singleId()?.let(GuidebookAction::DeleteRequest)
       "delete-confirm" -> args.singleId()?.let(GuidebookAction::DeleteConfirm)
+      "slot-request" -> if (args.size == 1) GuidebookAction.SlotRequest else null
+      "slot-confirm" -> if (args.size == 1) GuidebookAction.SlotConfirm else null
       else -> null
     }
   }
@@ -148,12 +165,16 @@ object SLGuide : CommandExecutor, TabCompleter {
       is GuidebookAction.Toggle -> GuidebookBookUI.togglePublished(sender, action.guidebookId)
       is GuidebookAction.Describe ->
           GuidebookBookUI.startDescriptionEdit(sender, action.guidebookId)
+      is GuidebookAction.Title -> GuidebookBookUI.openRenameInput(sender, action.guidebookId)
       is GuidebookAction.Comment ->
           GuidebookBookUI.editComment(sender, action.guidebookId, action.buildId)
       is GuidebookAction.Go ->
           GuidebookListener.teleport(sender, action.guidebookId, action.buildId)
+      is GuidebookAction.Repost -> GuidebookService.repost(sender, action.guidebookId, action.price)
       is GuidebookAction.DeleteRequest -> GuidebookBookUI.requestDelete(sender, action.guidebookId)
       is GuidebookAction.DeleteConfirm -> GuidebookBookUI.confirmDelete(sender, action.guidebookId)
+      GuidebookAction.SlotRequest -> GuidebookBookUI.requestSlot(sender)
+      GuidebookAction.SlotConfirm -> GuidebookBookUI.confirmSlot(sender)
       null -> sender.sendMessage(Tools.socialLikesLOGO + " &e使い方: /slguide".color())
     }
     return true

@@ -16,6 +16,12 @@ class GuidebookCommandRulesTest {
     assertEquals(GuidebookAction.Go(12, 34), GuidebookCommandRules.parse(listOf("go", "12", "34")))
     assertNull(GuidebookCommandRules.parse(listOf("go", "12", "x")))
     assertNull(GuidebookCommandRules.parse(listOf("go", "12", "34", "extra")))
+    assertEquals(
+        GuidebookAction.Repost(12, 40),
+        GuidebookCommandRules.parse(listOf("repost", "12", "40")),
+    )
+    assertNull(GuidebookCommandRules.parse(listOf("repost", "12", "0")))
+    assertNull(GuidebookCommandRules.parse(listOf("repost", "12", "40", "extra")))
   }
 
   @Test
@@ -40,6 +46,8 @@ class GuidebookCommandRulesTest {
         GuidebookAction.Comment(10, 20),
         GuidebookCommandRules.parse(listOf("comment", "10", "20")),
     )
+    assertEquals(GuidebookAction.Title(10), GuidebookCommandRules.parse(listOf("title", "10")))
+    assertNull(GuidebookCommandRules.parse(listOf("title", "x")))
     assertNull(GuidebookCommandRules.parse(listOf("move", "10", "20", "2")))
     assertNull(GuidebookCommandRules.parse(listOf("remove", "10", "x")))
     assertNull(GuidebookCommandRules.parse(listOf("toggle", "10", "extra")))
@@ -56,6 +64,13 @@ class GuidebookCommandRulesTest {
         GuidebookCommandRules.parse(listOf("delete-confirm", "10")),
     )
     assertNull(GuidebookCommandRules.parse(listOf("delete", "10")))
+  }
+
+  @Test
+  fun `slot purchase requires the explicit confirmation command`() {
+    assertEquals(GuidebookAction.SlotRequest, GuidebookCommandRules.parse(listOf("slot-request")))
+    assertEquals(GuidebookAction.SlotConfirm, GuidebookCommandRules.parse(listOf("slot-confirm")))
+    assertNull(GuidebookCommandRules.parse(listOf("slot-confirm", "1")))
   }
 
   @Test
