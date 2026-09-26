@@ -50,7 +50,6 @@ oyasaiPurpur rec {
     dynamicprofile
     entitypose
     essentialsx
-    essentialsx-spawn
     ezedits
     fastasyncvoxelsniper
     fastasyncworldedit

@@ -5,7 +5,7 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
-softdepend: [Vault, TokenManager, LuckPerms, floodgate]
+softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
 commands:
   sit:
     description: "座る・右クリック座りを切り替える"
@@ -84,6 +84,10 @@ commands:
     description: "ホログラム"
     usage: /oholo <create|delete|list|near|movehere|line|import|range|seethrough>
     permission: oyasaiutilities.hologram
+  spawn:
+    description: "スポーン地点へテレポートする"
+    usage: /spawn [player]
+    permission: oyasaiutilities.spawn
 
 permissions:
   oyasai.skin:
@@ -101,6 +105,12 @@ permissions:
     default: op
   oyasaiutilities.hologram:
     description: "ホログラムコマンド"
+    default: op
+  oyasaiutilities.spawn:
+    description: "自分をスポーン地点へテレポートする"
+    default: true
+  oyasaiutilities.spawn.others:
+    description: "他のプレイヤーをスポーン地点へテレポートする"
     default: op
   backpack.user:
     description: "標準サイズのバックパックを使う"
