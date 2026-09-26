@@ -10,22 +10,19 @@ import org.bukkit.Location
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.WorldCreator
-import org.bukkit.command.Command
-import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class MultiverseCommand(
     private val registry: NormalWorlds,
     private val heightConfig: () -> OwgConfig,
-) : CommandExecutor {
-  override fun onCommand(
+) {
+  fun execute(
       sender: CommandSender,
-      command: Command,
-      label: String,
+      name: String,
       args: Array<out String>,
   ): Boolean {
-    if (command.name.equals("mvtp", true)) return teleport(sender, args)
+    if (name.equals("mvtp", true)) return teleport(sender, args)
     val sub = args.firstOrNull()?.lowercase(Locale.ROOT).orEmpty()
     val node =
         when (sub) {

@@ -7,6 +7,8 @@ import io.oyasai.worldgen.gen.VoidGenerator
 import io.oyasai.worldgen.height.NmsHeightProvider
 import io.oyasai.worldgen.world.NormalWorlds
 import io.oyasai.worldgen.world.WorldLifecycle
+import io.papermc.paper.command.brigadier.BasicCommand
+import io.papermc.paper.command.brigadier.CommandSourceStack
 import java.util.logging.Level
 import org.bukkit.generator.ChunkGenerator
 import org.bukkit.plugin.java.JavaPlugin
@@ -17,12 +19,9 @@ class OyasaiWorldGenerator : JavaPlugin() {
   private var lifecycle: WorldLifecycle? = null
 
   override fun onEnable() {
-    if (server.pluginManager.getPlugin("Multiverse-Core") != null) {
-      logger.severe("[OWG] Multiverse-Core is installed; OWG world management disabled")
-      getCommand("mv")?.unregister(server.commandMap)
-      getCommand("mvtp")?.unregister(server.commandMap)
-      server.pluginManager.disablePlugin(this)
-      return
+    val multiversePresent = server.pluginManager.getPlugin("Multiverse-Core") != null
+    if (multiversePresent) {
+      logger.warning("[OWG] Multiverse-Core is installed; normal world management disabled")
     }
     try {
       generatorReady = true
@@ -41,13 +40,15 @@ class OyasaiWorldGenerator : JavaPlugin() {
     }
 
     var normalWorlds: NormalWorlds? = null
-    try {
-      normalWorlds = NormalWorlds(this) { lifecycle?.configSnapshot() ?: preliminaryConfig }
-      normalWorlds.initialize()
-      server.pluginManager.registerEvents(normalWorlds, this)
-    } catch (throwable: Throwable) {
-      logger.log(Level.SEVERE, "[OWG] Normal world registry failed", throwable)
-      normalWorlds = null
+    if (!multiversePresent) {
+      try {
+        normalWorlds = NormalWorlds(this) { lifecycle?.configSnapshot() ?: preliminaryConfig }
+        normalWorlds.initialize()
+        server.pluginManager.registerEvents(normalWorlds, this)
+      } catch (throwable: Throwable) {
+        logger.log(Level.SEVERE, "[OWG] Normal world registry failed", throwable)
+        normalWorlds = null
+      }
     }
 
     try {
@@ -69,8 +70,16 @@ class OyasaiWorldGenerator : JavaPlugin() {
       if (normalWorlds != null) {
         val mvCommand =
             MultiverseCommand(normalWorlds) { lifecycle?.configSnapshot() ?: preliminaryConfig }
-        getCommand("mv")?.setExecutor(mvCommand)
-        getCommand("mvtp")?.setExecutor(mvCommand)
+        for (name in listOf("mv", "mvtp")) {
+          registerCommand(
+              name,
+              object : BasicCommand {
+                override fun execute(source: CommandSourceStack, args: Array<out String>) {
+                  mvCommand.execute(source.sender, name, args)
+                }
+              },
+          )
+        }
       }
     } catch (throwable: Throwable) {
       logger.log(Level.SEVERE, "[OWG] Command registration failed", throwable)

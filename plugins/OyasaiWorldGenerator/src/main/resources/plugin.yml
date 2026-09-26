@@ -6,10 +6,6 @@ description: 展示用ワールドの生成と高度制御
 authors: [takucan]
 load: STARTUP
 commands:
-  mv:
-    description: "通常ワールドの管理"
-  mvtp:
-    description: "通常ワールドへテレポート"
   owg:
     description: "ワールドの生成・高度・状態の管理"
     permission: oyasai.owg.use

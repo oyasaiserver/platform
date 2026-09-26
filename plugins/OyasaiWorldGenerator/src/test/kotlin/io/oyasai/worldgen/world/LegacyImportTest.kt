@@ -5,6 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class LegacyImportTest {
   @Test
@@ -35,8 +36,12 @@ class LegacyImportTest {
             read-only: {legacy-world-name: .HiddenArena, environment: normal}
           minecraft:missing_key:
             read-only: {legacy-world-name: MissingArena, environment: normal}
+            spawn-location:
+              ==: MVNullLocation (It's a bug if you see this in your config file)
           old_registration:
             auto-load: false
+            spawn-location:
+              ==: MVNullLocation (It's a bug if you see this in your config file)
           """
               .trimIndent(),
       )
@@ -49,6 +54,7 @@ class LegacyImportTest {
       assertFalse(assertNotNull(result.worlds["ArenaBlue"]).monsterSpawn)
       assertEquals("minecraft:overworld", result.worlds["DemoRealm"]?.key.toString())
       assertEquals("minecraft:missing_key", result.worlds["MissingArena"]?.key.toString())
+      assertNull(result.worlds["MissingArena"]?.spawn)
       val root = Files.createTempDirectory("fictional-level")
       try {
         val arena = normalWorldFolder(root, assertNotNull(result.worlds["ArenaBlue"]).key)

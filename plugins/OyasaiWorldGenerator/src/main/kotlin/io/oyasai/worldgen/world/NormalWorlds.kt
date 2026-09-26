@@ -47,11 +47,8 @@ internal data class LegacyWorlds(
 internal fun loadNormalYaml(file: File): YamlConfiguration =
     YamlConfiguration().apply {
       options().pathSeparator('\u0000')
-      // MV's spawn-location serialization marker needs its class, which is deliberately absent
-      // here.
-      loadFromString(
-          file.readLines().filterNot { it.trim() == "==: MVSpawnLocation" }.joinToString("\n")
-      )
+      // MV's serialized locations name classes unavailable without Multiverse-Core.
+      loadFromString(file.readLines().filterNot { it.trim().startsWith("==:") }.joinToString("\n"))
     }
 
 private inline fun <reified T : Enum<T>> normalEnumValue(value: String?, fallback: T): T =
@@ -104,15 +101,17 @@ internal fun parseLegacyWorlds(source: File): LegacyWorlds {
                 .getConfigurationSection("spawning")
                 ?.getConfigurationSection("animal")
                 ?.getBoolean("spawn", true) ?: true,
-            spawn?.let {
-              listOf(
-                  it.getDouble("x"),
-                  it.getDouble("y"),
-                  it.getDouble("z"),
-                  it.getDouble("yaw"),
-                  it.getDouble("pitch"),
-              )
-            },
+            spawn
+                ?.takeIf { it.contains("x") && it.contains("y") && it.contains("z") }
+                ?.let {
+                  listOf(
+                      it.getDouble("x"),
+                      it.getDouble("y"),
+                      it.getDouble("z"),
+                      it.getDouble("yaw"),
+                      it.getDouble("pitch"),
+                  )
+                },
             alias.takeUnless { it == name }.orEmpty(),
             section.getBoolean("keep-spawn-in-memory", true),
         )
@@ -265,19 +264,6 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
     }
     if (!create && folder(entry.key)?.isDirectory != true) return false
     return try {
-      if (
-          entry.generator.isNotBlank() &&
-              WorldCreator.getGeneratorForName(
-                  entry.name,
-                  entry.generator,
-                  Bukkit.getConsoleSender(),
-              ) == null
-      ) {
-        plugin.logger.warning(
-            "[OWG][normal] Generator unavailable, skipped: ${entry.name} generator=${entry.generator}"
-        )
-        return false
-      }
       val creator = WorldCreator.ofNameAndKey(entry.name, entry.key).environment(entry.environment)
       creator.keepSpawnLoaded(if (entry.keepSpawnInMemory) TriState.TRUE else TriState.FALSE)
       if (entry.generator.isNotBlank()) creator.generator(entry.generator)
