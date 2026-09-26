@@ -64,6 +64,7 @@ oyasaiPurpur rec {
     multiverseportals
     oyasaiadmintools
     oyasaichat
+    oyasaigames
     oyasaimenu
     oyasaimusic
     oyasaipets
