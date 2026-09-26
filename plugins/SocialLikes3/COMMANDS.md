@@ -30,7 +30,9 @@
 | `/slguide edit <ID>`               | そのガイドの編集用の本をもらう                                | 個人ガイドは作者・OP、公式ガイドは OP                           | `edit` の次に `<ID>`                  |
 
 本の中のリンクから呼ばれる内部コマンド（手で打つことは想定していない。補完にも出さない）:
-`editor` `add` `toggle` `describe` `comment` `move` `remove` `go` `delete-request` `delete-confirm` `slot-request` `slot-confirm`
+`editor` `add` `toggle` `describe` `title` `comment` `move` `remove` `go` `delete-request` `delete-confirm` `slot-request` `slot-confirm`
+
+編集用の本の「タイトル変更」は、作成時と同じ入力画面で変更する。公開済みガイドは、次に再公開したときに更新告知の対象になる。
 
 ## 看板
 

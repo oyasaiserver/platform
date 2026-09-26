@@ -214,6 +214,23 @@ object GuidebookService {
     }
   }
 
+  fun setTitle(player: Player, guidebookId: Int, rawTitle: String): Boolean {
+    editableGuidebook(player, guidebookId) ?: return false
+    val title = rawTitle.trim()
+    if (!GuidebookRules.isValidTitle(title, MAX_TITLE_LENGTH)) {
+      player.sendMessage(
+          Tools.socialLikesLOGO + " &cタイトルは1〜${MAX_TITLE_LENGTH}文字で、カラーコードなしで入力してください。".color()
+      )
+      return false
+    }
+    return SLDatabase.setGuidebookTitleBlocking(guidebookId, title).also { saved ->
+      player.sendMessage(
+          Tools.socialLikesLOGO +
+              if (saved) " &aタイトルを変更しました。".color() else " &cタイトルを変更できませんでした。".color()
+      )
+    }
+  }
+
   fun removeBuild(player: Player, guidebookId: Int, buildId: Int): Boolean {
     editableGuidebook(player, guidebookId) ?: return false
     return SLDatabase.removeGuidebookEntryBlocking(guidebookId, buildId).also {

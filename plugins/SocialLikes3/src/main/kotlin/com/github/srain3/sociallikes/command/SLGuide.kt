@@ -35,6 +35,8 @@ internal sealed interface GuidebookAction {
 
   data class Describe(val guidebookId: Int) : GuidebookAction
 
+  data class Title(val guidebookId: Int) : GuidebookAction
+
   data class Comment(val guidebookId: Int, val buildId: Int) : GuidebookAction
 
   data class Go(val guidebookId: Int, val buildId: Int) : GuidebookAction
@@ -83,6 +85,7 @@ internal object GuidebookCommandRules {
       "add" -> args.singleId()?.let(GuidebookAction::Add)
       "toggle" -> args.singleId()?.let(GuidebookAction::Toggle)
       "describe" -> args.singleId()?.let(GuidebookAction::Describe)
+      "title" -> args.singleId()?.let(GuidebookAction::Title)
       "comment" ->
           args.twoIds()?.let { (guidebookId, buildId) ->
             GuidebookAction.Comment(guidebookId, buildId)
@@ -154,6 +157,7 @@ object SLGuide : CommandExecutor, TabCompleter {
       is GuidebookAction.Toggle -> GuidebookBookUI.togglePublished(sender, action.guidebookId)
       is GuidebookAction.Describe ->
           GuidebookBookUI.startDescriptionEdit(sender, action.guidebookId)
+      is GuidebookAction.Title -> GuidebookBookUI.openRenameInput(sender, action.guidebookId)
       is GuidebookAction.Comment ->
           GuidebookBookUI.editComment(sender, action.guidebookId, action.buildId)
       is GuidebookAction.Go ->

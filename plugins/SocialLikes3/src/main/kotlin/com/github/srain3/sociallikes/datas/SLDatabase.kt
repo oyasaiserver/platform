@@ -570,6 +570,19 @@ object SLDatabase {
             } ?: false
       } ?: false
 
+  fun setGuidebookTitleBlocking(guidebookId: Int, title: String): Boolean =
+      submitWriteBlocking("setGuidebookTitle") {
+        rawConnection()
+            ?.prepareStatement(
+                "UPDATE guidebooks SET title = ?, edited_since_announce = 1 WHERE id = ?"
+            )
+            ?.use { statement ->
+              statement.setString(1, title)
+              statement.setInt(2, guidebookId)
+              statement.executeUpdate() == 1
+            } ?: false
+      } ?: false
+
   fun setGuidebookDescriptionBlocking(guidebookId: Int, description: String): Boolean =
       submitWriteBlocking("setGuidebookDescription") {
         rawConnection()

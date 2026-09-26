@@ -365,7 +365,8 @@ object GuidebookBookUI {
         page()
             .append(line(s.text("eTitle", mapOf("title" to guidebook.title)), "eTitle"))
             .append(line(s.text(state), state))
-            .append(blank())
+            .append(button("タイトル変更", "$COMMAND title ${guidebook.id}", "eButton"))
+            .append(newline())
             .append(command("bAdd", "$COMMAND add ${guidebook.id}"))
             .append(newline())
             .append(
@@ -449,6 +450,20 @@ object GuidebookBookUI {
         target,
         enteredTitle ->
       GuidebookService.create(target, type, enteredTitle)?.let { openEditor(target, it.id) }
+    }
+  }
+
+  fun openRenameInput(player: Player, guidebookId: Int) {
+    val guidebook = editableGuidebook(player, guidebookId) ?: return
+    val item =
+        ItemStack(Material.WRITABLE_BOOK)
+            .allFlag()
+            .addText(guidebook.title, mutableListOf("&7右側の本をクリックして確定します"))
+    SocialLikesAnvilInput.open(player, Tools.socialLikesLOGOShort + "&0タイトル変更".color(), item) {
+        target,
+        enteredTitle ->
+      GuidebookService.setTitle(target, guidebookId, enteredTitle)
+      openEditor(target, guidebookId)
     }
   }
 

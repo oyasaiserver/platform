@@ -40,6 +40,8 @@ class GuidebookCommandRulesTest {
         GuidebookAction.Comment(10, 20),
         GuidebookCommandRules.parse(listOf("comment", "10", "20")),
     )
+    assertEquals(GuidebookAction.Title(10), GuidebookCommandRules.parse(listOf("title", "10")))
+    assertNull(GuidebookCommandRules.parse(listOf("title", "x")))
     assertNull(GuidebookCommandRules.parse(listOf("move", "10", "20", "2")))
     assertNull(GuidebookCommandRules.parse(listOf("remove", "10", "x")))
     assertNull(GuidebookCommandRules.parse(listOf("toggle", "10", "extra")))
