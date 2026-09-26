@@ -1,7 +1,7 @@
 name: OyasaiGames
 version: ${version}
 main: icu.oyasai.games.OyasaiGamesPlugin
-api-version: '1.21'
+api-version: "1.21"
 author: ukieo
 description: おやさい鯖 ミニゲーム統合プラットフォーム (OyasaiGames)
 commands:

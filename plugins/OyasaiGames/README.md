@@ -8,7 +8,9 @@
 ## 🎮 収録ミニゲーム一覧
 
 ### 1. 建築用アイテム抽選ルーレット (Roulette)
+
 建築で使うブロックを完全ランダムに抽選するミニゲームです。
+
 - **3つのモード**:
   - 全建築用アイテム（設置可能な全ブロック）
   - フルブロックのみ（完全な立方体ブロック）
@@ -22,13 +24,13 @@
 
 ## 📋 コマンド一覧
 
-| コマンド | エイリアス | 権限 | 説明 |
-| :--- | :--- | :--- | :--- |
-| `/games` | `/og`, `/oyasaigames` | `oyasaigames.use` | おやさいゲームズのメインメニューを開く |
-| `/games help` | - | `oyasaigames.use` | コマンド一覧・ヘルプを表示 |
-| `/games reload` | - | `oyasaigames.admin` | プラグイン全体の設定を再読み込み |
-| `/roulette` | `/oroulette` | `oyasaigames.roulette.use` | 建築用アイテム抽選ルーレットGUIを開く |
-| `/roulette reload` | - | `oyasaigames.roulette.admin` | ルーレット設定とブロックリストを再読み込み |
+| コマンド           | エイリアス            | 権限                         | 説明                                       |
+| :----------------- | :-------------------- | :--------------------------- | :----------------------------------------- |
+| `/games`           | `/og`, `/oyasaigames` | `oyasaigames.use`            | おやさいゲームズのメインメニューを開く     |
+| `/games help`      | -                     | `oyasaigames.use`            | コマンド一覧・ヘルプを表示                 |
+| `/games reload`    | -                     | `oyasaigames.admin`          | プラグイン全体の設定を再読み込み           |
+| `/roulette`        | `/oroulette`          | `oyasaigames.roulette.use`   | 建築用アイテム抽選ルーレットGUIを開く      |
+| `/roulette reload` | -                     | `oyasaigames.roulette.admin` | ルーレット設定とブロックリストを再読み込み |
 
 ---
 
