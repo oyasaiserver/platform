@@ -5,7 +5,6 @@ main: com.baakun.dynamicprofile.DynamicProfile
 api-version: "1.20"
 version: "0.0.1"
 depend: [Votifier, Vault, TokenManager]
-softdepend: [PlaceholderAPI]
 permissions:
   dprofile.basic:
     description: "基本権限、鯖民向け"

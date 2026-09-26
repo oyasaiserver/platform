@@ -3,7 +3,6 @@ package com.github.srain3.sociallikes
 import com.github.srain3.sociallikes.command.*
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.DirtyBuildManager
-import com.github.srain3.sociallikes.datas.PlaceHolder
 import com.github.srain3.sociallikes.datas.PublicityHistory
 import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.discord.SLDiscord
@@ -17,7 +16,6 @@ import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import org.bukkit.Bukkit
 import org.bukkit.command.TabCompleter
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -105,10 +103,6 @@ class SocialLikes : JavaPlugin() {
       }
     }
 
-    if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-      PlaceHolder(this).register()
-    }
-
     DirtyBuildManager.loadFromDisk()
     DirtyBuildManager.startPeriodicReconciliation(this)
 
@@ -128,9 +122,6 @@ class SocialLikes : JavaPlugin() {
     DirtyBuildManager.stopPeriodicReconciliation()
     SLDiscord.disable()
 
-    if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-      PlaceHolder(this).unregister()
-    }
     SLtp.userLastSLTPTimeSave()
     Events.offlineLikePointSave()
     SLDatabase.close()

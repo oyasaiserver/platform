@@ -53,7 +53,7 @@ class ChatFormatter(
       ChatPresentationSnapshot(
           playerName = player.name,
           playerDisplayName = player.displayName(),
-          chatFormat = placeholderSupport.expand(player, config.chatFormat),
+          chatFormat = config.chatFormat,
           vaultPrefix = placeholderSupport.prefix(player),
           vaultSuffix = placeholderSupport.suffix(player),
           canSendLinks = player.hasPermission("oyasaichat.links.send"),

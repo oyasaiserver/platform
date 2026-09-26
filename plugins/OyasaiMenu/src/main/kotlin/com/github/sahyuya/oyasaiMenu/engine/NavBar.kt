@@ -5,7 +5,6 @@ import com.github.sahyuya.oyasaiMenu.manager.EconomyManager
 import com.github.sahyuya.oyasaiMenu.manager.TokenCurrencyManager
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import java.util.UUID
-import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -174,10 +173,7 @@ object NavBar {
       now - it.value.createdAtMillis > PLAYER_STATS_CACHE_SWEEP_MILLIS
     }
 
-    val dpLevel =
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-          runCatching { PlaceholderAPI.setPlaceholders(player, "%dp_level%") }.getOrElse { "---" }
-        } else "---"
+    val dpLevel = dpLevel(player)
     val snapshot =
         PlayerStatsSnapshot(
             createdAtMillis = now,

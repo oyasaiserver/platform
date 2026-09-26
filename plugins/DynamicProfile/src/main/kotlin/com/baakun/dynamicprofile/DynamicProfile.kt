@@ -89,9 +89,6 @@ class DynamicProfile : JavaPlugin() {
     if (perms == null) {
       logger.warning("LuckPerms is not found.")
     }
-    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-      PlaceHolderExpansion(this).register()
-    }
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             this,
@@ -185,9 +182,6 @@ class DynamicProfile : JavaPlugin() {
 
   override fun onDisable() {
 
-    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) { //
-      PlaceHolderExpansion(this).unregister() //
-    }
     for (player in Bukkit.getOnlinePlayers()) {
       playTimes[player]?.cancel()
       playTimes.remove(player)
