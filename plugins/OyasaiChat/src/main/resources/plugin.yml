@@ -6,7 +6,6 @@ description: バックエンド間チャット同期
 author: takucan
 softdepend:
   - Vault
-  - PlaceholderAPI
 loadbefore:
   - Essentials
   - LunaChat

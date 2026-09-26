@@ -5,7 +5,7 @@ api-version: "1.21"
 description: GUIベースの統合フロントエンドメニュープラグイン
 softdepend:
   - LuckPerms
-  - PlaceholderAPI
+  - DynamicProfile
   - TokenManager
   - Vault
 

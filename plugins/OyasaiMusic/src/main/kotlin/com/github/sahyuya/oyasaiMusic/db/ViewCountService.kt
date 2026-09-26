@@ -1,5 +1,6 @@
 package com.github.sahyuya.oyasaiMusic.db
 
+import com.earth2me.essentials.Essentials
 import com.github.sahyuya.oyasaiMusic.model.Song
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -9,7 +10,7 @@ import org.bukkit.plugin.Plugin
  * 視聴回数カウントと視聴ポイント付与のロジック（データ・システム設計書 1-3章、 UI/UX設計書 7章）を担当するサービス。
  *
  * 視聴1回としてカウントする条件（design doc 7章）:
- * 1. AFK状態ではない（PlaceholderAPI経由で %essentials_afk% を参照。無い場合は常にfalse扱い）
+ * 1. AFK状態ではない（Essentials が無い場合は常にfalse扱い）
  * 2. 楽曲の総演奏時間の80%以上を聴き終えている（呼び出し側=[com.github.sahyuya.oyasaiMusic.audio.PlaybackEngine] の
  *    onListenThresholdReached コールバックで既に判定済み）
  * 3. 同一プレイヤー・同一楽曲の再生が「1時間3回・1日10回」の制限内である
@@ -72,11 +73,11 @@ class ViewCountService(
   }
 
   private fun isAfk(player: Player): Boolean {
-    val papi = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") ?: return false
-    if (!papi.isEnabled) return false
+    val essentials =
+        Bukkit.getPluginManager().getPlugin("Essentials") as? Essentials ?: return false
+    if (!essentials.isEnabled) return false
     return try {
-      me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, "%essentials_afk%")
-          .equals("true", ignoreCase = true)
+      essentials.getUser(player)?.isAfk ?: false
     } catch (_: Throwable) {
       false
     }

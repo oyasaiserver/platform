@@ -1,5 +1,8 @@
 package com.github.sahyuya.oyasaiMenu.engine
 
+import com.baakun.dynamicprofile.model.Calculator
+import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
+import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.sahyuya.oyasaiMenu.OyasaiMenu
 import com.github.sahyuya.oyasaiMenu.manager.CooldownManager
 import com.github.sahyuya.oyasaiMenu.manager.EconomyManager
@@ -12,7 +15,6 @@ import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import com.github.sahyuya.oyasaiMenu.util.ItemVisuals
 import com.github.sahyuya.oyasaiMenu.util.PlayerAccess
-import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -27,9 +29,6 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
 
   private var cachedTpsAtMillis: Long = 0L
   private var cachedTps: Double = 20.0
-  private val placeholderApiAvailable: Boolean by lazy {
-    Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")
-  }
 
   private val rootFallback =
       MenuDefinition(id = "root", title = "&8✦ おやさい鯖 メニュー ✦", size = 54, items = emptyMap())
@@ -149,8 +148,6 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
       val key = "%announcement_line_${index + 1}%"
       if (result.contains(key)) result = result.replace(key, context.announcementLine(index))
     }
-    if (context.placeholderApiAvailable && result.contains('%'))
-        result = PlaceholderAPI.setPlaceholders(context.player, result)
     return result
   }
 
@@ -174,18 +171,11 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
   }
 
   private inner class PlaceholderContext(val player: Player) {
-    val placeholderApiAvailable: Boolean = this@MenuEngine.placeholderApiAvailable
     val onlinePlayers: String by
         lazy(LazyThreadSafetyMode.NONE) { Bukkit.getOnlinePlayers().size.toString() }
     val tpsTwoDecimals: String by
         lazy(LazyThreadSafetyMode.NONE) { String.format("%.2f", getCachedTps()) }
-    val dpLevel: String by
-        lazy(LazyThreadSafetyMode.NONE) {
-          if (placeholderApiAvailable)
-              runCatching { PlaceholderAPI.setPlaceholders(player, "%dp_level%") }
-                  .getOrElse { "---" }
-          else "---"
-        }
+    val dpLevel: String by lazy(LazyThreadSafetyMode.NONE) { dpLevel(player) }
     val balance: String by
         lazy(LazyThreadSafetyMode.NONE) {
           if (EconomyManager.isAvailable) EconomyManager.format(EconomyManager.getBalance(player))
@@ -207,4 +197,18 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
 
     fun announcementLine(index: Int): String = announcementBody.getOrNull(index) ?: ""
   }
+}
+
+internal fun dpLevel(player: Player): String {
+  if (!Bukkit.getPluginManager().isPluginEnabled("DynamicProfile")) return "---"
+  return runCatching {
+        val stats = getStats(player.uniqueId)
+        if (stats.title != -1) {
+          val title = getTitleFromId(stats.title)
+          if (title.id != -1) return@runCatching "${title.title}&r"
+          stats.title = -1
+        }
+        "Lv.${Calculator.getLevel(player)}"
+      }
+      .getOrElse { "---" }
 }
