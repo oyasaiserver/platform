@@ -17,6 +17,38 @@ class MultiverseCommand(
     private val registry: NormalWorlds,
     private val heightConfig: () -> OwgConfig,
 ) {
+  fun suggest(sender: CommandSender, name: String, args: Array<String>): Collection<String> {
+    val choices =
+        if (name.equals("mvtp", true)) {
+          if (args.size == 1)
+              registry.entries().flatMap { listOf(it.name, it.alias).filter(String::isNotEmpty) }
+          else if (args.size == 2)
+              registry.entries().flatMap { listOf(it.name, it.alias).filter(String::isNotEmpty) }
+          else emptyList()
+        } else
+            when (args.size) {
+              1 ->
+                  listOf(
+                      "list",
+                      "info",
+                      "create",
+                      "import",
+                      "load",
+                      "unload",
+                      "setspawn",
+                      "modify",
+                      "entity-spawn-config",
+                      "gamerule",
+                  )
+              2 ->
+                  registry.entries().flatMap {
+                    listOf(it.name, it.alias).filter(String::isNotEmpty)
+                  }
+              else -> emptyList()
+            }
+    return choices.filter { it.startsWith(args.lastOrNull().orEmpty(), true) }.distinct()
+  }
+
   fun execute(
       sender: CommandSender,
       name: String,

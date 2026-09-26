@@ -5,6 +5,8 @@ import io.oyasai.worldgen.command.OwgCommand
 import io.oyasai.worldgen.config.OwgConfig
 import io.oyasai.worldgen.gen.VoidGenerator
 import io.oyasai.worldgen.height.NmsHeightProvider
+import io.oyasai.worldgen.portal.PortalCommand
+import io.oyasai.worldgen.portal.Portals
 import io.oyasai.worldgen.world.NormalWorlds
 import io.oyasai.worldgen.world.WorldLifecycle
 import io.papermc.paper.command.brigadier.BasicCommand
@@ -19,9 +21,11 @@ class OyasaiWorldGenerator : JavaPlugin() {
   private var lifecycle: WorldLifecycle? = null
 
   override fun onEnable() {
-    val multiversePresent = server.pluginManager.getPlugin("Multiverse-Core") != null
+    val multiversePresent =
+        server.pluginManager.getPlugin("Multiverse-Core") != null ||
+            server.pluginManager.getPlugin("Multiverse-Portals") != null
     if (multiversePresent) {
-      logger.warning("[OWG] Multiverse-Core is installed; normal world management disabled")
+      logger.warning("[OWG] Multiverse is installed; normal world and portal management disabled")
     }
     try {
       generatorReady = true
@@ -40,6 +44,7 @@ class OyasaiWorldGenerator : JavaPlugin() {
     }
 
     var normalWorlds: NormalWorlds? = null
+    var portals: Portals? = null
     if (!multiversePresent) {
       try {
         normalWorlds = NormalWorlds(this) { lifecycle?.configSnapshot() ?: preliminaryConfig }
@@ -48,6 +53,14 @@ class OyasaiWorldGenerator : JavaPlugin() {
       } catch (throwable: Throwable) {
         logger.log(Level.SEVERE, "[OWG] Normal world registry failed", throwable)
         normalWorlds = null
+      }
+      try {
+        portals = Portals(this)
+        portals.initialize()
+        server.pluginManager.registerEvents(portals, this)
+      } catch (throwable: Throwable) {
+        logger.log(Level.SEVERE, "[OWG] Portal registry failed", throwable)
+        portals = null
       }
     }
 
@@ -77,10 +90,16 @@ class OyasaiWorldGenerator : JavaPlugin() {
                 override fun execute(source: CommandSourceStack, args: Array<out String>) {
                   mvCommand.execute(source.sender, name, args)
                 }
+
+                override fun suggest(
+                    source: CommandSourceStack,
+                    args: Array<String>,
+                ): Collection<String> = mvCommand.suggest(source.sender, name, args)
               },
           )
         }
       }
+      if (portals != null) registerCommand("mvp", PortalCommand(portals))
     } catch (throwable: Throwable) {
       logger.log(Level.SEVERE, "[OWG] Command registration failed", throwable)
     }
