@@ -81,8 +81,7 @@ class OyasaiWorldGenerator : JavaPlugin() {
       owgCommand.tabCompleter = command
       logger.info("[OWG] Command registered")
       if (normalWorlds != null) {
-        val mvCommand =
-            MultiverseCommand(normalWorlds) { lifecycle?.configSnapshot() ?: preliminaryConfig }
+        val mvCommand = MultiverseCommand(normalWorlds, checkNotNull(lifecycle))
         for (name in listOf("mv", "mvtp")) {
           registerCommand(
               name,

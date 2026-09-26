@@ -58,6 +58,10 @@ class LegacyImportTest {
       assertEquals("minecraft:overworld", result.worlds["DemoRealm"]?.key.toString())
       assertEquals("minecraft:missing_key", result.worlds["MissingArena"]?.key.toString())
       assertNull(result.worlds["MissingArena"]?.spawn)
+      val filtered = parseLegacyWorlds(file.toFile(), setOf("ArenaBlue"))
+      assertNull(filtered.worlds["ArenaBlue"])
+      assertEquals(5, filtered.worlds.size)
+      assertEquals(1, filtered.skippedHeight)
       val root = Files.createTempDirectory("fictional-level")
       try {
         val arena = normalWorldFolder(root, assertNotNull(result.worlds["ArenaBlue"]).key)

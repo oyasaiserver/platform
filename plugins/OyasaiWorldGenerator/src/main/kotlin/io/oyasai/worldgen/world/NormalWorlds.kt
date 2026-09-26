@@ -43,6 +43,7 @@ internal data class LegacyWorlds(
     val worlds: Map<String, NormalWorld>,
     val skippedLegacy: Int,
     val skippedInvalid: Int,
+    val skippedHeight: Int,
 )
 
 internal fun loadNormalYaml(file: File): YamlConfiguration =
@@ -55,11 +56,15 @@ internal fun loadNormalYaml(file: File): YamlConfiguration =
 private inline fun <reified T : Enum<T>> normalEnumValue(value: String?, fallback: T): T =
     enumValues<T>().firstOrNull { it.name.equals(value, true) } ?: fallback
 
-internal fun parseLegacyWorlds(source: File): LegacyWorlds {
+internal fun parseLegacyWorlds(
+    source: File,
+    heightWorldNames: Set<String> = emptySet(),
+): LegacyWorlds {
   val config = loadNormalYaml(source)
   val parsed = linkedMapOf<String, NormalWorld>()
   var skippedLegacy = 0
   var skippedInvalid = 0
+  var skippedHeight = 0
   for (rawKey in config.getKeys(false)) {
     if (!rawKey.startsWith("minecraft:")) {
       skippedLegacy++
@@ -78,6 +83,10 @@ internal fun parseLegacyWorlds(source: File): LegacyWorlds {
             parsed.containsKey(name)
     ) {
       skippedInvalid++
+      continue
+    }
+    if (name in heightWorldNames) {
+      skippedHeight++
       continue
     }
     val spawn = section.getConfigurationSection("spawn-location")
@@ -118,7 +127,7 @@ internal fun parseLegacyWorlds(source: File): LegacyWorlds {
             section.getBoolean("auto-load", true),
         )
   }
-  return LegacyWorlds(parsed, skippedLegacy, skippedInvalid)
+  return LegacyWorlds(parsed, skippedLegacy, skippedInvalid, skippedHeight)
 }
 
 internal fun normalWorldFolder(root: Path, key: NamespacedKey): File? {
@@ -169,11 +178,11 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
   }
 
   private fun importLegacy(source: File) {
-    val result = parseLegacyWorlds(source)
+    val result = parseLegacyWorlds(source, heightConfig().configuredWorldNames)
     worlds.putAll(result.worlds)
     save()
     plugin.logger.info(
-        "[OWG][normal] Imported ${result.worlds.size}; skipped legacy=${result.skippedLegacy} invalid=${result.skippedInvalid}"
+        "[OWG][normal] Imported ${result.worlds.size}; skipped legacy=${result.skippedLegacy} invalid=${result.skippedInvalid} height=${result.skippedHeight}"
     )
   }
 
@@ -296,6 +305,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
   }
 
   private fun enforceFlight(player: Player) {
+    if (player.world.name in heightConfig().configuredWorldNames) return
     val entry = worlds[player.world.name] ?: return
     if (player.gameMode == GameMode.SPECTATOR) {
       player.allowFlight = true
@@ -322,6 +332,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
 
   @EventHandler(priority = EventPriority.HIGH)
   fun onRespawn(event: PlayerRespawnEvent) {
+    if (event.player.world.name in heightConfig().configuredWorldNames) return
     val entry = worlds[event.player.world.name] ?: return
     if (event.isBedSpawn || event.isAnchorSpawn) return
     val world = Bukkit.getWorld(entry.name) ?: return

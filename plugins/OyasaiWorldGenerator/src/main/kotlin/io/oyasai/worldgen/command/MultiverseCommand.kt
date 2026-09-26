@@ -3,6 +3,7 @@ package io.oyasai.worldgen.command
 import io.oyasai.worldgen.config.OwgConfig
 import io.oyasai.worldgen.world.NormalWorld
 import io.oyasai.worldgen.world.NormalWorlds
+import io.oyasai.worldgen.world.WorldLifecycle
 import java.util.Locale
 import org.bukkit.Bukkit
 import org.bukkit.Difficulty
@@ -15,15 +16,14 @@ import org.bukkit.entity.Player
 
 class MultiverseCommand(
     private val registry: NormalWorlds,
-    private val heightConfig: () -> OwgConfig,
+    private val lifecycle: WorldLifecycle,
 ) {
   fun suggest(sender: CommandSender, name: String, args: Array<String>): Collection<String> {
     val choices =
         if (name.equals("mvtp", true)) {
-          if (args.size == 1)
-              registry.entries().flatMap { listOf(it.name, it.alias).filter(String::isNotEmpty) }
-          else if (args.size == 2)
-              registry.entries().flatMap { listOf(it.name, it.alias).filter(String::isNotEmpty) }
+          if (args.size in 1..2)
+              registry.entries().flatMap { listOf(it.name, it.alias).filter(String::isNotEmpty) } +
+                  lifecycle.configSnapshot().worlds.keys
           else emptyList()
         } else
             when (args.size) {
@@ -80,8 +80,18 @@ class MultiverseCommand(
       return true
     }
     when (sub) {
-      "list" ->
-          sender.sendMessage("[MV] Worlds: " + registry.entries().joinToString(", ") { it.name })
+      "list" -> {
+        val height = lifecycle.configSnapshot()
+        sender.sendMessage(
+            "[MV] Worlds: " +
+                (registry
+                        .entries()
+                        .map { it.name }
+                        .filterNot { it in height.configuredWorldNames } +
+                        height.worlds.keys.map { "$it(OWG)" })
+                    .joinToString(", ")
+        )
+      }
       "info" -> {
         val entry = args.getOrNull(1)?.let(registry::find)
         sender.sendMessage(
@@ -135,21 +145,32 @@ class MultiverseCommand(
       sender.sendMessage("[MV] プレイヤーが見つかりません")
       return true
     }
-    val entry = registry.find(args.last())
-    val world = entry?.let { Bukkit.getWorld(it.name) }
-    if (entry == null || world == null) {
+    val heightConfig = lifecycle.configSnapshot()
+    val heightEntry = heightConfig.worlds[args.last()]
+    val isHeight = args.last() in heightConfig.configuredWorldNames
+    val entry = if (isHeight) null else registry.find(args.last())
+    val worldName = heightEntry?.name ?: entry?.name
+    val world = worldName?.let(Bukkit::getWorld)
+    if ((isHeight && heightEntry == null) || worldName == null || world == null) {
       sender.sendMessage("[MV] ロード済みワールドが見つかりません")
       return true
     }
     val scope = if (sender == player) "self" else "other"
-    val node = "multiverse.teleport.$scope.w.${entry.name}"
+    val node = "multiverse.teleport.$scope.w.$worldName"
     if (!sender.hasPermission(node)) {
       sender.sendMessage("[MV] 権限がありません: $node")
       return true
     }
+    if (heightEntry != null) {
+      val moved = lifecycle.teleport(player, worldName)
+      if (sender != player)
+          sender.sendMessage(if (moved) "[MV] Teleported to $worldName" else "[MV] テレポートに失敗しました")
+      return true
+    }
     val spawn =
-        entry.spawn?.let { Location(world, it[0], it[1], it[2], it[3].toFloat(), it[4].toFloat()) }
-            ?: world.spawnLocation
+        entry!!.spawn?.let {
+          Location(world, it[0], it[1], it[2], it[3].toFloat(), it[4].toFloat())
+        } ?: world.spawnLocation
     sender.sendMessage(
         if (player.teleport(spawn)) "[MV] Teleported to ${entry.name}" else "[MV] テレポートに失敗しました"
     )
@@ -178,7 +199,7 @@ class MultiverseCommand(
             name == ".." ||
             key == null ||
             environment == null ||
-            name in heightConfig().configuredWorldNames ||
+            name in lifecycle.configSnapshot().configuredWorldNames ||
             registry.find(name) != null ||
             Bukkit.getWorld(name) != null
     ) {
