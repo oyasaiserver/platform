@@ -18,6 +18,7 @@ import icu.oyasai.utilities.redbull.RedBullCommand
 import icu.oyasai.utilities.redbull.RedBullFeature
 import icu.oyasai.utilities.sit.SitFeature
 import icu.oyasai.utilities.skin.SkinFeature
+import icu.oyasai.utilities.spawn.SpawnFeature
 import icu.oyasai.utilities.timerbar.TimerBarEvent
 import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
@@ -68,6 +69,9 @@ class Main : JavaPlugin() {
     Hats.onEnable()
     HologramFeature.onEnable()
     JoinCommands.onEnable()
+    // Essentials が無いと SpawnFeature のクラス読み込み自体が失敗するので、先に確かめる
+    if (server.pluginManager.isPluginEnabled("Essentials")) SpawnFeature.onEnable()
+    else logger.warning("Spawn: Essentials is not enabled; /spawn disabled")
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
     VeinminerConfig.reloadConfig()
