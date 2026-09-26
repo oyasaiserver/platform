@@ -24,6 +24,7 @@ import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
 import icu.oyasai.utilities.tpath.BackForwardCmd
 import icu.oyasai.utilities.tpath.TeleportListener
+import icu.oyasai.utilities.tpswitch.TpSwitchFeature
 import icu.oyasai.utilities.veinminer.VeinminerConfig
 import icu.oyasai.utilities.veinminer.VeinminerEvent
 import org.bukkit.plugin.java.JavaPlugin
@@ -31,11 +32,14 @@ import org.bukkit.plugin.java.JavaPlugin
 class Main : JavaPlugin() {
   private lateinit var backpackFeature: BackpackFeature
   private lateinit var skinFeature: SkinFeature
+  private lateinit var tpSwitchFeature: TpSwitchFeature
   private lateinit var sitFeature: SitFeature
 
   override fun onLoad() {}
 
   override fun onEnable() {
+    tpSwitchFeature = TpSwitchFeature(this)
+    tpSwitchFeature.enable()
     sitFeature = SitFeature(this)
     sitFeature.enable()
     skinFeature = SkinFeature(this)
@@ -81,6 +85,7 @@ class Main : JavaPlugin() {
   }
 
   override fun onDisable() {
+    if (::tpSwitchFeature.isInitialized) tpSwitchFeature.disable()
     if (::sitFeature.isInitialized) sitFeature.disable()
     if (::skinFeature.isInitialized) skinFeature.disable()
     OreReappears.onDisable() // OreReappearsの無効化
