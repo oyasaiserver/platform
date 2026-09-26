@@ -24,6 +24,7 @@ class LegacyImportTest {
             read-only: {legacy-world-name: DemoRealm_the_end, environment: the_end}
           minecraft:arena_key:
             read-only: {legacy-world-name: ArenaBlue, environment: normal}
+            auto-load: false
             spawn-location:
               ==: MVSpawnLocation
               x: 2.0
@@ -52,6 +53,8 @@ class LegacyImportTest {
       assertEquals("minecraft:arena_key", result.worlds["ArenaBlue"]?.key.toString())
       assertEquals("minecraft:.hidden_key", result.worlds[".HiddenArena"]?.key.toString())
       assertFalse(assertNotNull(result.worlds["ArenaBlue"]).monsterSpawn)
+      assertFalse(assertNotNull(result.worlds["ArenaBlue"]).autoLoad)
+      assertEquals(true, result.worlds.filterKeys { it != "ArenaBlue" }.values.all { it.autoLoad })
       assertEquals("minecraft:overworld", result.worlds["DemoRealm"]?.key.toString())
       assertEquals("minecraft:missing_key", result.worlds["MissingArena"]?.key.toString())
       assertNull(result.worlds["MissingArena"]?.spawn)

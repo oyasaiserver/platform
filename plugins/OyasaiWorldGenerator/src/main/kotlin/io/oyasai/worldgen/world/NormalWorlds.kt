@@ -36,6 +36,7 @@ data class NormalWorld(
     var spawn: List<Double>? = null,
     var alias: String = "",
     var keepSpawnInMemory: Boolean = true,
+    var autoLoad: Boolean = true,
 )
 
 internal data class LegacyWorlds(
@@ -114,6 +115,7 @@ internal fun parseLegacyWorlds(source: File): LegacyWorlds {
                 },
             alias.takeUnless { it == name }.orEmpty(),
             section.getBoolean("keep-spawn-in-memory", true),
+            section.getBoolean("auto-load", true),
         )
   }
   return LegacyWorlds(parsed, skippedLegacy, skippedInvalid)
@@ -201,6 +203,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
               spawn,
               section.getString("alias").orEmpty(),
               section.getBoolean("keep-spawn-in-memory", true),
+              section.getBoolean("auto-load", true),
           )
     }
     plugin.logger.info("[OWG][normal] Registry loaded: ${worlds.size}")
@@ -221,6 +224,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
       section.set("spawn", entry.spawn)
       if (entry.alias.isNotEmpty()) section.set("alias", entry.alias)
       section.set("keep-spawn-in-memory", entry.keepSpawnInMemory)
+      section.set("auto-load", entry.autoLoad)
     }
     file.parentFile.mkdirs()
     config.save(file)
@@ -244,6 +248,10 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
       val loaded = Bukkit.getWorld(entry.name)
       if (loaded != null) {
         apply(entry, loaded)
+        continue
+      }
+      if (!entry.autoLoad) {
+        plugin.logger.info("[OWG][normal] auto-load=false, skipped: ${entry.name}")
         continue
       }
       if (folder(entry.key)?.isDirectory != true) {

@@ -248,6 +248,11 @@ class MultiverseCommand(
                 entry.keepSpawnInMemory = it
                 true
               }
+          "auto-load" ->
+              bool?.let {
+                entry.autoLoad = it
+                true
+              }
           "generator" -> {
             entry.generator = value
             true
@@ -371,7 +376,6 @@ class MultiverseCommand(
             "bed-respawn",
             "anchor-respawn",
             "biome",
-            "auto-load",
             "seed",
             "tick-rate",
             "spawn-limit",
