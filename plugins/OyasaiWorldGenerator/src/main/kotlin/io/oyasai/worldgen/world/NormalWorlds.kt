@@ -1,8 +1,11 @@
 package io.oyasai.worldgen.world
 
 import io.oyasai.worldgen.config.OwgConfig
+import io.oyasai.worldgen.gen.VoidGenerator
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 import java.util.Locale
 import java.util.logging.Level
 import net.kyori.adventure.util.TriState
@@ -13,6 +16,7 @@ import org.bukkit.Location
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.WorldCreator
+import org.bukkit.WorldType
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -37,6 +41,12 @@ data class NormalWorld(
     var alias: String = "",
     var keepSpawnInMemory: Boolean = true,
     var autoLoad: Boolean = true,
+    val kind: String =
+        when (environment) {
+          World.Environment.NETHER -> "nether"
+          World.Environment.THE_END -> "the_end"
+          else -> "normal"
+        },
 )
 
 internal data class LegacyWorlds(
@@ -198,6 +208,25 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
         continue
       }
       val spawn = section.getDoubleList("spawn").takeIf { it.size == 5 }
+      val kind =
+          section.getString("kind")
+              ?: when (section.getString("environment")?.lowercase(Locale.ROOT)) {
+                "nether" -> "nether"
+                "the_end" -> "the_end"
+                else -> "normal"
+              }
+      if (
+          kind !in setOf("normal", "flat", "void", "nether", "the_end") ||
+              (kind == "nether" && section.getString("environment") != "nether") ||
+              (kind == "the_end" && section.getString("environment") != "the_end") ||
+              (kind in setOf("normal", "flat", "void") &&
+                  section.getString("environment") != "normal") ||
+              worlds.values.any { it.key == key } ||
+              name in heightConfig().configuredWorldNames
+      ) {
+        plugin.logger.warning("[OWG][normal] Conflicting or invalid entry skipped: $name")
+        continue
+      }
       worlds[name] =
           NormalWorld(
               name,
@@ -213,6 +242,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
               section.getString("alias").orEmpty(),
               section.getBoolean("keep-spawn-in-memory", true),
               section.getBoolean("auto-load", true),
+              kind,
           )
     }
     plugin.logger.info("[OWG][normal] Registry loaded: ${worlds.size}")
@@ -225,6 +255,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
       section.set("key", entry.key.toString())
       section.set("environment", entry.environment.name.lowercase(Locale.ROOT))
       section.set("generator", entry.generator)
+      section.set("kind", entry.kind)
       section.set("difficulty", entry.difficulty.name.lowercase(Locale.ROOT))
       section.set("pvp", entry.pvp)
       section.set("allow-flight", entry.allowFlight)
@@ -236,11 +267,27 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
       section.set("auto-load", entry.autoLoad)
     }
     file.parentFile.mkdirs()
-    config.save(file)
+    val temporary = File(file.parentFile, "${file.name}.tmp")
+    config.save(temporary)
+    try {
+      Files.move(
+          temporary.toPath(),
+          file.toPath(),
+          StandardCopyOption.ATOMIC_MOVE,
+          StandardCopyOption.REPLACE_EXISTING,
+      )
+    } finally {
+      temporary.delete()
+    }
   }
 
   fun add(entry: NormalWorld) {
     worlds[entry.name] = entry
+    save()
+  }
+
+  fun remove(name: String) {
+    worlds.remove(name)
     save()
   }
 
@@ -275,7 +322,17 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
 
   fun load(entry: NormalWorld, create: Boolean = false): Boolean {
     if (entry.name in heightConfig().configuredWorldNames) return false
+    Bukkit.getWorld(entry.key)?.let {
+      if (it.name != entry.name) {
+        plugin.logger.severe("[OWG][normal] World key already belongs to ${it.name}: ${entry.key}")
+        return false
+      }
+    }
     Bukkit.getWorld(entry.name)?.let {
+      if (it.key != entry.key || it.environment != entry.environment) {
+        plugin.logger.severe("[OWG][normal] Loaded world conflicts with registry: ${entry.name}")
+        return false
+      }
       apply(entry, it)
       return true
     }
@@ -283,7 +340,11 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
     return try {
       val creator = WorldCreator.ofNameAndKey(entry.name, entry.key).environment(entry.environment)
       creator.keepSpawnLoaded(if (entry.keepSpawnInMemory) TriState.TRUE else TriState.FALSE)
-      if (entry.generator.isNotBlank()) creator.generator(entry.generator)
+      when (entry.kind) {
+        "flat" -> creator.type(WorldType.FLAT)
+        "void" -> creator.generator(VoidGenerator(64))
+        else -> if (entry.generator.isNotBlank()) creator.generator(entry.generator)
+      }
       val world = Bukkit.createWorld(creator) ?: return false
       apply(entry, world)
       plugin.logger.info("[OWG][normal] Loaded ${entry.name} key=${entry.key}")

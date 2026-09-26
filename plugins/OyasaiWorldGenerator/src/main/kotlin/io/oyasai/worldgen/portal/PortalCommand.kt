@@ -1,9 +1,5 @@
 package io.oyasai.worldgen.portal
 
-import com.sk89q.worldedit.IncompleteRegionException
-import com.sk89q.worldedit.WorldEdit
-import com.sk89q.worldedit.bukkit.BukkitAdapter
-import com.sk89q.worldedit.regions.CuboidRegion
 import io.papermc.paper.command.brigadier.BasicCommand
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import java.util.Locale
@@ -27,7 +23,7 @@ class PortalCommand(private val portals: Portals) : BasicCommand {
           "remove" -> "multiverse.portal.$sub"
           "wand" -> "multiverse.portal.givewand"
           else -> {
-            sender.sendMessage("Usage: /mvp <create|modify|list|info|select|remove|wand>")
+            sender.sendMessage("[MVP] 使い方: /mvp <create|modify|list|info|select|remove|wand>")
             return
           }
         }
@@ -43,22 +39,26 @@ class PortalCommand(private val portals: Portals) : BasicCommand {
       "create" -> create(sender, args)
       "modify" -> modify(sender, args)
       "list" -> {
+        if (args.size !in 1..2) return sender.sendMessage("[MVP] 使い方: /mvp list [ワールド]")
         val world = args.getOrNull(1)
         sender.sendMessage(
-            "[MVP] Portals: " +
+            "[MVP] ポータル: " +
                 portals
                     .all()
                     .filter { world == null || it.world.equals(world, true) }
                     .joinToString(", ") { it.name }
         )
       }
-      "info" ->
-          sender.sendMessage(
-              portals.find(args.getOrNull(1).orEmpty())?.let {
-                "[MVP] ${it.name}: ${it.locationString()} -> ${it.destination}, safe-teleport=${it.safeTeleport}"
-              } ?: "[MVP] ポータルが見つかりません"
-          )
+      "info" -> {
+        if (args.size != 2) return sender.sendMessage("[MVP] 使い方: /mvp info <名前>")
+        sender.sendMessage(
+            portals.find(args.getOrNull(1).orEmpty())?.let {
+              "[MVP] ${it.name}: ${it.locationString()} -> ${it.destination}, 安全移動=${it.safeTeleport}"
+            } ?: "[MVP] ポータルが見つかりません"
+        )
+      }
       "select" -> {
+        if (args.size != 2) return sender.sendMessage("[MVP] 使い方: /mvp select <名前>")
         val player = sender as? Player ?: return sender.sendMessage("[MVP] プレイヤー専用です")
         if (!Bukkit.getPluginManager().isPluginEnabled("FastAsyncWorldEdit"))
             return sender.sendMessage("[MVP] FAWE が必要です")
@@ -67,28 +67,18 @@ class PortalCommand(private val portals: Portals) : BasicCommand {
                 ?: return sender.sendMessage("[MVP] ポータルが見つかりません")
         val world =
             Bukkit.getWorld(portal.world) ?: return sender.sendMessage("[MVP] ワールドがロードされていません")
-        val actor = BukkitAdapter.adapt(player)
-        val selector =
-            WorldEdit.getInstance()
-                .sessionManager
-                .get(actor)
-                .getRegionSelector(BukkitAdapter.adapt(world))
-        selector.selectPrimary(
-            com.sk89q.worldedit.math.BlockVector3.at(portal.minX, portal.minY, portal.minZ),
-            null,
-        )
-        selector.selectSecondary(
-            com.sk89q.worldedit.math.BlockVector3.at(portal.maxX, portal.maxY, portal.maxZ),
-            null,
-        )
-        sender.sendMessage("[MVP] Selected ${portal.name}")
+        PortalSelection.select(player, portal)
+        sender.sendMessage("[MVP] ${portal.name} を選択しました")
       }
-      "remove" ->
-          sender.sendMessage(
-              if (portals.remove(args.getOrNull(1).orEmpty())) "[MVP] Removed"
-              else "[MVP] ポータルが見つかりません"
-          )
+      "remove" -> {
+        if (args.size != 2) return sender.sendMessage("[MVP] 使い方: /mvp remove <名前>")
+        sender.sendMessage(
+            if (portals.remove(args.getOrNull(1).orEmpty())) "[MVP] 削除しました"
+            else "[MVP] ポータルが見つかりません"
+        )
+      }
       "wand" -> {
+        if (args.size != 1) return sender.sendMessage("[MVP] 使い方: /mvp wand")
         val player = sender as? Player ?: return sender.sendMessage("[MVP] プレイヤー専用です")
         if (!Bukkit.getPluginManager().isPluginEnabled("FastAsyncWorldEdit"))
             return sender.sendMessage("[MVP] FAWE が必要です")
@@ -109,68 +99,45 @@ class PortalCommand(private val portals: Portals) : BasicCommand {
       sender.sendMessage("[MVP] FAWE が必要です")
       return null
     }
-    val actor = BukkitAdapter.adapt(player)
-    val region =
-        try {
-          WorldEdit.getInstance()
-              .sessionManager
-              .get(actor)
-              .getRegionSelector(BukkitAdapter.adapt(player.world))
-              .region
-        } catch (_: IncompleteRegionException) {
-          sender.sendMessage("[MVP] 木の斧で2点を選択してください")
-          return null
-        }
-    if (region !is CuboidRegion) {
-      sender.sendMessage("[MVP] 直方体を選択してください")
-      return null
-    }
-    return Portal(
-        "",
-        player.world.name,
-        region.minimumPoint.x(),
-        region.minimumPoint.y(),
-        region.minimumPoint.z(),
-        region.maximumPoint.x(),
-        region.maximumPoint.y(),
-        region.maximumPoint.z(),
-        "",
-    )
+    return PortalSelection.current(player)
   }
 
   private fun create(sender: CommandSender, args: Array<out String>) {
     if (args.size !in 2..3) {
-      sender.sendMessage("Usage: /mvp create <name> [dest]")
+      sender.sendMessage("[MVP] 使い方: /mvp create <name> [dest]")
       return
     }
     val name = args[1]
-    if (!name.matches(Regex("[A-Za-z0-9_.-]+")) || portals.find(name) != null) {
-      sender.sendMessage("[MVP] 名前が不正か登録済みです")
+    if (!name.matches(Regex("[A-Za-z0-9_.-]+"))) {
+      sender.sendMessage("[MVP] 名前には英数字、_、-、. のみ使えます")
+      return
+    }
+    if (portals.find(name) != null) {
+      sender.sendMessage("[MVP] その名前のポータルは既にあります")
       return
     }
     val region = selection(sender) ?: return
     portals.put(region.copy(name = name, destination = args.getOrNull(2).orEmpty()))
-    sender.sendMessage("[MVP] Created $name")
+    sender.sendMessage("[MVP] $name を作成しました")
   }
 
   private fun modify(sender: CommandSender, args: Array<out String>) {
     if (args.size < 3) {
-      sender.sendMessage("Usage: /mvp modify <name> <dest|action|location> [value]")
+      sender.sendMessage("[MVP] 使い方: /mvp modify <name> <dest|location> [value]")
       return
     }
     val portal = portals.find(args[1]) ?: return sender.sendMessage("[MVP] ポータルが見つかりません")
     when (args[2].lowercase(Locale.ROOT)) {
-      "dest",
-      "action" -> {
+      "dest" -> {
         if (args.size != 4) {
-          sender.sendMessage("Usage: /mvp modify <name> dest <destination>")
+          sender.sendMessage("[MVP] 使い方: /mvp modify <name> dest <destination>")
           return
         }
         portal.destination = args[3]
       }
       "location" -> {
         if (args.size != 3) {
-          sender.sendMessage("Usage: /mvp modify <name> location")
+          sender.sendMessage("[MVP] 使い方: /mvp modify <name> location")
           return
         }
         val region = selection(sender) ?: return
@@ -188,13 +155,19 @@ class PortalCommand(private val portals: Portals) : BasicCommand {
       }
     }
     portals.save()
-    sender.sendMessage("[MVP] Modified ${portal.name}")
+    sender.sendMessage("[MVP] ${portal.name} を変更しました")
   }
 
   override fun suggest(source: CommandSourceStack, args: Array<String>): Collection<String> {
     val options =
         when (args.size) {
-          1 -> listOf("create", "modify", "list", "info", "select", "remove", "wand")
+          0,
+          1 ->
+              listOf("create", "modify", "list", "info", "select", "remove", "wand").filter {
+                source.sender.hasPermission(
+                    if (it == "wand") "multiverse.portal.givewand" else "multiverse.portal.$it"
+                ) && (it != "select" || source.sender.hasPermission("multiverse.portal.create"))
+              }
           2 ->
               when (args[0].lowercase(Locale.ROOT)) {
                 "list" -> Bukkit.getWorlds().map { it.name }
@@ -206,19 +179,24 @@ class PortalCommand(private val portals: Portals) : BasicCommand {
               }
           3 ->
               when (args[0].lowercase(Locale.ROOT)) {
-                "modify" -> listOf("dest", "action", "location")
+                "modify" -> listOf("dest", "location")
                 "create" -> portals.all().map { "p:${it.name}" }
                 else -> emptyList()
               }
           4 ->
-              if (
-                  args[0].equals("modify", true) &&
-                      (args[2].equals("dest", true) || args[2].equals("action", true))
-              )
+              if (args[0].equals("modify", true) && args[2].equals("dest", true))
                   portals.all().map { "p:${it.name}" }
               else emptyList()
           else -> emptyList()
         }
+    val sub = args.firstOrNull()?.lowercase(Locale.ROOT).orEmpty()
+    if (
+        args.size > 1 &&
+            (!source.sender.hasPermission(
+                if (sub == "wand") "multiverse.portal.givewand" else "multiverse.portal.$sub"
+            ) || (sub == "select" && !source.sender.hasPermission("multiverse.portal.create")))
+    )
+        return emptyList()
     return options.filter { it.startsWith(args.lastOrNull().orEmpty(), true) }
   }
 }

@@ -2,6 +2,8 @@ package io.oyasai.worldgen.portal
 
 import io.oyasai.worldgen.world.loadNormalYaml
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.UUID
 import kotlin.math.floor
 import org.bukkit.Bukkit
@@ -63,8 +65,10 @@ internal fun parsePortals(source: File): PortalImport {
             world.isBlank() ||
             first?.size != 3 ||
             second?.size != 3 ||
-            first.any { it == null || !it.isFinite() } ||
-            second.any { it == null || !it.isFinite() }
+            first.any {
+              it == null || !it.isFinite() || it < Int.MIN_VALUE || it > Int.MAX_VALUE
+            } ||
+            second.any { it == null || !it.isFinite() || it < Int.MIN_VALUE || it > Int.MAX_VALUE }
     ) {
       skipped += name
       continue
@@ -154,7 +158,18 @@ class Portals(private val plugin: JavaPlugin) : Listener {
       section.set("safe-teleport", portal.safeTeleport)
     }
     file.parentFile.mkdirs()
-    config.save(file)
+    val temporary = File(file.parentFile, "${file.name}.tmp")
+    config.save(temporary)
+    try {
+      Files.move(
+          temporary.toPath(),
+          file.toPath(),
+          StandardCopyOption.ATOMIC_MOVE,
+          StandardCopyOption.REPLACE_EXISTING,
+      )
+    } finally {
+      temporary.delete()
+    }
     reindex()
   }
 
@@ -242,8 +257,8 @@ class Portals(private val plugin: JavaPlugin) : Listener {
       val x = (target.minX + target.maxX + 1) / 2.0
       val z = (target.minZ + target.maxZ + 1) / 2.0
       val y =
-          (target.minY until target.maxY).firstOrNull { safe(world, x, it.toDouble(), z) }
-              ?: target.minY
+          (maxOf(target.minY, world.minHeight) until minOf(target.maxY, world.maxHeight - 1))
+              .firstOrNull { safe(world, x, it.toDouble(), z) } ?: target.minY
       if (target.safeTeleport && !safe(world, x, y.toDouble(), z)) return null
       val yaw =
           when (parts.getOrNull(2)?.lowercase()) {

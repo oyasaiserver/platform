@@ -17,7 +17,7 @@
 
 通常ワールドは別ファイル `plugins/OyasaiWorldGenerator/normal-worlds.yml` で管理します。初回のみ `plugins/Multiverse-Core/worlds.yml` から `minecraft:` の登録と名前・キーを取り込みます。以後はこのファイルを正本とし、高さ用の `config.yml` の `worlds:` には混ぜません。既定3ワールドには設定だけを適用し、追加ワールドは既存の dimension フォルダがある場合に、既定ワールドのロード完了後、POSTWORLD プラグインより前に開きます。フォルダ欠損や高さ用ワールドとの重複は飛ばします。Multiverse-Core の jar と同時に入れるとワールド管理を無効にします。
 
-通常ワールドの操作は `/mvtp [player] <world>`、`/mv list|info|create|import|load|unload|setspawn|modify|entity-spawn-config|gamerule` です。ポータル機能は含みません。
+通常ワールドの操作は `/mvtp [player] <world>`、`/mv list|info|create|import|load|unload|setspawn|modify|entity-spawn-config|gamerule` です。`/mv create <名前> <normal|flat|void|nether|the_end>` の種類を台帳に保存し、次回ロード時も同じ生成方法を使います。ポータルは `/mvp create|modify|list|info|select|remove|wand` で管理します（範囲選択を伴う操作のみ FAWE が必要です）。
 
 ## 高さ適用の設計
 
