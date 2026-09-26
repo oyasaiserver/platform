@@ -4,7 +4,14 @@ plugins { alias(libs.plugins.paperweight.userdev) }
 
 version = "0.1.0"
 
-dependencies { paperweightDevelopmentBundle(libs.purpur.dev.bundle) }
+dependencies {
+  paperweightDevelopmentBundle(libs.purpur.dev.bundle)
+  testImplementation(libs.purpur.api)
+  testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.4.0")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.4")
+}
+
+tasks.test { useJUnitPlatform() }
 
 tasks.processResources {
   val properties = mapOf("version" to project.version.toString())
