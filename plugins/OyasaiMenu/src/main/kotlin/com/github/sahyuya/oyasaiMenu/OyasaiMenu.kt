@@ -80,7 +80,6 @@ class OyasaiMenu : JavaPlugin(), Listener {
             sellEngine,
             pointShopEngine,
             adminEngine,
-            announcementManager,
             this,
         )
         .forEach { server.pluginManager.registerEvents(it, this) }

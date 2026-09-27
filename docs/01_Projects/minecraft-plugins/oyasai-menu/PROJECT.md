@@ -39,7 +39,8 @@ YAMLで定義されたメニューをチェスト型GUIで表示し、アクシ�
 | `/sell` | アイテム売却GUI |
 | `/pointshop` | ポイントショップ |
 | `/adminmenu` | 管理者メニュー |
-| `/menuedit` | お知らせ・ショップ商品・売却ホワイトリストの編集 |
+| `/menuedit` | ショップ商品・売却ホワイトリストの編集 |
+| `/oyasaimenu reload` | 設定・メニュー・お知らせを再読み込み |
 
 ## アーキテクチャ
 
@@ -52,7 +53,7 @@ engine/         ← ビジネスロジック
   PointShopEngine ← ポイント管理
   PopupMenuEngine ← ポップアップGUI
 manager/
-  AnnouncementManager ← アナウンス管理
+  AnnouncementManager ← announcements.yml の読み込み
 ```
 
 ## メニューYAML定義例
@@ -68,4 +69,5 @@ items:
 
 ## 関連ドキュメント
 
+- お知らせは `plugins/OyasaiMenu/announcements.yml` を直接編集し、`/oyasaimenu reload` で反映する。
 - エディター向け詳細: [`../../../02_Docs/tools/oyasai-menu-editors-doc/`](../../../02_Docs/tools/oyasai-menu-editors-doc/)

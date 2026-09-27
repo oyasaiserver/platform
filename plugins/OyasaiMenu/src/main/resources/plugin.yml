@@ -30,7 +30,7 @@ commands:
     aliases: [admenu]
     permission: oyasaimenu.admin
   menuedit:
-    description: お知らせ・ショップを管理する
+    description: ショップ・売却ホワイトリストを管理する
     permission: oyasaimenu.admin
   oyasaimenu:
     description: OyasaiMenu管理コマンド
