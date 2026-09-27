@@ -11,6 +11,13 @@
       "type": "modrinth"
     }
   },
+  "coreprotect": {
+    "paper": {
+      "skipVersionCheck": true,
+      "slug": "coreprotect",
+      "type": "modrinth"
+    }
+  },
   "crackshotguns": {
     "paper": {
       "id": 48301,
@@ -19,6 +26,7 @@
   },
   "decentholograms": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "decentholograms",
       "type": "modrinth"
     }
@@ -37,12 +45,14 @@
   },
   "fastasyncvoxelsniper": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "fastasyncvoxelsniper",
       "type": "modrinth"
     }
   },
   "fastasyncworldedit": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "fastasyncworldedit",
       "type": "modrinth"
     }
@@ -82,6 +92,7 @@
   },
   "lwc": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "lwc",
       "type": "modrinth"
     }
@@ -137,6 +148,7 @@
   },
   "skript": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "skript",
       "type": "modrinth"
     }
