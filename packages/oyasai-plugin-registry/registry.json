@@ -13,13 +13,8 @@
   },
   "coreprotect": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "coreprotect",
-      "type": "modrinth"
-    }
-  },
-  "decentholograms": {
-    "paper": {
-      "slug": "decentholograms",
       "type": "modrinth"
     }
   },
@@ -37,6 +32,7 @@
   },
   "fastasyncvoxelsniper": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "fastasyncvoxelsniper",
       "type": "modrinth"
     }
@@ -73,12 +69,6 @@
       "type": "modrinth"
     }
   },
-  "lwc": {
-    "paper": {
-      "slug": "lwc",
-      "type": "modrinth"
-    }
-  },
   "plugmanx": {
     "paper": {
       "slug": "plugmanx",
@@ -89,12 +79,6 @@
     "paper": {
       "id": 10997,
       "type": "spiget"
-    }
-  },
-  "skript": {
-    "paper": {
-      "slug": "skript",
-      "type": "modrinth"
     }
   },
   "vault": {
