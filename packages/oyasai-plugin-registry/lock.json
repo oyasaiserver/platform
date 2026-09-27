@@ -1,15 +1,15 @@
 {
   "axiom-paper-plugin": {
     "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/93qRRLuz/AxiomPaperPlugin-6.0.1-for-MC26.2.jar",
-        "hash": "sha256-BvOKOOBo5gCGY7QsAx30T4PLtN0Jf5RcI0pdXWS+ABg="
+      "26.3": {
+        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/V2yAy4up/AxiomPaper-6.0.1-for-MC26.3.jar",
+        "hash": "sha256-jzxHjEx9Xj6YZMsMXMhIpmY8BoZOpXYe2tJG66T0B1I="
       }
     }
   },
   "bluemap": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/pILlMIlN/bluemap-5.28-paper.jar",
         "hash": "sha256-TPtKmWMTLVvgqdsDGiipjp35Le7TfrsHVtOn3Ychq5g="
       }
@@ -17,7 +17,7 @@
   },
   "coreprotect": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/3sehX6Sg/CoreProtect-CE-24.1.jar",
         "hash": "sha256-oqzvfAbvIBNVzvB9WRpgVd/tNYrXaPqqqvTidoZezJc="
       }
@@ -25,7 +25,7 @@
   },
   "discordsrv": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/UmLGoGij/versions/ATlquwiT/DiscordSRV-Build-1.30.5.jar",
         "hash": "sha256-7y+h8usUbHx3QStxkKfdM/H8kSgmg/5FQHc5VUyK7+8="
       }
@@ -33,7 +33,7 @@
   },
   "fastasyncvoxelsniper": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/D7XBSI1y/versions/AnYq3r1h/fastasyncvoxelsniper-3.2.5.jar",
         "hash": "sha256-SF6LVpTfDb2pYDgEnLmnO+5ON9nsjH9YmvXopZD8ouk="
       }
@@ -41,7 +41,7 @@
   },
   "fastasyncworldedit": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/U2dcKa9T/FastAsyncWorldEdit-Paper-2.16.0.jar",
         "hash": "sha256-Gjz4F48i2X/njbEAx9UOvles21nz3xqXLCl2Hrum8M0="
       }
@@ -49,7 +49,7 @@
   },
   "floodgate": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/141/downloads/spigot",
         "hash": "sha256-IVcK/5zhfWmDko6FUnd3YOHt5QUAJrBMaGsK4RLm/X4="
       }
@@ -67,7 +67,7 @@
   },
   "luckperms": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar",
         "hash": "sha256-Sc7LZvof0ioTMDmkkOnB5QlaI4581m650qFv5siXVQ0="
       }
@@ -79,7 +79,7 @@
   },
   "plugmanx": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/yro4niHu/versions/j22EUw2Y/PlugManX-3.2.1.jar",
         "hash": "sha256-ZgpIxZdasermepJz6OsP22B/NNdkRzDlEEHT+L3+3PI="
       }
@@ -87,7 +87,7 @@
   },
   "viaversion": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/TEgYlalY/ViaVersion-5.12.1-SNAPSHOT.jar",
         "hash": "sha256-072ZwsSSNn45o+CXYdlbkR96kEr0/QjvyXVIyYeDD8s="
       }
@@ -95,7 +95,7 @@
   },
   "worldguard": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/TtfwTyi6/worldguard-bukkit-7.0.19.jar",
         "hash": "sha256-OW3wZfHPOLq5h4oPU6d21aCF6788QYE5OLc/ldTqygM="
       }

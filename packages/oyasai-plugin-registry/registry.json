@@ -13,6 +13,7 @@
   },
   "coreprotect": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "coreprotect",
       "type": "modrinth"
     }
@@ -25,6 +26,7 @@
   },
   "fastasyncvoxelsniper": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "fastasyncvoxelsniper",
       "type": "modrinth"
     }
