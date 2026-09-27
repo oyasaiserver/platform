@@ -1,23 +1,31 @@
 {
   "axiom-paper-plugin": {
     "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/93qRRLuz/AxiomPaperPlugin-6.0.1-for-MC26.2.jar",
-        "hash": "sha256-BvOKOOBo5gCGY7QsAx30T4PLtN0Jf5RcI0pdXWS+ABg="
+      "26.3": {
+        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/V2yAy4up/AxiomPaper-6.0.1-for-MC26.3.jar",
+        "hash": "sha256-jzxHjEx9Xj6YZMsMXMhIpmY8BoZOpXYe2tJG66T0B1I="
       }
     }
   },
   "bluemap": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/pILlMIlN/bluemap-5.28-paper.jar",
         "hash": "sha256-TPtKmWMTLVvgqdsDGiipjp35Le7TfrsHVtOn3Ychq5g="
       }
     }
   },
+  "coreprotect": {
+    "paper": {
+      "26.3": {
+        "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/3sehX6Sg/CoreProtect-CE-24.1.jar",
+        "hash": "sha256-oqzvfAbvIBNVzvB9WRpgVd/tNYrXaPqqqvTidoZezJc="
+      }
+    }
+  },
   "crackshotguns": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.spiget.org/file/spiget-resources/48301.jar",
         "hash": "sha256-Hd7DJB+7JNf9JhCc+VzeA52e7fqxyEhqAgz8sIoXoTY="
       }
@@ -25,7 +33,7 @@
   },
   "decentholograms": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/w02MKsTg/versions/Fva1FgWm/DecentHolograms-2.10.1.jar",
         "hash": "sha256-4ke3Niwnfa0FlstItdFXCxAC+6AUpa/YRY2XiWOiU7Q="
       }
@@ -33,7 +41,7 @@
   },
   "discordsrv": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/UmLGoGij/versions/ATlquwiT/DiscordSRV-Build-1.30.5.jar",
         "hash": "sha256-7y+h8usUbHx3QStxkKfdM/H8kSgmg/5FQHc5VUyK7+8="
       }
@@ -41,7 +49,7 @@
   },
   "essentialsx": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://repo.essentialsx.net/snapshots/net/essentialsx/EssentialsX/2.22.1-SNAPSHOT/EssentialsX-2.22.1-20260624.223341-11.jar",
         "hash": "sha256-7QxEMrsobOBoILpaFi/6yR404C66ZEz89mrsT9qGr0I="
       }
@@ -49,7 +57,7 @@
   },
   "fastasyncvoxelsniper": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/D7XBSI1y/versions/AnYq3r1h/fastasyncvoxelsniper-3.2.5.jar",
         "hash": "sha256-SF6LVpTfDb2pYDgEnLmnO+5ON9nsjH9YmvXopZD8ouk="
       }
@@ -57,7 +65,7 @@
   },
   "fastasyncworldedit": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/5TOYHuQr/FastAsyncWorldEdit-Paper-2.15.4.jar",
         "hash": "sha256-u7GHXoI8oBWRvSNCfob0kOF82C/nady36CqVXdg3Gsw="
       }
@@ -65,7 +73,7 @@
   },
   "floodgate": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/141/downloads/spigot",
         "hash": "sha256-IVcK/5zhfWmDko6FUnd3YOHt5QUAJrBMaGsK4RLm/X4="
       }
@@ -83,7 +91,7 @@
   },
   "luckperms": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar",
         "hash": "sha256-Sc7LZvof0ioTMDmkkOnB5QlaI4581m650qFv5siXVQ0="
       }
@@ -95,7 +103,7 @@
   },
   "lunachat": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/gr738FKw/versions/VnKre5xb/LunaChat.jar",
         "hash": "sha256-nZP7aCQa3ofzfvAoiBS9hyCMk2GDdKvQrJMTqJkTy8Q="
       }
@@ -103,7 +111,7 @@
   },
   "lwc": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/rAVMDz0v/versions/hCNtxsSa/LWC-2.4.2.jar",
         "hash": "sha256-2M4KfahUslvZCCfSuTz4BnKNHCYWj7sh9l5U6/Q3BFc="
       }
@@ -111,7 +119,7 @@
   },
   "multiversecore": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/YZ2Ji4IS/multiverse-core-5.8.1.jar",
         "hash": "sha256-vD804tdH/fAk9EhodHuwFrCPoR2YzLT/yslY8IMVGoM="
       }
@@ -119,7 +127,7 @@
   },
   "multiverseportals": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/8VMk6P0I/versions/otf0vOqh/multiverse-portals-5.3.0.jar",
         "hash": "sha256-NF8PKWu1Th/ZhJQmD5P7Grl7qS+K1/a/uhKeqQAh6o0="
       }
@@ -127,7 +135,7 @@
   },
   "placeholderapi": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/lKEzGugV/versions/pIvQcXW8/PlaceholderAPI-2.12.3.jar",
         "hash": "sha256-/eAyWfWvaTjzwz7rTYFAAKGtq/HSMEzhSXC+gfYJpDc="
       }
@@ -135,7 +143,7 @@
   },
   "plugmanx": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/yro4niHu/versions/j22EUw2Y/PlugManX-3.2.1.jar",
         "hash": "sha256-ZgpIxZdasermepJz6OsP22B/NNdkRzDlEEHT+L3+3PI="
       }
@@ -143,7 +151,7 @@
   },
   "pvparena": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.spiget.org/file/spiget-resources/16584.jar",
         "hash": "sha256-ww4DPTY76jRCx2EQjztEE1jmnmOMmk0xj+KfF26mbs4="
       }
@@ -151,7 +159,7 @@
   },
   "sba": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/lJPKRQLl/versions/axn2z8yT/SBA-1.5.21-all.jar",
         "hash": "sha256-BKN1kgCXCeA6gDALmdSumB+93aXPOeJS5QWbSvuGk6I="
       }
@@ -159,7 +167,7 @@
   },
   "screamingbedwars": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/8sg1aj4I/versions/nUPEYDAm/BedWars-0.2.44.jar",
         "hash": "sha256-UQ1G0xDf8qQmRhxWdgUbvxn/N7VT7guYdVl6vkukDVw="
       }
@@ -167,7 +175,7 @@
   },
   "signshop": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.spiget.org/file/spiget-resources/10997.jar",
         "hash": "sha256-6QlXZ9+cpuKzFo0EOg9bh2nhZwEcZpZEpvnL+hzUxJ4="
       }
@@ -175,7 +183,7 @@
   },
   "skript": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/4JYDcsAm/Skript-2.16.2.jar",
         "hash": "sha256-FM90PuLHzdAUvGOZPJCSll7ew73s/5OuR2Jv3vXSOxA="
       }
@@ -183,7 +191,7 @@
   },
   "slotmachine": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.spiget.org/file/spiget-resources/22023.jar",
         "hash": "sha256-qg+XVjITD4WzBQMDrNi4h5jX+p7oH07KamobDvSmk2k="
       }
@@ -191,7 +199,7 @@
   },
   "tntruneloaded": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.spiget.org/file/spiget-resources/53359.jar",
         "hash": "sha256-KS80G8n9ljR8ioNcrQpt+XTeOexJ4aNgmtFpgKMiW30="
       }
@@ -199,7 +207,7 @@
   },
   "vault": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.spiget.org/file/spiget-resources/34315.jar",
         "hash": "sha256-prXtl/Q6XPW7rwCnyM0jxa/JvQA/hJh1r4s25s930B0="
       }
@@ -207,7 +215,7 @@
   },
   "viaversion": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/TEgYlalY/ViaVersion-5.12.1-SNAPSHOT.jar",
         "hash": "sha256-072ZwsSSNn45o+CXYdlbkR96kEr0/QjvyXVIyYeDD8s="
       }
@@ -215,7 +223,7 @@
   },
   "worldguard": {
     "paper": {
-      "26.2": {
+      "26.3": {
         "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/TtfwTyi6/worldguard-bukkit-7.0.19.jar",
         "hash": "sha256-OW3wZfHPOLq5h4oPU6d21aCF6788QYE5OLc/ldTqygM="
       }
