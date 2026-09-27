@@ -1,5 +1,7 @@
 package icu.oyasai.lwc
 
+import com.griefcraft.lwc.LWC
+import com.griefcraft.lwc.LWCPlugin
 import java.util.UUID
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
@@ -32,10 +34,12 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTakeLecternBookEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
-import org.bukkit.plugin.java.JavaPlugin
 
-class LwcPlugin : JavaPlugin(), Listener, CommandExecutor {
+class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
   private lateinit var store: ProtectionStore
+  private val compatibility = LWC(this)
+
+  override fun getLWC(): LWC = compatibility
 
   private data class Pending(val action: String, val args: List<String>, val expires: Long)
 
@@ -142,11 +146,11 @@ class LwcPlugin : JavaPlugin(), Listener, CommandExecutor {
 
   private fun admin(player: Player) = player.isOp || player.hasPermission("lwc.admin")
 
-  private fun protection(block: Block): Protection? =
+  internal fun protection(block: Block): Protection? =
       if (isProtectable(block.type)) relatedKeys(block).firstNotNullOfOrNull { store.get(it) }
       else null
 
-  private fun canUse(player: Player, protection: Protection) =
+  internal fun canUse(player: Player, protection: Protection) =
       admin(player) || protection.owner == player.uniqueId || player.uniqueId in protection.shared
 
   private fun canManage(player: Player, protection: Protection) =
