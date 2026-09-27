@@ -7,7 +7,7 @@ Minecraft 内でノートブロックの演奏を録音し、楽曲として公�
 
 | 項目 | 必要なもの | | --- | --- | | サーバー | Paper / Purpur `26.2` | | Java | Java 25 | |
 必須プラグイン | FastAsyncWorldEdit (FAWE) `2.15.2` 以降 | | 任意プラグイン | Vault
-と経済プラグイン、TokenManager、PlaceholderAPI、Essentials、Floodgate |
+と経済プラグイン、TokenManager、Essentials、Floodgate |
 
 FAWE は `/record we ...` でクリップボードを読むための必須依存です。Vault
 が無い場合、金銭報酬の送金は行われません。TokenManager へのポイント付与は、設定したコンソールコマンドで行います。
@@ -316,7 +316,7 @@ BPM、回路型・生演奏・現地回路録音は基準 120 BPM です。
 有効な視聴として数えるには、次をすべて満たす必要があります。
 
 - 楽曲の総演奏時間の80%以上を聴き終える（`playback.view-completion-ratio`）
-- AFKではない。PlaceholderAPI と Essentials がある場合は `%essentials_afk%` で判定
+- AFKではない。Essentials がある場合はその AFK 状態で判定
 - 同じプレイヤーによる同じ楽曲の視聴が、1時間3回・1日10回以内
 - ジュークボックスの環境BGMではなく、個人再生である
 

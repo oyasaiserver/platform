@@ -118,6 +118,7 @@ object GuidebookBookUI {
     get() = GuidebookStyle.current
 
   private val deleteConfirmations = mutableMapOf<UUID, DeleteConfirmation>()
+  private val slotConfirmations = mutableMapOf<UUID, SlotConfirmation>()
   private val bookmarks = mutableMapOf<UUID, MutableMap<String, Int>>()
   private val viewKey = NamespacedKey(Tools.plugin, "guidebook_view")
 
@@ -126,6 +127,7 @@ object GuidebookBookUI {
   }
 
   fun openEditable(player: Player) {
+    slotConfirmations.remove(player.uniqueId)
     createCatalog(player, editable = true).show(player)
   }
 
@@ -182,6 +184,24 @@ object GuidebookBookUI {
       )
     }
     val canCreateOfficial = player.isOp
+    if (editable) {
+      val offer = GuidebookService.slotOffer(player)
+      val lore =
+          if (offer == null) "&c追加枠を確認できません"
+          else "&7作れる冊数 ${offer.totalLimit}（ランク ${offer.rankLimit} ＋ 追加 ${offer.extraSlots}）"
+      navigation.addItem(
+          GuiItem(
+              navigationItem(Material.EMERALD, "&a追加枠を買う ${offer?.price ?: "?"}P")
+                  .addText("&a追加枠を買う ${offer?.price ?: "?"}P", mutableListOf(lore))
+          ) { event ->
+            val clicker = event.whoClicked as Player
+            clicker.closeInventory()
+            requestSlot(clicker)
+          },
+          1,
+          0,
+      )
+    }
     navigation.addItem(
         GuiItem(navigationItem(Material.WRITABLE_BOOK, "&a新しいガイドを作る")) { event ->
           val clicker = event.whoClicked as Player
@@ -263,6 +283,7 @@ object GuidebookBookUI {
     }
     val entries = GuidebookService.entries(guidebook.id, player.uniqueId)
     val progress = GuidebookService.progress(entries)
+    val repostPrice = GuidebookService.repostPrice(progress.total)
     val next = GuidebookBookRules.nextLine(entries, progress.complete)
     val s = style
     val vars =
@@ -278,6 +299,20 @@ object GuidebookBookUI {
             .append(line(s.text("progress", vars), "progress"))
             .append(line(s.text("author", vars), "author"))
             .append(nextLine(next, guidebook.id, progress.complete))
+    if (guidebook.published) {
+      home
+          .append(
+              button(
+                      "リポスト ${repostPrice}P",
+                      "$COMMAND repost ${guidebook.id} $repostPrice",
+                      "eButton",
+                  )
+                  .hoverEvent(
+                      HoverEvent.showText(Component.text("${repostPrice}Pを消費してオンラインのプレイヤーへ宣伝します"))
+                  )
+          )
+          .append(newline())
+    }
     home.append(blank())
     if (guidebook.description.isNotBlank()) {
       GuidebookRules.description(guidebook.description, GuidebookService.descriptionMaxLines())
@@ -345,7 +380,8 @@ object GuidebookBookUI {
         page()
             .append(line(s.text("eTitle", mapOf("title" to guidebook.title)), "eTitle"))
             .append(line(s.text(state), state))
-            .append(blank())
+            .append(button("タイトル変更", "$COMMAND title ${guidebook.id}", "eButton"))
+            .append(newline())
             .append(command("bAdd", "$COMMAND add ${guidebook.id}"))
             .append(newline())
             .append(
@@ -429,6 +465,20 @@ object GuidebookBookUI {
         target,
         enteredTitle ->
       GuidebookService.create(target, type, enteredTitle)?.let { openEditor(target, it.id) }
+    }
+  }
+
+  fun openRenameInput(player: Player, guidebookId: Int) {
+    val guidebook = editableGuidebook(player, guidebookId) ?: return
+    val item =
+        ItemStack(Material.WRITABLE_BOOK)
+            .allFlag()
+            .addText(guidebook.title, mutableListOf("&7右側の本をクリックして確定します"))
+    SocialLikesAnvilInput.open(player, Tools.socialLikesLOGOShort + "&0タイトル変更".color(), item) {
+        target,
+        enteredTitle ->
+      GuidebookService.setTitle(target, guidebookId, enteredTitle)
+      openEditor(target, guidebookId)
     }
   }
 
@@ -538,8 +588,54 @@ object GuidebookBookUI {
     else openEditor(player, guidebookId)
   }
 
+  fun requestSlot(player: Player) {
+    val offer = GuidebookService.slotOffer(player)
+    if (offer == null) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c追加枠を確認できませんでした。".color())
+      return
+    }
+    slotConfirmations[player.uniqueId] =
+        SlotConfirmation(
+            offer.extraSlots,
+            offer.price,
+            System.currentTimeMillis() + DELETE_CONFIRM_MILLIS,
+        )
+    open(
+        player,
+        "追加枠の購入確認",
+        listOf(
+            page()
+                .append(Component.text("追加枠を1つ購入しますか？", BLACK).append(newline()))
+                .append(Component.text("価格: ${offer.price}P", BLACK).append(newline()))
+                .append(
+                    Component.text("作れる冊数: ${offer.totalLimit} → ${offer.totalLimit + 1}", BLACK)
+                        .append(newline())
+                )
+                .append(Component.text("購入後の払い戻しはできません。", RED).append(newline()))
+                .append(Component.text("15秒以内にもう一度クリックしてください。", DARK_GRAY).append(newline()))
+                .append(blank())
+                .append(button("購入を確定", "$COMMAND slot-confirm", "eDanger"))
+                .append(newline())
+                .append(button("キャンセル", "$COMMAND edit", "eButton"))
+                .build()
+        ),
+        null,
+    )
+  }
+
+  fun confirmSlot(player: Player) {
+    val confirmation = slotConfirmations.remove(player.uniqueId)
+    if (confirmation == null || System.currentTimeMillis() > confirmation.expiresAt) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c購入確認の有効期限が切れました。".color())
+    } else {
+      GuidebookService.purchaseExtraSlot(player, confirmation.slots, confirmation.price)
+    }
+    openEditable(player)
+  }
+
   fun clear(playerUuid: UUID) {
     deleteConfirmations.remove(playerUuid)
+    slotConfirmations.remove(playerUuid)
     bookmarks.remove(playerUuid)
   }
 
@@ -678,4 +774,6 @@ object GuidebookBookUI {
   private fun blank(): Component = Component.newline()
 
   private data class DeleteConfirmation(val guidebookId: Int, val expiresAt: Long)
+
+  private data class SlotConfirmation(val slots: Int, val price: Int, val expiresAt: Long)
 }

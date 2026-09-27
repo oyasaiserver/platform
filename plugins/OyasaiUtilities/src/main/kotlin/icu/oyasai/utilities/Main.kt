@@ -18,11 +18,13 @@ import icu.oyasai.utilities.redbull.RedBullCommand
 import icu.oyasai.utilities.redbull.RedBullFeature
 import icu.oyasai.utilities.sit.SitFeature
 import icu.oyasai.utilities.skin.SkinFeature
+import icu.oyasai.utilities.spawn.SpawnFeature
 import icu.oyasai.utilities.timerbar.TimerBarEvent
 import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
 import icu.oyasai.utilities.tpath.BackForwardCmd
 import icu.oyasai.utilities.tpath.TeleportListener
+import icu.oyasai.utilities.tpswitch.TpSwitchFeature
 import icu.oyasai.utilities.veinminer.VeinminerConfig
 import icu.oyasai.utilities.veinminer.VeinminerEvent
 import org.bukkit.plugin.java.JavaPlugin
@@ -30,11 +32,14 @@ import org.bukkit.plugin.java.JavaPlugin
 class Main : JavaPlugin() {
   private lateinit var backpackFeature: BackpackFeature
   private lateinit var skinFeature: SkinFeature
+  private lateinit var tpSwitchFeature: TpSwitchFeature
   private lateinit var sitFeature: SitFeature
 
   override fun onLoad() {}
 
   override fun onEnable() {
+    tpSwitchFeature = TpSwitchFeature(this)
+    tpSwitchFeature.enable()
     sitFeature = SitFeature(this)
     sitFeature.enable()
     skinFeature = SkinFeature(this)
@@ -68,6 +73,9 @@ class Main : JavaPlugin() {
     Hats.onEnable()
     HologramFeature.onEnable()
     JoinCommands.onEnable()
+    // Essentials が無いと SpawnFeature のクラス読み込み自体が失敗するので、先に確かめる
+    if (server.pluginManager.isPluginEnabled("Essentials")) SpawnFeature.onEnable()
+    else logger.warning("Spawn: Essentials is not enabled; /spawn disabled")
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
     VeinminerConfig.reloadConfig()
@@ -77,6 +85,7 @@ class Main : JavaPlugin() {
   }
 
   override fun onDisable() {
+    if (::tpSwitchFeature.isInitialized) tpSwitchFeature.disable()
     if (::sitFeature.isInitialized) sitFeature.disable()
     if (::skinFeature.isInitialized) skinFeature.disable()
     OreReappears.onDisable() // OreReappearsの無効化

@@ -59,6 +59,10 @@ class PointShopLoader(private val plugin: OyasaiMenu) {
             }
 
         val cost = sec.getLong("cost", 0L)
+        if (cost < 0) {
+          plugin.logger.warning("無効なポイントショップ価格 (pointshop $catId.$key): $cost")
+          return@forEach
+        }
         items[key] =
             PointShopItem(
                 key = key,

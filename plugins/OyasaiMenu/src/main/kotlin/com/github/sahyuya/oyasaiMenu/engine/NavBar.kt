@@ -5,7 +5,6 @@ import com.github.sahyuya.oyasaiMenu.manager.EconomyManager
 import com.github.sahyuya.oyasaiMenu.manager.TokenCurrencyManager
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import java.util.UUID
-import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -83,13 +82,6 @@ object NavBar {
               "&9ユーティリティ",
               "utility",
               listOf("&7ワープ・各種コマンドの", "&7ショートカット集です"),
-          ),
-          NavEntry(
-              52,
-              Material.PURPLE_CONCRETE_POWDER,
-              "&5マクロ",
-              "macromenu",
-              listOf("&7コマンドを登録・実行できる", "&7マクロ機能を管理します"),
           ),
           NavEntry(
               53,
@@ -174,10 +166,7 @@ object NavBar {
       now - it.value.createdAtMillis > PLAYER_STATS_CACHE_SWEEP_MILLIS
     }
 
-    val dpLevel =
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-          runCatching { PlaceholderAPI.setPlaceholders(player, "%dp_level%") }.getOrElse { "---" }
-        } else "---"
+    val dpLevel = dpLevel(player)
     val snapshot =
         PlayerStatsSnapshot(
             createdAtMillis = now,

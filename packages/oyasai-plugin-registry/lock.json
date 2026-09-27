@@ -47,14 +47,6 @@
       }
     }
   },
-  "essentialsx-spawn": {
-    "paper": {
-      "26.2": {
-        "url": "https://repo.essentialsx.net/snapshots/net/essentialsx/EssentialsXSpawn/2.22.1-SNAPSHOT/EssentialsXSpawn-2.22.1-20260624.223341-11.jar",
-        "hash": "sha256-HfCdpgFPiR4MmjeFwVBSsoqwQ2y9Po6y0+9hqZuzLNo="
-      }
-    }
-  },
   "fastasyncvoxelsniper": {
     "paper": {
       "26.2": {

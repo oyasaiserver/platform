@@ -1,4 +1,5 @@
 import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
+import { Image } from "@oyasaiserver/cdktf-providers/docker/image";
 import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
 import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
@@ -7,8 +8,9 @@ import { Password } from "@oyasaiserver/cdktf-providers/random/password";
 import { RandomProvider } from "@oyasaiserver/cdktf-providers/random/provider";
 import { LocalBackend } from "cdktf";
 import { Construct } from "constructs";
+import { ok } from "node:assert";
 import { join } from "node:path";
-import { envs, mustEnv, ports } from "../helpers.ts";
+import { envs, mapRecord, mustEnv, ports } from "../helpers.ts";
 import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
@@ -72,22 +74,24 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       }),
     } as const;
 
-    const imageIds = JSON.parse(mustEnv("OYASAI_IMAGE_IDS"));
-    const images = {
-      // keep-sorted start
-      alloy: imageIds["alloy"],
-      caddy: imageIds["caddy"],
-      mariadb: imageIds.mariadb,
-      minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
-      minecraftBackup: imageIds["mc-backup"],
-      minecraftLobby: imageIds["oyasai-minecraft-lobby"],
-      minecraftMain: imageIds["oyasai-minecraft-main"],
-      mysqlBackup: imageIds["mysql-backup"],
-      oyasaiCron: imageIds["oyasai-cron"],
-      oyasaiWeb: imageIds["oyasai-web"],
-      velocity: imageIds["oyasai-velocity"],
-      // keep-sorted end
-    } as const;
+    const imageTags: Record<string, string> = JSON.parse(
+      mustEnv("OYASAI_IMAGE_IDS"),
+    );
+
+    const dockerImages = mapRecord(imageTags, (name, tag) => [
+      name,
+      new Image(this, this.t(`${name}-image`), {
+        name: tag,
+        keepLocally: true,
+        lifecycle: { createBeforeDestroy: true },
+      }),
+    ]);
+
+    const imageId = (name: string): string => {
+      const image = dockerImages[name];
+      ok(image, `Missing image in OYASAI_IMAGE_IDS: ${name}`);
+      return image.imageId;
+    };
 
     const baseHostPath = join("/opt/platform", this.environment);
     const hostPaths = {
@@ -107,7 +111,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
 
     new Container(this, this.t("alloy-container"), {
       name: "alloy",
-      image: images.alloy,
+      image: imageId("alloy"),
       restart: "unless-stopped",
       env: envs({
         ENVIRONMENT: this.environment,
@@ -133,7 +137,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     });
 
     const mariadbContainer = new Container(this, this.t("mariadb-container"), {
-      image: images.mariadb,
+      image: imageId("mariadb"),
       name: "mariadb",
       restart: "unless-stopped",
       env: envs({
@@ -156,7 +160,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       this,
       this.t("minecraft-main-container"),
       {
-        image: images.minecraftMain,
+        image: imageId("oyasai-minecraft-main"),
         name: "oyasai-minecraft-main",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
@@ -204,7 +208,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       this,
       this.t("minecraft-lobby-container"),
       {
-        image: images.minecraftLobby,
+        image: imageId("oyasai-minecraft-lobby"),
         name: "oyasai-minecraft-lobby",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
@@ -231,7 +235,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       this,
       this.t("minecraft-axiom-container"),
       {
-        image: images.minecraftAxiom,
+        image: imageId("oyasai-minecraft-axiom"),
         name: "oyasai-minecraft-axiom",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
@@ -255,7 +259,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     );
 
     new Container(this, this.t("velocity-container"), {
-      image: images.velocity,
+      image: imageId("oyasai-velocity"),
       name: "oyasai-velocity",
       restart: "unless-stopped",
       tty: true,
@@ -282,7 +286,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       this,
       this.t("oyasai-web-container"),
       {
-        image: images.oyasaiWeb,
+        image: imageId("oyasai-web"),
         name: "oyasai-web",
         restart: "unless-stopped",
         networksAdvanced: [network],
@@ -293,7 +297,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     );
 
     new Container(this, this.t("caddy-container"), {
-      image: images.caddy,
+      image: imageId("caddy"),
       name: "caddy",
       restart: "unless-stopped",
       networksAdvanced: [network],
@@ -332,7 +336,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         new Container(this, this.t(`${backupId}-backup-container`), {
           name: `${backupId}-backup`,
           dependsOn: [minecraftContainer],
-          image: images.minecraftBackup,
+          image: imageId("mc-backup"),
           networksAdvanced: [network],
           restart: "unless-stopped",
           env: envs({
@@ -372,7 +376,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       new Container(this, this.t("mariadb-backup-container"), {
         name: "mariadb-backup",
         dependsOn: [mariadbContainer],
-        image: images.mysqlBackup,
+        image: imageId("mysql-backup"),
         restart: "unless-stopped",
         networksAdvanced: [network],
         command: ["dump"],
@@ -396,7 +400,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
 
       // Best-effort cron service
       new Container(this, this.t("oyasai-cron-container"), {
-        image: images.oyasaiCron,
+        image: imageId("oyasai-cron"),
         name: "oyasai-cron",
         restart: "unless-stopped",
         env: envs({

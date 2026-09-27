@@ -201,6 +201,7 @@ class Main : JavaPlugin() {
     getCommand(".hud")?.setExecutor(hudHandler)
     getCommand(".hud")?.tabCompleter = hudHandler
     server.pluginManager.registerEvents(WorldEditHudListener(this), this)
+    server.pluginManager.registerEvents(WorldEditSelectionPreview, this)
     worldEditHud.start()
     startSelectionParticles()
 
@@ -220,6 +221,7 @@ class Main : JavaPlugin() {
     }
     selectionParticleTask?.cancel()
     selectionParticleTask = null
+    WorldEditSelectionPreview.clear()
     sessions.values.forEach { it.previewTask?.cancel() }
     intersectionSessions.values.forEach { it.previewTask?.cancel() }
     bezierSessions.values.forEach { it.previewTask?.cancel() }
@@ -244,7 +246,7 @@ class Main : JavaPlugin() {
             Runnable {
               server.onlinePlayers.forEach { player ->
                 if (isSuiEnabled(player)) {
-                  WorldEditSelectionPreview.showOnce(player)
+                  WorldEditSelectionPreview.showOnce(this, player)
                 }
               }
             },

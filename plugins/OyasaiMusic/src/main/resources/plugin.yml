@@ -4,7 +4,7 @@ main: com.github.sahyuya.oyasaiMusic.OyasaiMusic
 api-version: "26.2"
 load: POSTWORLD
 depend: [FastAsyncWorldEdit]
-softdepend: [Vault, TokenManager, PlaceholderAPI, Essentials, Floodgate]
+softdepend: [Vault, TokenManager, Essentials, Floodgate]
 
 commands:
   record:

@@ -50,7 +50,6 @@ oyasaiPurpur rec {
     dynamicprofile
     entitypose
     essentialsx
-    essentialsx-spawn
     ezedits
     fastasyncvoxelsniper
     fastasyncworldedit
@@ -65,6 +64,7 @@ oyasaiPurpur rec {
     multiverseportals
     oyasaiadmintools
     oyasaichat
+    oyasaigames
     oyasaimenu
     oyasaimusic
     oyasaipets
@@ -86,7 +86,6 @@ oyasaiPurpur rec {
     sociallikes3
     socialvotes
     tntruneloaded
-    tpswitch
     vault
     vertex
     viaversion

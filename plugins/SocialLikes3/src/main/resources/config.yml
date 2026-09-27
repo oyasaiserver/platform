@@ -22,6 +22,14 @@ guidebook:
     takumi: 3
     blue: 4
     white: 5
+  # 追加枠の価格。リストの最後の価格を6枠目以降にも使う。
+  extraSlotPrices: [150, 400, 800, 1200, 1500]
+  # リポストの価格は基本額＋有効な掲載建築1件ごとの額（30件なら40P）。
+  repost:
+    basePrice: 10
+    pricePerEntry: 1
+  # 旅行ガイドの次の建築へ案内する間隔（秒）。0で待機なし。/sldataop reload で反映。
+  teleportCooldownSeconds: 30
   entriesPerBookLimit: 30
   # 本に表示する行数。説明文は1〜8行、コメントは1〜5行（範囲外は丸める）。変更は再起動で反映
   descriptionMaxLines: 8

@@ -35,6 +35,15 @@ export function arrayToObject<K extends string, V>(
   );
 }
 
+export function mapRecord<K extends string, V, K2 extends string, W>(
+  obj: { readonly [P in K]: V },
+  fn: (key: K, value: V) => readonly [K2, W],
+): { [P in K2]: W } {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => fn(key as K, value as V)),
+  ) as { [P in K2]: W };
+}
+
 export function mustEnv(name: string): string {
   const value = env[name];
   ok(value, `Required envvar ${name} missing`);

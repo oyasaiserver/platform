@@ -257,6 +257,10 @@ class ShopLoader(private val plugin: OyasaiMenu) {
     val key = parts[0].removePrefix("\$")
     val buyPrice = parts[1].toDoubleOrNull() ?: return null
     val sellPrice = parts[2].toDoubleOrNull() ?: return null
+    if (!buyPrice.isFinite() || !sellPrice.isFinite() || buyPrice < 0 || sellPrice < 0) {
+      plugin.logger.warning("無効なショップ価格 ($catId): '$line'")
+      return null
+    }
     val def =
         customItems[key]
             ?: run {
@@ -284,6 +288,10 @@ class ShopLoader(private val plugin: OyasaiMenu) {
     }
     val buyPrice = parts[1].toDoubleOrNull() ?: return null
     val sellPrice = parts[2].toDoubleOrNull() ?: return null
+    if (!buyPrice.isFinite() || !sellPrice.isFinite() || buyPrice < 0 || sellPrice < 0) {
+      plugin.logger.warning("無効なショップ価格 ($catId): '$line'")
+      return null
+    }
     val material =
         runCatching { Material.valueOf(parts[0].uppercase()) }
             .getOrElse {

@@ -1,5 +1,4 @@
 dependencies {
-  compileOnly(libs.placeholderapi)
   compileOnly(libs.purpur.api)
   compileOnly(libs.nuvotifier)
   compileOnly(libs.vault.api)

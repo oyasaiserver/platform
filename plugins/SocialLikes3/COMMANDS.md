@@ -19,17 +19,25 @@
 
 ## 旅行ガイドブック
 
-| コマンド                   | 何ができるか                                       | 使える人                                                                      | 補完                                  |
-| -------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------- |
-| `/slguide`                 | 公開中のガイドの一覧を開く                         | 全員                                                                          | `create` `edit` `<ID>`                |
-| `/slguide <ID>`            | そのガイドの本をもらう                             | 全員                                                                          | 同上                                  |
-| `/slguide create`          | 個人ガイドを作る                                   | ランクで冊数が決まる（config の `guidebook.personalBookLimits`。OP は最大値） | 同上                                  |
-| `/slguide create official` | 公式ガイドを作る。公式ガイドの編集・公開も OP のみ | OP                                                                            | `create` の次に `official`（OP のみ） |
-| `/slguide edit`            | 自分が編集できるガイドの一覧を開く                 | 全員                                                                          | `create` `edit` `<ID>`                |
-| `/slguide edit <ID>`       | そのガイドの編集用の本をもらう                     | 個人ガイドは作者・OP、公式ガイドは OP                                         | `edit` の次に `<ID>`                  |
+| コマンド                           | 何ができるか                                                  | 使える人                                                        | 補完                                  |
+| ---------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------- |
+| `/slguide`                         | 公開中のガイドの一覧を開く                                    | 全員                                                            | `create` `edit` `<ID>`                |
+| `/slguide <ID>`                    | そのガイドの本をもらう                                        | 全員                                                            | 同上                                  |
+| `/slguide create`                  | 個人ガイドを作る                                              | ランク上限（OP は最大値）＋購入済み追加枠の冊数まで             | 同上                                  |
+| `/slguide create official`         | 公式ガイドを作る。公式ガイドの編集・公開も OP のみ            | OP                                                              | `create` の次に `official`（OP のみ） |
+| `/slguide edit`                    | 自分が編集できるガイドの一覧を開く                            | 全員                                                            | `create` `edit` `<ID>`                |
+| 編集用ガイド一覧の「追加枠を買う」 | 1枠ずつポイントで購入（15秒以内の再確認が必要、払い戻しなし） | 全員。価格は `guidebook.extraSlotPrices` の順、以降は最後の価格 | なし                                  |
+| `/slguide edit <ID>`               | そのガイドの編集用の本をもらう                                | 個人ガイドは作者・OP、公式ガイドは OP                           | `edit` の次に `<ID>`                  |
+| ガイド情報の「リポスト NP」        | 公開中のガイドをオンライン全員へ宣伝し、履歴を記録する        | 全員。基本10P＋有効な掲載建築1件につき1P、確認なし              | なし                                  |
 
 本の中のリンクから呼ばれる内部コマンド（手で打つことは想定していない。補完にも出さない）:
-`editor` `add` `toggle` `describe` `comment` `move` `remove` `go` `delete-request` `delete-confirm`
+`editor` `add` `toggle` `describe` `title` `comment` `move` `remove` `go` `repost <ID> <表示価格>` `delete-request` `delete-confirm` `slot-request` `slot-confirm`
+
+リポストの価格は `guidebook.repost.basePrice`（既定10P）＋有効な掲載建築数×`guidebook.repost.pricePerEntry`（既定1P）。表示後に価格が変わった場合は課金せず情報ページを開き直す。
+
+編集用の本の「タイトル変更」は、作成時と同じ入力画面で変更する。公開済みガイドは、次に再公開したときに更新告知の対象になる。
+
+旅行ガイドの「次の建築へテレポート」の待機時間は `guidebook.teleportCooldownSeconds` 秒（既定30、0で待機なし）。`/sldataop reload` で反映する。
 
 ## 看板
 

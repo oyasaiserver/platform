@@ -80,5 +80,5 @@ items:
       - ""
       - "&eクリックで参加"
     actions:
-      - {op_player_cmd: "ch st"}
+      - {player_cmd: "ch st"}
       - {close: true}

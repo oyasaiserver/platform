@@ -2,6 +2,10 @@
 
 おやさい鯖の小物系便利Plugin
 
+## TPswitch
+
+`/tpset open|close|mode|oklist|nglist` で TP 受付を設定・確認し、`/tpset ok|ng|none <名前>` で許可・拒否リストを編集する。既定は open で、open は拒否リスト、close は許可リストを参照する。OP だけは拒否を通過できる。`/tp <名前>` の受付判定を行い、設定は `tpswitch.db` に保存する。初回起動時に旧 `TPswitch/config.yml` があれば一度だけ取り込み、旧ファイルは残す。取り込み件数とスキップ件数はログと SQLite の `tp_meta` に記録する。
+
 ## Sit
 
 `/sit`、`/lay`、`/bellyflop`、`/spin`、`/crawl` で座る・ポーズを切り替える。`/sit toggle` で右クリック座りを切り替える。
@@ -10,6 +14,10 @@
 ## JoinCommands
 
 参加時に `plugins/OyasaiUtilities/JoinCommands/config.yml` の `server-join-commands` を記述順に判定し、指定した遅延後にコマンドを実行する。各定義は `command-list`（文字列リスト）、`permission`（任意）、`first-join-only`（既定 false）、`delay`（tick、既定 0）を指定できる。`[PLAYER]` 付きはプレイヤー、それ以外はコンソールとして実行し、`{player}` を参加者名に置換する。変更は再起動で反映され、設定ファイルが無ければ何もしない。
+
+## Spawn
+
+外製 EssentialsSpawn の置き換え。`/spawn [player]` でスポーン地点へ移動（他人指定は `oyasaiutilities.spawn.others`）。地点は `Spawn/config.yml` の1か所で、無ければ起動時に `Essentials/spawn.yml` の `spawns.default` を取り込む。死亡時の復活先（牢屋・`respawn-at-home`）と初参加時のキット・移動・歓迎文は Essentials の設定に従う。Essentials が無いときは無効。
 
 ## NotNBT (by Srain3)
 

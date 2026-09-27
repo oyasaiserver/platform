@@ -14,6 +14,7 @@ Project index for `docs/01_Projects/`.
 | [headhunt](minecraft-plugins/headhunt/PROJECT.md) | Player-head treasure hunt minigame |
 | [oyasai-admin-tools](minecraft-plugins/oyasai-admin-tools/PROJECT.md) | Admin announcements, surveys, and player management |
 | [oyasai-chat](minecraft-plugins/oyasai-chat/PROJECT.md) | Cross-backend chat synchronization through Velocity |
+| [oyasai-lwc](minecraft-plugins/lwc/PROJECT.md) | Internal block protection with legacy LWC SQLite data |
 | [oyasai-menu](minecraft-plugins/oyasai-menu/PROJECT.md) | GUI menu system |
 | [oyasai-pets](minecraft-plugins/oyasai-pets/PROJECT.md) | Pet system |
 | [oyasai-utilities](minecraft-plugins/oyasai-utilities/PROJECT.md) | Bundled small utility features |
@@ -21,7 +22,6 @@ Project index for `docs/01_Projects/`.
 | [paint-tools](minecraft-plugins/paint-tools/PROJECT.md) | Map painting and item frame tools |
 | [sociallikes3](minecraft-plugins/sociallikes3/PROJECT.md) | Build likes and visit ranking system |
 | [social-votes](minecraft-plugins/social-votes/PROJECT.md) | Sign-based voting system |
-| [tpswitch](minecraft-plugins/tpswitch/PROJECT.md) | Teleport request switch/blacklist |
 | [vertex](minecraft-plugins/vertex/PROJECT.md) | Service-based plugin framework |
 
 ## Tools
