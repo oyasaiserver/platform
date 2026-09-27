@@ -280,12 +280,17 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       player.sendMessage(c("&cこのアイテムは売却できません。"))
       return
     }
-    val removed = removeFromInventory(player, item, quantity)
+    val removed = minOf(countInInventory(player, item), quantity)
     if (removed == 0) {
       player.sendMessage(c("&c${item.materialId} を持っていません。"))
       return
     }
-    EconomyManager.deposit(player, item.sellPrice * removed)
+    val error = EconomyManager.deposit(player, item.sellPrice * removed)
+    if (error != null) {
+      player.sendMessage(c(error))
+      return
+    }
+    removeFromInventory(player, item, removed)
     player.sendMessage(
         c(
             "&b売却: &7${item.materialId} ×$removed  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"
@@ -304,8 +309,12 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       player.sendMessage(c("&c${item.materialId} を持っていません。"))
       return
     }
+    val error = EconomyManager.deposit(player, item.sellPrice * total)
+    if (error != null) {
+      player.sendMessage(c(error))
+      return
+    }
     removeFromInventory(player, item, total)
-    EconomyManager.deposit(player, item.sellPrice * total)
     player.sendMessage(
         c(
             "&b全売却: &7${item.materialId} ×$total  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"
@@ -367,9 +376,8 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
 
   private fun matchesShopItem(stack: ItemStack, item: ShopItem): Boolean {
     if (stack.type != item.material) return false
-    if (item.enchantments.isEmpty()) return true
-    val meta = stack.itemMeta ?: return false
-    return item.enchantments.all { (ench, lvl) -> meta.getEnchantLevel(ench) >= lvl }
+    if (plugin.sellEngine.getSellPrice(stack) == null) return false
+    return stack.enchantments == item.enchantments
   }
 
   private fun countInInventory(player: Player, item: ShopItem): Int =
