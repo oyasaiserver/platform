@@ -25,11 +25,6 @@ commands:
   sell:
     description: アイテムを売る
     permission: oyasaimenu.use
-  macro:
-    description: マクロを管理する
-    aliases: [mcr]
-    permission: oyasaimenu.macro
-
   adminmenu:
     description: 管理者メニューを開く
     aliases: [admenu]
@@ -44,10 +39,6 @@ commands:
 permissions:
   oyasaimenu.use:
     description: OyasaiMenuを使用する権限
-    # 公開前なので一時的OP限定
-    default: op
-  oyasaimenu.macro:
-    description: マクロ機能を使用する権限
     # 公開前なので一時的OP限定
     default: op
   oyasaimenu.admin:

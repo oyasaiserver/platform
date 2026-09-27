@@ -293,14 +293,6 @@ items:
     actions:
       - type: OPEN_POPUP
         target: "utility"
-  macro:
-    slot: 52
-    icon: PURPLE_CONCRETE_POWDER
-    name: "&5マクロ"
-    lore: ["&7コマンドを登録・実行できる", "&7マクロ機能を管理します"]
-    actions:
-      - type: OPEN_POPUP
-        target: "macromenu"
   links:
     slot: 53
     icon: PINK_CONCRETE_POWDER

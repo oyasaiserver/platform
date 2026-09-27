@@ -103,13 +103,6 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         executeActions(player, if (hasPerm) action.success else action.fail, state)
       }
 
-      ActionType.MACRO_EXECUTE -> {
-        // MacroManager 経由でクールダウンチェックとコマンド実行を委譲
-        val macroId = action.getString("id")
-        val error = plugin.macroManager.executeMacro(player, macroId)
-        if (error != null) player.sendMessage(c("&c$error"))
-      }
-
       ActionType.SOUND -> {
         val soundName = action.getString("sound", "UI_BUTTON_CLICK").lowercase()
         val volume = action.getString("volume", "1.0").toFloatOrNull() ?: 1.0f
@@ -229,8 +222,6 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         val popupId = LEGACY_POPUP_IDS[action.type] ?: return
         runDelayed { plugin.popupMenuEngine.open(player, popupId) }
       }
-
-      ActionType.OPEN_MACRO -> runDelayed { plugin.macroEngine.openMacroList(player) }
 
       ActionType.OPEN_INFO -> runDelayed { plugin.menuEngine.openMenu(player, "root") }
 

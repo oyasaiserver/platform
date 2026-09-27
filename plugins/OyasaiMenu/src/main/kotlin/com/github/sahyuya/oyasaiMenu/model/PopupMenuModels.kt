@@ -65,7 +65,6 @@ enum class PopupActionType {
   OPEN_POPUP,
   OPEN_SHOP,
   OPEN_SELL,
-  OPEN_MACRO,
   OPEN_POINT_SHOP,
   OPEN_MENU,
   CLOSE,

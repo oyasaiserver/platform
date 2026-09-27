@@ -33,7 +33,6 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
             "sociallikes",
             "carbuilder",
             "utility",
-            "macromenu",
             "links",
             "vtpbiome",
         )
@@ -242,7 +241,6 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
         map.containsKey("open_shop") ->
             PopupAction(PopupActionType.OPEN_SHOP, map["open_shop"].toString())
         map.containsKey("open_sell") -> PopupAction(PopupActionType.OPEN_SELL, "")
-        map.containsKey("open_macro") -> PopupAction(PopupActionType.OPEN_MACRO, "")
         map.containsKey("open_point_shop") ->
             PopupAction(PopupActionType.OPEN_POINT_SHOP, map["open_point_shop"].toString())
         map.containsKey("open_menu") ->
