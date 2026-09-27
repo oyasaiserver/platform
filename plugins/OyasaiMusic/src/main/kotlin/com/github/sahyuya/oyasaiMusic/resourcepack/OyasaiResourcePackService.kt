@@ -426,7 +426,7 @@ class OyasaiResourcePackService(
     // request. The persisted ALLOW still gates this opt-in path.
     if (
         plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId) &&
-            plugin.ommtPlaybackClientRegistry.supportsBankManifest(player.uniqueId)
+            plugin.ommtPlaybackClientRegistry.matchesBank(player.uniqueId, active.manifestHash)
     ) {
       states[player.uniqueId] = ConnectionState.SUCCESS
       requested.remove(player.uniqueId)

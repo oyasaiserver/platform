@@ -23,6 +23,14 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
     if (event.hand != EquipmentSlot.HAND) return
     val player = event.player
     val clickedBlock = event.clickedBlock
+    if (
+        clickedBlock?.type == Material.JUKEBOX &&
+            plugin.ambientPlaybackRegistry.awaitingRestore(clickedBlock.location)
+    ) {
+      event.isCancelled = true
+      player.sendMessage("§7レコード情報を復元中です。少し待ってから操作してください。")
+      return
+    }
 
     // ジュークボックスからの取り出し（手ぶらで右クリック）。
     if (event.action == Action.RIGHT_CLICK_BLOCK && clickedBlock?.type == Material.JUKEBOX) {
@@ -168,7 +176,7 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
         )
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true, priority = org.bukkit.event.EventPriority.MONITOR)
   fun onBlockBreak(event: BlockBreakEvent) {
     if (event.block.type != Material.JUKEBOX) return
     plugin.ambientPlaybackRegistry.unregister(event.block.location)

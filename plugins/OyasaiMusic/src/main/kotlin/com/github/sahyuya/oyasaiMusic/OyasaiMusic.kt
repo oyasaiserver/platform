@@ -146,7 +146,6 @@ class OyasaiMusic : JavaPlugin() {
 
     saveDefaultConfig()
     reloadConfig()
-    migrateBundledResourcePackConfig()
 
     audioDirectory =
         File(dataFolder, config.getString("storage.audio-directory", "audio") ?: "audio")
@@ -262,6 +261,7 @@ class OyasaiMusic : JavaPlugin() {
 
     // 環境BGMレコードのトリガー監視。
     ambientPlaybackRegistry = AmbientPlaybackRegistry(this)
+    ambientPlaybackRegistry.initialize()
     server.pluginManager.registerEvents(PhysicalRecordListener(this), this)
     // RSトリガーの短いパルスも取りこぼさないよう、0.1秒ごとに状態を確認する。
     Bukkit.getScheduler().runTaskTimer(this, Runnable { ambientPlaybackRegistry.tick() }, 2L, 2L)
@@ -271,6 +271,7 @@ class OyasaiMusic : JavaPlugin() {
   }
 
   override fun onDisable() {
+    if (::playbackController.isInitialized) playbackController.shutdown()
     // Import jobs that already crossed the persistence boundary must drain before DB close.
     val uploadsDrained = !::ommtUploadService.isInitialized || ommtUploadService.shutdown()
     if (::ambientPlaybackRegistry.isInitialized) ambientPlaybackRegistry.stopAll()
@@ -309,60 +310,7 @@ class OyasaiMusic : JavaPlugin() {
     }
   }
 
-  /**
-   * Upgrades the old disabled placeholder and the known obsolete bundled pack. An operator's
-   * unrelated custom pack is never overwritten.
-   */
-  private fun migrateBundledResourcePackConfig() {
-    val prefix = "resource-pack."
-    val id = config.getString(prefix + "id").orEmpty()
-    val url = config.getString(prefix + "url").orEmpty()
-    val sha1 = config.getString(prefix + "sha1").orEmpty()
-    val manifest = config.getString(prefix + "bank-manifest-sha256").orEmpty()
-    val isPlaceholder =
-        (id.isBlank() || id == "00000000-0000-0000-0000-000000000000") &&
-            url.isBlank() &&
-            sha1.isBlank() &&
-            manifest.isBlank()
-    val obsoleteBundledSha1 = "af57205743d4d573bcb2dea2f81b745d30eb6eb3"
-    val isObsoleteBundledPack =
-        sha1.equals(obsoleteBundledSha1, ignoreCase = true) ||
-            url.contains(obsoleteBundledSha1, ignoreCase = true)
-    val bundledPackId = "8be1eaab-ca07-4f47-9957-40d29505e320"
-    var changed = false
-    if (isPlaceholder || isObsoleteBundledPack) {
-      config.set(prefix + "enabled", true)
-      config.set(prefix + "id", bundledPackId)
-      config.set(
-          prefix + "url",
-          "https://download.mc-packs.net/pack/73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d.zip",
-      )
-      config.set(prefix + "sha1", "73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d")
-      config.set(
-          prefix + "bank-manifest-sha256",
-          "5aa68f33eea756ca43244751605924095dff18c5a01fd18767b3f1e51cd19506",
-      )
-      config.set(prefix + "prompt", "おやさいサーバーの拡張音域リソースパックを読み込みますか？")
-      config.set(
-          prefix + "instrument-bank-event-template",
-          "oyasaimusic:bank/i/{instrument}/a/{anchor}",
-      )
-      changed = true
-    }
-    // Older generated configs left this blank, which silently disabled the Bedrock ALLOW path
-    // even when the correct .mcpack had been installed on Velocity.
-    if (config.getString("bedrock.pack-id", "").orEmpty().isBlank()) {
-      val resourcePackId =
-          config.getString(prefix + "id", bundledPackId).orEmpty().ifBlank { bundledPackId }
-      config.set("bedrock.pack-id", resourcePackId)
-      changed = true
-    }
-    if (!changed) return
-    saveConfig()
-    logger.info("リソースパック設定を現在のOyasaiMusic 26.2構成へ更新しました。")
-  }
-
-  /** 楽曲設定の保存直後に、再生中表示と全プレイヤーの開いているGUIへ最新値を反映する。 */
+  /** Propagates edited song metadata to playback and open menus. */
   fun applySongUpdate(updatedSong: Song) {
     playbackController.applySongMetadataUpdate(updatedSong)
     menuManager.refreshForSongUpdate(updatedSong)
@@ -383,26 +331,16 @@ class OyasaiMusic : JavaPlugin() {
             dayLimit = config.getInt("playback.view-limit-per-day", 10),
             viewsPerPoint = config.getInt("playback.views-per-point", 10),
         )
-    // 既存のconfig.ymlが空欄のままでも、標準のTokenManagerコマンドでポイントを付与する。
-    val pointCommand =
-        config.getString("economy.points-command", "").orEmpty().ifBlank {
-          "token add %player% %points% -s"
-        }
-    economyService = EconomyService(this, pointCommand)
+    economyService = EconomyService(this)
   }
 
   private fun createPlaybackEngine(): PlaybackEngine {
-    val defaultMode =
-        when (config.getString("playback.default-mode", "default")?.lowercase()) {
-          "positional" -> PlaybackMode.POSITIONAL
-          else -> PlaybackMode.DEFAULT
-        }
     return PlaybackEngine(
         plugin = this,
         bedrockPrefix = config.getString("bedrock.name-prefix", ".") ?: ".",
         chordLimit = config.getInt("bedrock.chord-limit", 3),
         lookaheadMs = config.getLong("playback.lookahead-ms", 35L).coerceIn(0L, 50L),
-        defaultMode = defaultMode,
+        defaultMode = PlaybackMode.DEFAULT,
     )
   }
 }
