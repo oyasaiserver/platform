@@ -143,7 +143,8 @@ class LwcPlugin : JavaPlugin(), Listener, CommandExecutor {
   private fun admin(player: Player) = player.isOp || player.hasPermission("lwc.admin")
 
   private fun protection(block: Block): Protection? =
-      relatedKeys(block).firstNotNullOfOrNull { store.get(it) }
+      if (isProtectable(block.type)) relatedKeys(block).firstNotNullOfOrNull { store.get(it) }
+      else null
 
   private fun canUse(player: Player, protection: Protection) =
       admin(player) || protection.owner == player.uniqueId || player.uniqueId in protection.shared
@@ -195,7 +196,7 @@ class LwcPlugin : JavaPlugin(), Listener, CommandExecutor {
     when (request.action) {
       "lock",
       "cdisplay" -> {
-        if (!isContainer(block.type) && !isManual(block.type)) {
+        if (!isProtectable(block.type)) {
           player.sendMessage("このブロックは保護できません")
         } else if (existing != null) {
           player.sendMessage("すでに保護されています")
@@ -266,10 +267,7 @@ class LwcPlugin : JavaPlugin(), Listener, CommandExecutor {
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun onBreak(event: BlockBreakEvent) {
     val protection = protection(event.block) ?: return
-    if (protection.type == 6 || !canUse(event.player, protection)) {
-      event.isCancelled = true
-      event.player.sendMessage("このブロックは壊せません")
-    } else if (!canManage(event.player, protection)) {
+    if (!canManage(event.player, protection)) {
       event.isCancelled = true
       event.player.sendMessage("持ち主か管理者だけが壊せます")
     }
@@ -280,7 +278,6 @@ class LwcPlugin : JavaPlugin(), Listener, CommandExecutor {
     val protection = protection(event.block) ?: return
     if (
         canManage(event.player, protection) &&
-            protection.type == 2 &&
             (protection.key == BlockKey.of(event.block) || event.block.type.name.endsWith("_DOOR"))
     )
         store.remove(protection)
@@ -318,6 +315,7 @@ class LwcPlugin : JavaPlugin(), Listener, CommandExecutor {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onAutoPlace(event: BlockPlaceEvent) {
     val block = event.blockPlaced
+    store.get(BlockKey.of(block))?.let { store.remove(it) }
     if (!isContainer(block.type) || !auto.containsKey(event.player.uniqueId)) return
     if (protection(block) == null)
         store.add(Protection.create(BlockKey.of(block), event.player.uniqueId, 2), block.type)
@@ -331,7 +329,7 @@ class LwcPlugin : JavaPlugin(), Listener, CommandExecutor {
   }
 
   private fun inventoryProtection(inventory: Inventory): Protection? {
-    val holder: InventoryHolder? = inventory.holder
+    val holder: InventoryHolder? = inventory.getHolder(false)
     return when (holder) {
       is DoubleChest ->
           listOfNotNull(holder.leftSide as? BlockState, holder.rightSide as? BlockState)

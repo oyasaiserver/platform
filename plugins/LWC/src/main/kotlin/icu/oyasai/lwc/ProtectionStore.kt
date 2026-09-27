@@ -164,10 +164,6 @@ internal class ProtectionStore(private val plugin: JavaPlugin) {
         action()
       } catch (error: Exception) {
         plugin.logger.severe("LWC データベースの書き込みに失敗しました: ${error.message}")
-        plugin.server.scheduler.runTask(
-            plugin,
-            Runnable { plugin.server.pluginManager.disablePlugin(plugin) },
-        )
       }
     }
   }

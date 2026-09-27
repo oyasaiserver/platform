@@ -132,6 +132,9 @@ internal fun isManual(material: Material): Boolean {
       name.endsWith("_WALL_BANNER")
 }
 
+internal fun isProtectable(material: Material): Boolean =
+    isContainer(material) || isManual(material)
+
 internal fun relatedKeys(block: Block): List<BlockKey> {
   val keys = mutableListOf(BlockKey.of(block))
   val data = block.blockData
