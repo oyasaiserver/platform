@@ -20,16 +20,3 @@ commands:
   eco:
     aliases: [eeco, economy, eeconomy]
     permission: essentials.eco
-permissions:
-  essentials.balance:
-    default: true
-  essentials.balance.others:
-    default: op
-  essentials.pay:
-    default: true
-  essentials.pay.offline:
-    default: op
-  essentials.balancetop:
-    default: true
-  essentials.eco:
-    default: op

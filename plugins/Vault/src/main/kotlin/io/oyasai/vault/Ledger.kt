@@ -21,6 +21,8 @@ internal object Money {
       null
     }
   }
+
+  fun payInput(raw: String): String? = if ('-' in raw) null else raw.replace(Regex("[^0-9.]"), "")
 }
 
 internal class Ledger(path: String) : AutoCloseable {

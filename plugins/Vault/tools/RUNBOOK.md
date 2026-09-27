@@ -17,8 +17,8 @@
    python3 plugins/Vault/tools/migrate_essentials_to_sqlite.py --input <userdata-copy> --output <economy.db>
    ```
 
-3. スクリプトは件数、元の合計、整数化後の合計、丸め差を表示する。ファイル数と口座数が一致し、範囲外 0、UUID ごとの Decimal 再読込が一致し、`元の合計 − 移行後の合計 = 丸め差` であることを確認する。DB と userdata のコピーを保管する。
-4. 旧 jar を外して自作 jar と `economy.db` を配置し、Essentials のコマンドを無効化してから起動する。`/vault-info`、提供元・コマンド所有者の起動ログ、LuckPerms の Permission/Chat 接続、代表的な残高、`eco give` の結果と SQLite を照合する。`/essentials reload` 後も確認する。
+3. スクリプトは件数、元の合計、整数化後の合計、丸め差を表示する。ファイル数と口座数が一致し、範囲外 0、UUID ごとの Decimal 再読込が一致し、`元の合計 − 移行後の合計 = 丸め差` であることを確認する。照合に失敗したら rollback される。DB と userdata のコピーを保管する。
+4. 旧 jar を外して自作 jar と `economy.db` を配置し、Essentials のコマンドを無効化してから起動する。`/vault-info`、提供元・コマンド所有者と `disabled-commands` 9 件の起動ログ、LuckPerms の Permission/Chat 接続、代表的な残高、`eco give` の結果と SQLite を照合する。`/essentials reload` 後も確認する。
 
 ## バックアップと戻し
 

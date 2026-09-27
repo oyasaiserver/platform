@@ -4,6 +4,7 @@ import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.sql.SQLException
+import java.util.Locale
 import java.util.UUID
 import java.util.logging.Level
 import net.milkbowl.vault.chat.Chat
@@ -12,6 +13,7 @@ import net.milkbowl.vault.permission.Permission
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -22,6 +24,23 @@ import org.bukkit.event.server.ServerLoadEvent
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
+
+internal fun missingDisabledCommands(disabled: Collection<String>): List<String> {
+  val required =
+      listOf(
+          "balance",
+          "balancetop",
+          "pay",
+          "eco",
+          "paytoggle",
+          "payconfirmtoggle",
+          "sell",
+          "worth",
+          "setworth",
+      )
+  val configured = disabled.map { it.lowercase(Locale.ROOT) }.toSet()
+  return required.filterNot { it in configured }
+}
 
 class VaultPlugin : JavaPlugin(), Listener {
   private var ledger: Ledger? = null
@@ -83,11 +102,24 @@ class VaultPlugin : JavaPlugin(), Listener {
     val registration: RegisteredServiceProvider<Economy>? =
         server.servicesManager.getRegistration(Economy::class.java)
     val commands = listOf("eco", "pay", "balance", "balancetop")
-    verified =
+    val ownershipOkay =
         registration?.provider === economy &&
             commands.all { name -> server.commandMap.getCommand(name)?.pluginOwner() === this }
-    if (!verified) logger.severe("!!! 自作 Vault が経済の最優先提供元または経済コマンドの持ち主ではありません。全入出金を停止します !!!")
-    else logger.info("経済提供元と eco/pay/balance/balancetop の所有者を確認しました")
+    val essentials = server.pluginManager.getPlugin("Essentials")
+    val missing =
+        if (essentials == null) emptyList()
+        else
+            missingDisabledCommands(
+                YamlConfiguration.loadConfiguration(File(essentials.dataFolder, "config.yml"))
+                    .getStringList("disabled-commands")
+            )
+    verified = ownershipOkay && missing.isEmpty()
+    if (!ownershipOkay) logger.severe("!!! 自作 Vault が経済の最優先提供元または経済コマンドの持ち主ではありません。全入出金を停止します !!!")
+    if (missing.isNotEmpty())
+        logger.severe(
+            "!!! Essentials disabled-commands に不足: ${missing.joinToString(", ")}。全入出金を停止します !!!"
+        )
+    if (verified) logger.info("経済提供元、コマンド所有者、Essentials disabled-commands を確認しました")
   }
 
   private fun Command.pluginOwner(): org.bukkit.plugin.Plugin? =
@@ -196,8 +228,13 @@ class VaultPlugin : JavaPlugin(), Listener {
       sender.sendMessage("§cオフラインの相手には送金できません。")
       return
     }
+    val cleaned = Money.payInput(args[1])
+    if (cleaned?.isEmpty() == true) {
+      sender.sendMessage("§c/pay <player> <amount>")
+      return
+    }
     val yen =
-        amount(args[1])?.takeIf { it >= 1 }
+        cleaned?.let(::amount)?.takeIf { it >= 1 }
             ?: run {
               sender.sendMessage("§c金額は 1 円以上にしてください。")
               return

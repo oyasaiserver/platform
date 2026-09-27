@@ -20,6 +20,40 @@ class LedgerTest {
     assertNull(Money.round(-1.0))
     assertNull(Money.round(Double.NaN))
     assertNull(Money.round(Double.POSITIVE_INFINITY))
+    assertEquals("1000", Money.payInput("1,000"))
+    assertEquals("1000", Money.payInput("¥1,000"))
+    assertEquals("", Money.payInput("yen"))
+    assertNull(Money.payInput("1-000"))
+    assertEquals(1, Money.round(Money.payInput("¥0.5")!!.toDouble()))
+    assertEquals(
+        setOf(
+            "balance",
+            "balancetop",
+            "pay",
+            "eco",
+            "paytoggle",
+            "payconfirmtoggle",
+            "sell",
+            "worth",
+            "setworth",
+        ),
+        missingDisabledCommands(emptyList()).toSet(),
+    )
+    assertEquals(
+        listOf("pay"),
+        missingDisabledCommands(
+            listOf(
+                "BALANCE",
+                "balancetop",
+                "eco",
+                "paytoggle",
+                "payconfirmtoggle",
+                "sell",
+                "worth",
+                "setworth",
+            )
+        ),
+    )
   }
 
   @Test

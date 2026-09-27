@@ -4,7 +4,7 @@
 
 このプラグインは VaultAPI 1.7.1 の型を元のパッケージのまま同梱し、`name: Vault`・`load: STARTUP` で既存 Vault を置き換える。VaultAPI の LGPL v3 本文は jar 内の `LICENSE-VaultAPI-LGPL-3.0.txt` に含める。LuckPerms が提供する Permission と Chat のサービスには触れない。
 
-`economy-enabled: false` では経済サービスを登録しない。DB が開けない、または台帳の不変条件が崩れている場合もプラグイン自体は有効のままにし、取引を止める。経済を有効にした場合は `ServicePriority.Highest` でサービスを登録する。起動時と `/essentials reload` 後に、最優先の Economy 提供元と `eco`・`pay`・`balance`・`balancetop` の所有者がこのプラグインであることを検査し、違えば全入出金を拒否する。`/vault-info` で状態を表示する。
+`economy-enabled: false` では経済サービスを登録しない。DB が開けない、または台帳の不変条件が崩れている場合もプラグイン自体は有効のままにし、取引を止める。経済を有効にした場合は `ServicePriority.Highest` でサービスを登録する。起動時と `/essentials reload` 後に、最優先の Economy 提供元と `eco`・`pay`・`balance`・`balancetop` の所有者がこのプラグインであることを検査する。Essentials があれば `disabled-commands` の必須 9 件も確認する。いずれかが違えば全入出金を拒否する。`/vault-info` で状態を表示する。
 
 Essentials 側では `disabled-commands` に `balance, balancetop, pay, eco, paytoggle, payconfirmtoggle, sell, worth, setworth` を指定する。`/sell` は OyasaiMenu の実装を使う。切り替え後の Essentials userdata `money` は正本ではない。旧 Vault jar と新 jar を同時に置かない。
 
@@ -33,11 +33,11 @@ SQLite は WAL と `synchronous=FULL`。停止時には `wal_checkpoint(TRUNCATE
 | `balancetop [page]`                         | `ebalancetop, baltop, ebaltop`       | `essentials.balancetop`                                   |
 | `eco give/take/set/reset <player> <amount>` | `eeco, economy, eeconomy`            | `essentials.eco`                                          |
 
-`pay` の最小額は 1 円。`balancetop` は 10 人ずつ。`eco` はコンソールからも使える。`take` は下限まで許す。`reset` は 10,240 円。メッセージは日本語。
+コマンド権限ノードには Bukkit の既定値を付けない。実際の許可は LuckPerms が決める。`pay` は `-` を含む額を拒否し、数字と小数点以外を除いて読む。最小額は 1 円。`balancetop` は 10 人ずつ。`eco` はコンソールからも使える。`take` は下限まで許す。`reset` は 10,240 円。メッセージは日本語。
 
 ## 移行と復旧
 
-停止後の Essentials `userdata/*.yml` のコピーから `tools/migrate_essentials_to_sqlite.py` で移す。`userdata.tar.gz` や `usermap.csv` は使用しない。全口座・履歴・`schema_meta.migrated_at` を 1 トランザクションで書く。金額は文字列から Python `Decimal` で読み、指数表記を含め `ROUND_HALF_UP` で整数化する。`money` のないファイルは 10,240 円として、元の合計にも入れる。各口座に `migrate` 履歴 1 行を作り、元の表記を `note` に保存する。移行後はファイル数、範囲、UUID ごとの残高、丸め差の合計を照合する。中身がある DB への再移行は拒否する。
+停止後の Essentials `userdata/*.yml` のコピーから `tools/migrate_essentials_to_sqlite.py` で移す。`userdata.tar.gz` や `usermap.csv` は使用しない。全口座・履歴・`schema_meta.migrated_at` を 1 トランザクションで書く。金額は文字列から Python `Decimal` で読み、指数表記を含め `ROUND_HALF_UP` で整数化する。`money` のないファイルは 10,240 円として、元の合計にも入れる。各口座に `migrate` 履歴 1 行を作り、元の表記を `note` に保存する。ファイル数、範囲、UUID ごとの残高、丸め差の合計を同じトランザクションで照合してから commit する。失敗時は rollback する。中身がある DB への再移行は拒否する。
 
 切り替え直後は停止して退避した userdata、旧 Vault jar、Essentials 設定を戻せる。この方法では切り替え後の取引が失われる。取引を残したい場合は `tools/restore_sqlite_to_essentials.py` で SQLite の現在残高を userdata の `money` に書き戻す。ファイルのない UUID が 1 件でもあれば書き戻しを始めない。移行前の端数は復元できない。
 

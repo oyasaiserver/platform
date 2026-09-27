@@ -73,8 +73,9 @@ def migrate(source, output):
         db.executemany("INSERT INTO accounts VALUES (?, ?, ?, ?, ?, ?)", [(u, n, n.lower() if n else None, b, now, now) for u, n, raw, orig, b in rows])
         db.executemany("INSERT INTO transactions (created_at, uuid, delta, balance_after, reason, note) VALUES (?, ?, ?, ?, 'migrate', ?)", [(now, u, b, b, raw) for u, n, raw, orig, b in rows])
         db.execute("INSERT INTO schema_meta VALUES ('migrated_at', ?)", (str(now),))
+        report = verify(source, db)
         db.commit()
-        verify(source, output)
+        print(report)
     except Exception:
         db.rollback()
         raise
@@ -82,23 +83,28 @@ def migrate(source, output):
         db.close()
 
 
-def verify(source, output):
+def verify(source, db):
     paths = sorted(Path(source).glob("*.yml"))
     expected = {row[0]: row for row in (load(path) for path in paths)}
-    with sqlite3.connect(output) as db:
-        actual = {u: b for u, b in db.execute("SELECT uuid, balance FROM accounts")}
-        assert len(actual) == len(paths) == len(expected), "account count mismatch"
-        assert all(MIN <= b <= MAX for b in actual.values()), "out of range"
-        assert all(actual[u] == row[4] for u, row in expected.items()), "UUID balance mismatch"
-        assert db.execute("SELECT COUNT(*) FROM transactions WHERE reason='migrate'").fetchone()[0] == len(paths)
-        assert db.execute("SELECT COUNT(*) FROM accounts a LEFT JOIN (SELECT uuid, SUM(delta) total FROM transactions GROUP BY uuid) t ON a.uuid=t.uuid WHERE a.balance != t.total").fetchone()[0] == 0
-        with localcontext() as context:
-            context.prec = 80
-            originals = sum((row[3] for row in expected.values()), Decimal(0))
-            migrated = sum(actual.values())
-            differences = sum((row[3] - Decimal(row[4]) for row in expected.values()), Decimal(0))
-            assert originals - Decimal(migrated) == differences, "rounding reconciliation mismatch"
-    print(f"[ok] {len(paths)} accounts; original={originals}; migrated={migrated}; rounding difference={differences}")
+    actual = {u: b for u, b in db.execute("SELECT uuid, balance FROM accounts")}
+    if len(actual) != len(paths) or len(expected) != len(paths):
+        raise ValueError("account count mismatch")
+    if not all(MIN <= b <= MAX for b in actual.values()):
+        raise ValueError("out of range")
+    if not all(actual.get(u) == row[4] for u, row in expected.items()):
+        raise ValueError("UUID balance mismatch")
+    if db.execute("SELECT COUNT(*) FROM transactions WHERE reason='migrate'").fetchone()[0] != len(paths):
+        raise ValueError("migration history count mismatch")
+    if db.execute("SELECT COUNT(*) FROM accounts a LEFT JOIN (SELECT uuid, SUM(delta) total FROM transactions GROUP BY uuid) t ON a.uuid=t.uuid WHERE a.balance != t.total").fetchone()[0]:
+        raise ValueError("ledger mismatch")
+    with localcontext() as context:
+        context.prec = 80
+        originals = sum((row[3] for row in expected.values()), Decimal(0))
+        migrated = sum(actual.values())
+        differences = sum((row[3] - Decimal(row[4]) for row in expected.values()), Decimal(0))
+        if originals - Decimal(migrated) != differences:
+            raise ValueError("rounding reconciliation mismatch")
+    return f"[ok] {len(paths)} accounts; original={originals}; migrated={migrated}; rounding difference={differences}"
 
 
 if __name__ == "__main__":
