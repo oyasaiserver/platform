@@ -17,7 +17,7 @@ agent_task: null
 # OyasaiMenu
 
 Minecraft（Purpur 1.21.x）向けの高機能GUIメニュープラグイン。
-YAMLで定義されたメニューをチェスト型GUIで表示し、アクション・マクロ・ショップ・ポイントシステムを提供する。
+YAMLで定義されたメニューをチェスト型GUIで表示し、アクション・ショップ・ポイントシステムを提供する。
 
 ## AI 作業入口
 
@@ -37,10 +37,9 @@ YAMLで定義されたメニューをチェスト型GUIで表示し、アクシ�
 | `/menu <name>` | 指定メニューを開く |
 | `/shop <name>` | ショップメニューを開く |
 | `/sell` | アイテム売却GUI |
-| `/macro <name>` | マクロを実行 |
 | `/pointshop` | ポイントショップ |
 | `/adminmenu` | 管理者メニュー |
-| `/menuedit` | メニューエディター |
+| `/menuedit` | お知らせ・ショップ商品・売却ホワイトリストの編集 |
 
 ## アーキテクチャ
 
@@ -50,7 +49,6 @@ engine/         ← ビジネスロジック
   ActionEngine  ← アクション（コマンド実行・アイテム付与等）の処理
   MenuEngine    ← メニュー表示・インベントリイベント処理
   ShopEngine    ← ショップ売買ロジック
-  MacroEngine   ← マクロ定義・実行
   PointShopEngine ← ポイント管理
   PopupMenuEngine ← ポップアップGUI
 manager/
