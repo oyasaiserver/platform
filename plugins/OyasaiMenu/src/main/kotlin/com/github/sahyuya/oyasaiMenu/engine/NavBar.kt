@@ -84,13 +84,6 @@ object NavBar {
               listOf("&7ワープ・各種コマンドの", "&7ショートカット集です"),
           ),
           NavEntry(
-              52,
-              Material.PURPLE_CONCRETE_POWDER,
-              "&5マクロ",
-              "macromenu",
-              listOf("&7コマンドを登録・実行できる", "&7マクロ機能を管理します"),
-          ),
-          NavEntry(
               53,
               Material.PINK_CONCRETE_POWDER,
               "&dリンク集",

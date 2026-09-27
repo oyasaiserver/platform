@@ -2,10 +2,7 @@ package com.github.sahyuya.oyasaiMenu.command
 
 import com.github.sahyuya.oyasaiMenu.OyasaiMenu
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -28,75 +25,11 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
               return true
             }
     when (args.getOrNull(0)?.lowercase()) {
-      "announce" -> handleAnnounce(player, args.drop(1).toTypedArray())
       "shop" -> handleShop(player, args.drop(1).toTypedArray())
       "whitelist" -> handleWhitelist(player, args.drop(1).toTypedArray())
       else -> sendHelp(player)
     }
     return true
-  }
-
-  private fun handleAnnounce(player: Player, args: Array<String>) {
-    when (args.getOrNull(0)?.lowercase()) {
-      "title" -> {
-        if (args.size < 2) {
-          player.sendMessage(c("&c使い方: /menuedit announce title <テキスト|JSON>"))
-          return
-        }
-        plugin.announcementManager.setTitle(parseTextInput(args.drop(1).joinToString(" ")))
-        player.sendMessage(c("&aタイトルを更新しました。"))
-      }
-      "line" -> {
-        if (args.size < 3) {
-          player.sendMessage(c("&c使い方: /menuedit announce line <番号> <テキスト|JSON>"))
-          return
-        }
-        val lineNum = args[1].toIntOrNull()?.minus(1)
-        if (lineNum == null || lineNum < 0) {
-          player.sendMessage(c("&c番号は 1 以上の整数で指定してください。"))
-          return
-        }
-        plugin.announcementManager.setLine(lineNum, parseTextInput(args.drop(2).joinToString(" ")))
-        player.sendMessage(c("&a${lineNum + 1} 行目を更新しました。"))
-      }
-      "remove-line" -> {
-        val lineNum = args.getOrNull(1)?.toIntOrNull()?.minus(1)
-        if (lineNum == null || lineNum < 0) {
-          player.sendMessage(c("&c使い方: /menuedit announce remove-line <番号>"))
-          return
-        }
-        val err = plugin.announcementManager.removeLine(lineNum)
-        if (err != null) player.sendMessage(c("&c$err"))
-        else player.sendMessage(c("&a${lineNum + 1} 行目を削除しました。"))
-      }
-      "book" -> {
-        player.closeInventory()
-        Bukkit.getScheduler()
-            .runTaskLater(
-                plugin,
-                Runnable { plugin.announcementManager.openBookEditor(player) },
-                1L,
-            )
-      }
-      "show" -> {
-        val ann = plugin.announcementManager.getAnnouncements().firstOrNull()
-        if (ann == null) {
-          player.sendMessage(c("&7お知らせが設定されていません。"))
-          return
-        }
-        player.sendMessage(c("&b=== 現在のお知らせ ==="))
-        player.sendMessage(c("&7タイトル: ${ann.title}"))
-        ann.body.forEachIndexed { i, line -> player.sendMessage(c("&7${i+1}行目: $line")) }
-      }
-      else -> {
-        player.sendMessage(c("&b--- /menuedit announce ---"))
-        player.sendMessage(c("&f/menuedit announce title &7<テキスト/JSON>"))
-        player.sendMessage(c("&f/menuedit announce line &7<番号> <テキスト/JSON>"))
-        player.sendMessage(c("&f/menuedit announce remove-line &7<番号>"))
-        player.sendMessage(c("&f/menuedit announce book"))
-        player.sendMessage(c("&f/menuedit announce show"))
-      }
-    }
   }
 
   private fun handleShop(player: Player, args: Array<String>) {
@@ -252,19 +185,8 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
 
   private fun sendHelp(player: Player) {
     player.sendMessage(c("&b&l/menuedit &7— 管理コマンド"))
-    player.sendMessage(c("&f/menuedit announce &7— お知らせの編集"))
     player.sendMessage(c("&f/menuedit shop &7— ショップの商品管理"))
     player.sendMessage(c("&f/menuedit whitelist &7— 売却ホワイトリスト管理"))
-  }
-
-  private fun parseTextInput(raw: String): String {
-    val trimmed = raw.trim()
-    if (!trimmed.startsWith("{")) return trimmed
-    return runCatching {
-          LegacyComponentSerializer.legacyAmpersand()
-              .serialize(GsonComponentSerializer.gson().deserialize(trimmed))
-        }
-        .getOrElse { trimmed }
   }
 
   override fun onTabComplete(
@@ -276,30 +198,15 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
     val prefix = args.lastOrNull() ?: ""
     return when {
       args.size <= 1 ->
-          listOf("announce", "shop", "whitelist").filter {
-            it.startsWith(prefix, ignoreCase = true)
-          }
+          listOf("shop", "whitelist").filter { it.startsWith(prefix, ignoreCase = true) }
       args.size == 2 ->
           when (args[0].lowercase()) {
-            "announce" -> listOf("title", "line", "remove-line", "book", "show")
             "shop" -> plugin.shopLoader.getAllCategories().keys.toList()
             "whitelist" -> listOf("list", "add", "remove")
             else -> emptyList()
           }.filter { it.startsWith(prefix, ignoreCase = true) }
       args.size == 3 ->
           when {
-            args[0].equals("announce", ignoreCase = true) &&
-                args[1].equals("line", ignoreCase = true) -> {
-              val max =
-                  (plugin.announcementManager.getAnnouncements().firstOrNull()?.body?.size ?: 0) + 1
-              (1..max).map { it.toString() }
-            }
-            args[0].equals("announce", ignoreCase = true) &&
-                args[1].equals("remove-line", ignoreCase = true) -> {
-              val size =
-                  plugin.announcementManager.getAnnouncements().firstOrNull()?.body?.size ?: 0
-              (1..size).map { it.toString() }
-            }
             args[0].equals("shop", ignoreCase = true) -> listOf("list", "add", "remove")
             args[0].equals("whitelist", ignoreCase = true) &&
                 args[1].equals("add", ignoreCase = true) -> listOf("hand")

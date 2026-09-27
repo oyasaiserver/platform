@@ -31,14 +31,6 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
         makeItem(Material.EMERALD, "&aリロード", listOf("&7全 YAML を再読み込みします", "", "&eクリックで実行")),
     )
     inv.setItem(
-        12,
-        makeItem(
-            Material.WRITABLE_BOOK,
-            "&bアナウンス編集",
-            listOf("&7本と羽ペンでお知らせを編集します", "", "&eクリックで本を受け取る"),
-        ),
-    )
-    inv.setItem(
         14,
         makeItem(
             Material.CHEST,
@@ -93,15 +85,6 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
       10 -> {
         plugin.reload()
         player.sendMessage(c("&aリロードしました。"))
-      }
-      12 -> {
-        player.closeInventory()
-        Bukkit.getScheduler()
-            .runTaskLater(
-                plugin,
-                Runnable { plugin.announcementManager.openBookEditor(player) },
-                1L,
-            )
       }
       14 -> {
         player.closeInventory()

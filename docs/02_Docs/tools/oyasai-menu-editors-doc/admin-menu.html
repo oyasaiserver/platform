@@ -50,7 +50,7 @@
     <div class="slot kind-fill"><span class="num">9</span></div>
     <div class="slot kind-confirm"><span class="num">10</span><span class="icon">💚</span><span class="label">リロード</span></div>
     <div class="slot kind-fill"><span class="num">11</span></div>
-    <div class="slot kind-func"><span class="num">12</span><span class="icon">📘</span><span class="label">アナウンス</span></div>
+    <div class="slot kind-fill"><span class="num">12</span></div>
     <div class="slot kind-fill"><span class="num">13</span></div>
     <div class="slot kind-func"><span class="num">14</span><span class="icon">📦</span><span class="label">ショップ管理</span></div>
     <div class="slot kind-fill"><span class="num">15</span></div>
@@ -101,7 +101,6 @@
     <thead><tr><th>slot</th><th>機能</th><th>動作</th></tr></thead>
     <tbody>
       <tr><td>10</td><td>リロード</td><td><code>plugin.reload()</code> — 全YAMLを再読み込み</td></tr>
-      <tr><td>12</td><td>アナウンス編集</td><td>インベントリを閉じてから <code>plugin.announcementManager.openBookEditor(player)</code></td></tr>
       <tr><td>14</td><td>ショップ商品管理</td><td>インベントリを閉じてチャットに <code>/menuedit shop ...</code> のガイドを表示</td></tr>
       <tr><td>16</td><td>売却ホワイトリスト</td><td>インベントリを閉じてチャットに <code>/menuedit whitelist ...</code> のガイドを表示</td></tr>
       <tr><td>34</td><td>閉じる</td><td><code>player.closeInventory()</code></td></tr>
@@ -123,11 +122,6 @@
   <table class="cmd-table">
     <thead><tr><th>コマンド</th><th>動作</th></tr></thead>
     <tbody>
-      <tr><td><code>/menuedit announce title &lt;text|JSON&gt;</code></td><td>お知らせのタイトルを更新</td></tr>
-      <tr><td><code>/menuedit announce line &lt;番号&gt; &lt;text|JSON&gt;</code></td><td>指定行を更新（不足分は空行で埋める）</td></tr>
-      <tr><td><code>/menuedit announce remove-line &lt;番号&gt;</code></td><td>指定行を削除</td></tr>
-      <tr><td><code>/menuedit announce book</code></td><td>本エディタを開く</td></tr>
-      <tr><td><code>/menuedit announce show</code></td><td>現在のお知らせをチャットに表示</td></tr>
       <tr><td><code>/menuedit shop &lt;category&gt; list</code></td><td>商品一覧</td></tr>
       <tr><td><code>/menuedit shop &lt;category&gt; add &lt;material&gt; &lt;buy&gt; &lt;sell&gt;</code></td><td>商品追加</td></tr>
       <tr><td><code>/menuedit shop &lt;category&gt; remove &lt;index&gt;</code></td><td>商品削除</td></tr>
@@ -139,7 +133,6 @@
 
   <h3>パラメータ詳細</h3>
   <ul>
-    <li><strong>announce title/line</strong>: テキストが <code>{</code> で始まる場合はJSONとしてパース (<code>GsonComponentSerializer</code>) → 失敗時はそのまま文字列</li>
     <li><strong>shop add</strong>: <code>Material.valueOf</code> でバリデーション。価格は <code>toDoubleOrNull</code></li>
     <li><strong>whitelist add hand</strong>: 売値は0より大きい必要あり。カスタム名のないアイテムは警告付きで追加</li>
   </ul>

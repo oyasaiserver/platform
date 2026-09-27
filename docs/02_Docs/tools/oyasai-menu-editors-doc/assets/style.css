@@ -346,7 +346,6 @@ tr:nth-child(even) td {
 .badge-editor  { background: #284a82; color: #c9e0ff; }
 .badge-admin   { background: #6e4a1f; color: #ffe9c9; }
 .badge-book    { background: #4a2e6e; color: #e9d6ff; }
-.badge-macro   { background: #2e5e44; color: #c9f5d8; }
 .badge-param   { background: #6e1f4a; color: #ffc9e0; }
 .badge-special { background: #1f4a6e; color: #c9e8ff; }
 

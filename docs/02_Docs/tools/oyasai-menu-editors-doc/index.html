@@ -16,24 +16,8 @@
   <h2>目次</h2>
   <ol>
     <li><a href="#overview">概要</a></li>
-    <li>
-      GuiMaker (チェストGUIエディタ)
-      <ul>
-        <li><a href="guimaker-hub.html">編集ハブ・各リスト画面</a></li>
-        <li><a href="guimaker-canvas.html">キャンバス・プレビュー</a></li>
-        <li><a href="guimaker-context.html">コンテキスト・ロア・アクション編集</a></li>
-        <li><a href="guimaker-pickers.html">各種ピッカー (権限/サウンド/カラー他)</a></li>
-        <li><a href="guimaker-templates.html">テンプレート管理</a></li>
-        <li><a href="guimaker-uiskin.html">UIスキンエディタ</a></li>
-        <li><a href="guimaker-popup.html">Popup設定エディタ</a></li>
-      </ul>
-    </li>
     <li><a href="admin-menu.html">管理者メニュー (/adminmenu)</a></li>
-    <li><a href="announcement.html">お知らせ本エディタ (/menuedit announce)</a></li>
-    <li><a href="macro.html">マクロエディタ (/macro)</a></li>
-    <li><a href="param-command.html">可変コマンドエディタ (PARAM_COMMAND)</a></li>
-    <li><a href="special-menu.html">特殊メニュー (online_players / confirm)</a></li>
-    <li><a href="data-flow.html">データフロー・ファイル構造</a></li>
+    <li><a href="announcement.html">お知らせの設定 (announcements.yml)</a></li>
   </ol>
 </nav>
 
@@ -42,42 +26,17 @@
     <h2>概要</h2>
     <p>
       <strong>OyasaiMenu</strong> プラグインに含まれる各種エディタ画面の使用方法・スロット配置・技術詳細を網羅したドキュメントです。
-      OyasaiMenuはチェストUI形式のメニュー定義（YAML）と、それをGUI上で編集する複合エディタ <strong>GuiMaker</strong> を中核に持ちます。
+      OyasaiMenuのメニュー定義はYAMLで管理します。
     </p>
     <h3>主要コンポーネント</h3>
     <ul class="comp-list">
-      <li><span class="badge badge-editor">GuiMaker</span> 通常GUI/Popup/UIスキンを編集する複合エディタ (<code>guimaker/</code> パッケージ)</li>
       <li><span class="badge badge-admin">AdminEngine</span> 管理メニュー (<code>/adminmenu</code>)</li>
-      <li><span class="badge badge-book">AnnouncementManager</span> 本(WRITABLE_BOOK)エディタ</li>
-      <li><span class="badge badge-macro">MacroEngine</span> マクロ一覧・詳細・本エディタ</li>
-      <li><span class="badge badge-param">ParameterCommandEngine</span> 可変コマンド (placeholder付き) 編集</li>
-      <li><span class="badge badge-special">SpecialMenuEngine</span> オンラインプレイヤー / 確認メニュー</li>
+      <li><span class="badge badge-book">AnnouncementManager</span> お知らせ設定の読み込み</li>
     </ul>
-
-    <h3>GuiMakerコマンド体系 (一部)</h3>
-    <table class="cmd-table">
-      <thead><tr><th>コマンド</th><th>動作</th></tr></thead>
-      <tbody>
-        <tr><td><code>/guimaker</code></td><td>編集ハブを開く（引数なし）</td></tr>
-        <tr><td><code>/guimaker hub</code></td><td>編集ハブを明示的に開く</td></tr>
-        <tr><td><code>/guimaker new &lt;id&gt;</code></td><td>新規通常GUIを作成</td></tr>
-        <tr><td><code>/guimaker edit &lt;id&gt; [canvas|preview|commit|revert|info|discard|title|name|lore|...]</code></td><td>個別操作（GUI+コマンドのハイブリッド）</td></tr>
-        <tr><td><code>/guimaker list</code></td><td>編集対象メニューID一覧をチャット表示</td></tr>
-        <tr><td><code>/guimaker popup [list|edit|new|set]</code></td><td>Popup関連</td></tr>
-        <tr><td><code>/guimaker ui [edit|list|silent]</code></td><td>UIスキン</td></tr>
-        <tr><td><code>/guimaker special</code></td><td>特殊メニュー入口</td></tr>
-        <tr><td><code>/guimaker template [approve]</code></td><td>テンプレート管理（公式承認）</td></tr>
-        <tr><td><code>/guimaker help</code></td><td>ヘルプ</td></tr>
-      </tbody>
-    </table>
-    <p class="note">※ コマンド権限: <strong>OPのみ</strong>（<code>onCommand</code> 冒頭で <code>sender.isOp</code> チェック）</p>
 
     <h3>権限・前提</h3>
     <ul>
-      <li>GuiMaker: <strong>OP限定</strong></li>
       <li>AdminMenu / MenuEdit: <code>oyasaimenu.admin</code> パーミッション</li>
-      <li>Macro: <code>oyasaimenu.macro</code> パーミッション</li>
-      <li>ParameterCommand / SpecialMenu (online_players, confirm): <strong>OP限定</strong></li>
     </ul>
   </section>
 
