@@ -93,12 +93,11 @@ class ActionEngine(private val plugin: OyasaiMenu) {
       ActionType.OP_PLAYER_CMD -> {
         val cmd = applyPlaceholders(player, action.getString("command"))
         if (cmd.isNotEmpty()) {
-          val wasOp = player.isOp
-          try {
-            player.isOp = true
+          if (player.isOp) {
             player.performCommand(cmd.removePrefix("/"))
-          } finally {
-            player.isOp = wasOp
+          } else {
+            player.sendMessage(c("&cこの操作はOPのみ実行できます。"))
+            plugin.logger.warning("OP_PLAYER_CMD を拒否: player=${player.name}, command=$cmd")
           }
         }
       }

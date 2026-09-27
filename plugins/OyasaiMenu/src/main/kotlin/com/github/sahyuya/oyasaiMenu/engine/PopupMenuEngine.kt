@@ -382,12 +382,11 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
         PopupActionType.OP_PLAYER_CMD -> {
           val cmd = action.value.replace("%player%", player.name)
           if (cmd.isNotEmpty()) {
-            val wasOp = player.isOp
-            try {
-              player.isOp = true
+            if (player.isOp) {
               player.performCommand(cmd.removePrefix("/"))
-            } finally {
-              player.isOp = wasOp
+            } else {
+              player.sendMessage(c("&cこの操作はOPのみ実行できます。"))
+              plugin.logger.warning("OP_PLAYER_CMD を拒否: player=${player.name}, command=$cmd")
             }
           }
         }
