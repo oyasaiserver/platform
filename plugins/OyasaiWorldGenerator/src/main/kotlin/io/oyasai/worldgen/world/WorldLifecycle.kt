@@ -84,7 +84,7 @@ class WorldLifecycle(
       applyResults[worldName] = false
       plugin.logger.severe(
           "[OWG][lifecycle] WorldInitEvent cannot patch $worldName because its configuration is invalid; " +
-              "ServerLoad inspection must unload it with save=false"
+              "ServerLoad inspection will reject unloading it without a verified save"
       )
       return
     }
@@ -234,15 +234,14 @@ class WorldLifecycle(
     }
     val applied = applyResults[name] == true
     val verified = applied && heightProvider.verify(world, entry.heightSpec)
-    val save = applied && verified
-    if (!save) {
-      plugin.logger.severe(
-          "[OWG][command] Refusing to save $name during unload: applied=$applied verified=$verified; " +
-              "unload will use save=false"
-      )
+    if (!verified) {
+      val reason = "applied=$applied verified=$verified"
+      plugin.logger.severe("[OWG][command] Refusing to unload $name: $reason; world remains loaded")
+      sender.sendMessage("[OWG] $name は高さを照合できないためアンロードしません ($reason)")
+      return false
     }
-    val result = Bukkit.unloadWorld(world, save)
-    sender.sendMessage("[OWG] unload $name: $result save=$save")
+    val result = Bukkit.unloadWorld(world, true)
+    sender.sendMessage("[OWG] unload $name: $result save=true")
     return result
   }
 
@@ -259,12 +258,15 @@ class WorldLifecycle(
       player.sendMessage("[OWG] まだ準備できていません")
       return false
     }
-    player.gameMode = entry.gameMode
-    player.allowFlight = entry.allowFlight
-    if (!entry.allowFlight) player.isFlying = false
-    return player.teleport(Location(world, 0.5, entry.spawnY.toDouble(), 0.5)).also {
-      player.sendMessage(if (it) "[OWG] ${entry.name} に移動しました" else "[OWG] 移動に失敗しました")
+    val moved =
+        player.teleport(Location(world, 0.5, entry.spawnY.toDouble(), 0.5)) && player.world == world
+    if (moved) {
+      player.gameMode = entry.gameMode
+      player.allowFlight = entry.allowFlight
+      if (!entry.allowFlight) player.isFlying = false
     }
+    player.sendMessage(if (moved) "[OWG] ${entry.name} に移動しました" else "[OWG] 移動に失敗しました")
+    return moved
   }
 
   fun statusLines(): List<String> {
@@ -328,7 +330,7 @@ class WorldLifecycle(
       if (selfTestResult == SelfTestResult.DISABLED) {
         plugin.logger.severe(
             "[OWG][self-test] DISABLED by configuration; target worlds will not be loaded and " +
-                "already-loaded targets will be unloaded with save=false"
+                "already-loaded targets will remain loaded without an unverified unload"
         )
       } else if (selfTestResult == SelfTestResult.FAILED) {
         plugin.logger.severe(
@@ -524,7 +526,9 @@ class WorldLifecycle(
     val root = Bukkit.getWorldContainer().toPath().toAbsolutePath().normalize()
     return setOf(
         root.resolve(SELF_TEST_WORLD).normalize(),
-        levelStorageRoot().resolve("dimensions/minecraft/$SELF_TEST_WORLD").normalize(),
+        checkNotNull(primaryWorldStorageRoot()) { "Primary world is unavailable" }
+            .resolve("dimensions/minecraft/$SELF_TEST_WORLD")
+            .normalize(),
     )
   }
 
@@ -575,34 +579,17 @@ class WorldLifecycle(
     val root = Bukkit.getWorldContainer().toPath().toAbsolutePath().normalize()
     return setOf(
         root.resolve(worldName).normalize(),
-        levelStorageRoot().resolve("dimensions/minecraft/$worldName").normalize(),
+        checkNotNull(primaryWorldStorageRoot()) { "Primary world is unavailable" }
+            .resolve("dimensions/minecraft/$worldName")
+            .normalize(),
     )
-  }
-
-  private fun levelStorageRoot(): Path {
-    val primaryWorldPath =
-        Bukkit.getWorlds()
-            .firstOrNull { it.key == NamespacedKey.minecraft("overworld") }
-            ?.worldPath
-            ?.toAbsolutePath()
-            ?.normalize() ?: error("Primary world is unavailable")
-    return if (
-        primaryWorldPath.fileName.toString() == "overworld" &&
-            primaryWorldPath.parent?.fileName?.toString() == "minecraft" &&
-            primaryWorldPath.parent?.parent?.fileName?.toString() == "dimensions"
-    ) {
-      primaryWorldPath.parent.parent.parent
-    } else {
-      primaryWorldPath
-    }
   }
 
   private fun recoverFailedWorld(world: World, reason: String) {
     failedWorlds += world.name
-    val unloaded = Bukkit.unloadWorld(world, false)
     plugin.logger.severe(
-        "[OWG][lifecycle] ${world.name} rejected: $reason; unload(save=false)=$unloaded; " +
-            "it will not be loaded again this run"
+        "[OWG][lifecycle] Refusing to unload ${world.name}: $reason; " +
+            "height is unverified, world remains loaded and will not be loaded again this run"
     )
   }
 

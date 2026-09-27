@@ -83,7 +83,7 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
       } else {
         logger.log(
             Level.SEVERE,
-            "[OWG][height] ROLLBACK FAILED world=${world.name}; world must be unloaded without saving",
+            "[OWG][height] ROLLBACK FAILED world=${world.name}; refusing an unverified unload",
             rollbackFailure,
         )
       }

@@ -43,16 +43,26 @@ data class Portal(
   fun locationString() = "$world:$minX,$minY,$minZ:$maxX,$maxY,$maxZ"
 }
 
-internal data class PortalImport(val portals: Map<String, Portal>, val skipped: List<String>)
+internal data class PortalImport(
+    val portals: Map<String, Portal>,
+    val skipped: List<String>,
+    val unsupportedActions: List<String>,
+)
 
 internal fun parsePortals(source: File): PortalImport {
   val root =
       loadNormalYaml(source).getConfigurationSection("portals")
-          ?: return PortalImport(emptyMap(), emptyList())
+          ?: return PortalImport(emptyMap(), emptyList(), emptyList())
   val parsed = linkedMapOf<String, Portal>()
   val skipped = mutableListOf<String>()
+  val unsupportedActions = mutableListOf<String>()
   for (name in root.getKeys(false)) {
     val section = root.getConfigurationSection(name)
+    val actionType = section?.getConfigurationSection("action")?.getString("type")
+    if (section?.contains("action") == true && actionType != "multiverse-destination") {
+      unsupportedActions += "$name:${actionType ?: "<missing>"}"
+      continue
+    }
     val rawLocation = section?.getString("location").orEmpty()
     val parts = rawLocation.split(':')
     val world = if (parts.size == 3) parts[0] else section?.getString("world").orEmpty()
@@ -90,12 +100,13 @@ internal fun parsePortals(source: File): PortalImport {
             section.getBoolean("safe-teleport", true),
         )
   }
-  return PortalImport(parsed, skipped)
+  return PortalImport(parsed, skipped, unsupportedActions)
 }
 
 class Portals(private val plugin: JavaPlugin) : Listener {
   private val file = File(plugin.dataFolder, "portals.yml")
   private val entries = linkedMapOf<String, Portal>()
+  private var yaml = YamlConfiguration().apply { options().pathSeparator('\u0000') }
   private val byWorld = mutableMapOf<String, List<Portal>>()
   private val lastUse = mutableMapOf<UUID, Long>()
   private val arrival = mutableMapOf<UUID, String>()
@@ -105,15 +116,21 @@ class Portals(private val plugin: JavaPlugin) : Listener {
   fun find(name: String): Portal? =
       entries[name] ?: entries.values.firstOrNull { it.name.equals(name, true) }
 
+  fun hasName(name: String): Boolean =
+      find(name) != null ||
+          yaml.getConfigurationSection("portals")?.getKeys(false)?.any { it.equals(name, true) } ==
+              true
+
   fun initialize() {
     if (!file.exists()) {
       val legacy = File(plugin.server.pluginsFolder, "Multiverse-Portals/portals.yml")
       if (legacy.isFile) {
         val imported = parsePortals(legacy)
+        yaml = loadNormalYaml(legacy)
         entries.putAll(imported.portals)
         save()
         plugin.logger.info(
-            "[OWG][portals] Imported ${entries.size}; skipped=${imported.skipped.size} ${imported.skipped}"
+            "[OWG][portals] Imported ${entries.size}; skipped=${imported.skipped}; unsupported-actions=${imported.unsupportedActions}"
         )
       } else {
         save()
@@ -121,11 +138,12 @@ class Portals(private val plugin: JavaPlugin) : Listener {
       }
     }
     val loaded = parsePortals(file)
+    yaml = loadNormalYaml(file)
     entries.clear()
     entries.putAll(loaded.portals)
     reindex()
     plugin.logger.info(
-        "[OWG][portals] Registry loaded: ${entries.size}; skipped=${loaded.skipped.size} ${loaded.skipped}"
+        "[OWG][portals] Registry loaded: ${entries.size}; skipped=${loaded.skipped}; unsupported-actions=${loaded.unsupportedActions}"
     )
   }
 
@@ -141,15 +159,16 @@ class Portals(private val plugin: JavaPlugin) : Listener {
 
   fun remove(name: String): Boolean {
     if (entries.remove(name) == null) return false
+    yaml.getConfigurationSection("portals")?.set(name, null)
     save()
     return true
   }
 
   fun save() {
-    val config = YamlConfiguration().apply { options().pathSeparator('\u0000') }
-    val root = config.createSection("portals")
+    val config = yaml
+    val root = config.getConfigurationSection("portals") ?: config.createSection("portals")
     for (portal in entries.values) {
-      val section = root.createSection(portal.name)
+      val section = root.getConfigurationSection(portal.name) ?: root.createSection(portal.name)
       section.set("location", portal.locationString())
       section.set(
           "action",
@@ -176,7 +195,7 @@ class Portals(private val plugin: JavaPlugin) : Listener {
   private fun at(location: Location): Portal? =
       byWorld[location.world?.name]?.firstOrNull { it.contains(location) }
 
-  @EventHandler(ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onMove(event: PlayerMoveEvent) {
     if (event.player.isInsideVehicle) return
     val to = event.to
@@ -188,20 +207,41 @@ class Portals(private val plugin: JavaPlugin) : Listener {
         return
     val portal = at(to)
     if (portal == null) {
-      arrival.remove(event.player.uniqueId)
+      if (arrival.containsKey(event.player.uniqueId)) {
+        Bukkit.getScheduler()
+            .runTask(
+                plugin,
+                Runnable {
+                  if (!event.isCancelled && at(event.player.location) == null)
+                      arrival.remove(event.player.uniqueId)
+                },
+            )
+      }
       return
     }
     if (at(event.from) != null) return
     // MV waits for PlayerPortalEvent when the interior is a Nether portal.
     if (to.block.type == Material.NETHER_PORTAL) return
-    use(event.player, portal)
+    Bukkit.getScheduler()
+        .runTask(
+            plugin,
+            Runnable {
+              if (
+                  !event.isCancelled &&
+                      event.player.isOnline &&
+                      at(event.player.location)?.name == portal.name
+              )
+                  use(event.player, portal)
+            },
+        )
   }
 
-  @EventHandler(priority = EventPriority.HIGH)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun onNether(event: PlayerPortalEvent) {
     val portal = at(event.from) ?: return
-    event.isCancelled = true
-    use(event.player, portal)
+    if (arrival[event.player.uniqueId] == portal.name) return
+    val target = destination(portal.destination) ?: return
+    event.to = target
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

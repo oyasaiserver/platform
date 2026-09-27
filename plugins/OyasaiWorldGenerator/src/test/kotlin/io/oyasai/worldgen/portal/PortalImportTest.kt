@@ -40,12 +40,17 @@ class PortalImportTest {
                 value: ignored
             invalid:
               location: nonsense
+            unsupported:
+              action: {type: command, value: '/say retained'}
+              location: 'DemoWorld:5,60,0:5,61,0'
           """
               .trimIndent(),
       )
       val imported = parsePortals(file.toFile())
       assertEquals(6, imported.portals.size)
       assertEquals(listOf("invalid"), imported.skipped)
+      assertEquals(listOf("unsupported:command"), imported.unsupportedActions)
+      assertNull(imported.portals["unsupported"])
       assertEquals("p:exit:west", imported.portals["entry"]?.destination)
       assertEquals("e:OtherWorld:1.5,70.0,2.5:15:90", imported.portals["coordinate"]?.destination)
       assertEquals("", imported.portals["broken"]?.destination)

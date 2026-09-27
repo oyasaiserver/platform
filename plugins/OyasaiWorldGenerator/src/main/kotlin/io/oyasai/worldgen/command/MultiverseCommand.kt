@@ -305,7 +305,7 @@ class MultiverseCommand(
     }
     if (
         lifecycle.configSnapshot().configuredWorldNames.any { it.equals(name, true) } ||
-            registry.find(name) != null ||
+            registry.hasName(name) ||
             Bukkit.getWorld(name) != null
     ) {
       sender.sendMessage("[MV] その名前のワールドは既にあります")

@@ -146,10 +146,27 @@ internal fun normalWorldFolder(root: Path, key: NamespacedKey): File? {
   return target.takeIf { it.startsWith(dimensions) }?.toFile()
 }
 
+internal fun primaryWorldStorageRoot(): Path? {
+  val path =
+      Bukkit.getWorlds()
+          .firstOrNull { it.key == NamespacedKey.minecraft("overworld") }
+          ?.worldPath
+          ?.toAbsolutePath()
+          ?.normalize() ?: return null
+  return if (
+      path.fileName.toString() == "overworld" &&
+          path.parent?.fileName?.toString() == "minecraft" &&
+          path.parent?.parent?.fileName?.toString() == "dimensions"
+  ) {
+    path.parent.parent.parent
+  } else path
+}
+
 class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () -> OwgConfig) :
     Listener {
   private val file = File(plugin.dataFolder, "normal-worlds.yml")
   private val worlds = linkedMapOf<String, NormalWorld>()
+  private var yaml = YamlConfiguration().apply { options().pathSeparator('\u0000') }
 
   fun entries(): Collection<NormalWorld> = worlds.values
 
@@ -157,22 +174,11 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
       worlds[name]
           ?: worlds.values.firstOrNull { it.alias.equals(name, true) && it.alias.isNotEmpty() }
 
+  fun hasName(name: String): Boolean =
+      find(name) != null || yaml.getKeys(false).any { it.equals(name, true) }
+
   fun folder(key: NamespacedKey): File? {
-    val path =
-        Bukkit.getWorlds()
-            .firstOrNull { it.key == NamespacedKey.minecraft("overworld") }
-            ?.worldPath
-            ?.toAbsolutePath()
-            ?.normalize() ?: return null
-    val root =
-        if (
-            path.fileName.toString() == "overworld" &&
-                path.parent?.fileName?.toString() == "minecraft" &&
-                path.parent?.parent?.fileName?.toString() == "dimensions"
-        )
-            path.parent.parent.parent
-        else path
-    return normalWorldFolder(root, key)
+    return primaryWorldStorageRoot()?.let { normalWorldFolder(it, key) }
   }
 
   fun initialize() {
@@ -199,6 +205,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
   private fun readFile() {
     worlds.clear()
     val config = loadNormalYaml(file)
+    yaml = config
     for (name in config.getKeys(false)) {
       val section = config.getConfigurationSection(name) ?: continue
       val key =
@@ -249,9 +256,9 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
   }
 
   fun save() {
-    val config = YamlConfiguration().apply { options().pathSeparator('\u0000') }
+    val config = yaml
     for (entry in worlds.values) {
-      val section = config.createSection(entry.name)
+      val section = config.getConfigurationSection(entry.name) ?: config.createSection(entry.name)
       section.set("key", entry.key.toString())
       section.set("environment", entry.environment.name.lowercase(Locale.ROOT))
       section.set("generator", entry.generator)
@@ -288,6 +295,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
 
   fun remove(name: String) {
     worlds.remove(name)
+    yaml.set(name, null)
     save()
   }
 
@@ -303,7 +311,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
       }
       val loaded = Bukkit.getWorld(entry.name)
       if (loaded != null) {
-        apply(entry, loaded)
+        load(entry)
         continue
       }
       if (!entry.autoLoad) {
@@ -391,7 +399,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
     Bukkit.getScheduler().runTask(plugin, Runnable { enforceFlight(event.player) })
   }
 
-  @EventHandler(priority = EventPriority.HIGH)
+  @EventHandler(priority = EventPriority.LOW)
   fun onRespawn(event: PlayerRespawnEvent) {
     if (event.player.world.name in heightConfig().configuredWorldNames) return
     val entry = worlds[event.player.world.name] ?: return

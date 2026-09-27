@@ -112,7 +112,7 @@ class PortalCommand(private val portals: Portals) : BasicCommand {
       sender.sendMessage("[MVP] 名前には英数字、_、-、. のみ使えます")
       return
     }
-    if (portals.find(name) != null) {
+    if (portals.hasName(name)) {
       sender.sendMessage("[MVP] その名前のポータルは既にあります")
       return
     }
