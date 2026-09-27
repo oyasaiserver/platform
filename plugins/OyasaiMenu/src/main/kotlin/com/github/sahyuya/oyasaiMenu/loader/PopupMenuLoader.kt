@@ -239,8 +239,6 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
             PopupAction(PopupActionType.SUGGEST_COMMAND, map["suggest_command"].toString())
         map.containsKey("open_popup") ->
             PopupAction(PopupActionType.OPEN_POPUP, map["open_popup"].toString())
-        map.containsKey("open_special") ->
-            PopupAction(PopupActionType.OPEN_SPECIAL, map["open_special"].toString())
         map.containsKey("open_shop") ->
             PopupAction(PopupActionType.OPEN_SHOP, map["open_shop"].toString())
         map.containsKey("open_sell") -> PopupAction(PopupActionType.OPEN_SELL, "")
@@ -250,6 +248,9 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
         map.containsKey("open_menu") ->
             PopupAction(PopupActionType.OPEN_MENU, map["open_menu"].toString())
         map.containsKey("close") -> PopupAction(PopupActionType.CLOSE, "")
-        else -> null
+        else -> {
+          plugin.logger.warning("不明な Popup アクション: $map")
+          null
+        }
       }
 }

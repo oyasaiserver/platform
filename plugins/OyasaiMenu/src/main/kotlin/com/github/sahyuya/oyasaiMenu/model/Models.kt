@@ -27,10 +27,8 @@ data class MenuItemDefinition(
 enum class ActionType {
   OPEN_MENU,
   OPEN_POPUP,
-  OPEN_SPECIAL,
   RUN_COMMAND,
   RUN_PLAYER_COMMAND,
-  PARAM_COMMAND,
   CONSOLE_CMD,
   PLAYER_CMD,
   OP_PLAYER_CMD,

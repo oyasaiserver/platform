@@ -63,7 +63,6 @@ enum class PopupActionType {
   CHAT_PASTE,
   SUGGEST_COMMAND,
   OPEN_POPUP,
-  OPEN_SPECIAL,
   OPEN_SHOP,
   OPEN_SELL,
   OPEN_MACRO,

@@ -65,19 +65,6 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         runDelayed { plugin.popupMenuEngine.open(player, target) }
       }
 
-      ActionType.OPEN_SPECIAL -> {
-        val target = action.getString("target")
-        if (target.isEmpty()) {
-          plugin.logger.warning("open_special にターゲットが未指定。")
-          return
-        }
-        runDelayed { plugin.specialMenuEngine.open(player, target, action) }
-      }
-
-      ActionType.PARAM_COMMAND -> {
-        runDelayed { plugin.parameterCommandEngine.open(player, action) }
-      }
-
       ActionType.RUN_COMMAND,
       ActionType.CONSOLE_CMD -> {
         val cmd = applyPlaceholders(player, action.getString("command"))
