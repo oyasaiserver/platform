@@ -1,7 +1,7 @@
 name: OyasaiTab
 version: "0.1.0"
 main: io.oyasai.oyasaitab.OyasaiTabPlugin
-api-version: "26.2"
+api-version: "26.3"
 authors:
   - OyasaiServer
 softdepend:

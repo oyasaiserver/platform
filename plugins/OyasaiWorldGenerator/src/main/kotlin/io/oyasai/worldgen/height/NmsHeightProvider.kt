@@ -686,6 +686,6 @@ class NmsHeightProvider(private val logger: Logger) {
   }
 
   companion object {
-    private const val SUPPORTED_MINECRAFT_VERSION = "26.2"
+    private const val SUPPORTED_MINECRAFT_VERSION = "26.3"
   }
 }
