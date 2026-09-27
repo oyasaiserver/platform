@@ -2,9 +2,6 @@ package com.github.sahyuya.oyasaiMenu
 
 import com.github.sahyuya.oyasaiMenu.command.*
 import com.github.sahyuya.oyasaiMenu.engine.*
-import com.github.sahyuya.oyasaiMenu.guimaker.GuiEditorEngine
-import com.github.sahyuya.oyasaiMenu.guimaker.GuiMakerCommand
-import com.github.sahyuya.oyasaiMenu.guimaker.GuiMakerMigration
 import com.github.sahyuya.oyasaiMenu.loader.*
 import com.github.sahyuya.oyasaiMenu.manager.*
 import org.bukkit.event.EventHandler
@@ -34,13 +31,11 @@ class OyasaiMenu : JavaPlugin(), Listener {
   lateinit var pointShopEngine: PointShopEngine
   lateinit var macroEngine: MacroEngine
   lateinit var adminEngine: AdminEngine
-  lateinit var guiEditorEngine: GuiEditorEngine
   lateinit var parameterCommandEngine: ParameterCommandEngine
   lateinit var specialMenuEngine: SpecialMenuEngine
 
   override fun onEnable() {
     saveDefaultConfig()
-    GuiMakerMigration.migrateFromCitiesSkyMine(this)
 
     menuLoader = MenuLoader(this)
     shopLoader = ShopLoader(this)
@@ -60,7 +55,6 @@ class OyasaiMenu : JavaPlugin(), Listener {
     pointShopEngine = PointShopEngine(this)
     macroEngine = MacroEngine(this)
     adminEngine = AdminEngine(this)
-    guiEditorEngine = GuiEditorEngine(this)
     parameterCommandEngine = ParameterCommandEngine(this)
     specialMenuEngine = SpecialMenuEngine(this)
 
@@ -92,9 +86,6 @@ class OyasaiMenu : JavaPlugin(), Listener {
     getCommand("menuedit")?.tabCompleter = MenuEditCommand(this)
     getCommand("oyasaimenu")?.setExecutor(OyasaiMenuCommand(this))
     getCommand("oyasaimenu")?.tabCompleter = OyasaiMenuCommand(this)
-    val gmCommand = GuiMakerCommand(this, guiEditorEngine)
-    getCommand("guimaker")?.setExecutor(gmCommand)
-    getCommand("guimaker")?.tabCompleter = gmCommand
 
     listOf(
             menuEngine,
@@ -104,7 +95,6 @@ class OyasaiMenu : JavaPlugin(), Listener {
             pointShopEngine,
             macroEngine,
             adminEngine,
-            guiEditorEngine,
             parameterCommandEngine,
             specialMenuEngine,
             announcementManager,

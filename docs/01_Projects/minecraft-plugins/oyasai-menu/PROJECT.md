@@ -53,9 +53,6 @@ engine/         ← ビジネスロジック
   MacroEngine   ← マクロ定義・実行
   PointShopEngine ← ポイント管理
   PopupMenuEngine ← ポップアップGUI
-guimaker/       ← GUIエディター（ドラフト/ライブ方式）
-  GuiEditorEngine
-  GuiEditorSession
 manager/
   AnnouncementManager ← アナウンス管理
 ```
@@ -74,4 +71,3 @@ items:
 ## 関連ドキュメント
 
 - エディター向け詳細: [`../../../02_Docs/tools/oyasai-menu-editors-doc/`](../../../02_Docs/tools/oyasai-menu-editors-doc/)
-- GuiMaker: [`../citiesskymine/PROJECT.md`](../citiesskymine/PROJECT.md)
