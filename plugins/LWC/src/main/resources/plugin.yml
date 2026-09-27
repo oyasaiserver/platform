@@ -1,0 +1,53 @@
+name: LWC
+version: ${version}
+main: icu.oyasai.lwc.LwcPlugin
+api-version: "1.21"
+description: ブロック保護プラグイン
+commands:
+  lock:
+    description: ブロックを保護する
+    aliases: [cprivate]
+    permission: lwc.protect
+  cdisplay:
+    description: 読み取り専用で保護する
+    permission: lwc.protect
+  unlock:
+    description: 保護を外す
+    aliases: [cremove]
+    permission: lwc.protect
+  cinfo:
+    description: 保護情報を見る
+    permission: lwc.protect
+  cmodify:
+    description: 共有相手を変更する
+    permission: lwc.protect
+  chopper:
+    description: HOPPER フラグを変更する
+    permission: lwc.protect
+  lwc: {description: 廃止済み}
+  cadmin: {description: 廃止済み}
+  cpublic: {description: 廃止済み}
+  cpassword: {description: 廃止済み}
+  cdonation: {description: 廃止済み}
+  csupply: {description: 廃止済み}
+  cunlock: {description: 廃止済み}
+  cremoveall: {description: 廃止済み}
+  climits: {description: 廃止済み}
+  credstone: {description: 廃止済み}
+  cmagnet: {description: 廃止済み}
+  cdroptransfer: {description: 廃止済み}
+  cpersist: {description: 廃止済み}
+  cnolock: {description: 廃止済み}
+  cnospam: {description: 廃止済み}
+  cexempt: {description: 廃止済み}
+  cautoclose: {description: 廃止済み}
+  callowexplosions: {description: 廃止済み}
+  ctnt: {description: 廃止済み}
+  cdefault: {description: 廃止済み}
+permissions:
+  lwc.protect:
+    description: 保護コマンドの使用
+    default: true
+  lwc.admin:
+    description: すべての保護の管理
+    default: op
