@@ -137,6 +137,10 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   // ============================
 
   private fun handleSell(player: Player, inv: Inventory) {
+    if (!EconomyManager.isAvailable) {
+      player.sendMessage(c("&c経済プラグインが見つかりません。"))
+      return
+    }
     val items = getInputItems(inv)
     if (items.isEmpty()) {
       player.sendMessage(c("&c売却できるアイテムがありません。"))
@@ -146,13 +150,14 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
     var earned = 0.0
     var count = 0
     var unsellable = 0
+    val soldSlots = mutableListOf<Int>()
 
     items.forEach { (slot, stack) ->
       val price = getSellPrice(stack)
       if (price != null && price > 0) {
         earned += price * stack.amount
         count += stack.amount
-        inv.setItem(slot, null)
+        soldSlots += slot
       } else {
         unsellable++
       }
@@ -168,7 +173,12 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
 
-    EconomyManager.deposit(player, earned)
+    val error = EconomyManager.deposit(player, earned)
+    if (error != null) {
+      player.sendMessage(c(error))
+      return
+    }
+    soldSlots.forEach { inv.setItem(it, null) }
     val suffix = if (unsellable > 0) " &7(不可 ${unsellable}種はGUIに残ります)" else ""
     buildControlBar(inv, "&f${count}個 → &a+${EconomyManager.format(earned)}$suffix")
     player.sendMessage(

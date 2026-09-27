@@ -27,10 +27,8 @@ data class MenuItemDefinition(
 enum class ActionType {
   OPEN_MENU,
   OPEN_POPUP,
-  OPEN_SPECIAL,
   RUN_COMMAND,
   RUN_PLAYER_COMMAND,
-  PARAM_COMMAND,
   CONSOLE_CMD,
   PLAYER_CMD,
   OP_PLAYER_CMD,
@@ -38,7 +36,6 @@ enum class ActionType {
   MESSAGE,
   CLOSE_MENU,
   CLOSE,
-  MACRO_EXECUTE,
   PLACEHOLDER_TEXT,
   SOUND,
   BROADCAST,
@@ -48,7 +45,6 @@ enum class ActionType {
   OPEN_SHOP,
   OPEN_POINT_SHOP,
   OPEN_UTILITY,
-  OPEN_MACRO,
   OPEN_INFO,
   OPEN_CHANNEL,
   OPEN_SOCIALLIKES,
@@ -68,11 +64,3 @@ data class MenuAction(
 }
 
 data class PlayerMenuState(val menuId: String, val page: Int = 0)
-
-data class PlayerMacro(
-    val id: String,
-    val name: String,
-    val ownerUUID: String,
-    val commands: List<String>,
-    val cooldownSeconds: Int = 3,
-)

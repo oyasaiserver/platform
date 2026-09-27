@@ -382,12 +382,11 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
         PopupActionType.OP_PLAYER_CMD -> {
           val cmd = action.value.replace("%player%", player.name)
           if (cmd.isNotEmpty()) {
-            val wasOp = player.isOp
-            try {
-              player.isOp = true
+            if (player.isOp) {
               player.performCommand(cmd.removePrefix("/"))
-            } finally {
-              player.isOp = wasOp
+            } else {
+              player.sendMessage(c("&cこの操作はOPのみ実行できます。"))
+              plugin.logger.warning("OP_PLAYER_CMD を拒否: player=${player.name}, command=$cmd")
             }
           }
         }
@@ -413,13 +412,11 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
           player.sendMessage(msg)
         }
         PopupActionType.OPEN_POPUP -> open(player, action.value)
-        PopupActionType.OPEN_SPECIAL -> plugin.specialMenuEngine.open(player, action.value)
         PopupActionType.OPEN_SHOP -> {
           val cat = action.value
           if (cat.isEmpty()) open(player, "shopindex") else plugin.shopEngine.openShop(player, cat)
         }
         PopupActionType.OPEN_SELL -> plugin.sellEngine.openSellMenu(player)
-        PopupActionType.OPEN_MACRO -> plugin.macroEngine.openMacroList(player)
         PopupActionType.OPEN_POINT_SHOP -> {
           val catId =
               if (action.value.isEmpty() || action.value == "true")

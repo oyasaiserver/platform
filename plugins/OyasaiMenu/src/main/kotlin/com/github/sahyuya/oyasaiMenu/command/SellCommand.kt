@@ -48,6 +48,10 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
   }
 
   private fun sellHand(player: Player) {
+    if (!EconomyManager.isAvailable) {
+      player.sendMessage(c("&c経済プラグインが見つかりません。"))
+      return
+    }
     if (CooldownManager.isCommandOnCooldown(player.uniqueId)) {
       player.sendMessage(c("&cもう少し待ってから実行してください。"))
       return
@@ -67,7 +71,11 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
     }
 
     val total = price * item.amount
-    EconomyManager.deposit(player, total)
+    val error = EconomyManager.deposit(player, total)
+    if (error != null) {
+      player.sendMessage(c(error))
+      return
+    }
     player.inventory.setItemInMainHand(null)
     player.sendMessage(
         c("&b売却: &f${item.type.name.lowercase()} ×${item.amount}  +${EconomyManager.format(total)}")
@@ -76,6 +84,10 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
   }
 
   private fun sellAll(player: Player) {
+    if (!EconomyManager.isAvailable) {
+      player.sendMessage(c("&c経済プラグインが見つかりません。"))
+      return
+    }
     if (CooldownManager.isCommandOnCooldown(player.uniqueId)) {
       player.sendMessage(c("&c時間を置いて実行してください。"))
       return
@@ -84,6 +96,7 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
     var earned = 0.0
     var count = 0
     var skipped = 0
+    val soldSlots = mutableListOf<Int>()
 
     player.inventory.contents.forEachIndexed { i, stack ->
       if (stack == null || stack.type.isAir) return@forEachIndexed
@@ -91,7 +104,7 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       if (price != null && price > 0) {
         earned += price * stack.amount
         count += stack.amount
-        player.inventory.setItem(i, null)
+        soldSlots += i
       } else {
         skipped++
       }
@@ -104,7 +117,12 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       return
     }
 
-    EconomyManager.deposit(player, earned)
+    val error = EconomyManager.deposit(player, earned)
+    if (error != null) {
+      player.sendMessage(c(error))
+      return
+    }
+    soldSlots.forEach { player.inventory.setItem(it, null) }
     val suffix = if (skipped > 0) " &7(スキップ ${skipped}種)" else ""
     player.sendMessage(
         c(

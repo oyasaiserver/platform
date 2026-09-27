@@ -65,19 +65,6 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         runDelayed { plugin.popupMenuEngine.open(player, target) }
       }
 
-      ActionType.OPEN_SPECIAL -> {
-        val target = action.getString("target")
-        if (target.isEmpty()) {
-          plugin.logger.warning("open_special にターゲットが未指定。")
-          return
-        }
-        runDelayed { plugin.specialMenuEngine.open(player, target, action) }
-      }
-
-      ActionType.PARAM_COMMAND -> {
-        runDelayed { plugin.parameterCommandEngine.open(player, action) }
-      }
-
       ActionType.RUN_COMMAND,
       ActionType.CONSOLE_CMD -> {
         val cmd = applyPlaceholders(player, action.getString("command"))
@@ -93,12 +80,11 @@ class ActionEngine(private val plugin: OyasaiMenu) {
       ActionType.OP_PLAYER_CMD -> {
         val cmd = applyPlaceholders(player, action.getString("command"))
         if (cmd.isNotEmpty()) {
-          val wasOp = player.isOp
-          try {
-            player.isOp = true
+          if (player.isOp) {
             player.performCommand(cmd.removePrefix("/"))
-          } finally {
-            player.isOp = wasOp
+          } else {
+            player.sendMessage(c("&cこの操作はOPのみ実行できます。"))
+            plugin.logger.warning("OP_PLAYER_CMD を拒否: player=${player.name}, command=$cmd")
           }
         }
       }
@@ -115,13 +101,6 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         // 成功なら success リスト、失敗なら fail リストを再帰実行
         val hasPerm = checkPermission(player, action.getString("permission"))
         executeActions(player, if (hasPerm) action.success else action.fail, state)
-      }
-
-      ActionType.MACRO_EXECUTE -> {
-        // MacroManager 経由でクールダウンチェックとコマンド実行を委譲
-        val macroId = action.getString("id")
-        val error = plugin.macroManager.executeMacro(player, macroId)
-        if (error != null) player.sendMessage(c("&c$error"))
       }
 
       ActionType.SOUND -> {
@@ -243,8 +222,6 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         val popupId = LEGACY_POPUP_IDS[action.type] ?: return
         runDelayed { plugin.popupMenuEngine.open(player, popupId) }
       }
-
-      ActionType.OPEN_MACRO -> runDelayed { plugin.macroEngine.openMacroList(player) }
 
       ActionType.OPEN_INFO -> runDelayed { plugin.menuEngine.openMenu(player, "root") }
 

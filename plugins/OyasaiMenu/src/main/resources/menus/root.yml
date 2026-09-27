@@ -1,4 +1,4 @@
-# Root menu. This file is intentionally editable by /guimaker edit root.
+# Root menu.
 menu:
   title: "&8✦ おやさい鯖 メニュー ✦"
   size: 54
@@ -293,14 +293,6 @@ items:
     actions:
       - type: OPEN_POPUP
         target: "utility"
-  macro:
-    slot: 52
-    icon: PURPLE_CONCRETE_POWDER
-    name: "&5マクロ"
-    lore: ["&7コマンドを登録・実行できる", "&7マクロ機能を管理します"]
-    actions:
-      - type: OPEN_POPUP
-        target: "macromenu"
   links:
     slot: 53
     icon: PINK_CONCRETE_POWDER

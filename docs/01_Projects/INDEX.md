@@ -14,6 +14,7 @@ Project index for `docs/01_Projects/`.
 | [headhunt](minecraft-plugins/headhunt/PROJECT.md) | Player-head treasure hunt minigame |
 | [oyasai-admin-tools](minecraft-plugins/oyasai-admin-tools/PROJECT.md) | Admin announcements, surveys, and player management |
 | [oyasai-chat](minecraft-plugins/oyasai-chat/PROJECT.md) | Cross-backend chat synchronization through Velocity |
+| [oyasai-lwc](minecraft-plugins/lwc/PROJECT.md) | Internal block protection with legacy LWC SQLite data |
 | [oyasai-menu](minecraft-plugins/oyasai-menu/PROJECT.md) | GUI menu system |
 | [oyasai-pets](minecraft-plugins/oyasai-pets/PROJECT.md) | Pet system |
 | [oyasai-utilities](minecraft-plugins/oyasai-utilities/PROJECT.md) | Bundled small utility features |
