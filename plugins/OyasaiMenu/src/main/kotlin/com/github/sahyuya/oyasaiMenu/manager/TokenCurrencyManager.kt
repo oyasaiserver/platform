@@ -30,8 +30,9 @@ object TokenCurrencyManager {
 
   /** @return 成功なら null、失敗なら &c 付きエラーメッセージ */
   fun removeTokens(player: Player, amount: Long): String? {
+    if (amount < 0) return "&cポイント価格が無効です。"
+    if (amount == 0L) return null
     val tm = manager ?: return "&cTokenManager が見つかりません。"
-    if (amount <= 0) return "&cポイント価格が無効です。"
     val current = getTokens(player)
     if (current < amount) return "&cポイントが不足しています。(所持: ${format(current)}P / 必要: ${format(amount)}P)"
     return if (
