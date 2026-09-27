@@ -2,6 +2,10 @@
 
 おやさい鯖の小物系便利Plugin
 
+## TPswitch
+
+`/tpset open|close|mode|oklist|nglist` で TP 受付を設定・確認し、`/tpset ok|ng|none <名前>` で許可・拒否リストを編集する。既定は open で、open は拒否リスト、close は許可リストを参照する。OP だけは拒否を通過できる。`/tp <名前>` の受付判定を行い、設定は `tpswitch.db` に保存する。初回起動時に旧 `TPswitch/config.yml` があれば一度だけ取り込み、旧ファイルは残す。取り込み件数とスキップ件数はログと SQLite の `tp_meta` に記録する。
+
 ## Sit
 
 `/sit`、`/lay`、`/bellyflop`、`/spin`、`/crawl` で座る・ポーズを切り替える。`/sit toggle` で右クリック座りを切り替える。

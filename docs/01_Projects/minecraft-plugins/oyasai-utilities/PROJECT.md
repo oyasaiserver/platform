@@ -28,6 +28,7 @@ agent_task: null
 | GetUUID | プレイヤーUUID取得（`/uuid`） |
 | TimerBar | ボスバー式タイマー（`/timerbar`） |
 | TPath | テレポート履歴の戻る/進む（`/back`, `/forward`） |
+| TPswitch | `/tpset` で TP 受付と許可・拒否リストを管理。設定は SQLite に保存 |
 | CreativeManagement | クリエ/サバイバル間のアイテム受け渡し制限（`cm.bypass`） |
 | DebugOnBE | ブロック配置デバッグ表示・Togo設定GUI（`/debugonbe`, `/togo`, `/togom`） |
 

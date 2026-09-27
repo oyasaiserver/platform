@@ -7,6 +7,11 @@ api-version: "1.21"
 version: "0.1.0"
 softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
 commands:
+  tpset:
+    description: "Teleport setting."
+    usage: "/<command> [option]"
+    permission: tpswitch.tpset
+    permission-message: "§4No permission!!!"
   sit:
     description: "座る・右クリック座りを切り替える"
     aliases: [gsit]
@@ -90,6 +95,9 @@ commands:
     permission: oyasaiutilities.spawn
 
 permissions:
+  tpswitch.tpset:
+    description: "Teleport setting permission."
+    default: true
   oyasai.skin:
     description: "スキン変更コマンドの使用権限"
     default: op

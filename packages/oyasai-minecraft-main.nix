@@ -86,7 +86,6 @@ oyasaiPurpur rec {
     sociallikes3
     socialvotes
     tntruneloaded
-    tpswitch
     vault
     vertex
     viaversion
