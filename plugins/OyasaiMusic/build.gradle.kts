@@ -3,6 +3,7 @@ plugins { alias(libs.plugins.paperweight.userdev) }
 repositories { maven("https://repo.essentialsx.net/releases/") }
 
 dependencies {
+  compileOnly(project(":plugins:OyasaiToken"))
   paperweightDevelopmentBundle(libs.purpur.dev.bundle)
 
   implementation(libs.kotlin.stdlib)

@@ -615,8 +615,7 @@ class SongSettingsScreen(
                     ),
             )
             .append(Component.text("  /mm open ${song.id}", NamedTextColor.GRAY))
-    val recipients =
-        Bukkit.getOnlinePlayers().filter { it.hasPermission("oyasaimusic.newsong.notify") }
+    val recipients = Bukkit.getOnlinePlayers().filter { it.hasPermission("oyasaimusic.notify") }
     recipients.forEach { it.sendMessage(message) }
     plugin.soundEffectService.play(PluginSoundEffect.NEW_SONG, recipients)
   }

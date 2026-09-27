@@ -41,6 +41,24 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
   private val ready = ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, String>>()
   private val expected = ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Expected>>()
   private val clientCapabilities = ConcurrentHashMap<UUID, Int>()
+  private val bankManifests = ConcurrentHashMap<UUID, Pair<Long, ByteArray>>()
+
+  fun matchesBank(playerId: UUID, expectedHash: ByteArray): Boolean {
+    val report = bankManifests[playerId]
+    val matches =
+        if (report == null) supportsBankManifest(playerId)
+        else
+            supportsV2(playerId) &&
+                report.first == generations[playerId] &&
+                expectedHash.any { it != 0.toByte() } &&
+                java.security.MessageDigest.isEqual(report.second, expectedHash)
+    if (matches && report != null)
+        clientCapabilities.computeIfPresent(playerId) { _, bits ->
+          bits or PlaybackBuffer.CLIENT_CAP_BANK_MANIFEST_V1
+        }
+    return matches
+  }
+
   private val acceptedNonces = ConcurrentHashMap<UUID, Pair<Long, String>>()
   private val started = ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Started>>()
   private val failed = ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Failed>>()
@@ -54,6 +72,30 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
 
   fun handlePacket(player: Player, message: PlaybackWireCodec.Message) {
     when (message.type) {
+      15 -> {
+        if (message.id != UUID(0L, 0L)) return
+        val parsed =
+            runCatching {
+                  DataInputStream(ByteArrayInputStream(message.body)).use { input ->
+                    val nonce = input.readUTF()
+                    val hash = input.readNBytes(32)
+                    require(
+                        nonce.matches(Regex("[A-Za-z0-9_-]{22}")) &&
+                            hash.size == 32 &&
+                            input.available() == 0
+                    )
+                    nonce to hash
+                  }
+                }
+                .getOrNull() ?: return
+        val probe = pending[player.uniqueId] ?: return
+        if (
+            probe.nonce == parsed.first &&
+                probe.generation == generations[player.uniqueId] &&
+                System.nanoTime() <= probe.expiresAtNanos
+        )
+            bankManifests[player.uniqueId] = probe.generation to parsed.second
+      }
       PlaybackBuffer.TYPE_PROBE_RESPONSE -> {
         if (message.id != UUID(0L, 0L)) return
         val nonce =
@@ -151,6 +193,7 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
             .encodeToString(ByteArray(16).also(random::nextBytes))
     val active = Pending(nonce, generation, System.nanoTime() + PROBE_TIMEOUT_NANOS, callback)
     generations[player.uniqueId] = generation
+    bankManifests.remove(player.uniqueId)
     pending[player.uniqueId] = active
     ready.remove(player.uniqueId)
     expected.remove(player.uniqueId)
@@ -364,6 +407,7 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
     presence.remove(playerId)
     generations.remove(playerId)
     clientCapabilities.remove(playerId)
+    bankManifests.remove(playerId)
     acceptedNonces.remove(playerId)
   }
 
@@ -377,6 +421,7 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
     ready.clear()
     expected.clear()
     clientCapabilities.clear()
+    bankManifests.clear()
     acceptedNonces.clear()
     started.clear()
     failed.clear()
@@ -394,6 +439,7 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
     ready.clear()
     expected.clear()
     clientCapabilities.clear()
+    bankManifests.clear()
     acceptedNonces.clear()
     started.clear()
     failed.clear()
@@ -417,6 +463,7 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
     ready.remove(id)
     expected.remove(id)
     clientCapabilities.remove(id)
+    bankManifests.remove(id)
     acceptedNonces.remove(id)
     started.remove(id)
     failed.remove(id)

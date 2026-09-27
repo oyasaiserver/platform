@@ -45,6 +45,16 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   /** Kept while a personal playback session survives a disconnect, so its bar can be reattached. */
   private val nowPlayingDurations = ConcurrentHashMap<UUID, Int>()
 
+  fun shutdown() {
+    nowPlayingBars.forEach { (id, bar) -> Bukkit.getPlayer(id)?.hideBossBar(bar) }
+    bossBarTasks.values.forEach { it.cancel() }
+    bossBarTasks.clear()
+    pauseAutoFinishTasks.values.forEach { it.cancel() }
+    pauseAutoFinishTasks.clear()
+    nowPlayingBars.clear()
+    nowPlayingDurations.clear()
+  }
+
   /**
    * Minecraft のボスバー色はクライアント仕様により7色の列挙値だけであり、任意の RGB 値には できない。そのため文字色は指定 RGB
    * をそのまま使い、バー本体は最も近い標準色へ対応付ける。
@@ -443,7 +453,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                               .activeSession
                               ?.sessionId != session.sessionId
                   ) {
-                    hideNowPlayingBar(viewer)
+                    if (nowPlayingBars[viewer.uniqueId] === bar) hideNowPlayingBar(viewer)
                     return@Runnable
                   }
                   val elapsed = session.elapsedPlaybackMs().coerceIn(0L, safeDuration)
@@ -476,7 +486,10 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
 
   private fun hideNowPlayingBar(viewer: Player) {
     bossBarTasks.remove(viewer.uniqueId)?.cancel()
-    nowPlayingBars.remove(viewer.uniqueId)?.let { viewer.hideBossBar(it) }
+    nowPlayingBars.remove(viewer.uniqueId)?.let { bar ->
+      viewer.hideBossBar(bar)
+      Bukkit.getPlayer(viewer.uniqueId)?.takeIf { it !== viewer }?.hideBossBar(bar)
+    }
   }
 
   /**
@@ -486,6 +499,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   @EventHandler
   fun onPlayerJoin(event: PlayerJoinEvent) {
     val viewer = event.player
+    hideNowPlayingBar(viewer)
     Bukkit.getScheduler()
         .runTaskLater(
             plugin,
@@ -505,6 +519,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
+    hideNowPlayingBar(event.player)
     // 切断時は放置終了タイマーを破棄する（再接続 semantics は維持し、壁時計での終了は行わない）。
     cancelPauseAutoFinish(event.player.uniqueId)
     val session =

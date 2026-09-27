@@ -91,6 +91,17 @@ class SongDetailScreen(
     )
 
     inventory.setItem(previewSlot, previewItem(state))
+    inventory.setItem(
+        13,
+        GuiItemBuilder(Material.PALE_OAK_SIGN)
+            .name(Component.text("リポスト (宣伝)", NamedTextColor.AQUA))
+            .lore(
+                Component.text("10", NamedTextColor.DARK_AQUA)
+                    .append(Component.text("P", NamedTextColor.WHITE))
+                    .append(Component.text("を消費してオンラインプレイヤーへ宣伝します", NamedTextColor.GRAY))
+            )
+            .build(),
+    )
     renderAuthorHead()
     inventory.setItem(followSlot, followItem())
     inventory.setItem(positionalModeSlot, positionalModeItem())
@@ -254,6 +265,7 @@ class SongDetailScreen(
     if (plugin.playbackController.handleControllerClick(slot, viewer)) return
 
     when (slot) {
+      13 -> song.id?.let { SongPromotionService.promote(plugin, viewer, it) }
       previewSlot -> playSong()
       authorHeadSlot -> openAuthorProfile()
       followSlot -> toggleFollow()

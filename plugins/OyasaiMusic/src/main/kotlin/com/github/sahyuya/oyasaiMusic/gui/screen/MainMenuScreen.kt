@@ -275,65 +275,67 @@ class MainMenuScreen(
 
                         val moneyResult =
                             plugin.economyService.deposit(viewer, pending.pendingMoney)
-                        val pointResult =
+                        val pointFuture =
                             plugin.economyService.grantPoints(viewer, pending.pendingPoints)
-                        Bukkit.getScheduler()
-                            .runTaskAsynchronously(
-                                plugin,
-                                Runnable {
-                                  if (
-                                      moneyResult is PayoutResult.Success &&
-                                          pending.pendingMoney > 0
-                                  ) {
-                                    plugin.userRepository.consumePending(
-                                        viewer.uniqueId,
-                                        money = pending.pendingMoney,
-                                    )
-                                  }
-                                  if (
-                                      pointResult is PayoutResult.Success &&
-                                          pending.pendingPoints > 0
-                                  ) {
-                                    plugin.userRepository.consumePending(
-                                        viewer.uniqueId,
-                                        points = pending.pendingPoints,
-                                    )
-                                  }
-                                  Bukkit.getScheduler()
-                                      .runTask(
-                                          plugin,
-                                          Runnable {
-                                            val messages = mutableListOf<String>()
-                                            if (pending.pendingMoney > 0)
-                                                messages +=
-                                                    if (moneyResult is PayoutResult.Success)
-                                                        "${pending.pendingMoney}円"
-                                                    else "お金: ${payoutFailure(moneyResult)}"
-                                            if (pending.pendingPoints > 0)
-                                                messages +=
-                                                    if (pointResult is PayoutResult.Success)
-                                                        "${pending.pendingPoints}pt"
-                                                    else "ポイント: ${payoutFailure(pointResult)}"
-                                            viewer.sendMessage(
-                                                "§a受取結果: §f${messages.joinToString(" / ")}"
-                                            )
-                                            if (
-                                                (pending.pendingMoney > 0 &&
-                                                    moneyResult is PayoutResult.Success) ||
-                                                    (pending.pendingPoints > 0 &&
-                                                        pointResult is PayoutResult.Success)
-                                            ) {
-                                              plugin.soundEffectService.play(
-                                                  PluginSoundEffect.REWARD_CLAIM,
-                                                  listOf(viewer),
-                                              )
-                                            }
-                                            claimsInProgress.remove(viewer.uniqueId)
-                                            reloadRewards()
-                                          },
+                        pointFuture.thenAccept { pointResult ->
+                          Bukkit.getScheduler()
+                              .runTaskAsynchronously(
+                                  plugin,
+                                  Runnable {
+                                    if (
+                                        moneyResult is PayoutResult.Success &&
+                                            pending.pendingMoney > 0
+                                    ) {
+                                      plugin.userRepository.consumePending(
+                                          viewer.uniqueId,
+                                          money = pending.pendingMoney,
                                       )
-                                },
-                            )
+                                    }
+                                    if (
+                                        pointResult is PayoutResult.Success &&
+                                            pending.pendingPoints > 0
+                                    ) {
+                                      plugin.userRepository.consumePending(
+                                          viewer.uniqueId,
+                                          points = pending.pendingPoints,
+                                      )
+                                    }
+                                    Bukkit.getScheduler()
+                                        .runTask(
+                                            plugin,
+                                            Runnable {
+                                              val messages = mutableListOf<String>()
+                                              if (pending.pendingMoney > 0)
+                                                  messages +=
+                                                      if (moneyResult is PayoutResult.Success)
+                                                          "${pending.pendingMoney}円"
+                                                      else "お金: ${payoutFailure(moneyResult)}"
+                                              if (pending.pendingPoints > 0)
+                                                  messages +=
+                                                      if (pointResult is PayoutResult.Success)
+                                                          "${pending.pendingPoints}pt"
+                                                      else "ポイント: ${payoutFailure(pointResult)}"
+                                              viewer.sendMessage(
+                                                  "§a受取結果: §f${messages.joinToString(" / ")}"
+                                              )
+                                              if (
+                                                  (pending.pendingMoney > 0 &&
+                                                      moneyResult is PayoutResult.Success) ||
+                                                      (pending.pendingPoints > 0 &&
+                                                          pointResult is PayoutResult.Success)
+                                              ) {
+                                                plugin.soundEffectService.play(
+                                                    PluginSoundEffect.REWARD_CLAIM,
+                                                    listOf(viewer),
+                                                )
+                                              }
+                                              claimsInProgress.remove(viewer.uniqueId)
+                                              reloadRewards()
+                                            },
+                                        )
+                                  },
+                              )
+                        }
                       },
                   )
             },

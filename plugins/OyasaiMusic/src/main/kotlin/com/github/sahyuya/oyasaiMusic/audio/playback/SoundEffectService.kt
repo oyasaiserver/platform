@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 
 /** プラグイン内通知に使う録音済み効果音の種類。追加時はここへ1行加えるだけでよい。 */
 enum class PluginSoundEffect(val fileName: String) {
+  ADVERTISE("advertise.bin"),
   NEW_SONG("publish_newsong.bin"),
   REWARD_CLAIM("get_reward.bin"),
   LIKE_RECEIVED("receive_likes.bin"),
