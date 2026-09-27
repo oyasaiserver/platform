@@ -1,11 +1,5 @@
-worlds:
-  cosmic:
-    generator: void
-    min-y: 0
-    height: 2032
-    logical-height: 256
-    spawn-y: 64
-    gamemode: adventure
-    allow-flight: true
+# Used only when plugins/OyasaiWorldGenerator/config.yml does not already exist.
+# Add height-managed worlds explicitly on servers that need them.
+worlds: {}
 self-test: true
 clear-force-loaded-chunks: false

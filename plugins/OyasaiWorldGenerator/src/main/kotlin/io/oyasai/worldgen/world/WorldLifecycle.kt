@@ -306,6 +306,13 @@ class WorldLifecycle(
           currentConfig.worlds.isNotEmpty() && currentConfig.validationErrors.isEmpty()
 
       plugin.logger.info("[OWG][startup] Runtime ${runtimeVersion()}")
+      if (currentConfig.worlds.isEmpty() && currentConfig.validationErrors.isEmpty()) {
+        selfTestResult = SelfTestResult.NOT_RUN
+        plugin.logger.warning(
+            "[OWG][startup] No height-managed worlds configured; self-test skipped"
+        )
+        return
+      }
       if (!supported) {
         plugin.logger.severe(
             "[OWG][startup] Unsupported server build; fail-closed inspection will still scan every target"

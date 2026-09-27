@@ -60,8 +60,6 @@ oyasaiPurpur rec {
     luckperms
     lunachat
     lwc
-    multiversecore
-    multiverseportals
     oyasaiadmintools
     oyasaichat
     oyasaigames

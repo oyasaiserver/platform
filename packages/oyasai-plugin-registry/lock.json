@@ -109,22 +109,6 @@
       }
     }
   },
-  "multiversecore": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/YZ2Ji4IS/multiverse-core-5.8.1.jar",
-        "hash": "sha256-vD804tdH/fAk9EhodHuwFrCPoR2YzLT/yslY8IMVGoM="
-      }
-    }
-  },
-  "multiverseportals": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/8VMk6P0I/versions/otf0vOqh/multiverse-portals-5.3.0.jar",
-        "hash": "sha256-NF8PKWu1Th/ZhJQmD5P7Grl7qS+K1/a/uhKeqQAh6o0="
-      }
-    }
-  },
   "placeholderapi": {
     "paper": {
       "26.2": {
