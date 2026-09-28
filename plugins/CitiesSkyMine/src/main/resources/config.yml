@@ -42,10 +42,11 @@ crowd:
     noise: 0.6
     scale: 14
     gap: 1
+    fb: 0
+    forward: 50
     right: 50
     jitter: 15
     mode: block
-    # axis: x  # x、z、または 0〜100。未設定ならプレイヤーの左右。
 
 csm:
   default-rotation: 0

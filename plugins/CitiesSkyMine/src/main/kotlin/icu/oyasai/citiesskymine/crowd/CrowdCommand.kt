@@ -127,14 +127,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val random = Random(seed)
     val crowd =
         try {
-          generateNaturalCrowd(
-              natural.copy(
-                  width = width,
-                  depth = depth,
-                  rightWorldX = rightAxis.x,
-                  rightWorldZ = rightAxis.z,
-              )
-          )
+          generateNaturalCrowd(natural.copy(width = width, depth = depth))
         } catch (e: IllegalArgumentException) {
           MessageUtil.error(sender, e.message ?: "群衆配置の計算に失敗しました。")
           return true
@@ -241,11 +234,10 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                 "noise=0.6",
                 "scale=14",
                 "gap=1",
+                "fb=0",
+                "forward=50",
                 "right=50",
                 "jitter=15",
-                "axis=x",
-                "axis=z",
-                "axis=50",
                 "mode=block",
                 "mode=mannequin",
                 "seed=42",
@@ -253,10 +245,10 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                 "heads",
                 "help",
             )
-        else if (current.startsWith("axis=", ignoreCase = true))
-            listOf("axis=x", "axis=z", "axis=50")
         else if (current.startsWith("mode=", ignoreCase = true))
             listOf("mode=block", "mode=mannequin")
+        else if (current.substringBefore('=') in listOf("fb", "forward", "right") && '=' in current)
+            listOf(0, 50, 100).map { "${current.substringBefore('=')}=$it" }
         else
             NATURAL_KEYS.filter { key -> args.none { it.startsWith("$key=", true) } }.map { "$it=" }
     return ArgSuggest.filterSuggestions(suggestions, current)
@@ -380,27 +372,19 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val stand = number("stand", 50.0, 0.0, 100.0)
     val noise = number("noise", 0.6, 0.0, 1.0)
     val scale = number("scale", 14.0, 3.0, 48.0)
+    val fb = number("fb", 0.0, 0.0, 100.0)
+    val forward = number("forward", 50.0, 0.0, 100.0)
     val right = number("right", 50.0, 0.0, 100.0)
     val jitter = number("jitter", 15.0, 0.0, 90.0)
     val gap = (values["gap"] ?: plugin.config.getString("crowd.natural.gap", "1"))?.toIntOrNull()
-    val axisRaw = values["axis"] ?: plugin.config.getString("crowd.natural.axis")
-    val axisXPercent =
-        when (axisRaw?.lowercase()) {
-          null -> null
-          "x" -> 100.0
-          "z" -> 0.0
-          else -> axisRaw.toDoubleOrNull()?.takeIf { it.isFinite() && it in 0.0..100.0 }
-        }
     val mode = values["mode"] ?: plugin.config.getString("crowd.natural.mode", "block")
     val seed =
         values["seed"]?.toLongOrNull()
             ?: if (values.containsKey("seed")) null else Random.nextLong()
     if (
-        listOf(density, group, stand, noise, scale, right, jitter).any { it == null } ||
-            gap !in 0..4 ||
-            axisRaw != null && axisXPercent == null ||
-            mode !in listOf("block", "mannequin") ||
-            seed == null
+        listOf(density, group, stand, noise, scale, fb, forward, right, jitter).any {
+          it == null
+        } || gap !in 0..4 || mode !in listOf("block", "mannequin") || seed == null
     ) {
       MessageUtil.error(sender, "引数が範囲外です。/csm crowd help で範囲を確認してください。")
       return null
@@ -415,10 +399,11 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             noise!!,
             scale!!,
             gap!!,
+            fb!!,
+            forward!!,
             right!!,
             jitter!!,
             seed,
-            axisXPercent,
         )
     return NaturalArgs(options, mode == "mannequin")
   }
@@ -581,14 +566,14 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     )
     MessageUtil.helpEntry(
         sender,
-        "/$label [gap=1] [right=50] [jitter=15] [axis=x|z|0–100] [seed=数値] [mode=block|mannequin]",
+        "/$label [gap=1] [fb=0] [forward=50] [right=50] [jitter=15] [seed=数値] [mode=block|mannequin]",
         "配置の間隔・向き・乱数を指定",
     )
     MessageUtil.helpEntry(sender, "/$label remove", "選択範囲内の生成済みマネキンを削除")
     if (plugin.access.canUse(sender, CommandKey.CROWD_HEADS)) headsUsage(sender, label)
     MessageUtil.info(
         sender,
-        "density 0.01–1, group 0–3, stand/right 0–100, noise 0–1, scale 3–48, gap 0–4, jitter 0–90。axis の数値は X 軸の割合。ブロックは //undo、マネキンは remove。",
+        "density 0.01–1, group 0–3, stand/fb/forward/right 0–100, noise 0–1, scale 3–48, gap 0–4, jitter 0–90。fb は前後組、forward はその前向き、right は左右組の右向きの割合。ブロックは //undo、マネキンは remove。",
     )
   }
 
@@ -611,9 +596,10 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             "noise",
             "scale",
             "gap",
+            "fb",
+            "forward",
             "right",
             "jitter",
-            "axis",
             "mode",
             "seed",
         )

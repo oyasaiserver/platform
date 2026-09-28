@@ -23,12 +23,11 @@ internal data class NaturalCrowdOptions(
     val noise: Double = 0.6,
     val scale: Double = 14.0,
     val gap: Int = 1,
+    val fb: Double = 0.0,
+    val forward: Double = 50.0,
     val right: Double = 50.0,
     val jitter: Double = 15.0,
     val seed: Long,
-    val axisXPercent: Double? = null,
-    val rightWorldX: Int = 1,
-    val rightWorldZ: Int = 0,
 )
 
 internal data class NaturalPerson(
@@ -82,16 +81,15 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
     val yaw =
         if (standing) random.nextDouble() * 2 * PI
         else {
-          val base =
-              when {
-                p.axisXPercent == null -> 0.0
-                random.nextDouble() * 100 < p.axisXPercent ->
-                    atan2(p.rightWorldZ.toDouble(), p.rightWorldX.toDouble())
-                else -> atan2(-p.rightWorldX.toDouble(), p.rightWorldZ.toDouble())
+          val alongForward =
+              when (p.fb) {
+                0.0 -> false
+                100.0 -> true
+                else -> random.nextDouble() * 100 < p.fb
               }
-          base +
-              (if (random.nextDouble() * 100 < p.right) 0.0 else PI) +
-              (random.nextDouble() * 2 - 1) * p.jitter * PI / 180
+          val base = if (alongForward) PI / 2 else 0.0
+          val positive = random.nextDouble() * 100 < if (alongForward) p.forward else p.right
+          base + (if (positive) 0.0 else PI) + (random.nextDouble() * 2 - 1) * p.jitter * PI / 180
         }
     val cs = cos(yaw)
     val sn = sin(yaw)

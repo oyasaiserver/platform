@@ -110,60 +110,29 @@ class NaturalCrowdTest {
   }
 
   @Test
-  fun walkingAxisUsesWorldDirectionsPerGroup() {
+  fun walkingDirectionsFollowPlayerAxesPerGroup() {
     val base =
         NaturalCrowdOptions(48, 32, density = 0.25, group = 2.0, stand = 0.0, gap = 0, seed = 42)
-    for ((rightX, rightZ) in listOf(1 to 0, 0 to 1, -1 to 0, 0 to -1)) {
-      val oriented = base.copy(rightWorldX = rightX, rightWorldZ = rightZ)
-      for (percent in listOf(0.0, 100.0)) {
-        val people = generateNaturalCrowd(oriented.copy(axisXPercent = percent)).people
-        assertTrue(people.isNotEmpty())
-        for (person in people) {
-          val worldX = cos(person.yaw) * rightX + sin(person.yaw) * rightZ
-          val worldZ = cos(person.yaw) * rightZ - sin(person.yaw) * rightX
-          val drift = if (percent == 0.0) abs(worldX) else abs(worldZ)
-          assertTrue(drift <= sin(oriented.jitter * PI / 180) + 1e-9)
-        }
-      }
-    }
-    for (percent in listOf(0.0, 100.0)) for (positive in listOf(false, true)) {
-      val people =
-          generateNaturalCrowd(
-                  base.copy(
-                      axisXPercent = percent,
-                      right = if (positive) 100.0 else 0.0,
-                      jitter = 0.0,
-                  )
-              )
-              .people
-      val expected = if (positive) 1.0 else -1.0
-      assertTrue(people.isNotEmpty())
-      assertTrue(
-          people.all {
-            if (percent == 100.0) abs(cos(it.yaw) - expected) < 1e-9
-            else abs(-sin(it.yaw) - expected) < 1e-9
-          }
-      )
-    }
-    val mixed = generateNaturalCrowd(base.copy(axisXPercent = 50.0, jitter = 0.0, right = 100.0))
-    val directions = mixed.people.map { if (cos(it.yaw) > 0.5) "x" else "z" }
-    assertTrue("x" in directions && "z" in directions)
+    val frontBack = generateNaturalCrowd(base.copy(fb = 100.0))
+    assertTrue(frontBack.people.isNotEmpty())
+    assertTrue(frontBack.people.all { abs(cos(it.yaw)) <= sin(base.jitter * PI / 180) + 1e-9 })
+
+    val forward = generateNaturalCrowd(base.copy(fb = 100.0, forward = 100.0, jitter = 0.0))
+    assertTrue(forward.people.isNotEmpty())
+    assertTrue(forward.people.all { abs(sin(it.yaw) - 1.0) < 1e-9 })
+
+    val left = generateNaturalCrowd(base.copy(fb = 0.0, right = 0.0, jitter = 0.0))
+    assertTrue(left.people.isNotEmpty())
+    assertTrue(left.people.all { abs(cos(it.yaw) + 1.0) < 1e-9 })
+
+    val mixed = generateNaturalCrowd(base.copy(fb = 50.0, jitter = 0.0))
+    assertTrue(mixed.people.any { abs(cos(it.yaw)) > 0.5 })
+    assertTrue(mixed.people.any { abs(sin(it.yaw)) > 0.5 })
     assertTrue(
         mixed.people
             .groupBy { it.group }
             .values
             .all { group -> group.map { it.yaw }.distinct().size == 1 }
     )
-    val legacy =
-        generateNaturalCrowd(
-            base.copy(
-                axisXPercent = null,
-                rightWorldX = 0,
-                rightWorldZ = 1,
-                jitter = 0.0,
-                right = 100.0,
-            )
-        )
-    assertTrue(legacy.people.all { it.yaw == 0.0 })
   }
 }
