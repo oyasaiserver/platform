@@ -1,0 +1,17 @@
+name: SignShop
+version: ${version}
+main: io.oyasai.signshop.SignShopPlugin
+api-version: "1.21"
+depend: [Vault]
+softdepend: [LWC]
+commands:
+  signshop:
+    description: 店の種類を表示する
+    usage: /signshop list
+permissions:
+  Signshop.Signs.*: {default: op}
+  SignShop.Admin.*: {default: op}
+  Signshop.Destroy.Others: {default: op}
+  Signshop.Inspect.Own: {default: true}
+  Signshop.Inspect.Others: {default: op}
+  SignShop.SuperAdmin: {default: op}
