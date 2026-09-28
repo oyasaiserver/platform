@@ -10,9 +10,6 @@ import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.util.MessageUtil
 import java.io.File
 import java.nio.charset.StandardCharsets
-import java.nio.file.AtomicMoveNotSupportedException
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -65,29 +62,23 @@ internal class CrowdHeads(private val plugin: Main) : Listener {
                 val profile = Bukkit.createProfile(name)
                 if (!profile.complete(true)) null else profile
               }
-              Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        val profile = result.getOrNull()
-                        val texture = profile?.properties?.firstOrNull { it.name == "textures" }
-                        val id = profile?.id
-                        if (id == null || texture == null || texture.value.isBlank()) {
-                          MessageUtil.error(sender, "$name のプロフィールまたは textures を取得できませんでした。")
-                          result.exceptionOrNull()?.let {
-                            plugin.logger.warning("群衆の頭取得に失敗: ${it.message}")
-                          }
-                          return@Runnable
-                        }
-                        if (store(id, profile.name ?: name, texture)) {
-                          MessageUtil.success(sender, "${profile.name ?: name} の頭を登録しました。")
-                        } else {
-                          MessageUtil.error(sender, "頭の保存に失敗しました。")
-                        }
-                      },
-                  )
+              Bukkit.getScheduler().runTask(plugin, Runnable { finishAdd(sender, name, result) })
             },
         )
+  }
+
+  private fun finishAdd(sender: CommandSender, name: String, result: Result<PlayerProfile?>) {
+    val profile = result.getOrNull()
+    val texture = profile?.properties?.firstOrNull { it.name == "textures" }
+    val id = profile?.id
+    if (id == null || texture == null || texture.value.isBlank()) {
+      MessageUtil.error(sender, "$name のプロフィールまたは textures を取得できませんでした。")
+      result.exceptionOrNull()?.let { plugin.logger.warning("群衆の頭取得に失敗: ${it.message}") }
+      return
+    }
+    if (store(id, profile.name ?: name, texture))
+        MessageUtil.success(sender, "${profile.name ?: name} の頭を登録しました。")
+    else MessageUtil.error(sender, "頭の保存に失敗しました。")
   }
 
   fun remove(sender: CommandSender, name: String) {
@@ -99,28 +90,13 @@ internal class CrowdHeads(private val plugin: Main) : Listener {
       MessageUtil.error(sender, "$name は登録されていません。")
       return
     }
-    val old = yaml.getConfigurationSection("heads.$key")?.getValues(false).orEmpty()
     yaml.set("heads.$key", null)
     if (save()) MessageUtil.success(sender, "$name の頭を削除しました。")
-    else {
-      old.forEach { (field, value) -> yaml.set("heads.$key.$field", value) }
-      MessageUtil.error(sender, "頭の削除に失敗しました。")
-    }
+    else MessageUtil.error(sender, "頭の削除に失敗しました。")
   }
 
   fun importHeads(sender: CommandSender, entries: List<HeadTexture>, skipped: Int) {
-    val before = yaml.saveToString()
-    val known =
-        yaml
-            .getConfigurationSection("heads")
-            ?.getKeys(false)
-            .orEmpty()
-            .mapNotNull { runCatching { UUID.fromString(it) }.getOrNull() }
-            .toMutableSet()
-    val byTexture = mutableMapOf<String, MutableSet<UUID>>()
-    known.forEach { id ->
-      yaml.getString("heads.$id.value")?.let { byTexture.getOrPut(it) { mutableSetOf() } += id }
-    }
+    val known = yaml.getConfigurationSection("heads")?.getKeys(false).orEmpty().toMutableSet()
     var added = 0
     var updated = 0
     for (entry in entries) {
@@ -129,31 +105,21 @@ internal class CrowdHeads(private val plugin: Main) : Listener {
               ?: UUID.nameUUIDFromBytes(
                   "crowd-texture:${entry.value}".toByteArray(StandardCharsets.UTF_8)
               )
-      val matches = byTexture[entry.value].orEmpty()
-      val key = matches.firstOrNull() ?: id
-      val path = "heads.$key"
-      if (key in known) updated++ else added++
-      yaml.getString("$path.value")?.let { byTexture[it]?.remove(key) }
-      yaml.set("$path.uuid", key.toString())
+      val path = "heads.$id"
+      if (id.toString() in known) updated++ else added++
+      yaml.set("$path.uuid", id.toString())
       yaml.set(
           "$path.name",
           entry.name?.takeIf { it.isNotBlank() }
               ?: yaml.getString("$path.name")
-              ?: "head_${(entry.id ?: key).toString().replace("-", "").take(11)}",
+              ?: "head_${id.toString().replace("-", "").take(11)}",
       )
       yaml.set("$path.value", entry.value)
       yaml.set("$path.signature", entry.signature)
       yaml.set("$path.updated-at", System.currentTimeMillis())
-      known += key
-      byTexture.getOrPut(entry.value) { mutableSetOf() } += key
-      for (duplicate in (matches + id).filter { it != key && it in known }) {
-        yaml.getString("heads.$duplicate.value")?.let { byTexture[it]?.remove(duplicate) }
-        yaml.set("heads.$duplicate", null)
-        known.remove(duplicate)
-      }
+      known += id.toString()
     }
     if (entries.isNotEmpty() && !save()) {
-      yaml.loadFromString(before)
       MessageUtil.error(sender, "頭の保存に失敗しました。")
       return
     }
@@ -171,38 +137,16 @@ internal class CrowdHeads(private val plugin: Main) : Listener {
 
   private fun store(id: UUID, name: String, texture: ProfileProperty): Boolean {
     val path = "heads.$id"
-    val old = yaml.getConfigurationSection(path)?.getValues(false).orEmpty()
     yaml.set("$path.uuid", id.toString())
     yaml.set("$path.name", name)
     yaml.set("$path.value", texture.value)
     yaml.set("$path.signature", texture.signature)
     yaml.set("$path.updated-at", System.currentTimeMillis())
-    if (save()) return true
-    yaml.set(path, null)
-    old.forEach { (field, value) -> yaml.set("$path.$field", value) }
-    return false
+    return save()
   }
 
   private fun save(): Boolean =
-      runCatching {
-            file.parentFile.mkdirs()
-            val temp = File(file.parentFile, "${file.name}.tmp").toPath()
-            try {
-              Files.writeString(temp, yaml.saveToString(), StandardCharsets.UTF_8)
-              try {
-                Files.move(
-                    temp,
-                    file.toPath(),
-                    StandardCopyOption.ATOMIC_MOVE,
-                    StandardCopyOption.REPLACE_EXISTING,
-                )
-              } catch (_: AtomicMoveNotSupportedException) {
-                Files.move(temp, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
-              }
-            } finally {
-              Files.deleteIfExists(temp)
-            }
-          }
+      runCatching { yaml.save(file) }
           .onFailure { plugin.logger.warning("crowd-heads.yml の保存に失敗: ${it.message}") }
           .isSuccess
 }

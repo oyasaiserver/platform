@@ -85,46 +85,12 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
     val count = min(groupSize(p.group, random), target - people.size)
     val standing = count >= 2 && random.nextDouble() * 100 < p.stand
     val pairLayout =
-        if (count == 2 && !standing) {
-          val local = p.density * weight(candidate.x, candidate.z, p) / meanWeight
-          val sideways = (1 - (local - 0.15) / 0.35).coerceIn(0.4, 1.0)
-          val choice = random.nextDouble()
-          when {
-            choice < sideways -> 0
-            choice < sideways + (1 - sideways) / 2 -> 1
-            else -> 2
-          }
-        } else 0
-    val yaw =
-        if (standing) random.nextDouble() * 2 * PI
-        else {
-          val alongForward =
-              when (p.fb) {
-                0.0 -> false
-                100.0 -> true
-                else -> random.nextDouble() * 100 < p.fb
-              }
-          val base = if (alongForward) PI / 2 else 0.0
-          val positive = random.nextDouble() * 100 < if (alongForward) p.forward else p.right
-          base + (if (positive) 0.0 else PI) + (random.nextDouble() * 2 - 1) * p.jitter * PI / 180
-        }
+        if (count == 2 && !standing) pairLayout(p, candidate, meanWeight, random) else 0
+    val yaw = groupYaw(p, standing, random)
     val cs = cos(yaw)
     val sn = sin(yaw)
     for (attempt in 0 until if (standing && count > 2) 3 else 1) {
-      val cells =
-          if (standing && count == 2) {
-            val x = floor(candidate.x).toInt()
-            val z = floor(candidate.z).toInt()
-            val dx = if (abs(cs) >= abs(sn)) if (cs >= 0) 1 else -1 else 0
-            val dz = if (dx == 0) if (sn >= 0) 1 else -1 else 0
-            listOf(Cell(x, z), Cell(x + 2 * dx, z + 2 * dz))
-          } else {
-            formation(count, standing, attempt, pairLayout).map { (forward, lateral) ->
-              val x = candidate.x + forward * cs - lateral * sn
-              val z = candidate.z + forward * sn + lateral * cs
-              Cell(floor(x).toInt(), floor(z).toInt())
-            }
-          }
+      val cells = groupCells(candidate, count, standing, attempt, pairLayout, cs, sn)
       val between =
           if (standing && count == 2)
               Cell((cells[0].x + cells[1].x) / 2, (cells[0].z + cells[1].z) / 2)
@@ -159,6 +125,58 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
 private data class Candidate(val x: Double, val z: Double, val key: Double)
 
 private data class Cell(val x: Int, val z: Int)
+
+private fun pairLayout(
+    p: NaturalCrowdOptions,
+    candidate: Candidate,
+    meanWeight: Double,
+    random: Random,
+): Int {
+  val local = p.density * weight(candidate.x, candidate.z, p) / meanWeight
+  val sideways = (1 - (local - 0.15) / 0.35).coerceIn(0.4, 1.0)
+  val choice = random.nextDouble()
+  return when {
+    choice < sideways -> 0
+    choice < sideways + (1 - sideways) / 2 -> 1
+    else -> 2
+  }
+}
+
+private fun groupYaw(p: NaturalCrowdOptions, standing: Boolean, random: Random): Double {
+  if (standing) return random.nextDouble() * 2 * PI
+  val alongForward =
+      when (p.fb) {
+        0.0 -> false
+        100.0 -> true
+        else -> random.nextDouble() * 100 < p.fb
+      }
+  val base = if (alongForward) PI / 2 else 0.0
+  val positive = random.nextDouble() * 100 < if (alongForward) p.forward else p.right
+  return base + (if (positive) 0.0 else PI) + (random.nextDouble() * 2 - 1) * p.jitter * PI / 180
+}
+
+private fun groupCells(
+    candidate: Candidate,
+    count: Int,
+    standing: Boolean,
+    attempt: Int,
+    pairLayout: Int,
+    cs: Double,
+    sn: Double,
+): List<Cell> {
+  if (standing && count == 2) {
+    val x = floor(candidate.x).toInt()
+    val z = floor(candidate.z).toInt()
+    val dx = if (abs(cs) >= abs(sn)) if (cs >= 0) 1 else -1 else 0
+    val dz = if (dx == 0) if (sn >= 0) 1 else -1 else 0
+    return listOf(Cell(x, z), Cell(x + 2 * dx, z + 2 * dz))
+  }
+  return formation(count, standing, attempt, pairLayout).map { (forward, lateral) ->
+    val x = candidate.x + forward * cs - lateral * sn
+    val z = candidate.z + forward * sn + lateral * cs
+    Cell(floor(x).toInt(), floor(z).toInt())
+  }
+}
 
 private fun groupSize(lambda: Double, random: Random): Int {
   if (lambda <= 0) return 1

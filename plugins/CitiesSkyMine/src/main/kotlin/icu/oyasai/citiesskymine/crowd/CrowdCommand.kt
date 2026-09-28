@@ -39,6 +39,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Mannequin
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.util.BoundingBox
 
 class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   internal val heads = CrowdHeads(plugin)
@@ -80,11 +81,6 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       showHelp(sender, label)
       return true
     }
-    if (args.firstOrNull().equals("undo", true)) {
-      MessageUtil.info(sender, "ブロックの取り消しは //undo、マネキンの削除は /csm crowd remove を使ってください。")
-      return true
-    }
-
     val request = parseNatural(sender, args) ?: return true
     val natural = request.options
     val region = selectedCuboid(sender, "群衆生成は cuboid 選択にだけ対応しています。") ?: return true
@@ -148,8 +144,19 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       spawnMannequins(sender, figures, bodyY, crowd.groups, seed, random)
       return true
     }
-    val headMaterial = configuredHeadMaterial() ?: Material.PLAYER_HEAD
-    val profiles = if (headMaterial == Material.PLAYER_HEAD) heads.profiles() else emptyList()
+    placeBlocks(sender, figures, bodyY, crowd.groups, seed, random)
+    return true
+  }
+
+  private fun placeBlocks(
+      player: Player,
+      figures: List<Figure>,
+      bodyY: Int,
+      groups: Int,
+      seed: Long,
+      random: Random,
+  ) {
+    val profiles = heads.profiles()
     val placements = ArrayList<CrowdPlacement>(figures.size * 3)
     val skulls = ArrayList<SkullPlacement>()
     for (figure in figures) {
@@ -157,14 +164,13 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val legs = legWalls.random(random)
       placements += CrowdPlacement(figure.x, bodyY, figure.z, footData(legs))
       placements += CrowdPlacement(figure.x, bodyY + 1, figure.z, torsoData(torso, figure.facing))
-      placements +=
-          CrowdPlacement(figure.x, bodyY + 2, figure.z, headData(headMaterial, figure.facing))
+      placements += CrowdPlacement(figure.x, bodyY + 2, figure.z, headData(figure.facing))
       if (profiles.isNotEmpty())
           skulls += SkullPlacement(figure.x, bodyY + 2, figure.z, profiles.random(random))
     }
     val undoRecorded =
         try {
-          CsmEditSession.run(sender, plugin.logger) { editSession ->
+          CsmEditSession.run(player, plugin.logger) { editSession ->
                 for (placement in placements) {
                   editSession.setBlock(
                       BlockVector3.at(placement.x, placement.y, placement.z),
@@ -175,8 +181,8 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
               }
               .undoRecorded
         } catch (e: Exception) {
-          MessageUtil.error(sender, "群衆生成に失敗しました: ${e.message}")
-          return true
+          MessageUtil.error(player, "群衆生成に失敗しました: ${e.message}")
+          return
         }
     // CsmEditSession.run completes commit before returning; tile states must be written afterward.
     var failedHeads = 0
@@ -184,7 +190,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val applied =
           runCatching {
                 val state =
-                    sender.world.getBlockAt(placement.x, placement.y, placement.z).state as? Skull
+                    player.world.getBlockAt(placement.x, placement.y, placement.z).state as? Skull
                 if (state == null) false
                 else {
                   state.setPlayerProfile(placement.profile)
@@ -196,13 +202,12 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       if (!applied) failedHeads++
     }
     MessageUtil.success(
-        sender,
-        "群衆を生成しました: ${figures.size}人 / ${crowd.groups}グループ / seed=$seed",
+        player,
+        "群衆を生成しました: ${figures.size}人 / $groups グループ / seed=$seed",
     )
-    if (failedHeads > 0) MessageUtil.warn(sender, "頭のスキンを $failedHeads 個適用できませんでした。")
-    if (undoRecorded) MessageUtil.info(sender, "FAWE の //undo でこの群衆生成を取り消せます。")
-    else MessageUtil.warn(sender, "群衆生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-    return true
+    if (failedHeads > 0) MessageUtil.warn(player, "頭のスキンを $failedHeads 個適用できませんでした。")
+    if (undoRecorded) MessageUtil.info(player, "FAWE の //undo でこの群衆生成を取り消せます。")
+    else MessageUtil.warn(player, "群衆生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
   }
 
   override fun onTabComplete(
@@ -279,70 +284,68 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun importHeads(player: Player, source: String) {
     val limit = plugin.config.getInt("crowd.heads.max-scan-blocks", 200_000).coerceAtLeast(1)
     val entries = ArrayList<HeadTexture>()
-    var skipped = 0
-    try {
-      if (source == "selection") {
-        val region = selectedCuboid(player, "頭の取り込みは cuboid 選択にだけ対応しています。") ?: return
-        val bounds = CuboidBounds.from(region)
-        if (
-            !scanAllowed(
-                player,
-                limit,
-                bounds.maxX.toLong() - bounds.minX + 1,
-                bounds.maxY.toLong() - bounds.minY + 1,
-                bounds.maxZ.toLong() - bounds.minZ + 1,
-            )
-        )
-            return
-        for (x in bounds.minX..bounds.maxX) for (y in bounds.minY..bounds.maxY) for (z in
-            bounds.minZ..bounds.maxZ) {
-          val block = player.world.getBlockAt(x, y, z)
-          if (block.type !in listOf(Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD)) continue
-          val profile = (block.state as? Skull)?.playerProfile
-          val texture =
-              profile?.properties?.firstOrNull { it.name == "textures" && it.value.isNotBlank() }
-          if (texture == null) skipped++
-          else entries += HeadTexture(profile.id, profile.name, texture.value, texture.signature)
-        }
-      } else {
-        val session = WorldEdit.getInstance().sessionManager.get(BukkitAdapter.adapt(player))
-        val clipboard =
-            try {
-              session.clipboard.clipboard
-            } catch (_: EmptyClipboardException) {
-              MessageUtil.error(player, "WorldEdit のクリップボードが空です。")
-              return
-            }
-        val size = clipboard.dimensions
-        if (!scanAllowed(player, limit, size.x().toLong(), size.y().toLong(), size.z().toLong()))
-            return
-        for (pos in clipboard) {
-          val block = clipboard.getFullBlock(pos)
-          if (
-              block.blockType.id() !in listOf("minecraft:player_head", "minecraft:player_wall_head")
-          )
-              continue
-          val head = headTextureFromNbt(block.nbtData)
-          if (head == null) skipped++ else entries += head
-        }
-      }
-    } catch (e: Exception) {
-      MessageUtil.error(player, "頭の走査に失敗しました: ${e.message}")
-      return
-    }
+    val skipped =
+        try {
+          if (source == "selection") scanSelectedHeads(player, limit, entries)
+          else scanClipboardHeads(player, limit, entries)
+        } catch (e: Exception) {
+          MessageUtil.error(player, "頭の走査に失敗しました: ${e.message}")
+          return
+        } ?: return
     heads.importHeads(player, entries, skipped)
   }
 
-  private fun scanAllowed(player: Player, limit: Int, vararg sizes: Long): Boolean {
-    var volume = 1L
-    for (size in sizes) {
-      if (size <= 0 || size > limit / volume) {
-        MessageUtil.error(player, "走査範囲が上限 ($limit ブロック) を超えています。")
-        return false
-      }
-      volume *= size
+  private fun scanSelectedHeads(
+      player: Player,
+      limit: Int,
+      entries: MutableList<HeadTexture>,
+  ): Int? {
+    val region = selectedCuboid(player, "頭の取り込みは cuboid 選択にだけ対応しています。") ?: return null
+    if (region.volume > limit) {
+      MessageUtil.error(player, "走査範囲が上限 ($limit ブロック) を超えています。")
+      return null
     }
-    return true
+    val bounds = CuboidBounds.from(region)
+    var skipped = 0
+    for (x in bounds.minX..bounds.maxX) for (y in bounds.minY..bounds.maxY) for (z in
+        bounds.minZ..bounds.maxZ) {
+      val block = player.world.getBlockAt(x, y, z)
+      if (block.type != Material.PLAYER_HEAD && block.type != Material.PLAYER_WALL_HEAD) continue
+      val profile = (block.state as? Skull)?.playerProfile
+      val texture =
+          profile?.properties?.firstOrNull { it.name == "textures" && it.value.isNotBlank() }
+      if (texture == null) skipped++
+      else entries += HeadTexture(profile.id, profile.name, texture.value, texture.signature)
+    }
+    return skipped
+  }
+
+  private fun scanClipboardHeads(
+      player: Player,
+      limit: Int,
+      entries: MutableList<HeadTexture>,
+  ): Int? {
+    val session = WorldEdit.getInstance().sessionManager.get(BukkitAdapter.adapt(player))
+    val clipboard =
+        try {
+          session.clipboard.clipboard
+        } catch (_: EmptyClipboardException) {
+          MessageUtil.error(player, "WorldEdit のクリップボードが空です。")
+          return null
+        }
+    if (clipboard.region.volume > limit) {
+      MessageUtil.error(player, "走査範囲が上限 ($limit ブロック) を超えています。")
+      return null
+    }
+    var skipped = 0
+    for (pos in clipboard) {
+      val block = clipboard.getFullBlock(pos)
+      if (block.blockType.id() !in listOf("minecraft:player_head", "minecraft:player_wall_head"))
+          continue
+      val head = headTextureFromNbt(block.nbtData)
+      if (head == null) skipped++ else entries += head
+    }
+    return skipped
   }
 
   private fun parseNatural(sender: CommandSender, args: Array<String>): NaturalArgs? {
@@ -453,32 +456,32 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun removeMannequins(player: Player) {
     val region = selectedCuboid(player, "群衆の削除は cuboid 選択にだけ対応しています。") ?: return
     val bounds = CuboidBounds.from(region)
+    val box =
+        BoundingBox(
+            bounds.minX.toDouble(),
+            bounds.minY.toDouble(),
+            bounds.minZ.toDouble(),
+            bounds.maxX + 1.0,
+            bounds.maxY + 1.0,
+            bounds.maxZ + 1.0,
+        )
     var removed = 0
     try {
-      for (chunkX in (bounds.minX shr 4)..(bounds.maxX shr 4)) {
-        for (chunkZ in (bounds.minZ shr 4)..(bounds.maxZ shr 4)) {
-          if (
-              !player.world.isChunkLoaded(chunkX, chunkZ) &&
-                  !player.world.isChunkGenerated(chunkX, chunkZ)
-          )
-              continue
-          for (entity in player.world.getChunkAt(chunkX, chunkZ, false).entities) {
-            if (
-                entity !is Mannequin ||
-                    !entity.persistentDataContainer.has(mannequinMarker, PersistentDataType.BYTE)
-            )
-                continue
-            val location = entity.location
-            if (
-                location.blockX !in bounds.minX..bounds.maxX ||
-                    location.blockY !in bounds.minY..bounds.maxY ||
-                    location.blockZ !in bounds.minZ..bounds.maxZ
-            )
-                continue
-            entity.remove()
-            removed++
-          }
-        }
+      for (entity in player.world.getNearbyEntities(box)) {
+        if (
+            entity !is Mannequin ||
+                !entity.persistentDataContainer.has(mannequinMarker, PersistentDataType.BYTE)
+        )
+            continue
+        val location = entity.location
+        if (
+            location.blockX !in bounds.minX..bounds.maxX ||
+                location.blockY !in bounds.minY..bounds.maxY ||
+                location.blockZ !in bounds.minZ..bounds.maxZ
+        )
+            continue
+        entity.remove()
+        removed++
       }
     } catch (e: Exception) {
       MessageUtil.error(player, "マネキン削除中に失敗しました（削除済み $removed 体）: ${e.message}")
@@ -507,8 +510,8 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         }
       }
 
-  private fun headData(material: Material, facing: BlockFace): BlockData =
-      (material.createBlockData() as Rotatable).apply { rotation = facing.oppositeFace }
+  private fun headData(facing: BlockFace): BlockData =
+      (Material.PLAYER_HEAD.createBlockData() as Rotatable).apply { rotation = facing.oppositeFace }
 
   private fun nearestFace(x: Double, z: Double, faces: List<BlockFace>): BlockFace =
       faces.maxBy { face ->
@@ -521,7 +524,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     if (names.isEmpty()) return allWalls
     val walls =
         names.mapNotNull { raw ->
-          wallMaterialFromArg(raw)
+          Material.matchMaterial(raw)?.takeIf { it.isBlock && it.createBlockData() is Wall }
               ?: run {
                 plugin.logger.warning("$path に不正な壁素材があります: $raw")
                 null
@@ -529,33 +532,6 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         }
     return walls.ifEmpty { allWalls }
   }
-
-  private fun configuredHeadMaterial(): Material? =
-      plugin.config.getString("crowd.head")?.let(::headMaterialFromArg)
-
-  private fun wallMaterialFromArg(raw: String): Material? {
-    val name = raw.trim().lowercase().removePrefix("minecraft:")
-    val candidates = if (name.endsWith("_wall")) listOf(name) else listOf("${name}_wall", name)
-    return candidates.asSequence().mapNotNull(Material::matchMaterial).firstOrNull {
-      it.isBlock && it.createBlockData() is Wall
-    }
-  }
-
-  private fun headMaterialFromArg(raw: String): Material? {
-    val name = raw.trim().lowercase().removePrefix("minecraft:")
-    return listOf(
-            name,
-            "${name}_head",
-            "${name}_skull",
-            if (name == "player") "player_head" else name,
-        )
-        .asSequence()
-        .mapNotNull(Material::matchMaterial)
-        .firstOrNull { isHeadMaterial(it) && it.createBlockData() is Rotatable }
-  }
-
-  private fun isHeadMaterial(material: Material): Boolean =
-      material.isBlock && (material.name.endsWith("_HEAD") || material.name.endsWith("_SKULL"))
 
   private fun showHelp(sender: CommandSender, label: String) {
     MessageUtil.header(sender, "CSM Crowd")
