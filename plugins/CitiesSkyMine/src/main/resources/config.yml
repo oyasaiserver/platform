@@ -29,8 +29,25 @@ slab-stairs:
 
 crowd:
   default-gap: 2
-  wall: COBBLESTONE_WALL
+  torso-walls:
+    - BRICK_WALL
+    - SANDSTONE_WALL
+    - RED_NETHER_BRICK_WALL
+    - PRISMARINE_WALL
+  leg-walls:
+    - DEEPSLATE_BRICK_WALL
+    - BLACKSTONE_WALL
+    - POLISHED_BLACKSTONE_WALL
   head: PLAYER_HEAD
+  natural:
+    density: 0.12
+    group: 1.0
+    stand: 25
+    noise: 0.6
+    scale: 14
+    gap: 1
+    right: 50
+    jitter: 15
 
 csm:
   default-rotation: 0
@@ -104,6 +121,8 @@ access:
     crowd:
       - builder
       - takumi
+      - admin
+    crowd-heads:
       - admin
     selection:
       - builder

@@ -92,6 +92,7 @@ class CitiesSkyMineCommand(
       "reload" -> {
         if (!requireAccess(sender, CommandKey.RELOAD)) return true
         plugin.reloadConfig()
+        crowdCommand.reloadMaterials()
         MessageUtil.success(sender, "設定をリロードしました。")
         true
       }
@@ -137,7 +138,11 @@ class CitiesSkyMineCommand(
         stackCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
       "crowd" -> {
-        if (!requireAccess(sender, CommandKey.CROWD)) return true
+        if (
+            args.getOrNull(1)?.equals("heads", ignoreCase = true) != true &&
+                !requireAccess(sender, CommandKey.CROWD)
+        )
+            return true
         crowdCommand.onCommand(sender, command, "$label crowd", args.drop(1).toTypedArray())
       }
       "selection",
@@ -255,8 +260,8 @@ class CitiesSkyMineCommand(
     )
     MessageUtil.helpEntry(
         sender,
-        "/csm crowd <人数|左右x奥行> [間隔] [壁材] [頭部材]",
-        "選択範囲に群衆シルエットを生成",
+        "/csm crowd [key=value ...] | /csm crowd <人数|左右x奥行> [間隔] [壁材] [頭部材]",
+        "選択範囲に自然な群衆または格子状の群衆を生成",
     )
     MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
     MessageUtil.helpEntry(sender, "/csm settings", "個人設定GUIを開く")
@@ -314,12 +319,7 @@ class CitiesSkyMineCommand(
               "/csm stack <forward|back|left|right|up|down...> <times>",
               "選択範囲を視点基準で複製",
           )
-      "crowd" ->
-          MessageUtil.helpEntry(
-              sender,
-              "/csm crowd <人数|左右x奥行> [間隔] [壁材] [頭部材]",
-              "選択範囲に群衆シルエットを生成",
-          )
+      "crowd" -> crowdCommand.sendHelp(sender, "/csm crowd")
       "debugstick" ->
           MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
       "preset" ->
