@@ -2,7 +2,7 @@
   inputs,
   writableTmpDirAsHomeHook,
   nodejs,
-  terraform,
+  terraform_1_14,
   stdenv,
   writeTextFile,
   lib,
@@ -42,7 +42,7 @@ let
     nativeBuildInputs = [
       final
       nodejs
-      terraform
+      (terraform_1_14.withPlugins (_: oyasaiTerraformProviders))
       # cdktf wants to write in homedir for cache
       writableTmpDirAsHomeHook
     ];
