@@ -1,7 +1,7 @@
-import { DnsRecord } from "@oyasaiserver/cdktf-providers/cloudflare/dns-record";
-import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
-import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
-import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
+import { DnsRecord } from "@oyasaiserver/cdktf-bindings/providers/cloudflare/dns-record";
+import { CloudflareProvider } from "@oyasaiserver/cdktf-bindings/providers/cloudflare/provider";
+import { R2Bucket } from "@oyasaiserver/cdktf-bindings/providers/cloudflare/r2-bucket";
+import { InfisicalProvider } from "@oyasaiserver/cdktf-bindings/providers/infisical/provider";
 import type { Construct } from "constructs";
 import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
