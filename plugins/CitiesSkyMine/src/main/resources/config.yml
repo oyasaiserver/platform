@@ -48,6 +48,7 @@ crowd:
     gap: 1
     right: 50
     jitter: 15
+    # axis: x  # x、z、または 0〜100。未設定ならプレイヤーの左右。
 
 csm:
   default-rotation: 0

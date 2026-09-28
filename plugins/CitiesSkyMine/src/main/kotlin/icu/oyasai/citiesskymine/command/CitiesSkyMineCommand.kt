@@ -260,7 +260,7 @@ class CitiesSkyMineCommand(
     )
     MessageUtil.helpEntry(
         sender,
-        "/csm crowd [key=value ...] | /csm crowd <人数|左右x奥行> [間隔] [壁材] [頭部材]",
+        "/csm crowd [axis=x|z|0–100] [key=value ...] | /csm crowd <人数|左右x奥行> [間隔] [壁材] [頭部材]",
         "選択範囲に自然な群衆または格子状の群衆を生成",
     )
     MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
