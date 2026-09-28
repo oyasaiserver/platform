@@ -29,15 +29,11 @@ slab-stairs:
 
 crowd:
   max-mannequins: 300
-  torso-walls:
-    - BRICK_WALL
-    - SANDSTONE_WALL
-    - RED_NETHER_BRICK_WALL
-    - PRISMARINE_WALL
-  leg-walls:
-    - DEEPSLATE_BRICK_WALL
-    - BLACKSTONE_WALL
-    - POLISHED_BLACKSTONE_WALL
+  heads:
+    max-scan-blocks: 200000
+  # 空リストなら、このバージョンに存在する全ての Wall 素材から胴と足を別々に抽選します。
+  torso-walls: []
+  leg-walls: []
   head: PLAYER_HEAD
   natural:
     density: 0.12

@@ -1,6 +1,8 @@
 package icu.oyasai.citiesskymine.crowd
 
 import com.destroystokyo.paper.profile.PlayerProfile
+import com.sk89q.worldedit.EmptyClipboardException
+import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
 import icu.oyasai.citiesskymine.Main
@@ -41,28 +43,17 @@ import org.bukkit.persistence.PersistentDataType
 class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   internal val heads = CrowdHeads(plugin)
   private val mannequinMarker = NamespacedKey(plugin, "crowd_mannequin")
-  private var torsoWalls =
-      loadWalls(
-          "crowd.torso-walls",
-          listOf("BRICK_WALL", "SANDSTONE_WALL", "RED_NETHER_BRICK_WALL", "PRISMARINE_WALL"),
-      )
-  private var legWalls =
-      loadWalls(
-          "crowd.leg-walls",
-          listOf("DEEPSLATE_BRICK_WALL", "BLACKSTONE_WALL", "POLISHED_BLACKSTONE_WALL"),
-      )
+  private val allWalls by lazy {
+    Material.entries.filter { material ->
+      !material.isLegacy && material.isBlock && material.createBlockData() is Wall
+    }
+  }
+  private var torsoWalls = loadWalls("crowd.torso-walls")
+  private var legWalls = loadWalls("crowd.leg-walls")
 
   fun reloadMaterials() {
-    torsoWalls =
-        loadWalls(
-            "crowd.torso-walls",
-            listOf("BRICK_WALL", "SANDSTONE_WALL", "RED_NETHER_BRICK_WALL", "PRISMARINE_WALL"),
-        )
-    legWalls =
-        loadWalls(
-            "crowd.leg-walls",
-            listOf("DEEPSLATE_BRICK_WALL", "BLACKSTONE_WALL", "POLISHED_BLACKSTONE_WALL"),
-        )
+    torsoWalls = loadWalls("crowd.torso-walls")
+    legWalls = loadWalls("crowd.leg-walls")
   }
 
   override fun onCommand(
@@ -231,7 +222,11 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     if (args[0].equals("heads", true)) {
       if (!plugin.access.canUse(sender, CommandKey.CROWD_HEADS)) return emptyList()
       return when (args.size) {
-        2 -> listOf("add", "remove", "list").filter { it.startsWith(args[1], true) }
+        2 -> listOf("add", "remove", "list", "import").filter { it.startsWith(args[1], true) }
+        3 ->
+            if (args[1].equals("import", true))
+                listOf("selection", "clipboard").filter { it.startsWith(args[2], true) }
+            else emptyList()
         else -> emptyList()
       }
     }
@@ -273,12 +268,90 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       "list" -> if (args.size == 1) heads.list(sender) else headsUsage(sender, label)
       "add" -> if (args.size == 2) heads.add(sender, args[1]) else headsUsage(sender, label)
       "remove" -> if (args.size == 2) heads.remove(sender, args[1]) else headsUsage(sender, label)
+      "import" -> {
+        if (sender !is Player) MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
+        else if (args.size > 2 || args.getOrNull(1) !in listOf(null, "selection", "clipboard"))
+            headsUsage(sender, label)
+        else importHeads(sender, args.getOrNull(1) ?: "selection")
+      }
       else -> headsUsage(sender, label)
     }
   }
 
   private fun headsUsage(sender: CommandSender, label: String) =
-      MessageUtil.info(sender, "使い方: /$label heads <add MCID|remove MCID|list>")
+      MessageUtil.info(
+          sender,
+          "使い方: /$label heads <add MCID|remove MCID|list|import [selection|clipboard]>",
+      )
+
+  private fun importHeads(player: Player, source: String) {
+    val limit = plugin.config.getInt("crowd.heads.max-scan-blocks", 200_000).coerceAtLeast(1)
+    val entries = ArrayList<HeadTexture>()
+    var skipped = 0
+    try {
+      if (source == "selection") {
+        val region = selectedCuboid(player, "頭の取り込みは cuboid 選択にだけ対応しています。") ?: return
+        val bounds = CuboidBounds.from(region)
+        if (
+            !scanAllowed(
+                player,
+                limit,
+                bounds.maxX.toLong() - bounds.minX + 1,
+                bounds.maxY.toLong() - bounds.minY + 1,
+                bounds.maxZ.toLong() - bounds.minZ + 1,
+            )
+        )
+            return
+        for (x in bounds.minX..bounds.maxX) for (y in bounds.minY..bounds.maxY) for (z in
+            bounds.minZ..bounds.maxZ) {
+          val block = player.world.getBlockAt(x, y, z)
+          if (block.type !in listOf(Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD)) continue
+          val profile = (block.state as? Skull)?.playerProfile
+          val texture =
+              profile?.properties?.firstOrNull { it.name == "textures" && it.value.isNotBlank() }
+          if (texture == null) skipped++
+          else entries += HeadTexture(profile.id, profile.name, texture.value, texture.signature)
+        }
+      } else {
+        val session = WorldEdit.getInstance().sessionManager.get(BukkitAdapter.adapt(player))
+        val clipboard =
+            try {
+              session.clipboard.clipboard
+            } catch (_: EmptyClipboardException) {
+              MessageUtil.error(player, "WorldEdit のクリップボードが空です。")
+              return
+            }
+        val size = clipboard.dimensions
+        if (!scanAllowed(player, limit, size.x().toLong(), size.y().toLong(), size.z().toLong()))
+            return
+        for (pos in clipboard) {
+          val block = clipboard.getFullBlock(pos)
+          if (
+              block.blockType.id() !in listOf("minecraft:player_head", "minecraft:player_wall_head")
+          )
+              continue
+          val head = headTextureFromNbt(block.nbtData)
+          if (head == null) skipped++ else entries += head
+        }
+      }
+    } catch (e: Exception) {
+      MessageUtil.error(player, "頭の走査に失敗しました: ${e.message}")
+      return
+    }
+    heads.importHeads(player, entries, skipped)
+  }
+
+  private fun scanAllowed(player: Player, limit: Int, vararg sizes: Long): Boolean {
+    var volume = 1L
+    for (size in sizes) {
+      if (size <= 0 || size > limit / volume) {
+        MessageUtil.error(player, "走査範囲が上限 ($limit ブロック) を超えています。")
+        return false
+      }
+      volume *= size
+    }
+    return true
+  }
 
   private fun parseNatural(sender: CommandSender, args: Array<String>): NaturalArgs? {
     val values = mutableMapOf<String, String>()
@@ -458,8 +531,9 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         (x * face.modX + z * face.modZ) / length
       }
 
-  private fun loadWalls(path: String, defaults: List<String>): List<Material> {
-    val names = plugin.config.getStringList(path).ifEmpty { defaults }
+  private fun loadWalls(path: String): List<Material> {
+    val names = plugin.config.getStringList(path)
+    if (names.isEmpty()) return allWalls
     val walls =
         names.mapNotNull { raw ->
           wallMaterialFromArg(raw)
@@ -468,7 +542,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                 null
               }
         }
-    return walls.ifEmpty { defaults.mapNotNull(::wallMaterialFromArg) }
+    return walls.ifEmpty { allWalls }
   }
 
   private fun configuredHeadMaterial(): Material? =

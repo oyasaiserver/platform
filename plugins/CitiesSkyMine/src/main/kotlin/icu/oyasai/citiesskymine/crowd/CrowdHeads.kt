@@ -2,6 +2,10 @@ package icu.oyasai.citiesskymine.crowd
 
 import com.destroystokyo.paper.profile.PlayerProfile
 import com.destroystokyo.paper.profile.ProfileProperty
+import com.sk89q.jnbt.CompoundTag
+import com.sk89q.jnbt.IntArrayTag
+import com.sk89q.jnbt.ListTag
+import com.sk89q.jnbt.StringTag
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.util.MessageUtil
 import java.io.File
@@ -104,6 +108,58 @@ internal class CrowdHeads(private val plugin: Main) : Listener {
     }
   }
 
+  fun importHeads(sender: CommandSender, entries: List<HeadTexture>, skipped: Int) {
+    val before = yaml.saveToString()
+    val known =
+        yaml
+            .getConfigurationSection("heads")
+            ?.getKeys(false)
+            .orEmpty()
+            .mapNotNull { runCatching { UUID.fromString(it) }.getOrNull() }
+            .toMutableSet()
+    val byTexture = mutableMapOf<String, MutableSet<UUID>>()
+    known.forEach { id ->
+      yaml.getString("heads.$id.value")?.let { byTexture.getOrPut(it) { mutableSetOf() } += id }
+    }
+    var added = 0
+    var updated = 0
+    for (entry in entries) {
+      val id =
+          entry.id
+              ?: UUID.nameUUIDFromBytes(
+                  "crowd-texture:${entry.value}".toByteArray(StandardCharsets.UTF_8)
+              )
+      val matches = byTexture[entry.value].orEmpty()
+      val key = matches.firstOrNull() ?: id
+      val path = "heads.$key"
+      if (key in known) updated++ else added++
+      yaml.getString("$path.value")?.let { byTexture[it]?.remove(key) }
+      yaml.set("$path.uuid", key.toString())
+      yaml.set(
+          "$path.name",
+          entry.name?.takeIf { it.isNotBlank() }
+              ?: yaml.getString("$path.name")
+              ?: "head_${(entry.id ?: key).toString().replace("-", "").take(11)}",
+      )
+      yaml.set("$path.value", entry.value)
+      yaml.set("$path.signature", entry.signature)
+      yaml.set("$path.updated-at", System.currentTimeMillis())
+      known += key
+      byTexture.getOrPut(entry.value) { mutableSetOf() } += key
+      for (duplicate in (matches + id).filter { it != key && it in known }) {
+        yaml.getString("heads.$duplicate.value")?.let { byTexture[it]?.remove(duplicate) }
+        yaml.set("heads.$duplicate", null)
+        known.remove(duplicate)
+      }
+    }
+    if (entries.isNotEmpty() && !save()) {
+      yaml.loadFromString(before)
+      MessageUtil.error(sender, "頭の保存に失敗しました。")
+      return
+    }
+    MessageUtil.success(sender, "頭を取り込みました: 新規 $added 件・更新 $updated 件・textures 無しでスキップ $skipped 件")
+  }
+
   @EventHandler
   fun onJoin(event: PlayerJoinEvent) {
     val player: Player = event.player
@@ -149,4 +205,42 @@ internal class CrowdHeads(private val plugin: Main) : Listener {
           }
           .onFailure { plugin.logger.warning("crowd-heads.yml の保存に失敗: ${it.message}") }
           .isSuccess
+}
+
+internal data class HeadTexture(
+    val id: UUID?,
+    val name: String?,
+    val value: String,
+    val signature: String?,
+)
+
+internal fun headTextureFromNbt(nbt: CompoundTag?): HeadTexture? {
+  val profile = nbt?.value?.get("profile") as? CompoundTag ?: return null
+  val properties = profile.value["properties"] as? ListTag<*, *> ?: return null
+  val texture =
+      properties.value.filterIsInstance<CompoundTag>().firstOrNull {
+        (it.value["name"] as? StringTag)?.value == "textures" &&
+            !(it.value["value"] as? StringTag)?.value.isNullOrBlank()
+      } ?: return null
+  val rawId = profile.value["id"]
+  val id =
+      when (rawId) {
+        is IntArrayTag ->
+            rawId.value
+                .takeIf { it.size == 4 }
+                ?.let { parts ->
+                  UUID(
+                      (parts[0].toLong() shl 32) or (parts[1].toLong() and 0xffffffffL),
+                      (parts[2].toLong() shl 32) or (parts[3].toLong() and 0xffffffffL),
+                  )
+                }
+        is StringTag -> runCatching { UUID.fromString(rawId.value) }.getOrNull()
+        else -> null
+      }
+  return HeadTexture(
+      id,
+      (profile.value["name"] as? StringTag)?.value,
+      (texture.value["value"] as StringTag).value,
+      (texture.value["signature"] as? StringTag)?.value,
+  )
 }

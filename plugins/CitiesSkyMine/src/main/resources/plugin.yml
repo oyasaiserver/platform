@@ -52,7 +52,7 @@ commands:
     usage: "/.ns <forward|back|left|right|up|down...> <times> [skip-blocks...]"
   ".crowd":
     description: "群衆生成ショートカット"
-    usage: "/.crowd [key=value ...] [mode=block|mannequin] | /.crowd remove"
+    usage: "/.crowd [key=value ...] [mode=block|mannequin] | /.crowd remove | /.crowd heads import [selection|clipboard]"
   ".sel":
     description: "WorldEdit 選択範囲の保存・復元ショートカット"
     usage: "/.sel <save|list|delete|p|name>"
