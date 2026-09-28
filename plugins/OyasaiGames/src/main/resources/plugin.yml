@@ -13,6 +13,9 @@ commands:
     description: 建築用アイテム抽選ルーレットGUIを開きます
     aliases: [oroulette]
     permission: oyasaigames.roulette.use
+  headhunt:
+    description: HeadHuntのメインコマンドです。
+    aliases: [hhunt]
 permissions:
   oyasaigames.use:
     description: おやさいゲームズを使用する権限
@@ -26,3 +29,9 @@ permissions:
   oyasaigames.roulette.admin:
     description: ルーレットの管理権限
     default: op
+  headhunt.admin:
+    description: HeadHuntの管理コマンドを使用できます。
+    default: op
+  headhunt.use:
+    description: HeadHuntの基本コマンドを使用できます。
+    default: true

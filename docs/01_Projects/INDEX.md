@@ -11,7 +11,7 @@ Project index for `docs/01_Projects/`.
 | [dynamic-profile](minecraft-plugins/dynamic-profile/PROJECT.md) | Player profile, titles, and leaderboards |
 | [entity-pose](minecraft-plugins/entity-pose/PROJECT.md) | Entity pose/position/scale building tool |
 | [gakubuchi-locker](minecraft-plugins/gakubuchi-locker/PROJECT.md) | Item frame lock protection |
-| [headhunt](minecraft-plugins/headhunt/PROJECT.md) | Player-head treasure hunt minigame |
+| [headhunt](minecraft-plugins/headhunt/PROJECT.md) | Player-head treasure hunt minigame in OyasaiGames |
 | [oyasai-admin-tools](minecraft-plugins/oyasai-admin-tools/PROJECT.md) | Admin announcements, surveys, and player management |
 | [oyasai-chat](minecraft-plugins/oyasai-chat/PROJECT.md) | Cross-backend chat synchronization through Velocity |
 | [oyasai-lwc](minecraft-plugins/lwc/PROJECT.md) | Internal block protection with legacy LWC SQLite data |
