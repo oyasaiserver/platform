@@ -37,8 +37,12 @@ object HologramDisplay {
   fun style(display: TextDisplay, holo: Hologram, line: String) {
     display.text(hologramComponent(line))
     display.billboard = Display.Billboard.CENTER
-    display.isDefaultBackground = false
-    display.backgroundColor = Color.fromARGB(0)
+    if (holo.background) {
+      display.isDefaultBackground = true
+    } else {
+      display.isDefaultBackground = false
+      display.backgroundColor = Color.fromARGB(0)
+    }
     display.brightness = Display.Brightness(15, 15)
     display.isSeeThrough = holo.seeThrough
     holo.viewRange?.let { display.viewRange = it }

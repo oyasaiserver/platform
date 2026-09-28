@@ -19,6 +19,7 @@ object HologramCommand : CommandExecutor, TabCompleter {
           "import",
           "range",
           "seethrough",
+          "background",
       )
   private val lineSubs = listOf("add", "set", "remove")
 
@@ -43,6 +44,7 @@ object HologramCommand : CommandExecutor, TabCompleter {
       "import" -> import(sender)
       "range" -> range(sender, args)
       "seethrough" -> seeThrough(sender, args)
+      "background" -> background(sender, args)
       else -> help(sender)
     }
     return true
@@ -65,13 +67,16 @@ object HologramCommand : CommandExecutor, TabCompleter {
     }
     if (
         args.size == 2 &&
-            listOf("delete", "movehere", "range", "seethrough").any {
+            listOf("delete", "movehere", "range", "seethrough", "background").any {
               it.equals(args[0], ignoreCase = true)
             }
     ) {
       return names(args[1])
     }
-    if (args.size == 3 && args[0].equals("seethrough", ignoreCase = true)) {
+    if (
+        args.size == 3 &&
+            listOf("seethrough", "background").any { it.equals(args[0], ignoreCase = true) }
+    ) {
       return listOf("on", "off").filter { it.startsWith(args[2], ignoreCase = true) }
     }
     if (args.size == 3 && args[0].equals("range", ignoreCase = true)) {
@@ -209,6 +214,19 @@ object HologramCommand : CommandExecutor, TabCompleter {
     sender.sendMessage("[oholo] seethrough: $name ${if (on) "on" else "off"}")
   }
 
+  private fun background(sender: CommandSender, args: Array<out String>) {
+    val name = args.getOrNull(1) ?: return help(sender)
+    val on =
+        when (args.getOrNull(2)?.lowercase()) {
+          "on" -> true
+          "off" -> false
+          else -> return help(sender)
+        }
+    val holo = HologramFeature.get(name) ?: return sender.sendMessage("[oholo] 無い: $name")
+    HologramFeature.put(holo.copy(background = on))
+    sender.sendMessage("[oholo] background: $name ${if (on) "on" else "off"}")
+  }
+
   private fun import(sender: CommandSender) {
     val result = HologramFeature.importDecent()
     if (result.missingDir) {
@@ -228,9 +246,11 @@ object HologramCommand : CommandExecutor, TabCompleter {
     sender.sendMessage(
         "[oholo] line add <name> <text> / line set <name> <index> <text> / line remove <name> <index>",
     )
-    sender.sendMessage("[oholo] range <name> <数値|default> / seethrough <name> <on|off>")
+    sender.sendMessage(
+        "[oholo] range <name> <数値|default> / seethrough <name> <on|off> / background <name> <on|off>",
+    )
   }
 
   private fun summary(holo: Hologram): String =
-      "${holo.world} ${holo.x} ${holo.y} ${holo.z} lines=${holo.lines.size} enabled=${holo.enabled} range=${holo.viewRange ?: "default"} seethrough=${holo.seeThrough}"
+      "${holo.world} ${holo.x} ${holo.y} ${holo.z} lines=${holo.lines.size} enabled=${holo.enabled} range=${holo.viewRange ?: "default"} seethrough=${holo.seeThrough} background=${holo.background}"
 }
