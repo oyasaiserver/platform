@@ -18,7 +18,7 @@ internal data class NaturalCrowdOptions(
     val width: Int,
     val depth: Int,
     val density: Double = 0.12,
-    val group: Double = 1.0,
+    val group: Double = 0.6,
     val stand: Double = 50.0,
     val noise: Double = 0.6,
     val scale: Double = 14.0,
@@ -50,6 +50,12 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
   val random = Random(p.seed)
   val area = p.width * p.depth
   val target = (p.density * area).roundToInt()
+  val meanWeight =
+      if (p.noise == 0.0) 1.0
+      else
+          (0 until p.depth).sumOf { z ->
+            (0 until p.width).sumOf { x -> weight(x + 0.5, z + 0.5, p) }
+          } / area
   val candidates =
       List(area * 3) {
             val x = random.nextDouble() * p.width
@@ -78,6 +84,17 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
     if (people.size >= target) break
     val count = min(groupSize(p.group, random), target - people.size)
     val standing = count >= 2 && random.nextDouble() * 100 < p.stand
+    val pairLayout =
+        if (count == 2 && !standing) {
+          val local = p.density * weight(candidate.x, candidate.z, p) / meanWeight
+          val sideways = (1 - (local - 0.15) / 0.35).coerceIn(0.4, 1.0)
+          val choice = random.nextDouble()
+          when {
+            choice < sideways -> 0
+            choice < sideways + (1 - sideways) / 2 -> 1
+            else -> 2
+          }
+        } else 0
     val yaw =
         if (standing) random.nextDouble() * 2 * PI
         else {
@@ -100,15 +117,25 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
             val z = floor(candidate.z).toInt()
             val dx = if (abs(cs) >= abs(sn)) if (cs >= 0) 1 else -1 else 0
             val dz = if (dx == 0) if (sn >= 0) 1 else -1 else 0
-            listOf(Cell(x, z), Cell(x + dx, z + dz))
+            listOf(Cell(x, z), Cell(x + 2 * dx, z + 2 * dz))
           } else {
-            formation(count, standing, attempt).map { (forward, lateral) ->
+            formation(count, standing, attempt, pairLayout).map { (forward, lateral) ->
               val x = candidate.x + forward * cs - lateral * sn
               val z = candidate.z + forward * sn + lateral * cs
               Cell(floor(x).toInt(), floor(z).toInt())
             }
           }
-      if (cells.toSet().size != count || cells.any { !free(it.x, it.z) }) continue
+      val between =
+          if (standing && count == 2)
+              Cell((cells[0].x + cells[1].x) / 2, (cells[0].z + cells[1].z) / 2)
+          else null
+      if (
+          cells.toSet().size != count ||
+              cells.any { !free(it.x, it.z) } ||
+              between != null && !free(between.x, between.z)
+      )
+          continue
+      if (between != null) occupied[between.z * p.width + between.x] = groups
       val centerX = cells.sumOf { it.x + 0.5 } / count
       val centerZ = cells.sumOf { it.z + 0.5 } / count
       for (cell in cells) {
@@ -151,12 +178,20 @@ private fun formation(
     count: Int,
     standing: Boolean,
     attempt: Int,
+    pairLayout: Int,
 ): List<Pair<Double, Double>> {
   if (standing) {
     val radius = max(1.0, count * 1.15 / (2 * PI)) + attempt * 0.5
     return List(count) { index ->
       val angle = index * 2 * PI / count
       cos(angle) * radius to sin(angle) * radius
+    }
+  }
+  if (count == 2) {
+    return when (pairLayout) {
+      1 -> listOf(0.0 to 0.0, -1.0 to 0.0)
+      2 -> listOf(0.0 to -0.5, -1.0 to 0.5)
+      else -> listOf(0.0 to -0.5, 0.0 to 0.5)
     }
   }
   val rows = if (count <= 4) listOf(count) else listOf(ceil(count / 2.0).toInt(), count / 2)

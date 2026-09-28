@@ -37,7 +37,7 @@ crowd:
   head: PLAYER_HEAD
   natural:
     density: 0.12
-    group: 1.0
+    group: 0.6
     stand: 50
     noise: 0.6
     scale: 14

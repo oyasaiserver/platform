@@ -229,7 +229,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         if (args.size == 1)
             listOf(
                 "density=0.12",
-                "group=1",
+                "group=0.6",
                 "stand=50",
                 "noise=0.6",
                 "scale=14",
@@ -368,7 +368,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       return value
     }
     val density = number("density", 0.12, 0.01, 1.0)
-    val group = number("group", 1.0, 0.0, 3.0)
+    val group = number("group", 0.6, 0.0, 3.0)
     val stand = number("stand", 50.0, 0.0, 100.0)
     val noise = number("noise", 0.6, 0.0, 1.0)
     val scale = number("scale", 14.0, 3.0, 48.0)
@@ -508,7 +508,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       }
 
   private fun headData(material: Material, facing: BlockFace): BlockData =
-      (material.createBlockData() as Rotatable).apply { rotation = facing }
+      (material.createBlockData() as Rotatable).apply { rotation = facing.oppositeFace }
 
   private fun nearestFace(x: Double, z: Double, faces: List<BlockFace>): BlockFace =
       faces.maxBy { face ->
@@ -561,7 +561,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     MessageUtil.header(sender, "CSM Crowd")
     MessageUtil.helpEntry(
         sender,
-        "/$label [density=0.12] [group=1] [stand=50] [noise=0.6] [scale=14]",
+        "/$label [density=0.12] [group=0.6] [stand=50] [noise=0.6] [scale=14]",
         "自然な群衆を生成",
     )
     MessageUtil.helpEntry(

@@ -40,8 +40,8 @@ class NaturalCrowdTest {
   }
 
   @Test
-  fun standingPairsAreAdjacentAndFaceEachOther() {
-    val groups =
+  fun standingPairsHaveOneEmptyCellAndFaceEachOther() {
+    val people =
         generateNaturalCrowd(
                 NaturalCrowdOptions(
                     48,
@@ -54,15 +54,47 @@ class NaturalCrowdTest {
                 )
             )
             .people
-            .groupBy { it.group }
-            .values
-            .filter { it.size == 2 }
+    val positions = people.map { it.x to it.z }.toSet()
+    val groups = people.groupBy { it.group }.values.filter { it.size == 2 }
     assertTrue(groups.isNotEmpty())
     for ((a, b) in groups.map { it[0] to it[1] }) {
-      assertEquals(1, abs(a.x - b.x) + abs(a.z - b.z))
+      assertEquals(2, abs(a.x - b.x) + abs(a.z - b.z))
+      assertTrue(a.x == b.x || a.z == b.z)
+      assertTrue(((a.x + b.x) / 2 to (a.z + b.z) / 2) !in positions)
       assertTrue(abs(cos(a.yaw) + cos(b.yaw)) < 1e-9)
       assertTrue(abs(sin(a.yaw) + sin(b.yaw)) < 1e-9)
     }
+  }
+
+  @Test
+  fun walkingPairsVaryWithLocalDensity() {
+    fun pairs(density: Double) =
+        generateNaturalCrowd(
+                NaturalCrowdOptions(
+                    64,
+                    64,
+                    density = density,
+                    group = 2.0,
+                    stand = 0.0,
+                    noise = 0.0,
+                    gap = 0,
+                    right = 100.0,
+                    jitter = 0.0,
+                    seed = 42,
+                )
+            )
+            .people
+            .groupBy { it.group }
+            .values
+            .filter { it.size == 2 }
+
+    val sparse = pairs(0.05)
+    assertTrue(sparse.isNotEmpty())
+    assertTrue(sparse.all { it[0].x == it[1].x && abs(it[0].z - it[1].z) == 1 })
+
+    val dense = pairs(0.5)
+    assertTrue(dense.any { abs(it[0].x - it[1].x) == 1 && it[0].z == it[1].z })
+    assertTrue(dense.any { abs(it[0].x - it[1].x) == 1 && abs(it[0].z - it[1].z) == 1 })
   }
 
   @Test
@@ -106,7 +138,7 @@ class NaturalCrowdTest {
       people += result.people.size
     }
     val share = solos.toDouble() / people
-    assertTrue(abs(share - exp(-1.0)) < 0.05, "solo share=$share, people=$people")
+    assertTrue(abs(share - exp(-0.6)) < 0.05, "solo share=$share, people=$people")
   }
 
   @Test
