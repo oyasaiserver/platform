@@ -4,6 +4,7 @@ import com.griefcraft.lwc.LWCPlugin
 import java.util.UUID
 import java.util.logging.Level
 import net.milkbowl.vault.economy.Economy
+import net.milkbowl.vault.economy.EconomyResponse
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -610,12 +611,7 @@ class SignShopPlugin : JavaPlugin(), Listener {
         val response =
             if (deposit) economy.depositPlayer(target, yen.toDouble())
             else economy.withdrawPlayer(target, yen.toDouble())
-        when {
-          response.transactionSuccess() && response.amount == yen.toDouble() -> MoneyResult.OK
-          response.type == net.milkbowl.vault.economy.EconomyResponse.ResponseType.FAILURE &&
-              response.amount == 0.0 -> MoneyResult.FAILED
-          else -> MoneyResult.UNKNOWN
-        }
+        moneyResult(response, yen)
       } catch (_: Exception) {
         MoneyResult.UNKNOWN
       }
@@ -738,3 +734,10 @@ class SignShopPlugin : JavaPlugin(), Listener {
     if (event.blocks.any(::protectedBlock)) event.isCancelled = true
   }
 }
+
+internal fun moneyResult(response: EconomyResponse, yen: Long): MoneyResult =
+    when {
+      response.transactionSuccess() && response.amount == yen.toDouble() -> MoneyResult.OK
+      response.type == EconomyResponse.ResponseType.FAILURE -> MoneyResult.FAILED
+      else -> MoneyResult.UNKNOWN
+    }

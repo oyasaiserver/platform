@@ -6,8 +6,21 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import net.milkbowl.vault.economy.EconomyResponse
 
 class SignShopTest {
+  @Test
+  fun vaultMoneyResponse() {
+    fun result(amount: Double, type: EconomyResponse.ResponseType) =
+        moneyResult(EconomyResponse(amount, 0.0, type, ""), 10)
+
+    assertEquals(MoneyResult.FAILED, result(10.0, EconomyResponse.ResponseType.FAILURE))
+    assertEquals(MoneyResult.FAILED, result(0.0, EconomyResponse.ResponseType.FAILURE))
+    assertEquals(MoneyResult.OK, result(10.0, EconomyResponse.ResponseType.SUCCESS))
+    assertEquals(MoneyResult.UNKNOWN, result(9.0, EconomyResponse.ResponseType.SUCCESS))
+    assertEquals(MoneyResult.UNKNOWN, result(10.0, EconomyResponse.ResponseType.NOT_IMPLEMENTED))
+  }
+
   @Test
   fun price() {
     assertEquals(1200, priceYen(" ¥1,200 "))
