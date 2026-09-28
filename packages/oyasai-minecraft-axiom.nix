@@ -33,10 +33,9 @@ oyasaiPurpur rec {
     floodgate
     luckperms
     lunachat
-    multiversecore
-    multiverseportals
     oyasaichat
     oyasaitab
+    oyasaiworldgenerator
     placeholderapi
     plugmanx
     vault

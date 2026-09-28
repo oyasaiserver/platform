@@ -5,7 +5,7 @@ api-version: "1.21"
 description: 展示用ワールドの生成と高度制御
 authors: [takucan]
 load: STARTUP
-softdepend: [Multiverse-Core]
+softdepend: [FastAsyncWorldEdit]
 commands:
   owg:
     description: "ワールドの生成・高度・状態の管理"

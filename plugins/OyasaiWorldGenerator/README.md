@@ -10,12 +10,14 @@
 - `/owg tp [world]`: 設定したゲームモードと飛行可否を付与して入場
 - `/owg load <world>`: 起動時安全検査を通過した対象だけをロード
 - `/owg create <name> <void-end|flat>`: 設定へ追記し、自己テスト後に新規ワールドを作成
-- `/owg unload <world>`: 保存してアンロード（フォルダは削除しない）
+- `/owg unload <world>`: 高さの照合に成功した場合だけ保存してアンロード（フォルダは削除しない）
 - `/owg check`: 設定・バージョン・ロード済みワールドを読み取り検査
 
 `owg_selftest` は、対象ワールドより先に同じ高さパッチを試すための使い捨てワールドです。起動前から同名フォルダがある場合は再利用も削除もせず、fail closed します。削除コードは、現在の起動で作成した `owg_selftest` のみに限定し、従来形式のワールド直下と 26.2 の namespaced dimension 配下を完全一致の allowlist で検査します。
 
-Multiverse-Core の `auto-import-3rd-party-worlds` が有効な場合、ロード後に OWG 対象が自動登録されることがあります。OWG は Multiverse 5 の `removeWorld` を `unloadBukkitWorld=false` / `saveBukkitWorld=false` で呼び、Bukkit ワールドをロードしたまま登録簿だけから外します。`deleteWorld` は呼びません。
+通常ワールドは別ファイル `plugins/OyasaiWorldGenerator/normal-worlds.yml` で管理します。初回のみ `plugins/Multiverse-Core/worlds.yml` から `minecraft:` の登録と名前・キーを取り込みます。以後はこのファイルを正本とし、高さ用の `config.yml` の `worlds:` には混ぜません。既定3ワールドには設定だけを適用し、追加ワールドは既存の dimension フォルダがある場合に、既定ワールドのロード完了後、POSTWORLD プラグインより前に開きます。フォルダ欠損や高さ用ワールドとの重複は飛ばします。Multiverse-Core の jar と同時に入れるとワールド管理を無効にします。
+
+通常ワールドの操作は `/mvtp [player] <world>`、`/mv list|info|create|import|load|unload|setspawn|modify|entity-spawn-config|gamerule` です。`/mv create <名前> <normal|flat|void|nether|the_end>` の種類を台帳に保存し、次回ロード時も同じ生成方法を使います。ポータルは `/mvp create|modify|list|info|select|remove|wand` で管理します（範囲選択を伴う操作のみ FAWE が必要です）。
 
 ## 高さ適用の設計
 
@@ -46,6 +48,6 @@ OWG 側で独自に書いたもの:
 - レジストリ状態を `try/finally` で保存・復元し、各書き込みを読み返す処理。
 - フィールド名が変わった場合の型・宣言順・変更前値による一意探索と fail-closed 判定。
 - 自己テストの既存フォルダ拒否、作成元追跡、固定パス削除ガード。
-- ボイド生成、設定検証、ライフサイクル、Multiverse 登録解除、コマンド、ログ文面。
+- ボイド生成、設定検証、ライフサイクル、コマンド、ログ文面。
 
 ライセンスの最終判断は別途行う前提で、このモジュールには LICENSE ファイルやソースヘッダを追加していません。
