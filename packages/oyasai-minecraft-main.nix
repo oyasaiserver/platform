@@ -44,7 +44,6 @@ oyasaiPurpur rec {
     citiesskymine
     coreprotect
     crackshotguns
-    decentholograms
     directstate
     discordsrv
     dynamicprofile
