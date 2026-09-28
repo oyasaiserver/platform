@@ -330,19 +330,8 @@ class SignShopPlugin : JavaPlugin(), Listener {
         selected[player.uniqueId]?.toList().orEmpty().ifEmpty {
           if (update) old?.containers.orEmpty() + old?.devices.orEmpty() else emptyList()
         }
-    if (
-        links.isEmpty() ||
-            links.size > 100 ||
-            links.any {
-              it.world != signBlock.world.name ||
-                  maxOf(
-                      kotlin.math.abs(it.x - signBlock.x),
-                      kotlin.math.abs(it.y - signBlock.y),
-                      kotlin.math.abs(it.z - signBlock.z),
-                  ) > 15
-            }
-    ) {
-      player.sendMessage("対象は同じ世界の15ブロック以内、100個以下で選んでください")
+    if (links.isEmpty() || links.size > 100 || links.any { it.world != signBlock.world.name }) {
+      player.sendMessage("対象は同じ世界から100個以下で選んでください")
       return
     }
     val blocks = links.mapNotNull { block(it) }
