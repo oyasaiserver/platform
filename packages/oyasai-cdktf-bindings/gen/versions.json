@@ -1,0 +1,8 @@
+{
+  "registry.terraform.io/cloudflare/cloudflare": "5.24.0",
+  "registry.terraform.io/grafana/grafana": "4.46.0",
+  "registry.terraform.io/hashicorp/random": "3.9.0",
+  "registry.terraform.io/infisical/infisical": "0.19.31",
+  "registry.terraform.io/integrations/github": "6.13.0",
+  "registry.terraform.io/kreuzwerker/docker": "4.6.0"
+}
