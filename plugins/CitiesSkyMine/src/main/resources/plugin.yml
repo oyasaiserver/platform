@@ -51,8 +51,8 @@ commands:
     description: "選択範囲をプレイヤー視点基準で複製するショートカット"
     usage: "/.ns <forward|back|left|right|up|down...> <times> [skip-blocks...]"
   ".crowd":
-    description: "群衆シルエット生成ショートカット"
-    usage: "/.crowd <count|leftxdepth> [gap] [wall] [head]"
+    description: "群衆生成ショートカット"
+    usage: "/.crowd [fb=0] [forward=50] [right=50] [key=value ...] | /.crowd remove | /.crowd heads import [selection|clipboard]"
   ".sel":
     description: "WorldEdit 選択範囲の保存・復元ショートカット"
     usage: "/.sel <save|list|delete|p|name>"

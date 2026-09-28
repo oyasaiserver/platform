@@ -28,9 +28,24 @@ slab-stairs:
   material: stone_brick
 
 crowd:
-  default-gap: 2
-  wall: COBBLESTONE_WALL
-  head: PLAYER_HEAD
+  max-mannequins: 300
+  heads:
+    max-scan-blocks: 200000
+  # 空リストなら、このバージョンに存在する全ての Wall 素材から胴と足を別々に抽選します。
+  torso-walls: []
+  leg-walls: []
+  natural:
+    density: 0.12
+    group: 0.6
+    stand: 50
+    noise: 0.6
+    scale: 14
+    gap: 1
+    fb: 0
+    forward: 50
+    right: 50
+    jitter: 15
+    mode: block
 
 csm:
   default-rotation: 0
@@ -104,6 +119,8 @@ access:
     crowd:
       - builder
       - takumi
+      - admin
+    crowd-heads:
       - admin
     selection:
       - builder
