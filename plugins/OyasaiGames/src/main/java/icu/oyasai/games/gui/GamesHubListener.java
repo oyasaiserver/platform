@@ -45,6 +45,11 @@ public class GamesHubListener implements Listener {
                 RouletteSession session = rouletteManager.getOrCreateSession(player.getUniqueId());
                 RouletteGui.open(player, session);
             }
+            case GamesHubGui.SLOT_HEADHUNT -> {
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.2f);
+                player.closeInventory();
+                player.performCommand("headhunt");
+            }
             case GamesHubGui.SLOT_CLOSE -> {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 0.8f);
                 player.closeInventory();

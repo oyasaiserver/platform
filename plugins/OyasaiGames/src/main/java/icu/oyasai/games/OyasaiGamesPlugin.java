@@ -2,6 +2,7 @@ package icu.oyasai.games;
 
 import icu.oyasai.games.command.GamesCommand;
 import icu.oyasai.games.gui.GamesHubListener;
+import icu.oyasai.games.headhunt.HeadHuntModule;
 import icu.oyasai.games.roulette.command.RouletteCommand;
 import icu.oyasai.games.roulette.config.ConfigManager;
 import icu.oyasai.games.roulette.gui.RouletteGuiListener;
@@ -23,6 +24,7 @@ public class OyasaiGamesPlugin extends JavaPlugin {
     private ConfigManager rouletteConfig;
     private BlockClassifier blockClassifier;
     private RouletteManager rouletteManager;
+    private HeadHuntModule headHuntModule;
 
     @Override
     public void onEnable() {
@@ -35,6 +37,13 @@ public class OyasaiGamesPlugin extends JavaPlugin {
 
         // 1. ルーレットモジュールの初期化
         initializeRouletteModule();
+
+        headHuntModule = new HeadHuntModule(this);
+        try {
+            headHuntModule.enable();
+        } catch (Exception exception) {
+            getLogger().log(java.util.logging.Level.SEVERE, "HeadHuntの初期化に失敗しました。", exception);
+        }
 
         // 2. おやさいゲームズ共通ハブコマンド & リスナーの登録
         registerGamesHub();
@@ -49,6 +58,9 @@ public class OyasaiGamesPlugin extends JavaPlugin {
         // ルーレットモジュールのクリーンアップ（タスク・セッション解放）
         if (rouletteManager != null) {
             rouletteManager.shutdown();
+        }
+        if (headHuntModule != null) {
+            headHuntModule.disable();
         }
 
         getLogger().info("OyasaiGames を安全に停止しました。");
