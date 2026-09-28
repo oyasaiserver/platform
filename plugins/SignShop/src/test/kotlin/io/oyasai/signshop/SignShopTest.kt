@@ -10,6 +10,26 @@ import net.milkbowl.vault.economy.EconomyResponse
 
 class SignShopTest {
   @Test
+  fun denyUseRespectsOverrides() {
+    val deny = "SignShop.DenyUse.Buy"
+    val cases =
+        listOf(
+            Triple("OP", true, setOf(deny) to false),
+            Triple("wildcard holder", false, setOf(deny, "Signshop.Signs.*") to false),
+            Triple("DenyUse only", false, setOf(deny) to true),
+            Triple("no permissions", false, emptySet<String>() to false),
+            Triple("SuperAdmin", false, setOf(deny, "SignShop.SuperAdmin") to false),
+            Triple("Signs type", false, setOf(deny, "Signshop.Signs.Buy") to false),
+            Triple("Admin type", false, setOf(deny, "SignShop.Admin.Buy") to false),
+            Triple("Admin wildcard", false, setOf(deny, "SignShop.Admin.*") to false),
+        )
+    for ((name, isOp, permissionAndExpected) in cases) {
+      val (permissions, expected) = permissionAndExpected
+      assertEquals(expected, denyUse("Buy", isOp, permissions::contains), name)
+    }
+  }
+
+  @Test
   fun vaultMoneyResponse() {
     fun result(amount: Double, type: EconomyResponse.ResponseType) =
         moneyResult(EconomyResponse(amount, 0.0, type, ""), 10)

@@ -433,7 +433,7 @@ class SignShopPlugin : JavaPlugin(), Listener {
             shop.section != "sellers" ||
             shopKind(sign) != type ||
             shop.sign != point(sign.block) ||
-            player.hasPermission("SignShop.DenyUse.$type") ||
+            denyUse(type, player.isOp, player::hasPermission) ||
             active.contains(shop) ||
             points.any { activeBoxes.contains(it) }
     ) {
@@ -734,6 +734,15 @@ class SignShopPlugin : JavaPlugin(), Listener {
     if (event.blocks.any(::protectedBlock)) event.isCancelled = true
   }
 }
+
+internal fun denyUse(type: String, isOp: Boolean, hasPermission: (String) -> Boolean): Boolean =
+    !isOp &&
+        hasPermission("SignShop.DenyUse.$type") &&
+        !hasPermission("SignShop.SuperAdmin") &&
+        !hasPermission("Signshop.Signs.$type") &&
+        !hasPermission("Signshop.Signs.*") &&
+        !hasPermission("SignShop.Admin.$type") &&
+        !hasPermission("SignShop.Admin.*")
 
 internal fun moneyResult(response: EconomyResponse, yen: Long): MoneyResult =
     when {
