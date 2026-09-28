@@ -99,7 +99,7 @@ let
     oyasai-cdktf = prev.oyasai-cdktf.override {
       package-lock2nix = final.package-lock2nix.override { nodejs = pkgs.nodejs_22; };
     };
-    oyasai-cdktf-providers = prev.oyasai-cdktf-providers.override {
+    oyasai-cdktf-bindings = prev.oyasai-cdktf-bindings.override {
       package-lock2nix = final.package-lock2nix.override { nodejs = pkgs.nodejs_22; };
     };
   };

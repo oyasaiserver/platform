@@ -11,6 +11,32 @@ import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.entity.Player
 
+internal data class StoredAmbientRecord(
+    val songId: Long,
+    val range: AmbientPlaybackRange,
+    val trigger: AmbientTrigger,
+    val loop: Boolean,
+    val mode: GameMode,
+) {
+  fun encode() =
+      "1;$songId;${range.blocks ?: -1};${trigger.name};${if (loop) 1 else 0};${mode.name}"
+
+  companion object {
+    fun decode(encoded: String): StoredAmbientRecord {
+      require(encoded.length <= 160)
+      val fields = encoded.split(';')
+      require(fields.size == 6 && fields[0] == "1" && fields[4] in setOf("0", "1"))
+      return StoredAmbientRecord(
+          fields[1].toLong().also { require(it > 0) },
+          AmbientPlaybackRange(fields[2].toInt().let { if (it == -1) null else it }),
+          AmbientTrigger.valueOf(fields[3]),
+          fields[4] == "1",
+          GameMode.valueOf(fields[5]),
+      )
+    }
+  }
+}
+
 /**
  * 環境BGM用レコード（UI/UX設計書9章）が設置されたジュークボックスの再生状態を管理する。
  *
@@ -20,7 +46,99 @@ import org.bukkit.entity.Player
  * - トリガー=接近: 範囲内にプレイヤーが入った時点で自動的に再生開始、居なくなったら停止 範囲内のプレイヤーは [tick] で追従させ、動いて範囲外に出た
  *   プレイヤーへは音を止め、新たに入ってきたプレイヤーには鳴らし始める。
  */
-class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) {
+class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.event.Listener {
+  private val storageKey = org.bukkit.NamespacedKey(plugin, "ambient_record_v1")
+  private val restoring = mutableSetOf<String>()
+
+  fun initialize() {
+    Bukkit.getPluginManager().registerEvents(this, plugin)
+    Bukkit.getWorlds().forEach { world -> world.loadedChunks.forEach(::restoreChunk) }
+  }
+
+  fun awaitingRestore(location: Location): Boolean {
+    if (entryAt(location) != null) return false
+    val block = location.block.state as? org.bukkit.block.Jukebox ?: return false
+    val stored =
+        block.persistentDataContainer.has(
+            storageKey,
+            org.bukkit.persistence.PersistentDataType.STRING,
+        )
+    if (stored) restoreChunk(location.chunk)
+    return stored
+  }
+
+  @org.bukkit.event.EventHandler
+  fun onChunkLoad(event: org.bukkit.event.world.ChunkLoadEvent) = restoreChunk(event.chunk)
+
+  @org.bukkit.event.EventHandler(
+      ignoreCancelled = true,
+      priority = org.bukkit.event.EventPriority.MONITOR,
+  )
+  fun onChunkUnload(event: org.bukkit.event.world.ChunkUnloadEvent) {
+    entries.values
+        .filter {
+          it.location.world == event.world &&
+              it.location.blockX shr 4 == event.chunk.x &&
+              it.location.blockZ shr 4 == event.chunk.z
+        }
+        .forEach {
+          stopPlayback(key(it.location))
+          entries.remove(key(it.location))
+        }
+  }
+
+  private fun restoreChunk(chunk: org.bukkit.Chunk) {
+    chunk.tileEntities.filterIsInstance<org.bukkit.block.Jukebox>().forEach { box ->
+      val encoded =
+          box.persistentDataContainer.get(
+              storageKey,
+              org.bukkit.persistence.PersistentDataType.STRING,
+          ) ?: return@forEach
+      val location = box.location
+      val k = key(location)
+      if (entries.containsKey(k) || !restoring.add(k)) return@forEach
+      val data = runCatching { StoredAmbientRecord.decode(encoded) }.getOrNull()
+      if (data == null) {
+        restoring.remove(k)
+        plugin.logger.warning("Invalid stored OyasaiMusic jukebox at $k")
+        return@forEach
+      }
+      Bukkit.getScheduler()
+          .runTaskAsynchronously(
+              plugin,
+              Runnable {
+                val song = runCatching { plugin.songRepository.findById(data.songId) }.getOrNull()
+                Bukkit.getScheduler()
+                    .runTask(
+                        plugin,
+                        Runnable {
+                          restoring.remove(k)
+                          if (!chunk.isLoaded || entries.containsKey(k) || song == null)
+                              return@Runnable
+                          val current =
+                              location.block.state as? org.bukkit.block.Jukebox ?: return@Runnable
+                          if (
+                              current.persistentDataContainer.get(
+                                  storageKey,
+                                  org.bukkit.persistence.PersistentDataType.STRING,
+                              ) != encoded
+                          )
+                              return@Runnable
+                          entries[k] =
+                              AmbientEntry(
+                                  location,
+                                  song,
+                                  data.range,
+                                  data.trigger,
+                                  data.loop,
+                                  data.mode,
+                              )
+                        },
+                    )
+              },
+          )
+    }
+  }
 
   data class AmbientEntry(
       val location: Location,
@@ -63,6 +181,14 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) {
       insertedGameMode: GameMode,
   ) {
     val k = key(location)
+    val box = location.block.state as? org.bukkit.block.Jukebox ?: error("ジュークボックスが見つかりません")
+    box.persistentDataContainer.set(
+        storageKey,
+        org.bukkit.persistence.PersistentDataType.STRING,
+        StoredAmbientRecord(requireNotNull(song.id), range, trigger, loop, insertedGameMode)
+            .encode(),
+    )
+    check(box.update(false, false)) { "レコード情報を保存できませんでした" }
     // 既に何か設置されていた場合、その再生セッションを確実に止めてから上書きする
     // （そうしないと古いセッションが止まらず二重に音が鳴り続けるバグになる）。
     entries[k]?.session?.let { plugin.playbackEngine.stop(it) }
@@ -71,6 +197,10 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) {
   }
 
   fun unregister(location: Location) {
+    (location.block.state as? org.bukkit.block.Jukebox)?.let { box ->
+      box.persistentDataContainer.remove(storageKey)
+      check(box.update(false, false)) { "レコード情報を削除できませんでした" }
+    }
     val k = key(location)
     stopPlayback(k)
     entries.remove(k)
@@ -100,6 +230,16 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) {
   /** 接近トリガーの開始判定・範囲内リスナーの追従のため、定期的(1秒毎想定)に呼び出す。 */
   fun tick() {
     entries.forEach { (k, entry) ->
+      val world = entry.location.world ?: return@forEach
+      if (!world.isChunkLoaded(entry.location.blockX shr 4, entry.location.blockZ shr 4)) {
+        stopPlayback(k)
+        return@forEach
+      }
+      if (entry.location.block.type != org.bukkit.Material.JUKEBOX) {
+        stopPlayback(k)
+        entries.remove(k)
+        return@forEach
+      }
       val nearby = nearbyPlayers(entry)
 
       // BlockRedstoneEventは周囲のダストだけに発火し、ジュークボックス自身には届かない

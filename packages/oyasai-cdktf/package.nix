@@ -3,7 +3,7 @@
   terraform,
   writeShellApplication,
   lib,
-  oyasai-cdktf-providers,
+  oyasai-cdktf-bindings,
   constants,
   oyasaiImageIds ? null,
 }:
@@ -25,7 +25,7 @@ writeShellApplication {
   // (lib.optionalAttrs (oyasaiImageIds != null) { OYASAI_IMAGE_IDS = lib.toJSON oyasaiImageIds; });
 
   runtimeInputs = [
-    oyasai-cdktf-providers
+    oyasai-cdktf-bindings
     terraform
   ];
 

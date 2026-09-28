@@ -59,10 +59,10 @@ oyasaiPurpur rec {
     imageonmap
     luckperms
     lunachat
-    lwc
     oyasaiadmintools
     oyasaichat
     oyasaigames
+    oyasailwc
     oyasaimenu
     oyasaimusic
     oyasaipets

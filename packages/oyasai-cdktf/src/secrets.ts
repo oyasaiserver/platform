@@ -1,4 +1,4 @@
-import { DataInfisicalSecrets } from "@oyasaiserver/cdktf-providers/infisical/data-infisical-secrets";
+import { DataInfisicalSecrets } from "@oyasaiserver/cdktf-bindings/providers/infisical/data-infisical-secrets";
 import { Fn, TerraformDataSource } from "cdktf";
 import type { CommonInfra } from "./stacks/common-infra.ts";
 import type { OyasaiTerraformStack } from "./stacks/oyasai-terraform-stack.ts";

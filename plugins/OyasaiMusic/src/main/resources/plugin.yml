@@ -54,8 +54,8 @@ permissions:
   oyasaimusic.import:
     description: OMMTから非公開下書きをインポートする
     default: false
-  oyasaimusic.newsong.notify:
-    description: 新曲公開のチャット通知と効果音を受け取る
+  oyasaimusic.notify:
+    description: 新曲公開とリポストのチャット通知・効果音を受け取る
     default: false
   oyasaimusic.record.range.16:
     description: 環境BGMレコードを半径16ブロックで再生する

@@ -6,13 +6,8 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 
-/**
- * 外部の経済プラグインとの境界をまとめるサービス。
- *
- * お金は Vault の Economy サービスを利用する。ポイントは TokenManager ごとの API 差異で
- * 本体が壊れないよう、設定したコンソールコマンド経由で付与する。ポイントコマンドを空欄に した場合はポイントを受け取れないだけで、DB 上の未受取残高は消去しない。
- */
-class EconomyService(private val plugin: Plugin, private val pointCommandTemplate: String) {
+/** Vault money and commit-confirmed OyasaiTokens points. */
+class EconomyService(private val plugin: Plugin) {
 
   private fun economy(): Economy? =
       Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
@@ -32,21 +27,76 @@ class EconomyService(private val plugin: Plugin, private val pointCommandTemplat
     else PayoutResult.Failed(response.errorMessage.ifBlank { "入金に失敗しました" })
   }
 
-  /** ポイントは設定済みのコンソールコマンドで付与する。戻り値 false の場合は残高を保持する。 */
-  fun grantPoints(player: Player, amount: Long): PayoutResult {
-    if (amount <= 0) return PayoutResult.Success
-    if (pointCommandTemplate.isBlank()) {
-      return PayoutResult.Unavailable("ポイント付与コマンドが未設定です")
-    }
-    val command =
-        pointCommandTemplate
-            .replace("%player%", player.name)
-            .replace("%points%", amount.toString())
-            .replace("%amount%", amount.toString())
-            .removePrefix("/")
-    return if (Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) PayoutResult.Success
-    else PayoutResult.Failed("ポイント付与コマンドの実行に失敗しました")
-  }
+  private fun tokenService(): io.oyasai.oyasaitoken.api.OyasaiTokenService? =
+      if (Bukkit.getPluginManager().isPluginEnabled("TokenManager"))
+          Bukkit.getServicesManager().load(io.oyasai.oyasaitoken.api.OyasaiTokenService::class.java)
+      else null
+
+  fun grantPoints(
+      player: Player,
+      amount: Long,
+  ): java.util.concurrent.CompletableFuture<PayoutResult> = movePoints(player, amount, false)
+
+  fun chargePoints(
+      player: Player,
+      amount: Long,
+  ): java.util.concurrent.CompletableFuture<PayoutResult> = movePoints(player, amount, true)
+
+  private fun movePoints(
+      player: Player,
+      amount: Long,
+      charge: Boolean,
+  ): java.util.concurrent.CompletableFuture<PayoutResult> =
+      tokenPayout(
+          runCatching { tokenService() }.getOrNull(),
+          player.uniqueId,
+          player.name,
+          amount,
+          charge,
+      )
+}
+
+internal fun tokenPayout(
+    provider: io.oyasai.oyasaitoken.api.OyasaiTokenService?,
+    uuid: java.util.UUID,
+    playerName: String,
+    amount: Long,
+    charge: Boolean,
+): java.util.concurrent.CompletableFuture<PayoutResult> {
+  if (amount < 0)
+      return java.util.concurrent.CompletableFuture.completedFuture(
+          PayoutResult.Failed("ポイント数が不正です")
+      )
+  if (amount == 0L)
+      return java.util.concurrent.CompletableFuture.completedFuture(PayoutResult.Success)
+  if (provider == null)
+      return java.util.concurrent.CompletableFuture.completedFuture(
+          PayoutResult.Unavailable("OyasaiTokensのAPIが利用できません")
+      )
+  return runCatching {
+        val request =
+            io.oyasai.oyasaitoken.api.TokenRequest(
+                uuid,
+                amount,
+                playerName,
+                io.oyasai.oyasaitoken.api.Delivery.Silent,
+            )
+        (if (charge) provider.charge(request) else provider.grant(request)).handle { result, error
+          ->
+          when {
+            error != null -> PayoutResult.Failed("ポイント処理を保存できませんでした")
+            result is io.oyasai.oyasaitoken.api.TokenResult.Success -> PayoutResult.Success
+            result is io.oyasai.oyasaitoken.api.TokenResult.InsufficientFunds ->
+                PayoutResult.Failed("ポイントが不足しています（必要: ${amount}P）")
+            else -> PayoutResult.Failed("ポイント処理に失敗しました")
+          }
+        }
+      }
+      .getOrElse {
+        java.util.concurrent.CompletableFuture.completedFuture(
+            PayoutResult.Failed("ポイントAPIの呼び出しに失敗しました")
+        )
+      }
 }
 
 /**
