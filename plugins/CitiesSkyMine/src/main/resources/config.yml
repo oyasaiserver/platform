@@ -28,7 +28,7 @@ slab-stairs:
   material: stone_brick
 
 crowd:
-  default-gap: 2
+  max-mannequins: 300
   torso-walls:
     - BRICK_WALL
     - SANDSTONE_WALL
@@ -42,12 +42,13 @@ crowd:
   natural:
     density: 0.12
     group: 1.0
-    stand: 25
+    stand: 50
     noise: 0.6
     scale: 14
     gap: 1
     right: 50
     jitter: 15
+    mode: block
     # axis: x  # x、z、または 0〜100。未設定ならプレイヤーの左右。
 
 csm:

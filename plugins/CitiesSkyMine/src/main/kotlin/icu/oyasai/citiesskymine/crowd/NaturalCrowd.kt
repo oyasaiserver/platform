@@ -19,7 +19,7 @@ internal data class NaturalCrowdOptions(
     val depth: Int,
     val density: Double = 0.12,
     val group: Double = 1.0,
-    val stand: Double = 25.0,
+    val stand: Double = 50.0,
     val noise: Double = 0.6,
     val scale: Double = 14.0,
     val gap: Int = 1,
@@ -51,10 +51,6 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
   val random = Random(p.seed)
   val area = p.width * p.depth
   val target = (p.density * area).roundToInt()
-  val meanWeight =
-      (0 until p.depth).sumOf { z ->
-        (0 until p.width).sumOf { x -> weight(x + 0.5, z + 0.5, p) }
-      } / area
   val candidates =
       List(area * 3) {
             val x = random.nextDouble() * p.width
@@ -83,11 +79,6 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
     if (people.size >= target) break
     val count = min(groupSize(p.group, random), target - people.size)
     val standing = count >= 2 && random.nextDouble() * 100 < p.stand
-    val bend =
-        ((p.density * weight(candidate.x, candidate.z, p) / meanWeight - 0.15) / 0.35).coerceIn(
-            0.0,
-            1.0,
-        )
     val yaw =
         if (standing) random.nextDouble() * 2 * PI
         else {
@@ -104,12 +95,20 @@ internal fun generateNaturalCrowd(p: NaturalCrowdOptions): NaturalCrowd {
         }
     val cs = cos(yaw)
     val sn = sin(yaw)
-    for (attempt in 0 until if (standing) 3 else 1) {
+    for (attempt in 0 until if (standing && count > 2) 3 else 1) {
       val cells =
-          formation(count, standing, bend, attempt).map { (forward, lateral) ->
-            val x = candidate.x + forward * cs - lateral * sn
-            val z = candidate.z + forward * sn + lateral * cs
-            Cell(floor(x).toInt(), floor(z).toInt())
+          if (standing && count == 2) {
+            val x = floor(candidate.x).toInt()
+            val z = floor(candidate.z).toInt()
+            val dx = if (abs(cs) >= abs(sn)) if (cs >= 0) 1 else -1 else 0
+            val dz = if (dx == 0) if (sn >= 0) 1 else -1 else 0
+            listOf(Cell(x, z), Cell(x + dx, z + dz))
+          } else {
+            formation(count, standing, attempt).map { (forward, lateral) ->
+              val x = candidate.x + forward * cs - lateral * sn
+              val z = candidate.z + forward * sn + lateral * cs
+              Cell(floor(x).toInt(), floor(z).toInt())
+            }
           }
       if (cells.toSet().size != count || cells.any { !free(it.x, it.z) }) continue
       val centerX = cells.sumOf { it.x + 0.5 } / count
@@ -153,7 +152,6 @@ private fun groupSize(lambda: Double, random: Random): Int {
 private fun formation(
     count: Int,
     standing: Boolean,
-    bend: Double,
     attempt: Int,
 ): List<Pair<Double, Double>> {
   if (standing) {
@@ -167,7 +165,7 @@ private fun formation(
   return rows.flatMapIndexed { row, size ->
     List(size) { index ->
       val lateral = index - (size - 1) / 2.0
-      -row * 1.2 + bend * abs(lateral) * 0.8 to lateral
+      -row * 1.2 + (if (size == 2) 0.0 else abs(lateral)) to lateral
     }
   }
 }

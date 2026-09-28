@@ -14,11 +14,17 @@ import icu.oyasai.citiesskymine.util.horizontalUnit
 import icu.oyasai.citiesskymine.util.lengthAlong
 import icu.oyasai.citiesskymine.util.selectedCuboid
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
+import io.papermc.paper.datacomponent.item.ResolvableProfile
+import kotlin.math.PI
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.random.Random
+import net.kyori.adventure.text.Component
+import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.block.BlockFace
 import org.bukkit.block.Skull
 import org.bukkit.block.data.BlockData
@@ -28,10 +34,13 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
+import org.bukkit.entity.Mannequin
 import org.bukkit.entity.Player
+import org.bukkit.persistence.PersistentDataType
 
 class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   internal val heads = CrowdHeads(plugin)
+  private val mannequinMarker = NamespacedKey(plugin, "crowd_mannequin")
   private var torsoWalls =
       loadWalls(
           "crowd.torso-walls",
@@ -71,75 +80,97 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       return true
     }
     if (!plugin.access.require(sender, CommandKey.CROWD)) return true
+    if (args.firstOrNull().equals("remove", true)) {
+      if (args.size == 1) removeMannequins(sender)
+      else MessageUtil.error(sender, "使い方: /$label remove")
+      return true
+    }
     if (args.firstOrNull().equals("help", true)) {
       showHelp(sender, label)
       return true
     }
     if (args.firstOrNull().equals("undo", true)) {
-      MessageUtil.info(sender, "群衆生成の取り消しは FAWE の //undo を使ってください。")
+      MessageUtil.info(sender, "ブロックの取り消しは //undo、マネキンの削除は /csm crowd remove を使ってください。")
       return true
     }
 
-    val grid = args.firstOrNull()?.let { parseCounts(it) }
-    val natural = if (grid == null) parseNatural(sender, args) ?: return true else null
-    val legacy = if (grid != null) parseGrid(sender, label, args, grid) ?: return true else null
+    val request = parseNatural(sender, args) ?: return true
+    val natural = request.options
     val region = selectedCuboid(sender, "群衆生成は cuboid 選択にだけ対応しています。") ?: return true
     val bounds = CuboidBounds.from(region)
     val bodyY = bounds.minY
-    if (bodyY < sender.world.minHeight || bodyY + 2 >= sender.world.maxHeight) {
+    if (
+        bodyY < sender.world.minHeight ||
+            bodyY >= sender.world.maxHeight ||
+            !request.mannequin && bodyY + 2 >= sender.world.maxHeight
+    ) {
       MessageUtil.error(sender, "生成先Yがワールド範囲外です: body=$bodyY head=${bodyY + 2}")
       return true
     }
     val depthAxis = horizontalUnit(sender.facing)
     val rightAxis = HorizontalUnit(-depthAxis.z, depthAxis.x)
-    val maxBlocks =
-        plugin.config.getLong(
-            "limits.max-blocks-crowd",
-            plugin.config.getLong("limits.max-blocks-csm", 2_000_000),
-        )
     val width = lengthAlong(bounds, rightAxis)
     val depth = lengthAlong(bounds, depthAxis)
-    val target =
-        if (legacy != null) legacy.counts.figureCount()
-        else (natural!!.density * width.toLong() * depth).roundToInt().toLong()
-    if (maxBlocks > 0 && target > maxBlocks / 3) {
-      val estimate = if (target > Long.MAX_VALUE / 3) Long.MAX_VALUE else target * 3
-      MessageUtil.error(sender, "生成ブロック数が上限 ($maxBlocks) を超えています: $estimate")
-      return true
+    val requestedPeople = (natural.density * width.toLong() * depth).roundToInt()
+    if (request.mannequin) {
+      val max = plugin.config.getInt("crowd.max-mannequins", 300).coerceAtLeast(0)
+      if (requestedPeople > max) {
+        MessageUtil.error(sender, "マネキン数が上限 ($max) を超えています: $requestedPeople")
+        return true
+      }
+    } else {
+      val maxBlocks =
+          plugin.config.getLong(
+              "limits.max-blocks-crowd",
+              plugin.config.getLong("limits.max-blocks-csm", 2_000_000),
+          )
+      if (maxBlocks > 0 && requestedPeople.toLong() > maxBlocks / 3) {
+        MessageUtil.error(
+            sender,
+            "生成ブロック数が上限 ($maxBlocks) を超えています: ${requestedPeople.toLong() * 3}",
+        )
+        return true
+      }
     }
-    val seed = natural?.seed ?: Random.nextLong()
+    val seed = natural.seed
     val random = Random(seed)
-    val figures =
+    val crowd =
         try {
-          if (legacy != null) gridFigures(bounds, rightAxis, depthAxis, legacy, sender.facing)
-          else {
-            val options =
-                natural!!.copy(
-                    width = width,
-                    depth = depth,
-                    rightWorldX = rightAxis.x,
-                    rightWorldZ = rightAxis.z,
-                )
-            generateNaturalCrowd(options).let { result ->
-              result.people.map { person ->
-                val point = blockAt(bounds, rightAxis, person.x, depthAxis, person.z)
-                val dx = cos(person.yaw) * rightAxis.x + sin(person.yaw) * depthAxis.x
-                val dz = cos(person.yaw) * rightAxis.z + sin(person.yaw) * depthAxis.z
-                Figure(point.x, point.z, nearestFace(dx, dz, HEAD_FACES))
-              } to result.groups
-            }
-          }
+          generateNaturalCrowd(
+              natural.copy(
+                  width = width,
+                  depth = depth,
+                  rightWorldX = rightAxis.x,
+                  rightWorldZ = rightAxis.z,
+              )
+          )
         } catch (e: IllegalArgumentException) {
           MessageUtil.error(sender, e.message ?: "群衆配置の計算に失敗しました。")
           return true
         }
-    val headMaterial = legacy?.headMaterial ?: configuredHeadMaterial() ?: Material.PLAYER_HEAD
+    val figures =
+        crowd.people.map { person ->
+          val point = blockAt(bounds, rightAxis, person.x, depthAxis, person.z)
+          val dx = cos(person.yaw) * rightAxis.x + sin(person.yaw) * depthAxis.x
+          val dz = cos(person.yaw) * rightAxis.z + sin(person.yaw) * depthAxis.z
+          Figure(
+              point.x,
+              point.z,
+              (atan2(-dx, dz) * 180 / PI).toFloat(),
+              nearestFace(dx, dz, HEAD_FACES),
+          )
+        }
+    if (request.mannequin) {
+      spawnMannequins(sender, figures, bodyY, crowd.groups, seed, random)
+      return true
+    }
+    val headMaterial = configuredHeadMaterial() ?: Material.PLAYER_HEAD
     val profiles = if (headMaterial == Material.PLAYER_HEAD) heads.profiles() else emptyList()
-    val placements = ArrayList<CrowdPlacement>(figures.first.size * 3)
+    val placements = ArrayList<CrowdPlacement>(figures.size * 3)
     val skulls = ArrayList<SkullPlacement>()
-    for (figure in figures.first) {
-      val torso = legacy?.wallMaterial ?: torsoWalls.random(random)
-      val legs = legacy?.wallMaterial ?: legWalls.random(random)
+    for (figure in figures) {
+      val torso = torsoWalls.random(random)
+      val legs = legWalls.random(random)
       placements += CrowdPlacement(figure.x, bodyY, figure.z, footData(legs))
       placements += CrowdPlacement(figure.x, bodyY + 1, figure.z, torsoData(torso, figure.facing))
       placements +=
@@ -182,7 +213,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
     MessageUtil.success(
         sender,
-        "群衆を生成しました: ${figures.first.size}人 / ${figures.second}グループ / seed=$seed",
+        "群衆を生成しました: ${figures.size}人 / ${crowd.groups}グループ / seed=$seed",
     )
     if (failedHeads > 0) MessageUtil.warn(sender, "頭のスキンを $failedHeads 個適用できませんでした。")
     if (undoRecorded) MessageUtil.info(sender, "FAWE の //undo でこの群衆生成を取り消せます。")
@@ -206,23 +237,12 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
     if (!plugin.access.canUse(sender, CommandKey.CROWD)) return emptyList()
     val current = args.last()
-    val grid = args.firstOrNull()?.let { parseCounts(it) }
-    if (grid != null) {
-      val suggestions =
-          when (args.size) {
-            2 -> listOf("1", "2", "3")
-            3 -> wallSuggestions(current)
-            4 -> headSuggestions(current)
-            else -> emptyList()
-          }
-      return ArgSuggest.filterSuggestions(suggestions, current)
-    }
     val suggestions =
         if (args.size == 1)
             listOf(
                 "density=0.12",
                 "group=1",
-                "stand=25",
+                "stand=50",
                 "noise=0.6",
                 "scale=14",
                 "gap=1",
@@ -231,14 +251,17 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                 "axis=x",
                 "axis=z",
                 "axis=50",
+                "mode=block",
+                "mode=mannequin",
                 "seed=42",
-                "8",
-                "10x3",
+                "remove",
                 "heads",
                 "help",
             )
         else if (current.startsWith("axis=", ignoreCase = true))
             listOf("axis=x", "axis=z", "axis=50")
+        else if (current.startsWith("mode=", ignoreCase = true))
+            listOf("mode=block", "mode=mannequin")
         else
             NATURAL_KEYS.filter { key -> args.none { it.startsWith("$key=", true) } }.map { "$it=" }
     return ArgSuggest.filterSuggestions(suggestions, current)
@@ -257,7 +280,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun headsUsage(sender: CommandSender, label: String) =
       MessageUtil.info(sender, "使い方: /$label heads <add MCID|remove MCID|list>")
 
-  private fun parseNatural(sender: CommandSender, args: Array<String>): NaturalCrowdOptions? {
+  private fun parseNatural(sender: CommandSender, args: Array<String>): NaturalArgs? {
     val values = mutableMapOf<String, String>()
     for (arg in args) {
       val parts = arg.split('=', limit = 2)
@@ -281,7 +304,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
     val density = number("density", 0.12, 0.01, 1.0)
     val group = number("group", 1.0, 0.0, 3.0)
-    val stand = number("stand", 25.0, 0.0, 100.0)
+    val stand = number("stand", 50.0, 0.0, 100.0)
     val noise = number("noise", 0.6, 0.0, 1.0)
     val scale = number("scale", 14.0, 3.0, 48.0)
     val right = number("right", 50.0, 0.0, 100.0)
@@ -295,6 +318,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           "z" -> 0.0
           else -> axisRaw.toDoubleOrNull()?.takeIf { it.isFinite() && it in 0.0..100.0 }
         }
+    val mode = values["mode"] ?: plugin.config.getString("crowd.natural.mode", "block")
     val seed =
         values["seed"]?.toLongOrNull()
             ?: if (values.containsKey("seed")) null else Random.nextLong()
@@ -302,96 +326,107 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         listOf(density, group, stand, noise, scale, right, jitter).any { it == null } ||
             gap !in 0..4 ||
             axisRaw != null && axisXPercent == null ||
+            mode !in listOf("block", "mannequin") ||
             seed == null
     ) {
       MessageUtil.error(sender, "引数が範囲外です。/csm crowd help で範囲を確認してください。")
       return null
     }
-    return NaturalCrowdOptions(
-        1,
-        1,
-        density!!,
-        group!!,
-        stand!!,
-        noise!!,
-        scale!!,
-        gap!!,
-        right!!,
-        jitter!!,
-        seed,
-        axisXPercent,
+    val options =
+        NaturalCrowdOptions(
+            1,
+            1,
+            density!!,
+            group!!,
+            stand!!,
+            noise!!,
+            scale!!,
+            gap!!,
+            right!!,
+            jitter!!,
+            seed,
+            axisXPercent,
+        )
+    return NaturalArgs(options, mode == "mannequin")
+  }
+
+  private fun spawnMannequins(
+      player: Player,
+      figures: List<Figure>,
+      y: Int,
+      groups: Int,
+      seed: Long,
+      random: Random,
+  ) {
+    val profiles = heads.profiles()
+    val spawned = ArrayList<Mannequin>(figures.size)
+    try {
+      for (figure in figures) {
+        val location =
+            Location(player.world, figure.x + 0.5, y.toDouble(), figure.z + 0.5, figure.yaw, 0f)
+        val profile = profiles.randomOrNull(random)?.let(ResolvableProfile::resolvableProfile)
+        spawned +=
+            player.world.spawn(location, Mannequin::class.java) { mannequin ->
+              mannequin.setRotation(figure.yaw, 0f)
+              mannequin.setBodyYaw(figure.yaw)
+              mannequin.setGravity(false)
+              mannequin.setImmovable(true)
+              mannequin.setCustomNameVisible(false)
+              mannequin.setDescription(Component.empty())
+              if (profile != null) mannequin.setProfile(profile)
+              mannequin.persistentDataContainer.set(
+                  mannequinMarker,
+                  PersistentDataType.BYTE,
+                  1.toByte(),
+              )
+            }
+      }
+    } catch (e: Exception) {
+      spawned.forEach { it.remove() }
+      MessageUtil.error(player, "マネキン生成に失敗しました: ${e.message}")
+      return
+    }
+    MessageUtil.success(
+        player,
+        "群衆を生成しました: ${figures.size}人 / $groups グループ / seed=$seed。マネキンは //undo では消えません。/csm crowd remove で削除できます。",
     )
   }
 
-  private fun parseGrid(
-      sender: CommandSender,
-      label: String,
-      args: Array<String>,
-      counts: CrowdCounts,
-  ): GridArgs? {
-    var index = 1
-    var gap = plugin.config.getInt("crowd.default-gap", 2)
-    args.getOrNull(index)?.toIntOrNull()?.let {
-      gap = it
-      index++
-    }
-    if (gap < 0) {
-      MessageUtil.error(sender, "間隔は0以上で指定してください。")
-      return null
-    }
-    val wall =
-        args.getOrNull(index)?.let { raw ->
-          wallMaterialFromArg(raw)
-              ?: run {
-                MessageUtil.error(sender, "Wallブロック素材を指定してください: $raw")
-                return null
-              }
-        }
-    if (wall != null) index++
-    val head =
-        args.getOrNull(index)?.let { raw ->
-          headMaterialFromArg(raw)
-              ?: run {
-                MessageUtil.error(sender, "頭部に使える head/skull ブロックを指定してください: $raw")
-                return null
-              }
-        }
-    if (head != null) index++
-    if (index < args.size) {
-      MessageUtil.error(sender, "使い方: /$label <人数|左右x奥行> [間隔] [壁材] [頭部材]")
-      return null
-    }
-    return GridArgs(counts, gap, wall, head)
-  }
-
-  private fun gridFigures(
-      bounds: CuboidBounds,
-      rightAxis: HorizontalUnit,
-      depthAxis: HorizontalUnit,
-      args: GridArgs,
-      facing: BlockFace,
-  ): Pair<List<Figure>, Int> {
-    val width = lengthAlong(bounds, rightAxis)
-    val depth = lengthAlong(bounds, depthAxis)
-    val xs = centeredStarts(args.counts.lateral, args.gap, width, "左右")
-    val zs =
-        args.counts.depth?.let { centeredStarts(it, args.gap, depth, "奥行き") }
-            ?: listOf((depth - 1) / 2)
-    val figures =
-        xs.flatMap { x ->
-          zs.map { z ->
-            blockAt(bounds, rightAxis, x, depthAxis, z).let { Figure(it.x, it.z, facing) }
+  private fun removeMannequins(player: Player) {
+    val region = selectedCuboid(player, "群衆の削除は cuboid 選択にだけ対応しています。") ?: return
+    val bounds = CuboidBounds.from(region)
+    var removed = 0
+    try {
+      for (chunkX in (bounds.minX shr 4)..(bounds.maxX shr 4)) {
+        for (chunkZ in (bounds.minZ shr 4)..(bounds.maxZ shr 4)) {
+          if (
+              !player.world.isChunkLoaded(chunkX, chunkZ) &&
+                  !player.world.isChunkGenerated(chunkX, chunkZ)
+          )
+              continue
+          for (entity in player.world.getChunkAt(chunkX, chunkZ, false).entities) {
+            if (
+                entity !is Mannequin ||
+                    !entity.persistentDataContainer.has(mannequinMarker, PersistentDataType.BYTE)
+            )
+                continue
+            val location = entity.location
+            if (
+                location.blockX !in bounds.minX..bounds.maxX ||
+                    location.blockY !in bounds.minY..bounds.maxY ||
+                    location.blockZ !in bounds.minZ..bounds.maxZ
+            )
+                continue
+            entity.remove()
+            removed++
           }
         }
-    return figures to figures.size
-  }
-
-  private fun centeredStarts(count: Int, gap: Int, length: Int, label: String): List<Int> {
-    val stride = gap.toLong() + 1
-    val needed = 1L + (count - 1).toLong() * stride
-    require(needed <= length) { "${label}方向の選択幅が不足しています: required=$needed selected=$length" }
-    val start = ((length - needed) / 2).toInt()
-    return (0 until count).map { (start + it * stride).toInt() }
+      }
+    } catch (e: Exception) {
+      MessageUtil.error(player, "マネキン削除中に失敗しました（削除済み $removed 体）: ${e.message}")
+      return
+    }
+    MessageUtil.success(player, "選択範囲内の群衆マネキンを $removed 体削除しました。")
   }
 
   private fun footData(material: Material): BlockData =
@@ -422,15 +457,6 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         val length = kotlin.math.sqrt((face.modX * face.modX + face.modZ * face.modZ).toDouble())
         (x * face.modX + z * face.modZ) / length
       }
-
-  private fun parseCounts(raw: String): CrowdCounts? {
-    val parts = raw.lowercase().replace("×", "x").replace("*", "x").replace(",", "x").split("x")
-    if (parts.size !in 1..2) return null
-    val width = parts[0].toIntOrNull() ?: return null
-    val depth = parts.getOrNull(1)?.toIntOrNull()
-    if (width <= 0 || depth != null && depth <= 0) return null
-    return CrowdCounts(width, depth)
-  }
 
   private fun loadWalls(path: String, defaults: List<String>): List<Material> {
     val names = plugin.config.getStringList(path).ifEmpty { defaults }
@@ -472,59 +498,31 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun isHeadMaterial(material: Material): Boolean =
       material.isBlock && (material.name.endsWith("_HEAD") || material.name.endsWith("_SKULL"))
 
-  private fun wallSuggestions(prefix: String): List<String> =
-      Material.values()
-          .asSequence()
-          .filter { it.isBlock && runCatching { it.createBlockData() is Wall }.getOrDefault(false) }
-          .map { it.key.key }
-          .filter { it.startsWith(prefix.lowercase()) }
-          .take(20)
-          .toList()
-
-  private fun headSuggestions(prefix: String): List<String> =
-      Material.values()
-          .asSequence()
-          .filter(::isHeadMaterial)
-          .filter { runCatching { it.createBlockData() is Rotatable }.getOrDefault(false) }
-          .map { it.key.key }
-          .filter { it.startsWith(prefix.lowercase()) }
-          .take(20)
-          .toList()
-
   private fun showHelp(sender: CommandSender, label: String) {
     MessageUtil.header(sender, "CSM Crowd")
     MessageUtil.helpEntry(
         sender,
-        "/$label [density=0.12] [group=1] [stand=25] [noise=0.6] [scale=14]",
+        "/$label [density=0.12] [group=1] [stand=50] [noise=0.6] [scale=14]",
         "自然な群衆を生成",
     )
     MessageUtil.helpEntry(
         sender,
-        "/$label [gap=1] [right=50] [jitter=15] [axis=x|z|0–100] [seed=数値]",
+        "/$label [gap=1] [right=50] [jitter=15] [axis=x|z|0–100] [seed=数値] [mode=block|mannequin]",
         "配置の間隔・向き・乱数を指定",
     )
-    MessageUtil.helpEntry(sender, "/$label 8|10x3 [間隔] [壁材] [頭部材]", "従来の格子配置")
+    MessageUtil.helpEntry(sender, "/$label remove", "選択範囲内の生成済みマネキンを削除")
     if (plugin.access.canUse(sender, CommandKey.CROWD_HEADS)) headsUsage(sender, label)
     MessageUtil.info(
         sender,
-        "density 0.01–1, group 0–3, stand/right 0–100, noise 0–1, scale 3–48, gap 0–4, jitter 0–90。axis の数値は X 軸の割合。axis 未設定ならプレイヤー左右、指定時の right は +方向へ進む割合。取り消しは //undo。",
+        "density 0.01–1, group 0–3, stand/right 0–100, noise 0–1, scale 3–48, gap 0–4, jitter 0–90。axis の数値は X 軸の割合。ブロックは //undo、マネキンは remove。",
     )
   }
 
   fun sendHelp(sender: CommandSender, label: String) = showHelp(sender, label.removePrefix("/"))
 
-  private data class CrowdCounts(val lateral: Int, val depth: Int?) {
-    fun figureCount(): Long = lateral.toLong() * (depth ?: 1)
-  }
+  private data class NaturalArgs(val options: NaturalCrowdOptions, val mannequin: Boolean)
 
-  private data class GridArgs(
-      val counts: CrowdCounts,
-      val gap: Int,
-      val wallMaterial: Material?,
-      val headMaterial: Material?,
-  )
-
-  private data class Figure(val x: Int, val z: Int, val facing: BlockFace)
+  private data class Figure(val x: Int, val z: Int, val yaw: Float, val facing: BlockFace)
 
   private data class CrowdPlacement(val x: Int, val y: Int, val z: Int, val data: BlockData)
 
@@ -542,6 +540,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             "right",
             "jitter",
             "axis",
+            "mode",
             "seed",
         )
     private val CARDINAL_FACES =

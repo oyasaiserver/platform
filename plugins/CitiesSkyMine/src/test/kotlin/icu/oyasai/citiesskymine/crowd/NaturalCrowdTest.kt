@@ -12,6 +12,60 @@ import kotlin.test.assertTrue
 
 class NaturalCrowdTest {
   @Test
+  fun walkingThreesFormOneBlockV() {
+    val groups =
+        generateNaturalCrowd(
+                NaturalCrowdOptions(
+                    64,
+                    64,
+                    density = 0.2,
+                    group = 2.0,
+                    stand = 0.0,
+                    jitter = 0.0,
+                    right = 100.0,
+                    gap = 0,
+                    seed = 42,
+                )
+            )
+            .people
+            .groupBy { it.group }
+            .values
+            .filter { it.size == 3 }
+    assertTrue(groups.isNotEmpty())
+    for (group in groups) {
+      val (left, middle, right) = group.sortedBy { it.z }
+      assertEquals(left.x, middle.x + 1)
+      assertEquals(right.x, middle.x + 1)
+    }
+  }
+
+  @Test
+  fun standingPairsAreAdjacentAndFaceEachOther() {
+    val groups =
+        generateNaturalCrowd(
+                NaturalCrowdOptions(
+                    48,
+                    48,
+                    density = 0.2,
+                    group = 2.0,
+                    stand = 100.0,
+                    gap = 0,
+                    seed = 42,
+                )
+            )
+            .people
+            .groupBy { it.group }
+            .values
+            .filter { it.size == 2 }
+    assertTrue(groups.isNotEmpty())
+    for ((a, b) in groups.map { it[0] to it[1] }) {
+      assertEquals(1, abs(a.x - b.x) + abs(a.z - b.z))
+      assertTrue(abs(cos(a.yaw) + cos(b.yaw)) < 1e-9)
+      assertTrue(abs(sin(a.yaw) + sin(b.yaw)) < 1e-9)
+    }
+  }
+
+  @Test
   fun placementInvariants() {
     val base = NaturalCrowdOptions(48, 32, seed = 42)
     val cases =
