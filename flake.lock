@@ -316,6 +316,7 @@
         "nixpkgs-terraform-providers-bin": "nixpkgs-terraform-providers-bin",
         "package-lock2nix": "package-lock2nix",
         "systems": "systems_2",
+        "terraform-cloudflare-nix-lru-cache": "terraform-cloudflare-nix-lru-cache",
         "tools": "tools",
         "treefmt-nix": "treefmt-nix"
       }
@@ -364,6 +365,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "triplet",
+        "type": "github"
+      }
+    },
+    "terraform-cloudflare-nix-lru-cache": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790567529,
+        "narHash": "sha256-3187/gRxhAo5tiEBuFkaoA8e1L8q08aQk0uZ1qT+OYY=",
+        "owner": "shunueda",
+        "repo": "terraform-cloudflare-nix-lru-cache",
+        "rev": "3259f4ee1284fa6b8314fd1e4816f86e9bee2894",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shunueda",
+        "repo": "terraform-cloudflare-nix-lru-cache",
         "type": "github"
       }
     },

@@ -2,9 +2,13 @@
   "name": "@oyasaiserver/cdktf-bindings",
   "type": "module",
   "exports": {
-    "./*": {
-      "import": "./dist/*/index.js",
-      "types": "./dist/*/index.d.ts"
+    "./providers/*": {
+      "import": "./dist/providers/*/index.js",
+      "types": "./dist/providers/*/index.d.ts"
+    },
+    "./modules/*": {
+      "import": "./dist/modules/*.js",
+      "types": "./dist/modules/*.d.ts"
     }
   },
   "bin": {
