@@ -412,13 +412,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   }
 
   private fun loadWalls(path: String, defaults: List<String>): List<Material> {
-    val legacy =
-        if (!plugin.config.isSet("crowd.torso-walls") && !plugin.config.isSet("crowd.leg-walls"))
-            plugin.config.getString("crowd.wall")
-        else null
-    val names =
-        if (plugin.config.isSet(path)) plugin.config.getStringList(path)
-        else legacy?.let { listOf(it) } ?: defaults
+    val names = plugin.config.getStringList(path).ifEmpty { defaults }
     val walls =
         names.mapNotNull { raw ->
           wallMaterialFromArg(raw)
