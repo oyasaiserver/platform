@@ -51,8 +51,11 @@ internal class StockPlan private constructor(private val changes: List<Change>) 
       val current = linkedMapOf<Pair<Inventory, Int>, ItemStack?>()
       fun slots(inventory: Inventory, player: Boolean) =
           0 until (if (player) minOf(36, inventory.size) else inventory.size)
-      fun get(inventory: Inventory, slot: Int): ItemStack? =
-          current.getOrPut(inventory to slot) { inventory.getItem(slot)?.clone() }
+      fun get(inventory: Inventory, slot: Int): ItemStack? {
+        val key = inventory to slot
+        if (!current.containsKey(key)) current[key] = inventory.getItem(slot)?.clone()
+        return current[key]
+      }
       if (source != null)
           for (item in items) {
             var remaining = item.amount
