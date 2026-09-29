@@ -3,7 +3,6 @@ package icu.oyasai.frames
 import com.gakubuchilocker.GakubuchiLockerPlugin
 import com.github.srain3.painttools.PaintTools
 import icu.oyasai.imageonmap.ImageOnMap
-import java.io.File
 import java.util.UUID
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.ItemFrame
@@ -19,8 +18,6 @@ class OyasaiFrames : ImageOnMap() {
 
   val paintIdKey
     get() = PAINT_ID_KEY
-
-  fun legacyFolder(name: String): File = dataFolder.parentFile.resolve(name)
 
   fun lockOwner(frame: ItemFrame): UUID? =
       frameOwner(

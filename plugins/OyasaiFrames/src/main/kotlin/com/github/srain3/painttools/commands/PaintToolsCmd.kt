@@ -6,7 +6,6 @@ import com.github.srain3.painttools.tools.configs.MapData
 import com.github.srain3.painttools.tools.configs.MapIdList
 import com.github.srain3.painttools.tools.configs.MapIdList.checkID
 import com.github.srain3.painttools.tools.configs.MapIdList.saveID
-import com.github.srain3.painttools.tools.configs.MapIdList.saveMapIdConfig
 import kotlin.math.PI
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -50,7 +49,6 @@ object PaintToolsCmd : CommandExecutor {
                 val id = getID()
                 it.inventory.addItem(createMap(mapView, id))
                 saveID(id)
-                saveMapIdConfig()
               }
             }
           }
@@ -64,11 +62,9 @@ object PaintToolsCmd : CommandExecutor {
               id = args[1].toInt()
             } else {
               saveID(id)
-              saveMapIdConfig()
             }
           } else {
             saveID(id)
-            saveMapIdConfig()
           }
           sender.inventory.addItem(createMap(mapView, id))
         }
@@ -228,7 +224,7 @@ object PaintToolsCmd : CommandExecutor {
   /** かぶりのないIDを出す */
   private fun getID(): Int {
     var id = MapIdList.getLastID().plus(1)
-    while (checkID(id)) { // 重複IDの場合whileで使われてないIDを探す
+    while (MapIdList.exists(id)) { // 保存済みの未登録キャンバスとも衝突させない
       id++
     }
     return id
@@ -310,8 +306,9 @@ object PaintToolsCmd : CommandExecutor {
       if (!checkID(id)) return
       val data = MapData.undoCash?.get(num, id) ?: return
       val view = mapMeta.mapView ?: return
-      val mMap = MapData.loadMapData(id)
+      val mMap = MapData.loadMapData(id) ?: return
       mMap.cash = data
+      mMap.changed()
       for (render in view.renderers) {
         view.removeRenderer(render)
       }

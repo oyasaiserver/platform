@@ -3,7 +3,6 @@ package com.github.srain3.painttools.events
 import com.github.srain3.painttools.tools.ToolBox
 import com.github.srain3.painttools.tools.configs.MapData
 import com.github.srain3.painttools.tools.configs.MapIdList
-import java.awt.Color
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.ItemFrame
@@ -27,21 +26,23 @@ object LoadChunkEvent : Listener {
           ) ?: return@forEach
       if (!MapIdList.checkID(id)) return@forEach
       val mapView = mapMeta.mapView ?: Bukkit.createMap(event.world)
-      val mMap = MapData.loadMapData(id)
-      mMap.cash.forEach { (index, color) ->
-        if ((color.red == 1 && color.green == 1 && color.blue == 1)) {
-          mMap.cash[index] = Color(1, 1, 1, 0)
-        }
+      MapData.loadMapData(id) { mMap ->
+        if (!frame.isValid) return@loadMapData
+        val currentMeta = frame.item.itemMeta as? MapMeta ?: return@loadMapData
+        if (
+            currentMeta.persistentDataContainer.get(
+                ToolBox.pl.paintIdKey,
+                PersistentDataType.INTEGER,
+            ) != id
+        )
+            return@loadMapData
+        mapView.centerZ = frame.location.blockZ
+        mapView.centerX = frame.location.blockX
+        mapView.renderers.toList().forEach(mapView::removeRenderer)
+        mapView.addRenderer(mMap.render())
+        currentMeta.mapView = mapView
+        frame.item.itemMeta = currentMeta
       }
-      mapView.centerZ = frame.location.blockZ
-      mapView.centerX = frame.location.blockX
-
-      for (renderer in mapView.renderers) {
-        mapView.removeRenderer(renderer)
-      }
-      mapView.addRenderer(mMap.render())
-      mapMeta.mapView = mapView
-      frame.item.itemMeta = mapMeta
     }
   }
 }

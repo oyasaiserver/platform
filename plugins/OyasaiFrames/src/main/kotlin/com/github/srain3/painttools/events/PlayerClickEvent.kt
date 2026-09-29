@@ -64,7 +64,16 @@ object PlayerClickEvent : Listener {
         ) ?: return
     if (!MapIdList.checkID(id)) return
     val view = mapMeta.mapView ?: return
-    val mMap = MapData.loadMapData(id)
+    val mMap =
+        MapData.loadMapData(id)
+            ?: run {
+              event.isCancelled = true
+              event.player.sendMessage(
+                  ToolBox.colorMessage("[PaintTools] &eキャンバスを読み込み中です。もう一度描いてください。")
+              )
+              return
+            }
+    val before = mMap.revision
 
     val handItem = event.item ?: return
     val sneak = event.player.isSneaking
@@ -252,10 +261,11 @@ object PlayerClickEvent : Listener {
       }
     }
 
-    for (render in view.renderers) {
-      view.removeRenderer(render)
+    if (mMap.revision != before) {
+      view.renderers.toList().forEach(view::removeRenderer)
+      view.addRenderer(mMap.render())
+      event.player.sendMap(view)
     }
-    view.addRenderer(mMap.render())
 
     event.isCancelled = true
   }
@@ -345,6 +355,7 @@ object PlayerClickEvent : Listener {
           mapData.cash[(x1 + 1) + (y1 * 128)] = javaColor
         }
       }
+      mapData.changed()
     }
     // MapData.savaData(mapData)
   }
@@ -415,12 +426,17 @@ object PlayerClickEvent : Listener {
           mapData.cash[(x1 + 1) + (y1 * 128)] = getColorToPix(mapData, x1, y1, gray) ?: continue
         }
       }
+      mapData.changed()
     }
   }
 
   private fun setColorToPix(mapData: MapDataCash, x1: Int, y1: Int, color: Color) {
     if (x1 < 0 || x1 > 127 || y1 < 0 || y1 > 127) return
-    mapData.cash[(x1 + 1) + (y1 * 128)] = color
+    val index = (x1 + 1) + (y1 * 128)
+    if (mapData.cash[index] != color) {
+      mapData.cash[index] = color
+      mapData.changed()
+    }
   }
 
   private fun getColorToPix(mapData: MapDataCash, x1: Int, y1: Int, gray: Boolean): Color? {
@@ -609,6 +625,7 @@ object PlayerClickEvent : Listener {
     mapData.cash.forEach { (index, oldColor) ->
       if (selectColor == oldColor) {
         mapData.cash[index] = javaColor
+        mapData.changed()
       }
     }
   }
@@ -624,6 +641,7 @@ object PlayerClickEvent : Listener {
     if (mapData.cash[(x + 1) + (y * 128)] != selectColor) return
     if (selectColor == javaColor) return
     mapData.cash[(x + 1) + (y * 128)] = javaColor
+    mapData.changed()
     buketTaskFill(selectColor, mapData, javaColor, x + 1, y)
     buketTaskFill(selectColor, mapData, javaColor, x - 1, y)
     buketTaskFill(selectColor, mapData, javaColor, x, y + 1)

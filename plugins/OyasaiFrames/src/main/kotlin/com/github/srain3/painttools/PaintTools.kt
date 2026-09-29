@@ -8,57 +8,71 @@ import com.github.srain3.painttools.events.ClickFrameMapEvent
 import com.github.srain3.painttools.events.LoadChunkEvent
 import com.github.srain3.painttools.events.PlayerClickEvent
 import com.github.srain3.painttools.tools.ToolBox
+import com.github.srain3.painttools.tools.configs.CanvasStore
 import com.github.srain3.painttools.tools.configs.MapData
 import com.github.srain3.painttools.tools.configs.MapIdList
 import icu.oyasai.frames.OyasaiFrames
-import java.util.*
-import kotlin.concurrent.scheduleAtFixedRate
-import org.bukkit.Bukkit
+import org.bukkit.scheduler.BukkitTask
 
-/** メインクラス */
 class PaintTools(private val plugin: OyasaiFrames) {
-  /** プラグインが有効化する時に呼ばれる所 */
+  private lateinit var store: CanvasStore
+  private var saveTask: BukkitTask? = null
+  private var undoTask: BukkitTask? = null
+  private var ready = false
+
   fun onEnable() {
     ToolBox.pl = plugin
-    plugin.legacyFolder("PaintTools").mkdirs()
-
-    MapIdList.loadMapIdConfig()
-    PaintToolsCmd.createDyeSet()
-
-    plugin.getCommand("painttools")?.setExecutor(PaintToolsCmd)
-    plugin.getCommand("painttools")?.tabCompleter = PaintToolsCmdTab
-    plugin.getCommand("toumeigakubuti")?.setExecutor(ToumeiGakubutiCmd)
-
-    plugin.server.pluginManager.registerEvents(ClickFrameMapEvent, plugin)
-    plugin.server.pluginManager.registerEvents(LoadChunkEvent, plugin)
-    plugin.server.pluginManager.registerEvents(PlayerClickEvent, plugin)
-    plugin.server.pluginManager.registerEvents(AnvilEdit, plugin)
-
-    timerSave()
-    undoSaveTask()
+    val blank =
+        checkNotNull(plugin.getResource("newPNG.png")) { "missing blank canvas" }
+            .use { it.readBytes() }
+    store = CanvasStore(plugin.dataFolder.resolve("pictures.db"), blank)
+    store
+        .submit { store.open() }
+        .whenComplete { metadata, failure ->
+          if (!plugin.isEnabled) return@whenComplete
+          plugin.server.scheduler.runTask(
+              plugin,
+              Runnable {
+                if (failure != null) {
+                  plugin.logger.severe("Painting disabled: ${failure.message}")
+                  return@Runnable
+                }
+                MapIdList.load(metadata, store)
+                MapData.initialize(store)
+                PaintToolsCmd.createDyeSet()
+                plugin.getCommand("painttools")?.setExecutor(PaintToolsCmd)
+                plugin.getCommand("painttools")?.tabCompleter = PaintToolsCmdTab
+                plugin.getCommand("toumeigakubuti")?.setExecutor(ToumeiGakubutiCmd)
+                listOf(ClickFrameMapEvent, LoadChunkEvent, PlayerClickEvent, AnvilEdit).forEach {
+                  plugin.server.pluginManager.registerEvents(it, plugin)
+                }
+                saveTask =
+                    plugin.server.scheduler.runTaskTimer(
+                        plugin,
+                        Runnable { MapData.saveMapDataConfig() },
+                        1200L,
+                        1200L,
+                    )
+                undoTask =
+                    plugin.server.scheduler.runTaskTimer(
+                        plugin,
+                        Runnable { MapData.savaUndo() },
+                        200L,
+                        1200L,
+                    )
+                ready = true
+              },
+          )
+        }
   }
 
-  /** プラグインが無効化するときに呼ばれる所 */
   fun onDisable() {
-    saveTimer.cancel()
-    undoSaveTimer.cancel()
-    MapData.saveMapDataConfig()
-    MapData.disableUnloadMemTask()
-  }
-
-  private var saveTimer = Timer("PaintTools-MapID_yml-save")
-
-  private fun timerSave() {
-    saveTimer.scheduleAtFixedRate(1000L * 60L * 20L, 1000L * 60L * 20L) {
-      Bukkit.getServer().logger.info("[PaintTools] Start saving ID data...")
-      MapData.saveMapDataConfig()
-      Bukkit.getServer().logger.info("[PaintTools] completion!")
+    saveTask?.cancel()
+    undoTask?.cancel()
+    if (ready) {
+      MapData.flush()
+      MapData.disableUnloadMemTask()
     }
-  }
-
-  private val undoSaveTimer = Timer("PaintTools_undoSave")
-
-  private fun undoSaveTask() {
-    undoSaveTimer.scheduleAtFixedRate(1000L * 10L, 1000L * 60L) { MapData.savaUndo() }
+    if (::store.isInitialized) store.close()
   }
 }

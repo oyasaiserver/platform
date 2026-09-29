@@ -122,7 +122,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     legacyKey = NamespacedKey("imageonmap", "legacy")
     try {
       ImageSource.registerWebp()
-      store = MapStore(dataFolder.parentFile.resolve("ImageOnMap/image.db"))
+      store = MapStore(dataFolder.resolve("pictures.db"))
       val (ids, frames) =
           dbThread
               .submit(
@@ -934,9 +934,6 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             deleted.mapIds.forEach(mapIds::clear)
             val deletedIds = deleted.mapIds.toSet()
             frameRecords.entries.removeIf { it.value.mapId in deletedIds }
-            database {
-              store.deleteFrames(store.framesForMaps(deleted.mapIds).map(FrameRecord::uuid))
-            }
             server.worlds.forEach { world ->
               world.loadedChunks.forEach { chunk ->
                 chunk.entities.filterIsInstance<ItemFrame>().forEach { frame ->
