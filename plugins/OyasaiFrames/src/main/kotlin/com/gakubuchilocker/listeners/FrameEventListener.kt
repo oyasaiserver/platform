@@ -133,7 +133,10 @@ class FrameEventListener(
       }
 
       null -> {
-        if (plugin.db.isLocked(frame.uniqueId) && !plugin.plugin.canModify(frame, player)) {
+        if (
+            plugin.db.isLocked(frame.uniqueId) &&
+                plugin.db.getOwner(frame.uniqueId) != player.uniqueId
+        ) {
           event.isCancelled = true
           player.sendMessage("§c[Gakubuchi] §fこの額縁はロックされています。")
         }
@@ -154,7 +157,9 @@ class FrameEventListener(
       return
     }
 
-    if (plugin.db.isLocked(frame.uniqueId) && !plugin.plugin.canModify(frame, player)) {
+    if (
+        plugin.db.isLocked(frame.uniqueId) && plugin.db.getOwner(frame.uniqueId) != player.uniqueId
+    ) {
       event.isCancelled = true
     }
   }
