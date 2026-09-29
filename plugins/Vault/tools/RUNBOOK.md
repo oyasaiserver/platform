@@ -18,7 +18,7 @@
    ```
 
 3. スクリプトは件数、元の合計、整数化後の合計、丸め差を表示する。ファイル数と口座数が一致し、範囲外 0、UUID ごとの Decimal 再読込が一致し、`元の合計 − 移行後の合計 = 丸め差` であることを確認する。照合に失敗したら rollback される。DB と userdata のコピーを保管する。
-4. 旧 jar を外して自作 jar と `economy.db` を配置し、Essentials のコマンドを無効化してから起動する。`/vault-info`、提供元・コマンド所有者と `disabled-commands` 9 件の起動ログ、LuckPerms の Permission/Chat 接続、代表的な残高、`eco give` の結果と SQLite を照合する。`essentials:eco` など名前空間付きの呼び方が無効なことを確認し、RCON の `essentials reload`・`ess reload` 後も再確認する。
+4. 旧 jar を外して自作 jar と `economy.db` を配置し、Essentials のコマンドを無効化してから起動する。`/vault-info`、経済提供元と `disabled-commands` 9 件の起動ログ、LuckPerms の Permission/Chat 接続を確認する。`eco`・`eeco`・`balance`・`money`・`bal`・`baltop` など素の名前と別名を実行し、SQLite の履歴と userdata の `money` から自作 Vault への到達を確認する。`essentials:eco` など名前空間付きはイベントで取り消されることを確認し、RCON の `essentials reload`・`ess reload` 後も再確認する。
 
 ## バックアップと戻し
 

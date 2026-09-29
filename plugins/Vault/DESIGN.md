@@ -4,7 +4,9 @@
 
 このプラグインは VaultAPI 1.7.1 の型を元のパッケージのまま同梱し、`name: Vault`・`load: STARTUP` で既存 Vault を置き換える。VaultAPI の LGPL v3 本文は jar 内の `LICENSE-VaultAPI-LGPL-3.0.txt` に含める。LuckPerms が提供する Permission と Chat のサービスには触れない。
 
-`economy-enabled: false` では経済サービスを登録しない。DB が開けない、または台帳の不変条件が崩れている場合もプラグイン自体は有効のままにし、取引を止める。経済を有効にした場合は `ServicePriority.Highest` でサービスを登録する。サーバーの読み込み完了時と Essentials の reload 後に Essentials の経済 9 コマンドと別名をコマンド表・Brigadier から外し、自作の経済コマンドと別名を登録する。最優先の Economy 提供元、各コマンドの到達先、`essentials:` 付き経済コマンドが残らないこと、Essentials `disabled-commands` の必須 9 件を確認する。いずれかが違えば全入出金を拒否する。`/vault-info` で状態を表示する。
+`economy-enabled: false` では経済サービスを登録しない。DB が開けない、または台帳の不変条件が崩れている場合もプラグイン自体は有効のままにし、取引を止める。経済を有効にした場合は `ServicePriority.Highest` でサービスを登録する。Essentials の経済 9 コマンドと別名への `essentials:` 付き呼び方は、プレイヤー・コンソール・RCON のコマンドイベントで取り消す。起動時と Essentials の reload 後には、最優先の Economy 提供元と Essentials `disabled-commands` の必須 9 件を確認し、違えば全入出金を拒否する。素の名前と別名の実際の到達先は配置試験で照合する。`/vault-info` で状態を表示する。
+
+イベントを通らず他のプラグインがコードから `Bukkit.dispatchCommand` で `essentials:eco` などを実行する経路は、この取消方式では塞げない。
 
 Essentials 側では `disabled-commands` に `balance, balancetop, pay, eco, paytoggle, payconfirmtoggle, sell, worth, setworth` を指定する。`/sell` は OyasaiMenu の実装を使う。切り替え後の Essentials userdata `money` は正本ではない。旧 Vault jar と新 jar を同時に置かない。
 
