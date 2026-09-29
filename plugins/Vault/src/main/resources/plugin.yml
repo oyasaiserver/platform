@@ -1,5 +1,5 @@
 name: Vault
-main: io.oyasai.vault.VaultPlugin
+main: net.milkbowl.vault.Vault
 version: "0.1.0"
 api-version: "1.21.11"
 load: STARTUP

@@ -1,5 +1,8 @@
 package io.oyasai.vault
 
+import com.mojang.brigadier.tree.RootCommandNode
+import io.papermc.paper.command.brigadier.CommandSourceStack
+import io.papermc.paper.command.brigadier.bukkit.BukkitCommandNode
 import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -13,36 +16,43 @@ import net.milkbowl.vault.permission.Permission
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
+import org.bukkit.command.PluginCommand
+import org.bukkit.command.SimpleCommandMap
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.craftbukkit.CraftServer
+import org.bukkit.craftbukkit.command.VanillaCommandWrapper
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.server.RemoteServerCommandEvent
 import org.bukkit.event.server.ServerCommandEvent
 import org.bukkit.event.server.ServerLoadEvent
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 
+private val economicCommands =
+    listOf(
+        "balance",
+        "balancetop",
+        "pay",
+        "eco",
+        "paytoggle",
+        "payconfirmtoggle",
+        "sell",
+        "worth",
+        "setworth",
+    )
+private val vaultCommands = listOf("balance", "pay", "balancetop", "eco")
+
 internal fun missingDisabledCommands(disabled: Collection<String>): List<String> {
-  val required =
-      listOf(
-          "balance",
-          "balancetop",
-          "pay",
-          "eco",
-          "paytoggle",
-          "payconfirmtoggle",
-          "sell",
-          "worth",
-          "setworth",
-      )
   val configured = disabled.map { it.lowercase(Locale.ROOT) }.toSet()
-  return required.filterNot { it in configured }
+  return economicCommands.filterNot { it in configured }
 }
 
-class VaultPlugin : JavaPlugin(), Listener {
+open class VaultPlugin : JavaPlugin(), Listener {
   private var ledger: Ledger? = null
   private lateinit var economy: VaultEconomy
   @Volatile private var verified = false
@@ -89,23 +99,114 @@ class VaultPlugin : JavaPlugin(), Listener {
 
   @EventHandler fun onServerCommand(event: ServerCommandEvent) = checkReload(event.command)
 
+  @EventHandler fun onRemoteCommand(event: RemoteServerCommandEvent) = checkReload(event.command)
+
   private fun checkReload(raw: String) {
-    val command = raw.removePrefix("/").lowercase().trim()
-    if (command == "essentials reload" || command == "essentials:essentials reload") {
+    val parts = raw.trim().removePrefix("/").split(Regex("\\s+"), limit = 3)
+    val essentials = server.pluginManager.getPlugin("Essentials") ?: return
+    val command = server.commandMap.getCommand(parts[0].lowercase(Locale.ROOT))?.pluginCommand()
+    if (
+        parts.getOrNull(1)?.equals("reload", ignoreCase = true) == true &&
+            command is PluginCommand &&
+            command.plugin === essentials &&
+            command.name == "essentials"
+    ) {
       verified = false
       server.scheduler.runTaskLater(this, Runnable { verify() }, 1L)
     }
   }
 
+  private fun claimCommands(essentials: org.bukkit.plugin.Plugin?) {
+    if (essentials == null) return
+    val map = server.commandMap as SimpleCommandMap
+    val known = map.knownCommands
+    val removed =
+        known
+            .filterValues {
+              it.pluginCommand()?.let { c ->
+                c.plugin === essentials && c.name in economicCommands
+              } == true
+            }
+            .keys
+    removed.forEach { known.remove(it) }
+
+    // ponytail: Bukkit exposes no post-load dispatcher removal; this targets the current Paper
+    // server.
+    @Suppress("UNCHECKED_CAST")
+    val root =
+        (server as CraftServer).server.commands.dispatcher.root
+            as RootCommandNode<CommandSourceStack>
+    removed.forEach { root.removeCommand(it) }
+    for (name in vaultCommands) {
+      val command = known["vault:$name"] as? PluginCommand
+      if (command == null) {
+        logger.severe("Vault コマンドがコマンド表にありません: vault:$name")
+        continue
+      }
+      for (label in listOf(name) + command.aliases) {
+        known[label] = command
+        root.removeCommand(label)
+        root.addChild(BukkitCommandNode.of(label, command))
+      }
+    }
+    server.onlinePlayers.forEach { it.updateCommands() }
+    if (removed.isNotEmpty())
+        logger.info("Essentials 経済コマンドを解除: ${removed.sorted().joinToString(", ")}")
+  }
+
   private fun verify() {
+    verified = false
     if (!config.getBoolean("economy-enabled") || ledger == null || !dbHealthy) return
+    val essentials = server.pluginManager.getPlugin("Essentials")
+    try {
+      claimCommands(essentials)
+    } catch (e: Exception) {
+      logger.log(Level.SEVERE, "経済コマンドの解除・登録に失敗しました。全入出金を停止します", e)
+      return
+    }
     val registration: RegisteredServiceProvider<Economy>? =
         server.servicesManager.getRegistration(Economy::class.java)
-    val commands = listOf("eco", "pay", "balance", "balancetop")
-    val ownershipOkay =
-        registration?.provider === economy &&
-            commands.all { name -> server.commandMap.getCommand(name)?.pluginOwner() === this }
-    val essentials = server.pluginManager.getPlugin("Essentials")
+    val known = (server.commandMap as SimpleCommandMap).knownCommands
+    val failures = mutableListOf<String>()
+    if (registration?.provider !== economy)
+        failures += "Economy 提供元=${registration?.provider?.name ?: "なし"}"
+    for (name in vaultCommands) {
+      val own = known["vault:$name"] as? PluginCommand
+      if (own == null || own.plugin !== this) {
+        failures += "vault:$name=${own?.plugin?.name ?: "なし"}"
+      }
+    }
+    for ((label, command) in known) {
+      if (
+          command.pluginCommand()?.let {
+            it.plugin === essentials && it.name in economicCommands
+          } == true
+      )
+          failures += "$label=Essentials"
+    }
+    val root = (server as CraftServer).server.commands.dispatcher.root
+    for (name in vaultCommands) {
+      val own = known["vault:$name"] as? PluginCommand ?: continue
+      for (label in listOf(name) + own.aliases) {
+        val command = (root.getChild(label) as? BukkitCommandNode)?.bukkitCommand
+        if (command !== own) failures += "Brigadier:$label=${command?.pluginOwner()?.name ?: "なし"}"
+      }
+    }
+    for (node in root.children) {
+      val command = (node as? BukkitCommandNode)?.bukkitCommand as? PluginCommand
+      if (command != null && command.plugin === essentials && command.name in economicCommands)
+          failures += "Brigadier:${node.name}=Essentials"
+    }
+    if (essentials != null) {
+      for ((name, details) in essentials.description.commands) {
+        if (name !in economicCommands) continue
+        val aliases = (details["aliases"] as? List<*>)?.filterIsInstance<String>().orEmpty()
+        for (label in listOf(name) + aliases) {
+          val key = "essentials:${label.lowercase(Locale.ROOT)}"
+          if (known[key] != null || root.getChild(key) != null) failures += "$key=残存"
+        }
+      }
+    }
     val missing =
         if (essentials == null) emptyList()
         else
@@ -113,8 +214,9 @@ class VaultPlugin : JavaPlugin(), Listener {
                 YamlConfiguration.loadConfiguration(File(essentials.dataFolder, "config.yml"))
                     .getStringList("disabled-commands")
             )
-    verified = ownershipOkay && missing.isEmpty()
-    if (!ownershipOkay) logger.severe("!!! 自作 Vault が経済の最優先提供元または経済コマンドの持ち主ではありません。全入出金を停止します !!!")
+    verified = failures.isEmpty() && missing.isEmpty()
+    if (failures.isNotEmpty())
+        logger.severe("!!! 経済コマンド確認失敗: ${failures.joinToString(", ")}。全入出金を停止します !!!")
     if (missing.isNotEmpty())
         logger.severe(
             "!!! Essentials disabled-commands に不足: ${missing.joinToString(", ")}。全入出金を停止します !!!"
@@ -122,8 +224,15 @@ class VaultPlugin : JavaPlugin(), Listener {
     if (verified) logger.info("経済提供元、コマンド所有者、Essentials disabled-commands を確認しました")
   }
 
-  private fun Command.pluginOwner(): org.bukkit.plugin.Plugin? =
-      if (this is org.bukkit.command.PluginCommand) plugin else null
+  private fun Command.pluginOwner(): org.bukkit.plugin.Plugin? = pluginCommand()?.plugin
+
+  private fun Command.pluginCommand(): PluginCommand? =
+      when (this) {
+        is PluginCommand -> this
+        is VanillaCommandWrapper ->
+            (vanillaCommand as? BukkitCommandNode)?.bukkitCommand as? PluginCommand
+        else -> null
+      }
 
   internal fun loan(uuid: UUID): Boolean =
       server.getPlayer(uuid)?.takeIf { it.isOnline }?.hasPermission("essentials.eco.loan") == true
