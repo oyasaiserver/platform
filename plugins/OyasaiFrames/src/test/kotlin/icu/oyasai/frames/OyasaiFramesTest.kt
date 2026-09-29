@@ -1,9 +1,11 @@
 package icu.oyasai.frames
 
 import java.lang.reflect.Proxy
+import java.nio.file.Files
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.bukkit.NamespacedKey
@@ -11,6 +13,21 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginDescriptionFile
 
 class OyasaiFramesTest {
+  @Test
+  fun legacyDataPreventsDatabaseCreation() {
+    val plugins = Files.createTempDirectory("oyasai-frames-migration").toFile()
+    plugins.resolve("ImageOnMap").mkdir()
+    plugins.resolve("ImageOnMap/image.db").createNewFile()
+    val dataFolder = plugins.resolve("OyasaiFrames")
+
+    assertFailsWith<IllegalStateException> {
+      requireMigratedDatabases(dataFolder)
+      FrameStore(dataFolder.resolve("frames.db")).close()
+    }
+    assertFalse(dataFolder.resolve("frames.db").exists())
+    assertFalse(dataFolder.resolve("pictures.db").exists())
+  }
+
   @Test
   fun legacyPdcKeys() {
     val lockerName = PluginDescriptionFile("Gakubuchi-Locker", "1", "main")
