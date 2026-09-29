@@ -426,8 +426,9 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                 }
                 mark(frame, true)
                 remember(frame, id, true)
-                // ponytail: Later-loaded legacy frames stay unlocked; placer lookup runs only
-                // during migration.
+                // ponytail: Runtime locks use the image author without looking up the placer;
+                // reassignment to the placer happens only during migration.
+                if (lockOwner(frame) == null) owners[id]?.let { locker()?.db?.lockFrame(frame, it) }
               }
             }
           }

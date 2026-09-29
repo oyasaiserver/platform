@@ -175,14 +175,15 @@ def adoption_placer(events, world, x, y, z, placed_at):
     owners = {owner for time, owner in placements if time > last_removal}
     if not owners:
         return None, "removed_after_placement"
+    if None in owners:
+        return None, "unknown_placer"
     if len(owners) > 1:
         return None, "multiple_placers"
-    owner = next(iter(owners))
-    return (owner, "reassigned") if owner else (None, "unknown_placer")
+    return next(iter(owners)), "reassigned"
 
 
 def migrate(image_db, locker_db, paint_dir, output_dir, blank_png, coreprotect_csv):
-    events = frame_events_from_csv(coreprotect_csv)
+    events = frame_events_from_csv(coreprotect_csv) if coreprotect_csv else {}
     output_dir.mkdir(parents=True, exist_ok=True)
     frames_path, pictures_path = output_dir / "frames.db", output_dir / "pictures.db"
     if frames_path.exists() or pictures_path.exists():
@@ -223,15 +224,13 @@ def migrate(image_db, locker_db, paint_dir, output_dir, blank_png, coreprotect_c
                 frames.execute("INSERT INTO frames(frame_uuid,map_id,world,x,y,z,facing,placed_at,legacy,detected) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(frame_uuid) DO UPDATE SET map_id=excluded.map_id,world=excluded.world,x=excluded.x,y=excluded.y,z=excluded.z,facing=excluded.facing,placed_at=excluded.placed_at,legacy=excluded.legacy,detected=excluded.detected", row)
             both = frames.execute("SELECT COUNT(*) FROM frames WHERE owner_uuid IS NOT NULL AND map_id IS NOT NULL").fetchone()[0]
             assert count(frames, "frames") == locks + posters - both
-            adoption_stats = {key: 0 for key in ("reassigned", "same_owner", "no_record", "removed_after_placement", "unknown_placer", "multiple_placers")}
+            adoption_stats = {key: 0 for key in ("same_owner", "different_owner", "no_record", "removed_after_placement", "unknown_placer", "multiple_placers")}
             for frame_uuid, world, x, y, z, placed_at, old_owner in adoption_locks:
                 owner, reason = adoption_placer(events, world, x, y, z, placed_at)
-                if owner is None:
-                    frames.execute("UPDATE frames SET owner_uuid=NULL,locked_at=NULL WHERE frame_uuid=?", (frame_uuid,))
-                elif owner != old_owner:
+                if owner is not None and owner != old_owner:
                     frames.execute("UPDATE frames SET owner_uuid=? WHERE frame_uuid=?", (owner, frame_uuid))
-                else:
-                    reason = "same_owner"
+                if owner is not None:
+                    reason = "same_owner" if owner == old_owner else "different_owner"
                 adoption_stats[reason] += 1
             pictures.execute("DROP TABLE frames")
             pictures.execute("DROP INDEX IF EXISTS frames_map")
@@ -272,7 +271,11 @@ def migrate(image_db, locker_db, paint_dir, output_dir, blank_png, coreprotect_c
             image_count, map_count = count(pictures, "images"), count(pictures, "maps")
             checks = (frames.execute("PRAGMA integrity_check").fetchone()[0], pictures.execute("PRAGMA integrity_check").fetchone()[0])
             print(f"locks={locks} posters={posters} both={both} frames={count(frames, 'frames')}")
-            print(f"adoption_locks={len(adoption_locks)} " + " ".join(f"{key}={value}" for key, value in adoption_stats.items()))
+            reassigned = adoption_stats["same_owner"] + adoption_stats["different_owner"]
+            kept = len(adoption_locks) - reassigned
+            print(f"取り込みロック={len(adoption_locks)} 付け替え={reassigned} (作者と同じ={adoption_stats['same_owner']} 作者と違う={adoption_stats['different_owner']}) "
+                  f"作者のまま={kept} (記録なし={adoption_stats['no_record']} 記録後に撤去={adoption_stats['removed_after_placement']} "
+                  f"UUID不明={adoption_stats['unknown_placer']} 複数人={adoption_stats['multiple_placers']})")
             paint_status = " PaintTools なし" if not paint_dir.exists() else ""
             print(f"images={image_count} maps={map_count} canvases={count(pictures, 'canvases')} png={from_png} yaml={from_yaml} unreadable={len(unreadable)}{paint_status}")
             print(f"unreadable_files={unreadable}")
@@ -322,8 +325,12 @@ def self_test():
         with sqlite3.connect(root / "out/frames.db") as db:
             assert db.execute("SELECT COUNT(*) FROM frames").fetchone()[0] == 10
             owners = dict(db.execute("SELECT frame_uuid,owner_uuid FROM frames"))
-            assert owners == {a: artist, b: None, c: placer, d: None, e: None, f: None, g: artist, h: another, i: artist, j: None}
+            assert owners == {a: artist, b: None, c: placer, d: artist, e: artist, f: artist, g: artist, h: another, i: artist, j: artist}
+            assert db.execute("SELECT COUNT(*) FROM frames WHERE owner_uuid IS NOT NULL AND locked_at IS NULL").fetchone()[0] == 0
             assert db.execute("SELECT COUNT(*) FROM frames WHERE owner_uuid IS NULL AND locked_at IS NOT NULL").fetchone()[0] == 0
+        migrate(image, locker, paint, root / "no-csv", blank, None)
+        with sqlite3.connect(root / "no-csv/frames.db") as db:
+            assert dict(db.execute("SELECT frame_uuid,owner_uuid FROM frames")) == {a: artist, b: None, c: artist, d: artist, e: artist, f: artist, g: artist, h: another, i: artist, j: artist}
         with sqlite3.connect(root / "out/pictures.db") as db:
             assert count(db, "images") == count(db, "maps") == 1
             assert count(db, "canvases") == 2
@@ -355,7 +362,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.self_test:
         self_test()
-    elif all((args.image_db, args.locker_db, args.paint_dir, args.output_dir, args.coreprotect_csv)):
+    elif all((args.image_db, args.locker_db, args.paint_dir, args.output_dir)):
         migrate(args.image_db, args.locker_db, args.paint_dir, args.output_dir, args.blank_png, args.coreprotect_csv)
     else:
-        parser.error("--image-db, --locker-db, --paint-dir, --output-dir and --coreprotect-csv are required")
+        parser.error("--image-db, --locker-db, --paint-dir and --output-dir are required")
