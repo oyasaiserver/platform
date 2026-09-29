@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Level
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.WorldCreator
@@ -133,7 +134,7 @@ class WorldLifecycle(
       val supported = (heightProvider as? NmsHeightProvider)?.isSupportedServer() ?: true
       if (!supported) {
         startupInspectionPassed = false
-        sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 build 2633/2622/2593 のみです")
+        sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 のみです")
         return false
       }
       if (currentConfig.worlds.isEmpty() || currentConfig.validationErrors.isNotEmpty()) {
@@ -204,7 +205,7 @@ class WorldLifecycle(
     val entry = OwgConfig.defaultWorld(name, kind)
     val supported = isSupportedServer()
     if (!supported) {
-      sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 build 2633/2622/2593 のみです")
+      sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 のみです")
       return false
     }
     if (!currentConfig.selfTest) {
@@ -315,7 +316,7 @@ class WorldLifecycle(
       }
       if (!supported) {
         plugin.logger.severe(
-            "[OWG][startup] Unsupported server build; fail-closed inspection will still scan every target"
+            "[OWG][startup] Unsupported server version; fail-closed inspection will still scan every target"
         )
       }
       if (!configValid) {
@@ -502,7 +503,36 @@ class WorldLifecycle(
       )
       passed = applyResults[name] == true && heightProvider.verify(createdWorld, spec)
       check(passed) { "height verification failed" }
+      val lowY = spec.minY + 1
+      val highY = spec.maxHeight - 2
+      createdWorld.getBlockAt(8, lowY, 8).type = Material.BEDROCK
+      createdWorld.getBlockAt(8, highY, 8).type = Material.OBSIDIAN
+      check(Bukkit.unloadWorld(createdWorld, true)) { "save/unload failed" }
+      world = null
+      plugin.logger.info("[OWG][self-test] saved and unloaded markers low=$lowY high=$highY")
+
+      applyResults.remove(name)
+      val reopened = createManagedWorld(name, worldCreator(name, entry))
+      check(reopened != null) { "reopen returned null" }
+      world = reopened
+      check(reopened.worldPath.toAbsolutePath().normalize() == createdFolder) {
+        "reopened a different world folder"
+      }
+      check(applyResults[name] == true && heightProvider.verify(reopened, spec)) {
+        "reopened height verification failed"
+      }
+      check(
+          reopened.getBlockAt(8, lowY, 8).type == Material.BEDROCK &&
+              reopened.getBlockAt(8, highY, 8).type == Material.OBSIDIAN
+      ) {
+        "saved markers missing after reopen"
+      }
+      plugin.logger.info(
+          "[OWG][self-test] SAVE/REOPEN PASS min=${reopened.minHeight} max=${reopened.maxHeight} " +
+              "markers=$lowY,$highY"
+      )
     } catch (throwable: Throwable) {
+      passed = false
       plugin.logger.log(Level.SEVERE, "[OWG][self-test] execution failed", throwable)
     } finally {
       if (world != null) {

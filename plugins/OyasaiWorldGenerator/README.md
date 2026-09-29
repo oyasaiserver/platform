@@ -13,7 +13,7 @@
 - `/owg unload <world>`: 高さの照合に成功した場合だけ保存してアンロード（フォルダは削除しない）
 - `/owg check`: 設定・バージョン・ロード済みワールドを読み取り検査
 
-`owg_selftest` は、対象ワールドより先に同じ高さパッチを試すための使い捨てワールドです。起動前から同名フォルダがある場合は再利用も削除もせず、fail closed します。削除コードは、現在の起動で作成した `owg_selftest` のみに限定し、従来形式のワールド直下と 26.2 の namespaced dimension 配下を完全一致の allowlist で検査します。
+`owg_selftest` は、対象ワールドより先に同じ高さパッチを試すための使い捨てワールドです。上下端のブロックを保存して開き直し、高さとブロックの残存を確認します。起動前から同名フォルダがある場合は再利用も削除もせず、fail closed します。削除コードは、現在の起動で作成した `owg_selftest` のみに限定し、従来形式のワールド直下と 26.2 の namespaced dimension 配下を完全一致の allowlist で検査します。
 
 通常ワールドは別ファイル `plugins/OyasaiWorldGenerator/normal-worlds.yml` で管理します。初回のみ `plugins/Multiverse-Core/worlds.yml` から `minecraft:` の登録と名前・キーを取り込みます。以後はこのファイルを正本とし、高さ用の `config.yml` の `worlds:` には混ぜません。既定3ワールドには設定だけを適用し、追加ワールドは既存の dimension フォルダがある場合に、既定ワールドのロード完了後、POSTWORLD プラグインより前に開きます。フォルダ欠損や高さ用ワールドとの重複は飛ばします。Multiverse-Core の jar と同時に入れるとワールド管理を無効にします。
 
