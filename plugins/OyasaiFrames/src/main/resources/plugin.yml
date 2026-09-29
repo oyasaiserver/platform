@@ -1,0 +1,79 @@
+name: OyasaiFrames
+main: icu.oyasai.frames.OyasaiFrames
+version: ${version}
+api-version: "1.21"
+softdepend: [WorldGuard]
+commands:
+  tomap:
+    usage: /tomap
+  gakubuchilock:
+    description: 額縁のLockモードを切り替える
+    usage: /gakubuchilock <on|off>
+    permission: gakubuchilocker.use
+    aliases: [glock]
+  gakubuchiunlock:
+    description: 額縁のUnlockモードを切り替える
+    usage: /gakubuchiunlock <on|off>
+    permission: gakubuchilocker.use
+    aliases: [gunlock]
+  gakubuchifinder:
+    description: 周囲の透明化されたロック済み額縁を赤いパーティクルで表示する
+    usage: /gakubuchifinder [radius]
+    permission: gakubuchilocker.use
+    aliases: [gfinder]
+  gakubuchitoumei:
+    description: 額縁設置時の自動透明化モードを切り替える
+    usage: /gakubuchitoumei <on|off>
+    permission: gakubuchilocker.use
+    aliases: [gtoumei]
+  painttools:
+    description: "PaintTools plugin command."
+    permission: "painttools.command.painttools"
+  toumeigakubuti:
+    aliases: ["toumei", "invisibleframe"]
+    description: "Frame transparency"
+permissions:
+  imageonmap.*:
+    default: true
+    children:
+      imageonmap.new: true
+      imageonmap.list: true
+      imageonmap.get: true
+      imageonmap.give: false
+      imageonmap.bypasssize: false
+      imageonmap.listother: false
+      imageonmap.getother: false
+      imageonmap.deleteother: false
+      imageonmap.placesplattermap: true
+      imageonmap.removesplattermap: true
+  imageonmap.new:
+    default: true
+  imageonmap.list:
+    default: true
+  imageonmap.get:
+    default: true
+  imageonmap.give:
+    default: op
+  imageonmap.bypasssize:
+    default: op
+  imageonmap.listother:
+    default: op
+  imageonmap.getother:
+    default: op
+  imageonmap.deleteother:
+    default: op
+  imageonmap.placesplattermap:
+    default: true
+  imageonmap.removesplattermap:
+    default: true
+  gakubuchilocker.use:
+    description: gakubuchilocker コマンドの使用を許可
+    default: true
+  painttools.command.painttools.canvas:
+    description: "/painttools canvas command"
+  painttools.canvas.use:
+    description: "Permissions that can be used by right-clicking with a dye"
+  painttools.command.painttools.dye:
+    description: "/painttools dye command"
+  painttools.command.toumeigakubuti.admin:
+    description: "/toumeigakubuti [force | count] command"
