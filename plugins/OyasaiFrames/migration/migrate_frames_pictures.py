@@ -159,9 +159,14 @@ def frame_events_from_csv(path):
             action = int(row["action"])
             if action not in (0, 1):
                 raise ValueError("unexpected CoreProtect action")
-            owner = row["placer_uuid"] or None
-            if owner is not None:
-                owner = str(uuid.UUID(owner))
+            owner = row["placer_uuid"]
+            if owner in ("", "NULL", "\\N"):
+                owner = None
+            else:
+                try:
+                    owner = str(uuid.UUID(owner))
+                except (ValueError, TypeError, AttributeError) as exc:
+                    raise ValueError(f"invalid placer_uuid at CSV line {rows.line_num}: {owner!r}") from exc
             events.setdefault(key, []).append((int(row["event_at"]), action, owner))
     return events
 
@@ -310,7 +315,16 @@ def self_test():
         with csv_path.open("w", newline="") as file:
             writer = csv.writer(file)
             writer.writerow(("world_name", "x", "y", "z", "event_at", "action", "placer_uuid"))
-            writer.writerows(("world", x, 2, 3, time, action, owner) for x, time, action, owner in ((3, 999, 1, placer), (4, 1001, 1, placer), (5, 999, 1, placer), (5, 999, 1, another), (6, 999, 1, ""), (9, 999, 1, artist), (10, 998, 1, placer), (10, 999, 0, placer)))
+            writer.writerows(("world", x, 2, 3, time, action, owner) for x, time, action, owner in ((3, 999, 1, placer), (4, 1001, 1, placer), (5, 999, 1, placer), (5, 999, 1, another), (6, 999, 1, "NULL"), (7, 999, 1, "\\N"), (9, 999, 1, artist), (10, 998, 1, placer), (10, 999, 0, placer), (11, 999, 1, "")))
+        events = frame_events_from_csv(csv_path)
+        assert all(events[("world", x, 2, 3)][0][2] is None for x in (6, 7, 11))
+        bad_csv = root / "bad-coreprotect.csv"
+        bad_csv.write_text("world_name,x,y,z,event_at,action,placer_uuid\nworld,1,2,3,999,1,invalid\n")
+        try:
+            frame_events_from_csv(bad_csv)
+            assert False, "invalid UUID was accepted"
+        except ValueError as exc:
+            assert "CSV line 2" in str(exc)
         with sqlite3.connect(image) as db:
             db.executescript("CREATE TABLE images(id INTEGER PRIMARY KEY,owner TEXT NOT NULL,name TEXT,columns INTEGER NOT NULL,rows INTEGER NOT NULL,created_at INTEGER,hidden INTEGER NOT NULL DEFAULT 0); CREATE TABLE maps(map_id INTEGER PRIMARY KEY,image_id INTEGER,idx INTEGER,png BLOB NOT NULL); CREATE TABLE frames(frame_uuid TEXT PRIMARY KEY,map_id INTEGER NOT NULL,world TEXT NOT NULL,x INTEGER NOT NULL,y INTEGER NOT NULL,z INTEGER NOT NULL,facing TEXT NOT NULL,placed_at INTEGER NOT NULL,legacy INTEGER NOT NULL DEFAULT 0,detected INTEGER NOT NULL DEFAULT 0); CREATE INDEX frames_map ON frames(map_id); PRAGMA user_version=1;")
             db.execute("INSERT INTO images(id,owner,columns,rows) VALUES(1,?,1,1)", (artist,))
