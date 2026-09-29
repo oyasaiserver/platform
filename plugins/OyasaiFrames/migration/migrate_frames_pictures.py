@@ -2,10 +2,25 @@
 """Copy three legacy stores into OyasaiFrames/frames.db and pictures.db once.
 
 Sources are opened read-only and snapshotted with SQLite backup. Outputs must not exist.
+Export this SELECT result as UTF-8 CSV with its column headers for --coreprotect-csv:
+
+    SELECT w.world AS world_name, b.x, b.y, b.z, b.time AS event_at,
+           b.action, u.uuid AS placer_uuid
+    FROM co_material_map AS m
+    STRAIGHT_JOIN co_block AS b ON b.type = m.id
+    JOIN co_world AS w ON w.id = b.wid
+    LEFT JOIN co_user AS u ON u.rowid = b.user
+    WHERE m.material IN ('minecraft:item_frame', 'minecraft:glow_item_frame')
+      AND b.action IN (0, 1) AND b.rolled_back = 0;
+
+CoreProtect times are Unix seconds; action 0 removes and 1 places. Include
+rows with NULL placer_uuid; they prevent uncertain ownership assignments.
 """
 
 import argparse
+import csv
 from contextlib import closing
+from datetime import datetime, timezone
 import pathlib
 import re
 import sqlite3
@@ -133,7 +148,41 @@ def count(db, table):
     return db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
 
 
-def migrate(image_db, locker_db, paint_dir, output_dir, blank_png):
+def frame_events_from_csv(path):
+    events = {}
+    with path.open(newline="", encoding="utf-8-sig") as file:
+        rows = csv.DictReader(file)
+        if rows.fieldnames != ["world_name", "x", "y", "z", "event_at", "action", "placer_uuid"]:
+            raise ValueError("unexpected CoreProtect CSV columns")
+        for row in rows:
+            key = (row["world_name"], int(row["x"]), int(row["y"]), int(row["z"]))
+            action = int(row["action"])
+            if action not in (0, 1):
+                raise ValueError("unexpected CoreProtect action")
+            owner = row["placer_uuid"] or None
+            if owner is not None:
+                owner = str(uuid.UUID(owner))
+            events.setdefault(key, []).append((int(row["event_at"]), action, owner))
+    return events
+
+
+def adoption_placer(events, world, x, y, z, placed_at):
+    history = [(time, action, owner) for time, action, owner in events.get((world, x, y, z), ()) if time * 1000 <= placed_at]
+    placements = [(time, owner) for time, action, owner in history if action == 1]
+    if not placements:
+        return None, "no_record"
+    last_removal = max((time for time, action, _ in history if action == 0), default=-1)
+    owners = {owner for time, owner in placements if time > last_removal}
+    if not owners:
+        return None, "removed_after_placement"
+    if len(owners) > 1:
+        return None, "multiple_placers"
+    owner = next(iter(owners))
+    return (owner, "reassigned") if owner else (None, "unknown_placer")
+
+
+def migrate(image_db, locker_db, paint_dir, output_dir, blank_png, coreprotect_csv):
+    events = frame_events_from_csv(coreprotect_csv)
     output_dir.mkdir(parents=True, exist_ok=True)
     frames_path, pictures_path = output_dir / "frames.db", output_dir / "pictures.db"
     if frames_path.exists() or pictures_path.exists():
@@ -156,14 +205,34 @@ def migrate(image_db, locker_db, paint_dir, output_dir, blank_png):
             frames.executescript(FRAMES_SCHEMA)
             locks = count(locker, "locked_frames")
             posters = count(pictures, "frames")
+            image_owners = dict(pictures.execute("SELECT m.map_id,i.owner FROM maps m JOIN images i ON i.id=m.image_id"))
+            picture_frames = {row[0]: row[1:] for row in pictures.execute("SELECT frame_uuid,map_id,x,y,z,placed_at,legacy FROM frames")}
+            adoption_locks = []
             for row in locker.execute("SELECT entity_uuid,world,x,y,z,owner_uuid,locked_at FROM locked_frames"):
                 uuid.UUID(row[0]); uuid.UUID(row[5])
                 frames.execute("INSERT INTO frames(frame_uuid,world_name,x,y,z,owner_uuid,locked_at) VALUES(?,?,?,?,?,?,?)", row)
+                picture = picture_frames.get(row[0])
+                if picture is None:
+                    continue
+                map_id, x, y, z, placed_at, legacy = picture
+                if (legacy == 1 and (x, y, z) == row[2:5] and image_owners.get(map_id) == row[5]
+                        and row[6] is not None and abs(int(datetime.fromisoformat(row[6]).replace(tzinfo=timezone.utc).timestamp()) * 1000 - placed_at) <= 1000):
+                    adoption_locks.append((row[0], row[1], x, y, z, placed_at, row[5]))
             for row in pictures.execute("SELECT frame_uuid,map_id,world,x,y,z,facing,placed_at,legacy,detected FROM frames"):
                 uuid.UUID(row[0]); uuid.UUID(row[2])
                 frames.execute("INSERT INTO frames(frame_uuid,map_id,world,x,y,z,facing,placed_at,legacy,detected) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(frame_uuid) DO UPDATE SET map_id=excluded.map_id,world=excluded.world,x=excluded.x,y=excluded.y,z=excluded.z,facing=excluded.facing,placed_at=excluded.placed_at,legacy=excluded.legacy,detected=excluded.detected", row)
             both = frames.execute("SELECT COUNT(*) FROM frames WHERE owner_uuid IS NOT NULL AND map_id IS NOT NULL").fetchone()[0]
             assert count(frames, "frames") == locks + posters - both
+            adoption_stats = {key: 0 for key in ("reassigned", "same_owner", "no_record", "removed_after_placement", "unknown_placer", "multiple_placers")}
+            for frame_uuid, world, x, y, z, placed_at, old_owner in adoption_locks:
+                owner, reason = adoption_placer(events, world, x, y, z, placed_at)
+                if owner is None:
+                    frames.execute("UPDATE frames SET owner_uuid=NULL,locked_at=NULL WHERE frame_uuid=?", (frame_uuid,))
+                elif owner != old_owner:
+                    frames.execute("UPDATE frames SET owner_uuid=? WHERE frame_uuid=?", (owner, frame_uuid))
+                else:
+                    reason = "same_owner"
+                adoption_stats[reason] += 1
             pictures.execute("DROP TABLE frames")
             pictures.execute("DROP INDEX IF EXISTS frames_map")
             pictures.execute("CREATE TABLE canvases (id INTEGER PRIMARY KEY, png BLOB, locked INTEGER NOT NULL DEFAULT 0, registered INTEGER NOT NULL DEFAULT 1)")
@@ -203,6 +272,7 @@ def migrate(image_db, locker_db, paint_dir, output_dir, blank_png):
             image_count, map_count = count(pictures, "images"), count(pictures, "maps")
             checks = (frames.execute("PRAGMA integrity_check").fetchone()[0], pictures.execute("PRAGMA integrity_check").fetchone()[0])
             print(f"locks={locks} posters={posters} both={both} frames={count(frames, 'frames')}")
+            print(f"adoption_locks={len(adoption_locks)} " + " ".join(f"{key}={value}" for key, value in adoption_stats.items()))
             paint_status = " PaintTools なし" if not paint_dir.exists() else ""
             print(f"images={image_count} maps={map_count} canvases={count(pictures, 'canvases')} png={from_png} yaml={from_yaml} unreadable={len(unreadable)}{paint_status}")
             print(f"unreadable_files={unreadable}")
@@ -231,21 +301,29 @@ def self_test():
         (paint / "data/269356228.yml").write_text("X0_Y0:\n  ==: Color\n  RED: 255\n  BLUE: 2\n  GREEN: 3\n")
         image = root / "image.db"
         locker = root / "gakubuchi.db"
-        a, b, c = (str(uuid.uuid4()) for _ in range(3))
+        csv_path = root / "coreprotect.csv"
+        a, b, c, d, e, f, g, h, i, j = (str(uuid.uuid4()) for _ in range(10))
+        artist, placer, another = (str(uuid.uuid4()) for _ in range(3))
+        with csv_path.open("w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(("world_name", "x", "y", "z", "event_at", "action", "placer_uuid"))
+            writer.writerows(("world", x, 2, 3, time, action, owner) for x, time, action, owner in ((3, 999, 1, placer), (4, 1001, 1, placer), (5, 999, 1, placer), (5, 999, 1, another), (6, 999, 1, ""), (9, 999, 1, artist), (10, 998, 1, placer), (10, 999, 0, placer)))
         with sqlite3.connect(image) as db:
             db.executescript("CREATE TABLE images(id INTEGER PRIMARY KEY,owner TEXT NOT NULL,name TEXT,columns INTEGER NOT NULL,rows INTEGER NOT NULL,created_at INTEGER,hidden INTEGER NOT NULL DEFAULT 0); CREATE TABLE maps(map_id INTEGER PRIMARY KEY,image_id INTEGER,idx INTEGER,png BLOB NOT NULL); CREATE TABLE frames(frame_uuid TEXT PRIMARY KEY,map_id INTEGER NOT NULL,world TEXT NOT NULL,x INTEGER NOT NULL,y INTEGER NOT NULL,z INTEGER NOT NULL,facing TEXT NOT NULL,placed_at INTEGER NOT NULL,legacy INTEGER NOT NULL DEFAULT 0,detected INTEGER NOT NULL DEFAULT 0); CREATE INDEX frames_map ON frames(map_id); PRAGMA user_version=1;")
-            db.execute("INSERT INTO images(id,owner,columns,rows) VALUES(1,?,1,1)", (str(uuid.uuid4()),))
+            db.execute("INSERT INTO images(id,owner,columns,rows) VALUES(1,?,1,1)", (artist,))
             db.execute("INSERT INTO maps(map_id,image_id,idx,png) VALUES(5,1,0,?)", (blank.read_bytes(),))
-            for frame in (b, c):
-                db.execute("INSERT INTO frames VALUES(?,?,?,?,?,?,?,?,?,?)", (frame, 5, str(uuid.uuid4()), 1, 2, 3, "NORTH", 1, 0, 0))
+            for x, frame in enumerate((b, c, d, e, f, g, h, i, j), 2):
+                db.execute("INSERT INTO frames VALUES(?,?,?,?,?,?,?,?,?,?)", (frame, 5, str(uuid.uuid4()), x, 2, 3, "NORTH", 1_000_000, int(frame != g), 0))
         with sqlite3.connect(locker) as db:
             db.execute("CREATE TABLE locked_frames(entity_uuid TEXT PRIMARY KEY,world TEXT NOT NULL,x INTEGER NOT NULL,y INTEGER NOT NULL,z INTEGER NOT NULL,owner_uuid TEXT NOT NULL,locked_at TIMESTAMP)")
-            for frame in (a, c):
-                db.execute("INSERT INTO locked_frames VALUES(?,?,?,?,?,?,CURRENT_TIMESTAMP)", (frame, "world", 1, 2, 3, str(uuid.uuid4())))
-        migrate(image, locker, paint, root / "out", blank)
+            for x, frame, owner in ((1, a, artist), (3, c, artist), (4, d, artist), (5, e, artist), (6, f, artist), (7, g, artist), (8, h, another), (9, i, artist), (10, j, artist)):
+                db.execute("INSERT INTO locked_frames VALUES(?,?,?,?,?,?,?)", (frame, "world", x, 2, 3, owner, "1970-01-01 00:16:40"))
+        migrate(image, locker, paint, root / "out", blank, csv_path)
         with sqlite3.connect(root / "out/frames.db") as db:
-            assert db.execute("SELECT COUNT(*) FROM frames").fetchone()[0] == 3
-            assert db.execute("SELECT COUNT(*) FROM frames WHERE owner_uuid IS NOT NULL AND map_id IS NOT NULL").fetchone()[0] == 1
+            assert db.execute("SELECT COUNT(*) FROM frames").fetchone()[0] == 10
+            owners = dict(db.execute("SELECT frame_uuid,owner_uuid FROM frames"))
+            assert owners == {a: artist, b: None, c: placer, d: None, e: None, f: None, g: artist, h: another, i: artist, j: None}
+            assert db.execute("SELECT COUNT(*) FROM frames WHERE owner_uuid IS NULL AND locked_at IS NOT NULL").fetchone()[0] == 0
         with sqlite3.connect(root / "out/pictures.db") as db:
             assert count(db, "images") == count(db, "maps") == 1
             assert count(db, "canvases") == 2
@@ -253,12 +331,12 @@ def self_test():
             pixels = png_pixels(db.execute("SELECT png FROM canvases WHERE id=269356228").fetchone()[0])
             assert pixels[:4] == bytes((255, 3, 2, 255))
         (paint / "MapID_TagList.yml").unlink()
-        migrate(image, locker, paint, root / "no-tag", blank)
+        migrate(image, locker, paint, root / "no-tag", blank, csv_path)
         with sqlite3.connect(root / "no-tag/pictures.db") as db:
             assert count(db, "canvases") == 2
             assert db.execute("SELECT COUNT(*) FROM canvases WHERE registered OR locked").fetchone()[0] == 0
             assert db.execute("SELECT last_id FROM canvas_meta").fetchone()[0] == 0
-        migrate(image, locker, root / "no-paint", root / "no-paint-out", blank)
+        migrate(image, locker, root / "no-paint", root / "no-paint-out", blank, csv_path)
         with sqlite3.connect(root / "no-paint-out/pictures.db") as db:
             assert count(db, "canvases") == 0
             assert db.execute("SELECT last_id FROM canvas_meta").fetchone()[0] == 0
@@ -271,12 +349,13 @@ if __name__ == "__main__":
     parser.add_argument("--locker-db", type=pathlib.Path)
     parser.add_argument("--paint-dir", type=pathlib.Path)
     parser.add_argument("--output-dir", type=pathlib.Path)
+    parser.add_argument("--coreprotect-csv", type=pathlib.Path)
     parser.add_argument("--blank-png", type=pathlib.Path, default=pathlib.Path(__file__).resolve().parents[1] / "src/main/resources/newPNG.png")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         self_test()
-    elif all((args.image_db, args.locker_db, args.paint_dir, args.output_dir)):
-        migrate(args.image_db, args.locker_db, args.paint_dir, args.output_dir, args.blank_png)
+    elif all((args.image_db, args.locker_db, args.paint_dir, args.output_dir, args.coreprotect_csv)):
+        migrate(args.image_db, args.locker_db, args.paint_dir, args.output_dir, args.blank_png, args.coreprotect_csv)
     else:
-        parser.error("--image-db, --locker-db, --paint-dir and --output-dir are required")
+        parser.error("--image-db, --locker-db, --paint-dir, --output-dir and --coreprotect-csv are required")
