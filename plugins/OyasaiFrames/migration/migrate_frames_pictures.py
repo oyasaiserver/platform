@@ -168,7 +168,8 @@ def migrate(image_db, locker_db, paint_dir, output_dir, blank_png):
             pictures.execute("DROP INDEX IF EXISTS frames_map")
             pictures.execute("CREATE TABLE canvases (id INTEGER PRIMARY KEY, png BLOB, locked INTEGER NOT NULL DEFAULT 0, registered INTEGER NOT NULL DEFAULT 1)")
             pictures.execute("CREATE TABLE canvas_meta (id INTEGER PRIMARY KEY CHECK(id=1), last_id INTEGER NOT NULL)")
-            registered, locked, last = tag_list(paint_dir / "MapID_TagList.yml")
+            tag_path = paint_dir / "MapID_TagList.yml"
+            registered, locked, last = tag_list(tag_path) if tag_path.exists() else (set(), set(), 0)
             pictures.execute("INSERT INTO canvas_meta(id,last_id) VALUES(1,?)", (last,))
             pngs = {int(p.stem): p for p in (paint_dir / "img").glob("*.png")}
             yamls = {int(p.stem): p for p in (paint_dir / "data").glob("*.yml")}
@@ -202,7 +203,8 @@ def migrate(image_db, locker_db, paint_dir, output_dir, blank_png):
             image_count, map_count = count(pictures, "images"), count(pictures, "maps")
             checks = (frames.execute("PRAGMA integrity_check").fetchone()[0], pictures.execute("PRAGMA integrity_check").fetchone()[0])
             print(f"locks={locks} posters={posters} both={both} frames={count(frames, 'frames')}")
-            print(f"images={image_count} maps={map_count} canvases={count(pictures, 'canvases')} png={from_png} yaml={from_yaml} unreadable={len(unreadable)}")
+            paint_status = " PaintTools なし" if not paint_dir.exists() else ""
+            print(f"images={image_count} maps={map_count} canvases={count(pictures, 'canvases')} png={from_png} yaml={from_yaml} unreadable={len(unreadable)}{paint_status}")
             print(f"unreadable_files={unreadable}")
             print(f"integrity_check frames={checks[0]} pictures={checks[1]}")
             if checks != ("ok", "ok"):
@@ -250,6 +252,16 @@ def self_test():
             assert db.execute("SELECT locked FROM canvases WHERE id=12").fetchone()[0] == 1
             pixels = png_pixels(db.execute("SELECT png FROM canvases WHERE id=269356228").fetchone()[0])
             assert pixels[:4] == bytes((255, 3, 2, 255))
+        (paint / "MapID_TagList.yml").unlink()
+        migrate(image, locker, paint, root / "no-tag", blank)
+        with sqlite3.connect(root / "no-tag/pictures.db") as db:
+            assert count(db, "canvases") == 2
+            assert db.execute("SELECT COUNT(*) FROM canvases WHERE registered OR locked").fetchone()[0] == 0
+            assert db.execute("SELECT last_id FROM canvas_meta").fetchone()[0] == 0
+        migrate(image, locker, root / "no-paint", root / "no-paint-out", blank)
+        with sqlite3.connect(root / "no-paint-out/pictures.db") as db:
+            assert count(db, "canvases") == 0
+            assert db.execute("SELECT last_id FROM canvas_meta").fetchone()[0] == 0
     print("self-test OK")
 
 
