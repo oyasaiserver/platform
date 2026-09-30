@@ -53,6 +53,57 @@ internal data class ImageDetails(
     val mapIds: List<Int>,
 )
 
+internal data class Animation(
+    val imageId: Long,
+    val columns: Int,
+    val rows: Int,
+    val ids: List<Int>,
+    val delays: List<Int>,
+) {
+  val tiles: Int
+    get() = columns * rows
+
+  val frames: Int
+    get() = delays.size
+
+  fun frameAt(tick: Long): Int {
+    var offset = (tick % delays.sum()).toInt()
+    for (i in delays.indices) {
+      if (offset < delays[i]) return i
+      offset -= delays[i]
+    }
+    return 0
+  }
+}
+
+internal data class AnimationTile(val imageId: Long, val tile: Int, val frame: Int, val baseId: Int)
+
+internal class AnimationIndex {
+  val animations = mutableMapOf<Long, Animation>()
+  private val byMap = mutableMapOf<Int, AnimationTile>()
+
+  fun add(animation: Animation) {
+    animations[animation.imageId] = animation
+    animation.ids.forEachIndexed { i, id ->
+      byMap[id] =
+          AnimationTile(
+              animation.imageId,
+              i % animation.tiles,
+              i / animation.tiles,
+              animation.ids[i % animation.tiles],
+          )
+    }
+  }
+
+  fun remove(imageId: Long) {
+    animations.remove(imageId)?.ids?.forEach(byMap::remove)
+  }
+
+  fun tile(mapId: Int): AnimationTile? = byMap[mapId]
+
+  fun base(mapId: Int): Int = byMap[mapId]?.baseId ?: mapId
+}
+
 /** All methods are called on the plugin's single database thread. */
 internal class MapStore(private val file: File) : AutoCloseable {
   private lateinit var db: Connection
@@ -103,22 +154,34 @@ internal class MapStore(private val file: File) : AutoCloseable {
                 "CREATE TABLE canvas_meta (id INTEGER PRIMARY KEY CHECK(id=1), last_id INTEGER NOT NULL)"
             )
             s.execute("INSERT INTO canvas_meta(id,last_id) VALUES(1,0)")
-            s.execute("PRAGMA user_version = 1")
+            s.execute(
+                "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL)"
+            )
+            s.execute("PRAGMA user_version = 2")
           }
         }
       }
-      1 ->
-          db.createStatement().use { s ->
-            s.executeQuery(
-                    "SELECT id, owner, name, columns, rows, created_at, hidden FROM images LIMIT 1"
+      1,
+      2 -> {
+        db.createStatement().use { s ->
+          s.executeQuery(
+                  "SELECT id, owner, name, columns, rows, created_at, hidden FROM images LIMIT 1"
+              )
+              .close()
+          s.executeQuery("SELECT map_id, image_id, idx, png FROM maps LIMIT 1").close()
+          s.executeQuery("SELECT id,png,locked,registered FROM canvases LIMIT 1").close()
+          s.executeQuery("SELECT last_id FROM canvas_meta WHERE id=1").use { r -> check(r.next()) }
+        }
+        if (version == 1)
+            transaction {
+              db.createStatement().use { s ->
+                s.execute(
+                    "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL)"
                 )
-                .close()
-            s.executeQuery("SELECT map_id, image_id, idx, png FROM maps LIMIT 1").close()
-            s.executeQuery("SELECT id,png,locked,registered FROM canvases LIMIT 1").close()
-            s.executeQuery("SELECT last_id FROM canvas_meta WHERE id=1").use { r ->
-              check(r.next())
+                s.execute("PRAGMA user_version = 2")
+              }
             }
-          }
+      }
       else -> error("unsupported image database version $version")
     }
   }
@@ -144,6 +207,40 @@ internal class MapStore(private val file: File) : AutoCloseable {
             while (r.next()) ids.set(r.getInt(1))
           }
         }
+      }
+
+  fun animations(): List<Animation> =
+      db.createStatement().use { s ->
+        s.executeQuery(
+                "SELECT a.image_id,i.columns,i.rows,a.frames,a.delays FROM animations a JOIN images i ON i.id=a.image_id ORDER BY a.image_id"
+            )
+            .use { r ->
+              buildList {
+                while (r.next()) {
+                  val id = r.getLong(1)
+                  val columns = r.getInt(2)
+                  val rows = r.getInt(3)
+                  val count = r.getInt(4)
+                  val delays = r.getString(5).split(',').map(String::toInt)
+                  val ids =
+                      db.prepareStatement("SELECT map_id FROM maps WHERE image_id=? ORDER BY idx")
+                          .use { m ->
+                            m.setLong(1, id)
+                            m.executeQuery().use { maps ->
+                              buildList { while (maps.next()) add(maps.getInt(1)) }
+                            }
+                          }
+                  check(
+                      count == delays.size &&
+                          delays.all { it > 0 } &&
+                          ids.size == count * columns * rows
+                  ) {
+                    "invalid animation $id"
+                  }
+                  add(Animation(id, columns, rows, ids, delays))
+                }
+              }
+            }
       }
 
   fun saveFrames(records: List<FrameRecord>) = frames.saveFrames(records)
@@ -176,8 +273,20 @@ internal class MapStore(private val file: File) : AutoCloseable {
     return create(owner, ids.size, 1, ids, pngs)
   }
 
-  fun create(owner: UUID, columns: Int, rows: Int, ids: List<Int>, pngs: List<ByteArray>): Long {
-    require(columns > 0 && rows > 0 && ids.size == columns * rows && ids.size == pngs.size)
+  fun create(
+      owner: UUID,
+      columns: Int,
+      rows: Int,
+      ids: List<Int>,
+      pngs: List<ByteArray>,
+      delays: List<Int> = emptyList(),
+  ): Long {
+    require(
+        columns > 0 &&
+            rows > 0 &&
+            ids.size == (if (delays.isEmpty()) 1 else delays.size) * columns * rows &&
+            ids.size == pngs.size
+    )
     return transaction {
       val imageId =
           db.prepareStatement(
@@ -204,6 +313,14 @@ internal class MapStore(private val file: File) : AutoCloseable {
           s.executeUpdate()
         }
       }
+      if (delays.isNotEmpty())
+          db.prepareStatement("INSERT INTO animations(image_id,frames,delays) VALUES(?,?,?)").use {
+              s ->
+            s.setLong(1, imageId)
+            s.setInt(2, delays.size)
+            s.setString(3, delays.joinToString(","))
+            s.executeUpdate()
+          }
       imageId
     }
   }
@@ -225,31 +342,36 @@ internal class MapStore(private val file: File) : AutoCloseable {
           }
         } ?: return null
     val ids =
-        db.prepareStatement("SELECT idx,map_id FROM maps WHERE image_id=? ORDER BY idx").use { s ->
-          s.setLong(1, id)
-          s.executeQuery().use { r ->
-            buildList {
-              while (r.next()) {
-                if (r.getInt(1) != size) return null
-                add(r.getInt(2))
+        db.prepareStatement("SELECT idx,map_id FROM maps WHERE image_id=? AND idx < ? ORDER BY idx")
+            .use { s ->
+              s.setLong(1, id)
+              s.setInt(2, image.second * image.third)
+              s.executeQuery().use { r ->
+                buildList {
+                  while (r.next()) {
+                    if (r.getInt(1) != size) break
+                    add(r.getInt(2))
+                  }
+                }
               }
             }
-          }
-        }
     return runCatching { Poster(id, image.first, image.second, image.third, ids) }.getOrNull()
   }
 
   fun mapIndex(mapId: Int): Pair<Poster, Int>? =
-      db.prepareStatement("SELECT image_id,idx FROM maps WHERE map_id=?").use { s ->
-        s.setInt(1, mapId)
-        s.executeQuery().use { r ->
-          if (!r.next()) null
-          else {
-            val id = r.getLong(1)
-            if (r.wasNull()) null else poster(id)?.let { it to r.getInt(2) }
+      db.prepareStatement(
+              "SELECT m.image_id,m.idx % (i.columns*i.rows) FROM maps m JOIN images i ON i.id=m.image_id WHERE m.map_id=?"
+          )
+          .use { s ->
+            s.setInt(1, mapId)
+            s.executeQuery().use { r ->
+              if (!r.next()) null
+              else {
+                val id = r.getLong(1)
+                if (r.wasNull()) null else poster(id)?.let { it to r.getInt(2) }
+              }
+            }
           }
-        }
-      }
 
   fun list(owner: UUID, offset: Int): List<Listing> = listings(owner, offset, false)
 
@@ -322,6 +444,10 @@ internal class MapStore(private val file: File) : AutoCloseable {
   fun delete(id: Long): ImageDetails? = transaction {
     val image = details(id) ?: return@transaction null
     db.prepareStatement("DELETE FROM maps WHERE image_id=?").use { s ->
+      s.setLong(1, id)
+      s.executeUpdate()
+    }
+    db.prepareStatement("DELETE FROM animations WHERE image_id=?").use { s ->
       s.setLong(1, id)
       s.executeUpdate()
     }

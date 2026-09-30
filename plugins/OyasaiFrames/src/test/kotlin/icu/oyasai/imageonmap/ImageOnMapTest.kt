@@ -6,7 +6,10 @@ import java.net.InetAddress
 import java.nio.file.Files
 import java.sql.DriverManager
 import java.util.UUID
+import javax.imageio.IIOImage
 import javax.imageio.ImageIO
+import javax.imageio.ImageTypeSpecifier
+import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -226,5 +229,95 @@ class ImageOnMapTest {
     val picture = ImageSource.decode(bytes)
     assertEquals(2, picture.width)
     assertEquals(3, picture.height)
+  }
+
+  private fun gif(disposal: String): ByteArray {
+    val writer = ImageIO.getImageWritersByFormatName("gif").next()
+    val output = ByteArrayOutputStream()
+    ImageIO.createImageOutputStream(output).use { stream ->
+      writer.output = stream
+      writer.prepareWriteSequence(null)
+      val colors = listOf(0xffff0000.toInt(), 0xff0000ff.toInt(), 0xff00ff00.toInt())
+      colors.forEachIndexed { i, color ->
+        val image =
+            BufferedImage(if (i == 0) 3 else if (i == 1) 2 else 1, 1, BufferedImage.TYPE_INT_ARGB)
+        image.setRGB(if (i == 0) 0 else 0, 0, color)
+        val metadata =
+            writer.getDefaultImageMetadata(ImageTypeSpecifier.createFromRenderedImage(image), null)
+        val root = metadata.getAsTree("javax_imageio_gif_image_1.0") as IIOMetadataNode
+        val descriptor = root.getElementsByTagName("ImageDescriptor").item(0) as IIOMetadataNode
+        descriptor.setAttribute("imageLeftPosition", i.toString())
+        val control =
+            root.getElementsByTagName("GraphicControlExtension").item(0) as IIOMetadataNode
+        control.setAttribute("delayTime", if (i == 0) "1" else "5")
+        control.setAttribute("disposalMethod", if (i == 1) disposal else "doNotDispose")
+        control.setAttribute("transparentColorFlag", "TRUE")
+        metadata.setFromTree("javax_imageio_gif_image_1.0", root)
+        writer.writeToSequence(IIOImage(image, null, metadata), null)
+      }
+      writer.endWriteSequence()
+    }
+    writer.dispose()
+    return output.toByteArray()
+  }
+
+  @Test
+  fun gifCompositionAndDelays() {
+    for (disposal in listOf("restoreToBackgroundColor", "restoreToPrevious")) {
+      val result = ImageSource.prepare(gif(disposal), null, false, 16, 30, 2)
+      assertEquals(1 to 1, result.columns to result.rows)
+      assertEquals(listOf(2, 2, 2), result.delays)
+      val second = ImageIO.read(result.pngs[1].inputStream())
+      val third = ImageIO.read(result.pngs[2].inputStream())
+      assertEquals(0xff0000ff.toInt(), second.getRGB(1, 0))
+      assertEquals(0xffff0000.toInt(), third.getRGB(0, 0))
+      assertEquals(0, third.getRGB(1, 0) ushr 24, disposal)
+      assertEquals(0xff00ff00.toInt(), third.getRGB(2, 0))
+    }
+  }
+
+  @Test
+  fun animationTimingAndBaseIds() {
+    val animation = Animation(8, 2, 1, listOf(10, 11, 20, 21, 30, 31), listOf(2, 3, 2))
+    assertEquals(listOf(0, 0, 1, 1, 1, 2, 2, 0), (0L..7L).map(animation::frameAt))
+    val index = AnimationIndex()
+    index.add(animation)
+    assertEquals(11, index.base(31))
+    assertEquals(AnimationTile(8, 1, 2, 11), index.tile(31))
+    index.remove(8)
+    assertEquals(31, index.base(31))
+  }
+
+  @Test
+  fun versionOneUpgradesAndKeepsPosters() {
+    val file = Files.createTempDirectory("imageonmap-v1").resolve("pictures.db").toFile()
+    val owner = UUID.randomUUID()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      store.create(owner, listOf(10), listOf(bytes))
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().use {
+        it.execute("DROP TABLE animations")
+        it.execute("PRAGMA user_version=1")
+      }
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertEquals(listOf(10), store.poster(1)?.ids)
+      val id = store.create(owner, 1, 1, listOf(20, 30), listOf(bytes, bytes), listOf(2, 3))
+      assertEquals(listOf(20), store.poster(id)?.ids)
+      assertEquals(listOf(20, 30), store.animations().single().ids)
+      assertEquals(0, store.mapIndex(30)?.second)
+      assertEquals(listOf(20, 30), store.delete(id)?.mapIds)
+      assertTrue(store.animations().isEmpty())
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("PRAGMA user_version").use {
+        assertTrue(it.next())
+        assertEquals(2, it.getInt(1))
+      }
+    }
   }
 }

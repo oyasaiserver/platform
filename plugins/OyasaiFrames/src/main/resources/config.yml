@@ -1,0 +1,5 @@
+animation:
+  max-tiles: 16
+  max-frames: 30
+  min-delay-ticks: 2
+  push-maps-per-tick: 20

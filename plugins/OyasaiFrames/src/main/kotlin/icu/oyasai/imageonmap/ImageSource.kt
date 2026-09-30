@@ -16,6 +16,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import javax.imageio.ImageIO
+import javax.imageio.metadata.IIOMetadataNode
 import javax.imageio.spi.IIORegistry
 import kotlin.math.ceil
 import kotlin.math.min
@@ -106,7 +107,7 @@ internal object ImageSource {
     return listOf(uri)
   }
 
-  fun fetch(url: String): BufferedImage {
+  fun fetch(url: String): ByteArray {
     val deadline = System.nanoTime() + Duration.ofSeconds(20).toNanos()
     var last: Exception? = null
     for (start in candidates(url)) {
@@ -156,13 +157,7 @@ internal object ImageSource {
                   out.write(buf, 0, n)
                 }
                 require(System.nanoTime() < deadline) { "取得がタイムアウトしました" }
-                val decoded = CompletableFuture.supplyAsync { decode(out.toByteArray()) }
-                try {
-                  return decoded.get(deadline - System.nanoTime(), TimeUnit.NANOSECONDS)
-                } catch (e: TimeoutException) {
-                  decoded.cancel(true)
-                  throw IllegalArgumentException("取得がタイムアウトしました")
-                }
+                return out.toByteArray()
               }
             } finally {
               timeout.cancel(false)
@@ -197,34 +192,169 @@ internal object ImageSource {
 
   data class Tiles(val columns: Int, val rows: Int, val pngs: List<ByteArray>)
 
+  data class Prepared(
+      val columns: Int,
+      val rows: Int,
+      val pngs: List<ByteArray>,
+      val delays: List<Int>,
+  ) {
+    val frames: Int
+      get() = if (delays.isEmpty()) 1 else delays.size
+  }
+
+  private fun node(root: IIOMetadataNode, name: String): IIOMetadataNode? =
+      (0 until root.length)
+          .asSequence()
+          .map { root.item(it) as IIOMetadataNode }
+          .firstOrNull { it.nodeName == name }
+
+  private fun attr(node: IIOMetadataNode, name: String): Int = node.getAttribute(name).toInt()
+
+  fun prepare(
+      bytes: ByteArray,
+      resize: Pair<Int, Int>?,
+      bypass: Boolean,
+      maxTiles: Int,
+      maxFrames: Int,
+      minDelayTicks: Int,
+  ): Prepared {
+    ImageIO.createImageInputStream(ByteArrayInputStream(bytes)).use { input ->
+      val readers = ImageIO.getImageReaders(input)
+      require(readers.hasNext()) { "対応していない画像形式です" }
+      val reader = readers.next()
+      try {
+        reader.input = input
+        val count = if (reader.formatName.equals("gif", true)) reader.getNumImages(true) else 1
+        if (count < 2) {
+          val picture = decode(bytes)
+          val result = tiles(picture, resize, bypass)
+          return Prepared(result.columns, result.rows, result.pngs, emptyList())
+        }
+        require(count <= maxFrames) { "コマ数が多すぎます（$count コマ、上限 $maxFrames）" }
+        val screen =
+            reader.streamMetadata.getAsTree("javax_imageio_gif_stream_1.0") as IIOMetadataNode
+        val logical = node(screen, "LogicalScreenDescriptor") ?: error("GIF の画面サイズがありません")
+        val width = attr(logical, "logicalScreenWidth")
+        val height = attr(logical, "logicalScreenHeight")
+        val palette = node(screen, "GlobalColorTable")
+        val backgroundIndex = palette?.getAttribute("backgroundColorIndex")?.toIntOrNull()
+        val background =
+            (0 until (palette?.length ?: 0))
+                .asSequence()
+                .map { palette!!.item(it) as IIOMetadataNode }
+                .firstOrNull {
+                  it.nodeName == "ColorTableEntry" &&
+                      it.getAttribute("index").toIntOrNull() == backgroundIndex
+                }
+                ?.let { java.awt.Color(attr(it, "red"), attr(it, "green"), attr(it, "blue")) }
+        require(width in 1..8192 && height in 1..8192 && width.toLong() * height <= 25_000_000) {
+          "画像の寸法が大きすぎます"
+        }
+        val (cols, rows) = dimensions(width, height, resize, false, maxTiles)
+        val canvas = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+        val pngs = ArrayList<ByteArray>(count * cols * rows)
+        val delays = ArrayList<Int>(count)
+        var previous: BufferedImage? = null
+        for (i in 0 until count) {
+          val metadata =
+              reader.getImageMetadata(i).getAsTree("javax_imageio_gif_image_1.0") as IIOMetadataNode
+          val descriptor = node(metadata, "ImageDescriptor") ?: error("GIF のコマ情報がありません")
+          val control = node(metadata, "GraphicControlExtension") ?: error("GIF の遅延がありません")
+          val x = attr(descriptor, "imageLeftPosition")
+          val y = attr(descriptor, "imageTopPosition")
+          val w = attr(descriptor, "imageWidth")
+          val h = attr(descriptor, "imageHeight")
+          require(
+              x >= 0 &&
+                  y >= 0 &&
+                  w > 0 &&
+                  h > 0 &&
+                  x.toLong() + w <= width &&
+                  y.toLong() + h <= height
+          ) {
+            "GIF のコマが画面外です"
+          }
+          val disposal = control.getAttribute("disposalMethod")
+          if (disposal == "restoreToPrevious") {
+            previous = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+            previous.createGraphics().apply {
+              drawImage(canvas, 0, 0, null)
+              dispose()
+            }
+          }
+          val frame = reader.read(i)
+          canvas.createGraphics().apply {
+            drawImage(frame, x, y, null)
+            dispose()
+          }
+          pngs.addAll(tiles(canvas, resize, false, maxTiles).pngs)
+          val hundredths = attr(control, "delayTime").let { if (it <= 1) 10 else it }
+          delays.add(((hundredths + 2) / 5).coerceAtLeast(minDelayTicks))
+          when (disposal) {
+            "restoreToBackgroundColor" ->
+                canvas.createGraphics().apply {
+                  val transparentBackground =
+                      control.getAttribute("transparentColorFlag").equals("true", true)
+                  composite =
+                      if (background == null || transparentBackground) java.awt.AlphaComposite.Clear
+                      else java.awt.AlphaComposite.Src
+                  if (background != null && !transparentBackground) color = background
+                  fillRect(x, y, w, h)
+                  dispose()
+                }
+            "restoreToPrevious" ->
+                if (previous != null) {
+                  canvas.createGraphics().apply {
+                    composite = java.awt.AlphaComposite.Src
+                    drawImage(previous, 0, 0, null)
+                    dispose()
+                  }
+                  previous = null
+                }
+          }
+        }
+        return Prepared(cols, rows, pngs, delays)
+      } finally {
+        reader.dispose()
+      }
+    }
+  }
+
   fun dimensions(
       width: Int,
       height: Int,
       resize: Pair<Int, Int>?,
       bypass: Boolean,
+      limit: Int = 100,
   ): Pair<Int, Int> {
     require(width > 0 && height > 0)
     if (resize != null) {
       require(resize.first > 0 && resize.second > 0) { "枚数は正の数にしてください" }
-      require(bypass || resize.first.toLong() * resize.second <= 100) { "100 枚を超えています" }
+      require(bypass || resize.first.toLong() * resize.second <= limit) { "$limit 枚を超えています" }
       return resize
     }
     var scale = 1.0
-    if (!bypass && ceil(width / 128.0) * ceil(height / 128.0) > 100) {
-      scale = min(1.0, sqrt(100.0 * 128 * 128 / (width.toDouble() * height)))
+    if (!bypass && ceil(width / 128.0) * ceil(height / 128.0) > limit) {
+      scale = min(1.0, sqrt(limit.toDouble() * 128 * 128 / (width.toDouble() * height)))
       var low = 0.0
       var high = scale
       repeat(48) {
         val mid = (low + high) / 2
-        if (ceil(width * mid / 128.0) * ceil(height * mid / 128.0) <= 100) low = mid else high = mid
+        if (ceil(width * mid / 128.0) * ceil(height * mid / 128.0) <= limit) low = mid
+        else high = mid
       }
       scale = low
     }
     return ceil(width * scale / 128.0).toInt() to ceil(height * scale / 128.0).toInt()
   }
 
-  fun tiles(source: BufferedImage, resize: Pair<Int, Int>?, bypass: Boolean): Tiles {
-    val (cols, rows) = dimensions(source.width, source.height, resize, bypass)
+  fun tiles(
+      source: BufferedImage,
+      resize: Pair<Int, Int>?,
+      bypass: Boolean,
+      limit: Int = 100,
+  ): Tiles {
+    val (cols, rows) = dimensions(source.width, source.height, resize, bypass, limit)
     val maxWidth = cols * 128
     val maxHeight = rows * 128
     val fit = min(maxWidth.toDouble() / source.width, maxHeight.toDouble() / source.height)
