@@ -53,12 +53,11 @@ oyasaiPurpur rec {
     fastasyncvoxelsniper
     fastasyncworldedit
     floodgate
-    gakubuchilocker
-    imageonmap
     luckperms
     lunachat
     oyasaiadmintools
     oyasaichat
+    oyasaiframes
     oyasaigames
     oyasailwc
     oyasaimenu
@@ -70,7 +69,6 @@ oyasaiPurpur rec {
     oyasaivehicles
     oyasaivotifier
     oyasaiworldgenerator
-    painttools
     placeholderapi
     plugmanx
     pvparena
