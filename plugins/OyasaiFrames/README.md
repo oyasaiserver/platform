@@ -1,6 +1,6 @@
 # OyasaiFrames
 
-画像地図、額縁ロック、お絵かきを一つにまとめたプラグインです。データは既存の `ImageOnMap`、`Gakubuchi-Locker`、`PaintTools` フォルダに保存します。
+画像地図、額縁ロック、お絵かきを一つにまとめたプラグインです。データは `OyasaiFrames/frames.db` と `OyasaiFrames/pictures.db` に保存します。
 
 ## コマンド
 
@@ -25,13 +25,19 @@
 
 ## データと移行
 
-正データは `plugins/ImageOnMap/image.db` です。`maps` 表の PNG は `map_id` ごとに保持され、索引のない PNG も描画します。`frames` 表に貼った額縁の場所と日時を保存します。スキーマ `user_version = 1` では、`maps.png` は **128×128 の PNG バイト列**です。GUI の非表示は索引に印を付けるだけで、PNG は消しません。
+`frames.db` の `frames` 表は額縁 UUID を主キーとし、位置と、独立したロック持ち主・ポスター map ID を持ちます。どちらか一方を外しても、もう一方は残ります。`pictures.db` の `images`・`maps` は画像地図、`canvases` は PaintTools のキャンバスを保存します。両 DB は `PRAGMA user_version = 1` です。
 
-旧データからの移行は、プラグインを停止し、`plugins/ImageOnMap/` 全体をバックアップしてから一度だけ実行します。Python 3 と PyYAML が必要です。
+キャンバス ID は地図の map ID ではなく、アイテム PDC `painttools:id` の整数です。`MapID_TagList.yml` の `ID` は利用可能なキャンバス ID、`LastID` は次の自動発行に使う値、`LockID` は描画禁止 ID です。`MapID_List.yml` は現行コードから使われていません。PNG と YAML は移行時に取り込み、移行後のゲーム処理では旧フォルダを読みません。
+
+移行は新プラグインを有効にする前に一度だけ実行します。入力 SQLite は読み取り専用で開き、SQLite backup API で整合したコピーを作ります。既存の出力 DB は上書きしません。旧 DB と PaintTools フォルダも変更しません。
 
 ```sh
-python3 plugins/OyasaiFrames/migration/migrate_to_sqlite.py --self-test
-python3 plugins/OyasaiFrames/migration/migrate_to_sqlite.py --data-dir plugins/ImageOnMap
+python3 plugins/OyasaiFrames/migration/migrate_frames_pictures.py --self-test
+python3 plugins/OyasaiFrames/migration/migrate_frames_pictures.py \
+  --image-db plugins/ImageOnMap/image.db \
+  --locker-db plugins/Gakubuchi-Locker/gakubuchi.db \
+  --paint-dir plugins/PaintTools \
+  --output-dir plugins/OyasaiFrames
 ```
 
-スクリプトは `maps/*.yml` と `images/map*.png` を読み、一時 DB を検査してから `image.db` に改名します。元ファイルには書きません。索引にあるが PNG がない地図 ID は報告され、その画像はポスターの形が完全でないため貼り直しには使えません。既存の `image.db` や調査待ちの `image.db.tmp` があれば上書きしません。検査結果と欠けた ID を確認してからプラグインを有効にしてください。
+出力の件数と `integrity_check=ok` を確認してから有効化してください。読めない PNG は旧コードと同じ白紙画像に置き換え、件数とファイル名を報告します。旧 YAML は 128×128 PNG に変換します。描画内容は描画後 60 秒以内を目安に DB に保存し、プラグイン停止時にも書き出します。Undo 用のスナップショットは従来通り 60 秒ごとにメモリへ保存します。

@@ -20,8 +20,6 @@ class OyasaiFrames : ImageOnMap() {
   val paintIdKey
     get() = PAINT_ID_KEY
 
-  fun legacyFolder(name: String): File = dataFolder.parentFile.resolve(name)
-
   fun lockOwner(frame: ItemFrame): UUID? =
       frameOwner(
           lockerFeature?.db?.getOwner(frame.uniqueId),
@@ -34,6 +32,14 @@ class OyasaiFrames : ImageOnMap() {
   fun locker(): GakubuchiLockerPlugin? = lockerFeature
 
   override fun onEnable() {
+    try {
+      requireMigratedDatabases(dataFolder)
+    } catch (e: IllegalStateException) {
+      logger.severe(e.message)
+      server.pluginManager.disablePlugin(this)
+      return
+    }
+
     val locker = GakubuchiLockerPlugin(this)
     try {
       locker.onEnable()
@@ -65,6 +71,19 @@ class OyasaiFrames : ImageOnMap() {
         .onFailure { logger.severe("Image maps shutdown failed: ${it.message}") }
     runCatching { lockerFeature?.onDisable() }
         .onFailure { logger.severe("Frame locking shutdown failed: ${it.message}") }
+  }
+}
+
+internal fun requireMigratedDatabases(dataFolder: File) {
+  val plugins = dataFolder.parentFile
+  val missingDatabase =
+      !dataFolder.resolve("frames.db").exists() || !dataFolder.resolve("pictures.db").exists()
+  val legacyData =
+      plugins.resolve("ImageOnMap/image.db").exists() ||
+          plugins.resolve("Gakubuchi-Locker/gakubuchi.db").exists() ||
+          plugins.resolve("PaintTools").exists()
+  check(!missingDatabase || !legacyData) {
+    "旧データがあるため OyasaiFrames を起動しません。先に移行スクリプト plugins/OyasaiFrames/migration/migrate_frames_pictures.py を実行してください。"
   }
 }
 

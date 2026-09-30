@@ -17,7 +17,7 @@ class GakubuchiLockerPlugin(val plugin: OyasaiFrames) {
     get() = plugin.logger
 
   val dataFolder
-    get() = plugin.legacyFolder("Gakubuchi-Locker")
+    get() = plugin.dataFolder
 
   // プレイヤーのモード管理 (UUID → "lock" | "unlock")
   val pendingMode = mutableMapOf<UUID, PendingMode>()

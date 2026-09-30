@@ -1,37 +1,40 @@
 package com.github.srain3.painttools.tools.configs
 
-import com.github.srain3.painttools.tools.FileBox
 import com.github.srain3.painttools.tools.ToolBox
 import java.awt.Color
-import java.io.File
-import java.io.IOException
+import java.awt.image.BufferedImage
 import java.time.LocalDateTime
-import java.util.logging.Level
-import javax.imageio.IIOException
-import javax.imageio.ImageIO
 import org.bukkit.entity.Player
 import org.bukkit.map.MapCanvas
 import org.bukkit.map.MapRenderer
 import org.bukkit.map.MapView
 
-/** Mapごとのデータ */
+internal class PaintRenderGate {
+  private var pending = true
+
+  fun consume(): Boolean = pending.also { pending = false }
+}
+
 data class MapDataCash(val id: Int, var cash: MutableMap<Int, Color>, var time: LocalDateTime) {
-  fun checkID(input: Int): Boolean {
-    return input == id
+  var revision = 0
+  var savedRevision = 0
+
+  fun checkID(input: Int): Boolean = input == id
+
+  fun changed() {
+    revision++
   }
 
   fun render(): MapRenderer {
     time = LocalDateTime.now()
-    val list = cash
-    return object : MapRenderer() {
+    val image = BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB)
+    for (y in 0 until 128) for (x in 0 until 128) {
+      image.setRGB(x, y, cash[(x + 1) + y * 128]?.rgb ?: 0)
+    }
+    val gate = PaintRenderGate()
+    return object : MapRenderer(false) {
       override fun render(map: MapView, canvas: MapCanvas, player: Player) {
-        // スレッド中にfor回して参照してはいけないらしい
-        for (x in 0..127) {
-          for (y in 0..127) {
-            val color = list[(x + 1) + (y * 128)] ?: continue
-            canvas.setPixelColor(x, y, color)
-          }
-        }
+        if (gate.consume()) canvas.drawImage(0, 0, image)
       }
 
       override fun isExplorerMap(): Boolean = false
@@ -39,123 +42,98 @@ data class MapDataCash(val id: Int, var cash: MutableMap<Int, Color>, var time: 
   }
 }
 
-/** DataCashまとめ */
 object MapData {
-  /** /data/<ID>.ymlを保管する変数 */
-  private var mapDataList = mutableListOf<MapDataCash>()
+  private val mapData = mutableMapOf<Int, MapDataCash>()
+  private val loading = mutableMapOf<Int, MutableList<(MapDataCash) -> Unit>>()
+  private lateinit var store: CanvasStore
+  var undoCash: UndoCash? = UndoCash()
 
-  /** /data/<ID>.ymlへセーブ */
-  fun saveMapDataConfig() {
-    val nowTime = LocalDateTime.now()
-    val list = mapDataList.toMutableList()
-    for (mapDataCash in list) {
-      // val file = FileBox.getCfg("/data/${mapDataCash.id}.yml")
-      val pngFile = File(ToolBox.pl.legacyFolder("PaintTools"), "/img/${mapDataCash.id}.png")
-      if (!pngFile.exists()) {
-        val imgFolder = File(ToolBox.pl.legacyFolder("PaintTools"), "/img")
-        if (!imgFolder.exists()) {
-          try {
-            imgFolder.mkdirs()
-          } catch (ex: IOException) {
-            ToolBox.pl.logger.log(Level.SEVERE, "Could not save config to /img", ex)
-          }
-        }
-        try {
-          pngFile.createNewFile()
-        } catch (ex: IOException) {
-          ToolBox.pl.logger.log(
-              Level.SEVERE,
-              "Could not save config to /img/${mapDataCash.id}.png",
-              ex,
+  internal fun initialize(database: CanvasStore) {
+    store = database
+  }
+
+  fun newCanvas(id: Int) {
+    mapData[id] =
+        MapDataCash(
+            id,
+            (1..(128 * 128)).associateWith { Color(1, 1, 1, 0) }.toMutableMap(),
+            LocalDateTime.now(),
+        )
+  }
+
+  fun loadMapData(id: Int, onLoaded: ((MapDataCash) -> Unit)? = null): MapDataCash? {
+    mapData[id]?.let {
+      return it.also { data ->
+        data.time = LocalDateTime.now()
+        onLoaded?.invoke(data)
+      }
+    }
+    val callbacks = loading[id]
+    if (callbacks != null) {
+      if (onLoaded != null) callbacks.add(onLoaded)
+      return null
+    }
+    loading[id] =
+        mutableListOf<(MapDataCash) -> Unit>().also { if (onLoaded != null) it.add(onLoaded) }
+    store
+        .submit { store.load(id) }
+        .whenComplete { colors, failure ->
+          if (!ToolBox.pl.isEnabled) return@whenComplete
+          ToolBox.pl.server.scheduler.runTask(
+              ToolBox.pl,
+              Runnable {
+                val waiting = loading.remove(id) ?: return@Runnable
+                if (failure != null) {
+                  ToolBox.pl.logger.warning("Canvas $id load failed: ${failure.message}")
+                  return@Runnable
+                }
+                val data = MapDataCash(id, colors, LocalDateTime.now())
+                mapData[id] = data
+                waiting.forEach { it(data) }
+              },
           )
         }
+    return null
+  }
+
+  /** Snapshot on the main thread; encode and commit on the canvas worker. */
+  fun saveMapDataConfig() {
+    val now = LocalDateTime.now()
+    mapData.values.toList().forEach { data ->
+      if (data.revision != data.savedRevision) {
+        val revision = data.revision
+        val copy = data.cash.toMap()
+        store
+            .submit { store.save(data.id, copy) }
+            .whenComplete { _, failure ->
+              if (failure != null)
+                  ToolBox.pl.logger.warning("Canvas ${data.id} save failed: ${failure.message}")
+              else if (ToolBox.pl.isEnabled)
+                  ToolBox.pl.server.scheduler.runTask(
+                      ToolBox.pl,
+                      Runnable { data.savedRevision = maxOf(data.savedRevision, revision) },
+                  )
+            }
       }
-      var bufferedImage = ImageIO.read(pngFile)
-      if (bufferedImage == null) {
-        bufferedImage = ImageIO.read(ToolBox.pl.getResource("newPNG.png"))
-      }
-      // //mapDataCash.cash.values.forEach { mapCash ->
-      // file.set("X${mapCash.x}_Y${mapCash.y}", mapCash.color)
-      // //bufferedImage.setRGB(mapCash.x,mapCash.y, mapCash.color.asRGB())
-      // //}
-      for (x in 0..127) {
-        for (y in 0..127) {
-          bufferedImage.setRGB(x, y, mapDataCash.cash[(x + 1) + (y * 128)]?.rgb ?: continue)
-        }
-      }
-      // FileBox.saveFile("/data/${mapDataCash.id}.yml", file)
-      ImageIO.write(bufferedImage, "PNG", pngFile)
-      if (nowTime.isAfter(mapDataCash.time.plusMinutes(10))) {
-        mapDataList.remove(mapDataCash)
-        // Bukkit.getServer().logger.info("[PaintTools] remove mapDataCash!")
+      if (now.isAfter(data.time.plusMinutes(10)) && data.revision == data.savedRevision)
+          mapData.remove(data.id)
+    }
+  }
+
+  fun flush() {
+    mapData.values.forEach { data ->
+      if (data.revision != data.savedRevision) {
+        val copy = data.cash.toMap()
+        store.submit { store.save(data.id, copy) }.join()
       }
     }
   }
 
-  /** 無効化時にキャッシュをクリアしておく */
   fun disableUnloadMemTask() {
-    mapDataList.clear()
+    mapData.clear()
+    loading.clear()
     undoCash = null
   }
 
-  /** pos(X,Y)とcolorのリストを呼び出す */
-  fun loadMapData(id: Int): MapDataCash {
-    return if (mapDataList.any { it.checkID(id) }) {
-      mapDataList.first { it.checkID(id) }
-    } else {
-      val posList = mutableMapOf<Int, Color>()
-      if (FileBox.checkFile("/data/$id.yml")) {
-        val file = FileBox.getCfg("/data/$id.yml")
-        file.getKeys(false).forEach { keyStr ->
-          val split = keyStr.replace("X", "").replace("Y", "").split("_")
-          val x = split[0].toInt()
-          val y = split[1].toInt()
-          val color = Color(file.getColor(keyStr)?.asRGB() ?: return@forEach)
-          posList[(x + 1) + (y * 128)] = color
-        }
-        FileBox.removeFile("/data/$id.yml")
-      } else {
-        val pngFile = File(ToolBox.pl.legacyFolder("PaintTools"), "/img/${id}.png")
-        if (!pngFile.exists()) {
-          val imgFolder = File(ToolBox.pl.legacyFolder("PaintTools"), "/img")
-          if (!imgFolder.exists()) {
-            try {
-              imgFolder.mkdirs()
-            } catch (ex: IOException) {
-              ToolBox.pl.logger.log(Level.SEVERE, "Could not save config to /img", ex)
-            }
-          }
-          try {
-            pngFile.createNewFile()
-          } catch (ex: IOException) {
-            ToolBox.pl.logger.log(Level.SEVERE, "Could not save config to /img/${id}.png", ex)
-          }
-        }
-        var bufferedImage =
-            try {
-              ImageIO.read(pngFile)
-            } catch (_: IIOException) {
-              null
-            }
-        if (bufferedImage == null) {
-          bufferedImage = ImageIO.read(ToolBox.pl.getResource("newPNG.png"))
-        }
-        val colorIntList = bufferedImage.getRGB(0, 0, 128, 128, IntArray(128 * 128), 0, 128)
-        for (x in 0..127) {
-          for (y in 0..127) {
-            posList[(x + 1) + (y * 128)] = Color(colorIntList[y * 128 + x], true)
-          }
-        }
-      }
-      val dataCash = MapDataCash(id, posList, LocalDateTime.now())
-      mapDataList.add(dataCash)
-      dataCash
-    }
-  }
-
-  var undoCash: UndoCash? = UndoCash()
-
-  fun savaUndo(): Boolean {
-    return undoCash?.save(mapDataList) ?: false
-  }
+  fun savaUndo(): Boolean = undoCash?.save(mapData.values.toMutableList()) ?: false
 }
