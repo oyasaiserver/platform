@@ -58,6 +58,7 @@ internal data class Animation(
     val columns: Int,
     val rows: Int,
     val ids: List<Int>,
+    val slots: List<Int>,
     val delays: List<Int>,
 ) {
   val tiles: Int
@@ -84,14 +85,16 @@ internal class AnimationIndex {
 
   fun add(animation: Animation) {
     animations[animation.imageId] = animation
-    animation.ids.forEachIndexed { i, id ->
-      byMap[id] =
+    animation.slots.forEachIndexed { i, id ->
+      byMap.putIfAbsent(
+          id,
           AnimationTile(
               animation.imageId,
               i % animation.tiles,
               i / animation.tiles,
-              animation.ids[i % animation.tiles],
-          )
+              animation.slots[i % animation.tiles],
+          ),
+      )
     }
   }
 
@@ -155,7 +158,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
             )
             s.execute("INSERT INTO canvas_meta(id,last_id) VALUES(1,0)")
             s.execute(
-                "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL)"
+                "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL, slots TEXT NOT NULL)"
             )
             s.execute("PRAGMA user_version = 2")
           }
@@ -176,7 +179,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
             transaction {
               db.createStatement().use { s ->
                 s.execute(
-                    "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL)"
+                    "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL, slots TEXT NOT NULL)"
                 )
                 s.execute("PRAGMA user_version = 2")
               }
@@ -212,7 +215,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
   fun animations(): List<Animation> =
       db.createStatement().use { s ->
         s.executeQuery(
-                "SELECT a.image_id,i.columns,i.rows,a.frames,a.delays FROM animations a JOIN images i ON i.id=a.image_id ORDER BY a.image_id"
+                "SELECT a.image_id,i.columns,i.rows,a.frames,a.delays,a.slots FROM animations a JOIN images i ON i.id=a.image_id ORDER BY a.image_id"
             )
             .use { r ->
               buildList {
@@ -222,22 +225,38 @@ internal class MapStore(private val file: File) : AutoCloseable {
                   val rows = r.getInt(3)
                   val count = r.getInt(4)
                   val delays = r.getString(5).split(',').map(String::toInt)
-                  val ids =
-                      db.prepareStatement("SELECT map_id FROM maps WHERE image_id=? ORDER BY idx")
+                  val slots = r.getString(6).split(',').map(String::toInt)
+                  val maps =
+                      db.prepareStatement(
+                              "SELECT map_id,idx FROM maps WHERE image_id=? ORDER BY idx"
+                          )
                           .use { m ->
                             m.setLong(1, id)
                             m.executeQuery().use { maps ->
-                              buildList { while (maps.next()) add(maps.getInt(1)) }
+                              buildMap { while (maps.next()) put(maps.getInt(1), maps.getInt(2)) }
                             }
                           }
+                  val firstSlots = mutableMapOf<Int, Int>()
+                  slots.forEachIndexed { slot, mapId -> firstSlots.putIfAbsent(mapId, slot) }
                   check(
-                      count == delays.size &&
+                      columns > 0 &&
+                          rows > 0 &&
+                          count > 0 &&
+                          count == delays.size &&
                           delays.all { it > 0 } &&
-                          ids.size == count * columns * rows
+                          slots.size.toLong() == count.toLong() * columns * rows &&
+                          maps == firstSlots &&
+                          slots.withIndex().all { (slot, mapId) ->
+                            val first = maps[mapId]
+                            first != null && first % (columns * rows) == slot % (columns * rows)
+                          } &&
+                          slots.take(columns * rows).withIndex().all { (slot, mapId) ->
+                            maps[mapId] == slot
+                          }
                   ) {
                     "invalid animation $id"
                   }
-                  add(Animation(id, columns, rows, ids, delays))
+                  add(Animation(id, columns, rows, maps.keys.toList(), slots, delays))
                 }
               }
             }
@@ -280,12 +299,26 @@ internal class MapStore(private val file: File) : AutoCloseable {
       ids: List<Int>,
       pngs: List<ByteArray>,
       delays: List<Int> = emptyList(),
+      firstSlots: List<Int> = ids.indices.toList(),
+      slots: List<Int> = emptyList(),
   ): Long {
+    val firstById = mutableMapOf<Int, Int>()
+    slots.forEachIndexed { slot, mapId -> firstById.putIfAbsent(mapId, slot) }
     require(
         columns > 0 &&
             rows > 0 &&
-            ids.size == (if (delays.isEmpty()) 1 else delays.size) * columns * rows &&
-            ids.size == pngs.size
+            ids.size == pngs.size &&
+            ids.size == firstSlots.size &&
+            (if (delays.isEmpty()) ids.size == columns * rows && slots.isEmpty()
+            else
+                slots.size.toLong() == delays.size.toLong() * columns * rows &&
+                    firstSlots.all { it in slots.indices } &&
+                    slots.take(columns * rows) == ids.take(columns * rows) &&
+                    firstById.size == ids.size &&
+                    ids.indices.all { i -> firstById[ids[i]] == firstSlots[i] } &&
+                    slots.withIndex().all { (slot, mapId) ->
+                      firstById[mapId]!! % (columns * rows) == slot % (columns * rows)
+                    })
     )
     return transaction {
       val imageId =
@@ -308,19 +341,22 @@ internal class MapStore(private val file: File) : AutoCloseable {
         ids.forEachIndexed { i, id ->
           s.setInt(1, id)
           s.setLong(2, imageId)
-          s.setInt(3, i)
+          s.setInt(3, firstSlots[i])
           s.setBytes(4, pngs[i])
           s.executeUpdate()
         }
       }
       if (delays.isNotEmpty())
-          db.prepareStatement("INSERT INTO animations(image_id,frames,delays) VALUES(?,?,?)").use {
-              s ->
-            s.setLong(1, imageId)
-            s.setInt(2, delays.size)
-            s.setString(3, delays.joinToString(","))
-            s.executeUpdate()
-          }
+          db.prepareStatement(
+                  "INSERT INTO animations(image_id,frames,delays,slots) VALUES(?,?,?,?)"
+              )
+              .use { s ->
+                s.setLong(1, imageId)
+                s.setInt(2, delays.size)
+                s.setString(3, delays.joinToString(","))
+                s.setString(4, slots.joinToString(","))
+                s.executeUpdate()
+              }
       imageId
     }
   }

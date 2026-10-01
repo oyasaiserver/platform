@@ -202,6 +202,8 @@ internal object ImageSource {
       val rows: Int,
       val pngs: List<ByteArray>,
       val delays: List<Int>,
+      val firstSlots: List<Int> = pngs.indices.toList(),
+      val slots: List<Int> = emptyList(),
   ) {
     val frames: Int
       get() = if (delays.isEmpty()) 1 else delays.size
@@ -257,7 +259,10 @@ internal object ImageSource {
         }
         val (cols, rows) = dimensions(width, height, resize, false, maxTiles)
         val canvas = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-        val pngs = ArrayList<ByteArray>(count * cols * rows)
+        val pngs = ArrayList<ByteArray>()
+        val firstSlots = ArrayList<Int>()
+        val slots = ArrayList<Int>(count * cols * rows)
+        val seen = List(cols * rows) { mutableMapOf<Int, MutableList<Int>>() }
         val delays = ArrayList<Int>(count)
         var previous: BufferedImage? = null
         for (i in 0 until count) {
@@ -292,7 +297,18 @@ internal object ImageSource {
             drawImage(frame, x, y, null)
             dispose()
           }
-          pngs.addAll(tiles(canvas, resize, false, maxTiles).pngs)
+          tiles(canvas, resize, false, maxTiles).pngs.forEachIndexed { tile, png ->
+            val candidates = seen[tile].getOrPut(png.contentHashCode()) { mutableListOf() }
+            val existing = candidates.firstOrNull { pngs[it].contentEquals(png) }
+            val index =
+                existing
+                    ?: pngs.size.also {
+                      pngs.add(png)
+                      firstSlots.add(slots.size)
+                      candidates.add(it)
+                    }
+            slots.add(index)
+          }
           val hundredths = attr(control, "delayTime").let { if (it <= 1) 10 else it }
           delays.add(((hundredths + 2) / 5).coerceAtLeast(minDelayTicks))
           when (disposal) {
@@ -318,7 +334,7 @@ internal object ImageSource {
                 }
           }
         }
-        return Prepared(cols, rows, pngs, delays)
+        return Prepared(cols, rows, pngs, delays, firstSlots, slots)
       } finally {
         reader.dispose()
       }

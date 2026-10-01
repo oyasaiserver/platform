@@ -336,9 +336,12 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       if (shownFrames[imageId] == current) return@forEach
       frames.values.removeIf { !it.isValid }
       frames.values.forEach { frame ->
-        val baseId = mapId(frame.item) ?: return@forEach
+        val currentId =
+            (frame.item.itemMeta as? MapMeta)?.takeIf { it.hasMapId() }?.mapId ?: return@forEach
+        val baseId = animations.base(currentId)
         val tile = animations.tile(baseId) ?: return@forEach
-        frame.setItem(item(animation.ids[current * animation.tiles + tile.tile]), false)
+        val nextId = animation.slots[current * animation.tiles + tile.tile]
+        if (nextId != currentId) frame.setItem(item(nextId), false)
       }
       shownFrames[imageId] = current
     }
@@ -892,8 +895,18 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                   failCreate(player, url, e)
                   return@main
                 }
+            val slots = tiles.slots.map(ids::get)
             database {
-                  store.create(owner, tiles.columns, tiles.rows, ids, tiles.pngs, tiles.delays)
+                  store.create(
+                      owner,
+                      tiles.columns,
+                      tiles.rows,
+                      ids,
+                      tiles.pngs,
+                      tiles.delays,
+                      tiles.firstSlots,
+                      slots,
+                  )
                 }
                 .whenComplete { id, saveFailure ->
                   main {
@@ -902,7 +915,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                       ids.forEach(mapIds::set)
                       if (tiles.delays.isNotEmpty())
                           animations.add(
-                              Animation(id, tiles.columns, tiles.rows, ids, tiles.delays)
+                              Animation(id, tiles.columns, tiles.rows, ids, slots, tiles.delays)
                           )
                       database { store.poster(id) }
                           .whenComplete { poster, readFailure ->
@@ -919,7 +932,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                                 )
                                 if (tiles.delays.isNotEmpty())
                                     logger.info(
-                                        "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} pngBytes=${tiles.pngs.sumOf { it.size.toLong() }}"
+                                        "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} slots=${slots.size} pngBytes=${tiles.pngs.sumOf { it.size.toLong() }}"
                                     )
                               }
                             }
