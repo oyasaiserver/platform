@@ -237,7 +237,7 @@ internal object ImageSource {
           val result = tiles(picture, resize, bypass)
           return Prepared(result.columns, result.rows, result.pngs, emptyList())
         }
-        require(count <= maxFrames) { "コマ数が多すぎます（$count コマ、上限 $maxFrames）" }
+        require(bypass || count <= maxFrames) { "コマ数が多すぎます（$count コマ、上限 $maxFrames）" }
         val screen =
             reader.streamMetadata.getAsTree("javax_imageio_gif_stream_1.0") as IIOMetadataNode
         val logical = node(screen, "LogicalScreenDescriptor") ?: error("GIF の画面サイズがありません")
@@ -257,7 +257,7 @@ internal object ImageSource {
         require(width in 1..8192 && height in 1..8192 && width.toLong() * height <= 25_000_000) {
           "画像の寸法が大きすぎます"
         }
-        val (cols, rows) = dimensions(width, height, resize, false, maxTiles)
+        val (cols, rows) = dimensions(width, height, resize, bypass, maxTiles)
         val canvas = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
         val pngs = ArrayList<ByteArray>()
         val firstSlots = ArrayList<Int>()
@@ -297,7 +297,7 @@ internal object ImageSource {
             drawImage(frame, x, y, null)
             dispose()
           }
-          tiles(canvas, resize, false, maxTiles).pngs.forEachIndexed { tile, png ->
+          tiles(canvas, resize, bypass, maxTiles).pngs.forEachIndexed { tile, png ->
             val candidates = seen[tile].getOrPut(png.contentHashCode()) { mutableListOf() }
             val existing = candidates.firstOrNull { pngs[it].contentEquals(png) }
             val index =

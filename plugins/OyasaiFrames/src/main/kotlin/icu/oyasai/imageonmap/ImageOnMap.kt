@@ -85,6 +85,9 @@ internal fun tomapAction(args: List<String>): TomapAction =
       else -> TomapAction.USAGE
     }
 
+internal fun exceedsLimit(current: Int, added: Int, limit: Int, bypass: Boolean): Boolean =
+    !bypass && current.toLong() + added > limit
+
 open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private val dbThread = Executors.newSingleThreadExecutor { r -> Thread(r, "imageonmap-db") }
   private val imageThreads = Executors.newFixedThreadPool(2) { r -> Thread(r, "imageonmap-image") }
@@ -852,7 +855,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private fun create(player: Player, url: String, resize: Pair<Int, Int>?) {
     val bypass = player.hasPermission("imageonmap.bypasssize")
     val maxTiles = getConfig().getInt("animation.max-tiles", 16).coerceAtLeast(1)
-    val maxFrames = getConfig().getInt("animation.max-frames", 30).coerceAtLeast(1)
+    val maxFrames = getConfig().getInt("animation.max-frames", 60).coerceAtLeast(1)
+    val maxMaps = getConfig().getInt("animation.max-maps", 500).coerceAtLeast(1)
+    val maxMapsPerPlayer =
+        getConfig().getInt("animation.max-maps-per-player", 2000).coerceAtLeast(1)
     val minDelay = getConfig().getInt("animation.min-delay-ticks", 2).coerceAtLeast(1)
     if (resize != null && !bypass && resize.first.toLong() * resize.second > 100) {
       message(player, "100 枚を超えています")
@@ -865,79 +871,133 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     active.add(player.uniqueId)
     val owner = player.uniqueId
     player.sendActionBar(Component.text("画像を読み込み中…"))
-    CompletableFuture.supplyAsync(
-            {
-              ImageSource.prepare(
-                  ImageSource.fetch(url),
-                  resize,
-                  bypass,
-                  maxTiles,
-                  maxFrames,
-                  minDelay,
-              )
-            },
-            imageThreads,
-        )
-        .whenComplete { tiles, failure ->
+    database { if (bypass) 0 else store.animatedMapCount(owner) }
+        .thenCompose { current ->
+          CompletableFuture.supplyAsync(
+              {
+                current to
+                    ImageSource.prepare(
+                        ImageSource.fetch(url),
+                        resize,
+                        bypass,
+                        maxTiles,
+                        maxFrames,
+                        minDelay,
+                    )
+              },
+              imageThreads,
+          )
+        }
+        .whenComplete { result, failure ->
           main {
             if (failure != null) {
               failCreate(player, url, failure)
               return@main
             }
+            val (current, tiles) = result
             if (!player.isOnline) {
               failCreate(player, url, IllegalStateException("プレイヤーが退出しました"))
               return@main
             }
-            val ids =
-                try {
-                  List(tiles.pngs.size) { Bukkit.createMap(player.world).id }
-                } catch (e: Exception) {
-                  failCreate(player, url, e)
-                  return@main
-                }
-            val slots = tiles.slots.map(ids::get)
+            if (tiles.delays.isNotEmpty() && !bypass) {
+              if (current >= maxMapsPerPlayer) {
+                failCreate(
+                    player,
+                    url,
+                    IllegalArgumentException("動く画像の地図は現在 $current 枚、上限 $maxMapsPerPlayer 枚です"),
+                )
+                return@main
+              }
+              if (exceedsLimit(tiles.pngs.size, 0, maxMaps, false)) {
+                failCreate(
+                    player,
+                    url,
+                    IllegalArgumentException(
+                        "地図が多すぎます（${tiles.pngs.size} 枚、上限 $maxMaps 枚）。コマ数か大きさを減らしてください"
+                    ),
+                )
+                return@main
+              }
+            }
             database {
-                  store.create(
-                      owner,
-                      tiles.columns,
-                      tiles.rows,
-                      ids,
-                      tiles.pngs,
-                      tiles.delays,
-                      tiles.firstSlots,
-                      slots,
-                  )
+                  if (tiles.delays.isNotEmpty() && !bypass) store.animatedMapCount(owner) else 0
                 }
-                .whenComplete { id, saveFailure ->
+                .whenComplete { latest, latestFailure ->
                   main {
-                    if (saveFailure != null) failCreate(player, url, saveFailure)
-                    else {
-                      ids.forEach(mapIds::set)
-                      if (tiles.delays.isNotEmpty())
-                          animations.add(
-                              Animation(id, tiles.columns, tiles.rows, ids, slots, tiles.delays)
+                    if (latestFailure != null) {
+                      failCreate(player, url, latestFailure)
+                      return@main
+                    }
+                    if (
+                        tiles.delays.isNotEmpty() &&
+                            exceedsLimit(latest, tiles.pngs.size, maxMapsPerPlayer, bypass)
+                    ) {
+                      failCreate(
+                          player,
+                          url,
+                          IllegalArgumentException("動く画像の地図は現在 $latest 枚、上限 $maxMapsPerPlayer 枚です"),
+                      )
+                      return@main
+                    }
+                    val ids =
+                        try {
+                          List(tiles.pngs.size) { Bukkit.createMap(player.world).id }
+                        } catch (e: Exception) {
+                          failCreate(player, url, e)
+                          return@main
+                        }
+                    val slots = tiles.slots.map(ids::get)
+                    database {
+                          store.create(
+                              owner,
+                              tiles.columns,
+                              tiles.rows,
+                              ids,
+                              tiles.pngs,
+                              tiles.delays,
+                              tiles.firstSlots,
+                              slots,
                           )
-                      database { store.poster(id) }
-                          .whenComplete { poster, readFailure ->
-                            main {
-                              active.remove(player.uniqueId)
-                              permits.release()
-                              if (readFailure != null || poster == null)
-                                  message(player, "保存後の索引を読めません")
-                              else {
-                                deliver(player, splatter(poster))
-                                message(
-                                    player,
-                                    "画像を作成しました (${tiles.columns}×${tiles.rows}、${tiles.frames} コマ、地図 ${ids.size} 枚)",
-                                )
-                                if (tiles.delays.isNotEmpty())
-                                    logger.info(
-                                        "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} slots=${slots.size} pngBytes=${tiles.pngs.sumOf { it.size.toLong() }}"
-                                    )
-                              }
+                        }
+                        .whenComplete { id, saveFailure ->
+                          main {
+                            if (saveFailure != null) failCreate(player, url, saveFailure)
+                            else {
+                              ids.forEach(mapIds::set)
+                              if (tiles.delays.isNotEmpty())
+                                  animations.add(
+                                      Animation(
+                                          id,
+                                          tiles.columns,
+                                          tiles.rows,
+                                          ids,
+                                          slots,
+                                          tiles.delays,
+                                      )
+                                  )
+                              database { store.poster(id) }
+                                  .whenComplete { poster, readFailure ->
+                                    main {
+                                      active.remove(player.uniqueId)
+                                      permits.release()
+                                      if (readFailure != null || poster == null)
+                                          message(player, "保存後の索引を読めません")
+                                      else {
+                                        deliver(player, splatter(poster))
+                                        message(
+                                            player,
+                                            "画像を作成しました (${tiles.columns}×${tiles.rows}、${tiles.frames} コマ、地図 ${ids.size} 枚)",
+                                        )
+                                        if (tiles.delays.isNotEmpty())
+                                            logger.info(
+                                                "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} slots=${slots.size} pngBytes=${tiles.pngs.sumOf { it.size.toLong() }}"
+                                            )
+                                      }
+                                    }
+                                  }
                             }
                           }
-                    }
+                        }
                   }
                 }
           }

@@ -37,6 +37,63 @@ class ImageOnMapTest {
           .toByteArray()
 
   @Test
+  fun animatedMapLimits() {
+    assertTrue(exceedsLimit(0, 501, 500, false))
+    assertFalse(exceedsLimit(0, 500, 500, false))
+    assertFalse(exceedsLimit(0, 501, 500, true))
+    assertTrue(exceedsLimit(1501, 500, 2000, false))
+    assertFalse(exceedsLimit(1500, 500, 2000, false))
+    assertFalse(exceedsLimit(2000, 500, 2000, true))
+  }
+
+  @Test
+  fun gifBypassRemovesTileAndFrameLimits() {
+    val bytes = gif("none")
+    assertFails { ImageSource.prepare(bytes, 2 to 1, false, 1, 1, 2) }
+    val prepared = ImageSource.prepare(bytes, 2 to 1, true, 1, 1, 2)
+    assertEquals(2 to 1, prepared.columns to prepared.rows)
+    assertEquals(3, prepared.frames)
+  }
+
+  @Test
+  fun animatedMapCountIncludesHiddenButNotStaticOrDeleted() {
+    val file = Files.createTempDirectory("imageonmap-count").resolve("pictures.db").toFile()
+    val owner = UUID.randomUUID()
+    val other = UUID.randomUUID()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      val animated =
+          store.create(
+              owner,
+              1,
+              1,
+              listOf(1, 2),
+              listOf(bytes, bytes),
+              listOf(2, 2),
+              listOf(0, 1),
+              listOf(1, 2),
+          )
+      assertEquals(2, store.animatedMapCount(owner))
+      store.hide(owner, animated)
+      store.create(owner, listOf(3), listOf(bytes))
+      store.create(
+          other,
+          1,
+          1,
+          listOf(4, 5),
+          listOf(bytes, bytes),
+          listOf(2, 2),
+          listOf(0, 1),
+          listOf(4, 5),
+      )
+      assertEquals(2, store.animatedMapCount(owner))
+      store.delete(animated)
+      assertEquals(0, store.animatedMapCount(owner))
+    }
+  }
+
+  @Test
   fun commandRouting() {
     assertEquals(TomapAction.CREATE, tomapAction(listOf("https://")))
     assertEquals(

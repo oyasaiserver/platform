@@ -212,6 +212,18 @@ internal class MapStore(private val file: File) : AutoCloseable {
         }
       }
 
+  fun animatedMapCount(owner: UUID): Int =
+      db.prepareStatement(
+              "SELECT COUNT(*) FROM maps m JOIN animations a ON a.image_id=m.image_id JOIN images i ON i.id=a.image_id WHERE i.owner=?"
+          )
+          .use { s ->
+            s.setString(1, owner.toString())
+            s.executeQuery().use { r ->
+              r.next()
+              r.getInt(1)
+            }
+          }
+
   fun animations(): List<Animation> =
       db.createStatement().use { s ->
         s.executeQuery(
