@@ -127,7 +127,12 @@ internal object ImageSource {
           val remaining = deadline - System.nanoTime()
           require(remaining > 0) { "取得がタイムアウトしました" }
           val request =
-              HttpRequest.newBuilder(target).timeout(Duration.ofNanos(remaining)).GET().build()
+              HttpRequest.newBuilder(target)
+                  .timeout(Duration.ofNanos(remaining))
+                  // Wikimedia などは Java 既定の User-Agent を 403 で断る
+                  .header("User-Agent", "OyasaiFrames/6.0 (Minecraft server image import)")
+                  .GET()
+                  .build()
           val response = client.send(request, HttpResponse.BodyHandlers.ofInputStream())
           response.body().use { body ->
             val timeout =
