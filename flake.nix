@@ -46,6 +46,10 @@
       inputs.systems.follows = "systems";
     };
     systems.url = "github:nix-systems/triplet";
+    terraform-cloudflare-nix-lru-cache = {
+      url = "github:shunueda/terraform-cloudflare-nix-lru-cache";
+      flake = false;
+    };
     tools = {
       url = "github:anteriorcore/tools";
       inputs.nixpkgs.follows = "nixpkgs";
