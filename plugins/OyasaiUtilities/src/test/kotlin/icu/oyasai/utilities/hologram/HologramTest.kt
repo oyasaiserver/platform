@@ -66,7 +66,7 @@ class HologramTest {
     assertNull(parseDecentHologram("bad", "enabled: true\n"))
     assertNull(holo.viewRange)
     assertTrue(holo.seeThrough)
-    assertTrue(holo.background)
+    assertEquals(BackgroundType.DEFAULT, holo.background)
     assertEquals(41.750 - TEXT_HEIGHT, lineY(holo.y, 0), 0.000_000_1)
     assertEquals(41.750 - LINE_HEIGHT - TEXT_HEIGHT, lineY(holo.y, 1), 0.000_000_1)
   }
@@ -86,17 +86,23 @@ class HologramTest {
             enabled = true,
             viewRange = 2.5f,
             seeThrough = false,
-            background = false,
+            background = BackgroundType.TRANSPARENT,
         )
-    val plain = tuned.copy(name = "plain", viewRange = null, seeThrough = true, background = true)
+    val plain =
+        tuned.copy(
+            name = "plain",
+            viewRange = null,
+            seeThrough = true,
+            background = BackgroundType.DEFAULT,
+        )
     writeHolograms(file, listOf(tuned, plain))
     val read = readHolograms(file)
     assertEquals(2.5f, read["tuned"]?.viewRange)
     assertEquals(false, read["tuned"]?.seeThrough)
-    assertEquals(false, read["tuned"]?.background)
+    assertEquals(BackgroundType.TRANSPARENT, read["tuned"]?.background)
     assertNull(read["plain"]?.viewRange)
     assertEquals(true, read["plain"]?.seeThrough)
-    assertEquals(true, read["plain"]?.background)
+    assertEquals(BackgroundType.DEFAULT, read["plain"]?.background)
 
     file.writeText(
         """
@@ -116,7 +122,7 @@ class HologramTest {
     assertNotNull(old)
     assertNull(old.viewRange)
     assertTrue(old.seeThrough)
-    assertTrue(old.background)
+    assertEquals(BackgroundType.DEFAULT, old.background)
     assertEquals(listOf("hello"), old.lines)
   }
 }

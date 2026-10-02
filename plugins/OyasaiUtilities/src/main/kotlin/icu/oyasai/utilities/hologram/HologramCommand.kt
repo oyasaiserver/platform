@@ -10,6 +10,9 @@ import org.bukkit.entity.Player
 object HologramCommand : CommandExecutor, TabCompleter {
   private val subs =
       listOf(
+          "tool",
+          "menu",
+          "angle",
           "create",
           "delete",
           "list",
@@ -29,12 +32,31 @@ object HologramCommand : CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    if (!sender.hasPermission(HologramFeature.PERMISSION)) return true
+    if (!HologramFeature.canEdit(sender)) return true
     if (args.isEmpty()) {
       help(sender)
       return true
     }
     when (args[0].lowercase()) {
+      "tool" -> {
+        val player = sender as? Player ?: return true
+        if (player.inventory.addItem(HologramTool.item()).isNotEmpty())
+            player.sendMessage("[oholo] インベントリに空きがありません")
+      }
+      "menu" -> {
+        val player = sender as? Player ?: return true
+        val holo =
+            args.getOrNull(1)?.let { HologramFeature.get(it) }
+                ?: run {
+                  help(sender)
+                  return true
+                }
+        HologramGui.open(player, holo.name)
+      }
+      "angle" -> {
+        val player = sender as? Player ?: return true
+        HologramTool.angle(player, args.getOrNull(1))
+      }
       "create" -> create(sender, args)
       "delete" -> delete(sender, args)
       "list" -> list(sender)
@@ -56,8 +78,11 @@ object HologramCommand : CommandExecutor, TabCompleter {
       alias: String,
       args: Array<out String>,
   ): List<String> {
-    if (!sender.hasPermission(HologramFeature.PERMISSION)) return emptyList()
+    if (!HologramFeature.canEdit(sender)) return emptyList()
     if (args.size == 1) return subs.filter { it.startsWith(args[0], ignoreCase = true) }
+    if (args.size == 2 && args[0].equals("angle", ignoreCase = true)) {
+      return listOf("15", "reset").filter { it.startsWith(args[1], ignoreCase = true) }
+    }
     if (args[0].equals("line", ignoreCase = true)) {
       if (args.size == 2) return lineSubs.filter { it.startsWith(args[1], ignoreCase = true) }
       if (args.size == 3 && lineSubs.any { it.equals(args[1], ignoreCase = true) }) {
@@ -67,7 +92,7 @@ object HologramCommand : CommandExecutor, TabCompleter {
     }
     if (
         args.size == 2 &&
-            listOf("delete", "movehere", "range", "seethrough", "background").any {
+            listOf("menu", "delete", "movehere", "range", "seethrough", "background").any {
               it.equals(args[0], ignoreCase = true)
             }
     ) {
@@ -94,7 +119,7 @@ object HologramCommand : CommandExecutor, TabCompleter {
     val lines = if (text.isEmpty()) emptyList() else listOf(text)
     val loc = player.location
     HologramFeature.put(
-        Hologram(name, loc.world.name, loc.x, loc.y, loc.z, lines, enabled = true),
+        Hologram(name, loc.world.name, loc.x, loc.y, loc.z, lines, enabled = true, yaw = loc.yaw),
     )
     sender.sendMessage("[oholo] 作成: $name")
   }
@@ -119,7 +144,8 @@ object HologramCommand : CommandExecutor, TabCompleter {
         if (args.size < 2) {
           16.0
         } else {
-          args[1].toDoubleOrNull()?.takeIf { it > 0 } ?: return sender.sendMessage("[oholo] 半径は正の数")
+          args[1].toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
+              ?: return sender.sendMessage("[oholo] 半径は正の数")
         }
     val here = player.location
     val rows =
@@ -141,7 +167,9 @@ object HologramCommand : CommandExecutor, TabCompleter {
     val name = args.getOrNull(1) ?: return help(sender)
     val holo = HologramFeature.get(name) ?: return sender.sendMessage("[oholo] 無い: $name")
     val loc = player.location
-    HologramFeature.put(holo.copy(world = loc.world.name, x = loc.x, y = loc.y, z = loc.z))
+    HologramFeature.put(
+        holo.copy(world = loc.world.name, x = loc.x, y = loc.y, z = loc.z, yaw = loc.yaw)
+    )
     sender.sendMessage("[oholo] 移動: $name")
   }
 
@@ -195,7 +223,8 @@ object HologramCommand : CommandExecutor, TabCompleter {
         if (raw.equals("default", ignoreCase = true)) {
           null
         } else {
-          raw.toFloatOrNull() ?: return sender.sendMessage("[oholo] 距離は数値か default")
+          raw.toFloatOrNull()?.takeIf { it.isFinite() && it >= 0 }
+              ?: return sender.sendMessage("[oholo] 距離は数値か default")
         }
     HologramFeature.put(holo.copy(viewRange = viewRange))
     sender.sendMessage("[oholo] range: $name ${viewRange ?: "default"}")
@@ -223,7 +252,9 @@ object HologramCommand : CommandExecutor, TabCompleter {
           else -> return help(sender)
         }
     val holo = HologramFeature.get(name) ?: return sender.sendMessage("[oholo] 無い: $name")
-    HologramFeature.put(holo.copy(background = on))
+    HologramFeature.put(
+        holo.copy(background = if (on) BackgroundType.DEFAULT else BackgroundType.TRANSPARENT)
+    )
     sender.sendMessage("[oholo] background: $name ${if (on) "on" else "off"}")
   }
 
@@ -240,6 +271,7 @@ object HologramCommand : CommandExecutor, TabCompleter {
       HologramFeature.all().map { it.name }.filter { it.startsWith(prefix, ignoreCase = true) }
 
   private fun help(sender: CommandSender) {
+    sender.sendMessage("[oholo] tool / menu <name> / angle <角度|reset>")
     sender.sendMessage(
         "[oholo] create <name> [text] / delete <name> / list / near [radius] / movehere <name> / import",
     )

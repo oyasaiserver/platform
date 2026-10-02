@@ -87,7 +87,7 @@ commands:
     usage: /togom [types/reset/lim/radius/duration/replace]
   oholo:
     description: "ホログラム"
-    usage: /oholo <create|delete|list|near|movehere|line|import|range|seethrough|background>
+    usage: /oholo <create|delete|list|near|movehere|line|import|range|seethrough|background|tool|menu|angle>
     permission: oyasaiutilities.hologram
   spawn:
     description: "スポーン地点へテレポートする"
