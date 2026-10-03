@@ -11,7 +11,7 @@ import io.oyasai.chat.paper.chat.ChatService
 private const val PRESENCE_CACHE_TTL_MILLIS = 10_000L
 
 /**
- * コマンド補完だけに使う、短時間有効なProxy全体のオンライン名キャッシュ。 PM送信時はVelocity側でUUIDと現在のサーバーを正式確認するため、古い候補が表示されても
+ * コマンド補完と日本語変換の保護名に使う、短時間有効なProxy全体のオンライン名キャッシュ。 PM送信時はVelocity側でUUIDと現在のサーバーを正式確認するため、古い候補が表示されても
  * オフラインの相手へPMは送信されない。
  */
 class PlayerPresenceCache(
@@ -20,6 +20,7 @@ class PlayerPresenceCache(
 ) {
   @Volatile private var names: Set<String> = emptySet()
   @Volatile private var updatedAt: Long = 0L
+  private var pending: java.util.concurrent.CompletableFuture<Set<String>>? = null
   @Volatile private var requestedAt: Long = 0L
 
   fun receive(envelope: NetworkEnvelope) {
@@ -31,6 +32,20 @@ class PlayerPresenceCache(
     }
     names = PresenceSnapshotCodec.decode(envelope.content)
     updatedAt = System.currentTimeMillis()
+    pending?.complete(names)
+    pending = null
+  }
+
+  fun snapshot(): java.util.concurrent.CompletableFuture<Set<String>> {
+    pending
+        ?.takeUnless { it.isDone }
+        ?.let {
+          return it
+        }
+    val result = java.util.concurrent.CompletableFuture<Set<String>>()
+    pending = result
+    requestRefresh(System.currentTimeMillis(), force = true)
+    return result.completeOnTimeout(names, 2, java.util.concurrent.TimeUnit.SECONDS)
   }
 
   fun names(partial: String, now: Long = System.currentTimeMillis()): List<String> {
@@ -42,8 +57,8 @@ class PlayerPresenceCache(
     return names.filter { it.lowercase().startsWith(lower) }.sorted()
   }
 
-  private fun requestRefresh(now: Long) {
-    if (now - requestedAt <= PRESENCE_CACHE_TTL_MILLIS) return
+  private fun requestRefresh(now: Long, force: Boolean = false) {
+    if (!force && now - requestedAt <= PRESENCE_CACHE_TTL_MILLIS) return
     val carrier = plugin.server.onlinePlayers.firstOrNull() ?: return
     requestedAt = now
     chat.bridge.send(

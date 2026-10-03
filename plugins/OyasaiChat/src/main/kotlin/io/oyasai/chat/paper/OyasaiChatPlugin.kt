@@ -43,17 +43,20 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
           "setchannel",
           "msg",
           "r",
+          "japanize",
           "oyasaichat",
       )
   private val shortcutCommands = mutableMapOf<String, Command>()
   private val displacedCommands = mutableMapOf<String, Command>()
 
   internal lateinit var runtime: PaperRuntime
+  internal lateinit var sourceMessages: io.oyasai.chat.paper.japanize.SourceMessageQueue
   internal lateinit var textTransformers: RecipientTextTransformerRegistry
 
   internal val chatLifecycleLock = Any()
   @Volatile internal var reloadInProgress = false
   internal var pendingChatCommits = 0
+  internal var importInProgress = false
 
   override fun onEnable() {
     saveDefaultConfig()
@@ -68,6 +71,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
               return
             }
     this.runtime = runtime
+    sourceMessages = io.oyasai.chat.paper.japanize.SourceMessageQueue(this)
     runtime.discord.enable()
 
     server.pluginManager.registerEvents(this, this)
@@ -90,12 +94,78 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     )
   }
 
+  fun importLunaChat(sender: CommandSender) {
+    if (!sender.hasPermission("oyasaichat.admin.import")) {
+      sender.sendMessage(
+          runtime.formatter.error("You do not have permission to import LunaChat data.")
+      )
+      return
+    }
+    if (
+        importInProgress ||
+            !sourceMessages.canReloadSafely() ||
+            pendingChatCommits != 0 ||
+            !runtime.privateMessages.canReloadSafely()
+    ) {
+      sender.sendMessage(
+          runtime.formatter.error("Wait until pending messages finish before importing.")
+      )
+      return
+    }
+    runCatching {
+          val plan =
+              io.oyasai.chat.paper.japanize.LunaImport.load(
+                  java.io.File(dataFolder, "imports/lunachat")
+              )
+          val dictionaryFile = java.io.File(dataFolder, "japanize-dictionary.yml")
+          val merged =
+              io.oyasai.chat.paper.japanize.LunaImport.dictionary(dictionaryFile) + plan.dictionary
+          val settings =
+              runtime.config.japanize.copy(
+                  dictionary = merged + PaperConfigLoader.load(config).japanize.dictionary
+              )
+          io.oyasai.chat.paper.japanize.LunaImport.saveDictionary(dictionaryFile, merged)
+          runtime = runtime.copy(config = runtime.config.copy(japanize = settings))
+          sourceMessages.close()
+          sourceMessages = io.oyasai.chat.paper.japanize.SourceMessageQueue(this)
+          importInProgress = true
+          sender.sendMessage(
+              runtime.formatter.info(
+                  "LunaChat import started: resolved=${plan.players.size}, unresolved=${plan.unresolved}, dictionary=${plan.dictionary.size}."
+              )
+          )
+          val states = runtime.states
+          states.importJapanize(plan.players).whenComplete { changed, failure ->
+            if (isEnabled)
+                server.scheduler.runTask(
+                    this,
+                    Runnable {
+                      states.finishImport()
+                      importInProgress = false
+                      val message =
+                          if (failure == null)
+                              "LunaChat import saved: changed=$changed, unresolved=${plan.unresolved}."
+                          else
+                              "LunaChat player import failed; retry the same staged files: ${failure.message}"
+                      sender.sendMessage(runtime.formatter.info(message))
+                      if (failure != null) logger.warning(message)
+                    },
+                )
+          }
+        }
+        .onFailure {
+          sender.sendMessage(runtime.formatter.error("LunaChat import failed: ${it.message}"))
+        }
+  }
+
   fun reloadRuntime(sender: CommandSender): Boolean {
     check(server.isPrimaryThread) { "OyasaiChat reload must run on the server thread" }
     val busy =
         synchronized(chatLifecycleLock) {
           if (
-              pendingChatCommits != 0 ||
+              importInProgress ||
+                  pendingChatCommits != 0 ||
+                  !sourceMessages.canReloadSafely() ||
                   !runtime.privateMessages.canReloadSafely() ||
                   !runtime.delivery.canReloadSafely()
           ) {
@@ -149,7 +219,9 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
       runtime.delivery.close()
       server.messenger.unregisterIncomingPluginChannel(this, NETWORK_CHANNEL)
 
+      sourceMessages.close()
       runtime = candidate
+      sourceMessages = io.oyasai.chat.paper.japanize.SourceMessageQueue(this)
       server.messenger.registerIncomingPluginChannel(this, NETWORK_CHANNEL, candidate.bridge)
       candidate.discord.enable()
       server.onlinePlayers.forEach { player ->
@@ -181,6 +253,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     if (!::runtime.isInitialized) return
     unregisterShortcutCommands()
     releaseClaimedCommands()
+    sourceMessages.close()
     runtime.discord.disable()
     runtime.delivery.close()
     runtime.states.flushAndShutdown()

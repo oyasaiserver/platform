@@ -60,6 +60,8 @@ data class ChatConfig(
     val pmEnabledByDefault: Boolean,
     val privateMessageReceiveSound: PrivateMessageSoundSettings,
     val discord: DiscordSettings,
+    val japanize: io.oyasai.chat.common.japanize.JapanizeSettings =
+        io.oyasai.chat.common.japanize.JapanizeSettings(),
 )
 
 data class PrivateMessageSoundSettings(

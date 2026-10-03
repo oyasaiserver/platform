@@ -26,10 +26,11 @@ internal constructor(
       recipients: Collection<Player>,
       render: (Player, Component) -> Component,
       afterDelivery: (Player) -> Unit = {},
+      originalBody: Component = Component.text(originalText),
   ) {
     check(plugin.server.isPrimaryThread) { "Text dispatch must start on the server thread" }
     if (closed) return
-    val original = Component.text(originalText)
+    val original = originalBody
     recipients.distinctBy(Player::getUniqueId).forEach { player ->
       val resolved =
           resolve(

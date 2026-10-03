@@ -2,6 +2,7 @@ package io.oyasai.chat.paper.pm
 
 import io.oyasai.chat.api.ChatTextSender
 import io.oyasai.chat.api.ChatTextSurface
+import io.oyasai.chat.common.japanize.ChatMessage
 import io.oyasai.chat.common.protocol.MAX_MESSAGE_AGE_MILLIS
 import io.oyasai.chat.common.protocol.MessageType
 import io.oyasai.chat.common.protocol.NetworkEnvelope
@@ -9,7 +10,6 @@ import io.oyasai.chat.paper.OyasaiChatPlugin
 import io.oyasai.chat.paper.chat.ChatService
 import io.oyasai.chat.paper.chat.state
 import java.util.UUID
-import net.kyori.adventure.text.Component
 import org.bukkit.SoundCategory
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -22,7 +22,7 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
   internal val pendingOutbound = mutableMapOf<UUID, PendingOutbound>()
 
   internal data class PendingReply(
-      val message: String,
+      val message: ChatMessage,
       val createdAt: Long = System.currentTimeMillis(),
   )
 
@@ -34,7 +34,7 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
   internal data class PendingOutbound(
       val sourceId: UUID,
       val targetName: String,
-      val message: String,
+      val message: ChatMessage,
       val createdAt: Long = System.currentTimeMillis(),
   )
 
@@ -50,6 +50,11 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
     return pendingReplies.isEmpty() &&
         pendingConversationTargets.isEmpty() &&
         pendingOutbound.isEmpty()
+  }
+
+  fun hasPendingSource(id: UUID): Boolean {
+    canReloadSafely()
+    return pendingReplies.containsKey(id) || pendingOutbound.values.any { it.sourceId == id }
   }
 
   internal fun playReceiveSound(target: Player) {
@@ -125,10 +130,11 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
   /** AsyncChatEventを受理した後の、会話モードPMの確定。受信者別の表示もここで行う。 */
   fun commitConversationMessage(
       source: Player,
-      message: String,
+      message: ChatMessage,
       expectedPeer: UUID? = null,
       expectedName: String? = null,
       deliverLocal: Boolean = true,
+      recipientIds: Set<UUID>? = null,
   ): Boolean {
     val state = chat.state(source)
     if (state.privateMessageModePeer == null && state.privateMessageModeName == null) {
@@ -153,7 +159,14 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       source.sendMessage(chat.formatter.error("Message must not be empty."))
       return true
     }
-    sendInternal(source, targetName, peer, message, deliverLocal = deliverLocal)
+    sendInternal(
+        source,
+        targetName,
+        peer,
+        message,
+        deliverLocal = deliverLocal,
+        recipientIds = recipientIds,
+    )
     return true
   }
 
@@ -208,15 +221,19 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
               )
               return false
             }
-    return sendInternal(source, targetInput, null, message)
+    plugin.sourceMessages.enqueue(source, message) { prepared ->
+      sendInternal(source, targetInput, null, prepared)
+    }
+    return true
   }
 
   internal fun sendInternal(
       source: Player,
       targetInput: String,
       targetId: java.util.UUID?,
-      message: String,
+      message: ChatMessage,
       deliverLocal: Boolean = true,
+      recipientIds: Set<UUID>? = null,
   ): Boolean {
     if (message.isBlank()) {
       source.sendMessage(chat.formatter.error("Message must not be empty."))
@@ -237,45 +254,44 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       chat.states.save(local)
       if (deliverLocal) {
         val presentation = chat.formatter.snapshot(source)
-        if (chat.ownsTransformation(ChatTextSurface.PRIVATE_MESSAGE)) {
-          chat.delivery.dispatch(
-              messageId = UUID.randomUUID(),
-              surface = ChatTextSurface.PRIVATE_MESSAGE,
-              sender =
-                  ChatTextSender(
-                      source.uniqueId,
-                      source.name,
-                      source.locale().toLanguageTag(),
-                  ),
-              originalText = message,
-              recipients = listOf(source, local),
-              render = { _, body ->
-                chat.formatter.privateMessage(
-                    senderName = source.name,
-                    targetName = local.name,
-                    message = body,
-                    presentation = presentation,
-                )
-              },
-              afterDelivery = { recipient ->
-                if (recipient.uniqueId == local.uniqueId) playReceiveSound(recipient)
-              },
-          )
-        } else {
-          val component =
+        chat.delivery.dispatch(
+            messageId = UUID.randomUUID(),
+            surface = ChatTextSurface.PRIVATE_MESSAGE,
+            sender =
+                ChatTextSender(
+                    source.uniqueId,
+                    source.name,
+                    source.locale().toLanguageTag(),
+                ),
+            originalText = chat.formatter.plain(chat.formatter.body(message)),
+            originalBody = chat.formatter.body(message),
+            recipients =
+                listOf(source, local).filter {
+                  recipientIds == null || it.uniqueId in recipientIds
+                },
+            render = { _, body ->
               chat.formatter.privateMessage(
                   senderName = source.name,
                   targetName = local.name,
-                  message = Component.text(message),
+                  message = body,
                   presentation = presentation,
               )
-          source.sendMessage(component)
-          local.sendMessage(component)
-          playReceiveSound(local)
-        }
+            },
+            afterDelivery = { recipient ->
+              if (recipient.uniqueId == local.uniqueId) playReceiveSound(recipient)
+            },
+        )
       } else {
         playReceiveSound(local)
       }
+      plugin.server.consoleSender.sendMessage(
+          chat.formatter.privateMessage(
+              source.name,
+              local.name,
+              chat.formatter.body(message),
+              chat.formatter.snapshot(source),
+          )
+      )
       chat.bridge.send(
           source,
           NetworkEnvelope.backend(
@@ -287,7 +303,11 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
               content = "SET",
           ),
       )
-      plugin.runtime.discord.onPrivateMessage(source.name, local.name, message)
+      plugin.runtime.discord.onPrivateMessage(
+          source.name,
+          local.name,
+          chat.formatter.plain(chat.formatter.body(message)),
+      )
       return true
     }
     val envelope =
@@ -300,7 +320,9 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
             senderCanSendLinks =
                 source.hasPermission("oyasaichat.links.send") || !chat.config.linkDomainFilter,
             senderName = source.name,
-            content = message,
+            content = message.text,
+            japanizeOriginal = message.original,
+            japanizeFormat = message.format,
             senderLocale = source.locale().toLanguageTag(),
         )
     if (deliverLocal) {
@@ -325,6 +347,12 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       sender.sendMessage(chat.formatter.error("Message must not be empty."))
       return false
     }
+    plugin.sourceMessages.enqueue(player, message) { prepared -> replyPrepared(player, prepared) }
+    return true
+  }
+
+  private fun replyPrepared(player: Player, message: ChatMessage): Boolean {
+    val sender = player
     val peer = chat.state(player).lastPrivateMessagePeer
     if (peer == null) {
       pendingReplies[player.uniqueId] = PendingReply(message)

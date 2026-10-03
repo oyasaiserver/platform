@@ -73,13 +73,6 @@
       "type": "modrinth"
     }
   },
-  "lunachat": {
-    "paper": {
-      "skipVersionCheck": true,
-      "slug": "lunachat",
-      "type": "modrinth"
-    }
-  },
   "lwc": {
     "paper": {
       "slug": "lwc",

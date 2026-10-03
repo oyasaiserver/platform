@@ -54,6 +54,8 @@ data class NetworkEnvelope(
     val senderLocale: String? = null,
     val senderName: String,
     val content: String,
+    val japanizeOriginal: String? = null,
+    val japanizeFormat: String? = null,
 ) {
   fun isFresh(now: Long = System.currentTimeMillis()): Boolean =
       timestamp >= now - MAX_MESSAGE_AGE_MILLIS && timestamp <= now + MAX_FUTURE_SKEW_MILLIS
@@ -64,6 +66,8 @@ data class NetworkEnvelope(
         backendId: String,
         senderName: String,
         content: String,
+        japanizeOriginal: String? = null,
+        japanizeFormat: String? = null,
         replyToMessageId: UUID? = null,
         channelId: String? = null,
         networkGroup: String? = null,
@@ -92,6 +96,8 @@ data class NetworkEnvelope(
             senderLocale = senderLocale,
             senderName = senderName,
             content = content,
+            japanizeOriginal = japanizeOriginal,
+            japanizeFormat = japanizeFormat,
         )
 
     fun proxy(
@@ -171,7 +177,16 @@ object EnvelopeCodec {
     requiredLong(objectJson, "timestamp")
     requiredString(objectJson, "senderName")
     val content = requiredString(objectJson, "content")
-    require(content.length <= MAX_PAYLOAD_LENGTH) { "Envelope content is too long." }
+    val original = optionalString(objectJson, "japanizeOriginal")
+    val format = optionalString(objectJson, "japanizeFormat")
+    require((original == null) == (format == null)) { "Japanize metadata must be paired" }
+    if (original != null) {
+      require(type == MessageType.CHANNEL_MESSAGE || type == MessageType.PRIVATE_MESSAGE)
+      require(original.isNotBlank() && format!!.length <= 512)
+    }
+    require(content.length + (original?.length ?: 0) <= MAX_PAYLOAD_LENGTH) {
+      "Envelope content is too long."
+    }
     optionalString(objectJson, "senderLocale")?.let { value ->
       require(value.length <= 35 && Locale.forLanguageTag(value).language.isNotBlank()) {
         "Envelope senderLocale is invalid."

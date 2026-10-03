@@ -2,6 +2,7 @@ package io.oyasai.chat.paper.network
 
 import io.oyasai.chat.api.ChatTextSender
 import io.oyasai.chat.api.ChatTextSurface
+import io.oyasai.chat.common.japanize.ChatMessage
 import io.oyasai.chat.common.protocol.MessageOrigin
 import io.oyasai.chat.common.protocol.MessageType
 import io.oyasai.chat.common.protocol.NetworkEnvelope
@@ -12,7 +13,6 @@ import io.oyasai.chat.paper.pm.receiveModeState
 import io.oyasai.chat.paper.pm.receivePrivateResult
 import io.oyasai.chat.paper.pm.receiveReplyState
 import io.oyasai.chat.paper.pm.receiveTargetResult
-import net.kyori.adventure.text.Component
 
 // Velocityから届いたメッセージのPaper側反映。
 /** 読み込み済みProxyメッセージのPaper側チャット・プレイヤー状態への反映。 */
@@ -54,7 +54,7 @@ class PaperNetworkHandler(
         channel,
         envelope.senderName,
         envelope.originPlayerId,
-        envelope.content,
+        ChatMessage.from(envelope),
         envelope.messageId,
         envelope.originBackendPrefix,
         envelope.originBackendSuffix,
@@ -79,50 +79,27 @@ class PaperNetworkHandler(
     if (accepted) {
       targetState.lastPrivateMessagePeer = senderId
       chat.states.save(target)
-      if (chat.ownsTransformation(ChatTextSurface.PRIVATE_MESSAGE)) {
-        chat.delivery.dispatch(
-            messageId = envelope.messageId,
-            surface = ChatTextSurface.PRIVATE_MESSAGE,
-            sender = ChatTextSender(senderId, envelope.senderName, envelope.senderLocale),
-            originalText = envelope.content,
-            recipients = listOf(target),
-            render = { _, body ->
-              chat.formatter.privateMessage(
-                  senderName = envelope.senderName,
-                  targetName = target.name,
-                  message = body,
-                  presentation = null,
-                  senderCanSendLinks = envelope.senderCanSendLinks,
-              )
-            },
-            afterDelivery = { current ->
-              chat.privateMessages.playReceiveSound(current)
-              acknowledgePrivate(current, senderId, envelope, "DELIVERED")
-            },
-        )
-      } else {
-        val current = plugin.server.getPlayer(target.uniqueId)
-        if (current === target && current.isOnline) {
-          runCatching {
-                current.sendMessage(
-                    chat.formatter.privateMessage(
-                        senderName = envelope.senderName,
-                        targetName = current.name,
-                        message = Component.text(envelope.content),
-                        presentation = null,
-                        senderCanSendLinks = envelope.senderCanSendLinks,
-                    )
-                )
-                chat.privateMessages.playReceiveSound(current)
-                acknowledgePrivate(current, senderId, envelope, "DELIVERED")
-              }
-              .onFailure {
-                plugin.logger.warning(
-                    "Unable to deliver network private message ${envelope.messageId}: ${it.message}"
-                )
-              }
-        }
-      }
+      chat.delivery.dispatch(
+          messageId = envelope.messageId,
+          surface = ChatTextSurface.PRIVATE_MESSAGE,
+          sender = ChatTextSender(senderId, envelope.senderName, envelope.senderLocale),
+          originalText = chat.formatter.plain(chat.formatter.body(ChatMessage.from(envelope))),
+          originalBody = chat.formatter.body(ChatMessage.from(envelope)),
+          recipients = listOf(target),
+          render = { _, body ->
+            chat.formatter.privateMessage(
+                senderName = envelope.senderName,
+                targetName = target.name,
+                message = body,
+                presentation = null,
+                senderCanSendLinks = envelope.senderCanSendLinks,
+            )
+          },
+          afterDelivery = { current ->
+            chat.privateMessages.playReceiveSound(current)
+            acknowledgePrivate(current, senderId, envelope, "DELIVERED")
+          },
+      )
     } else {
       val current = plugin.server.getPlayer(target.uniqueId)
       if (current === target && current.isOnline) {

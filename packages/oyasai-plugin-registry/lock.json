@@ -93,14 +93,6 @@
       "hash": "sha256-o6yS704p/Yek1wbckkRf2UbxyvHTNSbKGEIqYlVPoYo="
     }
   },
-  "lunachat": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/gr738FKw/versions/VnKre5xb/LunaChat.jar",
-        "hash": "sha256-nZP7aCQa3ofzfvAoiBS9hyCMk2GDdKvQrJMTqJkTy8Q="
-      }
-    }
-  },
   "lwc": {
     "paper": {
       "26.2": {

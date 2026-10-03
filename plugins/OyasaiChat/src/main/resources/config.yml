@@ -94,3 +94,17 @@ login-messages:
     lobby: "Lobby"
   from-suffix-format: " <gray>from <white><backend></white></gray>"
   to-suffix-format: " <gray>to <white><backend></white></gray>"
+
+# Source backend conversion only. Incoming network messages are already prepared.
+japanize:
+  enabled: false
+  backends:
+    main: true
+    lobby: false
+    axiom: false
+  player-default: true
+  strip-marker: true
+  none-marker: "#"
+  timeout-millis: 2000
+  format: "<converted> <gray><original></gray>"
+  dictionary: {}

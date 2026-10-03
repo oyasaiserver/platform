@@ -177,6 +177,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           ],
         }),
         env: envs({
+          OYASAI_SERVER_ID: "main",
+          OYASAI_JAPANIZE_ENABLED: "true",
           MEMORY: this.isMaster
             ? // On-prem has 64GB
               "28G"
@@ -218,6 +220,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         init: true,
         networksAdvanced: [network],
         env: envs({
+          OYASAI_SERVER_ID: "lobby",
+          OYASAI_JAPANIZE_ENABLED: "false",
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
           MEMORY: this.isMaster ? "2G" : "1G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
@@ -245,6 +249,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         init: true,
         networksAdvanced: [network],
         env: envs({
+          OYASAI_SERVER_ID: "axiom",
+          OYASAI_JAPANIZE_ENABLED: "false",
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
           MEMORY: this.isMaster ? "8G" : "1G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,

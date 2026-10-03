@@ -31,9 +31,19 @@ internal data class PaperRuntime(
 internal object PaperRuntimeFactory {
   fun create(
       plugin: OyasaiChatPlugin,
-      model: ChatConfig,
+      rawModel: ChatConfig,
       transformers: RecipientTextTransformerRegistry,
   ): PaperRuntime {
+    val model =
+        rawModel.copy(
+            japanize =
+                rawModel.japanize.copy(
+                    dictionary =
+                        io.oyasai.chat.paper.japanize.LunaImport.dictionary(
+                            java.io.File(plugin.dataFolder, "japanize-dictionary.yml")
+                        ) + rawModel.japanize.dictionary
+                )
+        )
     validateShortcutCommands(plugin, model)
     val states = PlayerStateStore(plugin, model)
     val formatter = ChatFormatter(plugin, model)
@@ -89,6 +99,7 @@ internal object PaperRuntimeFactory {
                 "setchannel",
                 "msg",
                 "r",
+                "japanize",
                 "oyasaichat",
             )
             .flatMap {

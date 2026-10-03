@@ -32,7 +32,6 @@ oyasaiPurpur rec {
     fastasyncworldedit
     floodgate
     luckperms
-    lunachat
     oyasaichat
     oyasaitab
     oyasaiworldgenerator

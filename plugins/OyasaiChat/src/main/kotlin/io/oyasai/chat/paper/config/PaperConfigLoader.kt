@@ -85,7 +85,52 @@ object PaperConfigLoader {
     require(receiveSound.pitch.isFinite() && receiveSound.pitch in 0.5f..2.0f) {
       "private-messages.receive-sound.pitch must be between 0.5 and 2.0"
     }
+    val japanize =
+        io.oyasai.chat.common.japanize.JapanizeSettings(
+            enabled =
+                config.getBoolean(
+                    "japanize.backends.$backendId",
+                    config.getBoolean(
+                        "japanize.enabled",
+                        System.getenv("OYASAI_JAPANIZE_ENABLED")?.toBooleanStrictOrNull() ?: false,
+                    ),
+                ),
+            playerDefault = config.getBoolean("japanize.player-default", true),
+            marker = config.getString("japanize.none-marker", "#") ?: "#",
+            stripMarker = config.getBoolean("japanize.strip-marker", true),
+            timeoutMillis = config.getLong("japanize.timeout-millis", 2000),
+            format = config.getString("japanize.format", "<converted> <gray><original></gray>")!!,
+            dictionary =
+                config
+                    .getConfigurationSection("japanize.dictionary")
+                    ?.getValues(false)
+                    ?.mapValues { (_, value) ->
+                      require(value is String) { "Japanize dictionary values must be strings" }
+                      value
+                    } ?: emptyMap(),
+        )
+    require(japanize.timeoutMillis in 100..10000) { "Japanize timeout must be 100–10000ms" }
+    require(japanize.format.length <= 512) { "Japanize format must be at most 512 characters" }
+    require(
+        Regex("<converted>").findAll(japanize.format).count() == 1 &&
+            Regex("<original>").findAll(japanize.format).count() == 1
+    ) {
+      "Japanize format must contain one <converted> and one <original>"
+    }
+    net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
+        .deserialize(
+            japanize.format,
+            net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed(
+                "converted",
+                "test",
+            ),
+            net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed(
+                "original",
+                "test",
+            ),
+        )
     return ChatConfig(
+        japanize = japanize,
         network = network,
         channels = registry,
         chatFormat = config.getString("formatting.chat") ?: "<channel> <name>: <message>",

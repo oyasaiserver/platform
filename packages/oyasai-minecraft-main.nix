@@ -54,7 +54,6 @@ oyasaiPurpur rec {
     fastasyncworldedit
     floodgate
     luckperms
-    lunachat
     oyasaiadmintools
     oyasaichat
     oyasaiframes

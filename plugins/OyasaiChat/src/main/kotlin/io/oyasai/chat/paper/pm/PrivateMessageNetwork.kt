@@ -4,7 +4,6 @@ import io.oyasai.chat.common.protocol.MessageOrigin
 import io.oyasai.chat.common.protocol.MessageType
 import io.oyasai.chat.common.protocol.NetworkEnvelope
 import io.oyasai.chat.paper.chat.state
-import net.kyori.adventure.text.Component
 
 // Velocityから届いたPM関連メッセージ処理。
 internal fun PrivateMessageService.receiveTargetResult(envelope: NetworkEnvelope) {
@@ -85,10 +84,31 @@ internal fun PrivateMessageService.receivePrivateResult(envelope: NetworkEnvelop
             chat.formatter.privateMessage(
                 senderName = sender.name,
                 targetName = targetName,
-                message = Component.text(pending.message),
+                message = chat.formatter.body(pending.message),
                 presentation = chat.formatter.snapshot(sender),
             )
-        sender.sendMessage(component)
+        chat.delivery.dispatch(
+            messageId = java.util.UUID.randomUUID(),
+            surface = io.oyasai.chat.api.ChatTextSurface.PRIVATE_MESSAGE,
+            sender =
+                io.oyasai.chat.api.ChatTextSender(
+                    sender.uniqueId,
+                    sender.name,
+                    sender.locale().toLanguageTag(),
+                ),
+            originalText = chat.formatter.plain(chat.formatter.body(pending.message)),
+            originalBody = chat.formatter.body(pending.message),
+            recipients = listOf(sender),
+            render = { _, body ->
+              chat.formatter.privateMessage(
+                  sender.name,
+                  targetName,
+                  body,
+                  chat.formatter.snapshot(sender),
+              )
+            },
+        )
+        plugin.server.consoleSender.sendMessage(component)
       }
     }
     "DISABLED" -> {
