@@ -41,7 +41,8 @@ internal class CanvasStore(private val file: File, private val blank: ByteArray)
             r.getInt(1)
           }
         }
-    check(version == 1) { "unsupported pictures database version $version" }
+    // v2 は ImageOnMap の animations 表を足しただけで、canvases は変わらない
+    check(version in 1..2) { "unsupported pictures database version $version" }
     val ids = mutableSetOf<Int>()
     val existing = mutableSetOf<Int>()
     val locked = mutableSetOf<Int>()
