@@ -33,39 +33,34 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
     val localNames = plugin.server.onlinePlayers.map { it.name }
     val names =
         if (JapanizePreparation.eligible(text, settings, enabled))
-            plugin.runtime.presence.snapshot().thenApply { it + localNames }
-        else CompletableFuture.completedFuture(localNames.toSet())
+            plugin.runtime.presence.snapshot() + localNames
+        else localNames.toSet()
     val accepted =
         ordered.enqueue(player.uniqueId) {
           val done = CompletableFuture<Void>()
-          names
-              .thenCompose { engine.prepare(text, enabled, it) }
-              .whenComplete { message, error ->
-                runCatching {
-                      plugin.server.scheduler.runTask(
-                          plugin,
-                          Runnable {
-                            try {
-                              if (
-                                  !closed &&
-                                      player.isOnline &&
-                                      plugin.server.getPlayer(player.uniqueId) === player
-                              ) {
-                                val prepared = if (error == null) message else ChatMessage(text)
-                                if (!prepared.isBlank()) deliver(prepared)
-                              }
-                            } catch (failure: Exception) {
-                              plugin.logger.warning(
-                                  "Unable to commit chat message: ${failure.message}"
-                              )
-                            } finally {
-                              finishWhenPrivateIdle(player.uniqueId, done)
-                            }
-                          },
-                      )
+          engine.prepare(text, enabled, names).whenComplete { message, error ->
+            runCatching {
+                  val commit = Runnable {
+                    try {
+                      if (
+                          !closed &&
+                              player.isOnline &&
+                              plugin.server.getPlayer(player.uniqueId) === player
+                      ) {
+                        val prepared = if (error == null) message else ChatMessage(text)
+                        if (!prepared.isBlank()) deliver(prepared)
+                      }
+                    } catch (failure: Exception) {
+                      plugin.logger.warning("Unable to commit chat message: ${failure.message}")
+                    } finally {
+                      finishWhenPrivateIdle(player.uniqueId, done)
                     }
-                    .onFailure { done.complete(null) }
-              }
+                  }
+                  if (plugin.server.isPrimaryThread) commit.run()
+                  else plugin.server.scheduler.runTask(plugin, commit)
+                }
+                .onFailure { done.complete(null) }
+          }
           done
         }
     if (!accepted)

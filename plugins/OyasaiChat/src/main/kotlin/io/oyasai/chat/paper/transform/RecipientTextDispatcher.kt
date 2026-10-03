@@ -104,26 +104,25 @@ internal constructor(
       return completed
     }
     runCatching {
-          plugin.server.scheduler.runTask(
-              plugin,
-              Runnable {
-                val current = plugin.server.getPlayer(expectedPlayer.uniqueId)
-                if (closed || current !== expectedPlayer || !expectedPlayer.isOnline) {
-                  completed.complete(null)
-                  return@Runnable
+          val delivery = Runnable {
+            val current = plugin.server.getPlayer(expectedPlayer.uniqueId)
+            if (closed || current !== expectedPlayer || !expectedPlayer.isOnline) {
+              completed.complete(null)
+              return@Runnable
+            }
+            runCatching {
+                  expectedPlayer.sendMessage(render(expectedPlayer, component))
+                  afterDelivery(expectedPlayer)
                 }
-                runCatching {
-                      expectedPlayer.sendMessage(render(expectedPlayer, component))
-                      afterDelivery(expectedPlayer)
-                    }
-                    .onFailure {
-                      plugin.logger.warning(
-                          "Unable to deliver transformed text to ${expectedPlayer.uniqueId}: ${it.message}"
-                      )
-                    }
-                completed.complete(null)
-              },
-          )
+                .onFailure {
+                  plugin.logger.warning(
+                      "Unable to deliver transformed text to ${expectedPlayer.uniqueId}: ${it.message}"
+                  )
+                }
+            completed.complete(null)
+          }
+          if (plugin.server.isPrimaryThread) delivery.run()
+          else plugin.server.scheduler.runTask(plugin, delivery)
         }
         .onFailure { completed.complete(null) }
     return completed
