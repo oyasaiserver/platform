@@ -40,12 +40,16 @@ let
         <<<"''${FLOODGATE_KEY_PEM_B64}" base64 -d  >plugins/floodgate/key.pem
       fi
 
+      mkdir -p logs/dumps
+
       MEMORY="''${MEMORY:-512M}"
       exec ${lib.getExe package} \
         -Xmx"''${MEMORY}" \
         -Xms"''${MEMORY}" \
+        -XX:+ExitOnOutOfMemoryError \
+        -XX:+HeapDumpOnOutOfMemoryError \
+        -XX:HeapDumpPath=logs/dumps/ \
         -Dvelocity.max-plugin-message-payload-size=2100000 \
-        -Dvelocity.max-compression-ratio=2000000 \
         "$@"
     '';
 
