@@ -6,6 +6,7 @@ description: バックエンド間チャット同期
 author: takucan
 softdepend:
   - Vault
+  - LuckPerms
 loadbefore:
   - Essentials
 commands:

@@ -11,6 +11,12 @@ data class LunaImportPlan(
     val unresolved: Int,
 )
 
+data class LunaImportData(
+    val preferences: Map<String, Boolean>,
+    val names: Map<String, UUID>,
+    val dictionary: Map<String, String>,
+)
+
 object LunaImport {
   fun flatYaml(file: File): Map<String, Any?> {
     require(file.isFile) { "Missing import file: ${file.name}" }
@@ -26,6 +32,23 @@ object LunaImport {
       cache: Map<String, Any?>,
       dictionary: Map<String, Any?>,
   ): LunaImportPlan {
+    val data = parseData(preferences, cache, dictionary)
+    val players =
+        buildMap<UUID, Boolean> {
+          data.preferences.forEach { (name, value) -> data.names[name]?.let { put(it, value) } }
+        }
+    return LunaImportPlan(
+        players,
+        data.dictionary,
+        data.preferences.keys.count { it !in data.names },
+    )
+  }
+
+  fun parseData(
+      preferences: Map<String, Any?>,
+      cache: Map<String, Any?>,
+      dictionary: Map<String, Any?>,
+  ): LunaImportData {
     val names = mutableMapOf<String, UUID>()
     val ambiguous = mutableSetOf<String>()
     cache.forEach { (key, value) ->
@@ -45,13 +68,22 @@ object LunaImport {
       if (names.put(name, uuid)?.let { it != uuid } == true) ambiguous += name
     }
     ambiguous.forEach(names::remove)
-    var unresolved = 0
-    val players =
-        buildMap<UUID, Boolean> {
+    val settings =
+        buildMap<String, Boolean> {
           preferences.forEach { (name, value) ->
             require(value is Boolean) { "japanize.yml values must be true/false" }
-            val uuid = names[name.lowercase(java.util.Locale.ROOT)]
-            if (uuid == null) unresolved++ else put(uuid, value)
+            val normalized = name.lowercase(java.util.Locale.ROOT)
+            require(
+                normalized.isNotBlank() &&
+                    normalized.length <= 64 &&
+                    normalized.none { it.isWhitespace() || it.isISOControl() }
+            ) {
+              "Invalid player name"
+            }
+            require(!containsKey(normalized) || get(normalized) == value) {
+              "Conflicting preferences for the same player name"
+            }
+            put(normalized, value)
           }
         }
     val words =
@@ -61,11 +93,18 @@ object LunaImport {
           }
           value
         }
-    return LunaImportPlan(players, words, unresolved)
+    return LunaImportData(settings, names, words)
   }
 
   fun load(directory: File): LunaImportPlan =
       parse(
+          flatYaml(File(directory, "japanize.yml")),
+          flatYaml(File(directory, "uuidcache.yml")),
+          flatYaml(File(directory, "dictionary.yml")),
+      )
+
+  fun loadData(directory: File): LunaImportData =
+      parseData(
           flatYaml(File(directory, "japanize.yml")),
           flatYaml(File(directory, "uuidcache.yml")),
           flatYaml(File(directory, "dictionary.yml")),

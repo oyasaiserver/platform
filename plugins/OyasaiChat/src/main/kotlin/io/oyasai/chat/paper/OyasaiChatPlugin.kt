@@ -113,42 +113,85 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
       )
       return
     }
-    runCatching {
-          val plan =
-              io.oyasai.chat.paper.japanize.LunaImport.load(
-                  java.io.File(dataFolder, "imports/lunachat")
+    importInProgress = true
+    sender.sendMessage(
+        runtime.formatter.info("LunaChat import started; resolving names asynchronously.")
+    )
+    val states = runtime.states
+    val playerDefault = runtime.config.japanize.playerDefault
+    val lookup =
+        if (server.pluginManager.isPluginEnabled("LuckPerms"))
+            io.oyasai.chat.paper.japanize.LuckPermsNameLookup.available(this)
+        else null
+    val resolver =
+        io.oyasai.chat.paper.japanize.LunaImportResolver(
+            lookup,
+            { name ->
+              val result = java.util.concurrent.CompletableFuture<UUID?>()
+              // Bukkit's cached-only access stays on the server thread. Never query Mojang.
+              server.scheduler.runTask(
+                  this,
+                  Runnable {
+                    runCatching { server.getOfflinePlayerIfCached(name)?.uniqueId }
+                        .onSuccess { result.complete(it) }
+                        .onFailure { result.completeExceptionally(it) }
+                  },
               )
-          val dictionarySaved = runtime.dictionary.mergeImport(plan.dictionary)
-          importInProgress = true
-          sender.sendMessage(
-              runtime.formatter.info(
-                  "LunaChat import started: resolved=${plan.players.size}, unresolved=${plan.unresolved}, dictionary=${plan.dictionary.size}."
-              )
+              result
+            },
+        )
+    java.util.concurrent.CompletableFuture.supplyAsync {
+          io.oyasai.chat.paper.japanize.LunaImport.loadData(
+              java.io.File(dataFolder, "imports/lunachat")
           )
-          val states = runtime.states
-          states
-              .importJapanize(plan.players)
-              .thenCombine(dictionarySaved) { changed, _ -> changed }
-              .whenComplete { changed, failure ->
-                if (isEnabled)
-                    server.scheduler.runTask(
-                        this,
-                        Runnable {
-                          states.finishImport()
-                          importInProgress = false
-                          val message =
-                              if (failure == null)
-                                  "LunaChat import saved: changed=$changed, unresolved=${plan.unresolved}."
-                              else
-                                  "LunaChat import failed; retry the same staged files: ${failure.message}"
-                          sender.sendMessage(runtime.formatter.info(message))
-                          if (failure != null) logger.warning(message)
-                        },
-                    )
-              }
         }
-        .onFailure {
-          sender.sendMessage(runtime.formatter.error("LunaChat import failed: ${it.message}"))
+        .thenCompose { data -> resolver.resolve(data, playerDefault).thenApply { data to it } }
+        .whenComplete { resolved, resolutionFailure ->
+          if (isEnabled)
+              server.scheduler.runTask(
+                  this,
+                  Runnable {
+                    if (resolutionFailure != null) {
+                      importInProgress = false
+                      val message = "LunaChat import failed: ${resolutionFailure.message}"
+                      sender.sendMessage(runtime.formatter.error(message))
+                      logger.warning(message)
+                      return@Runnable
+                    }
+                    val (data, plan) = resolved
+                    val saved =
+                        runCatching {
+                              val dictionarySaved = runtime.dictionary.mergeImport(data.dictionary)
+                              states.importJapanize(plan.players).thenCombine(dictionarySaved) {
+                                  changed,
+                                  _ ->
+                                changed
+                              }
+                            }
+                            .getOrElse { java.util.concurrent.CompletableFuture.failedFuture(it) }
+                    saved.whenComplete { changed, failure ->
+                      if (isEnabled)
+                          server.scheduler.runTask(
+                              this,
+                              Runnable {
+                                states.finishImport()
+                                importInProgress = false
+                                val message =
+                                    if (failure == null)
+                                        "LunaChat import saved: changed=$changed, selected=${plan.players.size}, dictionary=${data.dictionary.size}, skipped-default=${plan.skippedDefault} (player-default=$playerDefault)."
+                                    else
+                                        "LunaChat import failed; retry the same staged files: ${failure.message}"
+                                sender.sendMessage(runtime.formatter.info(message))
+                                logger.info(message)
+                                plan.report().forEach { line ->
+                                  sender.sendMessage(runtime.formatter.info(line))
+                                  logger.info("LunaChat import $line")
+                                }
+                              },
+                          )
+                    }
+                  },
+              )
         }
   }
 
