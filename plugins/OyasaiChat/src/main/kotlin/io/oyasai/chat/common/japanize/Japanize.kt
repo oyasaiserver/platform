@@ -160,6 +160,7 @@ class Japanizer(
       text: String,
       playerEnabled: Boolean,
       names: Collection<String>,
+      dictionary: Map<String, String> = settings.dictionary,
   ): CompletableFuture<ChatMessage> {
     if (!JapanizePreparation.eligible(text, settings, playerEnabled)) {
       val visible =
@@ -173,7 +174,7 @@ class Japanizer(
           else text
       return CompletableFuture.completedFuture(ChatMessage(visible))
     }
-    val parts = JapanizePreparation.parts(text, settings.dictionary, names)
+    val parts = JapanizePreparation.parts(text, dictionary, names)
     val futures =
         parts.map { part ->
           if (part.protected) CompletableFuture.completedFuture(part.text)

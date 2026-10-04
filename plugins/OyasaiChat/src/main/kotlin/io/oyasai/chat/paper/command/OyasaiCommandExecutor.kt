@@ -20,6 +20,8 @@ class OyasaiCommandExecutor(
     private val chat: ChatService,
     private val pm: PrivateMessageService,
 ) : CommandExecutor, TabCompleter {
+  private val dictionaryCommand = JapanizeDictionaryCommand(plugin)
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
@@ -67,6 +69,8 @@ class OyasaiCommandExecutor(
         true
       }
       "japanize" -> {
+        if (args.firstOrNull()?.equals("dict", true) == true)
+            return dictionaryCommand.execute(sender, args.drop(1).toTypedArray())
         val player = requirePlayer(sender) ?: return true
         if (args.size > 1 || (args.isNotEmpty() && args[0].lowercase() !in listOf("on", "off"))) {
           sender.sendMessage(chat.formatter.error("Usage: /japanize [on|off]"))
@@ -164,7 +168,14 @@ class OyasaiCommandExecutor(
                   .sorted()
             } else emptyList()
         "japanize" ->
-            if (args.size == 1) listOf("on", "off").filter { it.startsWith(args[0], true) }
+            if (args.firstOrNull()?.equals("dict", true) == true && args.size > 1)
+                dictionaryCommand.complete(sender, args.drop(1).toTypedArray())
+            else if (args.size == 1)
+                (listOf("on", "off") +
+                        if (sender.hasPermission(JapanizeDictionaryCommand.PERMISSION))
+                            listOf("dict")
+                        else emptyList())
+                    .filter { it.startsWith(args[0], true) }
             else emptyList()
         "oyasaichat" ->
             if (

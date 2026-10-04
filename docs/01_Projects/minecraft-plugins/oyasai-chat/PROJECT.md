@@ -12,7 +12,7 @@ related_paths:
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
-last_validated: "2026-10-03"
+last_validated: "2026-10-04"
 agent_task: null
 ---
 
@@ -195,6 +195,25 @@ OyasaiChatはroutingとformatを維持したまま、外部Paperプラグイン�
 `/japanize [on|off]`（`/jp`）は引数なしなら切替。既存 `players/<UUID>.yml` の `japanize-enabled` に保存する。旧ファイルにキーがない場合は `player-default` を使う。保存先は既存状態と同様にbackendごと。
 
 先頭の `#` は変換を止め、既定では表示から1回だけ除去する（`strip-marker: false` で残す）。**LunaChatと同じ除去挙動かは未確認**。公開configコメントは「先頭にあれば変換しない」までしか説明していないため、導入前に実データまたは利用者の既知の挙動と照合する。[LunaChat公開設定](https://github.com/ucchyocean/LunaChat/blob/master/src/main/resources/config_ja.yml)。変換が無効なbackendでは印の除去もしない。
+
+### ゲーム内の辞書管理（第2段階の最初）
+
+`/japanize dict`（`/jp dict`）は `japanize-dictionary.yml` を編集する。`oyasaichat.japanize.dictionary`（既定OP）が必要。Consoleも利用可能。既存 `/japanize [on|off]` の本人設定操作はそのまま。
+
+| コマンド | 動作 |
+|---|---|
+| `dict add <ローマ字> <置き換え後...>` | 残りの引数を空白で連結。同じキーを上書きし旧値と新値を表示 |
+| `dict remove <ローマ字>` | 辞書ファイルの登録を削除。未登録なら変更しない |
+| `dict list [ページ]` | ファイルの登録をキー順に10件ずつ、件数・ページ数付きで表示 |
+| `dict lookup <ローマ字>` | ファイルの登録有無と値を表示。configの有効値があれば併記 |
+
+キーは小文字化し、空・空白/制御文字を含む・64文字超を拒否。値は256文字超を拒否し、空白を含む値は保持する。タブ補完は権限を持つ利用者だけに表示し、removeはファイルの既存キー、lookupはconfigも含めた有効なキーを候補にする。
+
+**有効な辞書は「ファイルの辞書 + config.yml の japanize.dictionary」で、同じキーはconfigが優先する。** コマンドはconfigを変更しない。configと衝突する登録は表示にconfigの優先値を併記し、ファイルのキーを削除してもconfigの変換は残る。読み込み時もキーの大文字小文字を正規化する。
+
+変更はメモリ上に即座に反映され、次に開始する変換から使う。reloadは不要で、進行中の送信キューを破棄しない。保存は不変スナップショットを専用の単一writerで順番に書き込み、一時ファイルからの置き換えを既存 `saveDictionary` と同じ方式で行う。Paperメインスレッドは保存完了を待たない。保存待機中のreloadを拒否し、disable時はwriterをshutdownして受理済み保存を終わらせる。LunaChat取り込みも同じwriterを使い、ゲーム内の更新と競合して古い辞書で上書きしない。
+
+各追加・上書き・削除でConsoleに実行者、キー、旧値→新値を記録する。保存完了と失敗をコマンド実行者へ通知する。保存失敗時もメモリ上の変更は有効で、同じ操作の再実行または次の変更で現在のスナップショットを保存できる。変換結果キャッシュとサーバー間辞書共有は実装しない。
 
 ### 表示・順序・Protocol
 

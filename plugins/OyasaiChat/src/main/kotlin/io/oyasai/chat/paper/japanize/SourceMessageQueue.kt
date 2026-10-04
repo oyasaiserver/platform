@@ -11,6 +11,7 @@ import org.bukkit.entity.Player
 class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
   private val ordered = OrderedSourceQueue()
   @Volatile private var closed = false
+  private val dictionary = plugin.runtime.dictionary
   private val settings = plugin.runtime.config.japanize
   private val engine = Japanizer(settings, GoogleTransliterator(settings.timeoutMillis)::convert)
 
@@ -38,7 +39,8 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
     val accepted =
         ordered.enqueue(player.uniqueId) {
           val done = CompletableFuture<Void>()
-          engine.prepare(text, enabled, names).whenComplete { message, error ->
+          engine.prepare(text, enabled, names, dictionary.effective()).whenComplete { message, error
+            ->
             runCatching {
                   val commit = Runnable {
                     try {

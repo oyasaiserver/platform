@@ -34,8 +34,8 @@ commands:
     usage: /msg <player> <message>
     aliases: [tell, message, pm]
   japanize:
-    description: Toggle Japanese chat conversion
-    usage: /japanize [on|off]
+    description: Toggle Japanese chat conversion or manage its dictionary
+    usage: /japanize [on|off] or /japanize dict <add|remove|list|lookup>
     aliases: [jp]
   r:
     description: Reply to the last private message
@@ -45,6 +45,9 @@ commands:
     description: OyasaiChat administrative commands
     usage: /oyasaichat reload
 permissions:
+  oyasaichat.japanize.dictionary:
+    description: Manage Japanese conversion dictionary entries
+    default: op
   oyasaichat.links.send:
     description: Post links in chat as clickable URLs
     default: true

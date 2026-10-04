@@ -103,6 +103,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     }
     if (
         importInProgress ||
+            !runtime.dictionary.canReloadSafely() ||
             !sourceMessages.canReloadSafely() ||
             pendingChatCommits != 0 ||
             !runtime.privateMessages.canReloadSafely()
@@ -117,17 +118,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
               io.oyasai.chat.paper.japanize.LunaImport.load(
                   java.io.File(dataFolder, "imports/lunachat")
               )
-          val dictionaryFile = java.io.File(dataFolder, "japanize-dictionary.yml")
-          val merged =
-              io.oyasai.chat.paper.japanize.LunaImport.dictionary(dictionaryFile) + plan.dictionary
-          val settings =
-              runtime.config.japanize.copy(
-                  dictionary = merged + PaperConfigLoader.load(config).japanize.dictionary
-              )
-          io.oyasai.chat.paper.japanize.LunaImport.saveDictionary(dictionaryFile, merged)
-          runtime = runtime.copy(config = runtime.config.copy(japanize = settings))
-          sourceMessages.close()
-          sourceMessages = io.oyasai.chat.paper.japanize.SourceMessageQueue(this)
+          val dictionarySaved = runtime.dictionary.mergeImport(plan.dictionary)
           importInProgress = true
           sender.sendMessage(
               runtime.formatter.info(
@@ -135,23 +126,26 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
               )
           )
           val states = runtime.states
-          states.importJapanize(plan.players).whenComplete { changed, failure ->
-            if (isEnabled)
-                server.scheduler.runTask(
-                    this,
-                    Runnable {
-                      states.finishImport()
-                      importInProgress = false
-                      val message =
-                          if (failure == null)
-                              "LunaChat import saved: changed=$changed, unresolved=${plan.unresolved}."
-                          else
-                              "LunaChat player import failed; retry the same staged files: ${failure.message}"
-                      sender.sendMessage(runtime.formatter.info(message))
-                      if (failure != null) logger.warning(message)
-                    },
-                )
-          }
+          states
+              .importJapanize(plan.players)
+              .thenCombine(dictionarySaved) { changed, _ -> changed }
+              .whenComplete { changed, failure ->
+                if (isEnabled)
+                    server.scheduler.runTask(
+                        this,
+                        Runnable {
+                          states.finishImport()
+                          importInProgress = false
+                          val message =
+                              if (failure == null)
+                                  "LunaChat import saved: changed=$changed, unresolved=${plan.unresolved}."
+                              else
+                                  "LunaChat import failed; retry the same staged files: ${failure.message}"
+                          sender.sendMessage(runtime.formatter.info(message))
+                          if (failure != null) logger.warning(message)
+                        },
+                    )
+              }
         }
         .onFailure {
           sender.sendMessage(runtime.formatter.error("LunaChat import failed: ${it.message}"))
@@ -164,6 +158,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
         synchronized(chatLifecycleLock) {
           if (
               importInProgress ||
+                  !runtime.dictionary.canReloadSafely() ||
                   pendingChatCommits != 0 ||
                   !sourceMessages.canReloadSafely() ||
                   !runtime.privateMessages.canReloadSafely() ||
@@ -214,6 +209,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
       val previousStates = runtime.states
       val previousDiscord = runtime.discord
 
+      runtime.dictionary.close()
       previousStates.flushAndShutdown()
       previousDiscord.disable()
       runtime.delivery.close()
@@ -254,6 +250,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     unregisterShortcutCommands()
     releaseClaimedCommands()
     sourceMessages.close()
+    runtime.dictionary.close()
     runtime.discord.disable()
     runtime.delivery.close()
     runtime.states.flushAndShutdown()
