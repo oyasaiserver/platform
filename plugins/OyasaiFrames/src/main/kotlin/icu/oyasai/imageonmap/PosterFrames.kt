@@ -80,6 +80,7 @@ internal object PosterFrames {
       poster: Poster,
       index: Int,
       managed: (ItemFrame) -> Boolean,
+      baseMapId: (Int) -> Int = { it },
   ): List<ItemFrame> {
     val col =
         if (hit.facing == BlockFace.DOWN) poster.columns - 1 - index % poster.columns
@@ -110,7 +111,8 @@ internal object PosterFrames {
                                 i % poster.columns,
                                 i / poster.columns,
                             )]
-                if (managed(frame) && meta?.hasMapId() == true && meta.mapId == expected) frame
+                if (managed(frame) && meta?.hasMapId() == true && baseMapId(meta.mapId) == expected)
+                    frame
                 else null
               }
         }

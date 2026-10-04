@@ -6,7 +6,10 @@ import java.net.InetAddress
 import java.nio.file.Files
 import java.sql.DriverManager
 import java.util.UUID
+import javax.imageio.IIOImage
 import javax.imageio.ImageIO
+import javax.imageio.ImageTypeSpecifier
+import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -32,6 +35,63 @@ class ImageOnMapTest {
       ByteArrayOutputStream()
           .also { ImageIO.write(BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB), "png", it) }
           .toByteArray()
+
+  @Test
+  fun animatedMapLimits() {
+    assertTrue(exceedsLimit(0, 501, 500, false))
+    assertFalse(exceedsLimit(0, 500, 500, false))
+    assertFalse(exceedsLimit(0, 501, 500, true))
+    assertTrue(exceedsLimit(1501, 500, 2000, false))
+    assertFalse(exceedsLimit(1500, 500, 2000, false))
+    assertFalse(exceedsLimit(2000, 500, 2000, true))
+  }
+
+  @Test
+  fun gifBypassRemovesTileAndFrameLimits() {
+    val bytes = gif("none")
+    assertFails { ImageSource.prepare(bytes, 2 to 1, false, 1, 1, 2) }
+    val prepared = ImageSource.prepare(bytes, 2 to 1, true, 1, 1, 2)
+    assertEquals(2 to 1, prepared.columns to prepared.rows)
+    assertEquals(3, prepared.frames)
+  }
+
+  @Test
+  fun animatedMapCountIncludesHiddenButNotStaticOrDeleted() {
+    val file = Files.createTempDirectory("imageonmap-count").resolve("pictures.db").toFile()
+    val owner = UUID.randomUUID()
+    val other = UUID.randomUUID()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      val animated =
+          store.create(
+              owner,
+              1,
+              1,
+              listOf(1, 2),
+              listOf(bytes, bytes),
+              listOf(2, 2),
+              listOf(0, 1),
+              listOf(1, 2),
+          )
+      assertEquals(2, store.animatedMapCount(owner))
+      store.hide(owner, animated)
+      store.create(owner, listOf(3), listOf(bytes))
+      store.create(
+          other,
+          1,
+          1,
+          listOf(4, 5),
+          listOf(bytes, bytes),
+          listOf(2, 2),
+          listOf(0, 1),
+          listOf(4, 5),
+      )
+      assertEquals(2, store.animatedMapCount(owner))
+      store.delete(animated)
+      assertEquals(0, store.animatedMapCount(owner))
+    }
+  }
 
   @Test
   fun commandRouting() {
@@ -226,5 +286,206 @@ class ImageOnMapTest {
     val picture = ImageSource.decode(bytes)
     assertEquals(2, picture.width)
     assertEquals(3, picture.height)
+  }
+
+  private fun gif(disposal: String): ByteArray {
+    val writer = ImageIO.getImageWritersByFormatName("gif").next()
+    val output = ByteArrayOutputStream()
+    ImageIO.createImageOutputStream(output).use { stream ->
+      writer.output = stream
+      writer.prepareWriteSequence(null)
+      val colors = listOf(0xffff0000.toInt(), 0xff0000ff.toInt(), 0xff00ff00.toInt())
+      colors.forEachIndexed { i, color ->
+        val image =
+            BufferedImage(if (i == 0) 3 else if (i == 1) 2 else 1, 1, BufferedImage.TYPE_INT_ARGB)
+        image.setRGB(if (i == 0) 0 else 0, 0, color)
+        val metadata =
+            writer.getDefaultImageMetadata(ImageTypeSpecifier.createFromRenderedImage(image), null)
+        val root = metadata.getAsTree("javax_imageio_gif_image_1.0") as IIOMetadataNode
+        val descriptor = root.getElementsByTagName("ImageDescriptor").item(0) as IIOMetadataNode
+        descriptor.setAttribute("imageLeftPosition", i.toString())
+        val control =
+            root.getElementsByTagName("GraphicControlExtension").item(0) as IIOMetadataNode
+        control.setAttribute("delayTime", if (i == 0) "1" else "5")
+        control.setAttribute("disposalMethod", if (i == 1) disposal else "doNotDispose")
+        control.setAttribute("transparentColorFlag", "TRUE")
+        metadata.setFromTree("javax_imageio_gif_image_1.0", root)
+        writer.writeToSequence(IIOImage(image, null, metadata), null)
+      }
+      writer.endWriteSequence()
+    }
+    writer.dispose()
+    return output.toByteArray()
+  }
+
+  @Test
+  fun gifCompositionAndDelays() {
+    for (disposal in listOf("restoreToBackgroundColor", "restoreToPrevious")) {
+      val result = ImageSource.prepare(gif(disposal), null, false, 16, 30, 2)
+      assertEquals(1 to 1, result.columns to result.rows)
+      assertEquals(listOf(2, 2, 2), result.delays)
+      val second = ImageIO.read(result.pngs[1].inputStream())
+      val third = ImageIO.read(result.pngs[2].inputStream())
+      assertEquals(0xff0000ff.toInt(), second.getRGB(1, 0))
+      assertEquals(0xffff0000.toInt(), third.getRGB(0, 0))
+      assertEquals(0, third.getRGB(1, 0) ushr 24, disposal)
+      assertEquals(0xff00ff00.toInt(), third.getRGB(2, 0))
+    }
+  }
+
+  @Test
+  fun animationTimingAndBaseIds() {
+    val animation =
+        Animation(
+            8,
+            2,
+            1,
+            listOf(10, 11, 20, 21, 30, 31),
+            listOf(10, 11, 20, 21, 30, 31),
+            listOf(2, 3, 2),
+        )
+    assertEquals(listOf(0, 0, 1, 1, 1, 2, 2, 0), (0L..7L).map(animation::frameAt))
+    val index = AnimationIndex()
+    index.add(animation)
+    assertEquals(11, index.base(31))
+    assertEquals(AnimationTile(8, 1, 2, 11), index.tile(31))
+    index.remove(8)
+    assertEquals(31, index.base(31))
+  }
+
+  @Test
+  fun gifReusesTilesOnlyAtTheSamePositionAndPersistsSlots() {
+    val writer = ImageIO.getImageWritersByFormatName("gif").next()
+    val output = ByteArrayOutputStream()
+    ImageIO.createImageOutputStream(output).use { stream ->
+      writer.output = stream
+      writer.prepareWriteSequence(null)
+      listOf(
+              0xffff0000.toInt() to 0xff0000ff.toInt(),
+              0xffff0000.toInt() to 0xff00ff00.toInt(),
+              0xff0000ff.toInt() to 0xff00ff00.toInt(),
+          )
+          .forEach { (left, right) ->
+            val image = BufferedImage(256, 1, BufferedImage.TYPE_INT_ARGB)
+            for (x in 0 until 256) image.setRGB(x, 0, if (x < 128) left else right)
+            val metadata =
+                writer.getDefaultImageMetadata(
+                    ImageTypeSpecifier.createFromRenderedImage(image),
+                    null,
+                )
+            val root = metadata.getAsTree("javax_imageio_gif_image_1.0") as IIOMetadataNode
+            (root.getElementsByTagName("GraphicControlExtension").item(0) as IIOMetadataNode)
+                .setAttribute("delayTime", "5")
+            metadata.setFromTree("javax_imageio_gif_image_1.0", root)
+            writer.writeToSequence(IIOImage(image, null, metadata), null)
+          }
+      writer.endWriteSequence()
+    }
+    writer.dispose()
+    val prepared = ImageSource.prepare(output.toByteArray(), null, false, 16, 30, 2)
+    assertEquals(2 to 1, prepared.columns to prepared.rows)
+    assertEquals(listOf(0, 1, 3, 4), prepared.firstSlots)
+    assertEquals(listOf(0, 1, 0, 2, 3, 2), prepared.slots)
+    assertEquals(4, prepared.pngs.size)
+    assertTrue(prepared.pngs[1].contentEquals(prepared.pngs[3]))
+
+    val file = Files.createTempDirectory("imageonmap-slots").resolve("pictures.db").toFile()
+    val owner = UUID.randomUUID()
+    val ids = listOf(10, 11, 20, 21)
+    val slots = prepared.slots.map(ids::get)
+    val imageId =
+        MapStore(file).use { store ->
+          store.open()
+          store.create(owner, 2, 1, ids, prepared.pngs, prepared.delays, prepared.firstSlots, slots)
+        }
+    MapStore(file).use { store ->
+      store.open()
+      val animation = store.animations().single()
+      assertEquals(ids, animation.ids)
+      assertEquals(slots, animation.slots)
+      assertEquals(listOf(10, 11), store.poster(imageId)?.ids)
+      assertEquals(1, store.mapIndex(20)?.second)
+      val index = AnimationIndex()
+      index.add(animation)
+      assertEquals(11, index.base(20))
+      assertEquals(10, index.base(21))
+      assertEquals(AnimationTile(imageId, 1, 1, 11), index.tile(20))
+      assertEquals(ids, store.delete(imageId)?.mapIds)
+    }
+  }
+
+  @Test
+  fun invalidAnimationSlotsAreRejected() {
+    val file = Files.createTempDirectory("imageonmap-invalid-slots").resolve("pictures.db").toFile()
+    val owner = UUID.randomUUID()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      store.create(
+          owner,
+          2,
+          1,
+          listOf(10, 11, 20),
+          listOf(bytes, bytes, bytes),
+          listOf(2, 2),
+          listOf(0, 1, 3),
+          listOf(10, 11, 10, 20),
+      )
+      store.create(owner, listOf(30), listOf(bytes))
+    }
+    for (bad in listOf("10,11,20", "10,11,20,10", "10,11,10,30")) {
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.prepareStatement("UPDATE animations SET slots=? WHERE image_id=1").use {
+          it.setString(1, bad)
+          it.executeUpdate()
+        }
+      }
+      MapStore(file).use { store ->
+        store.open()
+        assertFails { store.animations() }
+      }
+    }
+  }
+
+  @Test
+  fun versionOneUpgradesAndKeepsPosters() {
+    val file = Files.createTempDirectory("imageonmap-v1").resolve("pictures.db").toFile()
+    val owner = UUID.randomUUID()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      store.create(owner, listOf(10), listOf(bytes))
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().use {
+        it.execute("DROP TABLE animations")
+        it.execute("PRAGMA user_version=1")
+      }
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertEquals(listOf(10), store.poster(1)?.ids)
+      val id =
+          store.create(
+              owner,
+              1,
+              1,
+              listOf(20, 30),
+              listOf(bytes, bytes),
+              listOf(2, 3),
+              slots = listOf(20, 30),
+          )
+      assertEquals(listOf(20), store.poster(id)?.ids)
+      assertEquals(listOf(20, 30), store.animations().single().ids)
+      assertEquals(0, store.mapIndex(30)?.second)
+      assertEquals(listOf(20, 30), store.delete(id)?.mapIds)
+      assertTrue(store.animations().isEmpty())
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("PRAGMA user_version").use {
+        assertTrue(it.next())
+        assertEquals(2, it.getInt(1))
+      }
+    }
   }
 }
