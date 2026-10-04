@@ -36,6 +36,8 @@ class OyasaiAdminTools : JavaPlugin() {
     this.getCommand("wborder")?.setExecutor(WorldBorderCommandExecutor)
     this.getCommand("wborder")?.tabCompleter = WorldBorderCommandExecutor
 
+    this.getCommand("applylifeworldsettings")?.setExecutor(ApplyLifeWorldSettingsCommandExecutor)
+
     // Bulletin Commands
     val bulletinExecutor = io.oyasai.oyasaiAdminTools.bulletin.BulletinCommandExecutor
     this.getCommand("bulletin")?.setExecutor(bulletinExecutor)
