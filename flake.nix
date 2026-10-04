@@ -38,6 +38,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     package-lock2nix = {
       url = "github:anteriorcore/package-lock2nix";
       inputs.nixpkgs.follows = "nixpkgs";

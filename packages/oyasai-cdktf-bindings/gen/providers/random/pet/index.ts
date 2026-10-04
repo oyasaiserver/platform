@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/pet
+// https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/pet
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface PetConfig extends cdktf.TerraformMetaArguments {
   /**
   * Arbitrary map of values that, when changed, will trigger recreation of resource. See [the main provider documentation](../index.html) for more information.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/pet#keepers Pet#keepers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/pet#keepers Pet#keepers}
   */
   readonly keepers?: { [key: string]: string };
   /**
   * The length (in words) of the pet name. Defaults to 2
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/pet#length Pet#length}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/pet#length Pet#length}
   */
   readonly length?: number;
   /**
   * A string to prefix the name with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/pet#prefix Pet#prefix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/pet#prefix Pet#prefix}
   */
   readonly prefix?: string;
   /**
   * The character to separate words in the pet name. Defaults to "-"
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/pet#separator Pet#separator}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/pet#separator Pet#separator}
   */
   readonly separator?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/pet random_pet}
+* Represents a {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/pet random_pet}
 */
 export class Pet extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class Pet extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Pet resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Pet to import
-  * @param importFromId The id of the existing Pet that should be imported. Refer to the {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/pet#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Pet that should be imported. Refer to the {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/pet#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Pet to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class Pet extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/pet random_pet} Resource
+  * Create a new {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/pet random_pet} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class Pet extends cdktf.TerraformResource {
       terraformResourceType: 'random_pet',
       terraformGeneratorMetadata: {
         providerName: 'random',
-        providerVersion: '3.9.0'
+        providerVersion: '3.9.1'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
