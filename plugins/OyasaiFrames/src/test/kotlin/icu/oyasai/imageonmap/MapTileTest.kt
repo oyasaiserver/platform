@@ -34,7 +34,7 @@ class MapTileTest {
   }
 
   @Test
-  fun xzBooksMeasure396SlowlyChangingMaps() {
+  fun zstdBooksMeasure396SlowlyChangingMaps() {
     val books =
         List(9) { tile ->
           val first =
@@ -61,14 +61,15 @@ class MapTileTest {
       }
     }
     println(
-        "XZ books 396 maps: compressedBytes=${compressed.sumOf { it.size }}, compressionMs=${compressionTime.inWholeMilliseconds}, expansionMs=${expansionTime.inWholeMilliseconds}"
+        "Zstd books 396 maps: compressedBytes=${compressed.sumOf { it.size }}, compressionMs=${compressionTime.inWholeMilliseconds}, expansionMs=${expansionTime.inWholeMilliseconds}"
     )
   }
 
   @Test
-  fun xzBookChecksTailWhenFullyReadButAllowsEarlyTileRead() {
+  fun zstdBookChecksTailWhenFullyReadButAllowsEarlyTileRead() {
     val first = ByteArray(MapTile.PIXELS) { (it % 128).toByte() }
     val packed = MapTile.compressBook(listOf(first, first))
+    assertTrue(packed[4].toInt() and 0x04 != 0, "zstd frame must include a checksum")
     val corrupted = packed.copyOf().also { it[it.lastIndex] = (it.last() + 1).toByte() }
     assertContentEquals(first, (MapTile.fromBook(corrupted, 0) as MapTile.Colors).pixels)
     assertFails { MapTile.allFromBook(corrupted, 2) }

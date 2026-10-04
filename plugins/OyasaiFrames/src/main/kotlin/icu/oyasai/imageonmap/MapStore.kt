@@ -206,7 +206,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
             while (columns.next()) if (columns.getString("name") == "zlib") oldColumn = true
             if (oldColumn) {
               s.executeQuery("SELECT COUNT(*) FROM map_books").use { rows ->
-                check(rows.next() && rows.getInt(1) == 0) { "zlib books cannot be read as xz" }
+                check(rows.next() && rows.getInt(1) == 0) { "zlib books cannot be read as zstd" }
               }
               s.execute("ALTER TABLE map_books RENAME COLUMN zlib TO data")
             }
