@@ -35,3 +35,6 @@ permissions:
   headhunt.use:
     description: HeadHuntの基本コマンドを使用できます。
     default: true
+  oyasaigames.roulette.special:
+    description: 匠ランク特典の特殊ブロック（コマンドブロック等）解放権限
+    default: op
