@@ -7,6 +7,38 @@ api-version: "1.21"
 version: "0.1.0"
 softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
 commands:
+  anshi:
+    usage: /anshi
+    permission: oyasai.night_vision
+    permission-message: "§cこのコマンドを使う権限がありません"
+  sokudo:
+    usage: /sokudo <number>
+    permission: oyasai.flyspeed
+    permission-message: "§cこのコマンドを使う権限がありません"
+  reach:
+    usage: /reach [<text>]
+    permission: reach.use
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  getdebugstick:
+    usage: /getdebugstick
+  scale:
+    usage: /scale [<text>] [<text>]
+  c:
+    usage: /c
+  d:
+    usage: /d
+  l:
+    usage: /l
+  savedyeitem:
+    usage: /savedyeitem
+    permission: save.dye.item
+  savemenuitem:
+    usage: /savemenuitem
+    permission: save.menu.item
+  getdye:
+    usage: /getdye
+  getmenu:
+    usage: /getmenu
   tpset:
     description: "Teleport setting."
     usage: "/<command> [option]"
