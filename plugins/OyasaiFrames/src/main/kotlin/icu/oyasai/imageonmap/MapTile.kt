@@ -23,10 +23,11 @@ internal sealed interface MapTile {
   }
 
   companion object {
-    private const val PIXELS = 128 * 128
+    const val PIXELS = 128 * 128
     private val PNG_SIGNATURE = byteArrayOf(-119, 80, 78, 71, 13, 10, 26, 10)
 
-    // ponytail: maps.png は PNG 署名なら従来の画像、それ以外なら zlib 圧縮した地図の色番号。
+    // maps.png に PNG 署名があれば v2 の PNG、空でなければ従来の単独 zlib。
+    // 空なら map_books.zlib の連結 zlib を maps.idx のタイル位置・順番から読む。
     fun fromStored(bytes: ByteArray): MapTile {
       if (
           bytes.size >= PNG_SIGNATURE.size &&
@@ -50,6 +51,40 @@ internal sealed interface MapTile {
       return ByteArrayOutputStream()
           .also { output -> DeflaterOutputStream(output).use { it.write(pixels) } }
           .toByteArray()
+    }
+
+    fun compressBook(pixels: List<ByteArray>): ByteArray {
+      require(pixels.isNotEmpty() && pixels.all { it.size == PIXELS })
+      return ByteArrayOutputStream()
+          .also { output ->
+            DeflaterOutputStream(output).use { stream -> pixels.forEach(stream::write) }
+          }
+          .toByteArray()
+    }
+
+    // readNBytes は指定枚数で止まる。後続のコマを展開しない。
+    fun fromBook(bytes: ByteArray, position: Int): MapTile {
+      require(position >= 0)
+      InflaterInputStream(ByteArrayInputStream(bytes)).use { stream ->
+        for (i in 0..position) {
+          val pixels = stream.readNBytes(PIXELS)
+          require(pixels.size == PIXELS) { "地図の本が途中で終わりました" }
+          if (i == position) return Colors(pixels)
+        }
+      }
+      error("地図の本に位置がありません")
+    }
+
+    fun allFromBook(bytes: ByteArray, count: Int): List<MapTile> {
+      require(count > 0)
+      return InflaterInputStream(ByteArrayInputStream(bytes)).use { stream ->
+        List(count) {
+              val pixels = stream.readNBytes(PIXELS)
+              require(pixels.size == PIXELS) { "地図の本が途中で終わりました" }
+              Colors(pixels)
+            }
+            .also { require(stream.read() == -1) { "地図の本に余分なデータがあります" } }
+      }
     }
   }
 }

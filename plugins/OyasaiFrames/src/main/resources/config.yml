@@ -12,4 +12,4 @@ animation:
   # 動く GIF の各コマを表示する最短 tick 数。
   min-delay-ticks: 2
   # 1 tick にプレイヤーへ送る地図の最大数。
-  push-maps-per-tick: 20
+  push-maps-per-tick: 50

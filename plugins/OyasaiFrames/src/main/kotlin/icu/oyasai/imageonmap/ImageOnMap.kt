@@ -136,7 +136,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     try {
       ImageSource.registerWebp()
       store = MapStore(dataFolder.resolve("pictures.db"))
-      pushPerTick = getConfig().getInt("animation.push-maps-per-tick", 20).coerceAtLeast(1)
+      pushPerTick = getConfig().getInt("animation.push-maps-per-tick", 50).coerceAtLeast(1)
       maxMapsPerViewer = getConfig().getInt("animation.max-maps-per-viewer", 1000).coerceAtLeast(1)
       val (ids, frames, savedAnimations) =
           dbThread
@@ -212,7 +212,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     }
   }
 
-  private fun attach(view: MapView) {
+  private fun attach(view: MapView, load: Boolean = true) {
     val id = view.id
     if (
         !ready ||
@@ -224,7 +224,8 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     view.renderers.toList().forEach(view::removeRenderer)
     val renderer = OnceRenderer()
     view.addRenderer(renderer)
-    database { store.png(id)?.let(MapTile::fromStored) }
+    if (!load) return
+    database { store.tile(id) }
         .whenComplete { tile, failure ->
           main {
             pendingMaps.remove(id)
@@ -236,7 +237,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   private fun attachItem(item: ItemStack?) {
     val meta = item?.itemMeta as? MapMeta ?: return
-    if (meta.hasMapId()) server.getMap(meta.mapId)?.let(::attach)
+    if (meta.hasMapId()) server.getMap(meta.mapId)?.let { attach(it) }
   }
 
   private fun blank(ids: List<Int>) {
@@ -308,8 +309,30 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
           val frame = shownFrames[imageId] ?: 0
           animation.pushOrder(frame).forEach { id ->
             queue.addLast(imageId to id)
-            server.getMap(id)?.let(::attach)
+            server.getMap(id)?.let { attach(it, false) }
           }
+          database { store.tilesForPush(imageId) }
+              .whenComplete { tiles, failure ->
+                main {
+                  if (failure != null) {
+                    logger.warning("Image $imageId: ${error(failure)}")
+                    val remaining = queue.count { it.first == imageId }
+                    queue.removeIf { it.first == imageId }
+                    budget.releaseQueued(remaining)
+                    sentImages[player.uniqueId]?.remove(imageId)
+                  } else if (imageId in animations.animations) {
+                    tiles.forEach { (id, tile) ->
+                      pendingMaps.remove(id)
+                      server
+                          .getMap(id)
+                          ?.renderers
+                          ?.filterIsInstance<OnceRenderer>()
+                          ?.firstOrNull()
+                          ?.let { if (!it.drawn) it.tile = tile }
+                    }
+                  }
+                }
+              }
         }
         if (queue.size > 1) {
           val distances = nearbyImages.associate { it.id to it.distanceSquared }
@@ -971,21 +994,24 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                         }
                     val slots = tiles.slots.map(ids::get)
                     database {
-                          store.create(
-                              owner,
-                              tiles.columns,
-                              tiles.rows,
-                              ids,
-                              tiles.storedTiles,
-                              tiles.delays,
-                              tiles.firstSlots,
-                              slots,
-                          )
+                          val id =
+                              store.create(
+                                  owner,
+                                  tiles.columns,
+                                  tiles.rows,
+                                  ids,
+                                  tiles.storedTiles,
+                                  tiles.delays,
+                                  tiles.firstSlots,
+                                  slots,
+                              )
+                          id to store.storedBytes(id)
                         }
-                        .whenComplete { id, saveFailure ->
+                        .whenComplete { saved, saveFailure ->
                           main {
                             if (saveFailure != null) failCreate(player, url, saveFailure)
                             else {
+                              val (id, storedBytes) = saved
                               ids.forEach(mapIds::set)
                               if (tiles.delays.isNotEmpty())
                                   animations.add(
@@ -1013,7 +1039,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                                         )
                                         if (tiles.delays.isNotEmpty())
                                             logger.info(
-                                                "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} slots=${slots.size} storedBytes=${tiles.storedTiles.sumOf { it.size.toLong() }}"
+                                                "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} slots=${slots.size} storedBytes=$storedBytes"
                                             )
                                       }
                                     }
