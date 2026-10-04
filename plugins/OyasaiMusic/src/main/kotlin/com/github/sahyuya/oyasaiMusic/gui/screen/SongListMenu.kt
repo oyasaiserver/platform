@@ -35,6 +35,7 @@ class SongListMenu(
      * 同じタブを再クリックした際にメインメニューへ戻る挙動([NavTabRouter])に使う。
      */
     private val ownTab: NavTab? = null,
+    private val playbackIds: (SongSort) -> List<Long>,
     private val loader: (sort: SongSort, limit: Int, offset: Int) -> List<Song>,
 ) : BaseGridMenu(viewer, Component.text(title)) {
 
@@ -182,7 +183,12 @@ class SongListMenu(
     if (plugin.playbackController.handleControllerClick(slot, viewer)) return
     when (slot) {
       ControllerSlots.SORT -> {
+        val oldSort = currentSort()
         sortIndex = (sortIndex + 1) % availableSorts.size
+        val newSort = currentSort()
+        plugin.playbackController.updateList(viewer, this to oldSort, this to newSort) {
+          playbackIds(newSort)
+        }
         page = 0
         reload()
       }
@@ -267,54 +273,8 @@ class SongListMenu(
     menuManager.open(viewer, PlaylistSelectionScreen(plugin, menuManager, viewer, song))
   }
 
-  /**
-   * サヒュヤ氏の指示「シャッフル、ループはプレイリスト外でもどこでも使えるように」への対応 （UI/UX設計書6章「全楽曲一覧/検索結果: 1曲で停止。ただしシャッフルON時はリスト内から
-   * ランダムに自動再生を継続。」に準拠）。
-   * - シャッフルOFF・ループOFF: 1曲で停止（従来通り）
-   * - シャッフルON: 再生完了ごとに、サーバー全体の公開楽曲からランダムな1曲へ進む
-   *   （[com.github.sahyuya.oyasaiMusic.db.SongRepository.randomPublished] を使用。
-   *   以前は表示中のページ(最大40件)内からしか選出できなかった制限を解消した）。
-   * - シャッフルOFF・ループ=1曲: 同じ曲を繰り返す
-   */
   private fun playSong(song: Song) {
-    plugin.playbackController.play(viewer, song, onCompletion = { handleAutoAdvance(song) })
-  }
-
-  private fun handleAutoAdvance(justFinished: Song) {
-    plugin.playbackController.scheduleTrackTransition(viewer) {
-      handleAutoAdvanceAfterCooldown(justFinished)
-    }
-  }
-
-  /** クールタイム後に状態を読むため、待機中のループ/シャッフル切替も即時反映される。 */
-  private fun handleAutoAdvanceAfterCooldown(justFinished: Song) {
-    val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
-    when {
-      state.loopMode == LoopMode.SINGLE -> playSong(justFinished)
-      state.shuffle -> playRandomSong(justFinished)
-      else -> {} // シャッフルOFF・ループOFF(またはLIST): 単曲再生のみ（設計書6章）
-    }
-  }
-
-  private fun playRandomSong(justFinished: Song) {
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              val next = plugin.songRepository.randomPublished(excludeId = justFinished.id)
-              Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        if (next != null) {
-                          playSong(next)
-                        } else {
-                          // 公開楽曲がこの1曲しか無い等のフォールバック: 同じ曲を再度再生する。
-                          playSong(justFinished)
-                        }
-                      },
-                  )
-            },
-        )
+    val sort = currentSort()
+    plugin.playbackController.playList(viewer, song, key = this to sort) { playbackIds(sort) }
   }
 }
