@@ -112,6 +112,7 @@ private class FullOyasaiTabRuntime(
 ) : OyasaiTabRuntime, Listener {
   private val legacy = LegacyComponentSerializer.legacyAmpersand()
   private val network = PaperTabSnapshotBridge(plugin, config)
+  private val lastPlayerListNames = mutableMapOf<UUID, String>()
   private var task: BukkitTask? = null
 
   override fun start(): OyasaiTabRuntime {
@@ -130,6 +131,7 @@ private class FullOyasaiTabRuntime(
     task = null
     network.stop()
     HandlerList.unregisterAll(this)
+    lastPlayerListNames.clear()
     scoreboard.getObjective(PING_OBJECTIVE)?.let {
       if (it.displaySlot == DisplaySlot.PLAYER_LIST) scoreboard.clearSlot(DisplaySlot.PLAYER_LIST)
       it.unregister()
@@ -139,6 +141,7 @@ private class FullOyasaiTabRuntime(
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
+    lastPlayerListNames.remove(event.player.uniqueId)
     removeOwnTeamEntry(event.player.name)
     scoreboard.getObjective(PING_OBJECTIVE)?.getScore(event.player.name)?.resetScore()
   }
@@ -174,16 +177,17 @@ private class FullOyasaiTabRuntime(
               )
           ),
       )
-      player.playerListName(
-          legacy.deserialize(
-              TablistFormatter.playerNameLegacy(
-                  groupColor = profile.groupColor,
-                  suffix = profile.suffix,
-                  likes = profile.likes,
-                  playerName = TablistFormatter.playerDisplayNameLegacy(player.name, profile.afk),
-              )
+      val playerListNameLegacy =
+          TablistFormatter.playerNameLegacy(
+              groupColor = profile.groupColor,
+              suffix = profile.suffix,
+              likes = profile.likes,
+              playerName = TablistFormatter.playerDisplayNameLegacy(player.name, profile.afk),
           )
-      )
+      if (lastPlayerListNames[player.uniqueId] != playerListNameLegacy) {
+        player.playerListName(legacy.deserialize(playerListNameLegacy))
+        lastPlayerListNames[player.uniqueId] = playerListNameLegacy
+      }
       player.setPlayerListOrder(orders[player.uniqueId] ?: 1)
       updateNameTag(player, profile)
       updatePing(player)
