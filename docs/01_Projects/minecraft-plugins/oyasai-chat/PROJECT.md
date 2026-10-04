@@ -233,13 +233,13 @@ Protocol version 3の任意field追加。旧実装も本文を読めるが、旧
 
 本番データへ自動アクセスしない。管理者がOyasaiChatのデータフォルダ内 `imports/lunachat/` に `japanize.yml`、`dictionary.yml`、`uuidcache.yml` のコピーを用意し、`/oyasaichat import-lunachat` を実行する。`oyasaichat.admin.import`（既定OP）が必要。
 
-- `japanize.yml`: プレイヤー名→Boolean。
-- `dictionary.yml`: ローマ字キー→文字列。`./spawn` のようなドットも文字通り扱う。
+- `japanize.yml`: プレイヤー名→Boolean。空、空白を含む、64文字を超える、制御文字・不可視の書式文字を含む名前はスキップし、`invalid-players` として数える。`uuidcache.yml` の同様の不正な名前も `invalid-cache` として数える。これらは未解決件数とは別に報告する。
+- `dictionary.yml`: ローマ字キー→文字列。`./spawn` のようなドットも文字通り扱う。空・空白のみのキーとYAMLパス区切り用のNULを含むキーはスキップし、`invalid-dictionary` として数える。空キーを含む入力はBukkitのパス設定処理を通さず読み込む。辞書の保存直前にも全キーを検証し、空パスを `set` しない。
 - `uuidcache.yml`: 実データの「UUID→名前」を受理し、互換性のためflatな「名前→UUID」も受理する。名前は大文字小文字を区別しない。矛盾する同名UUIDはこのキャッシュでは解決不能として次の方法へ進む。nested形式や不正な型は変更前に拒否する。
 - 名前解決は `uuidcache.yml` → LuckPerms `UserManager.lookupUniqueId` → Bukkit `getOfflinePlayerIfCached` の順。LuckPermsはsoftdependで、未導入またはサービス未登録なら飛ばす。問い合わせの失敗・名前未登録時もBukkitへ進む。LuckPermsへの非同期問い合わせは最大8件。Bukkitのキャッシュ参照だけをメインスレッドへ戻し、Mojang APIやoffline UUIDの生成は使わない。
 - `player-default` と同じ設定は保存対象から除く。既定オンならオフだけ、既定オフならオンだけ保存する。既定値と同じ項目について、以前OyasaiChatに保存済みの設定は上書きしない。名前解決の集計には全項目を含め、保存対象数と `skipped-default` を別に報告する。
 - 入力ファイルの読み込み・解析は非同期で実行する。全入力の解析・名前解決後、辞書を `japanize-dictionary.yml` へatomic保存し、UUID別の既存状態へ本人設定を保存する。他の状態は保持する。configの辞書が取り込み済み辞書に優先する。
-- 同じコピーと同じ既定値で再実行しても同じ設定・辞書になる。保存完了時に `changed`、`selected`、`dictionary`、`skipped-default`、`player-default` を報告し、解決方法別（UUIDCACHE / LUCKPERMS / BUKKIT_CACHE / UNRESOLVED）のオン・オフ件数を実行者とコンソールに表示する。名前解決件数は名前単位、保存対象数はUUID単位。オフライン状態の読み込みと保存は既存の専用writerで実行し、Paperメインスレッドで完了を待たない。取り込み中は新規送信とreloadを拒否する。ファイルごとのatomic保存であり、全件トランザクションではない。保存途中の失敗は報告し、同じコピーを再実行して復旧できる。
+- 同じコピーと同じ既定値で再実行しても同じ設定・辞書になる。保存完了時に `changed`、`selected`、`dictionary`、`invalid-players`、`invalid-dictionary`、`invalid-cache`、`skipped-default`、`player-default` を報告し、解決方法別（UUIDCACHE / LUCKPERMS / BUKKIT_CACHE / UNRESOLVED）のオン・オフ件数を実行者とコンソールに表示する。名前解決件数は名前単位、保存対象数はUUID単位。オフライン状態の読み込みと保存は既存の専用writerで実行し、Paperメインスレッドで完了を待たない。取り込み中は新規送信とreloadを拒否する。ファイルごとのatomic保存であり、全件トランザクションではない。保存途中の失敗は報告し、同じコピーを再実行して復旧できる。
 
 UUID→名前形式は運用者による本番データの読み取り専用確認で判明した。開発作業では本番へのアクセス・取り込みを行わず、匿名の固定データとLuckPermsのモックで検証する。本番での解決件数・取り込み結果と実Minecraftサーバー上の動作は導入時に確認する。
 

@@ -178,7 +178,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
                                 importInProgress = false
                                 val message =
                                     if (failure == null)
-                                        "LunaChat import saved: changed=$changed, selected=${plan.players.size}, dictionary=${data.dictionary.size}, skipped-default=${plan.skippedDefault} (player-default=$playerDefault)."
+                                        "LunaChat import saved: changed=$changed, selected=${plan.players.size}, dictionary=${data.dictionary.size}, invalid-players=${data.invalidPlayers}, invalid-dictionary=${data.invalidDictionary}, invalid-cache=${data.invalidCache}, skipped-default=${plan.skippedDefault} (player-default=$playerDefault)."
                                     else
                                         "LunaChat import failed; retry the same staged files: ${failure.message}"
                                 sender.sendMessage(runtime.formatter.info(message))
