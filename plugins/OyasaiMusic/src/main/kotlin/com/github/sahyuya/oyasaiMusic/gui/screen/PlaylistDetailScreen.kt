@@ -20,10 +20,10 @@ import org.bukkit.event.inventory.InventoryClickEvent
  */
 class PlaylistDetailScreen
 private constructor(
-  private val plugin: OyasaiMusic,
-  private val menuManager: MenuManager,
-  viewer: Player,
-  private val playlist: Playlist?, // null = お気に入り
+    private val plugin: OyasaiMusic,
+    private val menuManager: MenuManager,
+    viewer: Player,
+    private val playlist: Playlist?, // null = お気に入り
 ) : BaseGridMenu(viewer, Component.text(playlist?.name ?: "お気に入り")) {
 
   companion object {
@@ -32,13 +32,13 @@ private constructor(
     private const val PAGE_SIZE = 40
 
     fun forFavorites(plugin: OyasaiMusic, menuManager: MenuManager, viewer: Player) =
-      PlaylistDetailScreen(plugin, menuManager, viewer, null)
+        PlaylistDetailScreen(plugin, menuManager, viewer, null)
 
     fun forPlaylist(
-      plugin: OyasaiMusic,
-      menuManager: MenuManager,
-      viewer: Player,
-      playlist: Playlist,
+        plugin: OyasaiMusic,
+        menuManager: MenuManager,
+        viewer: Player,
+        playlist: Playlist,
     ) = PlaylistDetailScreen(plugin, menuManager, viewer, playlist)
   }
 
@@ -57,69 +57,69 @@ private constructor(
 
   private fun reload(autoPlayFirst: Boolean = false) {
     Bukkit.getScheduler()
-      .runTaskAsynchronously(
-        plugin,
-        Runnable {
-          val list =
-            if (playlist != null) {
-              plugin.playlistRepository.listSongs(requireNotNull(playlist.id))
-            } else {
-              plugin.socialRepository.listFavoriteSongIds(viewer.uniqueId).mapNotNull {
-                plugin.songRepository.findById(it)
-              }
-            }
-          Bukkit.getScheduler()
-            .runTask(
-              plugin,
-              Runnable {
-                if (songs.map { it.id } != list.map { it.id }) {
-                  val oldRevision = listRevision++
-                  val ids =
-                    list
-                      .filter { it.published || it.authorUuid == viewer.uniqueId }
-                      .mapNotNull { it.id }
-                  plugin.playbackController.updateList(
-                    viewer,
-                    this to oldRevision,
-                    this to listRevision,
-                  ) {
-                    ids
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val list =
+                  if (playlist != null) {
+                    plugin.playlistRepository.listSongs(requireNotNull(playlist.id))
+                  } else {
+                    plugin.socialRepository.listFavoriteSongIds(viewer.uniqueId).mapNotNull {
+                      plugin.songRepository.findById(it)
+                    }
                   }
-                }
-                songs = list
-                page = page.coerceAtMost(((songs.size - 1).coerceAtLeast(0)) / PAGE_SIZE)
-                render()
-                if (autoPlayFirst && songs.isNotEmpty()) playIndex(0)
-              },
-            )
-        },
-      )
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (songs.map { it.id } != list.map { it.id }) {
+                          val oldRevision = listRevision++
+                          val ids =
+                              list
+                                  .filter { it.published || it.authorUuid == viewer.uniqueId }
+                                  .mapNotNull { it.id }
+                          plugin.playbackController.updateList(
+                              viewer,
+                              this to oldRevision,
+                              this to listRevision,
+                          ) {
+                            ids
+                          }
+                        }
+                        songs = list
+                        page = page.coerceAtMost(((songs.size - 1).coerceAtLeast(0)) / PAGE_SIZE)
+                        render()
+                        if (autoPlayFirst && songs.isNotEmpty()) playIndex(0)
+                      },
+                  )
+            },
+        )
   }
 
   private fun render() {
     val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
     GuiChrome.render(
-      inventory,
-      null,
-      state,
-      sortLabel = "設定順",
-      viewer = viewer,
-      plugin = plugin,
-      actionModeCategory = ActionModeCategory.PLAYLIST_DETAIL,
+        inventory,
+        null,
+        state,
+        sortLabel = "設定順",
+        viewer = viewer,
+        plugin = plugin,
+        actionModeCategory = ActionModeCategory.PLAYLIST_DETAIL,
     )
 
     SLOTS.forEachIndexed { index, slot ->
       inventory.setItem(
-        slot,
-        songs.getOrNull(page * PAGE_SIZE + index)?.let { songIcon(it, state) },
+          slot,
+          songs.getOrNull(page * PAGE_SIZE + index)?.let { songIcon(it, state) },
       )
     }
     if (page == 0) inventory.setItem(ControllerSlots.PAGE_PREV, GuiChrome.backControllerButton())
   }
 
   private fun songIcon(
-    song: Song,
-    state: com.github.sahyuya.oyasaiMusic.gui.PlayerControllerState,
+      song: Song,
+      state: com.github.sahyuya.oyasaiMusic.gui.PlayerControllerState,
   ): org.bukkit.inventory.ItemStack {
     val confirming = pendingRemoveSongId == song.id
     val dragging = draggingSongId == song.id
@@ -128,15 +128,15 @@ private constructor(
 
     val lore = mutableListOf<Component>(SongLoreComponents.statistics(song.likes, song.views))
     lore +=
-      ActionLoreBuilder.build(
-        viewer,
-        prefix,
-        ActionModeCategory.PLAYLIST_DETAIL,
-        "再生",
-        "詳細を開く",
-        "掴んで移動",
-        "除外",
-      )
+        ActionLoreBuilder.build(
+            viewer,
+            prefix,
+            ActionModeCategory.PLAYLIST_DETAIL,
+            "再生",
+            "詳細を開く",
+            "掴んで移動",
+            "除外",
+        )
     when {
       dragging -> lore += Component.text("移動中… 移動先をクリック（再クリックでキャンセル）", NamedTextColor.AQUA)
       draggingSongId != null -> lore += Component.text("クリックでここに移動", NamedTextColor.AQUA)
@@ -145,10 +145,10 @@ private constructor(
     }
 
     return GuiItemBuilder(Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13)
-      .name(songTitle(song))
-      .lore(lore)
-      .glint(confirming || dragging || nowPlaying)
-      .build()
+        .name(songTitle(song))
+        .lore(lore)
+        .glint(confirming || dragging || nowPlaying)
+        .build()
   }
 
   override fun onClick(event: InventoryClickEvent) {
@@ -164,28 +164,28 @@ private constructor(
     }
 
     if (
-      NavTabRouter.handle(
-        slot,
-        null,
-        ActionModeCategory.PLAYLIST_DETAIL,
-        plugin,
-        menuManager,
-        viewer,
-      )
+        NavTabRouter.handle(
+            slot,
+            null,
+            ActionModeCategory.PLAYLIST_DETAIL,
+            plugin,
+            menuManager,
+            viewer,
+        )
     )
-      return
+        return
 
     when (slot) {
       ControllerSlots.PAGE_PREV ->
-        if (page > 0) {
-          page--
-          render()
-        } else menuManager.openPrevious(viewer)
+          if (page > 0) {
+            page--
+            render()
+          } else menuManager.openPrevious(viewer)
       ControllerSlots.PAGE_NEXT ->
-        if (songs.size > (page + 1) * PAGE_SIZE) {
-          page++
-          render()
-        }
+          if (songs.size > (page + 1) * PAGE_SIZE) {
+            page++
+            render()
+          }
       else -> {
         if (plugin.playbackController.handleControllerClick(slot, viewer)) return
         if (index == -1) return
@@ -244,24 +244,24 @@ private constructor(
       return
     }
     Bukkit.getScheduler()
-      .runTaskAsynchronously(
-        plugin,
-        Runnable {
-          plugin.playlistRepository.reorderToPosition(
-            requireNotNull(playlist.id),
-            songId,
-            targetIndex,
-          )
-          Bukkit.getScheduler()
-            .runTask(
-              plugin,
-              Runnable {
-                viewer.sendMessage("§a曲順を変更しました。")
-                reload()
-              },
-            )
-        },
-      )
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              plugin.playlistRepository.reorderToPosition(
+                  requireNotNull(playlist.id),
+                  songId,
+                  targetIndex,
+              )
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        viewer.sendMessage("§a曲順を変更しました。")
+                        reload()
+                      },
+                  )
+            },
+        )
   }
 
   private fun confirmOrRemove(song: Song) {
@@ -272,35 +272,35 @@ private constructor(
     }
     val songId = requireNotNull(song.id)
     Bukkit.getScheduler()
-      .runTaskAsynchronously(
-        plugin,
-        Runnable {
-          if (playlist != null) {
-            plugin.playlistRepository.removeSong(requireNotNull(playlist.id), songId)
-          } else {
-            plugin.socialRepository.removeFavorite(viewer.uniqueId, songId)
-          }
-          Bukkit.getScheduler()
-            .runTask(
-              plugin,
-              Runnable {
-                viewer.sendMessage("§aリストから除外しました: ${song.title}")
-                pendingRemoveSongId = null
-                reload()
-              },
-            )
-        },
-      )
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              if (playlist != null) {
+                plugin.playlistRepository.removeSong(requireNotNull(playlist.id), songId)
+              } else {
+                plugin.socialRepository.removeFavorite(viewer.uniqueId, songId)
+              }
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        viewer.sendMessage("§aリストから除外しました: ${song.title}")
+                        pendingRemoveSongId = null
+                        reload()
+                      },
+                  )
+            },
+        )
   }
 
   private fun playIndex(index: Int) {
     val song = songs.getOrNull(index) ?: return
     val ids = songs.filter { it.published || it.authorUuid == viewer.uniqueId }.mapNotNull { it.id }
     plugin.playbackController.playList(
-      viewer,
-      song,
-      key = this to listRevision,
-      sequential = true,
+        viewer,
+        song,
+        key = this to listRevision,
+        sequential = true,
     ) {
       ids
     }

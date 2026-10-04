@@ -41,10 +41,10 @@ internal class ListPlaybackOrder(ids: List<Long>, private val random: Random = R
   }
 
   fun next(
-    shuffle: Boolean,
-    repeatList: Boolean,
-    repeatSingle: Boolean,
-    autoAdvance: Boolean,
+      shuffle: Boolean,
+      repeatList: Boolean,
+      repeatSingle: Boolean,
+      autoAdvance: Boolean,
   ): Long? {
     if (ids.isEmpty()) return null
     if (repeatSingle) return current
@@ -66,16 +66,16 @@ internal class ListPlaybackOrder(ids: List<Long>, private val random: Random = R
   }
 
   fun previous(): Long? =
-    if (ids.isEmpty()) null else choose((currentIndex - 1 + ids.size) % ids.size)
+      if (ids.isEmpty()) null else choose((currentIndex - 1 + ids.size) % ids.size)
 }
 
 internal fun PlayerControllerState.cycleLoopMode() {
   loopMode =
-    when (loopMode) {
-      LoopMode.OFF -> LoopMode.LIST
-      LoopMode.LIST -> LoopMode.SINGLE
-      LoopMode.SINGLE -> LoopMode.OFF
-    }
+      when (loopMode) {
+        LoopMode.OFF -> LoopMode.LIST
+        LoopMode.LIST -> LoopMode.SINGLE
+        LoopMode.SINGLE -> LoopMode.OFF
+      }
   if (loopMode == LoopMode.SINGLE) shuffle = false
 }
 
