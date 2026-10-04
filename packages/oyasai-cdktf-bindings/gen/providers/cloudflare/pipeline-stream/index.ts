@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,29 +10,33 @@ export interface PipelineStreamConfig extends cdktf.TerraformMetaArguments {
   /**
   * Specifies the public ID of the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#account_id PipelineStream#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#account_id PipelineStream#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#format PipelineStream#format}
+  * Defines the data format of the events.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#format PipelineStream#format}
   */
   readonly format?: PipelineStreamFormat;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#http PipelineStream#http}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#http PipelineStream#http}
   */
   readonly http?: PipelineStreamHttp;
   /**
   * Specifies the name of the Stream.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#name PipelineStream#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#name PipelineStream#name}
   */
   readonly name: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#schema PipelineStream#schema}
+  * Defines the schema of the events in the data stream.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#schema PipelineStream#schema}
   */
   readonly schema?: PipelineStreamSchema;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#worker_binding PipelineStream#worker_binding}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#worker_binding PipelineStream#worker_binding}
   */
   readonly workerBinding?: PipelineStreamWorkerBinding;
 }
@@ -40,33 +44,33 @@ export interface PipelineStreamFormat {
   /**
   * Available values: "uncompressed", "snappy", "gzip", "zstd", "lz4".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#compression PipelineStream#compression}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#compression PipelineStream#compression}
   */
   readonly compression?: string;
   /**
   * Available values: "number", "string", "bytes".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#decimal_encoding PipelineStream#decimal_encoding}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#decimal_encoding PipelineStream#decimal_encoding}
   */
   readonly decimalEncoding?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#row_group_bytes PipelineStream#row_group_bytes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#row_group_bytes PipelineStream#row_group_bytes}
   */
   readonly rowGroupBytes?: number;
   /**
   * Available values: "rfc3339", "unix_millis".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#timestamp_format PipelineStream#timestamp_format}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#timestamp_format PipelineStream#timestamp_format}
   */
   readonly timestampFormat?: string;
   /**
   * Available values: "json", "parquet".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#type PipelineStream#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#type PipelineStream#type}
   */
   readonly type: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#unstructured PipelineStream#unstructured}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#unstructured PipelineStream#unstructured}
   */
   readonly unstructured?: boolean | cdktf.IResolvable;
 }
@@ -302,7 +306,7 @@ export class PipelineStreamFormatOutputReference extends cdktf.ComplexObject {
 }
 export interface PipelineStreamHttpCors {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#origins PipelineStream#origins}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#origins PipelineStream#origins}
   */
   readonly origins?: string[];
 }
@@ -398,19 +402,19 @@ export interface PipelineStreamHttp {
   /**
   * Indicates that authentication is required for the HTTP endpoint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#authentication PipelineStream#authentication}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#authentication PipelineStream#authentication}
   */
   readonly authentication: boolean | cdktf.IResolvable;
   /**
   * Specifies the CORS options for the HTTP endpoint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#cors PipelineStream#cors}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#cors PipelineStream#cors}
   */
   readonly cors?: PipelineStreamHttpCors;
   /**
   * Indicates that the HTTP endpoint is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#enabled PipelineStream#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#enabled PipelineStream#enabled}
   */
   readonly enabled: boolean | cdktf.IResolvable;
 }
@@ -556,31 +560,31 @@ export class PipelineStreamHttpOutputReference extends cdktf.ComplexObject {
 }
 export interface PipelineStreamSchemaFields {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#metadata_key PipelineStream#metadata_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#metadata_key PipelineStream#metadata_key}
   */
   readonly metadataKey?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#name PipelineStream#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#name PipelineStream#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#required PipelineStream#required}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#required PipelineStream#required}
   */
   readonly required?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#sql_name PipelineStream#sql_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#sql_name PipelineStream#sql_name}
   */
   readonly sqlName?: string;
   /**
   * Available values: "int32", "int64", "float32", "float64", "bool", "string", "binary", "timestamp", "json".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#type PipelineStream#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#type PipelineStream#type}
   */
   readonly type: string;
   /**
   * Available values: "second", "millisecond", "microsecond", "nanosecond".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#unit PipelineStream#unit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#unit PipelineStream#unit}
   */
   readonly unit?: string;
 }
@@ -836,281 +840,13 @@ export class PipelineStreamSchemaFieldsList extends cdktf.ComplexList {
     return new PipelineStreamSchemaFieldsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
-export interface PipelineStreamSchemaFormat {
-  /**
-  * Available values: "uncompressed", "snappy", "gzip", "zstd", "lz4".
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#compression PipelineStream#compression}
-  */
-  readonly compression?: string;
-  /**
-  * Available values: "number", "string", "bytes".
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#decimal_encoding PipelineStream#decimal_encoding}
-  */
-  readonly decimalEncoding?: string;
-  /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#row_group_bytes PipelineStream#row_group_bytes}
-  */
-  readonly rowGroupBytes?: number;
-  /**
-  * Available values: "rfc3339", "unix_millis".
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#timestamp_format PipelineStream#timestamp_format}
-  */
-  readonly timestampFormat?: string;
-  /**
-  * Available values: "json", "parquet".
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#type PipelineStream#type}
-  */
-  readonly type: string;
-  /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#unstructured PipelineStream#unstructured}
-  */
-  readonly unstructured?: boolean | cdktf.IResolvable;
-}
-
-export function pipelineStreamSchemaFormatToTerraform(struct?: PipelineStreamSchemaFormat | cdktf.IResolvable): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  return {
-    compression: cdktf.stringToTerraform(struct!.compression),
-    decimal_encoding: cdktf.stringToTerraform(struct!.decimalEncoding),
-    row_group_bytes: cdktf.numberToTerraform(struct!.rowGroupBytes),
-    timestamp_format: cdktf.stringToTerraform(struct!.timestampFormat),
-    type: cdktf.stringToTerraform(struct!.type),
-    unstructured: cdktf.booleanToTerraform(struct!.unstructured),
-  }
-}
-
-
-export function pipelineStreamSchemaFormatToHclTerraform(struct?: PipelineStreamSchemaFormat | cdktf.IResolvable): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  const attrs = {
-    compression: {
-      value: cdktf.stringToHclTerraform(struct!.compression),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "string",
-    },
-    decimal_encoding: {
-      value: cdktf.stringToHclTerraform(struct!.decimalEncoding),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "string",
-    },
-    row_group_bytes: {
-      value: cdktf.numberToHclTerraform(struct!.rowGroupBytes),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "number",
-    },
-    timestamp_format: {
-      value: cdktf.stringToHclTerraform(struct!.timestampFormat),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "string",
-    },
-    type: {
-      value: cdktf.stringToHclTerraform(struct!.type),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "string",
-    },
-    unstructured: {
-      value: cdktf.booleanToHclTerraform(struct!.unstructured),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "boolean",
-    },
-  };
-
-  // remove undefined attributes
-  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
-}
-
-export class PipelineStreamSchemaFormatOutputReference extends cdktf.ComplexObject {
-  private isEmptyObject = false;
-  private resolvableValue?: cdktf.IResolvable;
-
-  /**
-  * @param terraformResource The parent resource
-  * @param terraformAttribute The attribute on the parent resource this class is referencing
-  */
-  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
-    super(terraformResource, terraformAttribute, false);
-  }
-
-  public get internalValue(): PipelineStreamSchemaFormat | cdktf.IResolvable | undefined {
-    if (this.resolvableValue) {
-      return this.resolvableValue;
-    }
-    let hasAnyValues = this.isEmptyObject;
-    const internalValueResult: any = {};
-    if (this._compression !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.compression = this._compression;
-    }
-    if (this._decimalEncoding !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.decimalEncoding = this._decimalEncoding;
-    }
-    if (this._rowGroupBytes !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.rowGroupBytes = this._rowGroupBytes;
-    }
-    if (this._timestampFormat !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.timestampFormat = this._timestampFormat;
-    }
-    if (this._type !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.type = this._type;
-    }
-    if (this._unstructured !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.unstructured = this._unstructured;
-    }
-    return hasAnyValues ? internalValueResult : undefined;
-  }
-
-  public set internalValue(value: PipelineStreamSchemaFormat | cdktf.IResolvable | undefined) {
-    if (value === undefined) {
-      this.isEmptyObject = false;
-      this.resolvableValue = undefined;
-      this._compression = undefined;
-      this._decimalEncoding = undefined;
-      this._rowGroupBytes = undefined;
-      this._timestampFormat = undefined;
-      this._type = undefined;
-      this._unstructured = undefined;
-    }
-    else if (cdktf.Tokenization.isResolvable(value)) {
-      this.isEmptyObject = false;
-      this.resolvableValue = value;
-    }
-    else {
-      this.isEmptyObject = Object.keys(value).length === 0;
-      this.resolvableValue = undefined;
-      this._compression = value.compression;
-      this._decimalEncoding = value.decimalEncoding;
-      this._rowGroupBytes = value.rowGroupBytes;
-      this._timestampFormat = value.timestampFormat;
-      this._type = value.type;
-      this._unstructured = value.unstructured;
-    }
-  }
-
-  // compression - computed: false, optional: true, required: false
-  private _compression?: string; 
-  public get compression() {
-    return this.getStringAttribute('compression');
-  }
-  public set compression(value: string) {
-    this._compression = value;
-  }
-  public resetCompression() {
-    this._compression = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get compressionInput() {
-    return this._compression;
-  }
-
-  // decimal_encoding - computed: false, optional: true, required: false
-  private _decimalEncoding?: string; 
-  public get decimalEncoding() {
-    return this.getStringAttribute('decimal_encoding');
-  }
-  public set decimalEncoding(value: string) {
-    this._decimalEncoding = value;
-  }
-  public resetDecimalEncoding() {
-    this._decimalEncoding = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get decimalEncodingInput() {
-    return this._decimalEncoding;
-  }
-
-  // row_group_bytes - computed: false, optional: true, required: false
-  private _rowGroupBytes?: number; 
-  public get rowGroupBytes() {
-    return this.getNumberAttribute('row_group_bytes');
-  }
-  public set rowGroupBytes(value: number) {
-    this._rowGroupBytes = value;
-  }
-  public resetRowGroupBytes() {
-    this._rowGroupBytes = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get rowGroupBytesInput() {
-    return this._rowGroupBytes;
-  }
-
-  // timestamp_format - computed: false, optional: true, required: false
-  private _timestampFormat?: string; 
-  public get timestampFormat() {
-    return this.getStringAttribute('timestamp_format');
-  }
-  public set timestampFormat(value: string) {
-    this._timestampFormat = value;
-  }
-  public resetTimestampFormat() {
-    this._timestampFormat = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get timestampFormatInput() {
-    return this._timestampFormat;
-  }
-
-  // type - computed: false, optional: false, required: true
-  private _type?: string; 
-  public get type() {
-    return this.getStringAttribute('type');
-  }
-  public set type(value: string) {
-    this._type = value;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get typeInput() {
-    return this._type;
-  }
-
-  // unstructured - computed: false, optional: true, required: false
-  private _unstructured?: boolean | cdktf.IResolvable; 
-  public get unstructured() {
-    return this.getBooleanAttribute('unstructured');
-  }
-  public set unstructured(value: boolean | cdktf.IResolvable) {
-    this._unstructured = value;
-  }
-  public resetUnstructured() {
-    this._unstructured = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get unstructuredInput() {
-    return this._unstructured;
-  }
-}
 export interface PipelineStreamSchema {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#fields PipelineStream#fields}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#fields PipelineStream#fields}
   */
   readonly fields?: PipelineStreamSchemaFields[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#format PipelineStream#format}
-  */
-  readonly format?: PipelineStreamSchemaFormat;
-  /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#inferred PipelineStream#inferred}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#inferred PipelineStream#inferred}
   */
   readonly inferred?: boolean | cdktf.IResolvable;
 }
@@ -1122,7 +858,6 @@ export function pipelineStreamSchemaToTerraform(struct?: PipelineStreamSchema | 
   }
   return {
     fields: cdktf.listMapper(pipelineStreamSchemaFieldsToTerraform, false)(struct!.fields),
-    format: pipelineStreamSchemaFormatToTerraform(struct!.format),
     inferred: cdktf.booleanToTerraform(struct!.inferred),
   }
 }
@@ -1139,12 +874,6 @@ export function pipelineStreamSchemaToHclTerraform(struct?: PipelineStreamSchema
       isBlock: true,
       type: "list",
       storageClassType: "PipelineStreamSchemaFieldsList",
-    },
-    format: {
-      value: pipelineStreamSchemaFormatToHclTerraform(struct!.format),
-      isBlock: true,
-      type: "struct",
-      storageClassType: "PipelineStreamSchemaFormat",
     },
     inferred: {
       value: cdktf.booleanToHclTerraform(struct!.inferred),
@@ -1180,10 +909,6 @@ export class PipelineStreamSchemaOutputReference extends cdktf.ComplexObject {
       hasAnyValues = true;
       internalValueResult.fields = this._fields?.internalValue;
     }
-    if (this._format?.internalValue !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.format = this._format?.internalValue;
-    }
     if (this._inferred !== undefined) {
       hasAnyValues = true;
       internalValueResult.inferred = this._inferred;
@@ -1196,7 +921,6 @@ export class PipelineStreamSchemaOutputReference extends cdktf.ComplexObject {
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._fields.internalValue = undefined;
-      this._format.internalValue = undefined;
       this._inferred = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
@@ -1207,7 +931,6 @@ export class PipelineStreamSchemaOutputReference extends cdktf.ComplexObject {
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._fields.internalValue = value.fields;
-      this._format.internalValue = value.format;
       this._inferred = value.inferred;
     }
   }
@@ -1226,22 +949,6 @@ export class PipelineStreamSchemaOutputReference extends cdktf.ComplexObject {
   // Temporarily expose input value. Use with caution.
   public get fieldsInput() {
     return this._fields.internalValue;
-  }
-
-  // format - computed: false, optional: true, required: false
-  private _format = new PipelineStreamSchemaFormatOutputReference(this, "format");
-  public get format() {
-    return this._format;
-  }
-  public putFormat(value: PipelineStreamSchemaFormat) {
-    this._format.internalValue = value;
-  }
-  public resetFormat() {
-    this._format.internalValue = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get formatInput() {
-    return this._format.internalValue;
   }
 
   // inferred - computed: false, optional: true, required: false
@@ -1264,7 +971,7 @@ export interface PipelineStreamWorkerBinding {
   /**
   * Indicates that the worker binding is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#enabled PipelineStream#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#enabled PipelineStream#enabled}
   */
   readonly enabled: boolean | cdktf.IResolvable;
 }
@@ -1355,7 +1062,7 @@ export class PipelineStreamWorkerBindingOutputReference extends cdktf.ComplexObj
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream cloudflare_pipeline_stream}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream cloudflare_pipeline_stream}
 */
 export class PipelineStream extends cdktf.TerraformResource {
 
@@ -1371,7 +1078,7 @@ export class PipelineStream extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a PipelineStream resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the PipelineStream to import
-  * @param importFromId The id of the existing PipelineStream that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing PipelineStream that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the PipelineStream to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1383,7 +1090,7 @@ export class PipelineStream extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/pipeline_stream cloudflare_pipeline_stream} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/pipeline_stream cloudflare_pipeline_stream} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1394,7 +1101,7 @@ export class PipelineStream extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_pipeline_stream',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.24.0'
+        providerVersion: '5.25.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

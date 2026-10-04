@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/uuid
+// https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/uuid
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface UuidConfig extends cdktf.TerraformMetaArguments {
   /**
   * Arbitrary map of values that, when changed, will trigger recreation of resource. See [the main provider documentation](../index.html) for more information.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/uuid#keepers Uuid#keepers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/uuid#keepers Uuid#keepers}
   */
   readonly keepers?: { [key: string]: string };
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/uuid random_uuid}
+* Represents a {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/uuid random_uuid}
 */
 export class Uuid extends cdktf.TerraformResource {
 
@@ -32,7 +32,7 @@ export class Uuid extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Uuid resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Uuid to import
-  * @param importFromId The id of the existing Uuid that should be imported. Refer to the {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/uuid#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Uuid that should be imported. Refer to the {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/uuid#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Uuid to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class Uuid extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/hashicorp/random/3.9.0/docs/resources/uuid random_uuid} Resource
+  * Create a new {@link https://registry.terraform.io/providers/hashicorp/random/3.9.1/docs/resources/uuid random_uuid} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class Uuid extends cdktf.TerraformResource {
       terraformResourceType: 'random_uuid',
       terraformGeneratorMetadata: {
         providerName: 'random',
-        providerVersion: '3.9.0'
+        providerVersion: '3.9.1'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

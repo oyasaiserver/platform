@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/worker_version
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_version
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,26 +10,26 @@ export interface DataCloudflareWorkerVersionConfig extends cdktf.TerraformMetaAr
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/worker_version#account_id DataCloudflareWorkerVersion#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_version#account_id DataCloudflareWorkerVersion#account_id}
   */
   readonly accountId: string;
   /**
   * Whether to include the `modules` property of the version in the response, which contains code and sourcemap content and may add several megabytes to the response size.
   * Available values: "modules".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/worker_version#include DataCloudflareWorkerVersion#include}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_version#include DataCloudflareWorkerVersion#include}
   */
   readonly include?: string;
   /**
   * Identifier for the version, which can be a UUID, a UUID prefix (minimum length 8), or the literal "latest" to operate on the most recently created version.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/worker_version#version_id DataCloudflareWorkerVersion#version_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_version#version_id DataCloudflareWorkerVersion#version_id}
   */
   readonly versionId: string;
   /**
   * Identifier for the Worker, which can be ID or name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/worker_version#worker_id DataCloudflareWorkerVersion#worker_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_version#worker_id DataCloudflareWorkerVersion#worker_id}
   */
   readonly workerId: string;
 }
@@ -609,6 +609,11 @@ export class DataCloudflareWorkerVersionBindingsOutputReference extends cdktf.Co
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // identity - computed: true, optional: false, required: false
+  public get identity() {
+    return this.getStringAttribute('identity');
   }
 
   // index_name - computed: true, optional: false, required: false
@@ -1969,7 +1974,7 @@ export class DataCloudflareWorkerVersionPlacementOutputReference extends cdktf.C
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/worker_version cloudflare_worker_version}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_version cloudflare_worker_version}
 */
 export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
 
@@ -1985,7 +1990,7 @@ export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorkerVersion resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkerVersion to import
-  * @param importFromId The id of the existing DataCloudflareWorkerVersion that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/worker_version#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkerVersion that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_version#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkerVersion to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1997,7 +2002,7 @@ export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/worker_version cloudflare_worker_version} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_version cloudflare_worker_version} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -2008,7 +2013,7 @@ export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_worker_version',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.24.0'
+        providerVersion: '5.25.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

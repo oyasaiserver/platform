@@ -56,7 +56,6 @@ let
     {
       inherit inputs constants oyasaiTerraformProviders;
       inherit (pkgs) bore-cli;
-      inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
       inherit (inputs.tools.packages.${system}) nix-flake-check-changed nix-grep-to-build npm-list;
       inherit (inputs.nix-minecraft.legacyPackages.${system})
         purpurServers
@@ -73,6 +72,11 @@ let
 
       package-lock2nix = callPackage inputs.package-lock2nix.lib.package-lock2nix {
         overrideScope = pl2nixOverlay;
+      };
+
+      gradle2nix = inputs.gradle2nix.packages.${system}.gradle2nix.overrideAttrs {
+        # Gradle wants local networking
+        __darwinAllowLocalNetworking = true;
       };
 
       buildGradlePackage =

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/ct_alerting
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ct_alerting
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareCtAlertingConfig extends cdktf.TerraformMetaArgum
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/ct_alerting#zone_id DataCloudflareCtAlerting#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ct_alerting#zone_id DataCloudflareCtAlerting#zone_id}
   */
   readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/ct_alerting cloudflare_ct_alerting}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ct_alerting cloudflare_ct_alerting}
 */
 export class DataCloudflareCtAlerting extends cdktf.TerraformDataSource {
 
@@ -32,7 +32,7 @@ export class DataCloudflareCtAlerting extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareCtAlerting resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareCtAlerting to import
-  * @param importFromId The id of the existing DataCloudflareCtAlerting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/ct_alerting#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareCtAlerting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ct_alerting#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareCtAlerting to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class DataCloudflareCtAlerting extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/ct_alerting cloudflare_ct_alerting} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ct_alerting cloudflare_ct_alerting} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class DataCloudflareCtAlerting extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_ct_alerting',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.24.0'
+        providerVersion: '5.25.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
