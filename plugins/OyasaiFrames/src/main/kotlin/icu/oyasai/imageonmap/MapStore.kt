@@ -67,6 +67,9 @@ internal data class Animation(
   val frames: Int
     get() = delays.size
 
+  fun pushOrder(frame: Int): List<Int> =
+      (slots.subList(frame * tiles, (frame + 1) * tiles) + ids).distinct()
+
   fun frameAt(tick: Long): Int {
     var offset = (tick % delays.sum()).toInt()
     for (i in delays.indices) {

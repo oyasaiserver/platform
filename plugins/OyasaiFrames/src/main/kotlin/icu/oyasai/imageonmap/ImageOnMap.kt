@@ -98,8 +98,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private val shownFrames = mutableMapOf<Long, Int>()
   private val sentImages = mutableMapOf<UUID, MutableSet<Long>>()
   private val pushQueues = mutableMapOf<UUID, ArrayDeque<Pair<Long, Int>>>()
+  private val viewerBudgets = mutableMapOf<UUID, ViewerMapBudget>()
   private var ticks = 0L
   private var pushPerTick = 20
+  private var maxMapsPerViewer = 1000
   private val removing = mutableSetOf<UUID>()
   private val frameRecords = mutableMapOf<UUID, FrameRecord>()
   private val suspected = mutableSetOf<UUID>()
@@ -135,6 +137,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       ImageSource.registerWebp()
       store = MapStore(dataFolder.resolve("pictures.db"))
       pushPerTick = getConfig().getInt("animation.push-maps-per-tick", 20).coerceAtLeast(1)
+      maxMapsPerViewer = getConfig().getInt("animation.max-maps-per-viewer", 1000).coerceAtLeast(1)
       val (ids, frames, savedAnimations) =
           dbThread
               .submit(
@@ -284,31 +287,54 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       server.onlinePlayers.forEach { player ->
         val sent = sentImages.getOrPut(player.uniqueId) { mutableSetOf() }
         val queue = pushQueues.getOrPut(player.uniqueId) { ArrayDeque() }
-        animatedFrames.forEach { (imageId, frames) ->
-          if (
-              imageId !in sent &&
-                  queue.none { it.first == imageId } &&
-                  frames.values.any { it.isValid && nearby(player, it) }
-          ) {
-            queue.addLast(imageId to 0)
-            animations.animations[imageId]?.ids?.forEach { id -> server.getMap(id)?.let(::attach) }
+        val budget = viewerBudgets.getOrPut(player.uniqueId) { ViewerMapBudget() }
+        val playerLocation = player.location
+        val nearbyImages =
+            animatedFrames.mapNotNull { (imageId, frames) ->
+              val animation = animations.animations[imageId] ?: return@mapNotNull null
+              val distance =
+                  frames.values
+                      .asSequence()
+                      .filter { it.isValid && it.world == player.world }
+                      .map { playerLocation.distanceSquared(it.location) }
+                      .filter { it <= 64.0 * 64 }
+                      .minOrNull() ?: return@mapNotNull null
+              NearbyImage(imageId, animation.ids.size, distance)
+            }
+        budget.admitNearby(nearbyImages.filter { it.id !in sent }, maxMapsPerViewer).forEach {
+            imageId ->
+          val animation = animations.animations.getValue(imageId)
+          sent.add(imageId)
+          val frame = shownFrames[imageId] ?: 0
+          animation.pushOrder(frame).forEach { id ->
+            queue.addLast(imageId to id)
+            server.getMap(id)?.let(::attach)
           }
+        }
+        if (queue.size > 1) {
+          val distances = nearbyImages.associate { it.id to it.distanceSquared }
+          val ordered =
+              queue.sortedWith(
+                  compareBy<Pair<Long, Int>> { distances[it.first] ?: Double.POSITIVE_INFINITY }
+                      .thenBy { it.first }
+              )
+          queue.clear()
+          queue.addAll(ordered)
         }
       }
     }
     server.onlinePlayers.forEach { player ->
       val queue = pushQueues[player.uniqueId] ?: return@forEach
+      val budget = viewerBudgets[player.uniqueId] ?: return@forEach
       var sent = 0
       while (sent < pushPerTick && queue.isNotEmpty()) {
-        val (imageId, index) = queue.first()
-        val animation = animations.animations[imageId]
-        if (animation == null) {
-          queue.removeFirst()
-          continue
-        }
-        val view = server.getMap(animation.ids[index])
+        val (imageId, mapId) = queue.first()
+        val view = if (imageId in animations.animations) server.getMap(mapId) else null
         if (view == null) {
-          queue.removeFirst()
+          val remaining = queue.count { it.first == imageId }
+          queue.removeIf { it.first == imageId }
+          budget.releaseQueued(remaining)
+          sentImages[player.uniqueId]?.remove(imageId)
           continue
         }
         attach(view)
@@ -318,9 +344,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         player.sendMap(view)
         sent++
         queue.removeFirst()
-        if (index + 1 == animation.ids.size)
-            sentImages.getOrPut(player.uniqueId) { mutableSetOf() }.add(imageId)
-        else queue.addFirst(imageId to index + 1)
+        budget.delivered()
       }
     }
     animatedFrames.forEach { (imageId, frames) ->
@@ -333,6 +357,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
           return@forEach
       val current = animation.frameAt(ticks)
       if (shownFrames[imageId] == current) return@forEach
+      // ponytail: 額縁のコマ差し替えは全員共通。枠外の人にはコマ 0 を vanilla が送るだけで、未送信のコマは白く見えうる。
       frames.values.removeIf { !it.isValid }
       frames.values.forEach { frame ->
         val currentId =
@@ -583,6 +608,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   fun quit(e: PlayerQuitEvent) {
     gui.remove(e.player.uniqueId)
     clearPushed(e.player)
+    viewerBudgets.remove(e.player.uniqueId)
   }
 
   @EventHandler fun changedWorld(e: PlayerChangedWorldEvent) = clearPushed(e.player)
@@ -592,6 +618,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private fun clearPushed(player: Player) {
     sentImages.remove(player.uniqueId)
     pushQueues.remove(player.uniqueId)
+    viewerBudgets[player.uniqueId]?.reset()
   }
 
   @EventHandler
@@ -1160,7 +1187,11 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             animations.remove(id)
             animatedFrames.remove(id)
             shownFrames.remove(id)
-            pushQueues.values.forEach { it.removeIf { entry -> entry.first == id } }
+            pushQueues.forEach { (viewer, queue) ->
+              val remaining = queue.count { it.first == id }
+              queue.removeIf { entry -> entry.first == id }
+              viewerBudgets[viewer]?.releaseQueued(remaining)
+            }
             sentImages.values.forEach { it.remove(id) }
             logger.info(
                 "Image deleted by=${player.uniqueId} image=$id owner=${deleted.owner} size=${deleted.columns}x${deleted.rows} maps=${deleted.mapIds.size}"

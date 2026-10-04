@@ -49,6 +49,29 @@ class ImageOnMapTest {
   }
 
   @Test
+  fun viewerMapBudgetAdmitsNearbyImagesAndResets() {
+    val budget = ViewerMapBudget()
+    assertEquals(
+        listOf(2L, 3L),
+        budget.admitNearby(
+            listOf(
+                NearbyImage(1, 4, 30.0),
+                NearbyImage(2, 3, 1.0),
+                NearbyImage(3, 2, 10.0),
+            ),
+            5,
+        ),
+    )
+    budget.delivered()
+    assertEquals(1, budget.received)
+    assertEquals(emptyList(), budget.admitNearby(listOf(NearbyImage(4, 1, 0.0)), 5))
+    budget.reset()
+    assertEquals(0, budget.received)
+    assertEquals(listOf(4L), budget.admitNearby(listOf(NearbyImage(4, 5, 0.0)), 5))
+    assertEquals(emptyList(), budget.admitNearby(listOf(NearbyImage(5, 1, 0.0)), 5))
+  }
+
+  @Test
   fun gifBypassRemovesTileAndFrameLimits() {
     val bytes = gif("none")
     assertFails { ImageSource.prepare(bytes, 2 to 1, false, 1, 1, 2) }
@@ -347,6 +370,7 @@ class ImageOnMapTest {
             listOf(2, 3, 2),
         )
     assertEquals(listOf(0, 0, 1, 1, 1, 2, 2, 0), (0L..7L).map(animation::frameAt))
+    assertEquals(listOf(20, 21, 10, 11, 30, 31), animation.pushOrder(1))
     val index = AnimationIndex()
     index.add(animation)
     assertEquals(11, index.base(31))
