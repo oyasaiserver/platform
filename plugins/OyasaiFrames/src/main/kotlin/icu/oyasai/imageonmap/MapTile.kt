@@ -8,6 +8,10 @@ import java.util.zip.InflaterInputStream
 import javax.imageio.ImageIO
 import org.bukkit.map.MapCanvas
 import org.bukkit.map.MapPalette
+import org.tukaani.xz.LZMA2Options
+import org.tukaani.xz.SingleXZInputStream
+import org.tukaani.xz.XZ
+import org.tukaani.xz.XZOutputStream
 
 internal sealed interface MapTile {
   fun draw(canvas: MapCanvas)
@@ -27,7 +31,7 @@ internal sealed interface MapTile {
     private val PNG_SIGNATURE = byteArrayOf(-119, 80, 78, 71, 13, 10, 26, 10)
 
     // maps.png に PNG 署名があれば v2 の PNG、空でなければ従来の単独 zlib。
-    // 空なら map_books.zlib の連結 zlib を maps.idx のタイル位置・順番から読む。
+    // 空なら map_books.data の連結 xz を maps.idx のタイル位置・順番から読む。
     fun fromStored(bytes: ByteArray): MapTile {
       if (
           bytes.size >= PNG_SIGNATURE.size &&
@@ -55,9 +59,18 @@ internal sealed interface MapTile {
 
     fun compressBook(pixels: List<ByteArray>): ByteArray {
       require(pixels.isNotEmpty() && pixels.all { it.size == PIXELS })
+      val length = pixels.size.toLong() * PIXELS
+      require(length <= LZMA2Options.DICT_SIZE_MAX) { "地図の本が大きすぎます" }
+      val options = LZMA2Options(9)
+      options.dictSize = length.toInt()
+      // xz -9e: preset 9 with a longer match search and depth 512.
+      options.niceLen = 273
+      options.depthLimit = 512
       return ByteArrayOutputStream()
           .also { output ->
-            DeflaterOutputStream(output).use { stream -> pixels.forEach(stream::write) }
+            XZOutputStream(output, options, XZ.CHECK_CRC64).use { stream ->
+              pixels.forEach(stream::write)
+            }
           }
           .toByteArray()
     }
@@ -65,7 +78,7 @@ internal sealed interface MapTile {
     // readNBytes は指定枚数で止まる。後続のコマを展開しない。
     fun fromBook(bytes: ByteArray, position: Int): MapTile {
       require(position >= 0)
-      InflaterInputStream(ByteArrayInputStream(bytes)).use { stream ->
+      SingleXZInputStream(ByteArrayInputStream(bytes)).use { stream ->
         for (i in 0..position) {
           val pixels = stream.readNBytes(PIXELS)
           require(pixels.size == PIXELS) { "地図の本が途中で終わりました" }
@@ -77,7 +90,7 @@ internal sealed interface MapTile {
 
     fun allFromBook(bytes: ByteArray, count: Int): List<MapTile> {
       require(count > 0)
-      return InflaterInputStream(ByteArrayInputStream(bytes)).use { stream ->
+      return SingleXZInputStream(ByteArrayInputStream(bytes)).use { stream ->
         List(count) {
               val pixels = stream.readNBytes(PIXELS)
               require(pixels.size == PIXELS) { "地図の本が途中で終わりました" }

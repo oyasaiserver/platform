@@ -170,7 +170,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
                 "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL, slots TEXT NOT NULL)"
             )
             s.execute(
-                "CREATE TABLE map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, zlib BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
+                "CREATE TABLE map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, data BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
             )
             s.execute("PRAGMA user_version = 2")
           }
@@ -198,8 +198,19 @@ internal class MapStore(private val file: File) : AutoCloseable {
             }
         db.createStatement().use { s ->
           s.execute(
-              "CREATE TABLE IF NOT EXISTS map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, zlib BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
+              "CREATE TABLE IF NOT EXISTS map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, data BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
           )
+          // The unpublished zlib-book schema may exist locally, but it contains no books.
+          s.executeQuery("PRAGMA table_info(map_books)").use { columns ->
+            var oldColumn = false
+            while (columns.next()) if (columns.getString("name") == "zlib") oldColumn = true
+            if (oldColumn) {
+              s.executeQuery("SELECT COUNT(*) FROM map_books").use { rows ->
+                check(rows.next() && rows.getInt(1) == 0) { "zlib books cannot be read as xz" }
+              }
+              s.execute("ALTER TABLE map_books RENAME COLUMN zlib TO data")
+            }
+          }
         }
       }
       else -> error("unsupported image database version $version")
@@ -309,7 +320,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
 
   fun tile(mapId: Int): MapTile? =
       db.prepareStatement(
-              "SELECT m.png,b.zlib,(SELECT COUNT(*)-1 FROM maps p WHERE p.image_id=m.image_id AND p.idx<=m.idx AND p.idx % (i.columns*i.rows)=m.idx % (i.columns*i.rows)) FROM maps m LEFT JOIN images i ON i.id=m.image_id LEFT JOIN map_books b ON b.image_id=m.image_id AND b.tile=m.idx % (i.columns*i.rows) WHERE m.map_id=?"
+              "SELECT m.png,b.data,(SELECT COUNT(*)-1 FROM maps p WHERE p.image_id=m.image_id AND p.idx<=m.idx AND p.idx % (i.columns*i.rows)=m.idx % (i.columns*i.rows)) FROM maps m LEFT JOIN images i ON i.id=m.image_id LEFT JOIN map_books b ON b.image_id=m.image_id AND b.tile=m.idx % (i.columns*i.rows) WHERE m.map_id=?"
           )
           .use { s ->
             s.setInt(1, mapId)
@@ -334,7 +345,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
           }
         }
     val books =
-        db.prepareStatement("SELECT tile,zlib FROM map_books WHERE image_id=?").use { s ->
+        db.prepareStatement("SELECT tile,data FROM map_books WHERE image_id=?").use { s ->
           s.setLong(1, imageId)
           s.executeQuery().use { r ->
             buildMap { while (r.next()) put(r.getInt(1), r.getBytes(2)) }
@@ -373,7 +384,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
           }
         }
     val books =
-        db.prepareStatement("SELECT COALESCE(SUM(length(zlib)),0) FROM map_books WHERE image_id=?")
+        db.prepareStatement("SELECT COALESCE(SUM(length(data)),0) FROM map_books WHERE image_id=?")
             .use { s ->
               s.setLong(1, imageId)
               s.executeQuery().use { r ->
@@ -468,11 +479,11 @@ internal class MapStore(private val file: File) : AutoCloseable {
         }
       }
       if (books.isNotEmpty())
-          db.prepareStatement("INSERT INTO map_books(image_id,tile,zlib) VALUES(?,?,?)").use { s ->
-            books.forEach { (tile, zlib) ->
+          db.prepareStatement("INSERT INTO map_books(image_id,tile,data) VALUES(?,?,?)").use { s ->
+            books.forEach { (tile, data) ->
               s.setLong(1, imageId)
               s.setInt(2, tile)
-              s.setBytes(3, zlib)
+              s.setBytes(3, data)
               s.executeUpdate()
             }
           }

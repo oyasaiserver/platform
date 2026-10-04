@@ -4275,6 +4275,16 @@
       "hash": "sha256-9tSBCT51dny6Gsfh2zj49pLL4+OHRGkzcada6yHGFIs="
     }
   },
+  "org.tukaani:xz:1.12": {
+    "xz-1.12.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/tukaani/xz/1.12/xz-1.12.jar",
+      "hash": "sha256-PhWKh71z2K+0tugjnAE7fQScSFY/RYYM6ZzS5EjPSms="
+    },
+    "xz-1.12.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/tukaani/xz/1.12/xz-1.12.pom",
+      "hash": "sha256-k3tE2GnAWcOfB64ZTYzWIZ9a6/IgDvlwfwtQt4N9ooE="
+    }
+  },
   "org.tukaani:xz:1.9": {
     "xz-1.9.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/tukaani/xz/1.9/xz-1.9.jar",

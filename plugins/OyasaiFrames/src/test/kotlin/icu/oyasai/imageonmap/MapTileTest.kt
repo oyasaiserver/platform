@@ -13,6 +13,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import kotlin.time.measureTimedValue
 import org.bukkit.map.MapCanvas
 import org.bukkit.map.MapPalette
 
@@ -30,6 +31,47 @@ class MapTileTest {
     )
     assertFails { MapTile.compress(byteArrayOf(0)) }
     assertFails { MapTile.fromStored(MapTile.compress(ByteArray(128 * 128)).copyOf(4)) }
+  }
+
+  @Test
+  fun xzBooksMeasure396SlowlyChangingMaps() {
+    val books =
+        List(9) { tile ->
+          val first =
+              ByteArray(MapTile.PIXELS) { i ->
+                val x = i % 128
+                val y = i / 128
+                ((x * 17 + y * 29 + x * y / 3 + (x * x + y * y) / 11 + tile * 13) % 128).toByte()
+              }
+          List(44) { frame ->
+            first.copyOf().also { pixels ->
+              for (change in 0 until frame * 32) {
+                val index = (change * 131 + tile * 17) % pixels.size
+                pixels[index] = (pixels[index] + 1).toByte()
+              }
+            }
+          }
+        }
+    val (compressed, compressionTime) = measureTimedValue { books.map(MapTile::compressBook) }
+    val (expanded, expansionTime) =
+        measureTimedValue { compressed.map { MapTile.allFromBook(it, 44) } }
+    books.zip(expanded).forEach { (expected, actual) ->
+      expected.zip(actual).forEach { (pixels, tile) ->
+        assertContentEquals(pixels, (tile as MapTile.Colors).pixels)
+      }
+    }
+    println(
+        "XZ books 396 maps: compressedBytes=${compressed.sumOf { it.size }}, compressionMs=${compressionTime.inWholeMilliseconds}, expansionMs=${expansionTime.inWholeMilliseconds}"
+    )
+  }
+
+  @Test
+  fun xzBookChecksTailWhenFullyReadButAllowsEarlyTileRead() {
+    val first = ByteArray(MapTile.PIXELS) { (it % 128).toByte() }
+    val packed = MapTile.compressBook(listOf(first, first))
+    val corrupted = packed.copyOf().also { it[it.lastIndex] = (it.last() + 1).toByte() }
+    assertContentEquals(first, (MapTile.fromBook(corrupted, 0) as MapTile.Colors).pixels)
+    assertFails { MapTile.allFromBook(corrupted, 2) }
   }
 
   private fun drawnPixels(tile: MapTile): ByteArray {

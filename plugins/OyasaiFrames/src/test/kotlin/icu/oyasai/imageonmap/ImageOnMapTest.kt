@@ -477,6 +477,10 @@ class ImageOnMapTest {
     val owner = UUID.randomUUID()
     val colors = List(3) { frame -> ByteArray(MapTile.PIXELS) { (it + frame).toByte() } }
     val png = png()
+    MapStore(file).use { it.open() }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().execute("ALTER TABLE map_books RENAME COLUMN data TO zlib")
+    }
     MapStore(file).use { store ->
       store.open()
       val id =

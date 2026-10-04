@@ -6,6 +6,7 @@ dependencies {
   compileOnly(libs.worldguard.core) { isTransitive = false }
   compileOnly(libs.fawe.bukkit)
   implementation(libs.sqlite.jdbc)
+  implementation(libs.xz)
   implementation(libs.imageio.webp)
   implementation(libs.anvilgui)
   testImplementation(libs.purpur.api)
