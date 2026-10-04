@@ -24,10 +24,6 @@
       url = "github:oyasaiserver/gradle2nix?ref=v2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mc-monitor = {
-      url = "github:itzg/mc-monitor";
-      flake = false;
-    };
     nix-minecraft = {
       url = "github:infinidoge/nix-minecraft/pull/230/merge";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,8 +33,8 @@
       url = "github:nix-community/nixpkgs-terraform-providers-bin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     package-lock2nix = {
       url = "github:anteriorcore/package-lock2nix";
       inputs.nixpkgs.follows = "nixpkgs";
