@@ -5,6 +5,7 @@ import java.io.File
 import java.util.UUID
 import kotlin.math.floor
 import net.kyori.adventure.text.Component
+import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -12,6 +13,7 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Statistic
 import org.bukkit.Tag
+import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.type.Slab
@@ -31,7 +33,10 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityDismountEvent
 import org.bukkit.event.entity.EntityMountEvent
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerGameModeChangeEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
+import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
@@ -67,6 +72,8 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
 
   private val seatKey = NamespacedKey(plugin, "sit_seat")
   private val states = mutableMapOf<UUID, State>()
+  private val playerRides = mutableMapOf<UUID, UUID>()
+  private var playerMode = PlayerSitMode.RANK
   private val off = mutableSetOf<UUID>()
   private var store: SitStore? = null
   private var enabled = false
@@ -88,6 +95,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
     try {
       opened.open()
       off.addAll(opened.loadOff())
+      playerMode = opened.loadPlayerMode()
       store = opened
     } catch (failure: Exception) {
       runCatching { opened.close() }
@@ -99,7 +107,9 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
 
   fun disable() {
     watch?.cancel()
+    playerRides.keys.toList().forEach { releasePlayerRides(it) }
     states.keys.toList().forEach { id -> Bukkit.getPlayer(id)?.let { stop(it, true) } }
+    enabled = false
     states.clear()
     store?.close()
     store = null
@@ -112,6 +122,22 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
       args: Array<out String>,
   ): Boolean {
     if (!enabled) return reply(sender, "このサーバーでは使えません。")
+    if (command.name.equals("sit", true) && args.firstOrNull().equals("playermode", true)) {
+      if (args.size == 1) return reply(sender, "PlayerSit モード: ${playerMode.name.lowercase()}")
+      if (!sender.isOp && !sender.hasPermission("oyasai.utilities.sit.admin"))
+          return reply(sender, "権限がありません。")
+      val next = args.getOrNull(1)?.let { PlayerSitMode.parse(it) }
+      if (args.size != 2 || next == null) return reply(sender, "使い方: /sit playermode <rank|all>")
+      val database = store ?: return reply(sender, "今は使えません。")
+      try {
+        database.setPlayerMode(next)
+        playerMode = next
+        return reply(sender, "PlayerSit モード: ${next.name.lowercase()}")
+      } catch (failure: Exception) {
+        plugin.logger.severe("Could not update PlayerSit mode: ${failure.message}")
+        return reply(sender, "今は使えません。")
+      }
+    }
     val player = sender as? Player ?: return reply(sender, "プレイヤーのみ使えます。")
     val mode =
         when (command.name.lowercase()) {
@@ -137,7 +163,8 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
     if (args.isNotEmpty())
         return reply(
             player,
-            if (mode == Mode.SIT) "使い方: /sit [toggle]" else "使い方: /${command.name}",
+            if (mode == Mode.SIT) "使い方: /sit [toggle|playermode [rank|all]]"
+            else "使い方: /${command.name}",
         )
     val previous = states[player.uniqueId]
     if (previous?.mode == mode) {
@@ -166,9 +193,13 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
       alias: String,
       args: Array<out String>,
   ): List<String> =
-      if (command.name == "sit" && args.size == 1 && "toggle".startsWith(args[0], true))
-          listOf("toggle")
-      else emptyList()
+      when {
+        !command.name.equals("sit", true) -> emptyList()
+        args.size == 1 -> listOf("toggle", "playermode").filter { it.startsWith(args[0], true) }
+        args.size == 2 && args[0].equals("playermode", true) ->
+            listOf("rank", "all").filter { it.startsWith(args[1], true) }
+        else -> emptyList()
+      }
 
   private fun reply(sender: CommandSender, message: String): Boolean {
     sender.sendMessage(message)
@@ -193,10 +224,12 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
       mode: Mode,
   ): Boolean {
     val seatAt = at.clone().add(0.0, SEAT_Y_OFFSET, 0.0)
+    val scale = player.getAttribute(Attribute.SCALE)?.value ?: 1.0
     val stand =
         player.world.spawn(seatAt, ArmorStand::class.java) {
           it.isVisible = false
-          it.isMarker = true
+          it.isSmall = true
+          it.getAttribute(Attribute.SCALE)?.baseValue = scale
           it.setGravity(false)
           it.isInvulnerable = true
           it.isSilent = true
@@ -283,6 +316,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   }
 
   private fun stop(player: Player, returnToSeat: Boolean) {
+    releasePlayerRides(player.uniqueId)
     val state = states.remove(player.uniqueId) ?: return
     if (state.mode == Mode.CRAWL) {
       player.setPose(Pose.STANDING, false)
@@ -307,6 +341,73 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
             }
         player.teleport(target)
       }
+    }
+  }
+
+  private fun releasePlayerRides(id: UUID) {
+    PlayerSitRules.detach(playerRides, id).forEach { (riderId, carrierId) ->
+      val rider = Bukkit.getPlayer(riderId) ?: return@forEach
+      rider.vehicle?.takeIf { it.uniqueId == carrierId }?.removePassenger(rider)
+    }
+  }
+
+  private fun primaryGroup(player: Player): String? {
+    if (!plugin.server.pluginManager.isPluginEnabled("LuckPerms")) return null
+    return try {
+      LuckPermsProvider.get().userManager.getUser(player.uniqueId)?.primaryGroup
+    } catch (_: IllegalStateException) {
+      null
+    } catch (_: LinkageError) {
+      null
+    }
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onPlayerClickAt(event: PlayerInteractAtEntityEvent) = playerClick(event)
+
+  private fun playerClick(event: PlayerInteractEntityEvent) {
+    val rider = event.player
+    val clicked = event.rightClicked as? Player ?: return
+    if (
+        !enabled ||
+            store == null ||
+            event.hand != EquipmentSlot.HAND ||
+            rider.inventory.itemInMainHand.type != Material.AIR ||
+            states.containsKey(rider.uniqueId) ||
+            playerRides.containsKey(rider.uniqueId) ||
+            !canStart(rider)
+    )
+        return
+    val topId =
+        PlayerSitRules.top(rider.uniqueId, clicked.uniqueId) { id ->
+          val carrier = Bukkit.getEntity(id) as? Player
+          if (
+              carrier == null ||
+                  !carrier.isOnline ||
+                  carrier.isDead ||
+                  carrier.world != rider.world ||
+                  carrier.passengers.any { it !is Player }
+          )
+              null
+          else carrier.passengers.map { it.uniqueId }
+        } ?: return
+    val target = Bukkit.getPlayer(topId) ?: return
+    if (playerMode == PlayerSitMode.RANK) {
+      val riderGroup = primaryGroup(rider)
+      val targetGroup = primaryGroup(target)
+      if (riderGroup == null || targetGroup == null) {
+        rider.sendMessage("階級を確認できないため、今は乗れません。")
+        return
+      }
+      if (!PlayerSitRules.canRide(riderGroup, targetGroup)) {
+        rider.sendMessage("自分より階級の低い人にしか乗れません。")
+        return
+      }
+    }
+    if (target.addPassenger(rider)) {
+      playerRides[rider.uniqueId] = target.uniqueId
+      event.isCancelled = true
+      rider.sendActionBar(Component.text("スニークで戻る"))
     }
   }
 
@@ -362,6 +463,10 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   @EventHandler
   fun onDismount(event: EntityDismountEvent) {
     val player = event.entity as? Player ?: return
+    if (playerRides[player.uniqueId] == event.dismounted.uniqueId) {
+      releasePlayerRides(player.uniqueId)
+      return
+    }
     val state = states[player.uniqueId] ?: return
     if (event.dismounted != state.seat) return
     val seatAt = state.seat.location.clone()
@@ -386,6 +491,8 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
 
   @EventHandler fun onTeleport(event: PlayerTeleportEvent) = stop(event.player, false)
 
+  @EventHandler fun onWorldChange(event: PlayerChangedWorldEvent) = stop(event.player, false)
+
   @EventHandler fun onQuit(event: PlayerQuitEvent) = stop(event.player, false)
 
   @EventHandler fun onDeath(event: PlayerDeathEvent) = stop(event.entity, false)
@@ -399,7 +506,11 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
 
   @EventHandler
   fun onSneak(event: PlayerToggleSneakEvent) {
-    if (event.isSneaking && states[event.player.uniqueId]?.mode == Mode.CRAWL)
+    if (
+        event.isSneaking &&
+            (playerRides.containsKey(event.player.uniqueId) ||
+                states[event.player.uniqueId]?.mode == Mode.CRAWL)
+    )
         stop(event.player, false)
   }
 
@@ -470,6 +581,19 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   }
 
   private fun sweep() {
+    playerRides.toMap().forEach { (id, carrierId) ->
+      val rider = Bukkit.getPlayer(id)
+      val carrier = Bukkit.getPlayer(carrierId)
+      if (
+          rider == null ||
+              carrier == null ||
+              rider.isDead ||
+              carrier.isDead ||
+              rider.world != carrier.world ||
+              rider.vehicle != carrier
+      )
+          releasePlayerRides(id)
+    }
     states.keys.toList().forEach { id ->
       val player = Bukkit.getPlayer(id) ?: return@forEach
       val state = states[id] ?: return@forEach
