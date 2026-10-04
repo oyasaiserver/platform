@@ -372,13 +372,28 @@ class ImageOnMapTest {
             listOf(2, 3, 2),
         )
     assertEquals(listOf(0, 0, 1, 1, 1, 2, 2, 0), (0L..7L).map(animation::frameAt))
-    assertEquals(listOf(20, 10, 30, 21, 11, 31), animation.pushOrder(1))
     val index = AnimationIndex()
     index.add(animation)
     assertEquals(11, index.base(31))
     assertEquals(AnimationTile(8, 1, 2, 11), index.tile(31))
     index.remove(8)
     assertEquals(31, index.base(31))
+  }
+
+  @Test
+  fun animationWaitsForEveryNearbyViewer() {
+    val first = UUID.randomUUID()
+    val second = UUID.randomUUID()
+    val imageId = 8L
+    val viewers = listOf(first, second)
+    assertTrue(
+        allNearbyReceived(
+            imageId,
+            viewers,
+            mapOf(first to setOf(imageId), second to setOf(imageId)),
+        )
+    )
+    assertFalse(allNearbyReceived(imageId, viewers, mapOf(first to setOf(imageId))))
   }
 
   @Test
@@ -452,7 +467,6 @@ class ImageOnMapTest {
       val animation = store.animations().single()
       assertEquals(ids, animation.ids)
       assertEquals(slots, animation.slots)
-      assertEquals(listOf(10, 21, 20, 11), animation.pushOrder(1))
       assertEquals(listOf(10, 11), store.poster(imageId)?.ids)
       assertEquals(1, store.mapIndex(20)?.second)
       val index = AnimationIndex()

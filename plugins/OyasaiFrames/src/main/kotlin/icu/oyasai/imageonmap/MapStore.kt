@@ -67,15 +67,6 @@ internal data class Animation(
   val frames: Int
     get() = delays.size
 
-  fun pushOrder(frame: Int): List<Int> {
-    val firstTile = mutableMapOf<Int, Int>()
-    slots.forEachIndexed { slot, id -> firstTile.putIfAbsent(id, slot % tiles) }
-    val byTile = ids.groupBy(firstTile::getValue)
-    return (0 until tiles).flatMap { tile ->
-      (listOf(slots[frame * tiles + tile]) + byTile[tile].orEmpty()).distinct()
-    }
-  }
-
   fun frameAt(tick: Long): Int {
     var offset = (tick % delays.sum()).toInt()
     for (i in delays.indices) {
