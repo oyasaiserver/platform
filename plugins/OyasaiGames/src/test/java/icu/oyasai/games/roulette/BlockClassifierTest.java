@@ -121,10 +121,12 @@ public class BlockClassifierTest {
         assertFalse(classifier.isFullBlock(Material.BARRIER, Collections.emptySet(), Collections.emptySet()));
         assertFalse(classifier.isFullBlock(Material.STRUCTURE_VOID, Collections.emptySet(), Collections.emptySet()));
         assertFalse(classifier.isFullBlock(Material.LIGHT, Collections.emptySet(), Collections.emptySet()));
+        assertFalse(classifier.isFullBlock(Material.END_PORTAL_FRAME, Collections.emptySet(), Collections.emptySet()));
 
         // SPECIAL_ADMIN_BLOCKS の定義確認
         assertTrue(BlockClassifier.SPECIAL_ADMIN_BLOCKS.contains(Material.COMMAND_BLOCK));
         assertTrue(BlockClassifier.SPECIAL_ADMIN_BLOCKS.contains(Material.BARRIER));
-        assertEquals(10, BlockClassifier.SPECIAL_ADMIN_BLOCKS.size());
+        assertTrue(BlockClassifier.SPECIAL_ADMIN_BLOCKS.contains(Material.END_PORTAL_FRAME));
+        assertEquals(11, BlockClassifier.SPECIAL_ADMIN_BLOCKS.size());
     }
 }

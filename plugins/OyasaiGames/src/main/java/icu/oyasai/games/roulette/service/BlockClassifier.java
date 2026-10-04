@@ -47,7 +47,8 @@ public class BlockClassifier {
             Material.JIGSAW,
             Material.LIGHT,
             Material.BEDROCK,
-            Material.REINFORCED_DEEPSLATE
+            Material.REINFORCED_DEEPSLATE,
+            Material.END_PORTAL_FRAME
     ));
 
     // 一般プレイヤー用（特殊ブロック除外）
