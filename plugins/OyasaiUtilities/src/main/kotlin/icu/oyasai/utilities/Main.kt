@@ -20,6 +20,7 @@ import icu.oyasai.utilities.sit.SitFeature
 import icu.oyasai.utilities.skin.SkinFeature
 import icu.oyasai.utilities.skriptport.CommandAliases
 import icu.oyasai.utilities.skriptport.CommandItems
+import icu.oyasai.utilities.skriptport.Guidance
 import icu.oyasai.utilities.skriptport.NonOpUtilities
 import icu.oyasai.utilities.skriptport.Scale
 import icu.oyasai.utilities.spawn.SpawnFeature
@@ -39,10 +40,13 @@ class Main : JavaPlugin() {
   private lateinit var tpSwitchFeature: TpSwitchFeature
   private lateinit var sitFeature: SitFeature
   private lateinit var commandItems: CommandItems
+  private lateinit var guidance: Guidance
 
   override fun onLoad() {}
 
   override fun onEnable() {
+    guidance = Guidance(this)
+    guidance.enable()
     NonOpUtilities(this).enable()
     Scale(this).enable()
     CommandAliases(this).enable()
@@ -95,6 +99,7 @@ class Main : JavaPlugin() {
   }
 
   override fun onDisable() {
+    if (::guidance.isInitialized) guidance.disable()
     if (::commandItems.isInitialized) commandItems.disable()
     if (::tpSwitchFeature.isInitialized) tpSwitchFeature.disable()
     if (::sitFeature.isInitialized) sitFeature.disable()

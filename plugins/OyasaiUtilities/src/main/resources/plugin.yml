@@ -7,6 +7,19 @@ api-version: "1.21"
 version: "0.1.0"
 softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
 commands:
+  annaimode:
+    usage: /annaimode [<player>]
+  guidecheck:
+    usage: /guidecheck <player>
+    permission: group.jokyu
+  annai:
+    usage: /annai [<text>]
+    permission: server.annai.use
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  annai-en:
+    usage: /annai-en [<text>]
+    permission: server.annai.use
+    permission-message: "§cこのコマンドを使用する権限がありません。"
   anshi:
     usage: /anshi
     permission: oyasai.night_vision
