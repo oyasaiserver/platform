@@ -14,6 +14,7 @@ import org.bukkit.block.data.type.Wall;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -23,17 +24,41 @@ import java.util.logging.Logger;
  * 1. 全建築用アイテム
  * 2. フルブロックのみ
  * 3. フルブロック以外
- * の3つのリストに事前分類してキャッシュするクラスです。
+ * のリストに事前分類してキャッシュするクラスです。
  * 
- * 起動時に一度だけ分類を行うため、抽選時のサーバー負荷はほぼゼロです。
+ * サバイバルの一般プレイヤー用に管理者ブロック（コマンドブロック、バリア等）を
+ * 安全に除外したリスト（Regular）と、匠ランク以上に解放されるリスト（Special）を
+ * 起動時に一度だけ事前生成するため、抽選時のサーバー負荷はゼロです。
  */
 public class BlockClassifier {
     private final Logger logger;
     private final ConfigProvider configProvider;
 
-    private List<Material> allBuildingItems = Collections.emptyList();
-    private List<Material> fullBlocks = Collections.emptyList();
-    private List<Material> nonFullBlocks = Collections.emptyList();
+    /**
+     * サバイバルの一般プレイヤーから除外され、匠ランク以上にのみ解放される特殊ブロック
+     */
+    public static final Set<Material> SPECIAL_ADMIN_BLOCKS = Collections.unmodifiableSet(EnumSet.of(
+            Material.COMMAND_BLOCK,
+            Material.CHAIN_COMMAND_BLOCK,
+            Material.REPEATING_COMMAND_BLOCK,
+            Material.BARRIER,
+            Material.STRUCTURE_BLOCK,
+            Material.STRUCTURE_VOID,
+            Material.JIGSAW,
+            Material.LIGHT,
+            Material.BEDROCK,
+            Material.REINFORCED_DEEPSLATE
+    ));
+
+    // 一般プレイヤー用（特殊ブロック除外）
+    private List<Material> allBuildingItemsRegular = Collections.emptyList();
+    private List<Material> fullBlocksRegular = Collections.emptyList();
+    private List<Material> nonFullBlocksRegular = Collections.emptyList();
+
+    // 匠ランク以上用（特殊ブロック含む）
+    private List<Material> allBuildingItemsSpecial = Collections.emptyList();
+    private List<Material> fullBlocksSpecial = Collections.emptyList();
+    private List<Material> nonFullBlocksSpecial = Collections.emptyList();
 
     public BlockClassifier(Logger logger, ConfigProvider configProvider) {
         this.logger = logger;
@@ -49,9 +74,13 @@ public class BlockClassifier {
         Set<Material> forceFull = configProvider.getForceFullBlocks();
         Set<Material> forceNonFull = configProvider.getForceNonFullBlocks();
 
-        List<Material> allList = new ArrayList<>();
-        List<Material> fullList = new ArrayList<>();
-        List<Material> nonFullList = new ArrayList<>();
+        List<Material> allListSpecial = new ArrayList<>();
+        List<Material> fullListSpecial = new ArrayList<>();
+        List<Material> nonFullListSpecial = new ArrayList<>();
+
+        List<Material> allListRegular = new ArrayList<>();
+        List<Material> fullListRegular = new ArrayList<>();
+        List<Material> nonFullListRegular = new ArrayList<>();
 
         for (Material mat : Material.values()) {
             try {
@@ -59,25 +88,41 @@ public class BlockClassifier {
                     continue;
                 }
 
-                allList.add(mat);
+                boolean isSpecialBlock = SPECIAL_ADMIN_BLOCKS.contains(mat);
+                boolean full = isFullBlock(mat, forceFull, forceNonFull);
 
-                if (isFullBlock(mat, forceFull, forceNonFull)) {
-                    fullList.add(mat);
+                // 匠用リスト（常に全追加）
+                allListSpecial.add(mat);
+                if (full) {
+                    fullListSpecial.add(mat);
                 } else {
-                    nonFullList.add(mat);
+                    nonFullListSpecial.add(mat);
+                }
+
+                // 一般用リスト（特殊ブロックを除外）
+                if (!isSpecialBlock) {
+                    allListRegular.add(mat);
+                    if (full) {
+                        fullListRegular.add(mat);
+                    } else {
+                        nonFullListRegular.add(mat);
+                    }
                 }
             } catch (Throwable ignored) {
             }
         }
 
-        this.allBuildingItems = Collections.unmodifiableList(allList);
-        this.fullBlocks = Collections.unmodifiableList(fullList);
-        this.nonFullBlocks = Collections.unmodifiableList(nonFullList);
+        this.allBuildingItemsSpecial = Collections.unmodifiableList(allListSpecial);
+        this.fullBlocksSpecial = Collections.unmodifiableList(fullListSpecial);
+        this.nonFullBlocksSpecial = Collections.unmodifiableList(nonFullListSpecial);
+
+        this.allBuildingItemsRegular = Collections.unmodifiableList(allListRegular);
+        this.fullBlocksRegular = Collections.unmodifiableList(fullListRegular);
+        this.nonFullBlocksRegular = Collections.unmodifiableList(nonFullListRegular);
 
         logger.info("[Roulette] 建築アイテムの分類が完了しました:");
-        logger.info(" - 全建築用アイテム: " + allBuildingItems.size() + " 種類");
-        logger.info(" - フルブロック: " + fullBlocks.size() + " 種類");
-        logger.info(" - フルブロック以外: " + nonFullBlocks.size() + " 種類");
+        logger.info(" - 【一般用】全アイテム: " + allBuildingItemsRegular.size() + " / フル: " + fullBlocksRegular.size() + " / 装飾: " + nonFullBlocksRegular.size());
+        logger.info(" - 【匠特典】全アイテム: " + allBuildingItemsSpecial.size() + " / フル: " + fullBlocksSpecial.size() + " / 装飾: " + nonFullBlocksSpecial.size() + " (特殊ブロック解放)");
     }
 
     /**
@@ -117,6 +162,17 @@ public class BlockClassifier {
             return true;
         }
         if (forceNonFull != null && forceNonFull.contains(mat)) {
+            return false;
+        }
+
+        // コマンドブロック系、強化された深層岩、岩盤は完全な立方体
+        if (mat == Material.COMMAND_BLOCK || mat == Material.CHAIN_COMMAND_BLOCK || mat == Material.REPEATING_COMMAND_BLOCK
+                || mat == Material.BEDROCK || mat == Material.REINFORCED_DEEPSLATE) {
+            return true;
+        }
+
+        // バリア、ライト、ストラクチャー空胞などは非立方体・装飾枠
+        if (mat == Material.BARRIER || mat == Material.LIGHT || mat == Material.STRUCTURE_VOID) {
             return false;
         }
 
@@ -183,7 +239,8 @@ public class BlockClassifier {
                 || name.equals("LECTERN") || name.equals("RESPAWN_ANCHOR") || name.equals("LODESTONE")
                 || name.equals("JUKEBOX") || name.equals("NOTE_BLOCK") || name.equals("TARGET")
                 || name.equals("BELL") || name.equals("DAYLIGHT_DETECTOR")
-                || name.equals("LIGHTNING_ROD") || name.equals("CONDUIT")) {
+                || name.equals("LIGHTNING_ROD") || name.equals("CONDUIT")
+                || name.equals("STRUCTURE_BLOCK") || name.equals("JIGSAW")) {
             return true;
         }
 
@@ -278,15 +335,40 @@ public class BlockClassifier {
                 || name.equals("FROSTED_ICE") || name.equals("SLIME_BLOCK") || name.equals("HONEY_BLOCK");
     }
 
+    public List<Material> getAllBuildingItems(boolean special) {
+        return special ? allBuildingItemsSpecial : allBuildingItemsRegular;
+    }
+
+    public List<Material> getFullBlocks(boolean special) {
+        return special ? fullBlocksSpecial : fullBlocksRegular;
+    }
+
+    public List<Material> getNonFullBlocks(boolean special) {
+        return special ? nonFullBlocksSpecial : nonFullBlocksRegular;
+    }
+
+    // 後方互換性用（デフォルトは安全な一般用）
     public List<Material> getAllBuildingItems() {
-        return allBuildingItems;
+        return allBuildingItemsRegular;
     }
 
     public List<Material> getFullBlocks() {
-        return fullBlocks;
+        return fullBlocksRegular;
     }
 
     public List<Material> getNonFullBlocks() {
-        return nonFullBlocks;
+        return nonFullBlocksRegular;
+    }
+
+    public List<Material> getAllBuildingItemsSpecial() {
+        return allBuildingItemsSpecial;
+    }
+
+    public List<Material> getFullBlocksSpecial() {
+        return fullBlocksSpecial;
+    }
+
+    public List<Material> getNonFullBlocksSpecial() {
+        return nonFullBlocksSpecial;
     }
 }

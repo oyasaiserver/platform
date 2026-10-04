@@ -106,4 +106,25 @@ public class BlockClassifierTest {
         assertFalse(classifier.isFullBlock(Material.CRAFTING_TABLE, Collections.emptySet(), Collections.emptySet()));
         assertFalse(classifier.isFullBlock(Material.BARREL, Collections.emptySet(), Collections.emptySet()));
     }
+
+    @Test
+    @DisplayName("匠ランク用特殊ブロックが正しくフルブロック／装飾ブロックに分類されること")
+    public void testSpecialAdminBlocksClassification() {
+        // 立方体型特殊ブロック（フルブロック）
+        assertTrue(classifier.isFullBlock(Material.COMMAND_BLOCK, Collections.emptySet(), Collections.emptySet()));
+        assertTrue(classifier.isFullBlock(Material.CHAIN_COMMAND_BLOCK, Collections.emptySet(), Collections.emptySet()));
+        assertTrue(classifier.isFullBlock(Material.REPEATING_COMMAND_BLOCK, Collections.emptySet(), Collections.emptySet()));
+        assertTrue(classifier.isFullBlock(Material.BEDROCK, Collections.emptySet(), Collections.emptySet()));
+        assertTrue(classifier.isFullBlock(Material.REINFORCED_DEEPSLATE, Collections.emptySet(), Collections.emptySet()));
+
+        // 非立方体型特殊ブロック（装飾・機能）
+        assertFalse(classifier.isFullBlock(Material.BARRIER, Collections.emptySet(), Collections.emptySet()));
+        assertFalse(classifier.isFullBlock(Material.STRUCTURE_VOID, Collections.emptySet(), Collections.emptySet()));
+        assertFalse(classifier.isFullBlock(Material.LIGHT, Collections.emptySet(), Collections.emptySet()));
+
+        // SPECIAL_ADMIN_BLOCKS の定義確認
+        assertTrue(BlockClassifier.SPECIAL_ADMIN_BLOCKS.contains(Material.COMMAND_BLOCK));
+        assertTrue(BlockClassifier.SPECIAL_ADMIN_BLOCKS.contains(Material.BARRIER));
+        assertEquals(10, BlockClassifier.SPECIAL_ADMIN_BLOCKS.size());
+    }
 }

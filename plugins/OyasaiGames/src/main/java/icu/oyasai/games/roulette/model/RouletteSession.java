@@ -13,13 +13,15 @@ public class RouletteSession {
     private RouletteMode selectedMode;
     private int selectedCount;
     private boolean broadcastToAll;
+    private boolean hasSpecialAccess;
 
     public RouletteSession(UUID playerUuid) {
         this.playerUuid = playerUuid;
-        // 初期値：全建築用アイテム、1回、全体公開
+        // 初期値：全建築用アイテム、1回、全体公開、特殊アクセスなし
         this.selectedMode = RouletteMode.ALL;
         this.selectedCount = 1;
         this.broadcastToAll = true;
+        this.hasSpecialAccess = false;
     }
 
     public UUID getPlayerUuid() {
@@ -52,5 +54,13 @@ public class RouletteSession {
 
     public void toggleBroadcast() {
         this.broadcastToAll = !this.broadcastToAll;
+    }
+
+    public boolean hasSpecialAccess() {
+        return hasSpecialAccess;
+    }
+
+    public void setSpecialAccess(boolean hasSpecialAccess) {
+        this.hasSpecialAccess = hasSpecialAccess;
     }
 }
