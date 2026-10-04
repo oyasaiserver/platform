@@ -6,8 +6,6 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldguard.WorldGuard
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin
 import icu.oyasai.frames.OyasaiFrames
-import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
 import java.net.URI
 import java.time.Instant
 import java.time.ZoneId
@@ -17,7 +15,6 @@ import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.concurrent.Semaphore
-import javax.imageio.ImageIO
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -186,16 +183,16 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   private fun message(sender: CommandSender, text: String) = sender.sendMessage(text)
 
-  private class OnceRenderer(@Volatile var picture: BufferedImage? = null) : MapRenderer(false) {
+  private class OnceRenderer(@Volatile var tile: MapTile? = null) : MapRenderer(false) {
     @Volatile var drawn = false
 
     override fun isExplorerMap(): Boolean = false
 
     override fun render(view: MapView, canvas: MapCanvas, player: Player) {
-      val image = picture ?: return
-      canvas.drawImage(0, 0, image)
+      val image = tile ?: return
+      image.draw(canvas)
       drawn = true
-      picture = null
+      tile = null
     }
   }
 
@@ -224,13 +221,12 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     view.renderers.toList().forEach(view::removeRenderer)
     val renderer = OnceRenderer()
     view.addRenderer(renderer)
-    database { store.png(id)?.let { ImageIO.read(ByteArrayInputStream(it)) } }
-        .whenComplete { image, failure ->
+    database { store.png(id)?.let(MapTile::fromStored) }
+        .whenComplete { tile, failure ->
           main {
             pendingMaps.remove(id)
             if (failure != null) logger.warning("Map $id: ${error(failure)}")
-            else if (image?.width == 128 && image.height == 128 && renderer in view.renderers)
-                renderer.picture = image
+            else if (tile != null && renderer in view.renderers) renderer.tile = tile
           }
         }
   }
@@ -317,7 +313,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         }
         attach(view)
         val renderer = view.renderers.filterIsInstance<OnceRenderer>().firstOrNull()
-        if (renderer == null || (renderer.picture == null && !renderer.drawn)) break
+        if (renderer == null || (renderer.tile == null && !renderer.drawn)) break
         // ponytail: vanilla も額縁の地図をプレイヤーごとに 1 回送るため、最初の 1 周は最大 2 回送信される。
         player.sendMap(view)
         sent++
@@ -908,12 +904,12 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                 )
                 return@main
               }
-              if (exceedsLimit(tiles.pngs.size, 0, maxMaps, false)) {
+              if (exceedsLimit(tiles.storedTiles.size, 0, maxMaps, false)) {
                 failCreate(
                     player,
                     url,
                     IllegalArgumentException(
-                        "地図が多すぎます（${tiles.pngs.size} 枚、上限 $maxMaps 枚）。コマ数か大きさを減らしてください"
+                        "地図が多すぎます（${tiles.storedTiles.size} 枚、上限 $maxMaps 枚）。コマ数か大きさを減らしてください"
                     ),
                 )
                 return@main
@@ -930,7 +926,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                     }
                     if (
                         tiles.delays.isNotEmpty() &&
-                            exceedsLimit(latest, tiles.pngs.size, maxMapsPerPlayer, bypass)
+                            exceedsLimit(latest, tiles.storedTiles.size, maxMapsPerPlayer, bypass)
                     ) {
                       failCreate(
                           player,
@@ -941,7 +937,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                     }
                     val ids =
                         try {
-                          List(tiles.pngs.size) { Bukkit.createMap(player.world).id }
+                          List(tiles.storedTiles.size) { Bukkit.createMap(player.world).id }
                         } catch (e: Exception) {
                           failCreate(player, url, e)
                           return@main
@@ -953,7 +949,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                               tiles.columns,
                               tiles.rows,
                               ids,
-                              tiles.pngs,
+                              tiles.storedTiles,
                               tiles.delays,
                               tiles.firstSlots,
                               slots,
@@ -990,7 +986,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                                         )
                                         if (tiles.delays.isNotEmpty())
                                             logger.info(
-                                                "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} slots=${slots.size} pngBytes=${tiles.pngs.sumOf { it.size.toLong() }}"
+                                                "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} slots=${slots.size} storedBytes=${tiles.storedTiles.sumOf { it.size.toLong() }}"
                                             )
                                       }
                                     }

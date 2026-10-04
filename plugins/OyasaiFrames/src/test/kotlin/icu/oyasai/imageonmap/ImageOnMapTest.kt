@@ -1,5 +1,6 @@
 package icu.oyasai.imageonmap
 
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.net.InetAddress
@@ -18,6 +19,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import org.bukkit.block.BlockFace
+import org.bukkit.map.MapPalette
 
 class ImageOnMapTest {
   @Test
@@ -324,12 +326,12 @@ class ImageOnMapTest {
       val result = ImageSource.prepare(gif(disposal), null, false, 16, 30, 2)
       assertEquals(1 to 1, result.columns to result.rows)
       assertEquals(listOf(2, 2, 2), result.delays)
-      val second = ImageIO.read(result.pngs[1].inputStream())
-      val third = ImageIO.read(result.pngs[2].inputStream())
-      assertEquals(0xff0000ff.toInt(), second.getRGB(1, 0))
-      assertEquals(0xffff0000.toInt(), third.getRGB(0, 0))
-      assertEquals(0, third.getRGB(1, 0) ushr 24, disposal)
-      assertEquals(0xff00ff00.toInt(), third.getRGB(2, 0))
+      val second = (MapTile.fromStored(result.storedTiles[1]) as MapTile.Colors).pixels
+      val third = (MapTile.fromStored(result.storedTiles[2]) as MapTile.Colors).pixels
+      assertEquals(MapPalette.matchColor(Color.BLUE), second[1])
+      assertEquals(MapPalette.matchColor(Color.RED), third[0])
+      assertEquals(0, third[1].toInt(), disposal)
+      assertEquals(MapPalette.matchColor(Color.GREEN), third[2])
     }
   }
 
@@ -386,8 +388,8 @@ class ImageOnMapTest {
     assertEquals(2 to 1, prepared.columns to prepared.rows)
     assertEquals(listOf(0, 1, 3, 4), prepared.firstSlots)
     assertEquals(listOf(0, 1, 0, 2, 3, 2), prepared.slots)
-    assertEquals(4, prepared.pngs.size)
-    assertTrue(prepared.pngs[1].contentEquals(prepared.pngs[3]))
+    assertEquals(4, prepared.storedTiles.size)
+    assertTrue(prepared.storedTiles[1].contentEquals(prepared.storedTiles[3]))
 
     val file = Files.createTempDirectory("imageonmap-slots").resolve("pictures.db").toFile()
     val owner = UUID.randomUUID()
@@ -396,10 +398,20 @@ class ImageOnMapTest {
     val imageId =
         MapStore(file).use { store ->
           store.open()
-          store.create(owner, 2, 1, ids, prepared.pngs, prepared.delays, prepared.firstSlots, slots)
+          store.create(
+              owner,
+              2,
+              1,
+              ids,
+              prepared.storedTiles,
+              prepared.delays,
+              prepared.firstSlots,
+              slots,
+          )
         }
     MapStore(file).use { store ->
       store.open()
+      assertTrue(store.png(10)?.contentEquals(prepared.storedTiles[0]) == true)
       val animation = store.animations().single()
       assertEquals(ids, animation.ids)
       assertEquals(slots, animation.slots)
