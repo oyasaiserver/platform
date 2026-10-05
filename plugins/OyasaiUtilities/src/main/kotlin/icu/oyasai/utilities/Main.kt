@@ -32,6 +32,8 @@ import icu.oyasai.utilities.tpath.TeleportListener
 import icu.oyasai.utilities.tpswitch.TpSwitchFeature
 import icu.oyasai.utilities.veinminer.VeinminerConfig
 import icu.oyasai.utilities.veinminer.VeinminerEvent
+import icu.oyasai.utilities.workstation.WorkstationFeature
+import java.util.logging.Level
 import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {
@@ -40,11 +42,20 @@ class Main : JavaPlugin() {
   private lateinit var tpSwitchFeature: TpSwitchFeature
   private lateinit var sitFeature: SitFeature
   private lateinit var commandItems: CommandItems
+  private var workstationFeature: WorkstationFeature? = null
   private lateinit var guidance: Guidance
 
   override fun onLoad() {}
 
   override fun onEnable() {
+    val workstations = WorkstationFeature(this)
+    try {
+      workstations.enable()
+      workstationFeature = workstations
+    } catch (e: Exception) {
+      runCatching { workstations.disable() }.onFailure { e.addSuppressed(it) }
+      logger.log(Level.SEVERE, "Workstation: failed to enable; continuing other features", e)
+    }
     guidance = Guidance(this)
     guidance.enable()
     NonOpUtilities(this).enable()
@@ -99,6 +110,7 @@ class Main : JavaPlugin() {
   }
 
   override fun onDisable() {
+    workstationFeature?.disable()
     if (::guidance.isInitialized) guidance.disable()
     if (::commandItems.isInitialized) commandItems.disable()
     if (::tpSwitchFeature.isInitialized) tpSwitchFeature.disable()
