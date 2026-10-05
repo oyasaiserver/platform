@@ -1,9 +1,11 @@
 package io.oyasai.chat.paper.network
 
 import io.oyasai.chat.common.model.ChatConfig
+import io.oyasai.chat.common.protocol.BackendIdentity
 import io.oyasai.chat.common.protocol.EnvelopeCodec
 import io.oyasai.chat.common.protocol.MessageDeduplicator
 import io.oyasai.chat.common.protocol.MessageOrigin
+import io.oyasai.chat.common.protocol.MessageType
 import io.oyasai.chat.common.protocol.NetworkEnvelope
 import io.oyasai.chat.common.protocol.PROXY_ORIGIN_BACKEND
 import io.oyasai.chat.paper.OyasaiChatPlugin
@@ -20,7 +22,21 @@ class PaperNetworkBridge(
 ) : PluginMessageListener {
   private val deduplicator = MessageDeduplicator()
 
+  fun requestIdentity(player: Player) {
+    if (!player.isOnline || !plugin.isEnabled) return
+    val request = config.network.identity.request(player.uniqueId, player.name)
+    runCatching { player.sendPluginMessage(plugin, NETWORK_CHANNEL, EnvelopeCodec.encode(request)) }
+        .onFailure { plugin.logger.warning("Unable to request backend identity: ${it.message}") }
+  }
+
   fun send(player: Player, envelope: NetworkEnvelope): Boolean {
+    if (!config.network.identity.confirmed) {
+      requestIdentity(player)
+      plugin.logger.warning(
+          "Network delivery is unavailable until Velocity confirms this backend ID."
+      )
+      return false
+    }
     if (
         envelope.originKind != MessageOrigin.BACKEND ||
             envelope.originBackend != config.network.backendId
@@ -58,6 +74,49 @@ class PaperNetworkBridge(
       plugin.logger.warning("Rejected stale/future network message ${envelope.messageId}.")
       return
     }
+    if (envelope.type == MessageType.BACKEND_ID) {
+      plugin.server.scheduler.runTask(
+          plugin,
+          Runnable {
+            if (!player.isOnline || envelope.targetPlayerId != player.uniqueId) return@Runnable
+            if (envelope.replyToMessageId == null) {
+              // Post-connect announcement starts authentication; it cannot set the ID itself.
+              requestIdentity(player)
+              return@Runnable
+            }
+            val identity = config.network.identity
+            val wasConfirmed = identity.confirmed
+            val previous = identity.id
+            when (identity.accept(envelope, player.uniqueId)) {
+              BackendIdentity.Acceptance.REJECTED ->
+                  plugin.logger.warning("Rejected uncorrelated backend identity response.")
+              BackendIdentity.Acceptance.CONFLICT ->
+                  plugin.logger.severe(
+                      "Velocity backend ID changed from '$previous' to '${envelope.content}'; network sends are disabled until restart."
+                  )
+              BackendIdentity.Acceptance.CONFIRMED -> {
+                if (!wasConfirmed) {
+                  plugin.logger.info(
+                      "Velocity confirmed backend ID '${identity.id}' (configured '${identity.configuredId}')."
+                  )
+                  if (identity.id != identity.configuredId)
+                      plugin.logger.warning(
+                          "Velocity backend ID differs from network.backend-id; using Velocity's registered name."
+                      )
+                  plugin.runtime.presence.invalidate()
+                  plugin.runtime.presence.snapshot()
+                  plugin.server.onlinePlayers.forEach {
+                    plugin.runtime.privateMessages.onBackendJoin(it)
+                  }
+                }
+              }
+            }
+          },
+      )
+      return
+    }
+    if (envelope.type == MessageType.BACKEND_ID_REQUEST) return
+    if (!config.network.identity.confirmed && envelope.originKind == MessageOrigin.BACKEND) return
     if (
         envelope.originKind == MessageOrigin.BACKEND &&
             envelope.originBackend !in config.network.knownBackends()

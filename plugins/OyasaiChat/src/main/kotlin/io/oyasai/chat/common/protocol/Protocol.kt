@@ -7,13 +7,15 @@ import java.util.Locale
 import java.util.UUID
 
 // PaperとVelocity間のメッセージ形式。
-const val PROTOCOL_VERSION: Int = 3
+const val PROTOCOL_VERSION: Int = 4
 const val MAX_PAYLOAD_LENGTH: Int = 4096
 const val MAX_MESSAGE_AGE_MILLIS: Long = 30_000
 const val MAX_FUTURE_SKEW_MILLIS: Long = 5_000
 const val PROXY_ORIGIN_BACKEND: String = "__velocity_proxy__"
 
 enum class MessageType {
+  BACKEND_ID_REQUEST,
+  BACKEND_ID,
   CHANNEL_MESSAGE,
   PRIVATE_MESSAGE,
   PRIVATE_MESSAGE_RESULT,
@@ -131,6 +133,7 @@ object EnvelopeCodec {
 
   private val backendTypes =
       setOf(
+          MessageType.BACKEND_ID_REQUEST,
           MessageType.CHANNEL_MESSAGE,
           MessageType.PRIVATE_MESSAGE,
           MessageType.PRIVATE_MESSAGE_RESULT,
@@ -145,6 +148,7 @@ object EnvelopeCodec {
 
   private val proxyTypes =
       setOf(
+          MessageType.BACKEND_ID,
           MessageType.PRIVATE_MESSAGE_RESULT,
           MessageType.PRIVATE_REPLY_STATE,
           MessageType.PRIVATE_TARGET_RESULT,
@@ -263,6 +267,8 @@ object EnvelopeCodec {
       "Message type '$type' is not allowed for origin '$origin'."
     }
     when (type) {
+      MessageType.BACKEND_ID_REQUEST -> requireUuid(json, "originPlayerId")
+      MessageType.BACKEND_ID -> requireUuid(json, "targetPlayerId")
       MessageType.CHANNEL_MESSAGE -> {
         requiredString(json, "channelId")
         requiredString(json, "networkGroup")

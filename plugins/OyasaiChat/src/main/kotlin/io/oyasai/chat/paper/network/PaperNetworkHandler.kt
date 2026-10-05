@@ -22,6 +22,8 @@ class PaperNetworkHandler(
 ) {
   fun receive(envelope: NetworkEnvelope) {
     when (envelope.type) {
+      MessageType.BACKEND_ID,
+      MessageType.BACKEND_ID_REQUEST -> reject(envelope, "identity-only message")
       MessageType.CHANNEL_MESSAGE -> receiveChannel(envelope)
       MessageType.PRIVATE_MESSAGE -> receivePrivate(envelope)
       MessageType.PRIVATE_MESSAGE_RESULT -> chat.privateMessages.receivePrivateResult(envelope)
@@ -41,7 +43,7 @@ class PaperNetworkHandler(
 
   private fun receiveChannel(envelope: NetworkEnvelope) {
     val channel = envelope.channelId?.let(chat.config.channels::find) ?: return
-    val group = channel.networkGroup
+    val group = chat.config.network.groupFor(channel)
     if (
         group != envelope.networkGroup ||
             envelope.originKind != MessageOrigin.BACKEND ||

@@ -42,6 +42,12 @@ class PlayerPresenceCache internal constructor(private val refresh: (Long) -> Un
   @Volatile private var updatedAt: Long = 0L
   @Volatile private var requestedAt: Long = 0L
 
+  fun invalidate() {
+    names = emptySet()
+    updatedAt = 0L
+    requestedAt = 0L
+  }
+
   fun receive(envelope: NetworkEnvelope) {
     if (
         envelope.originKind != MessageOrigin.PROXY || envelope.type != MessageType.PRESENCE_RESULT

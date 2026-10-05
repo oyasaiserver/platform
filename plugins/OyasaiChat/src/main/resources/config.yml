@@ -1,4 +1,5 @@
 network:
+  # 初期表示用の予備ID。ネットワーク送信はVelocityが登録名を通知してから開始する。
   backend-id: main
   # 別バックエンドのメッセージ前後に付けるMiniMessage形式の識別子。<backend>は送信元backend ID。
   # 空欄で識別子なし。
@@ -97,11 +98,8 @@ login-messages:
 
 # Source backend conversion only. Incoming network messages are already prepared.
 japanize:
-  enabled: false
-  backends:
-    main: true
-    lobby: false
-    axiom: false
+  # 全サーバーで既定オン。無効化する場合のみfalseへ変更する。
+  enabled: true
   player-default: true
   strip-marker: true
   none-marker: "#"

@@ -14,15 +14,12 @@ import org.bukkit.configuration.file.FileConfiguration
 object PaperConfigLoader {
   fun load(
       config: FileConfiguration,
-      backendIdOverride: String? = System.getenv("OYASAI_SERVER_ID"),
   ): ChatConfig {
     val groups =
         config.getConfigurationSection("network.groups")?.getKeys(false)?.associateWith { group ->
           config.getStringList("network.groups.$group").toSet()
         } ?: emptyMap()
-    val backendId =
-        backendIdOverride?.trim()?.takeIf(String::isNotEmpty)
-            ?: config.getString("network.backend-id", "").orEmpty()
+    val backendId = config.getString("network.backend-id", "").orEmpty()
     val channels =
         config.getConfigurationSection("channels")?.getKeys(false)?.map { id ->
           val path = "channels.$id"
@@ -39,17 +36,7 @@ object PaperConfigLoader {
               autoJoin = config.getBoolean("$path.auto-join"),
               defaultChannel = config.getBoolean("$path.default"),
               networkGroup =
-                  config
-                      .getString("$path.network-group")
-                      ?.trim()
-                      ?.takeIf(String::isNotEmpty)
-                      ?.let { group ->
-                        when {
-                          group !in groups -> group
-                          backendId in groups.getValue(group) -> group
-                          else -> null
-                        }
-                      },
+                  config.getString("$path.network-group")?.trim()?.takeIf(String::isNotEmpty),
           )
         } ?: emptyList()
     val network =
@@ -87,14 +74,7 @@ object PaperConfigLoader {
     }
     val japanize =
         io.oyasai.chat.common.japanize.JapanizeSettings(
-            enabled =
-                config.getBoolean(
-                    "japanize.backends.$backendId",
-                    config.getBoolean(
-                        "japanize.enabled",
-                        System.getenv("OYASAI_JAPANIZE_ENABLED")?.toBooleanStrictOrNull() ?: false,
-                    ),
-                ),
+            enabled = config.getBoolean("japanize.enabled", true),
             playerDefault = config.getBoolean("japanize.player-default", true),
             marker = config.getString("japanize.none-marker", "#") ?: "#",
             stripMarker = config.getBoolean("japanize.strip-marker", true),

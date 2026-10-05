@@ -36,7 +36,7 @@ data class ChatMessage(val text: String, val original: String? = null, val forma
 }
 
 data class JapanizeSettings(
-    val enabled: Boolean = false,
+    val enabled: Boolean = true,
     val playerDefault: Boolean = true,
     val marker: String = "#",
     val stripMarker: Boolean = true,

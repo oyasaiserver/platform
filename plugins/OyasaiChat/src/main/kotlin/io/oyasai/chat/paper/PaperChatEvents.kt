@@ -82,12 +82,13 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
   fun onJoin(event: PlayerJoinEvent) {
     event.joinMessage(null)
     plugin.runtime.chat.initialize(event.player)
-    plugin.runtime.privateMessages.onBackendJoin(event.player)
+    plugin.onBackendPlayerJoin(event.player)
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   fun onQuit(event: PlayerQuitEvent) {
     event.quitMessage(null)
+    plugin.runtime.config.network.identity.forget(event.player.uniqueId)
     plugin.runtime.delivery.clear(event.player.uniqueId)
     plugin.runtime.privateMessages.onQuit(event.player)
     plugin.runtime.states.remove(event.player)

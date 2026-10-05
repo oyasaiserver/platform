@@ -86,12 +86,19 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     )
     server.onlinePlayers.forEach {
       runtime.chat.initialize(it)
-      runtime.privateMessages.onBackendJoin(it)
+      onBackendPlayerJoin(it)
     }
     bindCommands()
     logger.info(
         "OyasaiChat enabled for backend ${runtime.config.network.backendId} with ${runtime.config.channels.channels.size} channels."
     )
+  }
+
+  internal fun onBackendPlayerJoin(player: Player) {
+    // Paper join can precede Velocity post-connect; retry on the next tick as well
+    // as handling the proxy announcement. PM state requests require a confirmed ID.
+    server.scheduler.runTask(this, Runnable { runtime.bridge.requestIdentity(player) })
+    if (runtime.config.network.identity.confirmed) runtime.privateMessages.onBackendJoin(player)
   }
 
   fun importLunaChat(sender: CommandSender) {
@@ -227,6 +234,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
           runCatching {
                 reloadConfig()
                 val candidateConfig = PaperConfigLoader.load(config)
+                candidateConfig.network.identity = runtime.config.network.identity
                 PaperRuntimeFactory.create(this, candidateConfig, textTransformers)
               }
               .getOrElse {
@@ -270,7 +278,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
           state.privateMessageModePeer = previous.privateMessageModePeer
           state.privateMessageModeName = previous.privateMessageModeName
         }
-        candidate.privateMessages.onBackendJoin(player)
+        onBackendPlayerJoin(player)
       }
       bindCommands()
 

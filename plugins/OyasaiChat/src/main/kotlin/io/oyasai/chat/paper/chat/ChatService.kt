@@ -180,7 +180,7 @@ class ChatService(
   }
 
   private fun commitPublicChat(player: Player, channel: ChannelDefinition, message: ChatMessage) {
-    val group = channel.networkGroup
+    val group = config.network.groupFor(channel)
     if (group != null) {
       val sent =
           bridge.send(
@@ -249,7 +249,7 @@ class ChatService(
         externalAttachments = attachments,
         surface = ChatTextSurface.EXTERNAL_CHAT,
     )
-    if (channel.networkGroup != null) {
+    if (config.network.groupFor(channel) != null) {
       val transport = plugin.server.onlinePlayers.firstOrNull()
       if (transport == null) {
         plugin.logger.warning(
@@ -263,7 +263,7 @@ class ChatService(
                     type = MessageType.CHANNEL_MESSAGE,
                     backendId = config.network.backendId,
                     channelId = channel.id,
-                    networkGroup = channel.networkGroup,
+                    networkGroup = config.network.groupFor(channel),
                     originBackendPrefix =
                         config.network.remoteMessagePrefix.takeIf { it.isNotBlank() },
                     originBackendSuffix =

@@ -13,15 +13,22 @@ class JapanizeConfigTest {
   fun backendConfigurationAndDefaults() {
     val yaml = YamlConfiguration()
     yaml.loadFromString(javaClass.classLoader.getResource("config.yml")!!.readText())
-    assertTrue(PaperConfigLoader.load(yaml, "main").japanize.enabled)
-    assertFalse(PaperConfigLoader.load(yaml, "lobby").japanize.enabled)
-    assertFalse(PaperConfigLoader.load(yaml, "axiom").japanize.enabled)
-    assertTrue(PaperConfigLoader.load(yaml, "main").japanize.playerDefault)
+    for (backend in listOf("main", "lobby", "axiom")) {
+      yaml.set("network.backend-id", backend)
+      assertTrue(PaperConfigLoader.load(yaml).japanize.enabled)
+      assertTrue(PaperConfigLoader.load(yaml).japanize.playerDefault)
+    }
+    yaml.set("japanize.enabled", null)
+    assertTrue(PaperConfigLoader.load(yaml).japanize.enabled)
+    yaml.set("japanize.enabled", false)
+    assertFalse(PaperConfigLoader.load(yaml).japanize.enabled)
+    yaml.set("japanize.backends.axiom", true)
+    assertFalse(PaperConfigLoader.load(yaml).japanize.enabled)
     yaml.set("japanize.timeout-millis", 0)
-    assertFails { PaperConfigLoader.load(yaml, "main") }
+    assertFails { PaperConfigLoader.load(yaml) }
     yaml.set("japanize.timeout-millis", 2000)
     yaml.set("japanize.format", "<converted> <converted> <original>")
-    assertFails { PaperConfigLoader.load(yaml, "main") }
+    assertFails { PaperConfigLoader.load(yaml) }
   }
 
   @Test

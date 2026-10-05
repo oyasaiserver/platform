@@ -58,7 +58,13 @@ Paper用とVelocity用の実装を同一JARに同梱し、各実行環境が対�
 | Velocity | backend間メッセージ転送、PM宛先解決、ログイン通知、PM状態 |
 | 共通 | 設定モデル、Protocol、Envelope変換 |
 
-Paperのbackend IDは`network.backend-id`を基本値とし、`OYASAI_SERVER_ID`が明示されている場合はそちらを優先。backend IDは表示名ではなく、ネットワーク設定とルーティングに使う識別子。
+Paperのbackend IDはVelocityの `RegisteredServer.serverInfo.name` を採用する。`network.backend-id` は初期表示用の予備値で、未確定のIDではネットワーク送信しない。CDKTFからのID環境変数は使用しない。配布 `network.groups` の `main`・`lobby`・`axiom` は `packages/oyasai-velocity.nix` の登録名と一致する。チャンネルのgroup参加判定も確定後のIDを使う。
+
+Velocityの `ServerPostConnectEvent` が接続先へID通知を送る。Paperは通知または次tickの参加処理でランダムな照合ID付き `BACKEND_ID_REQUEST` を送り、Velocityは送信元 `ServerConnection` の登録名を `BACKEND_ID` で返信する。PaperはProtocolのproxy origin・鮮度に加え、照合IDと同じ接続プレイヤーUUIDを検証して初めて採用する。Velocityはチャンネルを `handled` にし、クライアント起点のメッセージを転送しない。ID要求だけは未確定IDによるbootstrapを許し、通常メッセージの送信元ID照合は維持する。Protocol v4を使うためPaper・Velocityの両方を同じjarへ更新する。
+
+確定前もローカルチャットは表示できるが、ネットワーク配送は拒否して再送を案内する。遠隔PMは既存の配送失敗表示を使う。無制限に発言を保留するキューは設けない。接続直後のPM状態取得はID確定後に行い、presence要求も通常の送信ガードを通る。ログイン通知はVelocityが直接配信するためPaperのIDに依存しない。Discord起点のネットワーク配送は従来からプレイヤーの接続を必要とし、無人時はローカル表示のみで警告する（ID取得方式による新たな制約ではない）。
+
+configと通知名の食い違いをログに出してVelocityの登録名を優先する。確定済みの登録名と異なる通知は重大ログを出し、ネットワーク送信を停止する。途中で別backendを名乗って配送しないよう、運用設定を確認して再起動するまで新しい名前は採用しない。reloadでも取得済みIDを保持する。
 
 ## チャンネル仕様
 
@@ -188,9 +194,9 @@ OyasaiChatはroutingとformatを維持したまま、外部Paperプラグイン�
 
 ### 設定と状態
 
-`config.yml` の `japanize` に `enabled`、`backends.<backend-id>`、`player-default`、`none-marker`、`strip-marker`、`timeout-millis`、`format`、`dictionary` を設定する。backend別指定が全体の `enabled` に優先する。既定の本人設定はオン、HTTPタイムアウトは2000ms。
+`config.yml` の `japanize` に `enabled`、`player-default`、`none-marker`、`strip-marker`、`timeout-millis`、`format`、`dictionary` を設定する。全体の `enabled` と本人設定の既定値はオン、HTTPタイムアウトは2000ms。
 
-配布configはmainだけ有効、lobby・axiomは無効。CDKTFの各Minecraftコンテナは `OYASAI_SERVER_ID` と `OYASAI_JAPANIZE_ENABLED` を明示する。後者は既存configに日本語変換の設定がまだない場合の既定値であり、明示的なconfig設定を優先する。Nixはプラグイン一覧を所有し、永続化されたプラグインconfigの上書きは行っていない。
+日本語変換は全サーバーで既定オン。backend別の表と環境変数による切り替えは使用しない。無効化する場合は各サーバーの `japanize.enabled: false` を明示する。Nixはプラグイン一覧を所有し、永続化されたプラグインconfigの上書きは行っていない。既存configに `enabled: false` がある場合は引き続き無効なので、全サーバーで有効にする導入時には `true` へ変更する。
 
 `/japanize [on|off]`（`/jp`）は引数なしなら切替。既存 `players/<UUID>.yml` の `japanize-enabled` に保存する。旧ファイルにキーがない場合は `player-default` を使う。保存先は既存状態と同様にbackendごと。
 
@@ -227,7 +233,7 @@ Envelopeの `content` は変換済み本文。任意の `japanizeOriginal` と `
 
 未変換の文も受信者別配送キューを通すため、遅いrecipient transformerを追い越さない。reloadは送信元キュー・受信者別配送・PM・チャット確定の待機中は拒否し、disableは未配送を破棄する。
 
-Protocol version 3の任意field追加。旧実装も本文を読めるが、旧Velocityは再encode時に追加fieldを落とす。**導入はVelocityを先に更新し、Paperを更新した後に変換を有効にする。** 混在期間の旧Paperは変換済み本文だけを表示する。
+日本語変換の任意fieldとbackend ID通知をProtocol version 4で送る。旧バージョンとのネットワーク通信は拒否するため、Velocityと全Paperを同じjarへ揃えて更新する。混在中の配送を前提にしない。
 
 ### LunaChatデータの取り込み
 
