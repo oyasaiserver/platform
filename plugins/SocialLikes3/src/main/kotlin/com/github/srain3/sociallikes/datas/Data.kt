@@ -13,6 +13,8 @@ import java.io.File
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.logging.Level
 import kotlin.math.floor
 import kotlin.math.max
@@ -44,10 +46,7 @@ object Data {
     if (activeReadSource == ReadSource.SQLITE) {
       SLDatabase.saveBuild(data) {
         DirtyBuildManager.markDirty(data.id)
-        notifyPlayerFailure(
-            actorUuid,
-            "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）",
-        )
+        notifyPlayerFailure(actorUuid, "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）")
       }
       saveYamlAsync(data)
     } else {
@@ -215,7 +214,9 @@ object Data {
   }
 
   /** [SLData]を50区切り別のフォルダ名と紐付けて保存しているCache */
-  private val dataMap = mutableMapOf<String, MutableList<SLData>>()
+  // Both levels are shared with readers during startup: a concurrent outer map alone is not
+  // enough. Bucket lists use snapshot iterators, including while builds are added or removed.
+  private val dataMap = ConcurrentHashMap<String, MutableList<SLData>>()
 
   /** SLDataをすべて返す (現役のみ) */
   fun getSLDataAll(): MutableSet<SLData> {
@@ -232,11 +233,11 @@ object Data {
   }
 
   /** データを元に制作者ごとのLike数を保存 */
-  val userLikesInt = mutableMapOf<UUID, Int>()
+  val userLikesInt: MutableMap<UUID, Int> = ConcurrentHashMap()
 
   /** userLikes数を変更する */
   fun changeUserLikesInt(owner: UUID, changeInt: Int) {
-    userLikesInt[owner] = (userLikesInt[owner] ?: 0) + changeInt
+    userLikesInt.merge(owner, changeInt, Int::plus)
   }
 
   /** 建築総数を返す */
@@ -247,7 +248,7 @@ object Data {
   }
 
   /** ファイルで存在する一番大きいID */
-  var lastID = 0
+  @Volatile var lastID = 0
 
   /** 次の新規IDを発行する (ID再利用は廃止、常に最大ID+1) */
   fun getNextID(): Int {
@@ -257,8 +258,8 @@ object Data {
     }
   }
 
-  /** ファイルのロードが終わっていたらtrue */
-  var loading = true
+  /** true = 操作可能（ロード完了）、false = ロード中。名前と初期値は既存APIのため維持。 */
+  @Volatile var loading = true
 
   /** ファイルからCacheを作成する(別スレッドにして鯖のロードを止めないようにしてる) */
   fun loadFileToDataCache() {
@@ -419,7 +420,7 @@ object Data {
 
   fun removeFromCache(data: SLData) {
     val dirName = getDirName(data.id)
-    dataMap[dirName]?.removeIf { it.id == data.id }
+    dataMap[dirName]?.let { list -> synchronized(list) { list.removeIf { it.id == data.id } } }
 
     val dW = slNearData[data.worldName]
     dW?.get(data.loc.blockX shr 4)?.get(data.loc.blockZ shr 4)?.removeIf { it.id == data.id }
@@ -427,12 +428,14 @@ object Data {
 
   private fun addToCacheInMemory(data: SLData) {
     val dirName = getDirName(data.id)
-    val list = dataMap.getOrPut(dirName) { mutableListOf() }
-    val existingIndex = list.indexOfFirst { it.id == data.id }
-    if (existingIndex >= 0) {
-      list[existingIndex] = data
-    } else {
-      list.add(data)
+    val list = dataMap.computeIfAbsent(dirName) { CopyOnWriteArrayList() }
+    synchronized(list) {
+      val existingIndex = list.indexOfFirst { it.id == data.id }
+      if (existingIndex >= 0) {
+        list[existingIndex] = data
+      } else {
+        list.add(data)
+      }
     }
 
     // slNearData を更新: 既存位置にあれば削除し、新位置に追加
@@ -441,9 +444,9 @@ object Data {
         cMap.values.forEach { cList -> cList.removeIf { it.id == data.id } }
       }
     }
-    val nWorld = slNearData.getOrPut(data.worldName) { mutableMapOf() }
-    val nChunkX = nWorld.getOrPut(data.loc.blockX shr 4) { mutableMapOf() }
-    val nChunkZ = nChunkX.getOrPut(data.loc.blockZ shr 4) { mutableListOf() }
+    val nWorld = slNearData.computeIfAbsent(data.worldName) { ConcurrentHashMap() }
+    val nChunkX = nWorld.computeIfAbsent(data.loc.blockX shr 4) { ConcurrentHashMap() }
+    val nChunkZ = nChunkX.computeIfAbsent(data.loc.blockZ shr 4) { CopyOnWriteArrayList() }
     nChunkZ.add(data)
   }
 
@@ -570,12 +573,10 @@ object Data {
     lastID = max(lastID, slData.id)
     ids.add(slData.id)
 
-    val list = dataMap[dirName] ?: mutableListOf()
-    list.add(slData)
-    dataMap[dirName] = list
+    dataMap.computeIfAbsent(dirName) { CopyOnWriteArrayList() }.add(slData)
 
     if (slData.deletedAt == null) {
-      userLikesInt[slData.owner] = (userLikesInt[slData.owner] ?: 0) + slData.likes.count()
+      changeUserLikesInt(slData.owner, slData.likes.count())
     }
   }
 
@@ -618,7 +619,7 @@ object Data {
 
   /** WorldNameとchunk別のslDataMap */
   private val slNearData =
-      mutableMapOf<String, MutableMap<Int, MutableMap<Int, MutableList<SLData>>>>()
+      ConcurrentHashMap<String, MutableMap<Int, MutableMap<Int, MutableList<SLData>>>>()
 
   /** locから近いslDataを順に返す(距離付き) */
   fun getSLNearToSLDataMap(loc: Location): List<Pair<Double, SLData>> {
@@ -652,11 +653,11 @@ object Data {
   private fun slNearLoadTask() {
     val list = getSLDataAll()
     list.forEach { data ->
-      val nWorld = slNearData.getOrPut(data.worldName) { mutableMapOf() }
+      val nWorld = slNearData.computeIfAbsent(data.worldName) { ConcurrentHashMap() }
       val x = data.loc.blockX.shr(4)
-      val nChunkX = nWorld.getOrPut(x) { mutableMapOf() }
+      val nChunkX = nWorld.computeIfAbsent(x) { ConcurrentHashMap() }
       val z = data.loc.blockZ.shr(4)
-      val nChunkZ = nChunkX.getOrPut(z) { mutableListOf() }
+      val nChunkZ = nChunkX.computeIfAbsent(z) { CopyOnWriteArrayList() }
       nChunkZ.add(data)
     }
   }
