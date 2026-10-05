@@ -1,5 +1,6 @@
 package icu.oyasai.imageonmap
 
+import com.github.srain3.painttools.tools.configs.CanvasStore
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
@@ -24,6 +25,19 @@ import org.bukkit.block.BlockFace
 import org.bukkit.map.MapPalette
 
 class ImageOnMapTest {
+  @Test
+  fun latestMapDatabaseOpensInCanvasStore() {
+    val file = Files.createTempDirectory("pictures-version").resolve("pictures.db").toFile()
+    MapStore(file).use { it.open() }
+    CanvasStore(file, byteArrayOf()).also { store ->
+      try {
+        assertEquals(0, store.open().lastId)
+      } finally {
+        store.close()
+      }
+    }
+  }
+
   @Test
   fun removedFrameDecision() {
     val gone = UUID.randomUUID()
