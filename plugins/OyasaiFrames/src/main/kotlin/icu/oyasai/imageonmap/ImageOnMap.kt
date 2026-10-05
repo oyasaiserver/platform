@@ -64,6 +64,7 @@ internal enum class TomapAction {
   GIVE,
   DELETE,
   RECOMPRESS,
+  DEDUPE,
   REMOVE,
   WHERE,
   USAGE,
@@ -79,6 +80,7 @@ internal fun tomapAction(args: List<String>): TomapAction =
       args.firstOrNull() == "give" -> TomapAction.GIVE
       args.firstOrNull() == "delete" -> TomapAction.DELETE
       args.firstOrNull() == "recompress" -> TomapAction.RECOMPRESS
+      args.firstOrNull() == "dedupe" -> TomapAction.DEDUPE
       args.firstOrNull() == "remove" -> TomapAction.REMOVE
       args.firstOrNull() == "where" -> TomapAction.WHERE
       else -> TomapAction.USAGE
@@ -125,6 +127,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private lateinit var legacyKey: NamespacedKey
   private var ready = false
   private var recompressRunning = false
+  private var dedupeRunning = false
 
   private data class Gui(
       val inventory: Inventory,
@@ -851,6 +854,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         if (args.size != 2 || (args[1] != "all" && (id == null || id <= 0))) usage(sender)
         else recompress(sender, if (args[1] == "all") null else id)
       }
+      TomapAction.DEDUPE -> {
+        if (!sender.hasPermission("imageonmap.deleteother")) return denied(sender)
+        if (args.size != 1) usage(sender) else dedupe(sender)
+      }
       TomapAction.REMOVE -> {
         if (!sender.hasPermission("imageonmap.removesplattermap")) return denied(sender)
         val player = sender as? Player ?: return playerOnly(sender)
@@ -936,6 +943,42 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     }
   }
 
+  private fun dedupe(sender: CommandSender) {
+    if (dedupeRunning) {
+      message(sender, "重複保存の整理は実行中です")
+      return
+    }
+    dedupeRunning = true
+    message(sender, "重複保存の整理を開始します")
+    var maps = 0L
+    var before = 0L
+    var added = 0L
+    fun next() {
+      database { store.dedupeBatch() }
+          .whenComplete { batch, failure ->
+            main {
+              if (failure != null) {
+                dedupeRunning = false
+                logger.warning("Dedupe failed: ${error(failure)}")
+                message(sender, "重複保存の整理に失敗しました: ${error(failure)}。再実行すると残りから続けます")
+                return@main
+              }
+              maps += batch.maps
+              before += batch.before
+              added += batch.added
+              if (batch.maps == 0) {
+                dedupeRunning = false
+                message(sender, "重複保存の整理完了: ${maps}枚、移動前 ${before}B、blobs に追加 ${added}B")
+                message(sender, "DB ファイル自体の容量は VACUUM するまで縮みません")
+              } else {
+                server.scheduler.runTaskLater(this, Runnable(::next), 20L)
+              }
+            }
+          }
+    }
+    next()
+  }
+
   private fun usage(sender: CommandSender) {
     message(sender, "使い方:")
     if (sender.hasPermission("imageonmap.new")) message(sender, "/tomap <URL> [resize [幅 高さ]]")
@@ -948,6 +991,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     if (sender.hasPermission("imageonmap.deleteother")) {
       message(sender, "/tomap delete <画像ID>")
       message(sender, "/tomap recompress <画像ID|all>")
+      message(sender, "/tomap dedupe")
     }
     if (sender.hasPermission("imageonmap.removesplattermap")) message(sender, "/tomap remove")
   }
@@ -972,6 +1016,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                 if (sender.hasPermission("imageonmap.deleteother")) {
                   add("delete")
                   add("recompress")
+                  add("dedupe")
                 }
                 if (sender.hasPermission("imageonmap.removesplattermap")) add("remove")
               }

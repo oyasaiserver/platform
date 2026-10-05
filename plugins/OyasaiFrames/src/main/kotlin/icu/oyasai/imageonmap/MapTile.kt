@@ -28,8 +28,8 @@ internal sealed interface MapTile {
     const val PIXELS = 128 * 128
     private val PNG_SIGNATURE = byteArrayOf(-119, 80, 78, 71, 13, 10, 26, 10)
 
-    // maps.png に PNG 署名があれば v2 の PNG、空でなければ従来の単独 zlib。
-    // 空なら map_books.data の連結 zstd を maps.idx のタイル位置・順番から読む。
+    // maps.png または blobs.data の PNG 署名があれば PNG、空でなければ単独 zlib。
+    // 両方空なら map_books.data の連結 zstd を maps.idx のタイル位置・順番から読む。
     fun fromStored(bytes: ByteArray): MapTile {
       if (
           bytes.size >= PNG_SIGNATURE.size &&

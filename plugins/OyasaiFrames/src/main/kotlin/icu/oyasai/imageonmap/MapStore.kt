@@ -2,6 +2,7 @@ package icu.oyasai.imageonmap
 
 import icu.oyasai.frames.FrameStore
 import java.io.File
+import java.security.MessageDigest
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.BitSet
@@ -59,6 +60,8 @@ internal data class RecompressResult(
     val before: Long,
     val after: Long,
 )
+
+internal data class DedupeBatch(val maps: Int, val before: Long, val added: Long)
 
 internal data class Animation(
     val imageId: Long,
@@ -175,7 +178,8 @@ internal class MapStore(private val file: File) : AutoCloseable {
         }
       }
       1,
-      2 -> {
+      2,
+      3 -> {
         db.createStatement().use { s ->
           s.executeQuery(
                   "SELECT id, owner, name, columns, rows, created_at, hidden FROM images LIMIT 1"
@@ -194,25 +198,42 @@ internal class MapStore(private val file: File) : AutoCloseable {
                 s.execute("PRAGMA user_version = 2")
               }
             }
-        db.createStatement().use { s ->
-          s.execute(
-              "CREATE TABLE IF NOT EXISTS map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, data BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
-          )
-          // The unpublished zlib-book schema may exist locally, but it contains no books.
-          s.executeQuery("PRAGMA table_info(map_books)").use { columns ->
-            var oldColumn = false
-            while (columns.next()) if (columns.getString("name") == "zlib") oldColumn = true
-            if (oldColumn) {
-              s.executeQuery("SELECT COUNT(*) FROM map_books").use { rows ->
-                check(rows.next() && rows.getInt(1) == 0) { "zlib books cannot be read as zstd" }
+        if (version <= 2)
+            db.createStatement().use { s ->
+              s.execute(
+                  "CREATE TABLE IF NOT EXISTS map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, data BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
+              )
+              // The unpublished zlib-book schema may exist locally, but it contains no books.
+              s.executeQuery("PRAGMA table_info(map_books)").use { columns ->
+                var oldColumn = false
+                while (columns.next()) if (columns.getString("name") == "zlib") oldColumn = true
+                if (oldColumn) {
+                  s.executeQuery("SELECT COUNT(*) FROM map_books").use { rows ->
+                    check(rows.next() && rows.getInt(1) == 0) {
+                      "zlib books cannot be read as zstd"
+                    }
+                  }
+                  s.execute("ALTER TABLE map_books RENAME COLUMN zlib TO data")
+                }
               }
-              s.execute("ALTER TABLE map_books RENAME COLUMN zlib TO data")
             }
-          }
-        }
+        if (version == 3)
+            db.createStatement().use { s ->
+              s.executeQuery("SELECT blob_hash FROM maps LIMIT 1").close()
+              s.executeQuery("SELECT hash,data FROM blobs LIMIT 1").close()
+            }
       }
       else -> error("unsupported image database version $version")
     }
+    if (version != 3)
+        transaction {
+          db.createStatement().use { s ->
+            s.execute("CREATE TABLE blobs (hash BLOB PRIMARY KEY, data BLOB NOT NULL)")
+            s.execute("ALTER TABLE maps ADD COLUMN blob_hash BLOB REFERENCES blobs(hash)")
+            s.execute("CREATE INDEX maps_blob_hash ON maps(blob_hash)")
+            s.execute("PRAGMA user_version = 3")
+          }
+        }
   }
 
   private fun <T> transaction(block: () -> T): T {
@@ -226,6 +247,76 @@ internal class MapStore(private val file: File) : AutoCloseable {
       throw e
     } finally {
       db.autoCommit = true
+    }
+  }
+
+  private fun storeBlob(data: ByteArray): Pair<ByteArray, Boolean> {
+    val hash = MessageDigest.getInstance("SHA-256").digest(data)
+    val inserted =
+        db.prepareStatement("INSERT OR IGNORE INTO blobs(hash,data) VALUES(?,?)").use { s ->
+          s.setBytes(1, hash)
+          s.setBytes(2, data)
+          s.executeUpdate() == 1
+        }
+    db.prepareStatement("SELECT data FROM blobs WHERE hash=?").use { s ->
+      s.setBytes(1, hash)
+      s.executeQuery().use { r ->
+        check(r.next() && r.getBytes(1).contentEquals(data)) { "SHA-256 collision in blobs" }
+      }
+    }
+    return hash to inserted
+  }
+
+  private fun blobHashes(imageId: Long): List<ByteArray> =
+      db.prepareStatement(
+              "SELECT DISTINCT blob_hash FROM maps WHERE image_id=? AND blob_hash IS NOT NULL"
+          )
+          .use { s ->
+            s.setLong(1, imageId)
+            s.executeQuery().use { r -> buildList { while (r.next()) add(r.getBytes(1)) } }
+          }
+
+  private fun removeUnusedBlobs(hashes: List<ByteArray>) {
+    db.prepareStatement(
+            "DELETE FROM blobs WHERE hash=? AND NOT EXISTS (SELECT 1 FROM maps WHERE blob_hash=?)"
+        )
+        .use { s ->
+          hashes.forEach { hash ->
+            s.setBytes(1, hash)
+            s.setBytes(2, hash)
+            s.executeUpdate()
+          }
+        }
+  }
+
+  /**
+   * Moves one bounded group in a transaction. A subsequent call starts at the remaining png rows.
+   */
+  fun dedupeBatch(limit: Int = 500): DedupeBatch {
+    require(limit > 0)
+    return transaction {
+      val rows =
+          db.prepareStatement(
+                  "SELECT map_id,png FROM maps WHERE length(png)>0 ORDER BY map_id LIMIT ?"
+              )
+              .use { s ->
+                s.setInt(1, limit)
+                s.executeQuery().use { r ->
+                  buildList { while (r.next()) add(r.getInt(1) to r.getBytes(2)) }
+                }
+              }
+      var added = 0L
+      db.prepareStatement("UPDATE maps SET png=X'',blob_hash=? WHERE map_id=? AND length(png)>0")
+          .use { update ->
+            rows.forEach { (id, data) ->
+              val (hash, inserted) = storeBlob(data)
+              if (inserted) added += data.size
+              update.setBytes(1, hash)
+              update.setInt(2, id)
+              check(update.executeUpdate() == 1) { "map $id changed during dedupe" }
+            }
+          }
+      DedupeBatch(rows.size, rows.sumOf { it.second.size.toLong() }, added)
     }
   }
 
@@ -311,14 +402,17 @@ internal class MapStore(private val file: File) : AutoCloseable {
   fun deleteFrames(ids: List<UUID>) = frames.deleteFrames(ids)
 
   fun png(mapId: Int): ByteArray? =
-      db.prepareStatement("SELECT png FROM maps WHERE map_id=?").use { s ->
-        s.setInt(1, mapId)
-        s.executeQuery().use { r -> if (r.next()) r.getBytes(1) else null }
-      }
+      db.prepareStatement(
+              "SELECT COALESCE(b.data,m.png) FROM maps m LEFT JOIN blobs b ON b.hash=m.blob_hash WHERE m.map_id=?"
+          )
+          .use { s ->
+            s.setInt(1, mapId)
+            s.executeQuery().use { r -> if (r.next()) r.getBytes(1) else null }
+          }
 
   fun tile(mapId: Int): MapTile? =
       db.prepareStatement(
-              "SELECT m.png,b.data,(SELECT COUNT(*)-1 FROM maps p WHERE p.image_id=m.image_id AND p.idx<=m.idx AND p.idx % (i.columns*i.rows)=m.idx % (i.columns*i.rows)) FROM maps m LEFT JOIN images i ON i.id=m.image_id LEFT JOIN map_books b ON b.image_id=m.image_id AND b.tile=m.idx % (i.columns*i.rows) WHERE m.map_id=?"
+              "SELECT COALESCE(blob.data,m.png),b.data,(SELECT COUNT(*)-1 FROM maps p WHERE p.image_id=m.image_id AND p.idx<=m.idx AND p.idx % (i.columns*i.rows)=m.idx % (i.columns*i.rows)) FROM maps m LEFT JOIN blobs blob ON blob.hash=m.blob_hash LEFT JOIN images i ON i.id=m.image_id LEFT JOIN map_books b ON b.image_id=m.image_id AND b.tile=m.idx % (i.columns*i.rows) WHERE m.map_id=?"
           )
           .use { s ->
             s.setInt(1, mapId)
@@ -350,13 +444,15 @@ internal class MapStore(private val file: File) : AutoCloseable {
           }
         }
     val rows =
-        db.prepareStatement("SELECT map_id,idx,png FROM maps WHERE image_id=? ORDER BY idx").use { s
-          ->
-          s.setLong(1, imageId)
-          s.executeQuery().use { r ->
-            buildList { while (r.next()) add(Triple(r.getInt(1), r.getInt(2), r.getBytes(3))) }
-          }
-        }
+        db.prepareStatement(
+                "SELECT m.map_id,m.idx,COALESCE(b.data,m.png) FROM maps m LEFT JOIN blobs b ON b.hash=m.blob_hash WHERE m.image_id=? ORDER BY m.idx"
+            )
+            .use { s ->
+              s.setLong(1, imageId)
+              s.executeQuery().use { r ->
+                buildList { while (r.next()) add(Triple(r.getInt(1), r.getInt(2), r.getBytes(3))) }
+              }
+            }
     val result = mutableMapOf<Int, MapTile>()
     rows
         .filter { it.third.isNotEmpty() }
@@ -373,14 +469,16 @@ internal class MapStore(private val file: File) : AutoCloseable {
 
   fun storedBytes(imageId: Long): Long {
     val maps =
-        db.prepareStatement("SELECT COALESCE(SUM(length(png)),0) FROM maps WHERE image_id=?").use {
-            s ->
-          s.setLong(1, imageId)
-          s.executeQuery().use { r ->
-            r.next()
-            r.getLong(1)
-          }
-        }
+        db.prepareStatement(
+                "SELECT COALESCE(SUM(length(COALESCE(b.data,m.png))),0) FROM maps m LEFT JOIN blobs b ON b.hash=m.blob_hash WHERE m.image_id=?"
+            )
+            .use { s ->
+              s.setLong(1, imageId)
+              s.executeQuery().use { r ->
+                r.next()
+                r.getLong(1)
+              }
+            }
     val books =
         db.prepareStatement("SELECT COALESCE(SUM(length(data)),0) FROM map_books WHERE image_id=?")
             .use { s ->
@@ -396,7 +494,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
   fun recompressCandidates(): List<Long> =
       db.createStatement().use { s ->
         s.executeQuery(
-                "SELECT a.image_id FROM animations a WHERE NOT EXISTS (SELECT 1 FROM map_books b WHERE b.image_id=a.image_id) AND EXISTS (SELECT 1 FROM maps m WHERE m.image_id=a.image_id AND length(m.png)>0) ORDER BY a.image_id"
+                "SELECT a.image_id FROM animations a WHERE NOT EXISTS (SELECT 1 FROM map_books b WHERE b.image_id=a.image_id) AND EXISTS (SELECT 1 FROM maps m WHERE m.image_id=a.image_id AND (length(m.png)>0 OR m.blob_hash IS NOT NULL)) ORDER BY a.image_id"
             )
             .use { r -> buildList { while (r.next()) add(r.getLong(1)) } }
       }
@@ -408,7 +506,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
   ): RecompressResult? {
     val tileCount =
         db.prepareStatement(
-                "SELECT i.columns*i.rows FROM images i JOIN animations a ON a.image_id=i.id WHERE i.id=? AND NOT EXISTS (SELECT 1 FROM map_books b WHERE b.image_id=i.id) AND EXISTS (SELECT 1 FROM maps m WHERE m.image_id=i.id AND length(m.png)>0)"
+                "SELECT i.columns*i.rows FROM images i JOIN animations a ON a.image_id=i.id WHERE i.id=? AND NOT EXISTS (SELECT 1 FROM map_books b WHERE b.image_id=i.id) AND EXISTS (SELECT 1 FROM maps m WHERE m.image_id=i.id AND (length(m.png)>0 OR m.blob_hash IS NOT NULL))"
             )
             .use { s ->
               s.setLong(1, imageId)
@@ -416,12 +514,15 @@ internal class MapStore(private val file: File) : AutoCloseable {
             } ?: return null
     check(tileCount > 0) { "invalid tile count for image $imageId" }
     val rows =
-        db.prepareStatement("SELECT idx,png FROM maps WHERE image_id=? ORDER BY idx").use { s ->
-          s.setLong(1, imageId)
-          s.executeQuery().use { r ->
-            buildList { while (r.next()) add(r.getInt(1) to r.getBytes(2)) }
-          }
-        }
+        db.prepareStatement(
+                "SELECT m.idx,COALESCE(b.data,m.png) FROM maps m LEFT JOIN blobs b ON b.hash=m.blob_hash WHERE m.image_id=? ORDER BY m.idx"
+            )
+            .use { s ->
+              s.setLong(1, imageId)
+              s.executeQuery().use { r ->
+                buildList { while (r.next()) add(r.getInt(1) to r.getBytes(2)) }
+              }
+            }
     check(rows.isNotEmpty() && rows.all { it.second.isNotEmpty() }) {
       "image $imageId has missing stored maps"
     }
@@ -449,6 +550,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
               packed
             }
     transaction {
+      val oldHashes = blobHashes(imageId)
       db.prepareStatement("INSERT INTO map_books(image_id,tile,data) VALUES(?,?,?)").use { s ->
         books.forEach { (tile, data) ->
           s.setLong(1, imageId)
@@ -457,10 +559,11 @@ internal class MapStore(private val file: File) : AutoCloseable {
           s.executeUpdate()
         }
       }
-      db.prepareStatement("UPDATE maps SET png=X'' WHERE image_id=?").use { s ->
+      db.prepareStatement("UPDATE maps SET png=X'',blob_hash=NULL WHERE image_id=?").use { s ->
         s.setLong(1, imageId)
         check(s.executeUpdate() == rows.size) { "image $imageId changed during recompression" }
       }
+      removeUnusedBlobs(oldHashes)
     }
     return RecompressResult(imageId, rows.size, before, books.values.sumOf { it.size.toLong() })
   }
@@ -539,15 +642,17 @@ internal class MapStore(private val file: File) : AutoCloseable {
                   r.getLong(1)
                 }
               }
-      db.prepareStatement("INSERT INTO maps(map_id,image_id,idx,png) VALUES(?,?,?,?)").use { s ->
-        ids.forEachIndexed { i, id ->
-          s.setInt(1, id)
-          s.setLong(2, imageId)
-          s.setInt(3, firstSlots[i])
-          s.setBytes(4, if (delays.isEmpty()) pngs[i] else byteArrayOf())
-          s.executeUpdate()
-        }
-      }
+      db.prepareStatement("INSERT INTO maps(map_id,image_id,idx,png,blob_hash) VALUES(?,?,?,?,?)")
+          .use { s ->
+            ids.forEachIndexed { i, id ->
+              s.setInt(1, id)
+              s.setLong(2, imageId)
+              s.setInt(3, firstSlots[i])
+              s.setBytes(4, byteArrayOf())
+              s.setBytes(5, if (delays.isEmpty()) storeBlob(pngs[i]).first else null)
+              s.executeUpdate()
+            }
+          }
       if (books.isNotEmpty())
           db.prepareStatement("INSERT INTO map_books(image_id,tile,data) VALUES(?,?,?)").use { s ->
             books.forEach { (tile, data) ->
@@ -690,6 +795,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
 
   fun delete(id: Long): ImageDetails? = transaction {
     val image = details(id) ?: return@transaction null
+    val oldHashes = blobHashes(id)
     db.prepareStatement("DELETE FROM map_books WHERE image_id=?").use { s ->
       s.setLong(1, id)
       s.executeUpdate()
@@ -698,6 +804,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
       s.setLong(1, id)
       s.executeUpdate()
     }
+    removeUnusedBlobs(oldHashes)
     db.prepareStatement("DELETE FROM animations WHERE image_id=?").use { s ->
       s.setLong(1, id)
       s.executeUpdate()
