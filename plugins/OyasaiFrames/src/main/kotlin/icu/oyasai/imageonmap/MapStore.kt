@@ -53,6 +53,13 @@ internal data class ImageDetails(
     val mapIds: List<Int>,
 )
 
+internal data class RecompressResult(
+    val imageId: Long,
+    val maps: Int,
+    val before: Long,
+    val after: Long,
+)
+
 internal data class Animation(
     val imageId: Long,
     val columns: Int,
@@ -384,6 +391,78 @@ internal class MapStore(private val file: File) : AutoCloseable {
               }
             }
     return maps + books
+  }
+
+  fun recompressCandidates(): List<Long> =
+      db.createStatement().use { s ->
+        s.executeQuery(
+                "SELECT a.image_id FROM animations a WHERE NOT EXISTS (SELECT 1 FROM map_books b WHERE b.image_id=a.image_id) AND EXISTS (SELECT 1 FROM maps m WHERE m.image_id=a.image_id AND length(m.png)>0) ORDER BY a.image_id"
+            )
+            .use { r -> buildList { while (r.next()) add(r.getLong(1)) } }
+      }
+
+  /** Returns null for a static, missing, or already converted image. */
+  fun recompressImage(
+      imageId: Long,
+      compressBook: (List<ByteArray>) -> ByteArray = MapTile::compressBook,
+  ): RecompressResult? {
+    val tileCount =
+        db.prepareStatement(
+                "SELECT i.columns*i.rows FROM images i JOIN animations a ON a.image_id=i.id WHERE i.id=? AND NOT EXISTS (SELECT 1 FROM map_books b WHERE b.image_id=i.id) AND EXISTS (SELECT 1 FROM maps m WHERE m.image_id=i.id AND length(m.png)>0)"
+            )
+            .use { s ->
+              s.setLong(1, imageId)
+              s.executeQuery().use { r -> if (r.next()) r.getInt(1) else null }
+            } ?: return null
+    check(tileCount > 0) { "invalid tile count for image $imageId" }
+    val rows =
+        db.prepareStatement("SELECT idx,png FROM maps WHERE image_id=? ORDER BY idx").use { s ->
+          s.setLong(1, imageId)
+          s.executeQuery().use { r ->
+            buildList { while (r.next()) add(r.getInt(1) to r.getBytes(2)) }
+          }
+        }
+    check(rows.isNotEmpty() && rows.all { it.second.isNotEmpty() }) {
+      "image $imageId has missing stored maps"
+    }
+    val before = rows.sumOf { it.second.size.toLong() }
+    val books =
+        rows
+            .groupBy { it.first % tileCount }
+            .mapValues { (_, entries) ->
+              val original =
+                  entries.map { (_, bytes) ->
+                    when (val map = MapTile.fromStored(bytes)) {
+                      is MapTile.Colors -> map.pixels
+                      is MapTile.Png -> MapTile.colors(map.image)
+                    }
+                  }
+              val packed = compressBook(original)
+              val decoded = MapTile.allFromBook(packed, original.size)
+              check(
+                  decoded.indices.all { index ->
+                    (decoded[index] as MapTile.Colors).pixels.contentEquals(original[index])
+                  }
+              ) {
+                "image $imageId book verification failed"
+              }
+              packed
+            }
+    transaction {
+      db.prepareStatement("INSERT INTO map_books(image_id,tile,data) VALUES(?,?,?)").use { s ->
+        books.forEach { (tile, data) ->
+          s.setLong(1, imageId)
+          s.setInt(2, tile)
+          s.setBytes(3, data)
+          s.executeUpdate()
+        }
+      }
+      db.prepareStatement("UPDATE maps SET png=X'' WHERE image_id=?").use { s ->
+        s.setLong(1, imageId)
+        check(s.executeUpdate() == rows.size) { "image $imageId changed during recompression" }
+      }
+    }
+    return RecompressResult(imageId, rows.size, before, books.values.sumOf { it.size.toLong() })
   }
 
   fun ownerByMap(mapId: Int): UUID? =

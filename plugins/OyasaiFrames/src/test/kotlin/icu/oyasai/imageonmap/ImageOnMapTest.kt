@@ -131,6 +131,7 @@ class ImageOnMapTest {
     assertEquals(TomapAction.INFO, tomapAction(listOf("info")))
     assertEquals(TomapAction.GIVE, tomapAction(listOf("give")))
     assertEquals(TomapAction.DELETE, tomapAction(listOf("delete")))
+    assertEquals(TomapAction.RECOMPRESS, tomapAction(listOf("recompress", "all")))
     assertEquals(TomapAction.REMOVE, tomapAction(listOf("remove")))
     assertEquals(TomapAction.WHERE, tomapAction(listOf("where")))
     assertEquals(TomapAction.USAGE, tomapAction(listOf("unknown")))
@@ -530,6 +531,115 @@ class ImageOnMapTest {
       db.createStatement().executeQuery("PRAGMA user_version").use {
         assertTrue(it.next())
         assertEquals(2, it.getInt(1))
+      }
+    }
+  }
+
+  @Test
+  fun recompressLegacyAnimationPreservesMapColorsAndSkipsConvertedImages() {
+    val file = Files.createTempDirectory("imageonmap-recompress").resolve("pictures.db").toFile()
+    val ids = listOf(10, 11, 20, 21, 30, 31)
+    val stored =
+        ids.mapIndexed { index, _ ->
+          if (index == 3) MapTile.compress(ByteArray(MapTile.PIXELS) { 42 })
+          else
+              ByteArrayOutputStream()
+                  .also { output ->
+                    val image = BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB)
+                    image.setRGB(0, 0, Color(index * 30, 50, 100).rgb)
+                    ImageIO.write(image, "png", output)
+                  }
+                  .toByteArray()
+        }
+    val expected =
+        stored.map {
+          when (val tile = MapTile.fromStored(it)) {
+            is MapTile.Png -> MapTile.colors(tile.image)
+            is MapTile.Colors -> tile.pixels
+          }
+        }
+    MapStore(file).use { store ->
+      store.open()
+      val imageId = store.create(UUID.randomUUID(), 2, 1, ids.take(2), stored.take(2))
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.prepareStatement("INSERT INTO maps(map_id,image_id,idx,png) VALUES(?,?,?,?)").use { s ->
+          (2 until ids.size).forEach { index ->
+            s.setInt(1, ids[index])
+            s.setLong(2, imageId)
+            s.setInt(3, index)
+            s.setBytes(4, stored[index])
+            s.executeUpdate()
+          }
+        }
+        db.prepareStatement("INSERT INTO animations(image_id,frames,delays,slots) VALUES(?,?,?,?)")
+            .use { s ->
+              s.setLong(1, imageId)
+              s.setInt(2, 3)
+              s.setString(3, "2,3,4")
+              s.setString(4, ids.joinToString(","))
+              s.executeUpdate()
+            }
+      }
+      assertEquals(listOf(imageId), store.recompressCandidates())
+      val originalAnimation = store.animations().single()
+      val before = store.storedBytes(imageId)
+      val result = store.recompressImage(imageId)
+      assertNotNull(result)
+      assertEquals(ids.size, result.maps)
+      assertEquals(before, result.before)
+      val pushed = store.tilesForPush(imageId)
+      assertEquals(ids.size, pushed.size)
+      ids.forEachIndexed { index, mapId ->
+        assertContentEquals(expected[index], (store.tile(mapId) as MapTile.Colors).pixels)
+        assertContentEquals(
+            expected[index],
+            (pushed.getValue(mapId) as MapTile.Colors).pixels,
+        )
+        assertContentEquals(byteArrayOf(), store.png(mapId))
+      }
+      assertEquals(originalAnimation, store.animations().single())
+      assertEquals(emptyList(), store.recompressCandidates())
+      assertNull(store.recompressImage(imageId))
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.createStatement()
+            .executeQuery("SELECT COUNT(*) FROM map_books WHERE image_id=$imageId")
+            .use { r ->
+              assertTrue(r.next())
+              assertEquals(2, r.getInt(1))
+            }
+      }
+    }
+  }
+
+  @Test
+  fun recompressVerificationFailureLeavesLegacyDataUntouched() {
+    val file =
+        Files.createTempDirectory("imageonmap-recompress-failure").resolve("pictures.db").toFile()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      val imageId = store.create(UUID.randomUUID(), listOf(10), listOf(bytes))
+      assertNull(store.recompressImage(imageId))
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.createStatement()
+            .execute(
+                "INSERT INTO animations(image_id,frames,delays,slots) VALUES($imageId,1,'2','10')"
+            )
+      }
+      assertFails {
+        store.recompressImage(imageId) { originals ->
+          MapTile.compressBook(originals.map { ByteArray(MapTile.PIXELS) { 1 } })
+        }
+      }
+      assertContentEquals(bytes, store.png(10))
+      assertEquals(listOf(imageId), store.recompressCandidates())
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.createStatement()
+            .executeQuery("SELECT COUNT(*) FROM map_books WHERE image_id=$imageId")
+            .use { r ->
+              assertTrue(r.next())
+              assertEquals(0, r.getInt(1))
+            }
       }
     }
   }

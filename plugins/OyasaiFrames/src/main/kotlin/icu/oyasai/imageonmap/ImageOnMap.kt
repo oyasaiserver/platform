@@ -63,6 +63,7 @@ internal enum class TomapAction {
   INFO,
   GIVE,
   DELETE,
+  RECOMPRESS,
   REMOVE,
   WHERE,
   USAGE,
@@ -77,6 +78,7 @@ internal fun tomapAction(args: List<String>): TomapAction =
       args.firstOrNull() == "info" -> TomapAction.INFO
       args.firstOrNull() == "give" -> TomapAction.GIVE
       args.firstOrNull() == "delete" -> TomapAction.DELETE
+      args.firstOrNull() == "recompress" -> TomapAction.RECOMPRESS
       args.firstOrNull() == "remove" -> TomapAction.REMOVE
       args.firstOrNull() == "where" -> TomapAction.WHERE
       else -> TomapAction.USAGE
@@ -122,6 +124,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private lateinit var managedKey: NamespacedKey
   private lateinit var legacyKey: NamespacedKey
   private var ready = false
+  private var recompressRunning = false
 
   private data class Gui(
       val inventory: Inventory,
@@ -842,6 +845,12 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         val id = args.getOrNull(1)?.toLongOrNull()
         if (args.size != 2 || id == null) usage(sender) else openDeleteConfirm(player, id, null)
       }
+      TomapAction.RECOMPRESS -> {
+        if (!sender.hasPermission("imageonmap.deleteother")) return denied(sender)
+        val id = args.getOrNull(1)?.toLongOrNull()
+        if (args.size != 2 || (args[1] != "all" && (id == null || id <= 0))) usage(sender)
+        else recompress(sender, if (args[1] == "all") null else id)
+      }
       TomapAction.REMOVE -> {
         if (!sender.hasPermission("imageonmap.removesplattermap")) return denied(sender)
         val player = sender as? Player ?: return playerOnly(sender)
@@ -867,6 +876,66 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     return true
   }
 
+  private fun recompress(sender: CommandSender, imageId: Long?) {
+    if (recompressRunning) {
+      message(sender, "作り直しは実行中です")
+      return
+    }
+    recompressRunning = true
+    val ids =
+        if (imageId == null) database { store.recompressCandidates() }
+        else CompletableFuture.completedFuture(listOf(imageId))
+    ids.whenComplete { candidates, failure ->
+      main {
+        if (failure != null) {
+          recompressRunning = false
+          message(sender, "対象の取得に失敗しました: ${error(failure)}")
+          return@main
+        }
+        var converted = 0
+        var skipped = 0
+        var failed = 0
+        var before = 0L
+        var after = 0L
+        val pending = ArrayDeque(candidates)
+        fun next() {
+          val id = pending.removeFirstOrNull()
+          if (id == null) {
+            recompressRunning = false
+            message(
+                sender,
+                "作り直し完了: ${converted}件、変更前 ${before}B、変更後 ${after}B（対象外 ${skipped}件、失敗 ${failed}件）",
+            )
+            message(sender, "DB ファイル自体の容量は VACUUM するまで縮みません")
+            return
+          }
+          database { store.recompressImage(id) }
+              .whenComplete { result, problem ->
+                main {
+                  if (problem != null) {
+                    failed++
+                    logger.warning("Recompress failed image=$id: ${error(problem)}")
+                    message(sender, "画像 $id の作り直しに失敗しました: ${error(problem)}")
+                  } else if (result == null) {
+                    skipped++
+                  } else {
+                    converted++
+                    before += result.before
+                    after += result.after
+                    logger.info(
+                        "Recompressed image=${result.imageId} maps=${result.maps} before=${result.before}B after=${result.after}B"
+                    )
+                  }
+                  if (pending.isEmpty()) next()
+                  else server.scheduler.runTaskLater(this, Runnable(::next), 20L)
+                }
+              }
+        }
+        next()
+      }
+    }
+  }
+
   private fun usage(sender: CommandSender) {
     message(sender, "使い方:")
     if (sender.hasPermission("imageonmap.new")) message(sender, "/tomap <URL> [resize [幅 高さ]]")
@@ -876,7 +945,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       message(sender, "/tomap where <画像ID>")
     }
     if (sender.hasPermission("imageonmap.give")) message(sender, "/tomap give <プレイヤー> <画像ID>")
-    if (sender.hasPermission("imageonmap.deleteother")) message(sender, "/tomap delete <画像ID>")
+    if (sender.hasPermission("imageonmap.deleteother")) {
+      message(sender, "/tomap delete <画像ID>")
+      message(sender, "/tomap recompress <画像ID|all>")
+    }
     if (sender.hasPermission("imageonmap.removesplattermap")) message(sender, "/tomap remove")
   }
 
@@ -897,13 +969,20 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                   add("where")
                 }
                 if (sender.hasPermission("imageonmap.give")) add("give")
-                if (sender.hasPermission("imageonmap.deleteother")) add("delete")
+                if (sender.hasPermission("imageonmap.deleteother")) {
+                  add("delete")
+                  add("recompress")
+                }
                 if (sender.hasPermission("imageonmap.removesplattermap")) add("remove")
               }
           args.size == 2 && args[0] == "list" && sender.hasPermission("imageonmap.listother") ->
               server.onlinePlayers.map { it.name }
           args.size == 2 && args[0] == "give" && sender.hasPermission("imageonmap.give") ->
               server.onlinePlayers.map { it.name }
+          args.size == 2 &&
+              args[0] == "recompress" &&
+              sender.hasPermission("imageonmap.deleteother") ->
+              listOf("all") + animations.animations.keys.map(Long::toString)
           args.size == 2 && args[0].startsWith("http") && sender.hasPermission("imageonmap.new") ->
               listOf("resize")
           else -> emptyList()
