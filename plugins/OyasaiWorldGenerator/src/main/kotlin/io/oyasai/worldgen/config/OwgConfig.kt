@@ -9,7 +9,6 @@ import org.bukkit.configuration.file.FileConfiguration
 
 data class OwgWorldConfig(
     val name: String,
-    val generator: String,
     val kind: OwgWorldKind,
     val heightSpec: HeightSpec,
     val spawnY: Int,
@@ -52,7 +51,6 @@ data class OwgConfig(
     fun defaultWorld(worldName: String, kind: OwgWorldKind): OwgWorldConfig =
         OwgWorldConfig(
             name = worldName,
-            generator = kind.id,
             kind = kind,
             heightSpec = HeightSpec(0, 2032, 256),
             spawnY = 64,
@@ -145,7 +143,6 @@ data class OwgConfig(
         parsed[worldName] =
             OwgWorldConfig(
                 name = worldName,
-                generator = generator,
                 kind = kind,
                 heightSpec = HeightSpec(minY, height, logicalHeight),
                 spawnY = spawnY,

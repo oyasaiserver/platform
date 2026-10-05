@@ -34,7 +34,7 @@ class SongRepository(private val db: DatabaseManager) {
                 INSERT INTO songs (id, author_uuid, title, created_at, bpm, record_material, price, status, likes, views, file_name, supports_positional, published)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, 0)
                 """
-                    .trimIndent(),
+                    .trimIndent()
             )
             .use { ps ->
               ps.setLong(1, songId)
@@ -81,20 +81,60 @@ class SongRepository(private val db: DatabaseManager) {
         }
       }
 
-  fun findByAuthor(authorUuid: UUID, includeDrafts: Boolean = true): List<Song> =
+  fun findByAuthor(
+      authorUuid: UUID,
+      includeDrafts: Boolean = true,
+      sort: SongSort = SongSort.CREATED_AT_DESC,
+      limit: Int = Int.MAX_VALUE,
+      offset: Int = 0,
+  ): List<Song> =
       db.transaction { conn ->
         // includeDrafts=false は「他人から見た公開作品一覧」を意味するため、
         // GUIフェーズより審査ステータス(status)ではなく公開フラグ(published)で絞り込む。
         val sql =
             if (includeDrafts) {
-              "SELECT * FROM songs WHERE author_uuid = ? ORDER BY created_at DESC"
+              "SELECT * FROM songs WHERE author_uuid = ? ORDER BY " +
+                  sort.orderBy +
+                  " LIMIT ? OFFSET ?"
             } else {
-              "SELECT * FROM songs WHERE author_uuid = ? AND published = 1 ORDER BY created_at DESC"
+              "SELECT * FROM songs WHERE author_uuid = ? AND published = 1 ORDER BY " +
+                  sort.orderBy +
+                  " LIMIT ? OFFSET ?"
             }
         conn.prepareStatement(sql).use { ps ->
           ps.setBytes(1, UuidUtil.toBytes(authorUuid))
+          ps.setInt(2, limit)
+          ps.setInt(3, offset)
           ps.executeQuery().use { rs -> rs.toSongList() }
         }
+      }
+
+  /** Project only IDs for playback; no Song materialization or per-row follow-up queries. */
+  fun listPlaybackIds(
+      sort: SongSort,
+      authorUuid: UUID? = null,
+      includeDrafts: Boolean = false,
+      titleLike: String? = null,
+  ): List<Long> =
+      db.transaction { conn ->
+        require(!includeDrafts || authorUuid != null)
+        val where = mutableListOf<String>()
+        if (!includeDrafts) where += "published = 1"
+        if (authorUuid != null) where += "author_uuid = ?"
+        if (titleLike != null) where += "title LIKE ? ESCAPE '\\'"
+        conn
+            .prepareStatement(
+                "SELECT id FROM songs WHERE " +
+                    where.joinToString(" AND ") +
+                    " ORDER BY " +
+                    sort.orderBy
+            )
+            .use { ps ->
+              var index = 1
+              if (authorUuid != null) ps.setBytes(index++, UuidUtil.toBytes(authorUuid))
+              if (titleLike != null) ps.setString(index, "%" + escapeLike(titleLike) + "%")
+              ps.executeQuery().use { rs -> buildList { while (rs.next()) add(rs.getLong(1)) } }
+            }
       }
 
   /** 公開済み(published=true)の楽曲を条件付きで検索する。 */
@@ -114,26 +154,6 @@ class SongRepository(private val db: DatabaseManager) {
           ps.setInt(idx++, limit)
           ps.setInt(idx, offset)
           ps.executeQuery().use { rs -> rs.toSongList() }
-        }
-      }
-
-  /**
-   * シャッフル再生用: 公開楽曲からランダムに1曲取得する（GUIフェーズで追加）。 以前は [com.github.sahyuya.oyasaiMusic.gui.SongListMenu]
-   * が表示中のページ(最大40件) 内からしかランダム選出できなかった制限に対応し、サーバー全体の公開楽曲を対象にする。
-   *
-   * @param excludeId 直前に再生していた曲を除外したい場合に指定する（公開楽曲が1曲しか 無い場合など、除外しきれず同じ曲が返ることがある）。
-   */
-  fun randomPublished(excludeId: Long? = null): Song? =
-      db.transaction { conn ->
-        val sql =
-            if (excludeId != null) {
-              "SELECT * FROM songs WHERE published = 1 AND id != ? ORDER BY RANDOM() LIMIT 1"
-            } else {
-              "SELECT * FROM songs WHERE published = 1 ORDER BY RANDOM() LIMIT 1"
-            }
-        conn.prepareStatement(sql).use { ps ->
-          if (excludeId != null) ps.setLong(1, excludeId)
-          ps.executeQuery().use { rs -> if (rs.next()) rs.toSong() else null }
         }
       }
 
@@ -314,17 +334,6 @@ enum class SongSort(val orderBy: String) {
   TITLE_ASC("title ASC"),
   LIKES_DESC("likes DESC"),
   VIEWS_DESC("views DESC"),
-  ;
-
-  fun comparator(): Comparator<Song> =
-      when (this) {
-        CREATED_AT_DESC -> compareByDescending<Song> { it.createdAt }.thenBy { it.id }
-        CREATED_AT_ASC -> compareBy<Song> { it.createdAt }.thenBy { it.id }
-        ID_ASC -> compareBy { it.id }
-        TITLE_ASC -> compareBy { it.title }
-        LIKES_DESC -> compareByDescending { it.likes }
-        VIEWS_DESC -> compareByDescending { it.views }
-      }
 }
 
 /**

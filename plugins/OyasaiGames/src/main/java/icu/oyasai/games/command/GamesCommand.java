@@ -45,6 +45,7 @@ public class GamesCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage(Component.text("------- [ おやさいゲームズ コマンド一覧 ] -------", NamedTextColor.GOLD));
                 sender.sendMessage(Component.text("/games (または /og) - ゲームメニューを開く", NamedTextColor.YELLOW));
                 sender.sendMessage(Component.text("/roulette - 建築用アイテムルーレットを開く", NamedTextColor.YELLOW));
+                sender.sendMessage(Component.text("/headhunt (または /hhunt) - 宝探しのヘルプを表示", NamedTextColor.YELLOW));
                 if (sender.hasPermission("oyasaigames.admin")) {
                     sender.sendMessage(Component.text("/games reload - プラグイン全体の設定を再読み込み", NamedTextColor.AQUA));
                 }

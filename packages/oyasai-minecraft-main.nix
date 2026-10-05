@@ -44,7 +44,6 @@ oyasaiPurpur rec {
     citiesskymine
     coreprotect
     crackshotguns
-    decentholograms
     directstate
     discordsrv
     dynamicprofile
@@ -54,17 +53,13 @@ oyasaiPurpur rec {
     fastasyncvoxelsniper
     fastasyncworldedit
     floodgate
-    gakubuchilocker
-    headhuntplugin
-    imageonmap
     luckperms
     lunachat
-    lwc
-    multiversecore
-    multiverseportals
     oyasaiadmintools
     oyasaichat
+    oyasaiframes
     oyasaigames
+    oyasailwc
     oyasaimenu
     oyasaimusic
     oyasaipets
@@ -74,7 +69,6 @@ oyasaiPurpur rec {
     oyasaivehicles
     oyasaivotifier
     oyasaiworldgenerator
-    painttools
     placeholderapi
     plugmanx
     pvparena

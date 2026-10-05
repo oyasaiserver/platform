@@ -8,6 +8,9 @@ import org.bukkit.World
 import org.bukkit.entity.Display
 import org.bukkit.entity.TextDisplay
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.util.Transformation
+import org.joml.AxisAngle4f
+import org.joml.Vector3f
 
 /** DH の行間既定。行 i の位置は location.y − i * これ。 */
 const val LINE_HEIGHT = 0.3
@@ -23,22 +26,35 @@ const val TEXT_HEIGHT = 10.0 * 0.025
 
 private const val LINE_WIDTH = 10_000
 
-fun lineY(holoY: Double, index: Int): Double = holoY - index * LINE_HEIGHT - TEXT_HEIGHT
+fun lineY(holoY: Double, index: Int, scale: Float = 1f): Double =
+    holoY - (index * LINE_HEIGHT + TEXT_HEIGHT) * scale
 
 object HologramDisplay {
   val markerKey by lazy { NamespacedKey(OyasaiUtilities.plugin, "hologram") }
 
   fun location(world: World, holo: Hologram, index: Int): Location =
-      Location(world, holo.x, lineY(holo.y, index), holo.z)
+      Location(world, holo.x, lineY(holo.y, index, holo.scale), holo.z, holo.yaw, 0f)
 
   fun spawn(world: World, at: Location, holo: Hologram, line: String): TextDisplay =
       world.spawn(at, TextDisplay::class.java) { display -> style(display, holo, line) }
 
+  fun transform(display: TextDisplay, scale: Float, offsetY: Float) {
+    display.transformation =
+        Transformation(Vector3f(0f, offsetY, 0f), AxisAngle4f(), Vector3f(scale), AxisAngle4f())
+  }
+
   fun style(display: TextDisplay, holo: Hologram, line: String) {
     display.text(hologramComponent(line))
-    display.billboard = Display.Billboard.CENTER
-    display.isDefaultBackground = false
-    display.backgroundColor = Color.fromARGB(0)
+    display.billboard = if (holo.follow) Display.Billboard.CENTER else Display.Billboard.FIXED
+    display.isShadowed = holo.shadow
+    transform(display, holo.scale, 0f)
+    if (holo.background == BackgroundType.DEFAULT) {
+      display.isDefaultBackground = true
+    } else {
+      display.isDefaultBackground = false
+      display.backgroundColor =
+          Color.fromARGB(if (holo.background == BackgroundType.BLACK) 0xff000000.toInt() else 0)
+    }
     display.brightness = Display.Brightness(15, 15)
     display.isSeeThrough = holo.seeThrough
     holo.viewRange?.let { display.viewRange = it }

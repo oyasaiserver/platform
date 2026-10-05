@@ -2,6 +2,9 @@ package icu.oyasai.games;
 
 import icu.oyasai.games.command.GamesCommand;
 import icu.oyasai.games.gui.GamesHubListener;
+import icu.oyasai.games.headhunt.HeadHuntModule;
+import icu.oyasai.games.kimodameshi.KimodameshiModule;
+import icu.oyasai.games.toys.ToysModule;
 import icu.oyasai.games.roulette.command.RouletteCommand;
 import icu.oyasai.games.roulette.config.ConfigManager;
 import icu.oyasai.games.roulette.gui.RouletteGuiListener;
@@ -23,6 +26,9 @@ public class OyasaiGamesPlugin extends JavaPlugin {
     private ConfigManager rouletteConfig;
     private BlockClassifier blockClassifier;
     private RouletteManager rouletteManager;
+    private HeadHuntModule headHuntModule;
+    private KimodameshiModule kimodameshiModule;
+    private ToysModule toysModule;
 
     @Override
     public void onEnable() {
@@ -35,6 +41,18 @@ public class OyasaiGamesPlugin extends JavaPlugin {
 
         // 1. ルーレットモジュールの初期化
         initializeRouletteModule();
+
+        headHuntModule = new HeadHuntModule(this);
+        try {
+            headHuntModule.enable();
+        } catch (Exception exception) {
+            getLogger().log(java.util.logging.Level.SEVERE, "HeadHuntの初期化に失敗しました。", exception);
+        }
+
+        kimodameshiModule = new KimodameshiModule(this);
+        kimodameshiModule.enable();
+        toysModule = new ToysModule(this);
+        toysModule.enable();
 
         // 2. おやさいゲームズ共通ハブコマンド & リスナーの登録
         registerGamesHub();
@@ -50,6 +68,12 @@ public class OyasaiGamesPlugin extends JavaPlugin {
         if (rouletteManager != null) {
             rouletteManager.shutdown();
         }
+        if (headHuntModule != null) {
+            headHuntModule.disable();
+        }
+
+        if (kimodameshiModule != null) kimodameshiModule.disable();
+        if (toysModule != null) toysModule.disable();
 
         getLogger().info("OyasaiGames を安全に停止しました。");
         instance = null;

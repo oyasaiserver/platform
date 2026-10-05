@@ -1,11 +1,11 @@
-import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
-import { Image } from "@oyasaiserver/cdktf-providers/docker/image";
-import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
-import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
-import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
-import { Bytes } from "@oyasaiserver/cdktf-providers/random/bytes";
-import { Password } from "@oyasaiserver/cdktf-providers/random/password";
-import { RandomProvider } from "@oyasaiserver/cdktf-providers/random/provider";
+import { Container } from "@oyasaiserver/cdktf-bindings/providers/docker/container";
+import { Image } from "@oyasaiserver/cdktf-bindings/providers/docker/image";
+import { Network } from "@oyasaiserver/cdktf-bindings/providers/docker/network";
+import { DockerProvider } from "@oyasaiserver/cdktf-bindings/providers/docker/provider";
+import { InfisicalProvider } from "@oyasaiserver/cdktf-bindings/providers/infisical/provider";
+import { Bytes } from "@oyasaiserver/cdktf-bindings/providers/random/bytes";
+import { Password } from "@oyasaiserver/cdktf-bindings/providers/random/password";
+import { RandomProvider } from "@oyasaiserver/cdktf-bindings/providers/random/provider";
 import { LocalBackend } from "cdktf";
 import { Construct } from "constructs";
 import { ok } from "node:assert";
@@ -272,7 +272,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       env: envs({
         FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
         VELOCITY_FORWARDING_SECRET: randoms.velocityForwardingSecret.result,
-        MEMORY: this.isMaster ? "2G" : "1G",
+        MEMORY: this.isMaster ? "4G" : "2G",
       }),
       volumes: [
         {

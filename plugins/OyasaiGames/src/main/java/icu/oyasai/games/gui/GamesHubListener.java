@@ -42,8 +42,13 @@ public class GamesHubListener implements Listener {
         switch (slot) {
             case GamesHubGui.SLOT_ROULETTE -> {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.2f);
-                RouletteSession session = rouletteManager.getOrCreateSession(player.getUniqueId());
+                RouletteSession session = rouletteManager.getOrCreateSession(player);
                 RouletteGui.open(player, session);
+            }
+            case GamesHubGui.SLOT_HEADHUNT -> {
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.2f);
+                player.closeInventory();
+                player.performCommand("headhunt");
             }
             case GamesHubGui.SLOT_CLOSE -> {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 0.8f);

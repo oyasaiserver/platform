@@ -20,17 +20,23 @@
 - **演出**: GUI画面を開いたまま当選ブロックが1つずつ出現。当選ブロックはアイテム本来のテクスチャで綺麗に表示。
 - **安全性**: インベントリ操作による持ち出し・増殖を100%防止。ログアウト時の自動解放および二重実行防止。
 
+### 2. HeadHunt
+
+設置した頭ブロックを探す、ソロ・チーム対応の宝探しミニゲームです。旧 `plugins/HeadHunt/treasures.yml` があり、OyasaiGames 側にデータがない場合は、初回起動時にコピーします。旧ファイルは残ります。
+
 ---
 
 ## 📋 コマンド一覧
 
-| コマンド           | エイリアス            | 権限                         | 説明                                       |
-| :----------------- | :-------------------- | :--------------------------- | :----------------------------------------- |
-| `/games`           | `/og`, `/oyasaigames` | `oyasaigames.use`            | おやさいゲームズのメインメニューを開く     |
-| `/games help`      | -                     | `oyasaigames.use`            | コマンド一覧・ヘルプを表示                 |
-| `/games reload`    | -                     | `oyasaigames.admin`          | プラグイン全体の設定を再読み込み           |
-| `/roulette`        | `/oroulette`          | `oyasaigames.roulette.use`   | 建築用アイテム抽選ルーレットGUIを開く      |
-| `/roulette reload` | -                     | `oyasaigames.roulette.admin` | ルーレット設定とブロックリストを再読み込み |
+| コマンド               | エイリアス            | 権限                         | 説明                                       |
+| :--------------------- | :-------------------- | :--------------------------- | :----------------------------------------- |
+| `/games`               | `/og`, `/oyasaigames` | `oyasaigames.use`            | おやさいゲームズのメインメニューを開く     |
+| `/games help`          | -                     | `oyasaigames.use`            | コマンド一覧・ヘルプを表示                 |
+| `/games reload`        | -                     | `oyasaigames.admin`          | プラグイン全体の設定を再読み込み           |
+| `/roulette`            | `/oroulette`          | `oyasaigames.roulette.use`   | 建築用アイテム抽選ルーレットGUIを開く      |
+| `/roulette reload`     | -                     | `oyasaigames.roulette.admin` | ルーレット設定とブロックリストを再読み込み |
+| `/headhunt`            | `/hhunt`              | `headhunt.use`               | 宝探しのヘルプ・チーム情報を表示           |
+| `/headhunt <管理操作>` | `/hhunt <管理操作>`   | `headhunt.admin`             | 宝の設置・イベント管理など                 |
 
 ---
 
@@ -40,6 +46,8 @@
 - `oyasaigames.admin`: 管理コマンドの実行権限（デフォルト: OP）
 - `oyasaigames.roulette.use`: ルーレットの利用権限（デフォルト: 全員）
 - `oyasaigames.roulette.admin`: ルーレットの管理権限（デフォルト: OP）
+- `headhunt.use`: HeadHunt の基本コマンド利用権限（デフォルト: 全員）
+- `headhunt.admin`: HeadHunt の管理権限（デフォルト: OP）
 
 ---
 

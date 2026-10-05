@@ -1,4 +1,4 @@
-import type { ContainerPorts } from "@oyasaiserver/cdktf-providers/docker/container";
+import type { ContainerPorts } from "@oyasaiserver/cdktf-bindings/providers/docker/container";
 import { ok } from "node:assert";
 import { env } from "node:process";
 

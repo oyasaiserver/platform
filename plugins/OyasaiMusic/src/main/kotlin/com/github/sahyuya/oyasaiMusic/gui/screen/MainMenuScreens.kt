@@ -2,7 +2,6 @@ package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.db.SongSort
-import com.github.sahyuya.oyasaiMusic.model.Song
 import java.util.UUID
 import org.bukkit.entity.Player
 
@@ -18,12 +17,17 @@ object MainMenuScreens {
           availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
           initialSort = SongSort.CREATED_AT_DESC,
           ownTab = NavTab.MY_SONGS,
+          playbackIds = { sort ->
+            plugin.songRepository.listPlaybackIds(sort, viewer.uniqueId, includeDrafts = true)
+          },
       ) { sort, limit, offset ->
-        plugin.songRepository
-            .findByAuthor(viewer.uniqueId, includeDrafts = true)
-            .sortedWith(sort.comparator())
-            .drop(offset)
-            .take(limit)
+        plugin.songRepository.findByAuthor(
+            viewer.uniqueId,
+            includeDrafts = true,
+            sort = sort,
+            limit = limit,
+            offset = offset,
+        )
       }
 
   fun allSongs(plugin: OyasaiMusic, menuManager: MenuManager, viewer: Player): SongListMenu =
@@ -42,10 +46,9 @@ object MainMenuScreens {
               ),
           initialSort = SongSort.CREATED_AT_DESC,
           ownTab = NavTab.ALL_SONGS,
+          playbackIds = { sort -> plugin.songRepository.listPlaybackIds(sort) },
       ) { sort, limit, offset ->
-        mergeOwnDrafts(plugin, viewer, offset, limit, titleFilter = null, sort = sort) { o, l ->
-          plugin.songRepository.searchPublished(sort = sort, limit = l, offset = o)
-        }
+        plugin.songRepository.searchPublished(sort = sort, limit = limit, offset = offset)
       }
 
   fun authorWorks(
@@ -60,46 +63,16 @@ object MainMenuScreens {
           menuManager,
           viewer,
           title = "$authorName の作品",
+          playbackIds = { sort -> plugin.songRepository.listPlaybackIds(sort, authorUuid) },
           availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
           initialSort = SongSort.CREATED_AT_DESC,
       ) { sort, limit, offset ->
-        plugin.songRepository
-            .findByAuthor(authorUuid, includeDrafts = false)
-            .sortedWith(sort.comparator())
-            .drop(offset)
-            .take(limit)
+        plugin.songRepository.findByAuthor(
+            authorUuid,
+            includeDrafts = false,
+            sort = sort,
+            limit = limit,
+            offset = offset,
+        )
       }
-
-  /**
-   * 公開楽曲を表示する一覧へ、閲覧者本人の下書きだけを先頭に追加する。 下書きは録音直後の設定画面へ移動しやすくするためで、アイコンの描画は
-   * [SongListMenu]が非公開状態を検出して切り替える。
-   *
-   * 下書きと公開曲を単一の仮想リストとしてページングするため、下書きがページを埋めても 次ページの公開曲を飛ばさない。
-   */
-  fun mergeOwnDrafts(
-      plugin: OyasaiMusic,
-      viewer: Player,
-      offset: Int,
-      limit: Int,
-      titleFilter: String?,
-      sort: SongSort = SongSort.CREATED_AT_DESC,
-      publishedLoader: (offset: Int, limit: Int) -> List<Song>,
-  ): List<Song> {
-    val myDrafts =
-        plugin.songRepository
-            .findByAuthor(viewer.uniqueId, includeDrafts = true)
-            .filter { !it.published }
-            .let { drafts ->
-              if (titleFilter != null)
-                  drafts.filter { it.title.contains(titleFilter, ignoreCase = true) }
-              else drafts
-            }
-            .sortedWith(sort.comparator())
-
-    val draftsForPage = myDrafts.drop(offset).take(limit)
-    val remaining = (limit - draftsForPage.size).coerceAtLeast(0)
-    val publishedOffset = (offset - myDrafts.size).coerceAtLeast(0)
-    val published = if (remaining > 0) publishedLoader(publishedOffset, remaining) else emptyList()
-    return draftsForPage + published
-  }
 }

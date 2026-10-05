@@ -86,18 +86,6 @@
       "type": "modrinth"
     }
   },
-  "multiversecore": {
-    "paper": {
-      "slug": "multiverse-core",
-      "type": "modrinth"
-    }
-  },
-  "multiverseportals": {
-    "paper": {
-      "slug": "multiverse-portals",
-      "type": "modrinth"
-    }
-  },
   "placeholderapi": {
     "paper": {
       "slug": "placeholderapi",

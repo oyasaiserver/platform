@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Level
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.WorldCreator
@@ -25,12 +26,14 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.server.ServerLoadEvent
 import org.bukkit.event.world.WorldInitEvent
+import org.bukkit.event.world.WorldLoadEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class WorldLifecycle(
     private val plugin: JavaPlugin,
     private val heightProvider: HeightProvider,
     initialConfig: OwgConfig,
+    private val normalWorlds: NormalWorlds? = null,
 ) : Listener {
   enum class SelfTestResult {
     NOT_RUN,
@@ -46,6 +49,8 @@ class WorldLifecycle(
   private val managedLoadRequests = ConcurrentHashMap.newKeySet<String>()
   private val observedTargets = ConcurrentHashMap.newKeySet<String>()
   private val externallyLoaded = ConcurrentHashMap.newKeySet<String>()
+  private val initialWorldsPending = mutableSetOf<NamespacedKey>()
+  private var initialWorldsLoaded = false
   @Volatile private var currentConfig: OwgConfig = initialConfig
   @Volatile
   var selfTestResult: SelfTestResult = SelfTestResult.NOT_RUN
@@ -61,6 +66,7 @@ class WorldLifecycle(
 
   @EventHandler(priority = EventPriority.NORMAL)
   fun onWorldInit(event: WorldInitEvent) {
+    if (!initialWorldsLoaded) initialWorldsPending += event.world.key
     val worldName = event.world.name
     if (!managedSpecs.containsKey(worldName) && worldName !in currentConfig.configuredWorldNames)
         return
@@ -79,7 +85,7 @@ class WorldLifecycle(
       applyResults[worldName] = false
       plugin.logger.severe(
           "[OWG][lifecycle] WorldInitEvent cannot patch $worldName because its configuration is invalid; " +
-              "ServerLoad inspection must unload it with save=false"
+              "ServerLoad inspection will reject unloading it without a verified save"
       )
       return
     }
@@ -106,6 +112,18 @@ class WorldLifecycle(
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
+  fun onWorldLoad(event: WorldLoadEvent) {
+    if (
+        initialWorldsLoaded ||
+            !initialWorldsPending.remove(event.world.key) ||
+            initialWorldsPending.isNotEmpty()
+    )
+        return
+    initialWorldsLoaded = true
+    normalWorlds?.loadStartup()
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR)
   fun onServerLoad(event: ServerLoadEvent) {
     Bukkit.getScheduler().runTask(plugin, Runnable { runStartup() })
   }
@@ -116,7 +134,7 @@ class WorldLifecycle(
       val supported = (heightProvider as? NmsHeightProvider)?.isSupportedServer() ?: true
       if (!supported) {
         startupInspectionPassed = false
-        sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 build 2622/2593 のみです")
+        sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 のみです")
         return false
       }
       if (currentConfig.worlds.isEmpty() || currentConfig.validationErrors.isNotEmpty()) {
@@ -187,7 +205,7 @@ class WorldLifecycle(
     val entry = OwgConfig.defaultWorld(name, kind)
     val supported = isSupportedServer()
     if (!supported) {
-      sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 build 2622/2593 のみです")
+      sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 のみです")
       return false
     }
     if (!currentConfig.selfTest) {
@@ -217,15 +235,14 @@ class WorldLifecycle(
     }
     val applied = applyResults[name] == true
     val verified = applied && heightProvider.verify(world, entry.heightSpec)
-    val save = applied && verified
-    if (!save) {
-      plugin.logger.severe(
-          "[OWG][command] Refusing to save $name during unload: applied=$applied verified=$verified; " +
-              "unload will use save=false"
-      )
+    if (!verified) {
+      val reason = "applied=$applied verified=$verified"
+      plugin.logger.severe("[OWG][command] Refusing to unload $name: $reason; world remains loaded")
+      sender.sendMessage("[OWG] $name は高さを照合できないためアンロードしません ($reason)")
+      return false
     }
-    val result = Bukkit.unloadWorld(world, save)
-    sender.sendMessage("[OWG] unload $name: $result save=$save")
+    val result = Bukkit.unloadWorld(world, true)
+    sender.sendMessage("[OWG] unload $name: $result save=true")
     return result
   }
 
@@ -242,12 +259,15 @@ class WorldLifecycle(
       player.sendMessage("[OWG] まだ準備できていません")
       return false
     }
-    player.gameMode = entry.gameMode
-    player.allowFlight = entry.allowFlight
-    if (!entry.allowFlight) player.isFlying = false
-    return player.teleport(Location(world, 0.5, entry.spawnY.toDouble(), 0.5)).also {
-      player.sendMessage(if (it) "[OWG] ${entry.name} に移動しました" else "[OWG] 移動に失敗しました")
+    val moved =
+        player.teleport(Location(world, 0.5, entry.spawnY.toDouble(), 0.5)) && player.world == world
+    if (moved) {
+      player.gameMode = entry.gameMode
+      player.allowFlight = entry.allowFlight
+      if (!entry.allowFlight) player.isFlying = false
     }
+    player.sendMessage(if (moved) "[OWG] ${entry.name} に移動しました" else "[OWG] 移動に失敗しました")
+    return moved
   }
 
   fun statusLines(): List<String> {
@@ -268,8 +288,7 @@ class WorldLifecycle(
       lines +=
           "[OWG] ${entry.name}: expected min=${entry.heightSpec.minY} max=${entry.heightSpec.maxHeight} " +
               "actual $actual loaded=${world != null} applied=$applied " +
-              "appliedVersion=${appliedVersions[entry.name] ?: "-"} forceLoaded=$forceLoaded " +
-              "multiverse=${multiverseRegistrationState(entry.name)}"
+              "appliedVersion=${appliedVersions[entry.name] ?: "-"} forceLoaded=$forceLoaded"
     }
     return lines
   }
@@ -288,9 +307,16 @@ class WorldLifecycle(
           currentConfig.worlds.isNotEmpty() && currentConfig.validationErrors.isEmpty()
 
       plugin.logger.info("[OWG][startup] Runtime ${runtimeVersion()}")
+      if (currentConfig.worlds.isEmpty() && currentConfig.validationErrors.isEmpty()) {
+        selfTestResult = SelfTestResult.NOT_RUN
+        plugin.logger.warning(
+            "[OWG][startup] No height-managed worlds configured; self-test skipped"
+        )
+        return
+      }
       if (!supported) {
         plugin.logger.severe(
-            "[OWG][startup] Unsupported server build; fail-closed inspection will still scan every target"
+            "[OWG][startup] Unsupported server version; fail-closed inspection will still scan every target"
         )
       }
       if (!configValid) {
@@ -312,7 +338,7 @@ class WorldLifecycle(
       if (selfTestResult == SelfTestResult.DISABLED) {
         plugin.logger.severe(
             "[OWG][self-test] DISABLED by configuration; target worlds will not be loaded and " +
-                "already-loaded targets will be unloaded with save=false"
+                "already-loaded targets will remain loaded without an unverified unload"
         )
       } else if (selfTestResult == SelfTestResult.FAILED) {
         plugin.logger.severe(
@@ -323,7 +349,6 @@ class WorldLifecycle(
       val loadingAllowed = supported && configValid && selfTestResult == SelfTestResult.PASSED
       for (worldName in targetNames) {
         try {
-          detachFromMultiverse(worldName)
           val entry = currentConfig.worlds[worldName]
           val existing = Bukkit.getWorld(worldName)
           if (!loadingAllowed || entry == null) {
@@ -367,8 +392,6 @@ class WorldLifecycle(
               "[OWG][startup] Inspection failed for $worldName; continuing with remaining targets",
               throwable,
           )
-        } finally {
-          detachFromMultiverse(worldName)
         }
       }
       startupInspectionPassed =
@@ -400,41 +423,37 @@ class WorldLifecycle(
   }
 
   private fun createAndVerify(entry: OwgWorldConfig, sender: CommandSender): Boolean {
-    try {
-      declare(entry)
-      applyResults.remove(entry.name)
-      appliedVersions.remove(entry.name)
-      plugin.logger.info(
-          "[OWG][lifecycle] Creating/loading ${entry.name}: expected min=${entry.heightSpec.minY} max=${entry.heightSpec.maxHeight}"
-      )
-      val world =
-          createManagedWorld(
-              entry.name,
-              worldCreator(entry.name, entry),
-          )
-      if (world == null) {
-        failedWorlds += entry.name
-        plugin.logger.severe("[OWG][lifecycle] createWorld returned null for ${entry.name}")
-        sender.sendMessage("[OWG] ${entry.name} のロードに失敗しました")
-        return false
-      }
-      val valid = applyResults[entry.name] == true && heightProvider.verify(world, entry.heightSpec)
-      if (!valid) {
-        failedWorlds += entry.name
-        recoverFailedWorld(world, "post-create verification failed")
-        sender.sendMessage("[OWG] ${entry.name} の高さ検証に失敗しました")
-        return false
-      }
-      plugin.logger.info(
-          "[OWG][lifecycle] WORLD PASS ${entry.name}: min=${world.minHeight} max=${world.maxHeight}"
-      )
-      failedWorlds -= entry.name
-      handleConfiguredForceLoads(world)
-      sender.sendMessage("[OWG] ${entry.name} ready: min=${world.minHeight} max=${world.maxHeight}")
-      return true
-    } finally {
-      detachFromMultiverse(entry.name)
+    declare(entry)
+    applyResults.remove(entry.name)
+    appliedVersions.remove(entry.name)
+    plugin.logger.info(
+        "[OWG][lifecycle] Creating/loading ${entry.name}: expected min=${entry.heightSpec.minY} max=${entry.heightSpec.maxHeight}"
+    )
+    val world =
+        createManagedWorld(
+            entry.name,
+            worldCreator(entry.name, entry),
+        )
+    if (world == null) {
+      failedWorlds += entry.name
+      plugin.logger.severe("[OWG][lifecycle] createWorld returned null for ${entry.name}")
+      sender.sendMessage("[OWG] ${entry.name} のロードに失敗しました")
+      return false
     }
+    val valid = applyResults[entry.name] == true && heightProvider.verify(world, entry.heightSpec)
+    if (!valid) {
+      failedWorlds += entry.name
+      recoverFailedWorld(world, "post-create verification failed")
+      sender.sendMessage("[OWG] ${entry.name} の高さ検証に失敗しました")
+      return false
+    }
+    plugin.logger.info(
+        "[OWG][lifecycle] WORLD PASS ${entry.name}: min=${world.minHeight} max=${world.maxHeight}"
+    )
+    failedWorlds -= entry.name
+    handleConfiguredForceLoads(world)
+    sender.sendMessage("[OWG] ${entry.name} ready: min=${world.minHeight} max=${world.maxHeight}")
+    return true
   }
 
   private fun selectSelfTestEntries(): List<OwgWorldConfig> =
@@ -484,7 +503,36 @@ class WorldLifecycle(
       )
       passed = applyResults[name] == true && heightProvider.verify(createdWorld, spec)
       check(passed) { "height verification failed" }
+      val lowY = spec.minY + 1
+      val highY = spec.maxHeight - 2
+      createdWorld.getBlockAt(8, lowY, 8).type = Material.BEDROCK
+      createdWorld.getBlockAt(8, highY, 8).type = Material.OBSIDIAN
+      check(Bukkit.unloadWorld(createdWorld, true)) { "save/unload failed" }
+      world = null
+      plugin.logger.info("[OWG][self-test] saved and unloaded markers low=$lowY high=$highY")
+
+      applyResults.remove(name)
+      val reopened = createManagedWorld(name, worldCreator(name, entry))
+      check(reopened != null) { "reopen returned null" }
+      world = reopened
+      check(reopened.worldPath.toAbsolutePath().normalize() == createdFolder) {
+        "reopened a different world folder"
+      }
+      check(applyResults[name] == true && heightProvider.verify(reopened, spec)) {
+        "reopened height verification failed"
+      }
+      check(
+          reopened.getBlockAt(8, lowY, 8).type == Material.BEDROCK &&
+              reopened.getBlockAt(8, highY, 8).type == Material.OBSIDIAN
+      ) {
+        "saved markers missing after reopen"
+      }
+      plugin.logger.info(
+          "[OWG][self-test] SAVE/REOPEN PASS min=${reopened.minHeight} max=${reopened.maxHeight} " +
+              "markers=$lowY,$highY"
+      )
     } catch (throwable: Throwable) {
+      passed = false
       plugin.logger.log(Level.SEVERE, "[OWG][self-test] execution failed", throwable)
     } finally {
       if (world != null) {
@@ -515,7 +563,9 @@ class WorldLifecycle(
     val root = Bukkit.getWorldContainer().toPath().toAbsolutePath().normalize()
     return setOf(
         root.resolve(SELF_TEST_WORLD).normalize(),
-        levelStorageRoot().resolve("dimensions/minecraft/$SELF_TEST_WORLD").normalize(),
+        checkNotNull(primaryWorldStorageRoot()) { "Primary world is unavailable" }
+            .resolve("dimensions/minecraft/$SELF_TEST_WORLD")
+            .normalize(),
     )
   }
 
@@ -566,34 +616,17 @@ class WorldLifecycle(
     val root = Bukkit.getWorldContainer().toPath().toAbsolutePath().normalize()
     return setOf(
         root.resolve(worldName).normalize(),
-        levelStorageRoot().resolve("dimensions/minecraft/$worldName").normalize(),
+        checkNotNull(primaryWorldStorageRoot()) { "Primary world is unavailable" }
+            .resolve("dimensions/minecraft/$worldName")
+            .normalize(),
     )
-  }
-
-  private fun levelStorageRoot(): Path {
-    val primaryWorldPath =
-        Bukkit.getWorlds()
-            .firstOrNull { it.key == NamespacedKey.minecraft("overworld") }
-            ?.worldPath
-            ?.toAbsolutePath()
-            ?.normalize() ?: error("Primary world is unavailable")
-    return if (
-        primaryWorldPath.fileName.toString() == "overworld" &&
-            primaryWorldPath.parent?.fileName?.toString() == "minecraft" &&
-            primaryWorldPath.parent?.parent?.fileName?.toString() == "dimensions"
-    ) {
-      primaryWorldPath.parent.parent.parent
-    } else {
-      primaryWorldPath
-    }
   }
 
   private fun recoverFailedWorld(world: World, reason: String) {
     failedWorlds += world.name
-    val unloaded = Bukkit.unloadWorld(world, false)
     plugin.logger.severe(
-        "[OWG][lifecycle] ${world.name} rejected: $reason; unload(save=false)=$unloaded; " +
-            "it will not be loaded again this run"
+        "[OWG][lifecycle] Refusing to unload ${world.name}: $reason; " +
+            "height is unverified, world remains loaded and will not be loaded again this run"
     )
   }
 
@@ -618,73 +651,6 @@ class WorldLifecycle(
 
   private fun runtimeVersion(): String =
       (heightProvider as? NmsHeightProvider)?.runtimeVersion() ?: heightProvider.name
-
-  private fun multiverseRegistrationState(worldName: String): String {
-    val multiverse = Bukkit.getPluginManager().getPlugin("Multiverse-Core") ?: return "unavailable"
-    if (!multiverse.isEnabled) return "disabled"
-    return try {
-      val apiClass = Class.forName("org.mvplugins.multiverse.core.MultiverseCoreApi")
-      if (!(apiClass.getMethod("isLoaded").invoke(null) as Boolean)) return "not-ready"
-      val api = apiClass.getMethod("get").invoke(null)
-      val manager = apiClass.getMethod("getWorldManager").invoke(api)
-      val registered =
-          manager.javaClass.getMethod("isWorld", String::class.java).invoke(manager, worldName)
-              as Boolean
-      registered.toString()
-    } catch (throwable: Throwable) {
-      "error:${throwable.javaClass.simpleName}"
-    }
-  }
-
-  private fun detachFromMultiverse(worldName: String) {
-    val multiverse = Bukkit.getPluginManager().getPlugin("Multiverse-Core") ?: return
-    if (!multiverse.isEnabled) return
-    try {
-      val apiClass = Class.forName("org.mvplugins.multiverse.core.MultiverseCoreApi")
-      if (!(apiClass.getMethod("isLoaded").invoke(null) as Boolean)) return
-      val api = apiClass.getMethod("get").invoke(null)
-      val manager = apiClass.getMethod("getWorldManager").invoke(api)
-      val isWorld =
-          manager.javaClass.getMethod("isWorld", String::class.java).invoke(manager, worldName)
-              as Boolean
-      if (!isWorld) {
-        plugin.logger.info(
-            "[OWG][multiverse] $worldName was not registered; no import action taken"
-        )
-        return
-      }
-      val option =
-          manager.javaClass.getMethod("getWorld", String::class.java).invoke(manager, worldName)
-      val mvWorld = option.javaClass.getMethod("get").invoke(option)
-      val wasLoaded = Bukkit.getWorld(worldName) != null
-      val optionsClass =
-          Class.forName("org.mvplugins.multiverse.core.world.options.RemoveWorldOptions")
-      val mvWorldClass = Class.forName("org.mvplugins.multiverse.core.world.MultiverseWorld")
-      val options = optionsClass.getMethod("world", mvWorldClass).invoke(null, mvWorld)
-      optionsClass
-          .getMethod("saveBukkitWorld", Boolean::class.javaPrimitiveType)
-          .invoke(options, false)
-      optionsClass
-          .getMethod("unloadBukkitWorld", Boolean::class.javaPrimitiveType)
-          .invoke(options, false)
-      val removeMethod = manager.javaClass.getMethod("removeWorld", optionsClass)
-      val attempt = removeMethod.invoke(manager, options)
-      val success = attempt.javaClass.getMethod("isSuccess").invoke(attempt) as Boolean
-      check(success) { "Multiverse removeWorld returned failure: $attempt" }
-      check(!wasLoaded || Bukkit.getWorld(worldName) != null) {
-        "Multiverse unexpectedly unloaded Bukkit world $worldName"
-      }
-      plugin.logger.info(
-          "[OWG][multiverse] Removed $worldName from Multiverse registry without unloading or deleting it"
-      )
-    } catch (throwable: Throwable) {
-      plugin.logger.log(
-          Level.WARNING,
-          "[OWG][multiverse] Could not remove $worldName from automatic Multiverse registration; OWG will still not import it",
-          throwable,
-      )
-    }
-  }
 
   companion object {
     private const val SELF_TEST_WORLD = "owg_selftest"

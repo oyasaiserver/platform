@@ -23,7 +23,7 @@ public class GamesHubGui {
 
     public static final int SLOT_ROULETTE = 11;
     public static final int SLOT_ABOUT = 13;
-    public static final int SLOT_COMING_SOON = 15;
+    public static final int SLOT_HEADHUNT = 15;
     public static final int SLOT_CLOSE = 22;
 
     public static void open(Player player) {
@@ -83,19 +83,19 @@ public class GamesHubGui {
         }
         inv.setItem(SLOT_ABOUT, aboutItem);
 
-        // スロット 15: Coming Soon...
-        ItemStack comingSoonItem = new ItemStack(Material.CLOCK);
-        ItemMeta cMeta = comingSoonItem.getItemMeta();
+        // スロット 15: HeadHunt
+        ItemStack headHuntItem = new ItemStack(Material.PLAYER_HEAD);
+        ItemMeta cMeta = headHuntItem.getItemMeta();
         if (cMeta != null) {
-            cMeta.displayName(Component.text("⏳ 次のゲーム準備中...", NamedTextColor.LIGHT_PURPLE, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+            cMeta.displayName(Component.text("HeadHunt", NamedTextColor.GOLD, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.text("今後のアップデートで新しいミニゲームが追加予定！", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("頭ブロックの宝探しミニゲーム", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
             lore.add(Component.empty());
-            lore.add(Component.text("お楽しみに！", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("▶ クリックしてヘルプを表示", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
             cMeta.lore(lore);
-            comingSoonItem.setItemMeta(cMeta);
+            headHuntItem.setItemMeta(cMeta);
         }
-        inv.setItem(SLOT_COMING_SOON, comingSoonItem);
+        inv.setItem(SLOT_HEADHUNT, headHuntItem);
 
         // スロット 22: 閉じる
         ItemStack closeItem = new ItemStack(Material.BARRIER);

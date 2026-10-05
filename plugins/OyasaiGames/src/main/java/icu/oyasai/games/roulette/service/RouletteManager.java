@@ -24,6 +24,8 @@ import java.util.logging.Logger;
  * およびサーバー側での安全かつ公平な抽選処理を統括するマネージャークラスです。
  */
 public class RouletteManager {
+    public static final String PERMISSION_SPECIAL_BLOCKS = "oyasaigames.roulette.special";
+
     private final Plugin plugin;
     private final Logger logger;
     private final ConfigProvider configProvider;
@@ -46,6 +48,28 @@ public class RouletteManager {
         this.logger = plugin.getLogger();
         this.configProvider = configProvider;
         this.classifier = classifier;
+    }
+
+    /**
+     * プレイヤーが匠ランクなどの特殊ブロック（コマンドブロック等）解放権限を持っているか判定します。
+     */
+    public boolean hasSpecialAccess(Player player) {
+        if (player == null) {
+            return false;
+        }
+        return player.hasPermission(PERMISSION_SPECIAL_BLOCKS)
+                || player.hasPermission("citiesskymine.role.takumi")
+                || player.hasPermission("group.takumi")
+                || player.isOp();
+    }
+
+    /**
+     * プレイヤーのセッションを取得し、最新の権限状態を反映します。
+     */
+    public RouletteSession getOrCreateSession(Player player) {
+        RouletteSession session = sessions.computeIfAbsent(player.getUniqueId(), RouletteSession::new);
+        session.setSpecialAccess(hasSpecialAccess(player));
+        return session;
     }
 
     /**
@@ -118,16 +142,20 @@ public class RouletteManager {
             return false;
         }
 
-        // 4. 抽選対象リストの選定
+        // 匠ランク判定（特殊ブロックの解放有無）
+        boolean special = hasSpecialAccess(player);
+        session.setSpecialAccess(special);
+
+        // 4. 抽選対象リストの選定（一般プレイヤーにはコマンドブロック等を除外、匠には解放）
         List<Material> pool = switch (mode) {
-            case ALL -> classifier.getAllBuildingItems();
-            case FULL_BLOCK -> classifier.getFullBlocks();
-            case NON_FULL_BLOCK -> classifier.getNonFullBlocks();
+            case ALL -> classifier.getAllBuildingItems(special);
+            case FULL_BLOCK -> classifier.getFullBlocks(special);
+            case NON_FULL_BLOCK -> classifier.getNonFullBlocks(special);
         };
 
         if (pool == null || pool.isEmpty()) {
             player.sendMessage(Component.text("エラー: 抽選対象のブロックが登録されていません。", NamedTextColor.RED));
-            logger.severe("抽選プールが空です: モード=" + mode);
+            logger.severe("抽選プールが空です: モード=" + mode + " (special=" + special + ")");
             return false;
         }
 

@@ -66,12 +66,13 @@ class HologramTest {
     assertNull(parseDecentHologram("bad", "enabled: true\n"))
     assertNull(holo.viewRange)
     assertTrue(holo.seeThrough)
+    assertEquals(BackgroundType.DEFAULT, holo.background)
     assertEquals(41.750 - TEXT_HEIGHT, lineY(holo.y, 0), 0.000_000_1)
     assertEquals(41.750 - LINE_HEIGHT - TEXT_HEIGHT, lineY(holo.y, 1), 0.000_000_1)
   }
 
   @Test
-  fun `roundtrips view range and see through and reads files without them`() {
+  fun `roundtrips view range see through and background and reads files without them`() {
     val file = File.createTempFile("holograms", ".yml")
     file.deleteOnExit()
     val tuned =
@@ -85,14 +86,23 @@ class HologramTest {
             enabled = true,
             viewRange = 2.5f,
             seeThrough = false,
+            background = BackgroundType.TRANSPARENT,
         )
-    val plain = tuned.copy(name = "plain", viewRange = null, seeThrough = true)
+    val plain =
+        tuned.copy(
+            name = "plain",
+            viewRange = null,
+            seeThrough = true,
+            background = BackgroundType.DEFAULT,
+        )
     writeHolograms(file, listOf(tuned, plain))
     val read = readHolograms(file)
     assertEquals(2.5f, read["tuned"]?.viewRange)
     assertEquals(false, read["tuned"]?.seeThrough)
+    assertEquals(BackgroundType.TRANSPARENT, read["tuned"]?.background)
     assertNull(read["plain"]?.viewRange)
     assertEquals(true, read["plain"]?.seeThrough)
+    assertEquals(BackgroundType.DEFAULT, read["plain"]?.background)
 
     file.writeText(
         """
@@ -112,6 +122,7 @@ class HologramTest {
     assertNotNull(old)
     assertNull(old.viewRange)
     assertTrue(old.seeThrough)
+    assertEquals(BackgroundType.DEFAULT, old.background)
     assertEquals(listOf("hello"), old.lines)
   }
 }

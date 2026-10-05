@@ -113,6 +113,7 @@ class Main : JavaPlugin() {
     val columnLayoutHandler = ColumnLayoutCommand(this)
     val stackHandler = StackCommand(this)
     val crowdHandler = CrowdCommand(this)
+    server.pluginManager.registerEvents(crowdHandler.heads, this)
     val selectionHandler = SelectionCommand(this)
     val settingsHandler = ConfigGuiCommand(this)
     val serverConfigHandler = ServerConfigCommand(this)
