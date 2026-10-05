@@ -107,7 +107,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private val viewerBudgets = mutableMapOf<UUID, ViewerMapBudget>()
   private var ticks = 0L
   private var pushPerTick = 20
-  private var maxMapsPerViewer = 1000
+  private var maxMapsPerViewer = 3000
   private val removing = mutableSetOf<UUID>()
   private val frameRecords = mutableMapOf<UUID, FrameRecord>()
   private val suspected = mutableSetOf<UUID>()
@@ -143,7 +143,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       ImageSource.registerWebp()
       store = MapStore(dataFolder.resolve("pictures.db"))
       pushPerTick = getConfig().getInt("animation.push-maps-per-tick", 50).coerceAtLeast(1)
-      maxMapsPerViewer = getConfig().getInt("animation.max-maps-per-viewer", 1000).coerceAtLeast(1)
+      maxMapsPerViewer = getConfig().getInt("animation.max-maps-per-viewer", 3000).coerceAtLeast(1)
       val (ids, frames, savedAnimations) =
           dbThread
               .submit(
