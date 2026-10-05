@@ -21,6 +21,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.bukkit.Rotation
 import org.bukkit.block.BlockFace
 import org.bukkit.map.MapPalette
 
@@ -251,6 +252,7 @@ class ImageOnMapTest {
         tomapAction(listOf("http://", "resize")),
     )
     assertEquals(TomapAction.LIST, tomapAction(listOf("list")))
+    assertEquals(TomapAction.GLOW, tomapAction(listOf("glow")))
     assertEquals(TomapAction.ALL, tomapAction(listOf("all")))
     assertEquals(TomapAction.INFO, tomapAction(listOf("info")))
     assertEquals(TomapAction.GIVE, tomapAction(listOf("give")))
@@ -456,13 +458,17 @@ class ImageOnMapTest {
 
   @Test
   fun posterOrder() {
-    assertEquals(4, PosterFrames.mapIndex(3, 2, BlockFace.NORTH, 1, 0))
-    assertEquals(1, PosterFrames.mapIndex(3, 2, BlockFace.NORTH, 1, 1))
-    assertEquals(5, PosterFrames.mapIndex(3, 2, BlockFace.DOWN, 0, 0))
-    assertEquals(2, PosterFrames.mapIndex(3, 2, BlockFace.DOWN, 0, 1))
+    assertEquals(4, PosterFrames.mapIndex(3, 2, 1, 0))
+    assertEquals(1, PosterFrames.mapIndex(3, 2, 1, 1))
     assertEquals(Triple(-1, 1, 0), PosterFrames.offset(BlockFace.NORTH, BlockFace.SOUTH, 1, 1))
     assertEquals(Triple(1, 0, -1), PosterFrames.offset(BlockFace.UP, BlockFace.NORTH, 1, 1))
-    assertEquals(Triple(-1, 0, 1), PosterFrames.offset(BlockFace.DOWN, BlockFace.SOUTH, 1, 1))
+    assertEquals(Triple(-1, 0, -1), PosterFrames.offset(BlockFace.DOWN, BlockFace.SOUTH, 1, 1))
+    // 本番の旧 ImageOnMap の天井（東向きで貼った 2×3）: 右が南、上が西
+    assertEquals(Triple(0, 0, 1), PosterFrames.offset(BlockFace.DOWN, BlockFace.EAST, 1, 0))
+    assertEquals(Triple(-1, 0, 0), PosterFrames.offset(BlockFace.DOWN, BlockFace.EAST, 0, 1))
+    assertEquals(Rotation.NONE, PosterFrames.rotation(BlockFace.UP, BlockFace.NORTH))
+    assertEquals(Rotation.CLOCKWISE_45, PosterFrames.rotation(BlockFace.UP, BlockFace.EAST))
+    assertEquals(Rotation.CLOCKWISE_135, PosterFrames.rotation(BlockFace.DOWN, BlockFace.EAST))
   }
 
   @Test
