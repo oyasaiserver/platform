@@ -7,6 +7,56 @@ api-version: "1.21"
 version: "0.1.0"
 softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
 commands:
+  gamemode:
+    usage: /<command>
+    permission: essentials.gamemode
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [gm, gmc, gms, gmsp, gma, sp, spec, spectator, survival, creative]
+  fly:
+    usage: /<command>
+    permission: essentials.fly
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  speed:
+    usage: /<command>
+    permission: essentials.speed
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [flyspeed]
+  jump:
+    usage: /<command>
+    permission: essentials.jump
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [j, jumpto]
+  time:
+    usage: /<command>
+    permission: essentials.time
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [day, night]
+  weather:
+    usage: /<command>
+    permission: essentials.weather
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [sun, rain]
+  ptime:
+    usage: /<command>
+    permission: essentials.ptime
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [playertime]
+  heal:
+    usage: /<command>
+    permission: essentials.heal
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  afk:
+    usage: /<command>
+    permission: essentials.afk
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  nick:
+    usage: /<command>
+    permission: essentials.nick
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  realname:
+    usage: /<command>
+    permission: essentials.realname
+    permission-message: "§cこのコマンドを使用する権限がありません。"
   workbench:
     usage: /<command>
     permission: essentials.workbench
@@ -186,6 +236,104 @@ commands:
     permission: oyasaiutilities.spawn
 
 permissions:
+  essentials.gamemode:
+    default: op
+  essentials.fly:
+    default: op
+  essentials.speed:
+    default: op
+  essentials.jump:
+    default: op
+  essentials.time:
+    default: op
+  essentials.weather:
+    default: op
+  essentials.ptime:
+    default: op
+  essentials.heal:
+    default: op
+  essentials.afk:
+    default: op
+  essentials.nick:
+    default: op
+  essentials.realname:
+    default: op
+  essentials.gamemode.all:
+    default: op
+  essentials.gamemode.others:
+    default: op
+  essentials.gamemode.survival:
+    default: op
+  essentials.gamemode.creative:
+    default: op
+  essentials.gamemode.adventure:
+    default: op
+  essentials.gamemode.spectator:
+    default: op
+  essentials.fly.others:
+    default: op
+  essentials.fly.safelogin:
+    default: op
+  essentials.speed.others:
+    default: op
+  essentials.speed.fly:
+    default: op
+  essentials.speed.walk:
+    default: op
+  essentials.speed.bypass:
+    default: op
+  essentials.jump.lock:
+    default: op
+  essentials.time.set:
+    default: op
+  essentials.time.world.all:
+    default: op
+  essentials.ptime.others:
+    default: op
+  essentials.heal.others:
+    default: op
+  essentials.heal.cooldown.bypass:
+    default: op
+  essentials.afk.others:
+    default: op
+  essentials.afk.message:
+    default: op
+  essentials.afk.auto:
+    default: false
+  essentials.afk.kickexempt:
+    default: op
+  essentials.sleepingignored:
+    default: op
+  essentials.nick.color:
+    default: op
+  essentials.nick.format:
+    default: op
+  essentials.nick.magic:
+    default: op
+  essentials.nick.rgb:
+    default: op
+  essentials.nick.others:
+    default: op
+  essentials.nick.allowunsafe:
+    default: false
+  essentials.nick.changecolors:
+    default: op
+  essentials.nick.changecolors.bypass:
+    default: op
+  essentials.nick.blacklist.bypass:
+    default: op
+  essentials.nick.hideprefix:
+    default: false
+  essentials.keepinv:
+    default: false
+  essentials.keepxp:
+    default: false
+  essentials.gamemode.*:
+    default: op
+    children:
+      essentials.gamemode: true
+      essentials.gamemode.others: true
+      essentials.gamemode.all: true
   essentials.vanish.interact:
     default: op
   essentials.workbench:

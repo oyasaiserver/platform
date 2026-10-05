@@ -14,6 +14,7 @@ import icu.oyasai.utilities.ore_reappears.OreReappears
 import icu.oyasai.utilities.oresmelter.OreSmelter
 import icu.oyasai.utilities.oresmelter.OreSmelterEvent
 import icu.oyasai.utilities.pita.Pita
+import icu.oyasai.utilities.playerstate.PlayerStateFeature
 import icu.oyasai.utilities.redbull.RedBullCommand
 import icu.oyasai.utilities.redbull.RedBullFeature
 import icu.oyasai.utilities.sit.SitFeature
@@ -42,6 +43,7 @@ class Main : JavaPlugin() {
   private lateinit var tpSwitchFeature: TpSwitchFeature
   private lateinit var sitFeature: SitFeature
   private lateinit var commandItems: CommandItems
+  private var playerStateFeature: PlayerStateFeature? = null
   private var workstationFeature: WorkstationFeature? = null
   private lateinit var guidance: Guidance
 
@@ -55,6 +57,14 @@ class Main : JavaPlugin() {
     } catch (e: Exception) {
       runCatching { workstations.disable() }.onFailure { e.addSuppressed(it) }
       logger.log(Level.SEVERE, "Workstation: failed to enable; continuing other features", e)
+    }
+    val playerState = PlayerStateFeature(this)
+    try {
+      playerState.enable()
+      playerStateFeature = playerState
+    } catch (e: Exception) {
+      runCatching { playerState.disable() }.onFailure { e.addSuppressed(it) }
+      logger.log(Level.SEVERE, "PlayerState: failed to enable; continuing other features", e)
     }
     guidance = Guidance(this)
     guidance.enable()
@@ -110,6 +120,7 @@ class Main : JavaPlugin() {
   }
 
   override fun onDisable() {
+    playerStateFeature?.disable()
     workstationFeature?.disable()
     if (::guidance.isInitialized) guidance.disable()
     if (::commandItems.isInitialized) commandItems.disable()

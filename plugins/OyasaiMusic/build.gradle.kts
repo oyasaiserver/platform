@@ -1,7 +1,5 @@
 plugins { alias(libs.plugins.paperweight.userdev) }
 
-repositories { maven("https://repo.essentialsx.net/releases/") }
-
 dependencies {
   compileOnly(project(":plugins:OyasaiToken"))
   paperweightDevelopmentBundle(libs.purpur.dev.bundle)
@@ -9,7 +7,6 @@ dependencies {
   implementation(libs.kotlin.stdlib)
   implementation(libs.sqlite.jdbc)
 
-  compileOnly("net.essentialsx:EssentialsX:2.21.2") { isTransitive = false }
   compileOnly(libs.vault.api)
   compileOnly(libs.fawe.bukkit)
   compileOnly(libs.velocity.api) { exclude(group = "net.kyori") }
