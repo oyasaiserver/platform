@@ -1,6 +1,5 @@
-package icu.oyasai.utilities.skriptport
+package com.github.sahyuya.oyasaiMenu.item
 
-import icu.oyasai.utilities.Main
 import java.io.File
 import java.util.UUID
 import java.util.logging.Level
@@ -19,23 +18,30 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.java.JavaPlugin
 
-class CommandItems(private val plugin: Main) : CommandExecutor, Listener {
-  private val store = CommandItemStore(File(plugin.dataFolder, "command-items.db"))
-  private val items = linkedMapOf<String, ItemStack>()
+class MenuItem(
+    private val plugin: Plugin,
+    private val currentTick: () -> Int = Bukkit::getCurrentTick,
+    private val matches: (ItemStack, ItemStack) -> Boolean = { held, template ->
+      !template.type.isAir && held.isSimilar(template)
+    },
+    private val copyItem: (ItemStack) -> ItemStack = { it.clone() },
+) : CommandExecutor, Listener {
+  private val store = ItemTemplateStore(File(plugin.dataFolder, "command-items.db"))
+  internal var item: ItemStack? = null
   private val activatedTicks = mutableMapOf<UUID, Int>()
   private var ready = false
 
   fun enable() {
-    listOf("savedyeitem", "savemenuitem", "getdye", "getmenu").forEach {
-      requireNotNull(plugin.getCommand(it)).setExecutor(this)
+    listOf("savemenuitem", "getmenu").forEach {
+      requireNotNull((plugin as JavaPlugin).getCommand(it)).setExecutor(this)
     }
     // 保存の失敗はこの機能だけを無効にし、他の機能の有効化を妨げない。
     try {
       store.open()
-      listOf("dye", "menu").forEach { name ->
-        store.load(name)?.let { items[name] = ItemStack.deserializeBytes(it) }
-      }
+      item = store.load("menu")?.let { ItemStack.deserializeBytes(it) }
       ready = true
       plugin.server.pluginManager.registerEvents(this, plugin)
     } catch (failure: Exception) {
@@ -69,29 +75,30 @@ class CommandItems(private val plugin: Main) : CommandExecutor, Listener {
       sender.sendMessage("§cアイテム保存機能は現在利用できません。")
       return true
     }
-    val dye = command.name == "savedyeitem" || command.name == "getdye"
-    val name = if (dye) "dye" else "menu"
-    val title = if (dye) "Dye" else "Menu"
-    if (command.name.startsWith("save")) {
-      val item = sender.inventory.itemInMainHand.clone()
+    if (command.name == "savemenuitem") {
+      val saved = sender.inventory.itemInMainHand.clone()
       try {
-        store.save(name, item.serializeAsBytes())
-        items[name] = item
-        sender.sendMessage(" §8► §e$title item has been saved！")
+        store.save("menu", saved.serializeAsBytes())
+        item = saved
+        sender.sendMessage(" §8► §eMenu item has been saved！")
       } catch (failure: Exception) {
-        plugin.logger.log(Level.SEVERE, "Failed to save $name command item.", failure)
+        plugin.logger.log(Level.SEVERE, "Failed to save menu command item.", failure)
         sender.sendMessage("§cアイテムの保存に失敗しました。")
       }
     } else {
-      items[name]?.let { giveItem(sender, it.asOne()) }
-      sender.sendMessage(" §8► §aYou have received $name item!")
+      item?.let { giveItem(sender, it.asOne()) }
+      sender.sendMessage(" §8► §aYou have received menu item!")
     }
     return true
   }
 
   @EventHandler
   fun onFirstJoin(event: PlayerJoinEvent) {
-    if (!event.player.hasPlayedBefore()) items.values.forEach { giveItem(event.player, it.clone()) }
+    giveOnFirstJoin(event.player)
+  }
+
+  internal fun giveOnFirstJoin(player: Player) {
+    if (!player.hasPlayedBefore()) item?.let { giveItem(player, copyItem(it)) }
   }
 
   @EventHandler
@@ -115,26 +122,37 @@ class CommandItems(private val plugin: Main) : CommandExecutor, Listener {
     activatedTicks.remove(event.player.uniqueId)
   }
 
-  private fun activate(player: Player): Boolean {
+  internal fun activate(player: Player): Boolean {
+    val template = item ?: return false
     val held = player.inventory.itemInMainHand
-    val matching = items.filterValues { !it.type.isAir && held.isSimilar(it) }
-    if (matching.isEmpty()) return false
+    if (!matches(held, template)) return false
     // Skript と同様、両手・エンティティの重複イベントでも1 tickに1回だけ実行する。
-    val tick = Bukkit.getCurrentTick()
+    val tick = currentTick()
     if (activatedTicks.put(player.uniqueId, tick) == tick) return true
-    matching.keys.forEach { name ->
-      player.performCommand(if (name == "dye") "painttools dye" else "menu")
-    }
+    player.performCommand("menu")
     return true
   }
 
   @EventHandler
   fun onCraft(event: CraftItemEvent) {
-    items.forEach { (name, item) ->
-      if (!item.type.isAir && event.inventory.contents.any { it?.isSimilar(item) == true }) {
-        event.isCancelled = true
-        event.whoClicked.sendMessage(" §8► §cYou can not use the $name item in crafting!")
-      }
+    if (cancelCraft(event.inventory.contents) { event.whoClicked.sendMessage(it) }) {
+      event.isCancelled = true
+    }
+  }
+
+  internal fun cancelCraft(
+      contents: Array<out ItemStack?>,
+      sendMessage: (String) -> Unit,
+  ): Boolean {
+    val template = item ?: return false
+    if (!contents.any { it != null && matches(it, template) }) return false
+    sendMessage(" §8► §cYou can not use the menu item in crafting!")
+    return true
+  }
+
+  private fun giveItem(player: Player, stack: ItemStack) {
+    player.inventory.addItem(stack).values.forEach {
+      player.world.dropItemNaturally(player.location, it)
     }
   }
 }

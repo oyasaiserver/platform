@@ -1,10 +1,10 @@
-package icu.oyasai.utilities.skriptport
+package icu.oyasai.frames
 
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 
-internal class CommandItemStore(private val file: File) : AutoCloseable {
+internal class ItemTemplateStore(private val file: File) : AutoCloseable {
   private lateinit var connection: Connection
 
   fun open() {
