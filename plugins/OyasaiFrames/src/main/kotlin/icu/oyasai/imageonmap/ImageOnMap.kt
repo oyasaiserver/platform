@@ -63,6 +63,8 @@ internal enum class TomapAction {
   INFO,
   GIVE,
   DELETE,
+  RECOMPRESS,
+  DEDUPE,
   REMOVE,
   WHERE,
   USAGE,
@@ -77,6 +79,8 @@ internal fun tomapAction(args: List<String>): TomapAction =
       args.firstOrNull() == "info" -> TomapAction.INFO
       args.firstOrNull() == "give" -> TomapAction.GIVE
       args.firstOrNull() == "delete" -> TomapAction.DELETE
+      args.firstOrNull() == "recompress" -> TomapAction.RECOMPRESS
+      args.firstOrNull() == "dedupe" -> TomapAction.DEDUPE
       args.firstOrNull() == "remove" -> TomapAction.REMOVE
       args.firstOrNull() == "where" -> TomapAction.WHERE
       else -> TomapAction.USAGE
@@ -122,6 +126,8 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private lateinit var managedKey: NamespacedKey
   private lateinit var legacyKey: NamespacedKey
   private var ready = false
+  private var recompressRunning = false
+  private var dedupeRunning = false
 
   private data class Gui(
       val inventory: Inventory,
@@ -842,6 +848,16 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         val id = args.getOrNull(1)?.toLongOrNull()
         if (args.size != 2 || id == null) usage(sender) else openDeleteConfirm(player, id, null)
       }
+      TomapAction.RECOMPRESS -> {
+        if (!sender.hasPermission("imageonmap.deleteother")) return denied(sender)
+        val id = args.getOrNull(1)?.toLongOrNull()
+        if (args.size != 2 || (args[1] != "all" && (id == null || id <= 0))) usage(sender)
+        else recompress(sender, if (args[1] == "all") null else id)
+      }
+      TomapAction.DEDUPE -> {
+        if (!sender.hasPermission("imageonmap.deleteother")) return denied(sender)
+        if (args.size != 1) usage(sender) else dedupe(sender)
+      }
       TomapAction.REMOVE -> {
         if (!sender.hasPermission("imageonmap.removesplattermap")) return denied(sender)
         val player = sender as? Player ?: return playerOnly(sender)
@@ -867,6 +883,106 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     return true
   }
 
+  private fun recompress(sender: CommandSender, imageId: Long?) {
+    if (recompressRunning) {
+      message(sender, "作り直しは実行中です")
+      return
+    }
+    recompressRunning = true
+    val ids =
+        if (imageId == null) database { store.recompressCandidates() }
+        else CompletableFuture.completedFuture(listOf(imageId))
+    ids.whenComplete { candidates, failure ->
+      main {
+        if (failure != null) {
+          recompressRunning = false
+          message(sender, "対象の取得に失敗しました: ${error(failure)}")
+          return@main
+        }
+        var converted = 0
+        var skipped = 0
+        var failed = 0
+        var before = 0L
+        var after = 0L
+        val pending = ArrayDeque(candidates)
+        fun next() {
+          val id = pending.removeFirstOrNull()
+          if (id == null) {
+            recompressRunning = false
+            message(
+                sender,
+                "作り直し完了: ${converted}件、変更前 ${before}B、変更後 ${after}B（対象外 ${skipped}件、失敗 ${failed}件）",
+            )
+            message(sender, "DB ファイル自体の容量は VACUUM するまで縮みません")
+            return
+          }
+          database { store.recompressImage(id) }
+              .whenComplete { result, problem ->
+                main {
+                  if (problem != null) {
+                    failed++
+                    logger.warning("Recompress failed image=$id: ${error(problem)}")
+                    message(sender, "画像 $id の作り直しに失敗しました: ${error(problem)}")
+                  } else if (result == null) {
+                    skipped++
+                  } else {
+                    converted++
+                    before += result.before
+                    after += result.after
+                    logger.info(
+                        "Recompressed image=${result.imageId} maps=${result.maps} before=${result.before}B after=${result.after}B"
+                    )
+                  }
+                  if (pending.isEmpty()) next()
+                  else server.scheduler.runTaskLater(this, Runnable(::next), 20L)
+                }
+              }
+        }
+        next()
+      }
+    }
+  }
+
+  private fun dedupe(sender: CommandSender) {
+    if (dedupeRunning) {
+      message(sender, "重複保存の整理は実行中です")
+      return
+    }
+    dedupeRunning = true
+    message(sender, "重複保存の整理を開始します")
+    var maps = 0L
+    var before = 0L
+    var added = 0L
+    fun next() {
+      database { store.readDedupeBatch() }
+          .thenCompose { rows ->
+            CompletableFuture.supplyAsync({ prepareDedupeRows(rows) }, imageThreads)
+          }
+          .thenCompose { rows -> database { store.writeDedupeBatch(rows) } }
+          .whenComplete { batch, failure ->
+            main {
+              if (failure != null) {
+                dedupeRunning = false
+                logger.warning("Dedupe failed: ${error(failure)}")
+                message(sender, "重複保存の整理に失敗しました: ${error(failure)}。再実行すると残りから続けます")
+                return@main
+              }
+              maps += batch.maps
+              before += batch.before
+              added += batch.added
+              if (batch.maps == 0) {
+                dedupeRunning = false
+                message(sender, "重複保存の整理完了: ${maps}枚、移動前 ${before}B、blobs に追加 ${added}B")
+                message(sender, "DB ファイル自体の容量は VACUUM するまで縮みません")
+              } else {
+                server.scheduler.runTaskLater(this, Runnable(::next), 20L)
+              }
+            }
+          }
+    }
+    next()
+  }
+
   private fun usage(sender: CommandSender) {
     message(sender, "使い方:")
     if (sender.hasPermission("imageonmap.new")) message(sender, "/tomap <URL> [resize [幅 高さ]]")
@@ -876,7 +992,11 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       message(sender, "/tomap where <画像ID>")
     }
     if (sender.hasPermission("imageonmap.give")) message(sender, "/tomap give <プレイヤー> <画像ID>")
-    if (sender.hasPermission("imageonmap.deleteother")) message(sender, "/tomap delete <画像ID>")
+    if (sender.hasPermission("imageonmap.deleteother")) {
+      message(sender, "/tomap delete <画像ID>")
+      message(sender, "/tomap recompress <画像ID|all>")
+      message(sender, "/tomap dedupe")
+    }
     if (sender.hasPermission("imageonmap.removesplattermap")) message(sender, "/tomap remove")
   }
 
@@ -897,13 +1017,21 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                   add("where")
                 }
                 if (sender.hasPermission("imageonmap.give")) add("give")
-                if (sender.hasPermission("imageonmap.deleteother")) add("delete")
+                if (sender.hasPermission("imageonmap.deleteother")) {
+                  add("delete")
+                  add("recompress")
+                  add("dedupe")
+                }
                 if (sender.hasPermission("imageonmap.removesplattermap")) add("remove")
               }
           args.size == 2 && args[0] == "list" && sender.hasPermission("imageonmap.listother") ->
               server.onlinePlayers.map { it.name }
           args.size == 2 && args[0] == "give" && sender.hasPermission("imageonmap.give") ->
               server.onlinePlayers.map { it.name }
+          args.size == 2 &&
+              args[0] == "recompress" &&
+              sender.hasPermission("imageonmap.deleteother") ->
+              listOf("all") + animations.animations.keys.map(Long::toString)
           args.size == 2 && args[0].startsWith("http") && sender.hasPermission("imageonmap.new") ->
               listOf("resize")
           else -> emptyList()
@@ -934,15 +1062,17 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         .thenCompose { current ->
           CompletableFuture.supplyAsync(
               {
+                val fetched = ImageSource.fetch(url)
                 current to
-                    ImageSource.prepare(
-                        ImageSource.fetch(url),
-                        resize,
-                        bypass,
-                        maxTiles,
-                        maxFrames,
-                        minDelay,
-                    )
+                    (fetched to
+                        ImageSource.prepare(
+                            fetched.bytes,
+                            resize,
+                            bypass,
+                            maxTiles,
+                            maxFrames,
+                            minDelay,
+                        ))
               },
               imageThreads,
           )
@@ -953,7 +1083,8 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               failCreate(player, url, failure)
               return@main
             }
-            val (current, tiles) = result
+            val (current, prepared) = result
+            val (fetched, tiles) = prepared
             if (!player.isOnline) {
               failCreate(player, url, IllegalStateException("プレイヤーが退出しました"))
               return@main
@@ -1017,6 +1148,9 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                                   tiles.delays,
                                   tiles.firstSlots,
                                   slots,
+                                  tiles.staticBlobs,
+                                  url,
+                                  fetched.url,
                               )
                           id to store.storedBytes(id)
                         }
@@ -1070,7 +1204,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     active.remove(player.uniqueId)
     permits.release()
     val host = runCatching { URI(url).host }.getOrNull() ?: "unknown"
-    val raw = error(failure)
+    val raw = error(failure).replace(Regex("https?://\\S+", RegexOption.IGNORE_CASE), "[URL]")
     val reason =
         if (raw.any { it in 'ぁ'..'ん' || it in '一'..'龯' }) raw.replace(url, "[URL]")
         else "通信または保存に失敗しました"
@@ -1291,6 +1425,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                 player,
                 "画像ID: ${details.id}（地図ID #$id、${tileName(index, details.columns, details.rows)}） / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"}$placement",
             )
+            message(player, imageUrls(details))
           }
         }
   }
@@ -1299,6 +1434,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val DATE: DateTimeFormatter =
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("Asia/Tokyo"))
   }
+
+  private fun imageUrls(details: ImageDetails): String =
+      if (details.sourceUrl == null && details.fetchedUrl == null) "URL の記録なし（記録前に作成）"
+      else "入力URL: ${details.sourceUrl ?: "不明"} / 取得URL: ${details.fetchedUrl ?: "不明"}"
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun place(e: PlayerInteractEvent) {
@@ -1477,6 +1616,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               return@main
             }
             message(sender, "画像 #$imageId: ${result.second.size} 枚")
+            message(sender, imageUrls(result.first!!))
             result.second.take(20).forEach { row ->
               val world = server.getWorld(row.world)
               val status =

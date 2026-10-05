@@ -5,6 +5,7 @@ import com.github.luben.zstd.ZstdOutputStream
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.security.MessageDigest
 import java.util.zip.DeflaterOutputStream
 import java.util.zip.InflaterInputStream
 import javax.imageio.ImageIO
@@ -28,8 +29,8 @@ internal sealed interface MapTile {
     const val PIXELS = 128 * 128
     private val PNG_SIGNATURE = byteArrayOf(-119, 80, 78, 71, 13, 10, 26, 10)
 
-    // maps.png に PNG 署名があれば v2 の PNG、空でなければ従来の単独 zlib。
-    // 空なら map_books.data の連結 zstd を maps.idx のタイル位置・順番から読む。
+    // maps.png の旧 PNG・zlib、blobs.data の zstd (旧ローカル PNG も) を読む。
+    // 両方空なら map_books.data の連結 zstd を maps.idx のタイル位置・順番から読む。
     fun fromStored(bytes: ByteArray): MapTile {
       if (
           bytes.size >= PNG_SIGNATURE.size &&
@@ -39,8 +40,15 @@ internal sealed interface MapTile {
         require(image.width == 128 && image.height == 128) { "地図の寸法が不正です" }
         return Png(image)
       }
+      val zstd =
+          bytes.size >= 4 &&
+              bytes[0] == 0x28.toByte() &&
+              bytes[1] == 0xb5.toByte() &&
+              bytes[2] == 0x2f.toByte() &&
+              bytes[3] == 0xfd.toByte()
       val pixels =
-          InflaterInputStream(ByteArrayInputStream(bytes)).use { it.readNBytes(PIXELS + 1) }
+          if (zstd) ZstdInputStream(ByteArrayInputStream(bytes)).use { it.readNBytes(PIXELS + 1) }
+          else InflaterInputStream(ByteArrayInputStream(bytes)).use { it.readNBytes(PIXELS + 1) }
       require(pixels.size == PIXELS) { "地図の色番号の長さが不正です" }
       return Colors(pixels)
     }
@@ -52,6 +60,15 @@ internal sealed interface MapTile {
       require(pixels.size == PIXELS) { "地図の色番号の長さが不正です" }
       return ByteArrayOutputStream()
           .also { output -> DeflaterOutputStream(output).use { it.write(pixels) } }
+          .toByteArray()
+    }
+
+    fun compressBlob(pixels: ByteArray): ByteArray {
+      require(pixels.size == PIXELS) { "地図の色番号の長さが不正です" }
+      return ByteArrayOutputStream()
+          .also { output ->
+            ZstdOutputStream(output, 19).setChecksum(true).use { it.write(pixels) }
+          }
           .toByteArray()
     }
 
@@ -89,6 +106,34 @@ internal sealed interface MapTile {
             }
             .also { require(stream.read() == -1) { "地図の本に余分なデータがあります" } }
       }
+    }
+  }
+}
+
+internal data class ColorBlob(val hash: ByteArray, val data: ByteArray) {
+  companion object {
+    fun fromColors(
+        colors: ByteArray,
+        compress: (ByteArray) -> ByteArray = MapTile::compressBlob,
+    ): ColorBlob {
+      require(colors.size == MapTile.PIXELS)
+      val blob = ColorBlob(MessageDigest.getInstance("SHA-256").digest(colors), compress(colors))
+      check((MapTile.fromStored(blob.data) as MapTile.Colors).pixels.contentEquals(colors)) {
+        "圧縮後の地図の色番号が一致しません"
+      }
+      return blob
+    }
+
+    fun fromLegacy(
+        data: ByteArray,
+        compress: (ByteArray) -> ByteArray = MapTile::compressBlob,
+    ): ColorBlob {
+      val colors =
+          when (val tile = MapTile.fromStored(data)) {
+            is MapTile.Png -> MapTile.colors(tile.image)
+            is MapTile.Colors -> tile.pixels
+          }
+      return fromColors(colors, compress)
     }
   }
 }

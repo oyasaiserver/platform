@@ -110,13 +110,14 @@ class MapTileTest {
     image.setRGB(2, 0, 0x80ff0000.toInt())
     val png = png(image)
     val colors = MapTile.colors(image)
-    val compressed = MapTile.compress(colors)
+    val compressed = MapTile.compressBlob(colors)
     val fromPng = drawnPixels(MapTile.fromStored(png))
     val fromColors = drawnPixels(MapTile.fromStored(compressed))
     assertContentEquals(fromPng, fromColors)
     assertEquals(0, fromColors[0].toInt())
     assertEquals(0, fromColors[1].toInt())
     assertTrue(fromColors[2].toInt() != 0)
+    assertTrue(compressed[4].toInt() and 0x04 != 0, "zstd frame must include a checksum")
     println("MapTile sample: pngBytes=${png.size} storedBytes=${compressed.size}")
   }
 

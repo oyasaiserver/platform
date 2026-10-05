@@ -23,6 +23,8 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 internal object ImageSource {
+  data class Fetched(val bytes: ByteArray, val url: String)
+
   private const val MAX_BYTES = 16 * 1024 * 1024
   private var webp: WebPImageReaderSpi? = null
   private val watchdog =
@@ -107,7 +109,7 @@ internal object ImageSource {
     return listOf(uri)
   }
 
-  fun fetch(url: String): ByteArray {
+  fun fetch(url: String): Fetched {
     val deadline = System.nanoTime() + Duration.ofSeconds(20).toNanos()
     var last: Exception? = null
     for (start in candidates(url)) {
@@ -162,7 +164,7 @@ internal object ImageSource {
                   out.write(buf, 0, n)
                 }
                 require(System.nanoTime() < deadline) { "取得がタイムアウトしました" }
-                return out.toByteArray()
+                return Fetched(out.toByteArray(), uri.toString())
               }
             } finally {
               timeout.cancel(false)
@@ -204,6 +206,7 @@ internal object ImageSource {
       val delays: List<Int>,
       val firstSlots: List<Int> = storedTiles.indices.toList(),
       val slots: List<Int> = emptyList(),
+      val staticBlobs: List<ColorBlob> = emptyList(),
   ) {
     val frames: Int
       get() = if (delays.isEmpty()) 1 else delays.size
@@ -234,8 +237,12 @@ internal object ImageSource {
         val count = if (reader.formatName.equals("gif", true)) reader.getNumImages(true) else 1
         if (count < 2) {
           val picture = decode(bytes)
-          val result = tiles(picture, resize, bypass)
-          return Prepared(result.columns, result.rows, result.pngs, emptyList())
+          val (cols, rows) = dimensions(picture.width, picture.height, resize, bypass)
+          val blobs =
+              tileImages(picture, cols, rows, resize).map {
+                ColorBlob.fromColors(MapTile.colors(it))
+              }
+          return Prepared(cols, rows, blobs.map(ColorBlob::data), emptyList(), staticBlobs = blobs)
         }
         require(bypass || count <= maxFrames) { "コマ数が多すぎます（$count コマ、上限 $maxFrames）" }
         val screen =

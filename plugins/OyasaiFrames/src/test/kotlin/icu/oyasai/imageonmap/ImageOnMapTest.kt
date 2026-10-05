@@ -1,10 +1,12 @@
 package icu.oyasai.imageonmap
 
+import com.github.srain3.painttools.tools.configs.CanvasStore
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.net.InetAddress
 import java.nio.file.Files
+import java.security.MessageDigest
 import java.sql.DriverManager
 import java.util.UUID
 import javax.imageio.IIOImage
@@ -24,6 +26,19 @@ import org.bukkit.map.MapPalette
 
 class ImageOnMapTest {
   @Test
+  fun latestMapDatabaseOpensInCanvasStore() {
+    val file = Files.createTempDirectory("pictures-version").resolve("pictures.db").toFile()
+    MapStore(file).use { it.open() }
+    CanvasStore(file, byteArrayOf()).also { store ->
+      try {
+        assertEquals(0, store.open().lastId)
+      } finally {
+        store.close()
+      }
+    }
+  }
+
+  @Test
   fun removedFrameDecision() {
     val gone = UUID.randomUUID()
     val unloaded = UUID.randomUUID()
@@ -38,6 +53,115 @@ class ImageOnMapTest {
       ByteArrayOutputStream()
           .also { ImageIO.write(BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB), "png", it) }
           .toByteArray()
+
+  private fun blob(bytes: ByteArray): ColorBlob = ColorBlob.fromLegacy(bytes)
+
+  private fun MapStore.dedupeForTest(limit: Int = 500): DedupeBatch =
+      writeDedupeBatch(prepareDedupeRows(readDedupeBatch(limit)))
+
+  private fun legacyDatabase(file: java.io.File, version: Int, oldBookColumn: Boolean = false) {
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().use { s ->
+        s.execute(
+            "CREATE TABLE images (id INTEGER PRIMARY KEY, owner TEXT NOT NULL, name TEXT, columns INTEGER NOT NULL, rows INTEGER NOT NULL, created_at INTEGER, hidden INTEGER NOT NULL DEFAULT 0)"
+        )
+        s.execute(
+            "CREATE TABLE maps (map_id INTEGER PRIMARY KEY, image_id INTEGER REFERENCES images(id), idx INTEGER, png BLOB NOT NULL, UNIQUE(image_id, idx))"
+        )
+        s.execute(
+            "CREATE TABLE canvases (id INTEGER PRIMARY KEY, png BLOB, locked INTEGER NOT NULL DEFAULT 0, registered INTEGER NOT NULL DEFAULT 1)"
+        )
+        s.execute(
+            "CREATE TABLE canvas_meta (id INTEGER PRIMARY KEY CHECK(id=1), last_id INTEGER NOT NULL)"
+        )
+        s.execute("INSERT INTO canvas_meta(id,last_id) VALUES(1,0)")
+        if (version == 2) {
+          s.execute(
+              "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL, slots TEXT NOT NULL)"
+          )
+          s.execute(
+              "CREATE TABLE map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, ${if (oldBookColumn) "zlib" else "data"} BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
+          )
+        }
+        s.execute("PRAGMA user_version=$version")
+      }
+    }
+  }
+
+  @Test
+  fun staticImageKeepsUrlsWithAndWithoutResize() {
+    val file = Files.createTempDirectory("imageonmap-urls").resolve("pictures.db").toFile()
+    val source = "https://example.com/image?original=1"
+    val fetched = "https://cdn.example.com/image.png"
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      listOf(null, 1 to 1).forEachIndexed { index, resize ->
+        val tiles = ImageSource.prepare(bytes, resize, false, 16, 30, 2)
+        val id =
+            store.create(
+                UUID.randomUUID(),
+                tiles.columns,
+                tiles.rows,
+                listOf(100 + index),
+                tiles.storedTiles,
+                staticBlobs = tiles.staticBlobs,
+                sourceUrl = source,
+                fetchedUrl = fetched,
+            )
+        assertEquals(source, store.details(id)?.sourceUrl)
+        assertEquals(fetched, store.details(id)?.fetchedUrl)
+      }
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("PRAGMA index_list(images)").use { indexes ->
+        assertTrue(
+            generateSequence { if (indexes.next()) indexes.getString("name") else null }
+                .any { it == "images_source_url" }
+        )
+      }
+    }
+  }
+
+  @Test
+  fun legacyImageHasNoRecordedUrlsAfterUpgrade() {
+    val file = Files.createTempDirectory("imageonmap-old-urls").resolve("pictures.db").toFile()
+    legacyDatabase(file, 2)
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement()
+          .execute("INSERT INTO images(id,owner,columns,rows) VALUES(1,'${UUID.randomUUID()}',1,1)")
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertNull(store.details(1)?.sourceUrl)
+      assertNull(store.details(1)?.fetchedUrl)
+    }
+  }
+
+  @Test
+  fun versionThreeImageGainsNullableUrlsWithoutVersionBump() {
+    val file = Files.createTempDirectory("imageonmap-v3-urls").resolve("pictures.db").toFile()
+    legacyDatabase(file, 2)
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().use { s ->
+        s.execute("INSERT INTO images(id,owner,columns,rows) VALUES(1,'${UUID.randomUUID()}',1,1)")
+        s.execute("CREATE TABLE blobs (hash BLOB PRIMARY KEY, data BLOB NOT NULL)")
+        s.execute("ALTER TABLE maps ADD COLUMN blob_hash BLOB REFERENCES blobs(hash)")
+        s.execute("PRAGMA user_version=3")
+      }
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertNull(store.details(1)?.sourceUrl)
+      assertNull(store.details(1)?.fetchedUrl)
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("PRAGMA user_version").use {
+        assertTrue(it.next())
+        assertEquals(3, it.getInt(1))
+      }
+    }
+  }
 
   @Test
   fun animatedMapLimits() {
@@ -102,7 +226,7 @@ class ImageOnMapTest {
           )
       assertEquals(2, store.animatedMapCount(owner))
       store.hide(owner, animated)
-      store.create(owner, listOf(3), listOf(bytes))
+      store.create(owner, listOf(3), listOf(blob(bytes)))
       store.create(
           other,
           1,
@@ -131,6 +255,8 @@ class ImageOnMapTest {
     assertEquals(TomapAction.INFO, tomapAction(listOf("info")))
     assertEquals(TomapAction.GIVE, tomapAction(listOf("give")))
     assertEquals(TomapAction.DELETE, tomapAction(listOf("delete")))
+    assertEquals(TomapAction.RECOMPRESS, tomapAction(listOf("recompress", "all")))
+    assertEquals(TomapAction.DEDUPE, tomapAction(listOf("dedupe")))
     assertEquals(TomapAction.REMOVE, tomapAction(listOf("remove")))
     assertEquals(TomapAction.WHERE, tomapAction(listOf("where")))
     assertEquals(TomapAction.USAGE, tomapAction(listOf("unknown")))
@@ -145,9 +271,17 @@ class ImageOnMapTest {
     val bytes = png()
     MapStore(file).use { store ->
       store.open()
-      val first = store.create(owner, 2, 1, listOf(1, 2), listOf(bytes, bytes))
+      val first =
+          store.create(
+              owner,
+              2,
+              1,
+              listOf(1, 2),
+              listOf(bytes, bytes),
+              staticBlobs = List(2) { blob(bytes) },
+          )
       store.hide(owner, first)
-      val later = (3..48).map { id -> store.create(other, listOf(id), listOf(bytes)) }
+      val later = (3..48).map { id -> store.create(other, listOf(id), listOf(blob(bytes))) }
       assertTrue(store.list(owner, 0).isEmpty())
       assertEquals(listOf(first), store.listings(owner, 0).map { it.id })
       assertTrue(store.listings(owner, 0).single().hidden)
@@ -171,9 +305,26 @@ class ImageOnMapTest {
     val bytes = png()
     MapStore(file).use { store ->
       store.open()
-      val id = store.create(owner, 2, 1, listOf(10, 11), listOf(bytes, bytes))
+      val id =
+          store.create(
+              owner,
+              2,
+              1,
+              listOf(10, 11),
+              listOf(bytes, bytes),
+              staticBlobs = List(2) { blob(bytes) },
+          )
       assertEquals(listOf(10, 11), store.poster(id)?.ids)
-      assertFails { store.create(owner, 2, 1, listOf(12, 10), listOf(bytes, bytes)) }
+      assertFails {
+        store.create(
+            owner,
+            2,
+            1,
+            listOf(12, 10),
+            listOf(bytes, bytes),
+            staticBlobs = List(2) { blob(bytes) },
+        )
+      }
       assertNull(store.png(12))
       assertNotNull(store.png(10))
     }
@@ -203,7 +354,15 @@ class ImageOnMapTest {
     val bytes = png()
     MapStore(file).use { store ->
       store.open()
-      val image = store.create(owner, 2, 1, listOf(4, 150000), listOf(bytes, bytes))
+      val image =
+          store.create(
+              owner,
+              2,
+              1,
+              listOf(4, 150000),
+              listOf(bytes, bytes),
+              staticBlobs = List(2) { blob(bytes) },
+          )
       assertTrue(store.mapIds()[4])
       assertTrue(store.mapIds()[150000])
       assertFalse(store.mapIds()[5])
@@ -448,6 +607,8 @@ class ImageOnMapTest {
               prepared.delays,
               prepared.firstSlots,
               slots,
+              sourceUrl = "https://imgur.com/aBc123",
+              fetchedUrl = "https://i.imgur.com/aBc123.gif",
           )
         }
     MapStore(file).use { store ->
@@ -457,6 +618,8 @@ class ImageOnMapTest {
           (store.tile(10) as MapTile.Colors).pixels,
       )
       val pushed = store.tilesForPush(imageId)
+      assertEquals("https://imgur.com/aBc123", store.details(imageId)?.sourceUrl)
+      assertEquals("https://i.imgur.com/aBc123.gif", store.details(imageId)?.fetchedUrl)
       assertEquals(ids.toSet(), pushed.keys)
       ids.forEachIndexed { index, mapId ->
         assertContentEquals(
@@ -491,10 +654,7 @@ class ImageOnMapTest {
     val owner = UUID.randomUUID()
     val colors = List(3) { frame -> ByteArray(MapTile.PIXELS) { (it + frame).toByte() } }
     val png = png()
-    MapStore(file).use { it.open() }
-    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
-      db.createStatement().execute("ALTER TABLE map_books RENAME COLUMN data TO zlib")
-    }
+    legacyDatabase(file, 2, oldBookColumn = true)
     MapStore(file).use { store ->
       store.open()
       val id =
@@ -513,9 +673,9 @@ class ImageOnMapTest {
       assertEquals(setOf(100, 101, 102), store.tilesForPush(id).keys)
       assertTrue(store.storedBytes(id) > 0)
       assertContentEquals(byteArrayOf(), store.png(101))
-      store.create(owner, listOf(200), listOf(png))
-      store.create(owner, listOf(201), listOf(MapTile.compress(colors[0])))
-      assertTrue(store.tile(200) is MapTile.Png)
+      store.create(owner, listOf(200), listOf(blob(png)))
+      store.create(owner, listOf(201), listOf(ColorBlob.fromColors(colors[0])))
+      assertTrue(store.tile(200) is MapTile.Colors)
       assertContentEquals(colors[0], (store.tile(201) as MapTile.Colors).pixels)
       assertEquals(listOf(100), store.poster(id)?.ids)
       assertEquals(listOf(100, 101, 102), store.delete(id)?.mapIds)
@@ -529,7 +689,124 @@ class ImageOnMapTest {
       }
       db.createStatement().executeQuery("PRAGMA user_version").use {
         assertTrue(it.next())
-        assertEquals(2, it.getInt(1))
+        assertEquals(3, it.getInt(1))
+      }
+    }
+  }
+
+  @Test
+  fun recompressLegacyAnimationPreservesMapColorsAndSkipsConvertedImages() {
+    val file = Files.createTempDirectory("imageonmap-recompress").resolve("pictures.db").toFile()
+    val ids = listOf(10, 11, 20, 21, 30, 31)
+    val stored =
+        ids.mapIndexed { index, _ ->
+          if (index == 3) MapTile.compress(ByteArray(MapTile.PIXELS) { 42 })
+          else
+              ByteArrayOutputStream()
+                  .also { output ->
+                    val image = BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB)
+                    image.setRGB(0, 0, Color(index * 30, 50, 100).rgb)
+                    ImageIO.write(image, "png", output)
+                  }
+                  .toByteArray()
+        }
+    val expected =
+        stored.map {
+          when (val tile = MapTile.fromStored(it)) {
+            is MapTile.Png -> MapTile.colors(tile.image)
+            is MapTile.Colors -> tile.pixels
+          }
+        }
+    MapStore(file).use { store ->
+      store.open()
+      val imageId =
+          store.create(
+              UUID.randomUUID(),
+              2,
+              1,
+              ids.take(2),
+              stored.take(2),
+              staticBlobs = stored.take(2).map(::blob),
+          )
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.prepareStatement("INSERT INTO maps(map_id,image_id,idx,png) VALUES(?,?,?,?)").use { s ->
+          (2 until ids.size).forEach { index ->
+            s.setInt(1, ids[index])
+            s.setLong(2, imageId)
+            s.setInt(3, index)
+            s.setBytes(4, stored[index])
+            s.executeUpdate()
+          }
+        }
+        db.prepareStatement("INSERT INTO animations(image_id,frames,delays,slots) VALUES(?,?,?,?)")
+            .use { s ->
+              s.setLong(1, imageId)
+              s.setInt(2, 3)
+              s.setString(3, "2,3,4")
+              s.setString(4, ids.joinToString(","))
+              s.executeUpdate()
+            }
+      }
+      assertEquals(listOf(imageId), store.recompressCandidates())
+      val originalAnimation = store.animations().single()
+      val before = store.storedBytes(imageId)
+      val result = store.recompressImage(imageId)
+      assertNotNull(result)
+      assertEquals(ids.size, result.maps)
+      assertEquals(before, result.before)
+      val pushed = store.tilesForPush(imageId)
+      assertEquals(ids.size, pushed.size)
+      ids.forEachIndexed { index, mapId ->
+        assertContentEquals(expected[index], (store.tile(mapId) as MapTile.Colors).pixels)
+        assertContentEquals(
+            expected[index],
+            (pushed.getValue(mapId) as MapTile.Colors).pixels,
+        )
+        assertContentEquals(byteArrayOf(), store.png(mapId))
+      }
+      assertEquals(originalAnimation, store.animations().single())
+      assertEquals(emptyList(), store.recompressCandidates())
+      assertNull(store.recompressImage(imageId))
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.createStatement()
+            .executeQuery("SELECT COUNT(*) FROM map_books WHERE image_id=$imageId")
+            .use { r ->
+              assertTrue(r.next())
+              assertEquals(2, r.getInt(1))
+            }
+      }
+    }
+  }
+
+  @Test
+  fun recompressVerificationFailureLeavesLegacyDataUntouched() {
+    val file =
+        Files.createTempDirectory("imageonmap-recompress-failure").resolve("pictures.db").toFile()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      val imageId = store.create(UUID.randomUUID(), listOf(10), listOf(blob(bytes)))
+      assertNull(store.recompressImage(imageId))
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.createStatement()
+            .execute(
+                "INSERT INTO animations(image_id,frames,delays,slots) VALUES($imageId,1,'2','10')"
+            )
+      }
+      assertFails {
+        store.recompressImage(imageId) { originals ->
+          MapTile.compressBook(originals.map { ByteArray(MapTile.PIXELS) { 1 } })
+        }
+      }
+      assertContentEquals(blob(bytes).data, store.png(10))
+      assertEquals(listOf(imageId), store.recompressCandidates())
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.createStatement()
+            .executeQuery("SELECT COUNT(*) FROM map_books WHERE image_id=$imageId")
+            .use { r ->
+              assertTrue(r.next())
+              assertEquals(0, r.getInt(1))
+            }
       }
     }
   }
@@ -551,7 +828,7 @@ class ImageOnMapTest {
           listOf(0, 1, 3),
           listOf(10, 11, 10, 20),
       )
-      store.create(owner, listOf(30), listOf(bytes))
+      store.create(owner, listOf(30), listOf(blob(bytes)))
     }
     for (bad in listOf("10,11,20", "10,11,20,10", "10,11,10,30")) {
       DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
@@ -572,14 +849,15 @@ class ImageOnMapTest {
     val file = Files.createTempDirectory("imageonmap-v1").resolve("pictures.db").toFile()
     val owner = UUID.randomUUID()
     val bytes = png()
-    MapStore(file).use { store ->
-      store.open()
-      store.create(owner, listOf(10), listOf(bytes))
-    }
+    legacyDatabase(file, 1)
     DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
-      db.createStatement().use {
-        it.execute("DROP TABLE animations")
-        it.execute("PRAGMA user_version=1")
+      db.prepareStatement("INSERT INTO images(id,owner,columns,rows) VALUES(1,?,1,1)").use {
+        it.setString(1, owner.toString())
+        it.executeUpdate()
+      }
+      db.prepareStatement("INSERT INTO maps(map_id,image_id,idx,png) VALUES(10,1,0,?)").use {
+        it.setBytes(1, bytes)
+        it.executeUpdate()
       }
     }
     MapStore(file).use { store ->
@@ -604,8 +882,223 @@ class ImageOnMapTest {
     DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
       db.createStatement().executeQuery("PRAGMA user_version").use {
         assertTrue(it.next())
-        assertEquals(2, it.getInt(1))
+        assertEquals(3, it.getInt(1))
       }
+    }
+  }
+
+  @Test
+  fun newStaticMapsShareOneBlobAndDeleteOnlyWhenUnreferenced() {
+    val file = Files.createTempDirectory("imageonmap-blobs").resolve("pictures.db").toFile()
+    val bytes = png()
+    val secondPng =
+        ByteArrayOutputStream()
+            .also { output ->
+              val image = BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB)
+              image.setRGB(0, 0, 0x00ff0000)
+              ImageIO.write(image, "png", output)
+            }
+            .toByteArray()
+    assertFalse(bytes.contentEquals(secondPng))
+    val firstPrepared = ImageSource.prepare(bytes, null, false, 16, 30, 2)
+    val secondPrepared = ImageSource.prepare(secondPng, null, false, 16, 30, 2)
+    assertContentEquals(
+        firstPrepared.staticBlobs.single().hash,
+        secondPrepared.staticBlobs.single().hash,
+    )
+    assertContentEquals(
+        firstPrepared.staticBlobs.single().data,
+        secondPrepared.staticBlobs.single().data,
+    )
+    assertContentEquals(
+        MessageDigest.getInstance("SHA-256")
+            .digest(MapTile.colors(ImageIO.read(bytes.inputStream()))),
+        firstPrepared.staticBlobs.single().hash,
+    )
+    MapStore(file).use { store ->
+      store.open()
+      val first = store.create(UUID.randomUUID(), listOf(10), firstPrepared.staticBlobs)
+      val second = store.create(UUID.randomUUID(), listOf(11), secondPrepared.staticBlobs)
+      fun state(): Pair<Int, Int> =
+          DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+            db.createStatement().use { s ->
+              val blobs =
+                  s.executeQuery("SELECT COUNT(*) FROM blobs").use {
+                    it.next()
+                    it.getInt(1)
+                  }
+              val refs =
+                  s.executeQuery(
+                          "SELECT COUNT(*) FROM maps WHERE length(png)=0 AND blob_hash IS NOT NULL"
+                      )
+                      .use {
+                        it.next()
+                        it.getInt(1)
+                      }
+              blobs to refs
+            }
+          }
+      assertEquals(1 to 2, state())
+      assertContentEquals(
+          MapTile.colors(ImageIO.read(bytes.inputStream())),
+          (store.tile(10) as MapTile.Colors).pixels,
+      )
+      assertContentEquals(
+          firstPrepared.staticBlobs.single().hash,
+          DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+            db.createStatement().executeQuery("SELECT hash FROM blobs").use { r ->
+              r.next()
+              r.getBytes(1)
+            }
+          },
+      )
+      assertContentEquals(blob(bytes).data, store.png(10))
+      assertContentEquals(blob(bytes).data, store.png(11))
+      assertTrue(store.tile(10) is MapTile.Colors)
+      assertEquals(setOf(10), store.tilesForPush(first).keys)
+      assertTrue(store.mapIds()[10] && store.mapIds()[11])
+      store.delete(first)
+      assertEquals(1 to 1, state())
+      assertContentEquals(blob(bytes).data, store.png(11))
+      store.delete(second)
+      assertEquals(0 to 0, state())
+    }
+  }
+
+  @Test
+  fun dedupeResumesAfterReopenAndKeepsBothLegacyFormats() {
+    val file = Files.createTempDirectory("imageonmap-dedupe").resolve("pictures.db").toFile()
+    val bytes = png()
+    val colors = ByteArray(MapTile.PIXELS) { 7 }
+    val compressed = MapTile.compress(colors)
+    legacyDatabase(file, 2)
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.prepareStatement("INSERT INTO maps(map_id,png) VALUES(?,?)").use { s ->
+        listOf(bytes, bytes, compressed).forEachIndexed { index, data ->
+          s.setInt(1, index + 1)
+          s.setBytes(2, data)
+          s.executeUpdate()
+        }
+      }
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertTrue(store.tile(1) is MapTile.Png)
+      assertContentEquals(colors, (store.tile(3) as MapTile.Colors).pixels)
+      assertEquals(
+          DedupeBatch(1, bytes.size.toLong(), blob(bytes).data.size.toLong()),
+          store.dedupeForTest(1),
+      )
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertEquals(DedupeBatch(1, bytes.size.toLong(), 0), store.dedupeForTest(1))
+      assertEquals(
+          DedupeBatch(1, compressed.size.toLong(), blob(compressed).data.size.toLong()),
+          store.dedupeForTest(1),
+      )
+      assertEquals(DedupeBatch(0, 0, 0), store.dedupeForTest(1))
+      assertContentEquals(blob(bytes).data, store.png(1))
+      assertContentEquals(blob(bytes).data, store.png(2))
+      assertContentEquals(blob(compressed).data, store.png(3))
+      assertContentEquals(colors, (store.tile(3) as MapTile.Colors).pixels)
+      assertTrue(store.mapIds()[1] && store.mapIds()[2] && store.mapIds()[3])
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().use { s ->
+        s.executeQuery("PRAGMA user_version").use {
+          it.next()
+          assertEquals(3, it.getInt(1))
+        }
+        s.executeQuery("SELECT COUNT(*),SUM(length(data)) FROM blobs").use {
+          it.next()
+          assertEquals(2, it.getInt(1))
+          assertEquals(blob(bytes).data.size + blob(compressed).data.size, it.getInt(2))
+        }
+      }
+    }
+  }
+
+  @Test
+  fun dedupeBeforeRecompressConvertsAnimationAndReleasesBlob() {
+    val file =
+        Files.createTempDirectory("imageonmap-dedupe-animation").resolve("pictures.db").toFile()
+    val bytes = png()
+    legacyDatabase(file, 2)
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement()
+          .execute("INSERT INTO images(id,owner,columns,rows) VALUES(1,'${UUID.randomUUID()}',1,1)")
+      db.createStatement()
+          .execute("INSERT INTO animations(image_id,frames,delays,slots) VALUES(1,1,'2','10')")
+      db.prepareStatement("INSERT INTO maps(map_id,image_id,idx,png) VALUES(10,1,0,?)").use {
+        it.setBytes(1, bytes)
+        it.executeUpdate()
+      }
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertEquals(1, store.dedupeForTest(1).maps)
+      assertEquals(listOf(1L), store.recompressCandidates())
+      assertNotNull(store.recompressImage(1))
+      assertTrue(store.tile(10) is MapTile.Colors)
+      assertContentEquals(byteArrayOf(), store.png(10))
+      assertEquals(emptyList(), store.recompressCandidates())
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("SELECT COUNT(*) FROM blobs").use {
+        it.next()
+        assertEquals(0, it.getInt(1))
+      }
+    }
+  }
+
+  @Test
+  fun mismatchedBlobDataRollsBackDedupeBatch() {
+    val file = Files.createTempDirectory("imageonmap-collision").resolve("pictures.db").toFile()
+    val bytes = png()
+    MapStore(file).use { it.open() }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.prepareStatement("INSERT INTO maps(map_id,png) VALUES(1,?)").use {
+        it.setBytes(1, bytes)
+        it.executeUpdate()
+      }
+      db.prepareStatement("INSERT INTO blobs(hash,data) VALUES(?,?)").use {
+        it.setBytes(1, blob(bytes).hash)
+        it.setBytes(2, byteArrayOf(1, 2, 3))
+        it.executeUpdate()
+      }
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertFails { store.dedupeForTest(1) }
+      assertContentEquals(bytes, store.png(1))
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("SELECT blob_hash FROM maps WHERE map_id=1").use {
+        it.next()
+        assertNull(it.getBytes(1))
+      }
+    }
+  }
+
+  @Test
+  fun dedupeVerificationFailureLeavesLegacyRowUntouched() {
+    val file = Files.createTempDirectory("imageonmap-dedupe-verify").resolve("pictures.db").toFile()
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+        db.prepareStatement("INSERT INTO maps(map_id,png) VALUES(1,?)").use {
+          it.setBytes(1, bytes)
+          it.executeUpdate()
+        }
+      }
+      val rows = store.readDedupeBatch(1)
+      assertFails {
+        prepareDedupeRows(rows) { MapTile.compressBlob(ByteArray(MapTile.PIXELS) { 1 }) }
+      }
+      assertContentEquals(bytes, store.png(1))
+      assertEquals(1, store.readDedupeBatch(1).size)
     }
   }
 }
