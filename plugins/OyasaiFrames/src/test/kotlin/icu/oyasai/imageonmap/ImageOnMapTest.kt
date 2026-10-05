@@ -1,5 +1,6 @@
 package icu.oyasai.imageonmap
 
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.net.InetAddress
@@ -11,6 +12,7 @@ import javax.imageio.ImageIO
 import javax.imageio.ImageTypeSpecifier
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertFalse
@@ -18,6 +20,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import org.bukkit.block.BlockFace
+import org.bukkit.map.MapPalette
 
 class ImageOnMapTest {
   @Test
@@ -44,6 +47,29 @@ class ImageOnMapTest {
     assertTrue(exceedsLimit(1501, 500, 2000, false))
     assertFalse(exceedsLimit(1500, 500, 2000, false))
     assertFalse(exceedsLimit(2000, 500, 2000, true))
+  }
+
+  @Test
+  fun viewerMapBudgetAdmitsNearbyImagesAndResets() {
+    val budget = ViewerMapBudget()
+    assertEquals(
+        listOf(2L, 3L),
+        budget.admitNearby(
+            listOf(
+                NearbyImage(1, 4, 30.0),
+                NearbyImage(2, 3, 1.0),
+                NearbyImage(3, 2, 10.0),
+            ),
+            5,
+        ),
+    )
+    budget.delivered()
+    assertEquals(1, budget.received)
+    assertEquals(emptyList(), budget.admitNearby(listOf(NearbyImage(4, 1, 0.0)), 5))
+    budget.reset()
+    assertEquals(0, budget.received)
+    assertEquals(listOf(4L), budget.admitNearby(listOf(NearbyImage(4, 5, 0.0)), 5))
+    assertEquals(emptyList(), budget.admitNearby(listOf(NearbyImage(5, 1, 0.0)), 5))
   }
 
   @Test
@@ -163,6 +189,7 @@ class ImageOnMapTest {
       assertEquals(1, store.list(owner, 0).size)
       assertEquals(2, store.posterByMap(11)?.ids?.size)
       assertNotNull(store.png(99))
+      assertTrue(store.tile(99) is MapTile.Png)
       assertNull(store.posterByMap(99))
     }
   }
@@ -324,12 +351,12 @@ class ImageOnMapTest {
       val result = ImageSource.prepare(gif(disposal), null, false, 16, 30, 2)
       assertEquals(1 to 1, result.columns to result.rows)
       assertEquals(listOf(2, 2, 2), result.delays)
-      val second = ImageIO.read(result.pngs[1].inputStream())
-      val third = ImageIO.read(result.pngs[2].inputStream())
-      assertEquals(0xff0000ff.toInt(), second.getRGB(1, 0))
-      assertEquals(0xffff0000.toInt(), third.getRGB(0, 0))
-      assertEquals(0, third.getRGB(1, 0) ushr 24, disposal)
-      assertEquals(0xff00ff00.toInt(), third.getRGB(2, 0))
+      val second = (MapTile.fromStored(result.storedTiles[1]) as MapTile.Colors).pixels
+      val third = (MapTile.fromStored(result.storedTiles[2]) as MapTile.Colors).pixels
+      assertEquals(MapPalette.matchColor(Color.BLUE), second[1])
+      assertEquals(MapPalette.matchColor(Color.RED), third[0])
+      assertEquals(0, third[1].toInt(), disposal)
+      assertEquals(MapPalette.matchColor(Color.GREEN), third[2])
     }
   }
 
@@ -351,6 +378,22 @@ class ImageOnMapTest {
     assertEquals(AnimationTile(8, 1, 2, 11), index.tile(31))
     index.remove(8)
     assertEquals(31, index.base(31))
+  }
+
+  @Test
+  fun animationWaitsForEveryNearbyViewer() {
+    val first = UUID.randomUUID()
+    val second = UUID.randomUUID()
+    val imageId = 8L
+    val viewers = listOf(first, second)
+    assertTrue(
+        allNearbyReceived(
+            imageId,
+            viewers,
+            mapOf(first to setOf(imageId), second to setOf(imageId)),
+        )
+    )
+    assertFalse(allNearbyReceived(imageId, viewers, mapOf(first to setOf(imageId))))
   }
 
   @Test
@@ -386,8 +429,8 @@ class ImageOnMapTest {
     assertEquals(2 to 1, prepared.columns to prepared.rows)
     assertEquals(listOf(0, 1, 3, 4), prepared.firstSlots)
     assertEquals(listOf(0, 1, 0, 2, 3, 2), prepared.slots)
-    assertEquals(4, prepared.pngs.size)
-    assertTrue(prepared.pngs[1].contentEquals(prepared.pngs[3]))
+    assertEquals(4, prepared.storedTiles.size)
+    assertTrue(prepared.storedTiles[1].contentEquals(prepared.storedTiles[3]))
 
     val file = Files.createTempDirectory("imageonmap-slots").resolve("pictures.db").toFile()
     val owner = UUID.randomUUID()
@@ -396,10 +439,31 @@ class ImageOnMapTest {
     val imageId =
         MapStore(file).use { store ->
           store.open()
-          store.create(owner, 2, 1, ids, prepared.pngs, prepared.delays, prepared.firstSlots, slots)
+          store.create(
+              owner,
+              2,
+              1,
+              ids,
+              prepared.storedTiles,
+              prepared.delays,
+              prepared.firstSlots,
+              slots,
+          )
         }
     MapStore(file).use { store ->
       store.open()
+      assertContentEquals(
+          (MapTile.fromStored(prepared.storedTiles[0]) as MapTile.Colors).pixels,
+          (store.tile(10) as MapTile.Colors).pixels,
+      )
+      val pushed = store.tilesForPush(imageId)
+      assertEquals(ids.toSet(), pushed.keys)
+      ids.forEachIndexed { index, mapId ->
+        assertContentEquals(
+            (MapTile.fromStored(prepared.storedTiles[index]) as MapTile.Colors).pixels,
+            (pushed.getValue(mapId) as MapTile.Colors).pixels,
+        )
+      }
       val animation = store.animations().single()
       assertEquals(ids, animation.ids)
       assertEquals(slots, animation.slots)
@@ -411,6 +475,62 @@ class ImageOnMapTest {
       assertEquals(10, index.base(21))
       assertEquals(AnimationTile(imageId, 1, 1, 11), index.tile(20))
       assertEquals(ids, store.delete(imageId)?.mapIds)
+      assertNull(store.tile(10))
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("SELECT COUNT(*) FROM map_books").use {
+        assertTrue(it.next())
+        assertEquals(0, it.getInt(1))
+      }
+    }
+  }
+
+  @Test
+  fun bookReadsFirstMiddleAndLastAndKeepsLegacyFormats() {
+    val file = Files.createTempDirectory("imageonmap-books").resolve("pictures.db").toFile()
+    val owner = UUID.randomUUID()
+    val colors = List(3) { frame -> ByteArray(MapTile.PIXELS) { (it + frame).toByte() } }
+    val png = png()
+    MapStore(file).use { it.open() }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().execute("ALTER TABLE map_books RENAME COLUMN data TO zlib")
+    }
+    MapStore(file).use { store ->
+      store.open()
+      val id =
+          store.create(
+              owner,
+              1,
+              1,
+              listOf(100, 101, 102),
+              colors.map(MapTile::compress),
+              listOf(2, 2, 2),
+              slots = listOf(100, 101, 102),
+          )
+      colors.forEachIndexed { index, expected ->
+        assertContentEquals(expected, (store.tile(100 + index) as MapTile.Colors).pixels)
+      }
+      assertEquals(setOf(100, 101, 102), store.tilesForPush(id).keys)
+      assertTrue(store.storedBytes(id) > 0)
+      assertContentEquals(byteArrayOf(), store.png(101))
+      store.create(owner, listOf(200), listOf(png))
+      store.create(owner, listOf(201), listOf(MapTile.compress(colors[0])))
+      assertTrue(store.tile(200) is MapTile.Png)
+      assertContentEquals(colors[0], (store.tile(201) as MapTile.Colors).pixels)
+      assertEquals(listOf(100), store.poster(id)?.ids)
+      assertEquals(listOf(100, 101, 102), store.delete(id)?.mapIds)
+      assertNull(store.tile(101))
+      assertFalse(store.mapIds()[100])
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("SELECT COUNT(*) FROM map_books").use {
+        assertTrue(it.next())
+        assertEquals(0, it.getInt(1))
+      }
+      db.createStatement().executeQuery("PRAGMA user_version").use {
+        assertTrue(it.next())
+        assertEquals(2, it.getInt(1))
+      }
     }
   }
 

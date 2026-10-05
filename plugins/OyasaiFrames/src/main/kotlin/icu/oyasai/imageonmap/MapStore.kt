@@ -160,6 +160,9 @@ internal class MapStore(private val file: File) : AutoCloseable {
             s.execute(
                 "CREATE TABLE animations (image_id INTEGER PRIMARY KEY REFERENCES images(id), frames INTEGER NOT NULL, delays TEXT NOT NULL, slots TEXT NOT NULL)"
             )
+            s.execute(
+                "CREATE TABLE map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, data BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
+            )
             s.execute("PRAGMA user_version = 2")
           }
         }
@@ -184,6 +187,22 @@ internal class MapStore(private val file: File) : AutoCloseable {
                 s.execute("PRAGMA user_version = 2")
               }
             }
+        db.createStatement().use { s ->
+          s.execute(
+              "CREATE TABLE IF NOT EXISTS map_books (image_id INTEGER NOT NULL REFERENCES images(id), tile INTEGER NOT NULL, data BLOB NOT NULL, PRIMARY KEY(image_id,tile))"
+          )
+          // The unpublished zlib-book schema may exist locally, but it contains no books.
+          s.executeQuery("PRAGMA table_info(map_books)").use { columns ->
+            var oldColumn = false
+            while (columns.next()) if (columns.getString("name") == "zlib") oldColumn = true
+            if (oldColumn) {
+              s.executeQuery("SELECT COUNT(*) FROM map_books").use { rows ->
+                check(rows.next() && rows.getInt(1) == 0) { "zlib books cannot be read as zstd" }
+              }
+              s.execute("ALTER TABLE map_books RENAME COLUMN zlib TO data")
+            }
+          }
+        }
       }
       else -> error("unsupported image database version $version")
     }
@@ -290,6 +309,83 @@ internal class MapStore(private val file: File) : AutoCloseable {
         s.executeQuery().use { r -> if (r.next()) r.getBytes(1) else null }
       }
 
+  fun tile(mapId: Int): MapTile? =
+      db.prepareStatement(
+              "SELECT m.png,b.data,(SELECT COUNT(*)-1 FROM maps p WHERE p.image_id=m.image_id AND p.idx<=m.idx AND p.idx % (i.columns*i.rows)=m.idx % (i.columns*i.rows)) FROM maps m LEFT JOIN images i ON i.id=m.image_id LEFT JOIN map_books b ON b.image_id=m.image_id AND b.tile=m.idx % (i.columns*i.rows) WHERE m.map_id=?"
+          )
+          .use { s ->
+            s.setInt(1, mapId)
+            s.executeQuery().use { r ->
+              if (!r.next()) null
+              else {
+                val stored = r.getBytes(1)
+                if (stored.isNotEmpty()) MapTile.fromStored(stored)
+                else MapTile.fromBook(checkNotNull(r.getBytes(2)), r.getInt(3))
+              }
+            }
+          }
+
+  /** Read each book once on the database thread, then hand the tiles to the main thread. */
+  fun tilesForPush(imageId: Long): Map<Int, MapTile> {
+    val tileCount =
+        db.prepareStatement("SELECT columns*rows FROM images WHERE id=?").use { s ->
+          s.setLong(1, imageId)
+          s.executeQuery().use { r ->
+            check(r.next())
+            r.getInt(1)
+          }
+        }
+    val books =
+        db.prepareStatement("SELECT tile,data FROM map_books WHERE image_id=?").use { s ->
+          s.setLong(1, imageId)
+          s.executeQuery().use { r ->
+            buildMap { while (r.next()) put(r.getInt(1), r.getBytes(2)) }
+          }
+        }
+    val rows =
+        db.prepareStatement("SELECT map_id,idx,png FROM maps WHERE image_id=? ORDER BY idx").use { s
+          ->
+          s.setLong(1, imageId)
+          s.executeQuery().use { r ->
+            buildList { while (r.next()) add(Triple(r.getInt(1), r.getInt(2), r.getBytes(3))) }
+          }
+        }
+    val result = mutableMapOf<Int, MapTile>()
+    rows
+        .filter { it.third.isNotEmpty() }
+        .forEach { (id, _, stored) -> result[id] = MapTile.fromStored(stored) }
+    rows
+        .filter { it.third.isEmpty() }
+        .groupBy { it.second % tileCount }
+        .forEach { (tile, entries) ->
+          val unpacked = MapTile.allFromBook(checkNotNull(books[tile]), entries.size)
+          entries.forEachIndexed { index, entry -> result[entry.first] = unpacked[index] }
+        }
+    return result
+  }
+
+  fun storedBytes(imageId: Long): Long {
+    val maps =
+        db.prepareStatement("SELECT COALESCE(SUM(length(png)),0) FROM maps WHERE image_id=?").use {
+            s ->
+          s.setLong(1, imageId)
+          s.executeQuery().use { r ->
+            r.next()
+            r.getLong(1)
+          }
+        }
+    val books =
+        db.prepareStatement("SELECT COALESCE(SUM(length(data)),0) FROM map_books WHERE image_id=?")
+            .use { s ->
+              s.setLong(1, imageId)
+              s.executeQuery().use { r ->
+                r.next()
+                r.getLong(1)
+              }
+            }
+    return maps + books
+  }
+
   fun ownerByMap(mapId: Int): UUID? =
       db.prepareStatement(
               "SELECT i.owner FROM maps m JOIN images i ON i.id=m.image_id WHERE m.map_id=?"
@@ -332,6 +428,21 @@ internal class MapStore(private val file: File) : AutoCloseable {
                       firstById[mapId]!! % (columns * rows) == slot % (columns * rows)
                     })
     )
+    val books =
+        if (delays.isEmpty()) emptyMap()
+        else
+            ids.indices
+                .groupBy { firstSlots[it] % (columns * rows) }
+                .mapValues { (_, indices) ->
+                  MapTile.compressBook(
+                      indices.sortedBy(firstSlots::get).map { index ->
+                        when (val map = MapTile.fromStored(pngs[index])) {
+                          is MapTile.Colors -> map.pixels
+                          is MapTile.Png -> MapTile.colors(map.image)
+                        }
+                      }
+                  )
+                }
     return transaction {
       val imageId =
           db.prepareStatement(
@@ -354,10 +465,19 @@ internal class MapStore(private val file: File) : AutoCloseable {
           s.setInt(1, id)
           s.setLong(2, imageId)
           s.setInt(3, firstSlots[i])
-          s.setBytes(4, pngs[i])
+          s.setBytes(4, if (delays.isEmpty()) pngs[i] else byteArrayOf())
           s.executeUpdate()
         }
       }
+      if (books.isNotEmpty())
+          db.prepareStatement("INSERT INTO map_books(image_id,tile,data) VALUES(?,?,?)").use { s ->
+            books.forEach { (tile, data) ->
+              s.setLong(1, imageId)
+              s.setInt(2, tile)
+              s.setBytes(3, data)
+              s.executeUpdate()
+            }
+          }
       if (delays.isNotEmpty())
           db.prepareStatement(
                   "INSERT INTO animations(image_id,frames,delays,slots) VALUES(?,?,?,?)"
@@ -491,6 +611,10 @@ internal class MapStore(private val file: File) : AutoCloseable {
 
   fun delete(id: Long): ImageDetails? = transaction {
     val image = details(id) ?: return@transaction null
+    db.prepareStatement("DELETE FROM map_books WHERE image_id=?").use { s ->
+      s.setLong(1, id)
+      s.executeUpdate()
+    }
     db.prepareStatement("DELETE FROM maps WHERE image_id=?").use { s ->
       s.setLong(1, id)
       s.executeUpdate()

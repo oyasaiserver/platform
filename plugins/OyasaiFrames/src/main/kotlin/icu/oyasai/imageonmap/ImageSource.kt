@@ -200,9 +200,9 @@ internal object ImageSource {
   data class Prepared(
       val columns: Int,
       val rows: Int,
-      val pngs: List<ByteArray>,
+      val storedTiles: List<ByteArray>,
       val delays: List<Int>,
-      val firstSlots: List<Int> = pngs.indices.toList(),
+      val firstSlots: List<Int> = storedTiles.indices.toList(),
       val slots: List<Int> = emptyList(),
   ) {
     val frames: Int
@@ -259,7 +259,8 @@ internal object ImageSource {
         }
         val (cols, rows) = dimensions(width, height, resize, bypass, maxTiles)
         val canvas = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-        val pngs = ArrayList<ByteArray>()
+        val storedTiles = ArrayList<ByteArray>()
+        val rawTiles = ArrayList<ByteArray>()
         val firstSlots = ArrayList<Int>()
         val slots = ArrayList<Int>(count * cols * rows)
         val seen = List(cols * rows) { mutableMapOf<Int, MutableList<Int>>() }
@@ -297,13 +298,15 @@ internal object ImageSource {
             drawImage(frame, x, y, null)
             dispose()
           }
-          tiles(canvas, resize, bypass, maxTiles).pngs.forEachIndexed { tile, png ->
-            val candidates = seen[tile].getOrPut(png.contentHashCode()) { mutableListOf() }
-            val existing = candidates.firstOrNull { pngs[it].contentEquals(png) }
+          tileImages(canvas, cols, rows, resize).forEachIndexed { tile, image ->
+            val colors = MapTile.colors(image)
+            val candidates = seen[tile].getOrPut(colors.contentHashCode()) { mutableListOf() }
+            val existing = candidates.firstOrNull { rawTiles[it].contentEquals(colors) }
             val index =
                 existing
-                    ?: pngs.size.also {
-                      pngs.add(png)
+                    ?: storedTiles.size.also {
+                      rawTiles.add(colors)
+                      storedTiles.add(MapTile.compress(colors))
                       firstSlots.add(slots.size)
                       candidates.add(it)
                     }
@@ -334,7 +337,7 @@ internal object ImageSource {
                 }
           }
         }
-        return Prepared(cols, rows, pngs, delays, firstSlots, slots)
+        return Prepared(cols, rows, storedTiles, delays, firstSlots, slots)
       } finally {
         reader.dispose()
       }
@@ -376,6 +379,19 @@ internal object ImageSource {
       limit: Int = 100,
   ): Tiles {
     val (cols, rows) = dimensions(source.width, source.height, resize, bypass, limit)
+    val pngs =
+        tileImages(source, cols, rows, resize).map { tile ->
+          ByteArrayOutputStream().also { ImageIO.write(tile, "png", it) }.toByteArray()
+        }
+    return Tiles(cols, rows, pngs)
+  }
+
+  private fun tileImages(
+      source: BufferedImage,
+      cols: Int,
+      rows: Int,
+      resize: Pair<Int, Int>?,
+  ): List<BufferedImage> {
     val maxWidth = cols * 128
     val maxHeight = rows * 128
     val fit = min(maxWidth.toDouble() / source.width, maxHeight.toDouble() / source.height)
@@ -389,12 +405,10 @@ internal object ImageSource {
     val y = if (resize == null) 0 else (maxHeight - height) / 2
     g.drawImage(source, x, y, width, height, null)
     g.dispose()
-    val pngs = buildList {
+    return buildList {
       for (row in 0 until rows) for (col in 0 until cols) {
-        val tile = canvas.getSubimage(col * 128, row * 128, 128, 128)
-        add(ByteArrayOutputStream().also { ImageIO.write(tile, "png", it) }.toByteArray())
+        add(canvas.getSubimage(col * 128, row * 128, 128, 128))
       }
     }
-    return Tiles(cols, rows, pngs)
   }
 }
