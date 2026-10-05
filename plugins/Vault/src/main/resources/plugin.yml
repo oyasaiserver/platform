@@ -1,0 +1,22 @@
+name: Vault
+main: net.milkbowl.vault.Vault
+version: "0.1.0"
+api-version: "1.21.11"
+load: STARTUP
+author: OyasaiServer
+description: SQLite economy and VaultAPI compatibility.
+commands:
+  vault-info:
+    description: Vault の接続状態を表示
+  balance:
+    aliases: [bal, ebal, ebalance, money, emoney]
+    permission: essentials.balance
+  pay:
+    aliases: [epay]
+    permission: essentials.pay
+  balancetop:
+    aliases: [ebalancetop, baltop, ebaltop]
+    permission: essentials.balancetop
+  eco:
+    aliases: [eeco, economy, eeconomy]
+    permission: essentials.eco
