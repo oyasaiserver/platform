@@ -5,6 +5,19 @@
 
 # ゲームモジュールごとの有効/無効
 games:
+  headhunt:
+    enabled: true
+  slot:
+    enabled: true
+  weapons:
+    enabled: true
+  pvp:
+    enabled: true
+  bedwars:
+    # Legacy migration is opt-in; stop external BedWars before enabling.
+    enabled: false
+  tntrun:
+    enabled: true
   roulette:
     enabled: true
 
@@ -20,3 +33,11 @@ roulette:
     sound: ENTITY_PLAYER_LEVELUP
     volume: 1.0
     pitch: 1.2
+
+# 旧エンジンの非公開換算との比較・調整用。初期値は互換性を保証しません。
+weapons:
+  compatibility:
+    projectile-speed-scale: 0.1
+    recoil-scale: 0.1
+    knockback-scale: 0.1
+    spread-scale: 0.1

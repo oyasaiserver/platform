@@ -3,8 +3,32 @@ version: ${version}
 main: icu.oyasai.games.OyasaiGamesPlugin
 api-version: "1.21"
 author: ukieo
-description: おやさい鯖 ミニゲーム統合プラットフォーム (OyasaiGames)
+description: おやさい鯖 ミニゲーム・生活アイテム・武器・PvP・BedWars・TNTRun統合プラットフォーム (OyasaiGames)
+softdepend: [Vault, SlotMachine, CrackShot, pvparena, WorldEdit, FastAsyncWorldEdit, BedWars, ScreamingBedWars, SBA, TNTRun_reloaded, Multiverse-Core]
 commands:
+  bw:
+    description: BedWars の参加・退出・統計・参加GUI
+    aliases: [bedwars]
+    permission: oyasaigames.bedwars.use
+  bwparty:
+    description: BedWars パーティー
+    aliases: [party]
+    permission: oyasaigames.bedwars.use
+  shout:
+    description: BedWars 試合内全体チャット
+    permission: oyasaigames.bedwars.use
+  tntrun:
+    description: TNTRun の参加・退出・統計・一覧
+    aliases: [tr]
+  oslot:
+    description: スロット台の一覧・情報・再読み込み
+    permission: oyasaigames.slot.admin
+  shot:
+    description: 武器の一覧・配布・装填を行います
+    permission: oyasaigames.weapons.admin
+  pa:
+    description: PvP アリーナへの参加・観戦・管理
+    aliases: [pvparena, ogpa]
   oyasaigames:
     description: おやさいゲームズのメニューを開きます
     aliases: [games, og]
@@ -61,6 +85,27 @@ commands:
     permission: op
     permission-message: "§cYou don't have the required permission to use this command"
 permissions:
+  oyasaigames.bedwars.use:
+    default: true
+  tntrun.join:
+    default: true
+  tntrun.party:
+    default: true
+  tntrun.shop:
+    default: true
+  slotmachine.access.default:
+    description: 標準スロット台の利用
+    default: true
+  oyasaigames.slot.admin:
+    description: スロット台の管理
+    default: op
+  oyasaigames.weapons.admin:
+    description: 武器の管理コマンドを使用できます
+    default: op
+  oyasaigames.pvp.use:
+    default: true
+  oyasaigames.pvp.admin:
+    default: op
   op:
     default: op
   oyasaigames.use:

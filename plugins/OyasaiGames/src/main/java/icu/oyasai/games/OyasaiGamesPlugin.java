@@ -3,6 +3,8 @@ package icu.oyasai.games;
 import icu.oyasai.games.command.GamesCommand;
 import icu.oyasai.games.gui.GamesHubListener;
 import icu.oyasai.games.headhunt.HeadHuntModule;
+import icu.oyasai.games.weapons.WeaponsModule;
+import icu.oyasai.games.pvp.PvpModule;
 import icu.oyasai.games.kimodameshi.KimodameshiModule;
 import icu.oyasai.games.toys.ToysModule;
 import icu.oyasai.games.roulette.command.RouletteCommand;
@@ -27,6 +29,11 @@ public class OyasaiGamesPlugin extends JavaPlugin {
     private BlockClassifier blockClassifier;
     private RouletteManager rouletteManager;
     private HeadHuntModule headHuntModule;
+    private icu.oyasai.games.slot.SlotModule slotModule;
+    private WeaponsModule weaponsModule;
+    private PvpModule pvpModule;
+    private icu.oyasai.games.bedwars.BedWarsModule bedwarsModule;
+    private icu.oyasai.games.tntrun.TntrunModule tntrunModule;
     private KimodameshiModule kimodameshiModule;
     private ToysModule toysModule;
 
@@ -40,15 +47,60 @@ public class OyasaiGamesPlugin extends JavaPlugin {
         getLogger().info("==========================================");
 
         // 1. ルーレットモジュールの初期化
-        initializeRouletteModule();
+        if (getConfig().getBoolean("games.roulette.enabled", true)) {
+            try {
+                initializeRouletteModule();
+            } catch (Exception | LinkageError exception) {
+                getLogger().log(java.util.logging.Level.SEVERE, "Rouletteの初期化に失敗しました。", exception);
+                rouletteManager = null;
+            }
+        }
 
         headHuntModule = new HeadHuntModule(this);
         try {
-            headHuntModule.enable();
-        } catch (Exception exception) {
+            if (getConfig().getBoolean("games.headhunt.enabled", true)) headHuntModule.enable();
+        } catch (Exception | LinkageError exception) {
             getLogger().log(java.util.logging.Level.SEVERE, "HeadHuntの初期化に失敗しました。", exception);
         }
 
+        slotModule = new icu.oyasai.games.slot.SlotModule(this);
+        try {
+            slotModule.enable();
+        } catch (Exception | LinkageError exception) {
+            shutdownModule("slot", slotModule::disable);
+            getLogger().log(java.util.logging.Level.SEVERE, "slotの初期化に失敗しました。", exception);
+        }
+
+        weaponsModule = new WeaponsModule(this);
+        try {
+            weaponsModule.enable();
+        } catch (Exception | LinkageError exception) {
+            shutdownModule("weapons", weaponsModule::disable);
+            getLogger().severe("weaponsの初期化に失敗しました (" + exception.getClass().getSimpleName() + ")。");
+        }
+
+        pvpModule = new PvpModule(this);
+        try {
+            pvpModule.enable();
+        } catch (Exception | LinkageError exception) {
+            getLogger().log(java.util.logging.Level.SEVERE, "PvPの初期化に失敗しました。", exception);
+            shutdownModule("PvP", pvpModule::disable);
+        }
+
+        bedwarsModule = new icu.oyasai.games.bedwars.BedWarsModule(this);
+        try { bedwarsModule.enable(); }
+        catch (Exception | LinkageError exception) {
+            try { bedwarsModule.disable(); } catch (Exception | LinkageError cleanup) { getLogger().severe("BedWars recovery remains pending."); }
+            getLogger().severe("bedwarsの初期化に失敗しました (" + exception.getClass().getSimpleName() + ")。");
+        }
+
+        tntrunModule = new icu.oyasai.games.tntrun.TntrunModule(this);
+        try { tntrunModule.enable(); }
+        catch (Exception | LinkageError exception) {
+            getLogger().log(java.util.logging.Level.SEVERE, "TNTRunの初期化に失敗しました。", exception);
+            try { tntrunModule.disable(); }
+            catch (Exception | LinkageError cleanup) { getLogger().log(java.util.logging.Level.SEVERE, "TNTRun終了処理に失敗しました。", cleanup); }
+        }
         kimodameshiModule = new KimodameshiModule(this);
         kimodameshiModule.enable();
         toysModule = new ToysModule(this);
@@ -66,10 +118,30 @@ public class OyasaiGamesPlugin extends JavaPlugin {
 
         // ルーレットモジュールのクリーンアップ（タスク・セッション解放）
         if (rouletteManager != null) {
-            rouletteManager.shutdown();
+            shutdownModule("roulette", rouletteManager::shutdown);
+        }
+        if (slotModule != null) {
+            shutdownModule("slot", slotModule::disable);
         }
         if (headHuntModule != null) {
-            headHuntModule.disable();
+            shutdownModule("HeadHunt", headHuntModule::disable);
+        }
+
+        if (weaponsModule != null) {
+            shutdownModule("weapons", weaponsModule::disable);
+        }
+        if (pvpModule != null) {
+            try { pvpModule.disable(); }
+            catch (Exception | LinkageError exception) { getLogger().log(java.util.logging.Level.SEVERE, "PvP終了処理に失敗しました。", exception); }
+        }
+
+        if (bedwarsModule != null) {
+            try { bedwarsModule.disable(); }
+            catch (Exception | LinkageError exception) { getLogger().severe("BedWars終了処理に失敗しました。復元記録を保持します。"); }
+        }
+        if (tntrunModule != null) {
+            try { tntrunModule.disable(); }
+            catch (Exception | LinkageError exception) { getLogger().log(java.util.logging.Level.SEVERE, "TNTRun終了処理に失敗しました。", exception); }
         }
 
         if (kimodameshiModule != null) kimodameshiModule.disable();
@@ -77,6 +149,11 @@ public class OyasaiGamesPlugin extends JavaPlugin {
 
         getLogger().info("OyasaiGames を安全に停止しました。");
         instance = null;
+    }
+
+    private void shutdownModule(String name, Runnable action) {
+        try { action.run(); }
+        catch (Exception | LinkageError exception) { getLogger().severe(name + "終了処理に失敗しました (" + exception.getClass().getSimpleName() + ")。"); }
     }
 
     /**
@@ -119,6 +196,39 @@ public class OyasaiGamesPlugin extends JavaPlugin {
      */
     public void reloadAll() {
         reloadConfig();
+        if (slotModule != null) {
+            try {
+                slotModule.reload();
+            } catch (Exception | LinkageError exception) {
+                shutdownModule("slot", slotModule::disable);
+                getLogger().log(java.util.logging.Level.SEVERE, "slotの再設定に失敗しました。", exception);
+            }
+        }
+        if (weaponsModule != null) {
+            try { weaponsModule.reload(); }
+            catch (Exception | LinkageError exception) {
+                shutdownModule("weapons", weaponsModule::disable);
+                getLogger().log(java.util.logging.Level.SEVERE, "weaponsの再設定に失敗しました。", exception);
+            }
+        }
+        if (pvpModule != null) {
+            try { pvpModule.disable(); pvpModule.enable(); }
+            catch (Exception | LinkageError exception) {
+                getLogger().log(java.util.logging.Level.SEVERE, "PvPの再設定に失敗しました。", exception);
+            }
+        }
+        if (bedwarsModule != null) {
+            try { bedwarsModule.disable(); bedwarsModule.enable(); }
+            catch (Exception | LinkageError exception) { getLogger().severe("BedWarsの再設定に失敗しました。復元記録を保持します。"); }
+        }
+        if (tntrunModule != null) {
+            try { tntrunModule.disable(); tntrunModule.enable(); }
+            catch (Exception | LinkageError exception) {
+                getLogger().log(java.util.logging.Level.SEVERE, "TNTRunの再設定に失敗しました。", exception);
+                try { tntrunModule.disable(); }
+                catch (Exception | LinkageError cleanup) { getLogger().log(java.util.logging.Level.SEVERE, "TNTRun終了処理に失敗しました。", cleanup); }
+            }
+        }
         if (rouletteConfig != null) {
             rouletteConfig.reload();
         }
