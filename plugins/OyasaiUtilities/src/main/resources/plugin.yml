@@ -58,7 +58,8 @@ commands:
     permission: tpswitch.tpset
     permission-message: "§4No permission!!!"
   sit:
-    description: "座る・右クリック座りを切り替える"
+    description: "座る・右クリック座りとPlayerSitモードを切り替える"
+    usage: "/<command> [toggle|playermode [rank|all]]"
     aliases: [gsit]
   lay:
     description: "仰向けに寝そべる"
@@ -140,6 +141,9 @@ commands:
     permission: oyasaiutilities.spawn
 
 permissions:
+  oyasai.utilities.sit.admin:
+    description: "PlayerSitモードの変更権限"
+    default: op
   tpswitch.tpset:
     description: "Teleport setting permission."
     default: true
