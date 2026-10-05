@@ -3,6 +3,7 @@ version = "1.0.0"
 dependencies {
   compileOnly(libs.purpur.api)
   implementation(libs.kotlin.stdlib)
+  implementation(libs.sqlite.jdbc)
 
   testImplementation(libs.purpur.api)
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.4.0")

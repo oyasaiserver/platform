@@ -5,6 +5,11 @@ api-version: "1.21"
 softdepend:
   - TokenManager
 commands:
+  applylifeworldsettings:
+    description: lifeworld と同じ基本設定を適用する
+    usage: /applylifeworldsettings <world>
+    permission: oyasai.admintools.applylifeworldsettings
+    permission-message: "§cこのコマンドを使用する権限がありません。"
   syokaku:
     description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）
     usage: |
@@ -44,6 +49,9 @@ commands:
     description: 最新のアンケートを開く (短縮用)
     permission: oyasai.survey
 permissions:
+  oyasai.admintools.applylifeworldsettings:
+    description: applylifeworldsettingsコマンドの使用権限
+    default: op
   oyasai.survey:
     description: お知らせ・アンケートコマンドの使用権限
     default: true

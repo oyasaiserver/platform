@@ -16,7 +16,53 @@ commands:
   headhunt:
     description: HeadHuntのメインコマンドです。
     aliases: [hhunt]
+  joingame:
+    usage: "/joingame <text>"
+  leavegame:
+    description: 自身の参加予約をキャンセルします
+    usage: "/leavegame"
+  startgame:
+    usage: "/startgame"
+  givemission:
+    usage: "/givemission <player>"
+    permission: op
+    permission-message: "§cYou don't have the required permission to use this command"
+  checkmission:
+    usage: "/checkmission <number> <number> <number> <text>"
+  setteam:
+    usage: "/setteam <player> <text>"
+    permission: op
+    permission-message: "§cYou don't have the required permission to use this command"
+  clearteams:
+    usage: "/clearteams"
+    permission: op
+    permission-message: "§cYou don't have the required permission to use this command"
+  points:
+    description: 自分または指定したプレイヤーのポイントを確認します
+    usage: "/points [<player>]"
+  eventstats:
+    description: イベントポイントを持つ全プレイヤーの統計を表示します
+    usage: "/eventstats"
+    permission: op
+    permission-message: "§cYou don't have the required permission to use this command"
+  editpoints:
+    description: プレイヤーのポイントを増減・設定します
+    usage: "/editpoints <add|remove|set> <プレイヤー> <discovery|kill|event> <数値>"
+    permission: op
+    permission-message: "§cYou don't have the required permission to use this command"
+  stopgame:
+    description: 進行中のゲームを強制終了し、プレイヤーをロビーへ戻します
+    usage: "/stopgame"
+    permission: op
+    permission-message: "§cYou don't have the required permission to use this command"
+  recovergameplayer:
+    description: 未復元のゲーム用スナップショットを手動復元します
+    usage: "/recovergameplayer <player>"
+    permission: op
+    permission-message: "§cYou don't have the required permission to use this command"
 permissions:
+  op:
+    default: op
   oyasaigames.use:
     description: おやさいゲームズを使用する権限
     default: true
