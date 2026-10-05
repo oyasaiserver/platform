@@ -31,7 +31,13 @@ let
       mkdir -p plugins
       rm -f plugins/*.jar
       ${lib.optionalString (plugins != [ ]) ''
-        cp --no-preserve=ownership,mode ${lib.concatStringsSep " " plugins} plugins
+        # store のパスは `<hash>-<name>.jar`。`ls` で名前順に並ぶよう `<name>-<hash>.jar` にして置く
+        for p in ${lib.concatStringsSep " " plugins}; do
+          b=$(basename "$p")
+          h=''${b%%-*}
+          n=''${b#*-}
+          cp --no-preserve=ownership,mode "$p" "plugins/''${n%.jar}-$h.jar"
+        done
       ''}
 
       # Floodgate key.pem is 16 raw bytes (AES-128), base64-encoded in the envvar.
