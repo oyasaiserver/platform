@@ -19,7 +19,6 @@ import icu.oyasai.utilities.redbull.RedBullFeature
 import icu.oyasai.utilities.sit.SitFeature
 import icu.oyasai.utilities.skin.SkinFeature
 import icu.oyasai.utilities.skriptport.CommandAliases
-import icu.oyasai.utilities.skriptport.CommandItems
 import icu.oyasai.utilities.skriptport.Guidance
 import icu.oyasai.utilities.skriptport.NonOpUtilities
 import icu.oyasai.utilities.skriptport.Scale
@@ -39,7 +38,6 @@ class Main : JavaPlugin() {
   private lateinit var skinFeature: SkinFeature
   private lateinit var tpSwitchFeature: TpSwitchFeature
   private lateinit var sitFeature: SitFeature
-  private lateinit var commandItems: CommandItems
   private lateinit var guidance: Guidance
 
   override fun onLoad() {}
@@ -50,8 +48,6 @@ class Main : JavaPlugin() {
     NonOpUtilities(this).enable()
     Scale(this).enable()
     CommandAliases(this).enable()
-    commandItems = CommandItems(this)
-    commandItems.enable()
     tpSwitchFeature = TpSwitchFeature(this)
     tpSwitchFeature.enable()
     sitFeature = SitFeature(this)
@@ -100,7 +96,6 @@ class Main : JavaPlugin() {
 
   override fun onDisable() {
     if (::guidance.isInitialized) guidance.disable()
-    if (::commandItems.isInitialized) commandItems.disable()
     if (::tpSwitchFeature.isInitialized) tpSwitchFeature.disable()
     if (::sitFeature.isInitialized) sitFeature.disable()
     if (::skinFeature.isInitialized) skinFeature.disable()

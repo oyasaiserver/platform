@@ -42,16 +42,6 @@ commands:
     usage: /d
   l:
     usage: /l
-  savedyeitem:
-    usage: /savedyeitem
-    permission: save.dye.item
-  savemenuitem:
-    usage: /savemenuitem
-    permission: save.menu.item
-  getdye:
-    usage: /getdye
-  getmenu:
-    usage: /getmenu
   tpset:
     description: "Teleport setting."
     usage: "/<command> [option]"
