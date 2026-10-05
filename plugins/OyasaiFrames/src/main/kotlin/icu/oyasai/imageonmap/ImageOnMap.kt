@@ -1062,15 +1062,17 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         .thenCompose { current ->
           CompletableFuture.supplyAsync(
               {
+                val fetched = ImageSource.fetch(url)
                 current to
-                    ImageSource.prepare(
-                        ImageSource.fetch(url),
-                        resize,
-                        bypass,
-                        maxTiles,
-                        maxFrames,
-                        minDelay,
-                    )
+                    (fetched to
+                        ImageSource.prepare(
+                            fetched.bytes,
+                            resize,
+                            bypass,
+                            maxTiles,
+                            maxFrames,
+                            minDelay,
+                        ))
               },
               imageThreads,
           )
@@ -1081,7 +1083,8 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               failCreate(player, url, failure)
               return@main
             }
-            val (current, tiles) = result
+            val (current, prepared) = result
+            val (fetched, tiles) = prepared
             if (!player.isOnline) {
               failCreate(player, url, IllegalStateException("プレイヤーが退出しました"))
               return@main
@@ -1146,6 +1149,8 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                                   tiles.firstSlots,
                                   slots,
                                   tiles.staticBlobs,
+                                  url,
+                                  fetched.url,
                               )
                           id to store.storedBytes(id)
                         }
@@ -1199,7 +1204,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     active.remove(player.uniqueId)
     permits.release()
     val host = runCatching { URI(url).host }.getOrNull() ?: "unknown"
-    val raw = error(failure)
+    val raw = error(failure).replace(Regex("https?://\\S+", RegexOption.IGNORE_CASE), "[URL]")
     val reason =
         if (raw.any { it in 'ぁ'..'ん' || it in '一'..'龯' }) raw.replace(url, "[URL]")
         else "通信または保存に失敗しました"
@@ -1420,6 +1425,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                 player,
                 "画像ID: ${details.id}（地図ID #$id、${tileName(index, details.columns, details.rows)}） / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"}$placement",
             )
+            message(player, imageUrls(details))
           }
         }
   }
@@ -1428,6 +1434,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val DATE: DateTimeFormatter =
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("Asia/Tokyo"))
   }
+
+  private fun imageUrls(details: ImageDetails): String =
+      if (details.sourceUrl == null && details.fetchedUrl == null) "URL の記録なし（記録前に作成）"
+      else "入力URL: ${details.sourceUrl ?: "不明"} / 取得URL: ${details.fetchedUrl ?: "不明"}"
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun place(e: PlayerInteractEvent) {
@@ -1606,6 +1616,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               return@main
             }
             message(sender, "画像 #$imageId: ${result.second.size} 枚")
+            message(sender, imageUrls(result.first!!))
             result.second.take(20).forEach { row ->
               val world = server.getWorld(row.world)
               val status =

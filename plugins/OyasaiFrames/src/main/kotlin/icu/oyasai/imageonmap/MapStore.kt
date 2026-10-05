@@ -51,6 +51,8 @@ internal data class ImageDetails(
     val createdAt: Long?,
     val hidden: Boolean,
     val mapIds: List<Int>,
+    val sourceUrl: String?,
+    val fetchedUrl: String?,
 )
 
 internal data class RecompressResult(
@@ -162,7 +164,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
         transaction {
           db.createStatement().use { s ->
             s.execute(
-                "CREATE TABLE images (id INTEGER PRIMARY KEY, owner TEXT NOT NULL, name TEXT, columns INTEGER NOT NULL, rows INTEGER NOT NULL, created_at INTEGER, hidden INTEGER NOT NULL DEFAULT 0)"
+                "CREATE TABLE images (id INTEGER PRIMARY KEY, owner TEXT NOT NULL, name TEXT, columns INTEGER NOT NULL, rows INTEGER NOT NULL, created_at INTEGER, hidden INTEGER NOT NULL DEFAULT 0, source_url TEXT, fetched_url TEXT)"
             )
             s.execute(
                 "CREATE TABLE maps (map_id INTEGER PRIMARY KEY, image_id INTEGER REFERENCES images(id), idx INTEGER, png BLOB NOT NULL, UNIQUE(image_id, idx))"
@@ -242,6 +244,17 @@ internal class MapStore(private val file: File) : AutoCloseable {
             s.execute("PRAGMA user_version = 3")
           }
         }
+    transaction {
+      db.createStatement().use { s ->
+        val columns = mutableSetOf<String>()
+        s.executeQuery("PRAGMA table_info(images)").use { r ->
+          while (r.next()) columns.add(r.getString("name"))
+        }
+        if ("source_url" !in columns) s.execute("ALTER TABLE images ADD COLUMN source_url TEXT")
+        if ("fetched_url" !in columns) s.execute("ALTER TABLE images ADD COLUMN fetched_url TEXT")
+        s.execute("CREATE INDEX IF NOT EXISTS images_source_url ON images(source_url)")
+      }
+    }
   }
 
   private fun <T> transaction(block: () -> T): T {
@@ -599,6 +612,8 @@ internal class MapStore(private val file: File) : AutoCloseable {
       firstSlots: List<Int> = ids.indices.toList(),
       slots: List<Int> = emptyList(),
       staticBlobs: List<ColorBlob> = emptyList(),
+      sourceUrl: String? = null,
+      fetchedUrl: String? = null,
   ): Long {
     val firstById = mutableMapOf<Int, Int>()
     slots.forEachIndexed { slot, mapId -> firstById.putIfAbsent(mapId, slot) }
@@ -637,7 +652,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
     return transaction {
       val imageId =
           db.prepareStatement(
-                  "INSERT INTO images(owner,columns,rows,created_at) VALUES(?,?,?,?)",
+                  "INSERT INTO images(owner,columns,rows,created_at,source_url,fetched_url) VALUES(?,?,?,?,?,?)",
                   java.sql.Statement.RETURN_GENERATED_KEYS,
               )
               .use { s ->
@@ -645,6 +660,8 @@ internal class MapStore(private val file: File) : AutoCloseable {
                 s.setInt(2, columns)
                 s.setInt(3, rows)
                 s.setLong(4, System.currentTimeMillis())
+                s.setString(5, sourceUrl)
+                s.setString(6, fetchedUrl)
                 s.executeUpdate()
                 s.generatedKeys.use { r ->
                   check(r.next())
@@ -765,7 +782,9 @@ internal class MapStore(private val file: File) : AutoCloseable {
 
   fun details(id: Long): ImageDetails? {
     val image =
-        db.prepareStatement("SELECT owner,columns,rows,created_at,hidden FROM images WHERE id=?")
+        db.prepareStatement(
+                "SELECT owner,columns,rows,created_at,hidden,source_url,fetched_url FROM images WHERE id=?"
+            )
             .use { s ->
               s.setLong(1, id)
               s.executeQuery().use { r ->
@@ -779,6 +798,8 @@ internal class MapStore(private val file: File) : AutoCloseable {
                         r.getLong(4).takeUnless { r.wasNull() },
                         r.getInt(5) != 0,
                         emptyList(),
+                        r.getString(6),
+                        r.getString(7),
                     )
               }
             } ?: return null

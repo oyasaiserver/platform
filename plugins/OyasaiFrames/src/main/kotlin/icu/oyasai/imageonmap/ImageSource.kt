@@ -23,6 +23,8 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 internal object ImageSource {
+  data class Fetched(val bytes: ByteArray, val url: String)
+
   private const val MAX_BYTES = 16 * 1024 * 1024
   private var webp: WebPImageReaderSpi? = null
   private val watchdog =
@@ -107,7 +109,7 @@ internal object ImageSource {
     return listOf(uri)
   }
 
-  fun fetch(url: String): ByteArray {
+  fun fetch(url: String): Fetched {
     val deadline = System.nanoTime() + Duration.ofSeconds(20).toNanos()
     var last: Exception? = null
     for (start in candidates(url)) {
@@ -162,7 +164,7 @@ internal object ImageSource {
                   out.write(buf, 0, n)
                 }
                 require(System.nanoTime() < deadline) { "取得がタイムアウトしました" }
-                return out.toByteArray()
+                return Fetched(out.toByteArray(), uri.toString())
               }
             } finally {
               timeout.cancel(false)

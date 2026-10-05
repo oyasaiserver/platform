@@ -89,6 +89,81 @@ class ImageOnMapTest {
   }
 
   @Test
+  fun staticImageKeepsUrlsWithAndWithoutResize() {
+    val file = Files.createTempDirectory("imageonmap-urls").resolve("pictures.db").toFile()
+    val source = "https://example.com/image?original=1"
+    val fetched = "https://cdn.example.com/image.png"
+    val bytes = png()
+    MapStore(file).use { store ->
+      store.open()
+      listOf(null, 1 to 1).forEachIndexed { index, resize ->
+        val tiles = ImageSource.prepare(bytes, resize, false, 16, 30, 2)
+        val id =
+            store.create(
+                UUID.randomUUID(),
+                tiles.columns,
+                tiles.rows,
+                listOf(100 + index),
+                tiles.storedTiles,
+                staticBlobs = tiles.staticBlobs,
+                sourceUrl = source,
+                fetchedUrl = fetched,
+            )
+        assertEquals(source, store.details(id)?.sourceUrl)
+        assertEquals(fetched, store.details(id)?.fetchedUrl)
+      }
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("PRAGMA index_list(images)").use { indexes ->
+        assertTrue(
+            generateSequence { if (indexes.next()) indexes.getString("name") else null }
+                .any { it == "images_source_url" }
+        )
+      }
+    }
+  }
+
+  @Test
+  fun legacyImageHasNoRecordedUrlsAfterUpgrade() {
+    val file = Files.createTempDirectory("imageonmap-old-urls").resolve("pictures.db").toFile()
+    legacyDatabase(file, 2)
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement()
+          .execute("INSERT INTO images(id,owner,columns,rows) VALUES(1,'${UUID.randomUUID()}',1,1)")
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertNull(store.details(1)?.sourceUrl)
+      assertNull(store.details(1)?.fetchedUrl)
+    }
+  }
+
+  @Test
+  fun versionThreeImageGainsNullableUrlsWithoutVersionBump() {
+    val file = Files.createTempDirectory("imageonmap-v3-urls").resolve("pictures.db").toFile()
+    legacyDatabase(file, 2)
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().use { s ->
+        s.execute("INSERT INTO images(id,owner,columns,rows) VALUES(1,'${UUID.randomUUID()}',1,1)")
+        s.execute("CREATE TABLE blobs (hash BLOB PRIMARY KEY, data BLOB NOT NULL)")
+        s.execute("ALTER TABLE maps ADD COLUMN blob_hash BLOB REFERENCES blobs(hash)")
+        s.execute("PRAGMA user_version=3")
+      }
+    }
+    MapStore(file).use { store ->
+      store.open()
+      assertNull(store.details(1)?.sourceUrl)
+      assertNull(store.details(1)?.fetchedUrl)
+    }
+    DriverManager.getConnection("jdbc:sqlite:${file.absolutePath}").use { db ->
+      db.createStatement().executeQuery("PRAGMA user_version").use {
+        assertTrue(it.next())
+        assertEquals(3, it.getInt(1))
+      }
+    }
+  }
+
+  @Test
   fun animatedMapLimits() {
     assertTrue(exceedsLimit(0, 501, 500, false))
     assertFalse(exceedsLimit(0, 500, 500, false))
@@ -532,6 +607,8 @@ class ImageOnMapTest {
               prepared.delays,
               prepared.firstSlots,
               slots,
+              sourceUrl = "https://imgur.com/aBc123",
+              fetchedUrl = "https://i.imgur.com/aBc123.gif",
           )
         }
     MapStore(file).use { store ->
@@ -541,6 +618,8 @@ class ImageOnMapTest {
           (store.tile(10) as MapTile.Colors).pixels,
       )
       val pushed = store.tilesForPush(imageId)
+      assertEquals("https://imgur.com/aBc123", store.details(imageId)?.sourceUrl)
+      assertEquals("https://i.imgur.com/aBc123.gif", store.details(imageId)?.fetchedUrl)
       assertEquals(ids.toSet(), pushed.keys)
       ids.forEachIndexed { index, mapId ->
         assertContentEquals(
