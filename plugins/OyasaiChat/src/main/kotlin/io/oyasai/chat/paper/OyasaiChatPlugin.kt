@@ -57,9 +57,14 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   @Volatile internal var reloadInProgress = false
   internal var pendingChatCommits = 0
   internal var importInProgress = false
+  internal var networkDeliveryEnabled = true
+    private set
 
   override fun onEnable() {
     saveDefaultConfig()
+    networkDeliveryEnabled = io.oyasai.chat.paper.network.PaperNetworkMode.velocityEnabled(server)
+    if (!networkDeliveryEnabled)
+        logger.info("OyasaiChat standalone mode: network delivery disabled.")
     textTransformers = RecipientTextTransformerRegistry(this)
     val runtime =
         runCatching {
@@ -95,6 +100,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   }
 
   internal fun onBackendPlayerJoin(player: Player) {
+    if (!runtime.config.network.deliveryEnabled) return
     // Paper join can precede Velocity post-connect; retry on the next tick as well
     // as handling the proxy announcement. PM state requests require a confirmed ID.
     server.scheduler.runTask(this, Runnable { runtime.bridge.requestIdentity(player) })

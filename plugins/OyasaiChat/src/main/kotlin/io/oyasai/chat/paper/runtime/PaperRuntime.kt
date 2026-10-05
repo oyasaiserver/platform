@@ -35,6 +35,7 @@ internal object PaperRuntimeFactory {
       rawModel: ChatConfig,
       transformers: RecipientTextTransformerRegistry,
   ): PaperRuntime {
+    rawModel.network.deliveryEnabled = plugin.networkDeliveryEnabled
     val dictionaryFile = java.io.File(plugin.dataFolder, "japanize-dictionary.yml")
     val fileDictionary = io.oyasai.chat.paper.japanize.LunaImport.dictionary(dictionaryFile)
     val model =

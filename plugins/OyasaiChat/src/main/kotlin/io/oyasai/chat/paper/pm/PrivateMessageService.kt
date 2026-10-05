@@ -107,6 +107,10 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       return true
     }
 
+    if (!chat.config.network.deliveryEnabled) {
+      source.sendMessage(chat.formatter.error("That player is not online on this server."))
+      return false
+    }
     pendingConversationTargets[source.uniqueId] = PendingConversationTarget(input)
     val sent =
         chat.bridge.send(
@@ -310,6 +314,10 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       )
       return true
     }
+    if (!chat.config.network.deliveryEnabled) {
+      source.sendMessage(chat.formatter.error("That player is not online on this server."))
+      return false
+    }
     val envelope =
         NetworkEnvelope.backend(
             type = MessageType.PRIVATE_MESSAGE,
@@ -389,7 +397,7 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
     state.privateMessageModePeer = targetId
     state.privateMessageModeName = targetName
     state.lastPrivateMessagePeer = targetId
-    if (!syncProxy) return true
+    if (!syncProxy || !chat.config.network.deliveryEnabled) return true
     val sent =
         chat.bridge.send(
             source,

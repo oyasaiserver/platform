@@ -23,13 +23,14 @@ class PaperNetworkBridge(
   private val deduplicator = MessageDeduplicator()
 
   fun requestIdentity(player: Player) {
-    if (!player.isOnline || !plugin.isEnabled) return
+    if (!config.network.deliveryEnabled || !player.isOnline || !plugin.isEnabled) return
     val request = config.network.identity.request(player.uniqueId, player.name)
     runCatching { player.sendPluginMessage(plugin, NETWORK_CHANNEL, EnvelopeCodec.encode(request)) }
         .onFailure { plugin.logger.warning("Unable to request backend identity: ${it.message}") }
   }
 
   fun send(player: Player, envelope: NetworkEnvelope): Boolean {
+    if (!config.network.deliveryEnabled) return false
     if (!config.network.identity.confirmed) {
       requestIdentity(player)
       plugin.logger.warning(
@@ -63,7 +64,7 @@ class PaperNetworkBridge(
   }
 
   override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
-    if (channel != NETWORK_CHANNEL) return
+    if (!config.network.deliveryEnabled || channel != NETWORK_CHANNEL) return
     val envelope =
         runCatching { EnvelopeCodec.decode(message) }
             .getOrElse {

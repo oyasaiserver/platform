@@ -42,12 +42,15 @@ class NetworkSettings(
     val remoteMessagePrefix: String = "",
     val remoteMessageSuffix: String = "",
 ) {
+  var deliveryEnabled: Boolean = true
   var identity = io.oyasai.chat.common.protocol.BackendIdentity(backendId)
   val backendId: String
     get() = identity.id
 
   fun groupFor(channel: ChannelDefinition): String? =
-      channel.networkGroup?.takeIf { !identity.confirmed || backendId in groups[it].orEmpty() }
+      channel.networkGroup?.takeIf {
+        deliveryEnabled && (!identity.confirmed || backendId in groups[it].orEmpty())
+      }
 
   fun resolve(group: String?): Set<String>? = group?.let { groups[it] }
 
