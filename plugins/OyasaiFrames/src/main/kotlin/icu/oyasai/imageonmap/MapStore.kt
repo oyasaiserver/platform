@@ -2,7 +2,6 @@ package icu.oyasai.imageonmap
 
 import icu.oyasai.frames.FrameStore
 import java.io.File
-import java.security.MessageDigest
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.BitSet
@@ -62,6 +61,15 @@ internal data class RecompressResult(
 )
 
 internal data class DedupeBatch(val maps: Int, val before: Long, val added: Long)
+
+internal data class DedupeRow(val id: Int, val original: ByteArray, val blob: ColorBlob)
+
+internal data class LegacyRow(val id: Int, val data: ByteArray)
+
+internal fun prepareDedupeRows(
+    rows: List<LegacyRow>,
+    compress: (ByteArray) -> ByteArray = MapTile::compressBlob,
+): List<DedupeRow> = rows.map { DedupeRow(it.id, it.data, ColorBlob.fromLegacy(it.data, compress)) }
 
 internal data class Animation(
     val imageId: Long,
@@ -250,8 +258,8 @@ internal class MapStore(private val file: File) : AutoCloseable {
     }
   }
 
-  private fun storeBlob(data: ByteArray): Pair<ByteArray, Boolean> {
-    val hash = MessageDigest.getInstance("SHA-256").digest(data)
+  private fun storeBlob(blob: ColorBlob): Pair<ByteArray, Boolean> {
+    val (hash, data) = blob
     val inserted =
         db.prepareStatement("INSERT OR IGNORE INTO blobs(hash,data) VALUES(?,?)").use { s ->
           s.setBytes(1, hash)
@@ -289,35 +297,34 @@ internal class MapStore(private val file: File) : AutoCloseable {
         }
   }
 
-  /**
-   * Moves one bounded group in a transaction. A subsequent call starts at the remaining png rows.
-   */
-  fun dedupeBatch(limit: Int = 500): DedupeBatch {
+  fun readDedupeBatch(limit: Int = 500): List<LegacyRow> {
     require(limit > 0)
-    return transaction {
-      val rows =
-          db.prepareStatement(
-                  "SELECT map_id,png FROM maps WHERE length(png)>0 ORDER BY map_id LIMIT ?"
-              )
-              .use { s ->
-                s.setInt(1, limit)
-                s.executeQuery().use { r ->
-                  buildList { while (r.next()) add(r.getInt(1) to r.getBytes(2)) }
-                }
-              }
-      var added = 0L
-      db.prepareStatement("UPDATE maps SET png=X'',blob_hash=? WHERE map_id=? AND length(png)>0")
-          .use { update ->
-            rows.forEach { (id, data) ->
-              val (hash, inserted) = storeBlob(data)
-              if (inserted) added += data.size
-              update.setBytes(1, hash)
-              update.setInt(2, id)
-              check(update.executeUpdate() == 1) { "map $id changed during dedupe" }
-            }
+    return db.prepareStatement(
+            "SELECT map_id,png FROM maps WHERE length(png)>0 ORDER BY map_id LIMIT ?"
+        )
+        .use { s ->
+          s.setInt(1, limit)
+          s.executeQuery().use { r ->
+            buildList { while (r.next()) add(LegacyRow(r.getInt(1), r.getBytes(2))) }
           }
-      DedupeBatch(rows.size, rows.sumOf { it.second.size.toLong() }, added)
+        }
+  }
+
+  /** Moves a prepared group atomically. The next read starts at the remaining png rows. */
+  fun writeDedupeBatch(rows: List<DedupeRow>): DedupeBatch = transaction {
+    var added = 0L
+    db.prepareStatement("UPDATE maps SET png=X'',blob_hash=? WHERE map_id=? AND png=?").use { update
+      ->
+      rows.forEach { (id, original, blob) ->
+        val (hash, inserted) = storeBlob(blob)
+        if (inserted) added += blob.data.size
+        update.setBytes(1, hash)
+        update.setInt(2, id)
+        update.setBytes(3, original)
+        check(update.executeUpdate() == 1) { "map $id changed during dedupe" }
+      }
     }
+    DedupeBatch(rows.size, rows.sumOf { it.original.size.toLong() }, added)
   }
 
   fun mapIds(): BitSet =
@@ -577,9 +584,9 @@ internal class MapStore(private val file: File) : AutoCloseable {
             s.executeQuery().use { r -> if (r.next()) UUID.fromString(r.getString(1)) else null }
           }
 
-  fun create(owner: UUID, ids: List<Int>, pngs: List<ByteArray>): Long {
-    require(ids.isNotEmpty() && ids.size == pngs.size)
-    return create(owner, ids.size, 1, ids, pngs)
+  fun create(owner: UUID, ids: List<Int>, blobs: List<ColorBlob>): Long {
+    require(ids.isNotEmpty() && ids.size == blobs.size)
+    return create(owner, ids.size, 1, ids, blobs.map(ColorBlob::data), staticBlobs = blobs)
   }
 
   fun create(
@@ -587,17 +594,19 @@ internal class MapStore(private val file: File) : AutoCloseable {
       columns: Int,
       rows: Int,
       ids: List<Int>,
-      pngs: List<ByteArray>,
+      storedTiles: List<ByteArray>,
       delays: List<Int> = emptyList(),
       firstSlots: List<Int> = ids.indices.toList(),
       slots: List<Int> = emptyList(),
+      staticBlobs: List<ColorBlob> = emptyList(),
   ): Long {
     val firstById = mutableMapOf<Int, Int>()
     slots.forEachIndexed { slot, mapId -> firstById.putIfAbsent(mapId, slot) }
     require(
         columns > 0 &&
             rows > 0 &&
-            ids.size == pngs.size &&
+            ids.size == storedTiles.size &&
+            (if (delays.isEmpty()) staticBlobs.size == ids.size else staticBlobs.isEmpty()) &&
             ids.size == firstSlots.size &&
             (if (delays.isEmpty()) ids.size == columns * rows && slots.isEmpty()
             else
@@ -618,7 +627,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
                 .mapValues { (_, indices) ->
                   MapTile.compressBook(
                       indices.sortedBy(firstSlots::get).map { index ->
-                        when (val map = MapTile.fromStored(pngs[index])) {
+                        when (val map = MapTile.fromStored(storedTiles[index])) {
                           is MapTile.Colors -> map.pixels
                           is MapTile.Png -> MapTile.colors(map.image)
                         }
@@ -649,7 +658,7 @@ internal class MapStore(private val file: File) : AutoCloseable {
               s.setLong(2, imageId)
               s.setInt(3, firstSlots[i])
               s.setBytes(4, byteArrayOf())
-              s.setBytes(5, if (delays.isEmpty()) storeBlob(pngs[i]).first else null)
+              s.setBytes(5, if (delays.isEmpty()) storeBlob(staticBlobs[i]).first else null)
               s.executeUpdate()
             }
           }

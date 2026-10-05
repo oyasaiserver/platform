@@ -204,6 +204,7 @@ internal object ImageSource {
       val delays: List<Int>,
       val firstSlots: List<Int> = storedTiles.indices.toList(),
       val slots: List<Int> = emptyList(),
+      val staticBlobs: List<ColorBlob> = emptyList(),
   ) {
     val frames: Int
       get() = if (delays.isEmpty()) 1 else delays.size
@@ -234,8 +235,12 @@ internal object ImageSource {
         val count = if (reader.formatName.equals("gif", true)) reader.getNumImages(true) else 1
         if (count < 2) {
           val picture = decode(bytes)
-          val result = tiles(picture, resize, bypass)
-          return Prepared(result.columns, result.rows, result.pngs, emptyList())
+          val (cols, rows) = dimensions(picture.width, picture.height, resize, bypass)
+          val blobs =
+              tileImages(picture, cols, rows, resize).map {
+                ColorBlob.fromColors(MapTile.colors(it))
+              }
+          return Prepared(cols, rows, blobs.map(ColorBlob::data), emptyList(), staticBlobs = blobs)
         }
         require(bypass || count <= maxFrames) { "コマ数が多すぎます（$count コマ、上限 $maxFrames）" }
         val screen =

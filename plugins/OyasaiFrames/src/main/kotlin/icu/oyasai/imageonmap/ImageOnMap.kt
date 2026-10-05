@@ -954,7 +954,11 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     var before = 0L
     var added = 0L
     fun next() {
-      database { store.dedupeBatch() }
+      database { store.readDedupeBatch() }
+          .thenCompose { rows ->
+            CompletableFuture.supplyAsync({ prepareDedupeRows(rows) }, imageThreads)
+          }
+          .thenCompose { rows -> database { store.writeDedupeBatch(rows) } }
           .whenComplete { batch, failure ->
             main {
               if (failure != null) {
@@ -1141,6 +1145,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                                   tiles.delays,
                                   tiles.firstSlots,
                                   slots,
+                                  tiles.staticBlobs,
                               )
                           id to store.storedBytes(id)
                         }
