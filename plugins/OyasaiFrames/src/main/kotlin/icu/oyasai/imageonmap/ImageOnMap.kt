@@ -20,9 +20,12 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.Rotation
+import org.bukkit.block.BlockFace
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
+import org.bukkit.entity.GlowItemFrame
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -66,6 +69,7 @@ internal enum class TomapAction {
   RECOMPRESS,
   DEDUPE,
   REMOVE,
+  GLOW,
   WHERE,
   USAGE,
 }
@@ -82,6 +86,7 @@ internal fun tomapAction(args: List<String>): TomapAction =
       args.firstOrNull() == "recompress" -> TomapAction.RECOMPRESS
       args.firstOrNull() == "dedupe" -> TomapAction.DEDUPE
       args.firstOrNull() == "remove" -> TomapAction.REMOVE
+      args.firstOrNull() == "glow" -> TomapAction.GLOW
       args.firstOrNull() == "where" -> TomapAction.WHERE
       else -> TomapAction.USAGE
     }
@@ -125,6 +130,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private lateinit var marker: NamespacedKey
   private lateinit var managedKey: NamespacedKey
   private lateinit var legacyKey: NamespacedKey
+  private lateinit var glowKey: NamespacedKey
   private var ready = false
   private var recompressRunning = false
   private var dedupeRunning = false
@@ -144,6 +150,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     marker = NamespacedKey("imageonmap", "splatter")
     managedKey = NamespacedKey("imageonmap", "managed")
     legacyKey = NamespacedKey("imageonmap", "legacy")
+    glowKey = NamespacedKey("imageonmap", "glow")
     saveDefaultConfig()
     try {
       ImageSource.registerWebp()
@@ -831,7 +838,6 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         if (args.size == 1) openList(player, 0, null, true, true) else usage(sender)
       }
       TomapAction.INFO -> {
-        if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
         val player = sender as? Player ?: return playerOnly(sender)
         if (args.size == 1) showInfo(player) else usage(sender)
       }
@@ -862,6 +868,19 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         if (!sender.hasPermission("imageonmap.removesplattermap")) return denied(sender)
         val player = sender as? Player ?: return playerOnly(sender)
         if (args.size == 1) removeFrames(player) else usage(sender)
+      }
+      TomapAction.GLOW -> {
+        if (!sender.hasPermission("imageonmap.placesplattermap")) return denied(sender)
+        val player = sender as? Player ?: return playerOnly(sender)
+        when {
+          args.size == 1 -> toggleGlow(player)
+          args.size == 2 && args[1] in setOf("on", "off") -> {
+            val on = args[1] == "on"
+            player.persistentDataContainer.set(glowKey, PersistentDataType.BYTE, if (on) 1 else 0)
+            message(player, if (on) "これから貼る絵は輝く額縁にします" else "これから貼る絵は普通の額縁にします")
+          }
+          else -> usage(sender)
+        }
       }
       TomapAction.WHERE -> {
         if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
@@ -987,8 +1006,9 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     message(sender, "使い方:")
     if (sender.hasPermission("imageonmap.new")) message(sender, "/tomap <URL> [resize [幅 高さ]]")
     if (sender.hasPermission("imageonmap.list")) message(sender, "/tomap list")
+    message(sender, "/tomap info（見ている額縁か手に持った地図）")
     if (sender.hasPermission("imageonmap.listother")) {
-      message(sender, "/tomap list <プレイヤー> / all / info")
+      message(sender, "/tomap list <プレイヤー> / all")
       message(sender, "/tomap where <画像ID>")
     }
     if (sender.hasPermission("imageonmap.give")) message(sender, "/tomap give <プレイヤー> <画像ID>")
@@ -998,6 +1018,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       message(sender, "/tomap dedupe")
     }
     if (sender.hasPermission("imageonmap.removesplattermap")) message(sender, "/tomap remove")
+    if (sender.hasPermission("imageonmap.placesplattermap")) {
+      message(sender, "/tomap glow（見ている絵を輝く額縁と普通の額縁で切り替え）")
+      message(sender, "/tomap glow <on|off>（これから貼る絵を輝く額縁にするか）")
+    }
   }
 
   override fun onTabComplete(
@@ -1011,9 +1035,9 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
           args.size == 1 ->
               buildList {
                 if (sender.hasPermission("imageonmap.list")) add("list")
+                add("info")
                 if (sender.hasPermission("imageonmap.listother")) {
                   add("all")
-                  add("info")
                   add("where")
                 }
                 if (sender.hasPermission("imageonmap.give")) add("give")
@@ -1023,6 +1047,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                   add("dedupe")
                 }
                 if (sender.hasPermission("imageonmap.removesplattermap")) add("remove")
+                if (sender.hasPermission("imageonmap.placesplattermap")) add("glow")
               }
           args.size == 2 && args[0] == "list" && sender.hasPermission("imageonmap.listother") ->
               server.onlinePlayers.map { it.name }
@@ -1423,9 +1448,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             val date = details.createdAt?.let { DATE.format(Instant.ofEpochMilli(it)) } ?: "不明（移行前）"
             message(
                 player,
-                "画像ID: ${details.id}（地図ID #$id、${tileName(index, details.columns, details.rows)}） / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"}$placement",
+                "画像ID: ${details.id}（地図ID #$id、${tileName(index, details.columns, details.rows)}） / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows}・地図 ${details.mapIds.size} 枚 / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"}$placement",
             )
-            message(player, imageUrls(details))
+            // 取得元の URL は op だけ
+            if (player.hasPermission("imageonmap.listother")) message(player, imageUrls(details))
           }
         }
   }
@@ -1455,6 +1481,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val clicked = e.clickedBlock ?: return
     val face = e.blockFace
     val up = player.facing
+    val glow = player.persistentDataContainer.get(glowKey, PersistentDataType.BYTE) == 1.toByte()
     database { store.mapIndex(id)?.first ?: Poster(0, null, 1, 1, listOf(id)) }
         .whenComplete { poster, failure ->
           main {
@@ -1498,19 +1525,20 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                           PosterFrames.mapIndex(
                               poster.columns,
                               poster.rows,
-                              face,
                               i % poster.columns,
                               i / poster.columns,
                           )]
               val frame =
                   try {
-                    cell.world.spawn(cell.clone().add(0.5, 0.5, 0.5), ItemFrame::class.java) { f ->
-                      f.setFacingDirection(face, true)
-                      f.isVisible = false
-                      mark(f, false)
-                      f.setItem(item(map), false)
-                      f.rotation = PosterFrames.rotation(face, up, i == 0)
-                    }
+                    spawnFrame(
+                        cell.clone().add(0.5, 0.5, 0.5),
+                        glow,
+                        face,
+                        PosterFrames.rotation(face, up),
+                        item(map),
+                        false,
+                        false,
+                    )
                   } catch (failure: Exception) {
                     spawned.forEach(::rollbackFrame)
                     message(player, "ここには貼れません（額縁を出せませんでした）")
@@ -1542,7 +1570,94 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     discard(frame)
   }
 
-  private fun removeFrames(player: Player) {
+  @Suppress("UNCHECKED_CAST")
+  private fun spawnFrame(
+      at: Location,
+      glow: Boolean,
+      face: BlockFace,
+      rotation: Rotation,
+      item: ItemStack,
+      visible: Boolean,
+      legacy: Boolean,
+  ): ItemFrame =
+      at.world.spawn(
+          at,
+          (if (glow) GlowItemFrame::class.java else ItemFrame::class.java) as Class<ItemFrame>,
+      ) { f ->
+        f.setFacingDirection(face, true)
+        f.isVisible = visible
+        mark(f, legacy)
+        f.setItem(item, false)
+        f.rotation = rotation
+      }
+
+  private fun toggleGlow(player: Player) =
+      posterFrames(player, "切り替える") { hit, targets ->
+        val glow = hit !is GlowItemFrame
+        val records = mutableListOf<FrameRecord>()
+        var failed = 0
+        for (frame in targets) {
+          if ((frame is GlowItemFrame) == glow) continue
+          val id = mapId(frame.item) ?: continue
+          val old = frameRecords[frame.uniqueId]
+          val owner = lockOwner(frame)
+          val legacy = legacy(frame)
+          val at = frame.location.block.location.add(0.5, 0.5, 0.5)
+          val face = frame.facing
+          val rotation = frame.rotation
+          val item = frame.item.clone()
+          val visible = frame.isVisible
+          locker()?.db?.unlockFrame(frame.uniqueId)
+          discard(frame)
+          forget(frame.uniqueId)
+          // 出せなければ元の種類で出し直す（額縁を失わないため）
+          val spawned =
+              runCatching { spawnFrame(at, glow, face, rotation, item, visible, legacy) }
+                  .recoverCatching {
+                    failed++
+                    spawnFrame(at, !glow, face, rotation, item, visible, legacy)
+                  }
+                  .onFailure { logger.severe("Glow frame respawn at $at: ${error(it)}") }
+                  .getOrNull() ?: continue
+          owner?.let { locker()?.db?.lockFrame(spawned, it) }
+          track(spawned, id)
+          val record =
+              record(spawned, id, legacy).let { r ->
+                old?.let { r.copy(placedAt = it.placedAt, detected = it.detected) } ?: r
+              }
+          frameRecords[spawned.uniqueId] = record
+          records.add(record)
+        }
+        database { store.saveFrames(records) }
+            .whenComplete { _, failure ->
+              if (failure != null) logger.warning("Frame save: ${error(failure)}")
+            }
+        message(
+            player,
+            "額縁 ${records.size - failed} 枚を${if (glow) "輝く額縁" else "普通の額縁"}にしました" +
+                if (failed > 0) "（$failed 枚は替えられませんでした）" else "",
+        )
+      }
+
+  private fun removeFrames(player: Player) =
+      posterFrames(player, "外す") { _, targets ->
+        for (frame in targets) {
+          if (frameRecords[frame.uniqueId]?.legacy == true) clearDeleted(frame)
+          else {
+            locker()?.db?.unlockFrame(frame.uniqueId)
+            discard(frame)
+          }
+          forget(frame.uniqueId)
+        }
+        message(player, "額縁を ${targets.size} 枚外しました")
+      }
+
+  // 見ている額縁の絵の額縁を集め、ロックか建築の権限を確かめてから action を呼ぶ
+  private fun posterFrames(
+      player: Player,
+      verb: String,
+      action: (ItemFrame, List<ItemFrame>) -> Unit,
+  ) {
     val hit = player.getTargetEntity(5) as? ItemFrame
     if (hit == null || !managed(hit)) {
       message(player, "管理している額縁が見つかりません")
@@ -1584,18 +1699,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                       else !canBuild(player, frame.location)
                     }
             ) {
-              message(player, "外す権限がありません")
+              message(player, "${verb}権限がありません")
               return@main
             }
-            for (frame in targets) {
-              if (frameRecords[frame.uniqueId]?.legacy == true) clearDeleted(frame)
-              else {
-                locker()?.db?.unlockFrame(frame.uniqueId)
-                discard(frame)
-              }
-              forget(frame.uniqueId)
-            }
-            message(player, "額縁を ${targets.size} 枚外しました")
+            action(hit, targets)
           }
         }
   }
