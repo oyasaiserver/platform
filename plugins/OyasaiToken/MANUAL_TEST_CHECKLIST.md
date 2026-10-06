@@ -1,7 +1,7 @@
 # OyasaiToken再設計 — 手動実機テストチェックリスト
 
 対象サーバー: `~/platform/local/paperclip-tmp`(`localhost:8000`, online-mode=false, white-list=false)
-デプロイ済み: TokenManager(=OyasaiToken), OyasaiPets, DynamicProfile, OyasaiMenu, SocialLikes3, OyasaiAdminTools, Votifier, Vault, LuckPerms, PlugManX
+デプロイ済み: OyasaiToken (provides TokenManager), OyasaiPets, DynamicProfile, OyasaiMenu, SocialLikes3, OyasaiAdminTools, Votifier, Vault, LuckPerms, PlugManX
 
 Codex(gpt-5.5)が実コード(ファイル・行番号)と照合して検証済み。
 

@@ -5,11 +5,11 @@ startup commands depend on the local server workflow in use.
 
 ## Preconditions
 
-- Deploy the locally built `OyasaiToken` jar as plugin name `TokenManager`.
+- Deploy the locally built `OyasaiToken` jar as plugin name `OyasaiToken` (provides `TokenManager`).
 - Deploy the locally built `OyasaiPets` jar for the integration checks.
-- Use a disposable server data directory or back up `plugins/TokenManager/tokens.db`
-  and `plugins/TokenManager/data.yml` first.
-- For DB inspection, use `sqlite3 plugins/TokenManager/tokens.db`.
+- Use a disposable server data directory or back up `plugins/OyasaiToken/tokens.db`
+  and `plugins/OyasaiToken/data.yml` first.
+- For DB inspection, use `sqlite3 plugins/OyasaiToken/tokens.db`.
 
 ## 1. Memory-first balance updates and async SQLite persistence
 
@@ -157,7 +157,7 @@ must show the completed transfer; listeners must never observe only the sender d
 
 ## 9. Manual data.yml transfer does not freeze token operations
 
-1. Prepare a large `plugins/TokenManager/data.yml` with many `Players` entries.
+1. Prepare a large `plugins/OyasaiToken/data.yml` with many `Players` entries.
 2. Run `/tm transfer confirm` from console.
 3. Expected: the command immediately reports that import started and the server
    main thread remains responsive.
@@ -183,3 +183,21 @@ must show the completed transfer; listeners must never observe only the sender d
 5. Expected: the imported balance is not overwritten by a late `add` job, and
    there is no `add` transaction from the rejected calls. Normal writes resume
    only after the completed import has replaced the in-memory ledger.
+
+## Plugin rename and data folder copy
+
+1. On a stopped disposable server, prepare only `plugins/TokenManager/` with the
+   existing config, SQLite database, WAL/SHM sidecars, notifications, and nested backups.
+2. Start with only the OyasaiToken jar. Before any configuration or DB read, `onLoad`
+   copies the complete legacy folder to `plugins/OyasaiToken/`; the original remains.
+3. Verify balances, transaction history, notification settings, and `/token` permissions.
+   Confirm consumers with `depend: [TokenManager]` and `getPlugin("TokenManager")`
+   still resolve the same enabled plugin through Paper's `provides` alias.
+4. Restart with both folders present. Confirm the new folder is neither overwritten nor
+   merged. Start without either folder and verify normal default initialization.
+5. Simulate a copy failure: startup must refuse to open token storage, leave the original
+   intact, and allow retry after the failure is fixed.
+
+The current OyasaiToken configuration has no credentials. A legacy external TokenManager
+MySQL config may still contain a password (the export tool reads it). The full copy retains
+that file; review it privately before deployment and remove unused credentials manually.
