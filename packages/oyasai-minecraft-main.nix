@@ -67,7 +67,6 @@ oyasaiPurpur rec {
     oyasaivehicles
     oyasaivotifier
     oyasaiworldgenerator
-    placeholderapi
     plugmanx
     signshop
     skript

@@ -11,7 +11,7 @@
 バージョン:      0.2.0
 API:            Paper 1.21.x
 必須依存:       FastAsyncWorldEdit (FAWE)
-任意依存:       LuckPerms, PlaceholderAPI
+任意依存:       LuckPerms
 設定ファイル:    plugins/CitiesSkyMine/config.yml
 プレイヤーデータ: plugins/CitiesSkyMine/playerdata/
 ```

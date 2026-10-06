@@ -45,7 +45,7 @@ Paper用とVelocity用の実装を同一JARに同梱し、各実行環境が対�
 - Paperバックエンド間のGlobalチャンネル同期
 - バックエンドを跨ぐPM配送
 - プレイヤーのログイン・移動・退出通知
-- DiscordSRV、Vault、PlaceholderAPIとの任意連携
+- DiscordSRV、Vaultとの任意連携
 - Paper・Velocity双方の設定reload
 
 チャットの実装正本は`plugins/OyasaiChat/`。docsは仕様と作業入口を示し、実装そのものを複製しない。
@@ -173,7 +173,6 @@ PaperとVelocity間のPlugin Messageは、Gson JSONのEnvelopeで交換。
 | 連携 | 仕様 |
 |---|---|
 | Vault | Chat APIからprefix・suffixを取得。未導入、またはprovider未登録時は空表示 |
-| PlaceholderAPI | チャット表示用formatのPlaceholderを展開。未導入時は連携なし |
 | DiscordSRV | MinecraftチャンネルとDiscordチャンネルの相互連携。設定でmappingを定義 |
 
 ## テキスト変換API
