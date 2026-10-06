@@ -43,7 +43,6 @@ oyasaiPurpur rec {
     bluemap
     citiesskymine
     coreprotect
-    crackshotguns
     directstate
     discordsrv
     dynamicprofile
@@ -71,15 +70,10 @@ oyasaiPurpur rec {
     oyasaiworldgenerator
     placeholderapi
     plugmanx
-    pvparena
-    sba
-    screamingbedwars
     signshop
     skript
-    slotmachine
     sociallikes3
     socialvotes
-    tntruneloaded
     vault
     vertex
     viaversion
