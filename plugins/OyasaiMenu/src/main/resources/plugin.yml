@@ -10,6 +10,11 @@ softdepend:
   - Vault
 
 commands:
+  savemenuitem:
+    usage: /savemenuitem
+    permission: save.menu.item
+  getmenu:
+    usage: /getmenu
   menu:
     description: メニューを開く
     aliases: [mn]

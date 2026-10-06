@@ -2,6 +2,7 @@ package com.github.sahyuya.oyasaiMenu
 
 import com.github.sahyuya.oyasaiMenu.command.*
 import com.github.sahyuya.oyasaiMenu.engine.*
+import com.github.sahyuya.oyasaiMenu.item.MenuItem
 import com.github.sahyuya.oyasaiMenu.loader.*
 import com.github.sahyuya.oyasaiMenu.manager.*
 import org.bukkit.event.EventHandler
@@ -10,6 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class OyasaiMenu : JavaPlugin(), Listener {
+  private var menuItem: MenuItem? = null
 
   lateinit var menuLoader: MenuLoader
   lateinit var shopLoader: ShopLoader
@@ -29,6 +31,14 @@ class OyasaiMenu : JavaPlugin(), Listener {
 
   override fun onEnable() {
     saveDefaultConfig()
+
+    try {
+      val item = MenuItem(this)
+      menuItem = item
+      item.enable()
+    } catch (e: Exception) {
+      logger.severe("Menu item failed to start: ${e.message}")
+    }
 
     menuLoader = MenuLoader(this)
     shopLoader = ShopLoader(this)
@@ -93,6 +103,8 @@ class OyasaiMenu : JavaPlugin(), Listener {
   }
 
   override fun onDisable() {
+    runCatching { menuItem?.disable() }
+        .onFailure { logger.severe("Menu item shutdown failed: ${it.message}") }
     logger.info("OyasaiMenu を無効化しました。")
   }
 

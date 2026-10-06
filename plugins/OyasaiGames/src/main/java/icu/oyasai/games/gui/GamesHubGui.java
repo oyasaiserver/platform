@@ -25,6 +25,7 @@ public class GamesHubGui {
     public static final int SLOT_ABOUT = 13;
     public static final int SLOT_HEADHUNT = 15;
     public static final int SLOT_CLOSE = 22;
+    public static final int SLOT_BEDWARS = 17;
 
     public static void open(Player player) {
         GamesHubHolder holder = new GamesHubHolder();
@@ -96,6 +97,10 @@ public class GamesHubGui {
             headHuntItem.setItemMeta(cMeta);
         }
         inv.setItem(SLOT_HEADHUNT, headHuntItem);
+
+        ItemStack bedwarsItem = new ItemStack(Material.RED_BED);
+        bedwarsItem.editMeta(meta -> meta.displayName(Component.text("BedWars", NamedTextColor.GOLD)));
+        inv.setItem(SLOT_BEDWARS, bedwarsItem);
 
         // スロット 22: 閉じる
         ItemStack closeItem = new ItemStack(Material.BARRIER);

@@ -4,6 +4,11 @@ version: ${version}
 api-version: "1.21"
 softdepend: [WorldGuard]
 commands:
+  savedyeitem:
+    usage: /savedyeitem
+    permission: save.dye.item
+  getdye:
+    usage: /getdye
   tomap:
     usage: /tomap
   gakubuchilock:
