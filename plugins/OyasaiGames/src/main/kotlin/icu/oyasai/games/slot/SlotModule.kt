@@ -182,7 +182,16 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       }
       try {
         val yaml = loadSlotYaml(file)
-        auditSlotKeys(yaml, setOf("machines", "slotCooldownFormat"), "player", plugin.logger)
+        // SlotMachine's v2 serializer includes these metadata fields alongside cooldowns.
+        auditSlotKeys(
+            yaml,
+            setOf("machines", "slotCooldownFormat", "version", "playerUUID"),
+            "player",
+            plugin.logger,
+        )
+        if (yaml.contains("playerUUID")) {
+          require(UUID.fromString(yaml.getString("playerUUID")) == id) { "playerUUID mismatch" }
+        }
         require(
             yaml.getString("slotCooldownFormat") in setOf(null, "epoch-millis/duration-seconds")
         ) {
