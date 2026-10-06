@@ -5,7 +5,6 @@ import io.oyasai.oyasaiAdminTools.bulletin.announcement.models.Announcement
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTaskRegistry
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTimerHandler
-import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 
 object AnnouncementManager {
   private val plugin = OyasaiAdminTools.plugin
@@ -15,14 +14,12 @@ object AnnouncementManager {
 
   fun load() {
     stopAll()
-    announcements =
-        JsonUtils.readJsonFileSafe("announcements.json", mutableListOf<Announcement>())
-            .toMutableList()
+    announcements = plugin.db.loadAnnouncements()
     startAll()
   }
 
   fun save() {
-    JsonUtils.writeJsonFile("announcements.json", announcements)
+    plugin.db.saveAnnouncements(announcements)
   }
 
   fun startAll() {

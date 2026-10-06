@@ -7,10 +7,7 @@ import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.SurveyResult
 import io.oyasai.oyasaiAdminTools.utils.CSVUtils
-import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.MMUtils.mm
-import java.io.File
-import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -30,18 +27,12 @@ object SurveyExporter {
       return
     }
 
-    val file = File(plugin.dataFolder, "surveys/results_${surveyId}.json")
-    if (!file.exists()) {
-      player.sendMessage("<red>収集されたデータがまだありません。</red>".mm())
-      return
-    }
-
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
               try {
-                val results: List<SurveyResult> = JsonUtils.fromJson(file.readText())
+                val results: List<SurveyResult> = plugin.db.results(surveyId)
                 if (results.isEmpty()) {
                   player.sendMessage("<red>収集されたデータが空です。</red>".mm())
                   return@Runnable
@@ -112,21 +103,5 @@ object SurveyExporter {
               }
             },
         )
-  }
-
-  fun saveResult(surveyId: String, uuid: UUID, name: String, answers: List<String>) {
-    val resultFile = "surveys/results_${surveyId}.json"
-    val results = JsonUtils.readJsonFileSafe(resultFile, mutableListOf<SurveyResult>())
-
-    val newResult =
-        SurveyResult(
-            uuid = uuid.toString(),
-            name = name,
-            timestamp = System.currentTimeMillis(),
-            answers = answers,
-        )
-
-    results.add(newResult)
-    JsonUtils.writeJsonFile(resultFile, results)
   }
 }

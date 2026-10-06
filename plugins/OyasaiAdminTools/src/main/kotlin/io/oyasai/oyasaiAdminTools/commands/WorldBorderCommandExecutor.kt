@@ -1,5 +1,6 @@
 package io.oyasai.oyasaiAdminTools.commands
 
+import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import io.oyasai.oyasaiAdminTools.worldborder.WorldBorderManager
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -17,6 +18,10 @@ object WorldBorderCommandExecutor : CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
+    if (!OyasaiAdminTools.plugin.worldborderAvailable) {
+      sender.sendMessage("§cWorldborder storage is unavailable. Check the server log.")
+      return true
+    }
     val (worldHint, rest) = splitWorldPrefix(args)
     if (rest.isEmpty()) {
       return handleInfo(sender, worldHint)
@@ -253,7 +258,7 @@ object WorldBorderCommandExecutor : CommandExecutor, TabCompleter {
     sender.sendMessage("§7/$label radius <radius> §8- 既存ボーダーの半径を変更（+50 可）")
     sender.sendMessage("§7/$label info [world] §8- ボーダー情報")
     sender.sendMessage("§7/$label list §8- 全ワールドのボーダー")
-    sender.sendMessage("§7/$label reload §8- worldborder.yml を再読込")
+    sender.sendMessage("§7/$label reload §8- config.yml と境界データを再読込")
     sender.sendMessage("§7/$label clear [world] §8- ボーダーを削除")
   }
 
