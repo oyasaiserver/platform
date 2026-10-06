@@ -77,7 +77,6 @@ oyasaiPurpur rec {
     luckperms
     oyasaichat
     oyasaitab
-    oyasaiutilities
     plugmanx
     vertex
     viaversion
