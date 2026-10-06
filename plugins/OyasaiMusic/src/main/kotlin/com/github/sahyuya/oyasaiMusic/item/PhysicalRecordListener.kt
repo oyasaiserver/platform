@@ -49,7 +49,14 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
         val authorName = org.bukkit.Bukkit.getOfflinePlayer(entry.song.authorUuid).name ?: "不明"
         val material = Material.matchMaterial(entry.song.recordMaterial) ?: Material.MUSIC_DISC_13
         var ejected =
-            PhysicalRecordItem.create(plugin, material, songId, entry.song.title, authorName)
+            PhysicalRecordItem.create(
+                plugin,
+                material,
+                songId,
+                entry.song.title,
+                authorName,
+                entry.song.recordIdentity,
+            )
         ejected = PhysicalRecordItem.withRange(plugin, ejected, entry.range)
         ejected = PhysicalRecordItem.withTrigger(plugin, ejected, entry.trigger)
         ejected = PhysicalRecordItem.withLoop(plugin, ejected, entry.loop)
@@ -81,6 +88,11 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
         return
       }
       val range = PhysicalRecordItem.range(plugin, item)
+      val identity = PhysicalRecordItem.identity(plugin, item)
+      if (identity != null && identity != song.recordIdentity) {
+        player.sendMessage("§c元の楽曲は削除されています。このレコードは別の楽曲には使えません。")
+        return
+      }
       if (!AmbientRange.canUse(player, range)) {
         player.sendMessage("§c再生範囲 ${range.label} を使う権限がありません。")
         return
@@ -104,7 +116,14 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
         val oldMaterial =
             Material.matchMaterial(oldEntry.song.recordMaterial) ?: Material.MUSIC_DISC_13
         var rebuilt =
-            PhysicalRecordItem.create(plugin, oldMaterial, oldId, oldEntry.song.title, oldAuthor)
+            PhysicalRecordItem.create(
+                plugin,
+                oldMaterial,
+                oldId,
+                oldEntry.song.title,
+                oldAuthor,
+                oldEntry.song.recordIdentity,
+            )
         rebuilt = PhysicalRecordItem.withRange(plugin, rebuilt, oldEntry.range)
         rebuilt = PhysicalRecordItem.withTrigger(plugin, rebuilt, oldEntry.trigger)
         rebuilt = PhysicalRecordItem.withLoop(plugin, rebuilt, oldEntry.loop)

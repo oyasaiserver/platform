@@ -93,14 +93,16 @@ class SongDetailScreen(
     inventory.setItem(previewSlot, previewItem(state))
     inventory.setItem(
         13,
-        GuiItemBuilder(Material.PALE_OAK_SIGN)
-            .name(Component.text("リポスト (宣伝)", NamedTextColor.AQUA))
-            .lore(
-                Component.text("10", NamedTextColor.DARK_AQUA)
-                    .append(Component.text("P", NamedTextColor.WHITE))
-                    .append(Component.text("を消費してオンラインプレイヤーへ宣伝します", NamedTextColor.GRAY))
-            )
-            .build(),
+        if (!song.published) null
+        else
+            GuiItemBuilder(Material.PALE_OAK_SIGN)
+                .name(Component.text("リポスト (宣伝)", NamedTextColor.AQUA))
+                .lore(
+                    Component.text("10", NamedTextColor.DARK_AQUA)
+                        .append(Component.text("P", NamedTextColor.WHITE))
+                        .append(Component.text("を消費してオンラインプレイヤーへ宣伝します", NamedTextColor.GRAY))
+                )
+                .build(),
     )
     renderAuthorHead()
     inventory.setItem(followSlot, followItem())
@@ -150,15 +152,28 @@ class SongDetailScreen(
         .build()
   }
 
-  private fun buyRecordItem() =
-      GuiItemBuilder(Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13)
-          .name(Component.text("レコードを購入", NamedTextColor.GOLD))
-          .lore(
-              Component.text("価格: ${song.price}円", NamedTextColor.GRAY),
-              Component.text("クリックで購入", NamedTextColor.DARK_GRAY),
-              Component.text("購入額の80%は収益化対象の作者へ還元されます", NamedTextColor.DARK_GRAY),
-          )
-          .build()
+  private fun buyRecordItem(): org.bukkit.inventory.ItemStack {
+    val price = song.purchasePrice(viewer.uniqueId)
+    return GuiItemBuilder(Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13)
+        .name(
+            Component.text(
+                if (price == null) "非売品"
+                else if (song.authorUuid == viewer.uniqueId) "レコードを無料で入手" else "レコードを購入",
+                if (price == null) NamedTextColor.RED else NamedTextColor.GOLD,
+            )
+        )
+        .lore(
+            Component.text(
+                if (price == null) "非売品" else "価格: " + price + "円",
+                if (price == null) NamedTextColor.RED else NamedTextColor.GRAY,
+            ),
+            Component.text(
+                if (price == null) "このレコードは購入できません" else "クリックで入手",
+                NamedTextColor.DARK_GRAY,
+            ),
+        )
+        .build()
+  }
 
   private fun renderAuthorHead() {
     val authorUuid = song.authorUuid
@@ -273,7 +288,8 @@ class SongDetailScreen(
       referenceUrlSlot -> outputReferenceUrl()
       likeSlot -> likeSong()
       favoriteSlot -> {
-        if (!song.published) GuiFeedback.invalid(viewer, "非公開の楽曲は追加できません")
+        if (!SongAccess.canSocial(plugin, viewer, song))
+            GuiFeedback.invalid(viewer, "この曲へのアクセス権がありません")
         else menuManager.open(viewer, PlaylistSelectionScreen(plugin, menuManager, viewer, song))
       }
       buyRecordSlot -> buyRecord()
@@ -307,44 +323,104 @@ class SongDetailScreen(
 
   private fun buyRecord() {
     val songId = song.id ?: return
-    val payment = plugin.economyService.withdraw(viewer, song.price.toLong())
-    if (payment !is PayoutResult.Success) {
-      val reason =
-          when (payment) {
-            is PayoutResult.Unavailable -> payment.reason
-            is PayoutResult.Failed -> payment.reason
-            PayoutResult.Success -> ""
-          }
-      viewer.sendMessage("§c購入できませんでした: $reason")
-      return
-    }
-    val material = Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13
-    val authorName = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
-    val item = PhysicalRecordItem.create(plugin, material, songId, song.title, authorName)
-    val leftover = viewer.inventory.addItem(item)
-    if (leftover.isNotEmpty()) {
-      viewer.world.dropItemNaturally(viewer.location, item)
-    }
-
-    val authorShare =
-        (song.price * plugin.config.getDouble("economy.record-sale-author-share", 0.8)).toLong()
+    if (!purchases.add(viewer.uniqueId)) return
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              plugin.recordSaleRepository.recordSale(
-                  songId = songId,
-                  buyerUuid = viewer.uniqueId,
-                  authorUuid = song.authorUuid,
-                  grossAmount = song.price.toLong(),
-                  authorShare = authorShare,
-                  creditAuthor = song.isMonetizationEligible(),
-              )
+              val result = runCatching { plugin.songRepository.findById(songId) }
+              if (!plugin.isEnabled) {
+                purchases.remove(viewer.uniqueId)
+                return@Runnable
+              }
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        try {
+                          if (!viewer.isOnline) return@Runnable
+                          val current = result.getOrNull()
+                          if (current == null || current.recordIdentity != song.recordIdentity) {
+                            viewer.sendMessage("§c楽曲情報を取得できません。画面を開き直してください。")
+                            return@Runnable
+                          }
+                          song = current
+                          val cost = current.purchasePrice(viewer.uniqueId)
+                          if (cost == null) {
+                            viewer.sendMessage("§c非売品です。")
+                            render()
+                            return@Runnable
+                          }
+                          val material =
+                              Material.matchMaterial(current.recordMaterial)
+                                  ?: Material.MUSIC_DISC_13
+                          val authorName = Bukkit.getOfflinePlayer(current.authorUuid).name ?: "不明"
+                          val item =
+                              PhysicalRecordItem.create(
+                                  plugin,
+                                  material,
+                                  songId,
+                                  current.title,
+                                  authorName,
+                                  current.recordIdentity,
+                              )
+                          val payment =
+                              if (cost == 0) PayoutResult.Success
+                              else plugin.economyService.withdraw(viewer, cost.toLong())
+                          if (payment !is PayoutResult.Success) {
+                            viewer.sendMessage(
+                                "§c購入できませんでした: " +
+                                    when (payment) {
+                                      is PayoutResult.Failed -> payment.reason
+                                      is PayoutResult.Unavailable -> payment.reason
+                                      else -> ""
+                                    }
+                            )
+                            return@Runnable
+                          }
+                          viewer.inventory.addItem(item).values.forEach {
+                            viewer.world.dropItemNaturally(viewer.location, it)
+                          }
+                          if (cost > 0) {
+                            val buyer = viewer.uniqueId
+                            val share =
+                                (cost *
+                                        plugin.config.getDouble(
+                                            "economy.record-sale-author-share",
+                                            0.8,
+                                        ))
+                                    .toLong()
+                            Bukkit.getScheduler()
+                                .runTaskAsynchronously(
+                                    plugin,
+                                    Runnable {
+                                      plugin.recordSaleRepository.recordSale(
+                                          songId,
+                                          buyer,
+                                          current.authorUuid,
+                                          cost.toLong(),
+                                          share,
+                                          current.isMonetizationEligible(),
+                                      )
+                                    },
+                                )
+                          }
+                          viewer.sendMessage("§aレコードを受け取りました: " + current.title)
+                          viewer.sendMessage(
+                              if (cost == 0) "§7無料で入手しました。" else "§7" + cost + "円を支払いました。"
+                          )
+                          render()
+                        } finally {
+                          purchases.remove(viewer.uniqueId)
+                        }
+                      },
+                  )
             },
         )
-    viewer.sendMessage("§aレコードを受け取りました: ${song.title}")
-    viewer.sendMessage("§7${song.price}円を支払いました。")
-    viewer.sendMessage("§7Shift+右クリックで環境BGM設定（再生範囲/トリガー/ループ）を変更できます。")
+  }
+
+  companion object {
+    private val purchases = java.util.concurrent.ConcurrentHashMap.newKeySet<java.util.UUID>()
   }
 
   private fun openAuthorProfile() {
@@ -424,7 +500,11 @@ class SongDetailScreen(
   }
 
   private fun likeSong() {
-    if (!song.published) {
+    if (!SongAccess.canSocial(plugin, viewer, song)) {
+      GuiFeedback.invalid(viewer, "この曲へのアクセス権がありません")
+      return
+    }
+    if (!song.released) {
       GuiFeedback.invalid(viewer, "非公開の楽曲にはいいねできません")
       return
     }

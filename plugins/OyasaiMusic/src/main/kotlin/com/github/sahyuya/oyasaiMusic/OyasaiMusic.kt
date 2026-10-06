@@ -267,6 +267,7 @@ class OyasaiMusic : JavaPlugin() {
     Bukkit.getScheduler().runTaskTimer(this, Runnable { ambientPlaybackRegistry.tick() }, 2L, 2L)
     val playbackParticleService = PlaybackParticleService(this)
     Bukkit.getScheduler().runTaskTimer(this, Runnable { playbackParticleService.tick() }, 20L, 20L)
+    com.github.sahyuya.oyasaiMusic.gui.SongAccess.start(this)
     logger.info("OyasaiMusic を有効化しました。")
   }
 

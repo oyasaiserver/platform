@@ -182,7 +182,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                       Runnable {
                         if (!viewer.isOnline || requests[id] != generation || lists[id] !== context)
                             return@Runnable
-                        if (song == null || (!song.published && song.authorUuid != id)) {
+                        if (song == null || !SongAccess.canListen(plugin, viewer, song)) {
                           lists.remove(id)
                           viewer.sendMessage("§7楽曲が削除または非公開になったため、リスト再生を終了しました。")
                           return@Runnable
@@ -224,6 +224,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       song: Song,
       onCompletion: (() -> Unit)? = null,
       rememberInHistory: Boolean = true,
+      reviewPreview: Boolean = false,
   ) {
     val playerId = viewer.uniqueId
     val request = beginRequest(playerId)
@@ -237,6 +238,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
         .runTaskAsynchronously(
             plugin,
             Runnable {
+              val song = plugin.songRepository.findById(songId) ?: return@Runnable
               val file = File(plugin.audioDirectory, song.fileName)
               if (!file.exists()) {
                 Bukkit.getScheduler()
@@ -298,6 +300,13 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                         val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
                           if (!viewer.isOnline || requests[playerId] != request)
                               return@startPlayback
+                          if (
+                              !(reviewPreview && viewer.hasPermission("oyasaimusic.admin")) &&
+                                  !SongAccess.canListen(plugin, viewer, song)
+                          ) {
+                            viewer.sendMessage("§cこの楽曲を再生する権限がありません。限定品はレコードの所持が必要です。")
+                            return@startPlayback
+                          }
                           // Persisted ALLOW is not the same as a loaded pack. Resolve the current
                           // connection first and defer until either OMMT's matching bank or the
                           // external resource pack has actually been confirmed.
@@ -307,6 +316,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                 song,
                                 onCompletion,
                                 rememberInHistory,
+                                reviewPreview,
                             )
                             viewer.sendMessage("§e拡張音域を準備しています。完了後に再生を開始します。")
                             return@startPlayback
@@ -349,17 +359,18 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                   recipients = listOf(viewer),
                                   mode = mode,
                                   prepared = prepared,
-                                  onListenThresholdReached = { player, s ->
-                                    plugin.viewCountService.registerView(
-                                        player,
-                                        s,
-                                        isAmbientPlayback = false,
-                                    ) {
-                                      // 視聴回数がDBへ実際に記録できた時点でGUIを再描画し、
-                                      // 一覧等の「再生数」表示が最新化されるようにする。
-                                      menuManager.refreshCurrent(player.uniqueId)
-                                    }
-                                  },
+                                  onListenThresholdReached = listen@{ player, s ->
+                                        if (reviewPreview) return@listen
+                                        plugin.viewCountService.registerView(
+                                            player,
+                                            s,
+                                            isAmbientPlayback = false,
+                                        ) {
+                                          // 視聴回数がDBへ実際に記録できた時点でGUIを再描画し、
+                                          // 一覧等の「再生数」表示が最新化されるようにする。
+                                          menuManager.refreshCurrent(player.uniqueId)
+                                        }
+                                      },
                                   onCompletion = { finishedSession ->
                                     val s2 = plugin.controllerStateService.stateFor(viewer.uniqueId)
                                     if (s2.activeSession?.sessionId == finishedSession.sessionId) {
@@ -386,7 +397,44 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                         // prevented
                         // OMMT client-side bank rendering and manifested as "allow downloads but
                         // not audible".
-                        plugin.ommtPlaybackClientRegistry.resolveForPlayback(viewer, startPlayback)
+                        plugin.ommtPlaybackClientRegistry.resolveForPlayback(viewer) { buffered ->
+                          // Negotiation may take seconds. Re-read policy after it, before any
+                          // buffer is sent.
+                          Bukkit.getScheduler()
+                              .runTaskAsynchronously(
+                                  plugin,
+                                  Runnable {
+                                    val latest = plugin.songRepository.findById(songId)
+                                    if (!plugin.isEnabled) return@Runnable
+                                    Bukkit.getScheduler()
+                                        .runTask(
+                                            plugin,
+                                            Runnable {
+                                              if (!viewer.isOnline || requests[playerId] != request)
+                                                  return@Runnable
+                                              if (
+                                                  latest == null ||
+                                                      latest.recordIdentity !=
+                                                          song.recordIdentity ||
+                                                      (!(reviewPreview &&
+                                                          viewer.hasPermission(
+                                                              "oyasaimusic.admin"
+                                                          )) &&
+                                                          !SongAccess.canListen(
+                                                              plugin,
+                                                              viewer,
+                                                              latest,
+                                                          ))
+                                              ) {
+                                                viewer.sendMessage("§cこの楽曲を再生する権限がありません。")
+                                                return@Runnable
+                                              }
+                                              startPlayback(buffered)
+                                            },
+                                        )
+                                  },
+                              )
+                        }
                       },
                   )
             },

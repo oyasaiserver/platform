@@ -17,21 +17,31 @@ internal data class StoredAmbientRecord(
     val trigger: AmbientTrigger,
     val loop: Boolean,
     val mode: GameMode,
+    val recordIdentity: String? = null,
 ) {
   fun encode() =
-      "1;$songId;${range.blocks ?: -1};${trigger.name};${if (loop) 1 else 0};${mode.name}"
+      if (recordIdentity == null)
+          "1;$songId;${range.blocks ?: -1};${trigger.name};${if (loop) 1 else 0};${mode.name}"
+      else
+          "2;$songId;${range.blocks ?: -1};${trigger.name};${if (loop) 1 else 0};${mode.name};$recordIdentity"
 
   companion object {
     fun decode(encoded: String): StoredAmbientRecord {
       require(encoded.length <= 160)
       val fields = encoded.split(';')
-      require(fields.size == 6 && fields[0] == "1" && fields[4] in setOf("0", "1"))
+      require(
+          (fields.size == 6 && fields[0] == "1" || fields.size == 7 && fields[0] == "2") &&
+              fields[4] in setOf("0", "1")
+      )
       return StoredAmbientRecord(
           fields[1].toLong().also { require(it > 0) },
           AmbientPlaybackRange(fields[2].toInt().let { if (it == -1) null else it }),
           AmbientTrigger.valueOf(fields[3]),
           fields[4] == "1",
           GameMode.valueOf(fields[5]),
+          if (fields[0] == "2")
+              fields[6].also { require(java.util.UUID.fromString(it).toString() == it) }
+          else null,
       )
     }
   }
@@ -115,6 +125,11 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
                           restoring.remove(k)
                           if (!chunk.isLoaded || entries.containsKey(k) || song == null)
                               return@Runnable
+                          if (
+                              data.recordIdentity != null &&
+                                  data.recordIdentity != song.recordIdentity
+                          )
+                              return@Runnable
                           val current =
                               location.block.state as? org.bukkit.block.Jukebox ?: return@Runnable
                           if (
@@ -185,7 +200,14 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
     box.persistentDataContainer.set(
         storageKey,
         org.bukkit.persistence.PersistentDataType.STRING,
-        StoredAmbientRecord(requireNotNull(song.id), range, trigger, loop, insertedGameMode)
+        StoredAmbientRecord(
+                requireNotNull(song.id),
+                range,
+                trigger,
+                loop,
+                insertedGameMode,
+                song.recordIdentity,
+            )
             .encode(),
     )
     check(box.update(false, false)) { "レコード情報を保存できませんでした" }

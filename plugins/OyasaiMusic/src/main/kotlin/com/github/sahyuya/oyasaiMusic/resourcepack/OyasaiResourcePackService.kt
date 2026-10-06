@@ -62,6 +62,7 @@ class OyasaiResourcePackService(
       val song: com.github.sahyuya.oyasaiMusic.model.Song,
       val onCompletion: (() -> Unit)?,
       val remember: Boolean,
+      val reviewPreview: Boolean,
       val generation: Long,
   )
 
@@ -112,9 +113,10 @@ class OyasaiResourcePackService(
       song: com.github.sahyuya.oyasaiMusic.model.Song,
       onCompletion: (() -> Unit)?,
       remember: Boolean,
+      reviewPreview: Boolean = false,
   ) {
     val generation = generations[playerId] ?: return
-    pendingPlays[playerId] = PendingPlay(song, onCompletion, remember, generation)
+    pendingPlays[playerId] = PendingPlay(song, onCompletion, remember, reviewPreview, generation)
   }
 
   /** Discards a deferred playback (superseded play, quit, reload, shutdown). */
@@ -130,7 +132,13 @@ class OyasaiResourcePackService(
     if (!downloaded) {
       online.sendMessage("§eパックの読み込みをスキップし通常音域で再生します。")
     }
-    plugin.playbackController.play(online, pending.song, pending.onCompletion, pending.remember)
+    plugin.playbackController.play(
+        online,
+        pending.song,
+        pending.onCompletion,
+        pending.remember,
+        pending.reviewPreview,
+    )
   }
 
   fun isLoaded(player: UUID): Boolean = states[player] == ConnectionState.SUCCESS

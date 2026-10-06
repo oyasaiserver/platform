@@ -17,12 +17,12 @@ class FavoritesPlaylistsScreen(
     private val plugin: OyasaiMusic,
     private val menuManager: MenuManager,
     viewer: Player,
-) : BaseGridMenu(viewer, Component.text("お気に入り♪プレイリスト")) {
+) : BaseGridMenu(viewer, Component.text("ストレージ・お気に入り・プレイリスト")) {
 
   companion object {
     // サヒュヤ氏の指示: 5×8フル(40スロット)、slot1(左上)から詰めて表示する。
     val SLOTS: List<Int> = ContentGrid.SLOTS
-    private const val FAVORITES_INDEX = 0 // SLOTS[0] は常に「お気に入り」固定
+    private const val FAVORITES_INDEX = 1 // SLOTS[0] は常に「お気に入り」固定
   }
 
   private var playlists: List<Playlist> = emptyList()
@@ -67,6 +67,13 @@ class FavoritesPlaylistsScreen(
         actionModeCategory = ActionModeCategory.PLAYLIST_LIST,
     )
 
+    inventory.setItem(
+        SLOTS[0],
+        GuiItemBuilder(Material.RED_BUNDLE)
+            .name(Component.text("ストレージ", NamedTextColor.RED))
+            .lore(Component.text("レコード専用・最大20ページ", NamedTextColor.GRAY))
+            .build(),
+    )
     inventory.setItem(SLOTS[FAVORITES_INDEX], favoritesIcon(favoriteCount))
 
     playlists.forEachIndexed { i, playlist ->
@@ -137,6 +144,10 @@ class FavoritesPlaylistsScreen(
     val index = SLOTS.indexOf(slot)
     if (index == -1) return
 
+    if (index == 0) {
+      menuManager.open(viewer, RecordStorageScreen(plugin, menuManager, viewer))
+      return
+    }
     if (index == FAVORITES_INDEX) {
       pendingDeletePlaylistId = null
       menuManager.open(viewer, PlaylistDetailScreen.forFavorites(plugin, menuManager, viewer))
@@ -274,7 +285,7 @@ class FavoritesPlaylistsScreen(
                                         "§a${target.name} にプレイリスト「${playlist.name}」(${songs.size}曲)を共有しました。"
                                     )
                                     target.sendMessage(
-                                        "§d${viewer.name} からプレイリスト「${playlist.name}」が共有されました！ §7(お気に入り♪プレイリストに追加されました)"
+                                        "§d${viewer.name} からプレイリスト「${playlist.name}」が共有されました！ §7(ストレージ・お気に入り・プレイリストに追加されました)"
                                     )
                                     reload()
                                   },

@@ -191,6 +191,9 @@ class PlaylistRepository(private val db: DatabaseManager) {
           fileName = getString("file_name"),
           supportsPositional = getInt("supports_positional") != 0,
           published = getInt("published") != 0,
+          limitedPublication = getInt("limited_publication") != 0,
+          collectible = getInt("collectible") != 0,
+          recordIdentity = getString("record_identity") ?: "",
           reviewRequestedAt = getLong("review_requested_at").let { if (wasNull()) null else it },
       )
 }

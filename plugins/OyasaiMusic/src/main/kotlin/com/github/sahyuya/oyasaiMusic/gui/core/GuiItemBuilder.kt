@@ -77,7 +77,7 @@ class GuiItemBuilder(private val material: Material) {
   }
 
   companion object {
-    /** 余白埋め（灰色ガラス板等）用の空アイテムを作る。現状は未使用だが今後の調整用に用意。 */
+    /** 余白埋め（灰色ガラス板等）用の空アイテムを作る。ContentGridの枠埋めに使用する。 */
     fun filler(material: Material = Material.GRAY_STAINED_GLASS_PANE): ItemStack =
         GuiItemBuilder(material).name(Component.empty()).build()
   }

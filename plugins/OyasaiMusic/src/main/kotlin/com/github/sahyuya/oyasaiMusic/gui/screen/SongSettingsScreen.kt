@@ -30,7 +30,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
  * 録音方式を選んで音源を再読み込み／再録音 slot37: 戻る（矢、サヒュヤ氏指定の座標(1,4)＝コンテンツ領域左下） slot44: 楽曲削除（TNT、2回クリックで確定）
  *
  * 【公開とオリジナル審査の関係（サヒュヤ氏の指示により確定）】 「公開」は`songs.published`という審査ステータス(`status`)とは独立したカラムで管理する。
- * プレイヤーは`published`を自由にON/OFFでき、一覧・検索・ランキング等は`published=true`のみを対象とする。
+ * 通常公開と限定公開は別フラグで保持する。一覧・検索は作者とレコード所持権限で絞り込む。
  * `status`(下書き/仮OK/永続OK/却下)はOPによる「オリジナル審査」の結果として引き続き別管理し、
  * 収益化（視聴ポイント・レコード売上還元）の可否にのみ使用する（[Song.isMonetizationEligible]）。
  */
@@ -128,6 +128,15 @@ class SongSettingsScreen(
     inventory.setItem(previewSlot, previewItem())
     inventory.setItem(publishSlot, publishItem())
     inventory.setItem(
+        13,
+        if (song.limitedPublication)
+            GuiItemBuilder(if (song.collectible) Material.SOUL_LANTERN else Material.LANTERN)
+                .name(Component.text(if (song.collectible) "限定品" else "個人用", NamedTextColor.AQUA))
+                .lore(Component.text("クリックで個人用／限定品を切替", NamedTextColor.GRAY))
+                .build()
+        else null,
+    )
+    inventory.setItem(
         urlSlot,
         GuiItemBuilder(Material.WRITTEN_BOOK)
             .name(Component.text("参考URLを設定", NamedTextColor.YELLOW))
@@ -157,7 +166,14 @@ class SongSettingsScreen(
         priceSlot,
         GuiItemBuilder(Material.EMERALD)
             .name(Component.text("レコード価格を変更", NamedTextColor.YELLOW))
-            .lore(Component.text("現在: ${song.price}円", NamedTextColor.GRAY))
+            .lore(
+                Component.text(
+                    if (song.price < 0) "現在: 非売品" else "現在: " + song.price + "円",
+                    NamedTextColor.GRAY,
+                ),
+                Component.text("0以上で販売", NamedTextColor.GRAY),
+                Component.text("-1で非売化", NamedTextColor.GRAY),
+            )
             .build(),
     )
     val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
@@ -201,7 +217,7 @@ class SongSettingsScreen(
                 .name(Component.text("審査申請を取り消す", NamedTextColor.RED))
                 .lore(Component.text("クリックでOP審査への申請を取り消します", NamedTextColor.GRAY))
                 .build()
-        !song.published ->
+        !song.released ->
             GuiItemBuilder(Material.GRAY_DYE)
                 .name(Component.text("オリジナル審査を提出", NamedTextColor.DARK_GRAY))
                 .lore(Component.text("公開後に審査へ提出できます", NamedTextColor.GRAY))
@@ -237,15 +253,33 @@ class SongSettingsScreen(
   }
 
   private fun publishItem(): org.bukkit.inventory.ItemStack {
-    return GuiItemBuilder(if (song.published) Material.LIME_DYE else Material.GRAY_DYE)
-        .name(
-            Component.text(
-                if (song.published) "公開中" else "非公開(下書き)",
-                if (song.published) NamedTextColor.GREEN else NamedTextColor.GRAY,
-            )
+    val label =
+        when {
+          song.published -> "公開中"
+          song.limitedPublication -> "限定公開中"
+          else -> "非公開(下書き)"
+        }
+    val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
+    return GuiItemBuilder(
+            if (song.limitedPublication) Material.CYAN_DYE
+            else if (song.published) Material.LIME_DYE else Material.GRAY_DYE
         )
-        .lore(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
-        .glint(song.published)
+        .name(
+            Component.text(label, if (song.released) NamedTextColor.GREEN else NamedTextColor.GRAY)
+        )
+        .lore(
+            *ActionLoreBuilder.build(
+                    viewer,
+                    prefix,
+                    ActionModeCategory.SONG_SETTINGS,
+                    if (song.released) "下書きに戻す" else "公開",
+                    "-",
+                    if (song.released) "下書きに戻す" else "限定公開",
+                    "-",
+                )
+                .toTypedArray()
+        )
+        .glint(song.released)
         .build()
   }
 
@@ -316,7 +350,13 @@ class SongSettingsScreen(
             ActionMode.QUATERNARY -> reloadFromClipboard(grid = false)
           }
       urlSlot -> editUrl()
-      publishSlot -> togglePublish()
+      publishSlot ->
+          when (resolveAction(event)) {
+            ActionMode.PRIMARY -> togglePublish(false)
+            ActionMode.TERTIARY -> togglePublish(true)
+            else -> {}
+          }
+      13 -> if (song.limitedPublication) toggleCollectible()
       deleteSlot -> handleDeleteClick()
     }
   }
@@ -401,7 +441,7 @@ class SongSettingsScreen(
             .runTask(
                 plugin,
                 Runnable {
-                  viewer.sendMessage("§c価格は0以上の整数で入力してください。")
+                  viewer.sendMessage("§c価格は-1以上の整数で入力してください。")
                   menuManager.open(viewer, this, rememberAsPrevious = false)
                 },
             )
@@ -576,26 +616,75 @@ class SongSettingsScreen(
   }
 
   /** 新曲公開時は通知権限を持つプレイヤーへチャット通知を行い、クリックで即座に その曲の詳細GUIを開いて再生できる。通知対象と効果音の対象は同じ権限で統一する。 */
-  private fun togglePublish() {
-    val newPublished = !song.published
+  private var changingPublication = false
+
+  private fun togglePublish(limited: Boolean) {
+    if (changingPublication) return
+    changingPublication = true
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val notifyFirstPublish =
-                  plugin.songRepository.setPublishedAndClaimFirstAnnouncement(
-                      requireNotNull(song.id),
-                      newPublished,
-                  )
+              val result = runCatching {
+                plugin.songRepository.togglePublication(requireNotNull(song.id), limited)
+              }
+              if (!plugin.isEnabled) return@Runnable
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
-                        applyUpdatedSong(
-                            song.copy(published = newPublished),
-                            if (newPublished) "公開しました。" else "非公開(下書き)に戻しました。",
-                        )
-                        if (notifyFirstPublish) broadcastNewSong()
+                        changingPublication = false
+                        result
+                            .onSuccess { (updated, notify) ->
+                              applyUpdatedSong(
+                                  updated,
+                                  when {
+                                    updated.published -> "公開しました。"
+                                    updated.limitedPublication -> "限定公開しました。"
+                                    else -> "下書きに戻しました。"
+                                  },
+                              )
+                              Bukkit.getOnlinePlayers().forEach {
+                                SongAccess.upgrade(plugin, it, listOf(updated))
+                              }
+                              if (notify) broadcastNewSong()
+                            }
+                            .onFailure { viewer.sendMessage("§c公開状態を保存できませんでした。") }
+                      },
+                  )
+            },
+        )
+  }
+
+  private fun toggleCollectible() {
+    if (changingPublication) return
+    changingPublication = true
+    val value = !song.collectible
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val result = runCatching {
+                plugin.songRepository.updateSettings(requireNotNull(song.id), collectible = value)
+                requireNotNull(plugin.songRepository.findById(requireNotNull(song.id)))
+              }
+              if (!plugin.isEnabled) return@Runnable
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        changingPublication = false
+                        result
+                            .onSuccess { updated ->
+                              applyUpdatedSong(
+                                  updated,
+                                  if (updated.collectible) "限定品に変更しました。" else "個人用に変更しました。",
+                              )
+                              Bukkit.getOnlinePlayers().forEach {
+                                SongAccess.upgrade(plugin, it, listOf(updated))
+                              }
+                            }
+                            .onFailure { viewer.sendMessage("§c限定公開モードを保存できませんでした。") }
                       },
                   )
             },
@@ -623,7 +712,7 @@ class SongSettingsScreen(
   private fun submitForReview() {
     val songId = song.id ?: return
     val cancelling = song.status == SongStatus.TEMP_OK && song.reviewRequestedAt != null
-    if (!song.published && !cancelling) {
+    if (!song.released && !cancelling) {
       GuiFeedback.invalid(viewer, "公開後にオリジナル審査へ提出できます")
       return
     }

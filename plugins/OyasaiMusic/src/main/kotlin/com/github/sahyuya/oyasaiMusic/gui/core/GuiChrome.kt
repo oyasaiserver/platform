@@ -19,7 +19,7 @@ enum class NavTab(val slot: Int) {
   MY_SONGS(0), // ① プレイヤースキン頭：自作楽曲一覧
   SEARCH(9), // ② 赤色ブロック：検索メニュー
   ALL_SONGS(18), // ③ 黄色ブロック：全楽曲一覧
-  FAVORITES_PLAYLISTS(27), // ④ 緑色ブロック：お気に入り＆プレイリスト
+  FAVORITES_PLAYLISTS(27), // ④ 緑色ブロック：ストレージ・お気に入り・プレイリスト
   ACTION_MODE(36), // ⑤ 水色ブロック：アクションモード切り替え（主に統合版用）
 }
 
@@ -133,9 +133,10 @@ object GuiChrome {
       viewer: Player,
       plugin: OyasaiMusic,
       actionModeCategory: String? = null,
+      sortOptions: List<String> = if (sortLabel == "-") emptyList() else listOf(sortLabel),
   ) {
     renderNav(inventory, activeTab, viewer, plugin, actionModeCategory)
-    renderController(inventory, controllerState, sortLabel)
+    renderController(inventory, controllerState, sortLabel, sortOptions)
   }
 
   private fun renderNav(
@@ -166,7 +167,7 @@ object GuiChrome {
         NavTab.FAVORITES_PLAYLISTS.slot,
         navItem(
             Material.LIME_CONCRETE_POWDER,
-            "お気に入り・プレイリスト",
+            "ストレージ・お気に入り・プレイリスト",
             NamedTextColor.GREEN,
             NavTab.FAVORITES_PLAYLISTS == activeTab,
         ),
@@ -263,14 +264,26 @@ object GuiChrome {
       inventory: Inventory,
       state: PlayerControllerState,
       sortLabel: String,
+      sortOptions: List<String>,
   ) {
     inventory.setItem(
         ControllerSlots.SORT,
         GuiItemBuilder(Material.HOPPER)
             .name(Component.text("並び替え", NamedTextColor.GOLD))
             .lore(
-                Component.text("現在: $sortLabel", NamedTextColor.GRAY),
-                Component.text("クリックで切替", NamedTextColor.DARK_GRAY),
+                buildList {
+                  sortOptions.forEach { option ->
+                    add(
+                        Component.text(
+                            option,
+                            if (option == sortLabel) NamedTextColor.GREEN else NamedTextColor.GRAY,
+                        )
+                    )
+                  }
+                  if (sortOptions.isEmpty()) add(Component.text("並び替えなし", NamedTextColor.DARK_GRAY))
+                  else if (sortOptions.size > 1)
+                      add(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
+                }
             )
             .build(),
     )
