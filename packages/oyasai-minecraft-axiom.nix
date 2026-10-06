@@ -35,7 +35,6 @@ oyasaiPurpur rec {
     oyasaichat
     oyasaitab
     oyasaiworldgenerator
-    placeholderapi
     plugmanx
     vault
     viaversion

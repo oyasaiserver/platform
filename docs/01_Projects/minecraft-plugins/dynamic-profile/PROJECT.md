@@ -24,6 +24,6 @@ agent_task: null
 | 実装の正本 | `plugins/DynamicProfile/src/main/kotlin/com/baakun/dynamicprofile/` |
 | 主要コード | `DynamicProfile.kt`（メイン）、`command/`、`leaderBoard/`、`profile/playerTitle/` |
 | コマンド | `/dprofile`（`dp`）, `/dpmanager`, `/dpleaderboard`, `/dpweeklyleaderboard`, `/dpsuki` |
-| 依存 | Votifier, Vault, TokenManager（必須）/ PlaceholderAPI（任意） |
+| 依存 | Votifier, Vault, TokenManager（必須） |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:DynamicProfile:compileKotlin` |
 | 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置く |

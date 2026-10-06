@@ -93,14 +93,6 @@
       }
     }
   },
-  "placeholderapi": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/lKEzGugV/versions/pIvQcXW8/PlaceholderAPI-2.12.3.jar",
-        "hash": "sha256-/eAyWfWvaTjzwz7rTYFAAKGtq/HSMEzhSXC+gfYJpDc="
-      }
-    }
-  },
   "plugmanx": {
     "paper": {
       "26.2": {
