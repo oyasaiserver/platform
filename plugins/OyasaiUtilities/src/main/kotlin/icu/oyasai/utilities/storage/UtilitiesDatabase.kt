@@ -99,6 +99,14 @@ class UtilitiesDatabase(file: File, private val onWriteFailure: (Throwable) -> U
     }
   }
 
+  /** Commit every previously queued write before retiring an imported source of truth. */
+  fun flush() {
+    executor.submit {}.get()
+    writeFailure?.let {
+      throw IllegalStateException("SQLite writes failed; source data must be retained", it)
+    }
+  }
+
   /** All submitted writes finish before either connection closes; failure is reported to caller. */
   override fun close() {
     executor.shutdown()

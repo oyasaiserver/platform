@@ -7,6 +7,63 @@ api-version: "1.21"
 version: "0.1.0"
 softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
 commands:
+  home:
+    usage: /<command>
+    permission: essentials.home
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [homes]
+  sethome:
+    usage: /<command>
+    permission: essentials.sethome
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  delhome:
+    usage: /<command>
+    permission: essentials.delhome
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [remhome]
+  warp:
+    usage: /<command>
+    permission: essentials.warp
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [warps]
+  tp:
+    usage: /<command>
+    permission: essentials.tp
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [tp2p]
+  tphere:
+    usage: /<command>
+    permission: essentials.tphere
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [s]
+  tpa:
+    usage: /<command>
+    permission: essentials.tpa
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [tpask]
+  tpaccept:
+    usage: /<command>
+    permission: essentials.tpaccept
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [tpyes]
+  tpdeny:
+    usage: /<command>
+    permission: essentials.tpdeny
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [tpno]
+  tpacancel:
+    usage: /<command>
+    permission: essentials.tpacancel
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  tpahere:
+    usage: /<command>
+    permission: essentials.tpahere
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  togglejail:
+    usage: /<command>
+    permission: essentials.togglejail
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [jail, unjail]
   gamemode:
     usage: /<command>
     permission: essentials.gamemode
@@ -223,9 +280,69 @@ commands:
   spawn:
     description: "スポーン地点へテレポートする"
     usage: /spawn [player]
-    permission: oyasaiutilities.spawn
+    permission: essentials.spawn
 
 permissions:
+  essentials.spawn:
+    default: op
+  essentials.spawn.others:
+    default: op
+  essentials.home:
+    default: op
+  essentials.sethome:
+    default: op
+  essentials.delhome:
+    default: op
+  essentials.warp:
+    default: op
+  essentials.tp:
+    default: op
+  essentials.tphere:
+    default: op
+  essentials.tpa:
+    default: op
+  essentials.tpaccept:
+    default: op
+  essentials.tpdeny:
+    default: op
+  essentials.tpacancel:
+    default: op
+  essentials.tpahere:
+    default: op
+  essentials.togglejail:
+    default: op
+  essentials.home.others:
+    default: op
+  essentials.home.bed:
+    default: op
+  essentials.sethome.others:
+    default: op
+  essentials.sethome.multiple:
+    default: op
+  essentials.sethome.multiple.unlimited:
+    default: op
+  essentials.sethome.multiple.vip:
+    default: op
+  essentials.sethome.multiple.staff:
+    default: op
+  essentials.delhome.others:
+    default: op
+  essentials.warp.list:
+    default: op
+  essentials.warp.others:
+    default: op
+  essentials.warp.otherplayers:
+    default: op
+  essentials.tp.others:
+    default: op
+  essentials.tp.position:
+    default: op
+  essentials.togglejail.offline:
+    default: op
+  essentials.jail.exempt:
+    default: op
+  essentials.jail.notify:
+    default: op
   essentials.gamemode:
     default: op
   essentials.fly:

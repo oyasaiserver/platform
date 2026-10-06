@@ -150,4 +150,21 @@ class UtilitiesDatabaseTest {
     assertFailsWith<IllegalStateException> { db.close() }
     assertEquals("write failed", reported?.message)
   }
+
+  @Test
+  fun `flush commits queued writes and reports failures before source retirement`() =
+      withFile { file ->
+        val db = UtilitiesDatabase(file)
+        db.write { c ->
+          c.createStatement().use { it.execute("CREATE TABLE durable_import (value TEXT)") }
+        }
+        db.flush()
+        db.read { c ->
+          c.createStatement().use { it.executeQuery("SELECT * FROM durable_import").close() }
+        }
+        db.write { error("import was not committed") }
+        val failure = assertFailsWith<IllegalStateException> { db.flush() }
+        assertEquals("import was not committed", failure.cause?.message)
+        assertFailsWith<IllegalStateException> { db.close() }
+      }
 }

@@ -25,6 +25,7 @@ import icu.oyasai.utilities.skriptport.NonOpUtilities
 import icu.oyasai.utilities.skriptport.Scale
 import icu.oyasai.utilities.spawn.SpawnFeature
 import icu.oyasai.utilities.storage.UtilitiesDatabase
+import icu.oyasai.utilities.teleport.TeleportFeature
 import icu.oyasai.utilities.timerbar.TimerBarEvent
 import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
@@ -41,7 +42,12 @@ import org.bukkit.plugin.java.JavaPlugin
 class Main : JavaPlugin() {
   private lateinit var backpackFeature: BackpackFeature
   private lateinit var skinFeature: SkinFeature
-  private lateinit var tpSwitchFeature: TpSwitchFeature
+  lateinit var tpSwitchFeature: TpSwitchFeature
+    private set
+
+  var teleportFeature: TeleportFeature? = null
+    private set
+
   private lateinit var sitFeature: SitFeature
   private var playerStateFeature: PlayerStateFeature? = null
   private var workstationFeature: WorkstationFeature? = null
@@ -84,6 +90,14 @@ class Main : JavaPlugin() {
     CommandAliases(this).enable()
     tpSwitchFeature = TpSwitchFeature(this)
     tpSwitchFeature.enable()
+    val travel = TeleportFeature(this)
+    try {
+      travel.enable()
+      teleportFeature = travel
+    } catch (e: Exception) {
+      runCatching { travel.disable() }.onFailure { e.addSuppressed(it) }
+      logger.log(Level.SEVERE, "Teleport: failed to enable; continuing other features", e)
+    }
     sitFeature = SitFeature(this)
     sitFeature.enable()
     skinFeature = SkinFeature(this)
@@ -117,9 +131,12 @@ class Main : JavaPlugin() {
     Hats.onEnable()
     HologramFeature.onEnable()
     JoinCommands.onEnable()
-    // Essentials が無いと SpawnFeature のクラス読み込み自体が失敗するので、先に確かめる
-    if (server.pluginManager.isPluginEnabled("Essentials")) SpawnFeature.onEnable()
-    else logger.warning("Spawn: Essentials is not enabled; /spawn disabled")
+    try {
+      if (teleportFeature != null) SpawnFeature.onEnable()
+      else logger.warning("Spawn: teleport storage is unavailable; /spawn disabled")
+    } catch (e: Exception) {
+      logger.log(Level.SEVERE, "Spawn: failed to enable; continuing other features", e)
+    }
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
     VeinminerConfig.reloadConfig()
@@ -130,6 +147,7 @@ class Main : JavaPlugin() {
 
   override fun onDisable() {
     try {
+      teleportFeature?.disable()
       playerStateFeature?.disable()
       workstationFeature?.disable()
       if (::guidance.isInitialized) guidance.disable()
