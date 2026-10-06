@@ -7,6 +7,51 @@ api-version: "1.21"
 version: "0.1.0"
 softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
 commands:
+  workbench:
+    usage: /<command>
+    permission: essentials.workbench
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [craft, wb]
+  enderchest:
+    usage: /<command> [player]
+    permission: essentials.enderchest
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [ec]
+  disposal:
+    usage: /<command>
+    permission: essentials.disposal
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [trash]
+  anvil:
+    usage: /<command>
+    permission: essentials.anvil
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  loom:
+    usage: /<command>
+    permission: essentials.loom
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  grindstone:
+    usage: /<command>
+    permission: essentials.grindstone
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  stonecutter:
+    usage: /<command>
+    permission: essentials.stonecutter
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  smithingtable:
+    usage: /<command>
+    permission: essentials.smithingtable
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  hat:
+    usage: /<command> [remove]
+    permission: essentials.hat
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [head]
+  skull:
+    usage: /<command> [owner] [player]
+    permission: essentials.skull
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [eskull, playerskull]
   annaimode:
     usage: /annaimode [<player>]
   guidecheck:
@@ -131,6 +176,44 @@ commands:
     permission: oyasaiutilities.spawn
 
 permissions:
+  essentials.vanish.interact:
+    default: op
+  essentials.workbench:
+    default: op
+  essentials.enderchest:
+    default: op
+  essentials.disposal:
+    default: op
+  essentials.anvil:
+    default: op
+  essentials.loom:
+    default: op
+  essentials.grindstone:
+    default: op
+  essentials.stonecutter:
+    default: op
+  essentials.smithingtable:
+    default: op
+  essentials.hat:
+    default: op
+  essentials.skull:
+    default: op
+  essentials.enderchest.others:
+    default: op
+  essentials.enderchest.modify:
+    default: op
+  essentials.hat.ignore-binding:
+    default: op
+  essentials.hat.prevent-type.<item-name>:
+    default: op
+  essentials.skull.others:
+    default: op
+  essentials.skull.modify:
+    default: op
+  essentials.skull.spawn:
+    default: op
+  essentials.skull.spawn.others:
+    default: op
   oyasai.utilities.sit.admin:
     description: "PlayerSitモードの変更権限"
     default: op

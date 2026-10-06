@@ -24,8 +24,8 @@ class CommandAliases(private val plugin: Main) : CommandExecutor {
     if (args.isNotEmpty()) return false
     sender.performCommand(
         when (command.name) {
-          "c" -> "craft"
-          "d" -> "trash"
+          "c" -> "oyasaiutilities:workbench"
+          "d" -> "oyasaiutilities:disposal"
           else -> "list"
         }
     )
