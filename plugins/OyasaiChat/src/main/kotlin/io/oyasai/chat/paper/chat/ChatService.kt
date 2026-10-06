@@ -34,6 +34,9 @@ class ChatService(
     val player =
         plugin.server.getPlayer(playerId)
             ?: return LocalChatPlan.Rejected("Player is no longer online.")
+    plugin.muteRejection(player)?.let {
+      return LocalChatPlan.Rejected(it)
+    }
     val state = state(player)
     val pendingConversation = privateMessages.isConversationPending(playerId)
     if (
@@ -83,6 +86,7 @@ class ChatService(
               plugin.logger.warning("Dropping post-chat side effects for offline player $playerId.")
               return
             }
+    if (plan !is LocalChatPlan.Rejected && plugin.rejectMuted(player)) return
     when (plan) {
       is LocalChatPlan.Public -> {
         if (manualDelivery) {
@@ -104,6 +108,7 @@ class ChatService(
   }
 
   fun sendOneShotChannel(player: Player, channel: ChannelDefinition, message: String): Boolean {
+    if (plugin.rejectMuted(player)) return false
     if (message.isBlank()) {
       player.sendMessage(formatter.error("Message must not be blank."))
       return false

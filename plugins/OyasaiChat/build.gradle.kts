@@ -1,4 +1,5 @@
 dependencies {
+  implementation(libs.sqlite.jdbc)
   implementation(libs.gson)
   implementation(libs.kotlin.stdlib)
 
@@ -6,4 +7,10 @@ dependencies {
   compileOnly(libs.discordsrv)
   compileOnly(libs.velocity.api) { exclude(group = "net.kyori") }
   compileOnly(libs.vault.api)
+  testImplementation(libs.purpur.api)
+  testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.4.0")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.4")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
+
+tasks.test { useJUnitPlatform() }

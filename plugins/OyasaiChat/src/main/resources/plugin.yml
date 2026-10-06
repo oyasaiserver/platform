@@ -10,6 +10,10 @@ loadbefore:
   - Essentials
   - LunaChat
 commands:
+  mute:
+    description: Toggle or update a player mute
+    usage: /mute <player> [duration] [reason]
+    permission: essentials.mute
   ch:
     description: Select a chat channel
     usage: /ch <channel>
@@ -41,6 +45,16 @@ commands:
     description: OyasaiChat administrative commands
     usage: /oyasaichat reload
 permissions:
+  essentials.mute:
+    default: op
+  essentials.mute.offline:
+    default: op
+  essentials.mute.exempt:
+    default: false
+  essentials.mute.unlimited:
+    default: op
+  essentials.mute.notify:
+    default: op
   oyasaichat.links.send:
     description: Post links in chat as clickable URLs
     default: true
