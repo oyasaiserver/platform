@@ -61,6 +61,7 @@ oyasaiPurpur rec {
     oyasaimenu
     oyasaimusic
     oyasaipets
+    oyasaisignshop
     oyasaitab
     oyasaitoken
     oyasaiutilities
@@ -69,7 +70,6 @@ oyasaiPurpur rec {
     oyasaiworldgenerator
     placeholderapi
     plugmanx
-    signshop
     skript
     sociallikes3
     socialvotes
