@@ -309,7 +309,7 @@ items:
       - "&7額縁に飾って染料で右クリックでお絵かき"
       - "&c※ポイントショップで「表現の自由」が必要"
     actions:
-      - {player_cmd: "startpaint"}
+      - {player_cmd: "painttools dye"}
       - {console_cmd: "give %player% item_frame 1"}
       - {close: true}
   getdye:
