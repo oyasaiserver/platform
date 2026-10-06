@@ -82,7 +82,11 @@ class TpSwitchFeature(private val plugin: Main) : Listener, CommandExecutor, Tab
     }
   }
 
-  @EventHandler
+  fun accepts(target: Player, requester: Player): Boolean =
+      ready &&
+          !denied(settings[target.uniqueId] ?: TpSettings(), requester.uniqueId, requester.isOp)
+
+  @EventHandler(ignoreCancelled = true)
   fun onCommandPreprocess(event: PlayerCommandPreprocessEvent) {
     if (!ready) return
     val parts = event.message.split(" ")
@@ -96,7 +100,7 @@ class TpSwitchFeature(private val plugin: Main) : Listener, CommandExecutor, Tab
     if (denied(state, event.player.uniqueId, event.player.isOp)) {
       event.player.sendMessage("§6TPinfo:§e${parts[1]} §6is in closed mode!")
       event.isCancelled = true
-    } else event.isCancelled = false
+    }
   }
 
   override fun onTabComplete(
