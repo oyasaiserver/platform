@@ -65,11 +65,19 @@ heal は upstream 既定の60秒クールダウン、効果除去=true。
 元のインベントリに対応するドロップだけを除去し、追加戦利品は残す。
 消滅・束縛の呪いの policy は upstream 既定の keep（設定でdrop/deleteも可能）。
 
-`PlayerState/userdata/<UUID>.yml` に nickname、flymode、飛行中かどうか、速度とhealクールダウンの時刻を保存する。
-専用ファイルがない場合だけ同階層の `Essentials/userdata/<UUID>.yml` から nickname と
-flymode（およびhealクールダウンの時刻）を読み込む。nickname がない場合も `essentials-imported: true` を保存する。
-`/nick off` や再起動後も再移行しない。ファイルは一時ファイルから atomic move で保存する。
-移行元・保存済みファイルが壊れている場合は無視して初期値で上書きせず、エラーにする。
+`plugins/OyasaiUtilities/oyasaiutilities.db` の `playerstate_players` 表に UUID ごとの
+nickname、flymode、飛行中かどうか、fly/walk速度、最後の実名、healクールダウンの時刻、
+Essentials移行済みの印を保存する。設定の `PlayerState/config.yml` は YAML のまま。
+DBに行がない場合だけ同階層の `Essentials/userdata/<UUID>.yml` から nickname と
+flymode、`timestamps.lastheal` を読み込む。元ファイルやnicknameがなくても移行済みの行を作る。
+`/nick off` や再起動後も行があれば再移行しない。移行元YAMLが壊れている場合は
+初期値で上書きせずエラーにする。未公開の旧 `PlayerState/userdata/*.yml` は読み込まない。
+
+保存は値をコピーして専用スレッドへ順番に渡す。参加時などの初回参照では該当 UUID の行だけを
+読み、参加中はキャッシュを使う。保存完了前の再参加は最新の保存待ちの値を使う。
+停止時はオンラインの状態も保存し、全書き込み完了を待ってから共通DBを閉じる。
+書き込み失敗は SEVERE ログで報告し、停止時にも失敗を報告する。
+共通の接続・版管理は [SQLITE_STORAGE.md](SQLITE_STORAGE.md) を参照。
 
 ## Essentials との共存
 

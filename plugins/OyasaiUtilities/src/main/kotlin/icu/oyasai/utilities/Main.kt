@@ -24,6 +24,7 @@ import icu.oyasai.utilities.skriptport.Guidance
 import icu.oyasai.utilities.skriptport.NonOpUtilities
 import icu.oyasai.utilities.skriptport.Scale
 import icu.oyasai.utilities.spawn.SpawnFeature
+import icu.oyasai.utilities.storage.UtilitiesDatabase
 import icu.oyasai.utilities.timerbar.TimerBarEvent
 import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
@@ -33,6 +34,7 @@ import icu.oyasai.utilities.tpswitch.TpSwitchFeature
 import icu.oyasai.utilities.veinminer.VeinminerConfig
 import icu.oyasai.utilities.veinminer.VeinminerEvent
 import icu.oyasai.utilities.workstation.WorkstationFeature
+import java.io.File
 import java.util.logging.Level
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -45,9 +47,20 @@ class Main : JavaPlugin() {
   private var workstationFeature: WorkstationFeature? = null
   private lateinit var guidance: Guidance
 
+  var database: UtilitiesDatabase? = null
+    private set
+
   override fun onLoad() {}
 
   override fun onEnable() {
+    try {
+      database =
+          UtilitiesDatabase(File(dataFolder, "oyasaiutilities.db")) {
+            logger.log(Level.SEVERE, "Shared SQLite: write failed", it)
+          }
+    } catch (e: Exception) {
+      logger.log(Level.SEVERE, "Shared SQLite: failed to open; dependent features disabled", e)
+    }
     val workstations = WorkstationFeature(this)
     try {
       workstations.enable()
@@ -116,21 +129,29 @@ class Main : JavaPlugin() {
   }
 
   override fun onDisable() {
-    playerStateFeature?.disable()
-    workstationFeature?.disable()
-    if (::guidance.isInitialized) guidance.disable()
-    if (::tpSwitchFeature.isInitialized) tpSwitchFeature.disable()
-    if (::sitFeature.isInitialized) sitFeature.disable()
-    if (::skinFeature.isInitialized) skinFeature.disable()
-    OreReappears.onDisable() // OreReappearsの無効化
-    AdminBP.onDisable()
-    Hats.onDisable()
-    HologramFeature.onDisable()
-    Pita.onDisable() // Pitaの無効化
-    TimerObj.onDisable()
-    CreativeManagement.onDisable()
-    RedBullFeature.onDisable()
-    DebugOnBE.onDisable()
-    if (::backpackFeature.isInitialized) backpackFeature.disable()
+    try {
+      playerStateFeature?.disable()
+      workstationFeature?.disable()
+      if (::guidance.isInitialized) guidance.disable()
+      if (::tpSwitchFeature.isInitialized) tpSwitchFeature.disable()
+      if (::sitFeature.isInitialized) sitFeature.disable()
+      if (::skinFeature.isInitialized) skinFeature.disable()
+      OreReappears.onDisable() // OreReappearsの無効化
+      AdminBP.onDisable()
+      Hats.onDisable()
+      HologramFeature.onDisable()
+      Pita.onDisable() // Pitaの無効化
+      TimerObj.onDisable()
+      CreativeManagement.onDisable()
+      RedBullFeature.onDisable()
+      DebugOnBE.onDisable()
+      if (::backpackFeature.isInitialized) backpackFeature.disable()
+    } finally {
+      runCatching { database?.close() }
+          .onFailure {
+            logger.log(Level.SEVERE, "Shared SQLite: failed to finish writes or close", it)
+          }
+      database = null
+    }
   }
 }

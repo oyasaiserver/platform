@@ -1,9 +1,10 @@
 package icu.oyasai.utilities.playerstate
 
+import icu.oyasai.utilities.storage.UtilitiesDatabase
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
+import java.sql.Connection
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.configuration.file.YamlConfiguration
 
 data class SavedPlayerState(
@@ -16,60 +17,107 @@ data class SavedPlayerState(
     var lastHeal: Long = 0,
 )
 
-/** Own files, including an explicit first-import marker even for an absent nickname. */
-class PlayerStateStore(private val directory: File, private val essentialsDirectory: File) {
+/** Cache belongs to the server thread; queued writes only see immutable snapshots. */
+class PlayerStateStore(
+    private val database: UtilitiesDatabase,
+    private val essentialsDirectory: File,
+) {
   private val cache = mutableMapOf<UUID, SavedPlayerState>()
+  private val pending = ConcurrentHashMap<UUID, SavedPlayerState>()
+
+  init {
+    database.migrate(
+        "playerstate",
+        listOf({ connection ->
+          connection.createStatement().use {
+            it.execute(
+                """
+                CREATE TABLE playerstate_players (
+                  player_uuid TEXT PRIMARY KEY,
+                  nickname TEXT,
+                  flymode INTEGER NOT NULL CHECK(flymode IN (0, 1)),
+                  flying INTEGER NOT NULL CHECK(flying IN (0, 1)),
+                  fly_speed REAL NOT NULL,
+                  walk_speed REAL NOT NULL,
+                  last_name TEXT NOT NULL,
+                  last_heal INTEGER NOT NULL,
+                  essentials_imported INTEGER NOT NULL CHECK(essentials_imported = 1)
+                )
+                """
+                    .trimIndent()
+            )
+          }
+        }),
+    )
+  }
 
   fun get(id: UUID): SavedPlayerState =
       cache.getOrPut(id) {
-        val own = File(directory, "$id.yml")
-        if (own.exists()) {
-          val y = YamlConfiguration().apply { load(own) }
-          require(y.getBoolean("essentials-imported")) { "Missing migration marker: $own" }
-          SavedPlayerState(
-              y.getString("nickname"),
-              y.getBoolean("flymode"),
-              y.getBoolean("flying"),
-              y.getDouble("fly-speed", 0.1).toFloat(),
-              y.getDouble("walk-speed", 0.2).toFloat(),
-              y.getString("last-name", "")!!,
-              y.getLong("last-heal"),
-          )
-        } else {
-          val legacy = File(essentialsDirectory, "$id.yml")
-          val y = YamlConfiguration().apply { if (legacy.exists()) load(legacy) }
-          SavedPlayerState(
-                  nickname = y.getString("nickname"),
-                  flyMode = y.getBoolean("flymode"),
-                  lastHeal = y.getLong("timestamps.lastheal"),
-              )
-              .also { save(id, it) }
+        // Rejoining before the queued quit save commits must use the latest snapshot.
+        pending[id]?.copy()
+            ?: database.read { connection -> load(connection, id) }
+            ?: run {
+              val legacy = File(essentialsDirectory, "$id.yml")
+              val y = YamlConfiguration().apply { if (legacy.exists()) load(legacy) }
+              SavedPlayerState(
+                      nickname = y.getString("nickname"),
+                      flyMode = y.getBoolean("flymode"),
+                      lastHeal = y.getLong("timestamps.lastheal"),
+                  )
+                  .also { save(id, it) }
+            }
+      }
+
+  private fun load(connection: Connection, id: UUID): SavedPlayerState? =
+      connection.prepareStatement("SELECT * FROM playerstate_players WHERE player_uuid = ?").use {
+        it.setString(1, id.toString())
+        it.executeQuery().use { rows ->
+          if (!rows.next()) null
+          else {
+            check(rows.getInt("essentials_imported") == 1) { "Missing migration marker: $id" }
+            SavedPlayerState(
+                rows.getString("nickname"),
+                rows.getBoolean("flymode"),
+                rows.getBoolean("flying"),
+                rows.getFloat("fly_speed"),
+                rows.getFloat("walk_speed"),
+                rows.getString("last_name"),
+                rows.getLong("last_heal"),
+            )
+          }
         }
       }
 
   fun save(id: UUID, state: SavedPlayerState = get(id)) {
-    directory.mkdirs()
-    val y = YamlConfiguration()
-    y.set("essentials-imported", true)
-    y.set("nickname", state.nickname)
-    y.set("flymode", state.flyMode)
-    y.set("flying", state.flying)
-    y.set("fly-speed", state.flySpeed.toDouble())
-    y.set("walk-speed", state.walkSpeed.toDouble())
-    y.set("last-name", state.lastName)
-    y.set("last-heal", state.lastHeal)
-    val target = File(directory, "$id.yml").toPath()
-    val temporary = Files.createTempFile(directory.toPath(), "$id-", ".tmp")
-    try {
-      Files.writeString(temporary, y.saveToString())
-      Files.move(
-          temporary,
-          target,
-          StandardCopyOption.ATOMIC_MOVE,
-          StandardCopyOption.REPLACE_EXISTING,
-      )
-    } finally {
-      Files.deleteIfExists(temporary)
+    val snapshot = state.copy()
+    pending[id] = snapshot
+    database.write { connection ->
+      connection
+          .prepareStatement(
+              """
+              INSERT INTO playerstate_players
+                (player_uuid, nickname, flymode, flying, fly_speed, walk_speed, last_name, last_heal, essentials_imported)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+              ON CONFLICT(player_uuid) DO UPDATE SET
+                nickname = excluded.nickname, flymode = excluded.flymode, flying = excluded.flying,
+                fly_speed = excluded.fly_speed, walk_speed = excluded.walk_speed,
+                last_name = excluded.last_name, last_heal = excluded.last_heal,
+                essentials_imported = excluded.essentials_imported
+              """
+                  .trimIndent()
+          )
+          .use {
+            it.setString(1, id.toString())
+            it.setString(2, snapshot.nickname)
+            it.setBoolean(3, snapshot.flyMode)
+            it.setBoolean(4, snapshot.flying)
+            it.setFloat(5, snapshot.flySpeed)
+            it.setFloat(6, snapshot.walkSpeed)
+            it.setString(7, snapshot.lastName)
+            it.setLong(8, snapshot.lastHeal)
+            it.executeUpdate()
+          }
+      pending.remove(id, snapshot)
     }
   }
 

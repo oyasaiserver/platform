@@ -45,7 +45,7 @@ class PlayerStateFeature(val plugin: Main) : Listener {
     settings = PlayerStateSettings(File(plugin.dataFolder, "PlayerState/config.yml"))
     store =
         PlayerStateStore(
-            File(plugin.dataFolder, "PlayerState/userdata"),
+            requireNotNull(plugin.database) { "Shared SQLite database is unavailable" },
             File(plugin.dataFolder.parentFile, "Essentials/userdata"),
         )
     if (plugin.server.pluginManager.isPluginEnabled("Essentials")) {
