@@ -316,7 +316,6 @@ class PacketBlockHider(private val plugin: org.bukkit.plugin.Plugin) {
     // プロパティ設定
     stand.setSmall(placement.isSmall)
     stand.setInvisible(!placement.visible)
-    stand.setInvulnerable(true)
     stand.setNoGravity(true)
     stand.setSilent(true)
     stand.setNoBasePlate(true)
