@@ -17,12 +17,6 @@
       "type": "modrinth"
     }
   },
-  "decentholograms": {
-    "paper": {
-      "slug": "decentholograms",
-      "type": "modrinth"
-    }
-  },
   "discordsrv": {
     "paper": {
       "slug": "discordsrv",
@@ -73,22 +67,10 @@
       "type": "modrinth"
     }
   },
-  "lwc": {
-    "paper": {
-      "slug": "lwc",
-      "type": "modrinth"
-    }
-  },
   "plugmanx": {
     "paper": {
       "slug": "plugmanx",
       "type": "modrinth"
-    }
-  },
-  "signshop": {
-    "paper": {
-      "id": 10997,
-      "type": "spiget"
     }
   },
   "skript": {

@@ -23,14 +23,6 @@
       }
     }
   },
-  "decentholograms": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/w02MKsTg/versions/Fva1FgWm/DecentHolograms-2.10.1.jar",
-        "hash": "sha256-4ke3Niwnfa0FlstItdFXCxAC+6AUpa/YRY2XiWOiU7Q="
-      }
-    }
-  },
   "discordsrv": {
     "paper": {
       "26.2": {
@@ -93,27 +85,11 @@
       "hash": "sha256-o6yS704p/Yek1wbckkRf2UbxyvHTNSbKGEIqYlVPoYo="
     }
   },
-  "lwc": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/rAVMDz0v/versions/hCNtxsSa/LWC-2.4.2.jar",
-        "hash": "sha256-2M4KfahUslvZCCfSuTz4BnKNHCYWj7sh9l5U6/Q3BFc="
-      }
-    }
-  },
   "plugmanx": {
     "paper": {
       "26.2": {
         "url": "https://cdn.modrinth.com/data/yro4niHu/versions/j22EUw2Y/PlugManX-3.2.1.jar",
         "hash": "sha256-ZgpIxZdasermepJz6OsP22B/NNdkRzDlEEHT+L3+3PI="
-      }
-    }
-  },
-  "signshop": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/10997.jar",
-        "hash": "sha256-6QlXZ9+cpuKzFo0EOg9bh2nhZwEcZpZEpvnL+hzUxJ4="
       }
     }
   },
