@@ -11,6 +11,12 @@
       "type": "modrinth"
     }
   },
+  "coreprotect": {
+    "paper": {
+      "slug": "coreprotect",
+      "type": "modrinth"
+    }
+  },
   "decentholograms": {
     "paper": {
       "slug": "decentholograms",

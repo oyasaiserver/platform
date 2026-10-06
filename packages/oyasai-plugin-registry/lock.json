@@ -15,6 +15,14 @@
       }
     }
   },
+  "coreprotect": {
+    "paper": {
+      "26.2": {
+        "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/3sehX6Sg/CoreProtect-CE-24.1.jar",
+        "hash": "sha256-oqzvfAbvIBNVzvB9WRpgVd/tNYrXaPqqqvTidoZezJc="
+      }
+    }
+  },
   "decentholograms": {
     "paper": {
       "26.2": {
@@ -50,8 +58,8 @@
   "fastasyncworldedit": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/5TOYHuQr/FastAsyncWorldEdit-Paper-2.15.4.jar",
-        "hash": "sha256-u7GHXoI8oBWRvSNCfob0kOF82C/nady36CqVXdg3Gsw="
+        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/U2dcKa9T/FastAsyncWorldEdit-Paper-2.16.0.jar",
+        "hash": "sha256-Gjz4F48i2X/njbEAx9UOvles21nz3xqXLCl2Hrum8M0="
       }
     }
   },
@@ -69,8 +77,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.3/builds/1247/downloads/velocity",
-      "hash": "sha256-PvZLiv6HeIc8BuVeiac/gQkhR4GrH5ZGNgMaUtLu5hk="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.3/builds/1249/downloads/velocity",
+      "hash": "sha256-DqETzgYSc8UvSJvECjsoe5iHW5G4gc695Na+NC96VA0="
     }
   },
   "luckperms": {
