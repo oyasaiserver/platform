@@ -1,8 +1,6 @@
 # Agents Entry
 
-Read `docs/_MANIFEST.md` first.
-
-Shared context starts at `docs/00_Context/CONTEXT.md`.
+Read [`docs/_MANIFEST.md`](_MANIFEST.md) first. It is the constitution and the map.
 
 ## Routing
 - Code changes and algorithms: follow the root repository guidance and current code state.

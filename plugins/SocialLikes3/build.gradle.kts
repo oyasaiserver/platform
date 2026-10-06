@@ -45,9 +45,7 @@ val archiveSldataDialogSource by
             ZonedDateTime.now(ZoneId.of("Asia/Tokyo"))
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"))
         val archiveDir =
-            rootProject.layout.projectDirectory
-                .dir("docs/03_Outputs/sociallikes-dialog-archives")
-                .asFile
+            rootProject.layout.projectDirectory.dir("docs/local/sociallikes-dialog-archives").asFile
         copy {
           from(source)
           into(archiveDir)
