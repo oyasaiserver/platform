@@ -223,8 +223,9 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
       clicked: Boolean,
       mode: Mode,
   ): Boolean {
-    val seatAt = at.clone().add(0.0, SEAT_Y_OFFSET, 0.0)
     val scale = player.getAttribute(Attribute.SCALE)?.value ?: 1.0
+    // 乗る位置は台の頭の上になるので、小さい ArmorStand の高さだけ下げる。
+    val seatAt = at.clone().add(0.0, SEAT_Y_OFFSET - SMALL_STAND_HEIGHT * scale, 0.0)
     val stand =
         player.world.spawn(seatAt, ArmorStand::class.java) {
           it.isVisible = false
@@ -300,7 +301,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
     states[player.uniqueId] = state
     if (mannequin != null) {
       player.isInvisible = true
-      Bukkit.getOnlinePlayers().filter { it != player }.forEach { hide(it, player) }
+      Bukkit.getOnlinePlayers().filter { it != player }.forEach { it.hideEntity(plugin, player) }
       if (mode == Mode.LAY) {
         player.isSleepingIgnored = true
         player.setStatistic(Statistic.TIME_SINCE_REST, 0)
@@ -308,11 +309,6 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
     }
     player.sendActionBar(Component.text("スニークで戻る"))
     return true
-  }
-
-  private fun hide(viewer: Player, player: Player) {
-    viewer.hideEntity(plugin, player)
-    viewer.listPlayer(player)
   }
 
   private fun stop(player: Player, returnToSeat: Boolean) {
@@ -532,7 +528,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
     states.keys.forEach { id ->
       val state = states[id] ?: return@forEach
       val posed = Bukkit.getPlayer(id) ?: return@forEach
-      if (state.mannequin != null && posed != event.player) hide(event.player, posed)
+      if (state.mannequin != null && posed != event.player) event.player.hideEntity(plugin, posed)
     }
   }
 
@@ -623,5 +619,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   private companion object {
     // ローカルで見て調整する。
     const val SEAT_Y_OFFSET = 0.0
+    // バニラの小さい ArmorStand の高さ（1.975 の半分）。
+    const val SMALL_STAND_HEIGHT = 0.9875
   }
 }
