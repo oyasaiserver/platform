@@ -54,6 +54,7 @@ class OyasaiTokenPlugin :
     CommandExecutor,
     TabCompleter,
     Listener {
+  private var legacyDataReady = false
   private val dbLock = Any()
   private val nextTransactionId = AtomicLong(1L)
   private lateinit var connection: Connection
@@ -63,7 +64,13 @@ class OyasaiTokenPlugin :
   @Volatile private var notificationSettings = NotificationSettings.disabled()
   private var tabPlaceholderIntegration: TabPlaceholderIntegration? = null
 
+  override fun onLoad() {
+    migrateLegacyData(dataFolder, logger::info)
+    legacyDataReady = true
+  }
+
   override fun onEnable() {
+    check(legacyDataReady) { "Legacy data copy did not complete; refusing to open token storage" }
     saveDefaultConfig()
     dataFolder.mkdirs()
     saveNotificationDefaults()

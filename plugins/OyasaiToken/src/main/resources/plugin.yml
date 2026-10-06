@@ -1,4 +1,5 @@
-name: TokenManager
+name: OyasaiToken
+provides: [TokenManager]
 main: io.oyasai.oyasaitoken.OyasaiTokenPlugin
 version: "0.1.0"
 api-version: "1.21.11"
