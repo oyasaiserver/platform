@@ -17,6 +17,7 @@ data class PlayerChatState(
     var privateMessageModePeer: UUID? = null,
     var privateMessageModeName: String? = null,
     var privateMessagesEnabled: Boolean = true,
+    var japanizeEnabled: Boolean = true,
 )
 
 private data class StateSnapshot(
@@ -24,6 +25,7 @@ private data class StateSnapshot(
     val activeChannel: String,
     val joinedChannels: List<String>,
     val privateMessagesEnabled: Boolean,
+    val japanizeEnabled: Boolean,
 )
 
 class PlayerStateStore(
@@ -31,6 +33,7 @@ class PlayerStateStore(
     private val config: ChatConfig,
 ) {
   private val states = mutableMapOf<UUID, PlayerChatState>()
+  private val importingPreferences = mutableMapOf<UUID, Boolean>()
   private val directory = File(plugin.dataFolder, "players")
   private val writer =
       Executors.newSingleThreadExecutor { runnable ->
@@ -38,7 +41,12 @@ class PlayerStateStore(
       }
   private var acceptingWrites = true
 
-  fun get(player: Player): PlayerChatState = states.getOrPut(player.uniqueId) { load(player) }
+  fun get(player: Player): PlayerChatState =
+      states.getOrPut(player.uniqueId) {
+        load(player).also { state ->
+          importingPreferences[player.uniqueId]?.let { state.japanizeEnabled = it }
+        }
+      }
 
   fun initialize(player: Player): PlayerChatState {
     val state = get(player)
@@ -71,6 +79,65 @@ class PlayerStateStore(
     states.remove(player.uniqueId)
   }
 
+  /** Live state changes on Paper; offline reads and all saves use the existing serial writer. */
+  fun importJapanize(preferences: Map<UUID, Boolean>): java.util.concurrent.CompletableFuture<Int> {
+    check(plugin.server.isPrimaryThread)
+    importingPreferences.putAll(preferences)
+    val live =
+        preferences
+            .mapNotNull { (uuid, enabled) ->
+              states[uuid]?.let { current ->
+                val changed = current.japanizeEnabled != enabled
+                current.japanizeEnabled = enabled
+                uuid to (snapshot(uuid, current) to changed)
+              }
+            }
+            .toMap()
+    val completed = java.util.concurrent.CompletableFuture<Int>()
+    writer.execute {
+      runCatching {
+            var changed = 0
+            preferences.forEach { (uuid, enabled) ->
+              val existing = live[uuid]
+              val state =
+                  if (existing == null)
+                      PlayerStateFileCodec.load(
+                          file(uuid),
+                          config.pmEnabledByDefault,
+                          config.japanize.playerDefault,
+                      ) {
+                        throw it
+                      }
+                  else null
+              val needsWrite =
+                  (existing?.second ?: (state!!.japanizeEnabled != enabled)) ||
+                      !PlayerStateFileCodec.hasJapanizeSetting(file(uuid))
+              if (needsWrite) {
+                val value =
+                    existing?.first ?: snapshot(uuid, state!!.apply { japanizeEnabled = enabled })
+                PlayerStateFileCodec.saveAtomic(
+                    file(uuid),
+                    value.activeChannel,
+                    value.joinedChannels,
+                    value.privateMessagesEnabled,
+                    value.japanizeEnabled,
+                )
+                changed++
+              }
+            }
+            changed
+          }
+          .onSuccess(completed::complete)
+          .onFailure(completed::completeExceptionally)
+    }
+    return completed
+  }
+
+  fun finishImport() {
+    check(plugin.server.isPrimaryThread)
+    importingPreferences.clear()
+  }
+
   fun allLoaded(): Map<UUID, PlayerChatState> = states.toMap()
 
   /** 待機中の書き込みを終え、読み込み済みプレイヤーの最終状態を保存する。 */
@@ -97,9 +164,14 @@ class PlayerStateStore(
           activeChannel = initial.activeChannel,
           joinedChannels = initial.joinedChannels.toMutableSet(),
           privateMessagesEnabled = initial.privateMessagesEnabled,
+          japanizeEnabled = config.japanize.playerDefault,
       )
     }
-    return PlayerStateFileCodec.load(stateFile, config.pmEnabledByDefault) {
+    return PlayerStateFileCodec.load(
+        stateFile,
+        config.pmEnabledByDefault,
+        config.japanize.playerDefault,
+    ) {
       plugin.logger.warning(
           "Unable to load player state for ${player.uniqueId}; using defaults: ${it.message}"
       )
@@ -113,6 +185,7 @@ class PlayerStateStore(
               snapshot.activeChannel,
               snapshot.joinedChannels,
               snapshot.privateMessagesEnabled,
+              snapshot.japanizeEnabled,
           )
         }
         .onFailure {
@@ -126,6 +199,7 @@ class PlayerStateStore(
           state.activeChannel,
           state.joinedChannels.toList(),
           state.privateMessagesEnabled,
+          state.japanizeEnabled,
       )
 
   private fun file(uuid: UUID): File = File(directory, "$uuid.yml")

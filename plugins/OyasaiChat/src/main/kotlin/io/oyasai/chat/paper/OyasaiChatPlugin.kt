@@ -43,6 +43,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
           "setchannel",
           "msg",
           "r",
+          "japanize",
           "oyasaichat",
       )
   private val shortcutCommands = mutableMapOf<String, Command>()
@@ -60,14 +61,21 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   }
 
   internal lateinit var runtime: PaperRuntime
+  internal lateinit var sourceMessages: io.oyasai.chat.paper.japanize.SourceMessageQueue
   internal lateinit var textTransformers: RecipientTextTransformerRegistry
 
   internal val chatLifecycleLock = Any()
   @Volatile internal var reloadInProgress = false
   internal var pendingChatCommits = 0
+  internal var importInProgress = false
+  internal var networkDeliveryEnabled = true
+    private set
 
   override fun onEnable() {
     saveDefaultConfig()
+    networkDeliveryEnabled = io.oyasai.chat.paper.network.PaperNetworkMode.velocityEnabled(server)
+    if (!networkDeliveryEnabled)
+        logger.info("OyasaiChat standalone mode: network delivery disabled.")
     textTransformers = RecipientTextTransformerRegistry(this)
     val runtime =
         runCatching {
@@ -79,6 +87,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
               return
             }
     this.runtime = runtime
+    sourceMessages = io.oyasai.chat.paper.japanize.SourceMessageQueue(this)
     if (config.getBoolean("mute.enabled", runtime.config.network.backendId == "main")) {
       var candidate: io.oyasai.chat.paper.mute.MuteFeature? = null
       runCatching {
@@ -118,7 +127,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     )
     server.onlinePlayers.forEach {
       runtime.chat.initialize(it)
-      runtime.privateMessages.onBackendJoin(it)
+      onBackendPlayerJoin(it)
     }
     bindCommands()
     logger.info(
@@ -126,12 +135,124 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     )
   }
 
+  internal fun onBackendPlayerJoin(player: Player) {
+    if (!runtime.config.network.deliveryEnabled) return
+    // Paper join can precede Velocity post-connect; retry on the next tick as well
+    // as handling the proxy announcement. PM state requests require a confirmed ID.
+    server.scheduler.runTask(this, Runnable { runtime.bridge.requestIdentity(player) })
+    if (runtime.config.network.identity.confirmed) runtime.privateMessages.onBackendJoin(player)
+  }
+
+  fun importLunaChat(sender: CommandSender) {
+    if (!sender.hasPermission("oyasaichat.admin.import")) {
+      sender.sendMessage(
+          runtime.formatter.error("You do not have permission to import LunaChat data.")
+      )
+      return
+    }
+    if (
+        importInProgress ||
+            !runtime.dictionary.canReloadSafely() ||
+            !sourceMessages.canReloadSafely() ||
+            pendingChatCommits != 0 ||
+            !runtime.privateMessages.canReloadSafely()
+    ) {
+      sender.sendMessage(
+          runtime.formatter.error("Wait until pending messages finish before importing.")
+      )
+      return
+    }
+    importInProgress = true
+    sender.sendMessage(
+        runtime.formatter.info("LunaChat import started; resolving names asynchronously.")
+    )
+    val states = runtime.states
+    val playerDefault = runtime.config.japanize.playerDefault
+    val lookup =
+        if (server.pluginManager.isPluginEnabled("LuckPerms"))
+            io.oyasai.chat.paper.japanize.LuckPermsNameLookup.available(this)
+        else null
+    val resolver =
+        io.oyasai.chat.paper.japanize.LunaImportResolver(
+            lookup,
+            { name ->
+              val result = java.util.concurrent.CompletableFuture<UUID?>()
+              // Bukkit's cached-only access stays on the server thread. Never query Mojang.
+              server.scheduler.runTask(
+                  this,
+                  Runnable {
+                    runCatching { server.getOfflinePlayerIfCached(name)?.uniqueId }
+                        .onSuccess { result.complete(it) }
+                        .onFailure { result.completeExceptionally(it) }
+                  },
+              )
+              result
+            },
+        )
+    java.util.concurrent.CompletableFuture.supplyAsync {
+          io.oyasai.chat.paper.japanize.LunaImport.loadData(
+              java.io.File(dataFolder, "imports/lunachat")
+          )
+        }
+        .thenCompose { data -> resolver.resolve(data, playerDefault).thenApply { data to it } }
+        .whenComplete { resolved, resolutionFailure ->
+          if (isEnabled)
+              server.scheduler.runTask(
+                  this,
+                  Runnable {
+                    if (resolutionFailure != null) {
+                      importInProgress = false
+                      val message = "LunaChat import failed: ${resolutionFailure.message}"
+                      sender.sendMessage(runtime.formatter.error(message))
+                      logger.warning(message)
+                      return@Runnable
+                    }
+                    val (data, plan) = resolved
+                    val saved =
+                        runCatching {
+                              val dictionarySaved = runtime.dictionary.mergeImport(data.dictionary)
+                              states.importJapanize(plan.players).thenCombine(dictionarySaved) {
+                                  changed,
+                                  _ ->
+                                changed
+                              }
+                            }
+                            .getOrElse { java.util.concurrent.CompletableFuture.failedFuture(it) }
+                    saved.whenComplete { changed, failure ->
+                      if (isEnabled)
+                          server.scheduler.runTask(
+                              this,
+                              Runnable {
+                                states.finishImport()
+                                importInProgress = false
+                                val message =
+                                    if (failure == null)
+                                        "LunaChat import saved: changed=$changed, selected=${plan.players.size}, dictionary=${data.dictionary.size}, invalid-players=${data.invalidPlayers}, invalid-dictionary=${data.invalidDictionary}, invalid-cache=${data.invalidCache}, skipped-default=${plan.skippedDefault} (player-default=$playerDefault)."
+                                    else
+                                        "LunaChat import failed; retry the same staged files: ${failure.message}"
+                                sender.sendMessage(runtime.formatter.info(message))
+                                logger.info(message)
+                                plan.report().forEach { line ->
+                                  sender.sendMessage(runtime.formatter.info(line))
+                                  logger.info("LunaChat import $line")
+                                }
+                              },
+                          )
+                    }
+                  },
+              )
+        }
+  }
+
   fun reloadRuntime(sender: CommandSender): Boolean {
     check(server.isPrimaryThread) { "OyasaiChat reload must run on the server thread" }
     val busy =
         synchronized(chatLifecycleLock) {
           if (
-              pendingChatCommits != 0 ||
+              importInProgress ||
+                  !runtime.dictionary.canReloadSafely() ||
+                  pendingChatCommits != 0 ||
+                  !sourceMessages.canReloadSafely() ||
                   !runtime.privateMessages.canReloadSafely() ||
                   !runtime.delivery.canReloadSafely()
           ) {
@@ -155,6 +276,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
           runCatching {
                 reloadConfig()
                 val candidateConfig = PaperConfigLoader.load(config)
+                candidateConfig.network.identity = runtime.config.network.identity
                 PaperRuntimeFactory.create(this, candidateConfig, textTransformers)
               }
               .getOrElse {
@@ -180,12 +302,15 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
       val previousStates = runtime.states
       val previousDiscord = runtime.discord
 
+      runtime.dictionary.close()
       previousStates.flushAndShutdown()
       previousDiscord.disable()
       runtime.delivery.close()
       server.messenger.unregisterIncomingPluginChannel(this, NETWORK_CHANNEL)
 
+      sourceMessages.close()
       runtime = candidate
+      sourceMessages = io.oyasai.chat.paper.japanize.SourceMessageQueue(this)
       server.messenger.registerIncomingPluginChannel(this, NETWORK_CHANNEL, candidate.bridge)
       candidate.discord.enable()
       server.onlinePlayers.forEach { player ->
@@ -195,7 +320,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
           state.privateMessageModePeer = previous.privateMessageModePeer
           state.privateMessageModeName = previous.privateMessageModeName
         }
-        candidate.privateMessages.onBackendJoin(player)
+        onBackendPlayerJoin(player)
       }
       bindCommands()
 
@@ -220,6 +345,8 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     if (!::runtime.isInitialized) return
     unregisterShortcutCommands()
     releaseClaimedCommands()
+    sourceMessages.close()
+    runtime.dictionary.close()
     runtime.discord.disable()
     runtime.delivery.close()
     runtime.states.flushAndShutdown()

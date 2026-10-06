@@ -20,6 +20,8 @@ class OyasaiCommandExecutor(
     private val chat: ChatService,
     private val pm: PrivateMessageService,
 ) : CommandExecutor, TabCompleter {
+  private val dictionaryCommand = JapanizeDictionaryCommand(plugin)
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
@@ -66,9 +68,28 @@ class OyasaiCommandExecutor(
         else pm.reply(sender, args.joinToString(" "))
         true
       }
+      "japanize" -> {
+        if (args.firstOrNull()?.equals("dict", true) == true)
+            return dictionaryCommand.execute(sender, args.drop(1).toTypedArray())
+        val player = requirePlayer(sender) ?: return true
+        if (args.size > 1 || (args.isNotEmpty() && args[0].lowercase() !in listOf("on", "off"))) {
+          sender.sendMessage(chat.formatter.error("Usage: /japanize [on|off]"))
+        } else {
+          val state = chat.states.get(player)
+          state.japanizeEnabled =
+              if (args.isEmpty()) !state.japanizeEnabled else args[0].equals("on", true)
+          chat.states.save(player)
+          sender.sendMessage(
+              chat.formatter.info("Japanize: ${if (state.japanizeEnabled) "on" else "off"}")
+          )
+        }
+        true
+      }
       "oyasaichat" -> {
-        if (args.size != 1 || !args[0].equals("reload", true)) {
-          sender.sendMessage(chat.formatter.error("Usage: /oyasaichat reload"))
+        if (args.size == 1 && args[0].equals("import-lunachat", true)) {
+          plugin.importLunaChat(sender)
+        } else if (args.size != 1 || !args[0].equals("reload", true)) {
+          sender.sendMessage(chat.formatter.error("Usage: /oyasaichat <reload|import-lunachat>"))
         } else if (!sender.hasPermission("oyasaichat.admin.reload")) {
           sender.sendMessage(
               chat.formatter.error("You do not have permission to use this command.")
@@ -146,6 +167,16 @@ class OyasaiCommandExecutor(
                   .filter { it.lowercase().startsWith(partial.lowercase()) }
                   .sorted()
             } else emptyList()
+        "japanize" ->
+            if (args.firstOrNull()?.equals("dict", true) == true && args.size > 1)
+                dictionaryCommand.complete(sender, args.drop(1).toTypedArray())
+            else if (args.size == 1)
+                (listOf("on", "off") +
+                        if (sender.hasPermission(JapanizeDictionaryCommand.PERMISSION))
+                            listOf("dict")
+                        else emptyList())
+                    .filter { it.startsWith(args[0], true) }
+            else emptyList()
         "oyasaichat" ->
             if (
                 args.size == 1 &&

@@ -3,7 +3,6 @@ package io.oyasai.chat.paper
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
 import io.oyasai.chat.paper.chat.LocalChatPlan
 import io.oyasai.chat.paper.chat.initialize
-import io.oyasai.chat.paper.chat.requiresManualDelivery
 import io.papermc.paper.event.player.AsyncChatEvent
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -21,7 +20,6 @@ private data class ChatCommitSnapshot(
     val plan: LocalChatPlan,
     val text: String,
     val accepted: Boolean,
-    val manualDelivery: Boolean,
 )
 
 internal fun LocalChatPlan.intersectRecipients(viewerIds: Set<UUID>): LocalChatPlan =
@@ -60,9 +58,8 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
           planChatOnServerThread(playerId)
         }
     val plan = if (cancelled) planned else intersectWithEventViewers(event, planned)
-    val manualDelivery = plan.requiresManualDelivery(service::ownsTransformation)
-    if (!cancelled) configureVanillaDelivery(event, plan, manualDelivery)
-    val commit = ChatCommitSnapshot(playerId, plan, text, !cancelled, manualDelivery)
+    if (!cancelled) event.viewers().clear()
+    val commit = ChatCommitSnapshot(playerId, plan, text, !cancelled)
     plugin.server.scheduler.runTask(
         plugin,
         Runnable {
@@ -72,7 +69,6 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
                   commit.playerId,
                   commit.plan,
                   commit.text,
-                  commit.manualDelivery,
               )
             }
           } finally {
@@ -86,12 +82,13 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
   fun onJoin(event: PlayerJoinEvent) {
     event.joinMessage(null)
     plugin.runtime.chat.initialize(event.player)
-    plugin.runtime.privateMessages.onBackendJoin(event.player)
+    plugin.onBackendPlayerJoin(event.player)
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   fun onQuit(event: PlayerQuitEvent) {
     event.quitMessage(null)
+    plugin.runtime.config.network.identity.forget(event.player.uniqueId)
     plugin.runtime.delivery.clear(event.player.uniqueId)
     plugin.runtime.privateMessages.onQuit(event.player)
     plugin.runtime.states.remove(event.player)
@@ -110,35 +107,6 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
             LocalChatPlan.Rejected("Chat processing is temporarily unavailable.")
           }
 
-  private fun configureVanillaDelivery(
-      event: AsyncChatEvent,
-      plan: LocalChatPlan,
-      manualDelivery: Boolean,
-  ) {
-    val (recipientIds, renderer) =
-        when (plan) {
-          is LocalChatPlan.Public ->
-              plan.recipientIds to
-                  plugin.runtime.formatter.renderer(plan.channel, plan.presentation)
-          is LocalChatPlan.Private ->
-              plan.recipientIds to
-                  if (plan.pending) null
-                  else
-                      plugin.runtime.formatter.privateRenderer(
-                          senderName = plan.senderPresentation.playerName,
-                          targetName = plan.targetName,
-                          senderPresentation = plan.senderPresentation,
-                      )
-          is LocalChatPlan.Rejected -> emptySet<UUID>() to null
-        }
-    configureChatDelivery(
-        event,
-        recipientIds,
-        renderer,
-        manualDelivery || plan is LocalChatPlan.Rejected,
-    )
-  }
-
   private fun intersectWithEventViewers(
       event: AsyncChatEvent,
       plan: LocalChatPlan,
@@ -146,20 +114,5 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
     val viewerIds =
         event.viewers().asSequence().filterIsInstance<Player>().map(Player::getUniqueId).toSet()
     return plan.intersectRecipients(viewerIds)
-  }
-
-  private fun configureChatDelivery(
-      event: AsyncChatEvent,
-      recipientIds: Set<UUID>,
-      renderer: io.papermc.paper.chat.ChatRenderer?,
-      manualDelivery: Boolean,
-  ) {
-    val viewers = event.viewers()
-    viewers
-        .toList()
-        .filterIsInstance<Player>()
-        .filter { manualDelivery || it.uniqueId !in recipientIds }
-        .forEach(viewers::remove)
-    renderer?.let { event.renderer(it) }
   }
 }

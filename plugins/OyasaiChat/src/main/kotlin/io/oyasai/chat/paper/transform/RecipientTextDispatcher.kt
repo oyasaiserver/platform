@@ -26,10 +26,11 @@ internal constructor(
       recipients: Collection<Player>,
       render: (Player, Component) -> Component,
       afterDelivery: (Player) -> Unit = {},
+      originalBody: Component = Component.text(originalText),
   ) {
     check(plugin.server.isPrimaryThread) { "Text dispatch must start on the server thread" }
     if (closed) return
-    val original = Component.text(originalText)
+    val original = originalBody
     recipients.distinctBy(Player::getUniqueId).forEach { player ->
       val resolved =
           resolve(
@@ -103,26 +104,25 @@ internal constructor(
       return completed
     }
     runCatching {
-          plugin.server.scheduler.runTask(
-              plugin,
-              Runnable {
-                val current = plugin.server.getPlayer(expectedPlayer.uniqueId)
-                if (closed || current !== expectedPlayer || !expectedPlayer.isOnline) {
-                  completed.complete(null)
-                  return@Runnable
+          val delivery = Runnable {
+            val current = plugin.server.getPlayer(expectedPlayer.uniqueId)
+            if (closed || current !== expectedPlayer || !expectedPlayer.isOnline) {
+              completed.complete(null)
+              return@Runnable
+            }
+            runCatching {
+                  expectedPlayer.sendMessage(render(expectedPlayer, component))
+                  afterDelivery(expectedPlayer)
                 }
-                runCatching {
-                      expectedPlayer.sendMessage(render(expectedPlayer, component))
-                      afterDelivery(expectedPlayer)
-                    }
-                    .onFailure {
-                      plugin.logger.warning(
-                          "Unable to deliver transformed text to ${expectedPlayer.uniqueId}: ${it.message}"
-                      )
-                    }
-                completed.complete(null)
-              },
-          )
+                .onFailure {
+                  plugin.logger.warning(
+                      "Unable to deliver transformed text to ${expectedPlayer.uniqueId}: ${it.message}"
+                  )
+                }
+            completed.complete(null)
+          }
+          if (plugin.server.isPrimaryThread) delivery.run()
+          else plugin.server.scheduler.runTask(plugin, delivery)
         }
         .onFailure { completed.complete(null) }
     return completed

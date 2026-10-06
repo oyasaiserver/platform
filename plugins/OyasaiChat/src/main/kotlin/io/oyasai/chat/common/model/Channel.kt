@@ -36,12 +36,22 @@ class ChannelRegistry(definitions: Collection<ChannelDefinition>) {
   fun autoJoinChannels(): List<ChannelDefinition> = channels.filter { it.autoJoin }
 }
 
-data class NetworkSettings(
-    val backendId: String,
+class NetworkSettings(
+    backendId: String,
     val groups: Map<String, Set<String>>,
     val remoteMessagePrefix: String = "",
     val remoteMessageSuffix: String = "",
 ) {
+  var deliveryEnabled: Boolean = true
+  var identity = io.oyasai.chat.common.protocol.BackendIdentity(backendId)
+  val backendId: String
+    get() = identity.id
+
+  fun groupFor(channel: ChannelDefinition): String? =
+      channel.networkGroup?.takeIf {
+        deliveryEnabled && (!identity.confirmed || backendId in groups[it].orEmpty())
+      }
+
   fun resolve(group: String?): Set<String>? = group?.let { groups[it] }
 
   fun knownBackends(): Set<String> = groups.values.flatten().toSet()
@@ -60,6 +70,8 @@ data class ChatConfig(
     val pmEnabledByDefault: Boolean,
     val privateMessageReceiveSound: PrivateMessageSoundSettings,
     val discord: DiscordSettings,
+    val japanize: io.oyasai.chat.common.japanize.JapanizeSettings =
+        io.oyasai.chat.common.japanize.JapanizeSettings(),
 )
 
 data class PrivateMessageSoundSettings(

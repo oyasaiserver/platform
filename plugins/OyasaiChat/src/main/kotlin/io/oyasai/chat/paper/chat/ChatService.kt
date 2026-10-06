@@ -2,6 +2,7 @@ package io.oyasai.chat.paper.chat
 
 import io.oyasai.chat.api.ChatTextSender
 import io.oyasai.chat.api.ChatTextSurface
+import io.oyasai.chat.common.japanize.ChatMessage
 import io.oyasai.chat.common.model.ChannelDefinition
 import io.oyasai.chat.common.model.ChatConfig
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
@@ -78,7 +79,21 @@ class ChatService(
       playerId: UUID,
       plan: LocalChatPlan,
       message: String,
-      manualDelivery: Boolean,
+  ) {
+    val player = plugin.server.getPlayer(playerId) ?: return
+    if (plan is LocalChatPlan.Rejected) {
+      player.sendMessage(formatter.error(plan.reason))
+      return
+    }
+    plugin.sourceMessages.enqueue(player, message) { prepared ->
+      commitPreparedChat(playerId, plan, prepared)
+    }
+  }
+
+  private fun commitPreparedChat(
+      playerId: UUID,
+      plan: LocalChatPlan,
+      message: ChatMessage,
   ) {
     val player =
         plugin.server.getPlayer(playerId)
@@ -89,9 +104,10 @@ class ChatService(
     if (plan !is LocalChatPlan.Rejected && plugin.rejectMuted(player)) return
     when (plan) {
       is LocalChatPlan.Public -> {
-        if (manualDelivery) {
-          deliverPublicChat(player, plan, message)
-        }
+        deliverPublicChat(player, plan, message)
+        plugin.server.consoleSender.sendMessage(
+            formatter.chat(plan.channel, plan.presentation, formatter.body(message))
+        )
         commitPublicChat(player, plan.channel, message)
       }
       is LocalChatPlan.Private -> {
@@ -100,7 +116,8 @@ class ChatService(
             message = message,
             expectedPeer = plan.targetId,
             expectedName = plan.targetName,
-            deliverLocal = manualDelivery,
+            deliverLocal = true,
+            recipientIds = plan.recipientIds,
         )
       }
       is LocalChatPlan.Rejected -> player.sendMessage(formatter.error(plan.reason))
@@ -133,36 +150,42 @@ class ChatService(
       return false
     }
 
-    val presentation = formatter.snapshot(player)
-    val recipients = recipients(channel)
-    if (ownsTransformation(ChatTextSurface.PUBLIC_CHAT)) {
-      delivery.dispatch(
-          messageId = UUID.randomUUID(),
-          surface = ChatTextSurface.PUBLIC_CHAT,
-          sender = senderSnapshot(player),
-          originalText = message,
-          recipients = recipients,
-          render = { _, body ->
-            formatter.chat(
-                channel,
-                presentation,
-                body,
-            )
-          },
-      )
-    } else {
-      val component = formatter.chat(channel, presentation, Component.text(message))
-      recipients.forEach { it.sendMessage(component) }
+    plugin.sourceMessages.enqueue(player, message) { prepared ->
+      sendPreparedChannel(player, channel, prepared)
     }
-    plugin.server.consoleSender.sendMessage(
-        formatter.chat(channel, presentation, Component.text(message))
-    )
-    commitPublicChat(player, channel, message)
     return true
   }
 
-  private fun commitPublicChat(player: Player, channel: ChannelDefinition, message: String) {
-    val group = channel.networkGroup
+  private fun sendPreparedChannel(
+      player: Player,
+      channel: ChannelDefinition,
+      message: ChatMessage,
+  ) {
+    val presentation = formatter.snapshot(player)
+    val recipients = recipients(channel)
+    delivery.dispatch(
+        messageId = UUID.randomUUID(),
+        surface = ChatTextSurface.PUBLIC_CHAT,
+        sender = senderSnapshot(player),
+        originalText = formatter.plain(formatter.body(message)),
+        originalBody = formatter.body(message),
+        recipients = recipients,
+        render = { _, body ->
+          formatter.chat(
+              channel,
+              presentation,
+              body,
+          )
+        },
+    )
+    plugin.server.consoleSender.sendMessage(
+        formatter.chat(channel, presentation, formatter.body(message))
+    )
+    commitPublicChat(player, channel, message)
+  }
+
+  private fun commitPublicChat(player: Player, channel: ChannelDefinition, message: ChatMessage) {
+    val group = config.network.groupFor(channel)
     if (group != null) {
       val sent =
           bridge.send(
@@ -181,7 +204,9 @@ class ChatService(
                       player.hasPermission("oyasaichat.links.send") || !config.linkDomainFilter,
                   senderLocale = player.locale().toLanguageTag(),
                   senderName = player.name,
-                  content = message,
+                  content = message.text,
+                  japanizeOriginal = message.original,
+                  japanizeFormat = message.format,
               ),
           )
       if (!sent) {
@@ -192,13 +217,16 @@ class ChatService(
         )
       }
     }
-    plugin.runtime.discord.onMinecraftMessage(channel.displayName, player, message)
+    plugin.runtime.discord.onMinecraftMessage(
+        channel.displayName,
+        player,
+        formatter.plain(formatter.body(message)),
+    )
   }
 
   fun handleLocalChat(player: Player, message: String) {
     val plan = planLocalChat(player.uniqueId)
-    val manualDelivery = plan.requiresManualDelivery(::ownsTransformation)
-    commitLocalChat(player.uniqueId, plan, message, manualDelivery)
+    commitLocalChat(player.uniqueId, plan, message)
   }
 
   fun handleExternalChat(
@@ -221,12 +249,12 @@ class ChatService(
         channel,
         senderName,
         null,
-        message,
+        ChatMessage(message),
         externalSender = sender,
         externalAttachments = attachments,
         surface = ChatTextSurface.EXTERNAL_CHAT,
     )
-    if (channel.networkGroup != null) {
+    if (config.network.groupFor(channel) != null) {
       val transport = plugin.server.onlinePlayers.firstOrNull()
       if (transport == null) {
         plugin.logger.warning(
@@ -240,7 +268,7 @@ class ChatService(
                     type = MessageType.CHANNEL_MESSAGE,
                     backendId = config.network.backendId,
                     channelId = channel.id,
-                    networkGroup = channel.networkGroup,
+                    networkGroup = config.network.groupFor(channel),
                     originBackendPrefix =
                         config.network.remoteMessagePrefix.takeIf { it.isNotBlank() },
                     originBackendSuffix =
@@ -263,7 +291,7 @@ class ChatService(
       channel: ChannelDefinition,
       senderName: String,
       senderId: UUID?,
-      message: String,
+      message: ChatMessage,
       messageId: UUID = UUID.randomUUID(),
       originBackendPrefix: String? = null,
       originBackendSuffix: String? = null,
@@ -287,7 +315,7 @@ class ChatService(
             formatter::snapshot
         )
     plugin.logger.info(
-        "${consoleSafe(prefixText)}[${channel.displayName}] <$senderName> ${consoleSafe(message)}${consoleSafe(suffixText)}"
+        "${consoleSafe(prefixText)}[${channel.displayName}] <$senderName> ${consoleSafe(formatter.plain(formatter.body(message)))}${consoleSafe(suffixText)}"
     )
     val recipients = recipients(channel)
     val render: (Player, Component) -> Component = { _, body ->
@@ -310,27 +338,25 @@ class ChatService(
           }
       prefix.append(component).append(suffix)
     }
-    if (ownsTransformation(surface)) {
-      delivery.dispatch(
-          messageId = messageId,
-          surface = surface,
-          sender = ChatTextSender(senderId, senderName, senderLocale),
-          originalText = message,
-          recipients = recipients,
-          render = render,
-      )
-    } else {
-      recipients.forEach { it.sendMessage(render(it, Component.text(message))) }
-    }
+    delivery.dispatch(
+        messageId = messageId,
+        surface = surface,
+        sender = ChatTextSender(senderId, senderName, senderLocale),
+        originalText = formatter.plain(formatter.body(message)),
+        originalBody = formatter.body(message),
+        recipients = recipients,
+        render = render,
+    )
   }
 
-  private fun deliverPublicChat(player: Player, plan: LocalChatPlan.Public, message: String) {
+  private fun deliverPublicChat(player: Player, plan: LocalChatPlan.Public, message: ChatMessage) {
     val recipients = plan.recipientIds.mapNotNull(plugin.server::getPlayer)
     delivery.dispatch(
         messageId = UUID.randomUUID(),
         surface = ChatTextSurface.PUBLIC_CHAT,
         sender = senderSnapshot(player),
-        originalText = message,
+        originalText = formatter.plain(formatter.body(message)),
+        originalBody = formatter.body(message),
         recipients = recipients,
         render = { _, body ->
           formatter.chat(

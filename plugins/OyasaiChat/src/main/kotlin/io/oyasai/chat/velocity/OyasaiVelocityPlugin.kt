@@ -5,6 +5,7 @@ import com.velocitypowered.api.command.CommandSource
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.PluginMessageEvent
 import com.velocitypowered.api.event.connection.PluginMessageEvent.ForwardResult
+import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
@@ -14,6 +15,8 @@ import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier
 import io.oyasai.chat.common.protocol.EnvelopeCodec
 import io.oyasai.chat.common.protocol.MessageDeduplicator
 import io.oyasai.chat.common.protocol.MessageOrigin
+import io.oyasai.chat.common.protocol.MessageType
+import io.oyasai.chat.common.protocol.NetworkEnvelope
 import io.oyasai.chat.velocity.config.VelocityConfigLoader
 import io.oyasai.chat.velocity.config.VelocityRoutingConfig
 import io.oyasai.chat.velocity.lifecycle.LoginMessageService
@@ -89,6 +92,21 @@ constructor(
   }
 
   @Subscribe
+  fun onServerConnected(event: ServerPostConnectEvent) {
+    val connection = event.player.currentServer.orElse(null) ?: return
+    connection.sendPluginMessage(
+        identifier,
+        EnvelopeCodec.encode(
+            NetworkEnvelope.proxy(
+                type = MessageType.BACKEND_ID,
+                content = connection.serverInfo.name,
+                targetPlayerId = event.player.uniqueId,
+            )
+        ),
+    )
+  }
+
+  @Subscribe
   fun onPluginMessage(event: PluginMessageEvent) {
     if (event.identifier != identifier) return
     event.result = ForwardResult.handled()
@@ -110,6 +128,24 @@ constructor(
     }
     if (envelope.originKind != MessageOrigin.BACKEND) {
       logger.warn("Rejected proxy-originated message {} received from backend.", envelope.messageId)
+      return
+    }
+    if (envelope.type == MessageType.BACKEND_ID_REQUEST) {
+      if (envelope.originPlayerId != source.player.uniqueId) {
+        logger.warn("Rejected backend identity request with incorrect carrier UUID.")
+        return
+      }
+      source.sendPluginMessage(
+          identifier,
+          EnvelopeCodec.encode(
+              NetworkEnvelope.proxy(
+                  type = MessageType.BACKEND_ID,
+                  content = source.serverInfo.name,
+                  targetPlayerId = source.player.uniqueId,
+                  replyToMessageId = envelope.messageId,
+              )
+          ),
+      )
       return
     }
     val sourceBackend = source.serverInfo.name

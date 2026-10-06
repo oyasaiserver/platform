@@ -301,6 +301,8 @@ class ChatFormatter(
     return component
   }
 
+  fun body(message: io.oyasai.chat.common.japanize.ChatMessage): Component = message.component()
+
   fun parse(value: String): Component = mini.deserialize(value)
 
   fun info(value: String): Component = Component.text(value)

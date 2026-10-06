@@ -7,13 +7,15 @@ import java.util.Locale
 import java.util.UUID
 
 // PaperとVelocity間のメッセージ形式。
-const val PROTOCOL_VERSION: Int = 3
+const val PROTOCOL_VERSION: Int = 4
 const val MAX_PAYLOAD_LENGTH: Int = 4096
 const val MAX_MESSAGE_AGE_MILLIS: Long = 30_000
 const val MAX_FUTURE_SKEW_MILLIS: Long = 5_000
 const val PROXY_ORIGIN_BACKEND: String = "__velocity_proxy__"
 
 enum class MessageType {
+  BACKEND_ID_REQUEST,
+  BACKEND_ID,
   CHANNEL_MESSAGE,
   PRIVATE_MESSAGE,
   PRIVATE_MESSAGE_RESULT,
@@ -54,6 +56,8 @@ data class NetworkEnvelope(
     val senderLocale: String? = null,
     val senderName: String,
     val content: String,
+    val japanizeOriginal: String? = null,
+    val japanizeFormat: String? = null,
 ) {
   fun isFresh(now: Long = System.currentTimeMillis()): Boolean =
       timestamp >= now - MAX_MESSAGE_AGE_MILLIS && timestamp <= now + MAX_FUTURE_SKEW_MILLIS
@@ -64,6 +68,8 @@ data class NetworkEnvelope(
         backendId: String,
         senderName: String,
         content: String,
+        japanizeOriginal: String? = null,
+        japanizeFormat: String? = null,
         replyToMessageId: UUID? = null,
         channelId: String? = null,
         networkGroup: String? = null,
@@ -92,6 +98,8 @@ data class NetworkEnvelope(
             senderLocale = senderLocale,
             senderName = senderName,
             content = content,
+            japanizeOriginal = japanizeOriginal,
+            japanizeFormat = japanizeFormat,
         )
 
     fun proxy(
@@ -125,6 +133,7 @@ object EnvelopeCodec {
 
   private val backendTypes =
       setOf(
+          MessageType.BACKEND_ID_REQUEST,
           MessageType.CHANNEL_MESSAGE,
           MessageType.PRIVATE_MESSAGE,
           MessageType.PRIVATE_MESSAGE_RESULT,
@@ -139,6 +148,7 @@ object EnvelopeCodec {
 
   private val proxyTypes =
       setOf(
+          MessageType.BACKEND_ID,
           MessageType.PRIVATE_MESSAGE_RESULT,
           MessageType.PRIVATE_REPLY_STATE,
           MessageType.PRIVATE_TARGET_RESULT,
@@ -171,7 +181,16 @@ object EnvelopeCodec {
     requiredLong(objectJson, "timestamp")
     requiredString(objectJson, "senderName")
     val content = requiredString(objectJson, "content")
-    require(content.length <= MAX_PAYLOAD_LENGTH) { "Envelope content is too long." }
+    val original = optionalString(objectJson, "japanizeOriginal")
+    val format = optionalString(objectJson, "japanizeFormat")
+    require((original == null) == (format == null)) { "Japanize metadata must be paired" }
+    if (original != null) {
+      require(type == MessageType.CHANNEL_MESSAGE || type == MessageType.PRIVATE_MESSAGE)
+      require(original.isNotBlank() && format!!.length <= 512)
+    }
+    require(content.length + (original?.length ?: 0) <= MAX_PAYLOAD_LENGTH) {
+      "Envelope content is too long."
+    }
     optionalString(objectJson, "senderLocale")?.let { value ->
       require(value.length <= 35 && Locale.forLanguageTag(value).language.isNotBlank()) {
         "Envelope senderLocale is invalid."
@@ -248,6 +267,8 @@ object EnvelopeCodec {
       "Message type '$type' is not allowed for origin '$origin'."
     }
     when (type) {
+      MessageType.BACKEND_ID_REQUEST -> requireUuid(json, "originPlayerId")
+      MessageType.BACKEND_ID -> requireUuid(json, "targetPlayerId")
       MessageType.CHANNEL_MESSAGE -> {
         requiredString(json, "channelId")
         requiredString(json, "networkGroup")

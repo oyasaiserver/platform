@@ -12,6 +12,7 @@ object PlayerStateFileCodec {
   fun load(
       file: File,
       defaultPrivateMessagesEnabled: Boolean,
+      defaultJapanizeEnabled: Boolean = true,
       onFailure: (Throwable) -> Unit = {},
   ): PlayerChatState {
     if (!file.exists())
@@ -19,10 +20,12 @@ object PlayerStateFileCodec {
             "",
             mutableSetOf(),
             privateMessagesEnabled = defaultPrivateMessagesEnabled,
+            japanizeEnabled = defaultJapanizeEnabled,
         )
     return runCatching {
-          val yaml = YamlConfiguration.loadConfiguration(file)
+          val yaml = YamlConfiguration().apply { load(file) }
           PlayerChatState(
+              japanizeEnabled = yaml.getBoolean("japanize-enabled", defaultJapanizeEnabled),
               activeChannel = yaml.getString("active-channel", "") ?: "",
               joinedChannels = yaml.getStringList("joined-channels").toMutableSet(),
               privateMessagesEnabled =
@@ -35,15 +38,20 @@ object PlayerStateFileCodec {
               "",
               mutableSetOf(),
               privateMessagesEnabled = defaultPrivateMessagesEnabled,
+              japanizeEnabled = defaultJapanizeEnabled,
           )
         }
   }
+
+  fun hasJapanizeSetting(file: File): Boolean =
+      file.exists() && YamlConfiguration().apply { load(file) }.contains("japanize-enabled")
 
   fun saveAtomic(
       file: File,
       activeChannel: String,
       joinedChannels: List<String>,
       privateMessagesEnabled: Boolean,
+      japanizeEnabled: Boolean = true,
   ) {
     val directory = file.parentFile ?: error("Player state file has no parent directory")
     if (!directory.exists() && !directory.mkdirs() && !directory.isDirectory)
@@ -53,6 +61,7 @@ object PlayerStateFileCodec {
           set("active-channel", activeChannel)
           set("joined-channels", joinedChannels)
           set("private-messages-enabled", privateMessagesEnabled)
+          set("japanize-enabled", japanizeEnabled)
         }
     val temporary = File.createTempFile("${file.nameWithoutExtension}-", ".tmp", directory)
     try {

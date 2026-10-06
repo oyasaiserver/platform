@@ -26,14 +26,23 @@ internal data class PaperRuntime(
     var discord: DiscordBridge,
     val privateMessages: PrivateMessageService,
     val delivery: RecipientTextDispatcher,
+    val dictionary: io.oyasai.chat.paper.japanize.JapanizeDictionaryStore,
 )
 
 internal object PaperRuntimeFactory {
   fun create(
       plugin: OyasaiChatPlugin,
-      model: ChatConfig,
+      rawModel: ChatConfig,
       transformers: RecipientTextTransformerRegistry,
   ): PaperRuntime {
+    rawModel.network.deliveryEnabled = plugin.networkDeliveryEnabled
+    val dictionaryFile = java.io.File(plugin.dataFolder, "japanize-dictionary.yml")
+    val fileDictionary = io.oyasai.chat.paper.japanize.LunaImport.dictionary(dictionaryFile)
+    val model =
+        rawModel.copy(
+            japanize =
+                rawModel.japanize.copy(dictionary = fileDictionary + rawModel.japanize.dictionary)
+        )
     validateShortcutCommands(plugin, model)
     val states = PlayerStateStore(plugin, model)
     val formatter = ChatFormatter(plugin, model)
@@ -54,6 +63,11 @@ internal object PaperRuntimeFactory {
         createDiscordBridge(plugin, model),
         privateMessages,
         delivery,
+        io.oyasai.chat.paper.japanize.JapanizeDictionaryStore(
+            dictionaryFile,
+            rawModel.japanize.dictionary,
+            initial = fileDictionary,
+        ),
     )
   }
 
@@ -89,6 +103,7 @@ internal object PaperRuntimeFactory {
                 "setchannel",
                 "msg",
                 "r",
+                "japanize",
                 "oyasaichat",
             )
             .flatMap {

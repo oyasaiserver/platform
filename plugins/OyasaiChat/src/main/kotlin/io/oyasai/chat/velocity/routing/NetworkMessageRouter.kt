@@ -26,6 +26,9 @@ class NetworkMessageRouter(
   fun route(source: ServerConnection, envelope: NetworkEnvelope) {
     val sourceBackend = source.serverInfo.name
     when (envelope.type) {
+      MessageType.BACKEND_ID,
+      MessageType.BACKEND_ID_REQUEST ->
+          logger.warn("Rejected identity message passed to chat router.")
       MessageType.CHANNEL_MESSAGE -> routeChannel(sourceBackend, envelope)
       MessageType.PRIVATE_MESSAGE -> routePrivate(source, envelope)
       MessageType.PRIVATE_MESSAGE_RESULT -> routePrivateResult(envelope)

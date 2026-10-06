@@ -6,9 +6,9 @@ description: バックエンド間チャット同期
 author: takucan
 softdepend:
   - Vault
+  - LuckPerms
 loadbefore:
   - Essentials
-  - LunaChat
 commands:
   mute:
     description: Toggle or update a player mute
@@ -38,13 +38,21 @@ commands:
     description: Send a private message
     usage: /msg <player> <message>
     aliases: [tell, message, pm]
+  japanize:
+    description: Toggle Japanese chat conversion or manage its dictionary
+    usage: /japanize [on|off] or /japanize dict <add|remove|list|lookup>
+    aliases: [jp]
   r:
     description: Reply to the last private message
     usage: /r <message>
+    aliases: [reply]
   oyasaichat:
     description: OyasaiChat administrative commands
     usage: /oyasaichat reload
 permissions:
+  oyasaichat.japanize.dictionary:
+    description: Manage Japanese conversion dictionary entries
+    default: op
   essentials.mute:
     default: op
   essentials.mute.offline:
@@ -60,6 +68,9 @@ permissions:
     default: true
   oyasaichat.admin.setchannel:
     description: Change another player's active channel
+    default: op
+  oyasaichat.admin.import:
+    description: Import staged LunaChat player preferences and dictionary
     default: op
   oyasaichat.admin.reload:
     description: Reload OyasaiChat configuration and player state
