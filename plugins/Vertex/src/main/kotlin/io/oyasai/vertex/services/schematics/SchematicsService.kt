@@ -20,7 +20,8 @@ object OyasaiSchematics : Command("oyasai-schematics") {
         }
     when (option.lowercase()) {
       "load" -> {
-        if (!sender.isOp) {
+        // 青匠(blue)以上は LuckPerms の継承で group.blue を持つ。
+        if (!sender.isOp && !sender.hasPermission("group.blue")) {
           return false
         }
         val input =

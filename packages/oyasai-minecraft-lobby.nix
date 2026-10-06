@@ -78,7 +78,6 @@ oyasaiPurpur rec {
     lunachat
     oyasaichat
     oyasaitab
-    oyasaiutilities
     plugmanx
     vertex
     viaversion
