@@ -45,7 +45,160 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   /** Kept while a personal playback session survives a disconnect, so its bar can be reattached. */
   private val nowPlayingDurations = ConcurrentHashMap<UUID, Int>()
 
+  private class ListContext(var key: Any, var order: ListPlaybackOrder, val sequential: Boolean) {
+    lateinit var completion: () -> Unit
+    var updateGeneration = 0L
+  }
+
+  private val lists = mutableMapOf<UUID, ListContext>()
+  private val requests = mutableMapOf<UUID, Long>()
+  private var requestSerial = 0L
+  private val transitions = mutableMapOf<UUID, BukkitTask>()
+
+  private fun beginRequest(id: UUID): Long {
+    transitions.remove(id)?.cancel()
+    plugin.resourcePackService.discardPendingPlayback(id)
+    return (++requestSerial).also { requests[id] = it }
+  }
+
+  /** Load the complete originating list once per selection, off the game thread. */
+  fun playList(
+      viewer: Player,
+      selected: Song,
+      key: Any,
+      sequential: Boolean = false,
+      loader: () -> List<Long>,
+  ) {
+    val id = viewer.uniqueId
+    val existing = lists[id]
+    if (existing?.key == key && selected.id in existing.order.ids) {
+      existing.order.select(requireNotNull(selected.id))
+      playListSong(viewer, existing, requireNotNull(selected.id))
+      return
+    }
+    val generation = beginRequest(id)
+    lists.remove(id)
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val order =
+                  try {
+                    ListPlaybackOrder(loader())
+                  } catch (e: Exception) {
+                    plugin.logger.warning("楽曲一覧の読み込みに失敗しました: " + e.javaClass.simpleName)
+                    ListPlaybackOrder(emptyList())
+                  }
+              if (!plugin.isEnabled) return@Runnable
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (!viewer.isOnline || requests[id] != generation) return@Runnable
+                        val selectedId = selected.id
+                        if (selectedId == null || selectedId !in order.ids) {
+                          viewer.sendMessage("§cこの楽曲は現在の一覧から再生できません。")
+                          return@Runnable
+                        }
+                        val context = ListContext(key, order, sequential)
+                        lists[id] = context
+                        context.completion = {
+                          if (lists[id] === context)
+                              scheduleTrackTransition(viewer) {
+                                if (lists[id] === context) advanceList(viewer, context)
+                              }
+                        }
+                        context.order.select(selectedId)
+                        playListSong(viewer, context, selectedId)
+                      },
+                  )
+            },
+        )
+  }
+
+  /** Reset the shuffle bag after an explicit sort/edit, without restarting the current song. */
+  fun updateList(viewer: Player, oldKey: Any, newKey: Any, loader: () -> List<Long>) {
+    val id = viewer.uniqueId
+    val context = lists[id]?.takeIf { it.key == oldKey } ?: return
+    context.key = newKey
+    val updateGeneration = ++context.updateGeneration
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val replacement =
+                  try {
+                    ListPlaybackOrder(loader())
+                  } catch (e: Exception) {
+                    plugin.logger.warning("再生リストの更新に失敗しました: " + e.javaClass.simpleName)
+                    return@Runnable
+                  }
+              if (!plugin.isEnabled) return@Runnable
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (
+                            !viewer.isOnline ||
+                                lists[id] !== context ||
+                                context.key != newKey ||
+                                context.updateGeneration != updateGeneration
+                        )
+                            return@Runnable
+                        context.order.current
+                            ?.takeIf { it in replacement.ids }
+                            ?.let(replacement::select)
+                        context.order = replacement
+                      },
+                  )
+            },
+        )
+  }
+
+  private fun advanceList(viewer: Player, context: ListContext, manual: Boolean = false) {
+    val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
+    val next =
+        context.order.next(
+            state.shuffle,
+            state.loopMode == LoopMode.LIST,
+            !manual && state.loopMode == LoopMode.SINGLE,
+            manual || context.sequential,
+        ) ?: return
+    playListSong(viewer, context, next)
+  }
+
+  private fun playListSong(viewer: Player, context: ListContext, songId: Long) {
+    val id = viewer.uniqueId
+    val generation = beginRequest(id)
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val song = plugin.songRepository.findById(songId)
+              if (!plugin.isEnabled) return@Runnable
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (!viewer.isOnline || requests[id] != generation || lists[id] !== context)
+                            return@Runnable
+                        if (song == null || (!song.published && song.authorUuid != id)) {
+                          lists.remove(id)
+                          viewer.sendMessage("§7楽曲が削除または非公開になったため、リスト再生を終了しました。")
+                          return@Runnable
+                        }
+                        play(viewer, song, onCompletion = context.completion)
+                      },
+                  )
+            },
+        )
+  }
+
   fun shutdown() {
+    transitions.values.forEach { it.cancel() }
+    transitions.clear()
+    lists.clear()
+    requests.clear()
     nowPlayingBars.forEach { (id, bar) -> Bukkit.getPlayer(id)?.hideBossBar(bar) }
     bossBarTasks.values.forEach { it.cancel() }
     bossBarTasks.clear()
@@ -72,6 +225,9 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       onCompletion: (() -> Unit)? = null,
       rememberInHistory: Boolean = true,
   ) {
+    val playerId = viewer.uniqueId
+    val request = beginRequest(playerId)
+    if (onCompletion !== lists[playerId]?.completion) lists.remove(playerId)
     val songId = song.id
     if (songId == null) {
       viewer.sendMessage("§c保存前の楽曲は再生できません。")
@@ -137,9 +293,11 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                   .runTask(
                       plugin,
                       Runnable {
+                        if (!viewer.isOnline || requests[playerId] != request) return@Runnable
                         val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
                         val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
-                          if (!viewer.isOnline) return@startPlayback
+                          if (!viewer.isOnline || requests[playerId] != request)
+                              return@startPlayback
                           // Persisted ALLOW is not the same as a loaded pack. Resolve the current
                           // connection first and defer until either OMMT's matching bank or the
                           // external resource pack has actually been confirmed.
@@ -211,7 +369,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                       nowPlayingDurations.remove(viewer.uniqueId)
                                       hideNowPlayingBar(viewer)
                                       menuManager.refreshCurrent(viewer.uniqueId)
-                                      onCompletion?.invoke()
+                                      if (requests[playerId] == request) onCompletion?.invoke()
                                     }
                                   },
                               )
@@ -245,7 +403,10 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     if (session == null) {
       val lastSong = state.nowPlayingSong
       if (lastSong != null) {
-        play(viewer, lastSong)
+        val context = lists[viewer.uniqueId]
+        if (context != null && lastSong.id in context.order.ids) {
+          playListSong(viewer, context, requireNotNull(lastSong.id))
+        } else play(viewer, lastSong)
       } else {
         viewer.sendMessage("§7再生中の曲がありません。曲を選んで再生してください。")
       }
@@ -319,25 +480,31 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
 
   fun toggleLoop(viewer: Player) {
     val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
-    state.loopMode =
-        when (state.loopMode) {
-          LoopMode.OFF -> LoopMode.LIST
-          LoopMode.LIST -> LoopMode.SINGLE
-          LoopMode.SINGLE -> LoopMode.OFF
-        }
+    state.cycleLoopMode()
     menuManager.refreshCurrent(viewer.uniqueId)
   }
 
   fun toggleShuffle(viewer: Player) {
     val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
-    state.shuffle = !state.shuffle
+    state.toggleShuffleMode()
     menuManager.refreshCurrent(viewer.uniqueId)
   }
 
   /** 曲間の統一クールタイム（0.75秒）後に、ループ/シャッフル状態を再評価して遷移する。 */
   fun scheduleTrackTransition(viewer: Player, action: () -> Unit) {
-    Bukkit.getScheduler()
-        .runTaskLater(plugin, Runnable { if (viewer.isOnline) action() }, TRACK_TRANSITION_TICKS)
+    val id = viewer.uniqueId
+    val generation = requests[id]
+    transitions.remove(id)?.cancel()
+    transitions[id] =
+        Bukkit.getScheduler()
+            .runTaskLater(
+                plugin,
+                Runnable {
+                  transitions.remove(id)
+                  if (viewer.isOnline && requests[id] == generation) action()
+                },
+                TRACK_TRANSITION_TICKS,
+            )
   }
 
   /** 設定変更直後に、再生中表示とボスバーを最新の題名・作者・レコード種別へ差し替える。 */
@@ -363,11 +530,20 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     }
   }
 
-  /** 試聴履歴の直前の楽曲へ戻る。プレイリストを開いていない画面でも利用できる。 */
-  fun playPrevious(viewer: Player) = moveInHistory(viewer, -1, "前の曲はありません")
+  /** List context wins; standalone playback retains history navigation. */
+  fun playPrevious(viewer: Player) {
+    val context = lists[viewer.uniqueId]
+    if (context != null) {
+      context.order.previous()?.let { playListSong(viewer, context, it) }
+    } else moveInHistory(viewer, -1, "前の曲はありません")
+  }
 
-  /** 試聴履歴の次の楽曲へ進む。 */
-  fun playNext(viewer: Player) = moveInHistory(viewer, 1, "次の曲はありません")
+  /** Advance within the originating list, using its current shuffle mode. */
+  fun playNext(viewer: Player) {
+    val context = lists[viewer.uniqueId]
+    if (context != null) advanceList(viewer, context, manual = true)
+    else moveInHistory(viewer, 1, "次の曲はありません")
+  }
 
   private fun moveInHistory(viewer: Player, direction: Int, noSongMessage: String) {
     val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
@@ -519,6 +695,9 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
+    transitions.remove(event.player.uniqueId)?.cancel()
+    lists.remove(event.player.uniqueId)
+    requests.remove(event.player.uniqueId)
     hideNowPlayingBar(event.player)
     // 切断時は放置終了タイマーを破棄する（再接続 semantics は維持し、壁時計での終了は行わない）。
     cancelPauseAutoFinish(event.player.uniqueId)

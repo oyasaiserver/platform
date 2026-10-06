@@ -106,3 +106,10 @@ japanize:
   timeout-millis: 2000
   format: "<converted> <gray><original></gray>"
   dictionary: {}
+
+# enabled を省略すると backend-id=main のときだけ有効。他 backend では false。
+# 共存中は同階層 Essentials/config.yml の mute-commands / max-mute-time が優先。
+# mute の設定変更にはフル再起動が必要。
+mute:
+  commands: [f, kittycannon]
+  max-mute-time: -1

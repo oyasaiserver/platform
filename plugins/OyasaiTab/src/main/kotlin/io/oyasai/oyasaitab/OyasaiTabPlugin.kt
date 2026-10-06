@@ -1,7 +1,6 @@
 package io.oyasai.oyasaitab
 
 import com.baakun.dynamicprofile.model.Calculator
-import com.earth2me.essentials.Essentials
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaitoken.api.OyasaiTokenApi
 import java.nio.charset.StandardCharsets
@@ -21,7 +20,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.scoreboard.Criteria
@@ -56,7 +54,6 @@ private interface OyasaiTabRuntime {
           listOfNotNull(
               "SocialLikes3".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
               "DynamicProfile".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
-              "Essentials".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
               "LuckPerms".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
               "TokenManager".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
               "Vault".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
@@ -73,15 +70,13 @@ private interface OyasaiTabRuntime {
       val tokenApi =
           Bukkit.getServicesManager().getRegistration(OyasaiTokenApi::class.java)?.provider
       val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
-      val essentials = EssentialsAfkLookup.from(Bukkit.getPluginManager().getPlugin("Essentials"))
       val missingServices =
           listOfNotNull(
               "Vault Economy".takeIf { economy == null },
               "OyasaiTokenApi".takeIf { tokenApi == null },
               "LuckPerms API".takeIf { luckPerms == null },
-              "Essentials API".takeIf { essentials == null },
           )
-      if (economy == null || tokenApi == null || luckPerms == null || essentials == null) {
+      if (economy == null || tokenApi == null || luckPerms == null) {
         plugin.logger.info(
             "OyasaiTab display disabled: missing services ${missingServices.joinToString()}; cross-server snapshots stay enabled."
         )
@@ -95,7 +90,7 @@ private interface OyasaiTabRuntime {
           tokenApi = tokenApi,
           luckPerms = luckPerms,
           config = config,
-          isAfk = essentials::isAfk,
+          isAfk = OyasaiUtilitiesAfkLookup::isAfk,
       )
     }
   }
@@ -112,6 +107,7 @@ private class FullOyasaiTabRuntime(
 ) : OyasaiTabRuntime, Listener {
   private val legacy = LegacyComponentSerializer.legacyAmpersand()
   private val network = PaperTabSnapshotBridge(plugin, config)
+  private val lastPlayerListNames = mutableMapOf<UUID, String>()
   private var task: BukkitTask? = null
 
   override fun start(): OyasaiTabRuntime {
@@ -130,6 +126,7 @@ private class FullOyasaiTabRuntime(
     task = null
     network.stop()
     HandlerList.unregisterAll(this)
+    lastPlayerListNames.clear()
     scoreboard.getObjective(PING_OBJECTIVE)?.let {
       if (it.displaySlot == DisplaySlot.PLAYER_LIST) scoreboard.clearSlot(DisplaySlot.PLAYER_LIST)
       it.unregister()
@@ -139,6 +136,7 @@ private class FullOyasaiTabRuntime(
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
+    lastPlayerListNames.remove(event.player.uniqueId)
     removeOwnTeamEntry(event.player.name)
     scoreboard.getObjective(PING_OBJECTIVE)?.getScore(event.player.name)?.resetScore()
   }
@@ -174,16 +172,17 @@ private class FullOyasaiTabRuntime(
               )
           ),
       )
-      player.playerListName(
-          legacy.deserialize(
-              TablistFormatter.playerNameLegacy(
-                  groupColor = profile.groupColor,
-                  suffix = profile.suffix,
-                  likes = profile.likes,
-                  playerName = TablistFormatter.playerDisplayNameLegacy(player.name, profile.afk),
-              )
+      val playerListNameLegacy =
+          TablistFormatter.playerNameLegacy(
+              groupColor = profile.groupColor,
+              suffix = profile.suffix,
+              likes = profile.likes,
+              playerName = TablistFormatter.playerDisplayNameLegacy(player.name, profile.afk),
           )
-      )
+      if (lastPlayerListNames[player.uniqueId] != playerListNameLegacy) {
+        player.playerListName(legacy.deserialize(playerListNameLegacy))
+        lastPlayerListNames[player.uniqueId] = playerListNameLegacy
+      }
       player.setPlayerListOrder(orders[player.uniqueId] ?: 1)
       updateNameTag(player, profile)
       updatePing(player)
@@ -502,11 +501,10 @@ object TabOrder {
   }
 }
 
-private class EssentialsAfkLookup(private val essentials: Essentials) {
-  fun isAfk(player: Player): Boolean = essentials.getUser(player)?.isAfk ?: false
-
-  companion object {
-    fun from(plugin: Plugin?): EssentialsAfkLookup? =
-        (plugin as? Essentials)?.let(::EssentialsAfkLookup)
-  }
+private object OyasaiUtilitiesAfkLookup {
+  fun isAfk(player: Player): Boolean =
+      player.getMetadata("oyasaiutilities-afk").any {
+        val owner = it.owningPlugin
+        owner?.name == "OyasaiUtilities" && owner.isEnabled && it.asBoolean()
+      }
 }

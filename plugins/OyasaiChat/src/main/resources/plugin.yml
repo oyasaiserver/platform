@@ -10,6 +10,10 @@ softdepend:
 loadbefore:
   - Essentials
 commands:
+  mute:
+    description: Toggle or update a player mute
+    usage: /mute <player> [duration] [reason]
+    permission: essentials.mute
   ch:
     description: Select a chat channel
     usage: /ch <channel>
@@ -48,6 +52,16 @@ commands:
 permissions:
   oyasaichat.japanize.dictionary:
     description: Manage Japanese conversion dictionary entries
+    default: op
+  essentials.mute:
+    default: op
+  essentials.mute.offline:
+    default: op
+  essentials.mute.exempt:
+    default: false
+  essentials.mute.unlimited:
+    default: op
+  essentials.mute.notify:
     default: op
   oyasaichat.links.send:
     description: Post links in chat as clickable URLs

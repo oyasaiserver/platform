@@ -1,4 +1,5 @@
 dependencies {
+  implementation(libs.sqlite.jdbc)
   implementation(libs.gson)
   implementation(libs.kotlin.stdlib)
 

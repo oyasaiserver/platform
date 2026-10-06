@@ -6,8 +6,6 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldguard.WorldGuard
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin
 import icu.oyasai.frames.OyasaiFrames
-import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
 import java.net.URI
 import java.time.Instant
 import java.time.ZoneId
@@ -17,15 +15,17 @@ import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.concurrent.Semaphore
-import javax.imageio.ImageIO
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.Rotation
+import org.bukkit.block.BlockFace
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
+import org.bukkit.entity.GlowItemFrame
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -38,12 +38,14 @@ import org.bukkit.event.hanging.HangingBreakEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
+import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.MapInitializeEvent
 import org.bukkit.event.world.EntitiesUnloadEvent
@@ -64,7 +66,10 @@ internal enum class TomapAction {
   INFO,
   GIVE,
   DELETE,
+  RECOMPRESS,
+  DEDUPE,
   REMOVE,
+  GLOW,
   WHERE,
   USAGE,
 }
@@ -78,10 +83,22 @@ internal fun tomapAction(args: List<String>): TomapAction =
       args.firstOrNull() == "info" -> TomapAction.INFO
       args.firstOrNull() == "give" -> TomapAction.GIVE
       args.firstOrNull() == "delete" -> TomapAction.DELETE
+      args.firstOrNull() == "recompress" -> TomapAction.RECOMPRESS
+      args.firstOrNull() == "dedupe" -> TomapAction.DEDUPE
       args.firstOrNull() == "remove" -> TomapAction.REMOVE
+      args.firstOrNull() == "glow" -> TomapAction.GLOW
       args.firstOrNull() == "where" -> TomapAction.WHERE
       else -> TomapAction.USAGE
     }
+
+internal fun exceedsLimit(current: Int, added: Int, limit: Int, bypass: Boolean): Boolean =
+    !bypass && current.toLong() + added > limit
+
+internal fun allNearbyReceived(
+    imageId: Long,
+    nearbyPlayers: Collection<UUID>,
+    sentImages: Map<UUID, Set<Long>>,
+): Boolean = nearbyPlayers.all { imageId in sentImages[it].orEmpty() }
 
 open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private val dbThread = Executors.newSingleThreadExecutor { r -> Thread(r, "imageonmap-db") }
@@ -90,6 +107,16 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private val active = mutableSetOf<UUID>()
   private val pendingMaps = mutableSetOf<Int>()
   private val mapIds = BitSet()
+  private val animations = AnimationIndex()
+  private val animatedFrames = mutableMapOf<Long, MutableMap<UUID, ItemFrame>>()
+  private val frameImages = mutableMapOf<UUID, Long>()
+  private val shownFrames = mutableMapOf<Long, Int>()
+  private val sentImages = mutableMapOf<UUID, MutableSet<Long>>()
+  private val pushQueues = mutableMapOf<UUID, ArrayDeque<Pair<Long, Int>>>()
+  private val viewerBudgets = mutableMapOf<UUID, ViewerMapBudget>()
+  private var ticks = 0L
+  private var pushPerTick = 20
+  private var maxMapsPerViewer = 3000
   private val removing = mutableSetOf<UUID>()
   private val frameRecords = mutableMapOf<UUID, FrameRecord>()
   private val suspected = mutableSetOf<UUID>()
@@ -103,7 +130,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   private lateinit var marker: NamespacedKey
   private lateinit var managedKey: NamespacedKey
   private lateinit var legacyKey: NamespacedKey
+  private lateinit var glowKey: NamespacedKey
   private var ready = false
+  private var recompressRunning = false
+  private var dedupeRunning = false
 
   private data class Gui(
       val inventory: Inventory,
@@ -120,19 +150,24 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     marker = NamespacedKey("imageonmap", "splatter")
     managedKey = NamespacedKey("imageonmap", "managed")
     legacyKey = NamespacedKey("imageonmap", "legacy")
+    glowKey = NamespacedKey("imageonmap", "glow")
+    saveDefaultConfig()
     try {
       ImageSource.registerWebp()
       store = MapStore(dataFolder.resolve("pictures.db"))
-      val (ids, frames) =
+      pushPerTick = getConfig().getInt("animation.push-maps-per-tick", 50).coerceAtLeast(1)
+      maxMapsPerViewer = getConfig().getInt("animation.max-maps-per-viewer", 3000).coerceAtLeast(1)
+      val (ids, frames, savedAnimations) =
           dbThread
               .submit(
                   java.util.concurrent.Callable {
                     store.open()
-                    store.mapIds() to store.allFrames()
+                    Triple(store.mapIds(), store.allFrames(), store.animations())
                   }
               )
               .get()
       mapIds.or(ids)
+      savedAnimations.forEach(animations::add)
       frames.forEach { frameRecords[it.uuid] = it }
       ready = true
     } catch (e: Exception) {
@@ -142,6 +177,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     server.pluginManager.registerEvents(this, this)
     getCommand("tomap")?.setExecutor(this)
     server.scheduler.runTaskTimer(this, Runnable(::processFrameQueue), 1L, 1L)
+    server.scheduler.runTaskTimer(this, Runnable(::animationTick), 1L, 1L)
     server.worlds.forEach { world ->
       world.loadedChunks.forEach { chunk ->
         chunk.entities.filterIsInstance<ItemFrame>().forEach(::considerFrame)
@@ -169,13 +205,16 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   private fun message(sender: CommandSender, text: String) = sender.sendMessage(text)
 
-  private class OnceRenderer(@Volatile var picture: BufferedImage? = null) : MapRenderer(false) {
+  private class OnceRenderer(@Volatile var tile: MapTile? = null) : MapRenderer(false) {
+    @Volatile var drawn = false
+
     override fun isExplorerMap(): Boolean = false
 
     override fun render(view: MapView, canvas: MapCanvas, player: Player) {
-      val image = picture ?: return
-      canvas.drawImage(0, 0, image)
-      picture = null
+      val image = tile ?: return
+      image.draw(canvas)
+      drawn = true
+      tile = null
     }
   }
 
@@ -192,7 +231,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     }
   }
 
-  private fun attach(view: MapView) {
+  private fun attach(view: MapView, load: Boolean = true) {
     val id = view.id
     if (
         !ready ||
@@ -204,20 +243,20 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     view.renderers.toList().forEach(view::removeRenderer)
     val renderer = OnceRenderer()
     view.addRenderer(renderer)
-    database { store.png(id)?.let { ImageIO.read(ByteArrayInputStream(it)) } }
-        .whenComplete { image, failure ->
+    if (!load) return
+    database { store.tile(id) }
+        .whenComplete { tile, failure ->
           main {
             pendingMaps.remove(id)
             if (failure != null) logger.warning("Map $id: ${error(failure)}")
-            else if (image?.width == 128 && image.height == 128 && renderer in view.renderers)
-                renderer.picture = image
+            else if (tile != null && renderer in view.renderers) renderer.tile = tile
           }
         }
   }
 
   private fun attachItem(item: ItemStack?) {
     val meta = item?.itemMeta as? MapMeta ?: return
-    if (meta.hasMapId()) server.getMap(meta.mapId)?.let(::attach)
+    if (meta.hasMapId()) server.getMap(meta.mapId)?.let { attach(it) }
   }
 
   private fun blank(ids: List<Int>) {
@@ -237,7 +276,149 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   @EventHandler fun mapInit(e: MapInitializeEvent) = attach(e.map)
 
   private fun mapId(item: ItemStack): Int? =
-      (item.itemMeta as? MapMeta)?.let { if (it.hasMapId()) it.mapId else null }
+      (item.itemMeta as? MapMeta)?.let { if (it.hasMapId()) animations.base(it.mapId) else null }
+
+  private fun untrack(uuid: UUID) {
+    frameImages.remove(uuid)?.let { imageId ->
+      animatedFrames[imageId]?.remove(uuid)
+      if (animatedFrames[imageId].isNullOrEmpty()) {
+        animatedFrames.remove(imageId)
+        shownFrames.remove(imageId)
+      }
+    }
+  }
+
+  private fun track(frame: ItemFrame, baseId: Int) {
+    val imageId = animations.tile(baseId)?.imageId
+    if (frameImages[frame.uniqueId] != imageId) untrack(frame.uniqueId)
+    if (imageId != null) {
+      if (frame.uniqueId !in animatedFrames[imageId].orEmpty()) shownFrames.remove(imageId)
+      frameImages[frame.uniqueId] = imageId
+      animatedFrames.getOrPut(imageId) { mutableMapOf() }[frame.uniqueId] = frame
+    }
+  }
+
+  private fun nearby(player: Player, frame: ItemFrame): Boolean =
+      player.world == frame.world && player.location.distanceSquared(frame.location) <= 64.0 * 64
+
+  private fun animationTick() {
+    ticks++
+    if (ticks % 20L == 1L) {
+      server.onlinePlayers.forEach { player ->
+        val sent = sentImages.getOrPut(player.uniqueId) { mutableSetOf() }
+        val queue = pushQueues.getOrPut(player.uniqueId) { ArrayDeque() }
+        val budget = viewerBudgets.getOrPut(player.uniqueId) { ViewerMapBudget() }
+        val playerLocation = player.location
+        val nearbyImages =
+            animatedFrames.mapNotNull { (imageId, frames) ->
+              val animation = animations.animations[imageId] ?: return@mapNotNull null
+              val distance =
+                  frames.values
+                      .asSequence()
+                      .filter { it.isValid && it.world == player.world }
+                      .map { playerLocation.distanceSquared(it.location) }
+                      .filter { it <= 64.0 * 64 }
+                      .minOrNull() ?: return@mapNotNull null
+              NearbyImage(imageId, animation.ids.size, distance)
+            }
+        budget
+            .admitNearby(
+                nearbyImages.filter { image ->
+                  image.id !in sent && queue.none { it.first == image.id }
+                },
+                maxMapsPerViewer,
+            )
+            .forEach { imageId ->
+              val animation = animations.animations.getValue(imageId)
+              animation.ids.forEach { id ->
+                queue.addLast(imageId to id)
+                server.getMap(id)?.let { attach(it, false) }
+              }
+              database { store.tilesForPush(imageId) }
+                  .whenComplete { tiles, failure ->
+                    main {
+                      if (failure != null) {
+                        logger.warning("Image $imageId: ${error(failure)}")
+                        val remaining = queue.count { it.first == imageId }
+                        queue.removeIf { it.first == imageId }
+                        budget.releaseQueued(remaining)
+                        sentImages[player.uniqueId]?.remove(imageId)
+                      } else if (imageId in animations.animations) {
+                        tiles.forEach { (id, tile) ->
+                          pendingMaps.remove(id)
+                          server
+                              .getMap(id)
+                              ?.renderers
+                              ?.filterIsInstance<OnceRenderer>()
+                              ?.firstOrNull()
+                              ?.let { if (!it.drawn) it.tile = tile }
+                        }
+                      }
+                    }
+                  }
+            }
+        if (queue.size > 1) {
+          val distances = nearbyImages.associate { it.id to it.distanceSquared }
+          val ordered =
+              queue.sortedWith(
+                  compareBy<Pair<Long, Int>> { distances[it.first] ?: Double.POSITIVE_INFINITY }
+                      .thenBy { it.first }
+              )
+          queue.clear()
+          queue.addAll(ordered)
+        }
+      }
+    }
+    server.onlinePlayers.forEach { player ->
+      val queue = pushQueues[player.uniqueId] ?: return@forEach
+      val budget = viewerBudgets[player.uniqueId] ?: return@forEach
+      var sent = 0
+      while (sent < pushPerTick && queue.isNotEmpty()) {
+        val (imageId, mapId) = queue.first()
+        val view = if (imageId in animations.animations) server.getMap(mapId) else null
+        if (view == null) {
+          val remaining = queue.count { it.first == imageId }
+          queue.removeIf { it.first == imageId }
+          budget.releaseQueued(remaining)
+          sentImages[player.uniqueId]?.remove(imageId)
+          continue
+        }
+        attach(view)
+        val renderer = view.renderers.filterIsInstance<OnceRenderer>().firstOrNull()
+        if (renderer == null || (renderer.tile == null && !renderer.drawn)) break
+        // ponytail: vanilla も額縁の地図をプレイヤーごとに 1 回送るため、最初の 1 周は最大 2 回送信される。
+        player.sendMap(view)
+        sent++
+        queue.removeFirst()
+        budget.delivered()
+        if (queue.firstOrNull()?.first != imageId) sentImages[player.uniqueId]?.add(imageId)
+      }
+    }
+    animatedFrames.forEach { (imageId, frames) ->
+      val animation = animations.animations[imageId] ?: return@forEach
+      val viewers =
+          server.onlinePlayers.filter { player ->
+            frames.values.any { it.isValid && nearby(player, it) }
+          }
+      if (viewers.isEmpty()) return@forEach
+      val current =
+          if (allNearbyReceived(imageId, viewers.map { it.uniqueId }, sentImages))
+              animation.frameAt(ticks)
+          else 0
+      if (shownFrames[imageId] == current) return@forEach
+      // ponytail: 上限を超えた人が 1 人でも近くにいると全員にコマ 0 を見せる。人ごとに見せ分けるには額縁のアイテムを個別のパケットで送る必要がある。
+      frames.values.removeIf { !it.isValid }
+      frames.values.forEach { frame ->
+        val currentId =
+            (frame.item.itemMeta as? MapMeta)?.takeIf { it.hasMapId() }?.mapId ?: return@forEach
+        val baseId = animations.base(currentId)
+        val tile = animations.tile(baseId) ?: return@forEach
+        val nextId = animation.slots[current * animation.tiles + tile.tile]
+        if (nextId != currentId) frame.setItem(item(nextId), false)
+      }
+      shownFrames[imageId] = current
+    }
+  }
 
   private fun managed(frame: ItemFrame): Boolean =
       frame.persistentDataContainer.get(managedKey, PersistentDataType.BYTE) == 1.toByte()
@@ -266,6 +447,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       )
 
   private fun remember(frame: ItemFrame, id: Int, legacy: Boolean) {
+    track(frame, id)
     val old = frameRecords[frame.uniqueId]
     val current = record(frame, id, legacy)
     if (
@@ -293,6 +475,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   }
 
   private fun forget(uuid: UUID) {
+    untrack(uuid)
     frameRecords.remove(uuid)
     database { store.deleteFrames(listOf(uuid)) }
         .whenComplete { _, failure ->
@@ -361,6 +544,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   @EventHandler
   fun entityRemoved(e: EntityRemoveFromWorldEvent) {
     val frame = e.entity as? ItemFrame ?: return
+    untrack(frame.uniqueId)
     if (!managed(frame) || frame.uniqueId in removing) return
     suspected.add(frame.uniqueId)
     scheduleRemovalCheck()
@@ -375,7 +559,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   @EventHandler
   fun entitiesUnload(e: EntitiesUnloadEvent) {
-    e.entities.filterIsInstance<ItemFrame>().forEach { unloaded.add(it.uniqueId) }
+    e.entities.filterIsInstance<ItemFrame>().forEach {
+      untrack(it.uniqueId)
+      unloaded.add(it.uniqueId)
+    }
     if (unloaded.isNotEmpty()) scheduleRemovalCheck()
   }
 
@@ -469,6 +656,18 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
   @EventHandler
   fun quit(e: PlayerQuitEvent) {
     gui.remove(e.player.uniqueId)
+    clearPushed(e.player)
+    viewerBudgets.remove(e.player.uniqueId)
+  }
+
+  @EventHandler fun changedWorld(e: PlayerChangedWorldEvent) = clearPushed(e.player)
+
+  @EventHandler fun respawn(e: PlayerRespawnEvent) = clearPushed(e.player)
+
+  private fun clearPushed(player: Player) {
+    sentImages.remove(player.uniqueId)
+    pushQueues.remove(player.uniqueId)
+    viewerBudgets[player.uniqueId]?.reset()
   }
 
   @EventHandler
@@ -639,7 +838,6 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         if (args.size == 1) openList(player, 0, null, true, true) else usage(sender)
       }
       TomapAction.INFO -> {
-        if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
         val player = sender as? Player ?: return playerOnly(sender)
         if (args.size == 1) showInfo(player) else usage(sender)
       }
@@ -656,10 +854,33 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
         val id = args.getOrNull(1)?.toLongOrNull()
         if (args.size != 2 || id == null) usage(sender) else openDeleteConfirm(player, id, null)
       }
+      TomapAction.RECOMPRESS -> {
+        if (!sender.hasPermission("imageonmap.deleteother")) return denied(sender)
+        val id = args.getOrNull(1)?.toLongOrNull()
+        if (args.size != 2 || (args[1] != "all" && (id == null || id <= 0))) usage(sender)
+        else recompress(sender, if (args[1] == "all") null else id)
+      }
+      TomapAction.DEDUPE -> {
+        if (!sender.hasPermission("imageonmap.deleteother")) return denied(sender)
+        if (args.size != 1) usage(sender) else dedupe(sender)
+      }
       TomapAction.REMOVE -> {
         if (!sender.hasPermission("imageonmap.removesplattermap")) return denied(sender)
         val player = sender as? Player ?: return playerOnly(sender)
         if (args.size == 1) removeFrames(player) else usage(sender)
+      }
+      TomapAction.GLOW -> {
+        if (!sender.hasPermission("imageonmap.placesplattermap")) return denied(sender)
+        val player = sender as? Player ?: return playerOnly(sender)
+        when {
+          args.size == 1 -> toggleGlow(player)
+          args.size == 2 && args[1] in setOf("on", "off") -> {
+            val on = args[1] == "on"
+            player.persistentDataContainer.set(glowKey, PersistentDataType.BYTE, if (on) 1 else 0)
+            message(player, if (on) "これから貼る絵は輝く額縁にします" else "これから貼る絵は普通の額縁にします")
+          }
+          else -> usage(sender)
+        }
       }
       TomapAction.WHERE -> {
         if (!sender.hasPermission("imageonmap.listother")) return denied(sender)
@@ -681,17 +902,126 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     return true
   }
 
+  private fun recompress(sender: CommandSender, imageId: Long?) {
+    if (recompressRunning) {
+      message(sender, "作り直しは実行中です")
+      return
+    }
+    recompressRunning = true
+    val ids =
+        if (imageId == null) database { store.recompressCandidates() }
+        else CompletableFuture.completedFuture(listOf(imageId))
+    ids.whenComplete { candidates, failure ->
+      main {
+        if (failure != null) {
+          recompressRunning = false
+          message(sender, "対象の取得に失敗しました: ${error(failure)}")
+          return@main
+        }
+        var converted = 0
+        var skipped = 0
+        var failed = 0
+        var before = 0L
+        var after = 0L
+        val pending = ArrayDeque(candidates)
+        fun next() {
+          val id = pending.removeFirstOrNull()
+          if (id == null) {
+            recompressRunning = false
+            message(
+                sender,
+                "作り直し完了: ${converted}件、変更前 ${before}B、変更後 ${after}B（対象外 ${skipped}件、失敗 ${failed}件）",
+            )
+            message(sender, "DB ファイル自体の容量は VACUUM するまで縮みません")
+            return
+          }
+          database { store.recompressImage(id) }
+              .whenComplete { result, problem ->
+                main {
+                  if (problem != null) {
+                    failed++
+                    logger.warning("Recompress failed image=$id: ${error(problem)}")
+                    message(sender, "画像 $id の作り直しに失敗しました: ${error(problem)}")
+                  } else if (result == null) {
+                    skipped++
+                  } else {
+                    converted++
+                    before += result.before
+                    after += result.after
+                    logger.info(
+                        "Recompressed image=${result.imageId} maps=${result.maps} before=${result.before}B after=${result.after}B"
+                    )
+                  }
+                  if (pending.isEmpty()) next()
+                  else server.scheduler.runTaskLater(this, Runnable(::next), 20L)
+                }
+              }
+        }
+        next()
+      }
+    }
+  }
+
+  private fun dedupe(sender: CommandSender) {
+    if (dedupeRunning) {
+      message(sender, "重複保存の整理は実行中です")
+      return
+    }
+    dedupeRunning = true
+    message(sender, "重複保存の整理を開始します")
+    var maps = 0L
+    var before = 0L
+    var added = 0L
+    fun next() {
+      database { store.readDedupeBatch() }
+          .thenCompose { rows ->
+            CompletableFuture.supplyAsync({ prepareDedupeRows(rows) }, imageThreads)
+          }
+          .thenCompose { rows -> database { store.writeDedupeBatch(rows) } }
+          .whenComplete { batch, failure ->
+            main {
+              if (failure != null) {
+                dedupeRunning = false
+                logger.warning("Dedupe failed: ${error(failure)}")
+                message(sender, "重複保存の整理に失敗しました: ${error(failure)}。再実行すると残りから続けます")
+                return@main
+              }
+              maps += batch.maps
+              before += batch.before
+              added += batch.added
+              if (batch.maps == 0) {
+                dedupeRunning = false
+                message(sender, "重複保存の整理完了: ${maps}枚、移動前 ${before}B、blobs に追加 ${added}B")
+                message(sender, "DB ファイル自体の容量は VACUUM するまで縮みません")
+              } else {
+                server.scheduler.runTaskLater(this, Runnable(::next), 20L)
+              }
+            }
+          }
+    }
+    next()
+  }
+
   private fun usage(sender: CommandSender) {
     message(sender, "使い方:")
     if (sender.hasPermission("imageonmap.new")) message(sender, "/tomap <URL> [resize [幅 高さ]]")
     if (sender.hasPermission("imageonmap.list")) message(sender, "/tomap list")
+    message(sender, "/tomap info（見ている額縁か手に持った地図）")
     if (sender.hasPermission("imageonmap.listother")) {
-      message(sender, "/tomap list <プレイヤー> / all / info")
+      message(sender, "/tomap list <プレイヤー> / all")
       message(sender, "/tomap where <画像ID>")
     }
     if (sender.hasPermission("imageonmap.give")) message(sender, "/tomap give <プレイヤー> <画像ID>")
-    if (sender.hasPermission("imageonmap.deleteother")) message(sender, "/tomap delete <画像ID>")
+    if (sender.hasPermission("imageonmap.deleteother")) {
+      message(sender, "/tomap delete <画像ID>")
+      message(sender, "/tomap recompress <画像ID|all>")
+      message(sender, "/tomap dedupe")
+    }
     if (sender.hasPermission("imageonmap.removesplattermap")) message(sender, "/tomap remove")
+    if (sender.hasPermission("imageonmap.placesplattermap")) {
+      message(sender, "/tomap glow（見ている絵を輝く額縁と普通の額縁で切り替え）")
+      message(sender, "/tomap glow <on|off>（これから貼る絵を輝く額縁にするか）")
+    }
   }
 
   override fun onTabComplete(
@@ -705,19 +1035,28 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
           args.size == 1 ->
               buildList {
                 if (sender.hasPermission("imageonmap.list")) add("list")
+                add("info")
                 if (sender.hasPermission("imageonmap.listother")) {
                   add("all")
-                  add("info")
                   add("where")
                 }
                 if (sender.hasPermission("imageonmap.give")) add("give")
-                if (sender.hasPermission("imageonmap.deleteother")) add("delete")
+                if (sender.hasPermission("imageonmap.deleteother")) {
+                  add("delete")
+                  add("recompress")
+                  add("dedupe")
+                }
                 if (sender.hasPermission("imageonmap.removesplattermap")) add("remove")
+                if (sender.hasPermission("imageonmap.placesplattermap")) add("glow")
               }
           args.size == 2 && args[0] == "list" && sender.hasPermission("imageonmap.listother") ->
               server.onlinePlayers.map { it.name }
           args.size == 2 && args[0] == "give" && sender.hasPermission("imageonmap.give") ->
               server.onlinePlayers.map { it.name }
+          args.size == 2 &&
+              args[0] == "recompress" &&
+              sender.hasPermission("imageonmap.deleteother") ->
+              listOf("all") + animations.animations.keys.map(Long::toString)
           args.size == 2 && args[0].startsWith("http") && sender.hasPermission("imageonmap.new") ->
               listOf("resize")
           else -> emptyList()
@@ -727,6 +1066,12 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   private fun create(player: Player, url: String, resize: Pair<Int, Int>?) {
     val bypass = player.hasPermission("imageonmap.bypasssize")
+    val maxTiles = getConfig().getInt("animation.max-tiles", 16).coerceAtLeast(1)
+    val maxFrames = getConfig().getInt("animation.max-frames", 60).coerceAtLeast(1)
+    val maxMaps = getConfig().getInt("animation.max-maps", 500).coerceAtLeast(1)
+    val maxMapsPerPlayer =
+        getConfig().getInt("animation.max-maps-per-player", 2000).coerceAtLeast(1)
+    val minDelay = getConfig().getInt("animation.min-delay-ticks", 2).coerceAtLeast(1)
     if (resize != null && !bypass && resize.first.toLong() * resize.second > 100) {
       message(player, "100 枚を超えています")
       return
@@ -738,53 +1083,142 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     active.add(player.uniqueId)
     val owner = player.uniqueId
     player.sendActionBar(Component.text("画像を読み込み中…"))
-    CompletableFuture.supplyAsync(
-            {
-              ImageSource.tiles(
-                  ImageSource.fetch(url),
-                  resize,
-                  bypass,
-              )
-            },
-            imageThreads,
-        )
-        .whenComplete { tiles, failure ->
+    database { if (bypass) 0 else store.animatedMapCount(owner) }
+        .thenCompose { current ->
+          CompletableFuture.supplyAsync(
+              {
+                val fetched = ImageSource.fetch(url)
+                current to
+                    (fetched to
+                        ImageSource.prepare(
+                            fetched.bytes,
+                            resize,
+                            bypass,
+                            maxTiles,
+                            maxFrames,
+                            minDelay,
+                        ))
+              },
+              imageThreads,
+          )
+        }
+        .whenComplete { result, failure ->
           main {
             if (failure != null) {
               failCreate(player, url, failure)
               return@main
             }
+            val (current, prepared) = result
+            val (fetched, tiles) = prepared
             if (!player.isOnline) {
               failCreate(player, url, IllegalStateException("プレイヤーが退出しました"))
               return@main
             }
-            val ids =
-                try {
-                  List(tiles.pngs.size) { Bukkit.createMap(player.world).id }
-                } catch (e: Exception) {
-                  failCreate(player, url, e)
-                  return@main
+            if (tiles.delays.isNotEmpty() && !bypass) {
+              if (current >= maxMapsPerPlayer) {
+                failCreate(
+                    player,
+                    url,
+                    IllegalArgumentException("動く画像の地図は現在 $current 枚、上限 $maxMapsPerPlayer 枚です"),
+                )
+                return@main
+              }
+              if (exceedsLimit(tiles.storedTiles.size, 0, maxMaps, false)) {
+                failCreate(
+                    player,
+                    url,
+                    IllegalArgumentException(
+                        "地図が多すぎます（${tiles.storedTiles.size} 枚、上限 $maxMaps 枚）。コマ数か大きさを減らしてください"
+                    ),
+                )
+                return@main
+              }
+            }
+            database {
+                  if (tiles.delays.isNotEmpty() && !bypass) store.animatedMapCount(owner) else 0
                 }
-            database { store.create(owner, tiles.columns, tiles.rows, ids, tiles.pngs) }
-                .whenComplete { id, saveFailure ->
+                .whenComplete { latest, latestFailure ->
                   main {
-                    if (saveFailure != null) failCreate(player, url, saveFailure)
-                    else {
-                      ids.forEach(mapIds::set)
-                      database { store.poster(id) }
-                          .whenComplete { poster, readFailure ->
-                            main {
-                              active.remove(player.uniqueId)
-                              permits.release()
-                              if (readFailure != null || poster == null)
-                                  message(player, "保存後の索引を読めません")
-                              else {
-                                deliver(player, splatter(poster))
-                                message(player, "画像を作成しました (${tiles.columns}×${tiles.rows})")
-                              }
+                    if (latestFailure != null) {
+                      failCreate(player, url, latestFailure)
+                      return@main
+                    }
+                    if (
+                        tiles.delays.isNotEmpty() &&
+                            exceedsLimit(latest, tiles.storedTiles.size, maxMapsPerPlayer, bypass)
+                    ) {
+                      failCreate(
+                          player,
+                          url,
+                          IllegalArgumentException("動く画像の地図は現在 $latest 枚、上限 $maxMapsPerPlayer 枚です"),
+                      )
+                      return@main
+                    }
+                    val ids =
+                        try {
+                          List(tiles.storedTiles.size) { Bukkit.createMap(player.world).id }
+                        } catch (e: Exception) {
+                          failCreate(player, url, e)
+                          return@main
+                        }
+                    val slots = tiles.slots.map(ids::get)
+                    database {
+                          val id =
+                              store.create(
+                                  owner,
+                                  tiles.columns,
+                                  tiles.rows,
+                                  ids,
+                                  tiles.storedTiles,
+                                  tiles.delays,
+                                  tiles.firstSlots,
+                                  slots,
+                                  tiles.staticBlobs,
+                                  url,
+                                  fetched.url,
+                              )
+                          id to store.storedBytes(id)
+                        }
+                        .whenComplete { saved, saveFailure ->
+                          main {
+                            if (saveFailure != null) failCreate(player, url, saveFailure)
+                            else {
+                              val (id, storedBytes) = saved
+                              ids.forEach(mapIds::set)
+                              if (tiles.delays.isNotEmpty())
+                                  animations.add(
+                                      Animation(
+                                          id,
+                                          tiles.columns,
+                                          tiles.rows,
+                                          ids,
+                                          slots,
+                                          tiles.delays,
+                                      )
+                                  )
+                              database { store.poster(id) }
+                                  .whenComplete { poster, readFailure ->
+                                    main {
+                                      active.remove(player.uniqueId)
+                                      permits.release()
+                                      if (readFailure != null || poster == null)
+                                          message(player, "保存後の索引を読めません")
+                                      else {
+                                        deliver(player, splatter(poster))
+                                        message(
+                                            player,
+                                            "画像を作成しました (${tiles.columns}×${tiles.rows}、${tiles.frames} コマ、地図 ${ids.size} 枚)",
+                                        )
+                                        if (tiles.delays.isNotEmpty())
+                                            logger.info(
+                                                "Animated image created image=$id frames=${tiles.frames} maps=${ids.size} slots=${slots.size} storedBytes=$storedBytes"
+                                            )
+                                      }
+                                    }
+                                  }
                             }
                           }
-                    }
+                        }
                   }
                 }
           }
@@ -795,7 +1229,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     active.remove(player.uniqueId)
     permits.release()
     val host = runCatching { URI(url).host }.getOrNull() ?: "unknown"
-    val raw = error(failure)
+    val raw = error(failure).replace(Regex("https?://\\S+", RegexOption.IGNORE_CASE), "[URL]")
     val reason =
         if (raw.any { it in 'ぁ'..'ん' || it in '一'..'龯' }) raw.replace(url, "[URL]")
         else "通信または保存に失敗しました"
@@ -940,6 +1374,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               world.loadedChunks.forEach { chunk ->
                 chunk.entities.filterIsInstance<ItemFrame>().forEach { frame ->
                   if (managed(frame) && mapId(frame.item) in deletedIds) {
+                    untrack(frame.uniqueId)
                     clearDeleted(frame)
                     frameRecords.remove(frame.uniqueId)
                   }
@@ -947,6 +1382,15 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               }
             }
             blank(deleted.mapIds)
+            animations.remove(id)
+            animatedFrames.remove(id)
+            shownFrames.remove(id)
+            pushQueues.forEach { (viewer, queue) ->
+              val remaining = queue.count { it.first == id }
+              queue.removeIf { entry -> entry.first == id }
+              viewerBudgets[viewer]?.releaseQueued(remaining)
+            }
+            sentImages.values.forEach { it.remove(id) }
             logger.info(
                 "Image deleted by=${player.uniqueId} image=$id owner=${deleted.owner} size=${deleted.columns}x${deleted.rows} maps=${deleted.mapIds.size}"
             )
@@ -959,21 +1403,20 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
       if (columns * rows == 1) "1枚物" else "左上から ${index / columns + 1}行${index % columns + 1}列目"
 
   private fun showInfo(player: Player) {
-    val hand = player.inventory.itemInMainHand.itemMeta as? MapMeta
     val frame = player.getTargetEntity(5) as? ItemFrame
-    val frameMap = frame?.item?.itemMeta as? MapMeta
+    val frameMap = frame?.item?.let(::mapId)
+    val handMap = mapId(player.inventory.itemInMainHand)
     val id =
         when {
-          frameMap?.hasMapId() == true -> frameMap.mapId
-          hand?.hasMapId() == true -> hand.mapId
+          frameMap != null -> frameMap
+          handMap != null -> handMap
           else -> {
             message(player, "ImageOnMap の地図ではありません")
             return
           }
         }
-    val frameUuid = if (frameMap?.hasMapId() == true) frame.uniqueId else null
-    if (frame != null && managed(frame) && frameMap?.hasMapId() == true)
-        remember(frame, frameMap.mapId, legacy(frame))
+    val frameUuid = if (frameMap != null) frame?.uniqueId else null
+    if (frame != null && managed(frame) && frameMap != null) remember(frame, id, legacy(frame))
     database {
           Triple(
               store.detailsByMap(id),
@@ -1005,8 +1448,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             val date = details.createdAt?.let { DATE.format(Instant.ofEpochMilli(it)) } ?: "不明（移行前）"
             message(
                 player,
-                "画像ID: ${details.id}（地図ID #$id、${tileName(index, details.columns, details.rows)}） / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows} / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"}$placement",
+                "画像ID: ${details.id}（地図ID #$id、${tileName(index, details.columns, details.rows)}） / 作成者: ${ownerName(details.owner)} / ${details.columns}×${details.rows}・地図 ${details.mapIds.size} 枚 / 作成日時: $date / ${if (details.hidden) "隠し中" else "表示中"}$placement",
             )
+            // 取得元の URL は op だけ
+            if (player.hasPermission("imageonmap.listother")) message(player, imageUrls(details))
           }
         }
   }
@@ -1015,6 +1460,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val DATE: DateTimeFormatter =
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("Asia/Tokyo"))
   }
+
+  private fun imageUrls(details: ImageDetails): String =
+      if (details.sourceUrl == null && details.fetchedUrl == null) "URL の記録なし（記録前に作成）"
+      else "入力URL: ${details.sourceUrl ?: "不明"} / 取得URL: ${details.fetchedUrl ?: "不明"}"
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun place(e: PlayerInteractEvent) {
@@ -1032,6 +1481,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     val clicked = e.clickedBlock ?: return
     val face = e.blockFace
     val up = player.facing
+    val glow = player.persistentDataContainer.get(glowKey, PersistentDataType.BYTE) == 1.toByte()
     database { store.mapIndex(id)?.first ?: Poster(0, null, 1, 1, listOf(id)) }
         .whenComplete { poster, failure ->
           main {
@@ -1075,19 +1525,20 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                           PosterFrames.mapIndex(
                               poster.columns,
                               poster.rows,
-                              face,
                               i % poster.columns,
                               i / poster.columns,
                           )]
               val frame =
                   try {
-                    cell.world.spawn(cell.clone().add(0.5, 0.5, 0.5), ItemFrame::class.java) { f ->
-                      f.setFacingDirection(face, true)
-                      f.isVisible = false
-                      mark(f, false)
-                      f.setItem(item(map), false)
-                      f.rotation = PosterFrames.rotation(face, up, i == 0)
-                    }
+                    spawnFrame(
+                        cell.clone().add(0.5, 0.5, 0.5),
+                        glow,
+                        face,
+                        PosterFrames.rotation(face, up),
+                        item(map),
+                        false,
+                        false,
+                    )
                   } catch (failure: Exception) {
                     spawned.forEach(::rollbackFrame)
                     message(player, "ここには貼れません（額縁を出せませんでした）")
@@ -1096,6 +1547,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                   }
               locker()?.db?.lockFrame(frame, player.uniqueId)
               spawned.add(frame)
+              track(frame, map)
               records.add(record(frame, map, false))
             }
             records.forEach { frameRecords[it.uuid] = it }
@@ -1118,7 +1570,94 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     discard(frame)
   }
 
-  private fun removeFrames(player: Player) {
+  @Suppress("UNCHECKED_CAST")
+  private fun spawnFrame(
+      at: Location,
+      glow: Boolean,
+      face: BlockFace,
+      rotation: Rotation,
+      item: ItemStack,
+      visible: Boolean,
+      legacy: Boolean,
+  ): ItemFrame =
+      at.world.spawn(
+          at,
+          (if (glow) GlowItemFrame::class.java else ItemFrame::class.java) as Class<ItemFrame>,
+      ) { f ->
+        f.setFacingDirection(face, true)
+        f.isVisible = visible
+        mark(f, legacy)
+        f.setItem(item, false)
+        f.rotation = rotation
+      }
+
+  private fun toggleGlow(player: Player) =
+      posterFrames(player, "切り替える") { hit, targets ->
+        val glow = hit !is GlowItemFrame
+        val records = mutableListOf<FrameRecord>()
+        var failed = 0
+        for (frame in targets) {
+          if ((frame is GlowItemFrame) == glow) continue
+          val id = mapId(frame.item) ?: continue
+          val old = frameRecords[frame.uniqueId]
+          val owner = lockOwner(frame)
+          val legacy = legacy(frame)
+          val at = frame.location.block.location.add(0.5, 0.5, 0.5)
+          val face = frame.facing
+          val rotation = frame.rotation
+          val item = frame.item.clone()
+          val visible = frame.isVisible
+          locker()?.db?.unlockFrame(frame.uniqueId)
+          discard(frame)
+          forget(frame.uniqueId)
+          // 出せなければ元の種類で出し直す（額縁を失わないため）
+          val spawned =
+              runCatching { spawnFrame(at, glow, face, rotation, item, visible, legacy) }
+                  .recoverCatching {
+                    failed++
+                    spawnFrame(at, !glow, face, rotation, item, visible, legacy)
+                  }
+                  .onFailure { logger.severe("Glow frame respawn at $at: ${error(it)}") }
+                  .getOrNull() ?: continue
+          owner?.let { locker()?.db?.lockFrame(spawned, it) }
+          track(spawned, id)
+          val record =
+              record(spawned, id, legacy).let { r ->
+                old?.let { r.copy(placedAt = it.placedAt, detected = it.detected) } ?: r
+              }
+          frameRecords[spawned.uniqueId] = record
+          records.add(record)
+        }
+        database { store.saveFrames(records) }
+            .whenComplete { _, failure ->
+              if (failure != null) logger.warning("Frame save: ${error(failure)}")
+            }
+        message(
+            player,
+            "額縁 ${records.size - failed} 枚を${if (glow) "輝く額縁" else "普通の額縁"}にしました" +
+                if (failed > 0) "（$failed 枚は替えられませんでした）" else "",
+        )
+      }
+
+  private fun removeFrames(player: Player) =
+      posterFrames(player, "外す") { _, targets ->
+        for (frame in targets) {
+          if (frameRecords[frame.uniqueId]?.legacy == true) clearDeleted(frame)
+          else {
+            locker()?.db?.unlockFrame(frame.uniqueId)
+            discard(frame)
+          }
+          forget(frame.uniqueId)
+        }
+        message(player, "額縁を ${targets.size} 枚外しました")
+      }
+
+  // 見ている額縁の絵の額縁を集め、ロックか建築の権限を確かめてから action を呼ぶ
+  private fun posterFrames(
+      player: Player,
+      verb: String,
+      action: (ItemFrame, List<ItemFrame>) -> Unit,
+  ) {
     val hit = player.getTargetEntity(5) as? ItemFrame
     if (hit == null || !managed(hit)) {
       message(player, "管理している額縁が見つかりません")
@@ -1136,7 +1675,14 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
             if (!hit.isValid || !managed(hit) || mapId(hit.item) != id) return@main
             val targets =
                 if (result == null) listOf(hit)
-                else PosterFrames.matches(hit, result.first, result.second, ::managed)
+                else
+                    PosterFrames.matches(
+                        hit,
+                        result.first,
+                        result.second,
+                        ::managed,
+                        animations::base,
+                    )
             // 旧版のポスターには一部のタイルが欠けたものがある（本番で約180件）ので、見つかった分だけ外す
             if (targets.isEmpty()) {
               message(player, "額縁の記録が見つかりません")
@@ -1153,18 +1699,10 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
                       else !canBuild(player, frame.location)
                     }
             ) {
-              message(player, "外す権限がありません")
+              message(player, "${verb}権限がありません")
               return@main
             }
-            for (frame in targets) {
-              if (frameRecords[frame.uniqueId]?.legacy == true) clearDeleted(frame)
-              else {
-                locker()?.db?.unlockFrame(frame.uniqueId)
-                discard(frame)
-              }
-              forget(frame.uniqueId)
-            }
-            message(player, "額縁を ${targets.size} 枚外しました")
+            action(hit, targets)
           }
         }
   }
@@ -1185,6 +1723,7 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
               return@main
             }
             message(sender, "画像 #$imageId: ${result.second.size} 枚")
+            message(sender, imageUrls(result.first!!))
             result.second.take(20).forEach { row ->
               val world = server.getWorld(row.world)
               val status =

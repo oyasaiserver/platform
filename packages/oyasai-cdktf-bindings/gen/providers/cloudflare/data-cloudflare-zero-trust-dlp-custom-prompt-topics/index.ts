@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,13 +8,13 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustDlpCustomPromptTopicsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics#account_id DataCloudflareZeroTrustDlpCustomPromptTopics#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics#account_id DataCloudflareZeroTrustDlpCustomPromptTopics#account_id}
   */
   readonly accountId: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics#max_items DataCloudflareZeroTrustDlpCustomPromptTopics#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics#max_items DataCloudflareZeroTrustDlpCustomPromptTopics#max_items}
   */
   readonly maxItems?: number;
 }
@@ -130,7 +130,7 @@ export class DataCloudflareZeroTrustDlpCustomPromptTopicsResultList extends cdkt
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics cloudflare_zero_trust_dlp_custom_prompt_topics}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics cloudflare_zero_trust_dlp_custom_prompt_topics}
 */
 export class DataCloudflareZeroTrustDlpCustomPromptTopics extends cdktf.TerraformDataSource {
 
@@ -146,7 +146,7 @@ export class DataCloudflareZeroTrustDlpCustomPromptTopics extends cdktf.Terrafor
   * Generates CDKTF code for importing a DataCloudflareZeroTrustDlpCustomPromptTopics resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDlpCustomPromptTopics to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustDlpCustomPromptTopics that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustDlpCustomPromptTopics that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDlpCustomPromptTopics to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -158,7 +158,7 @@ export class DataCloudflareZeroTrustDlpCustomPromptTopics extends cdktf.Terrafor
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics cloudflare_zero_trust_dlp_custom_prompt_topics} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_custom_prompt_topics cloudflare_zero_trust_dlp_custom_prompt_topics} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -169,7 +169,7 @@ export class DataCloudflareZeroTrustDlpCustomPromptTopics extends cdktf.Terrafor
       terraformResourceType: 'cloudflare_zero_trust_dlp_custom_prompt_topics',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.24.0'
+        providerVersion: '5.25.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

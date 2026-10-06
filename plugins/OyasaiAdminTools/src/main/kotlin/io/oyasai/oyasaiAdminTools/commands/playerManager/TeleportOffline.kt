@@ -1,11 +1,9 @@
 package io.oyasai.oyasaiAdminTools.commands.playerManager
 
-import org.bukkit.Bukkit
-import org.bukkit.command.Command
-import org.bukkit.command.CommandExecutor
-import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
+import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
+import org.bukkit.command.*
 
+/** Kept as a second entry point; the actual teleport implementation is shared. */
 object TeleportOffline : CommandExecutor {
   override fun onCommand(
       sender: CommandSender,
@@ -13,17 +11,9 @@ object TeleportOffline : CommandExecutor {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    if (sender !is Player) {
-      sender.sendMessage("This command is only for players.")
-      return false
-    }
-    if (args.isEmpty()) {
-      sender.sendMessage("Usage: /playermanager tpoffline <player>")
-      return false
-    }
-    val targetPlayer = Bukkit.getOfflinePlayer(args[0])
-    targetPlayer.teleportOffline(sender.location)
-    sender.sendMessage("§e${targetPlayer.name} §aをあなたの位置にテレポートしました。")
+    val feature = OyasaiAdminTools.plugin.tpOffline
+    if (feature == null) sender.sendMessage("§cオフライン移動機能は利用できません。")
+    else feature.onCommand(sender, command, label, args)
     return true
   }
 }

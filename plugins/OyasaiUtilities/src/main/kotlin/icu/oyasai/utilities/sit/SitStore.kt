@@ -40,8 +40,43 @@ internal class SitStore(private val file: File) : AutoCloseable {
           connection.autoCommit = true
         }
       }
-      1 -> check(tableExists()) { "click_sit_off is missing" }
+      1,
+      2 -> check(tableExists()) { "click_sit_off is missing" }
       else -> error("unsupported sit schema version $version")
+    }
+    if (version < 2) {
+      connection.autoCommit = false
+      try {
+        connection.createStatement().use {
+          it.execute(
+              "CREATE TABLE sit_settings (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)"
+          )
+          it.execute("INSERT INTO sit_settings VALUES ('player_mode', 'RANK')")
+          it.execute("PRAGMA user_version = 2")
+        }
+        connection.commit()
+      } catch (failure: Exception) {
+        connection.rollback()
+        throw failure
+      } finally {
+        connection.autoCommit = true
+      }
+    }
+  }
+
+  fun loadPlayerMode(): PlayerSitMode =
+      connection.createStatement().use { statement ->
+        statement.executeQuery("SELECT value FROM sit_settings WHERE key = 'player_mode'").use {
+            rows ->
+          check(rows.next()) { "player_mode is missing" }
+          PlayerSitMode.parse(rows.getString(1)) ?: error("invalid player_mode")
+        }
+      }
+
+  fun setPlayerMode(mode: PlayerSitMode) {
+    connection.prepareStatement("UPDATE sit_settings SET value = ? WHERE key = 'player_mode'").use {
+      it.setString(1, mode.name)
+      check(it.executeUpdate() == 1) { "player_mode is missing" }
     }
   }
 

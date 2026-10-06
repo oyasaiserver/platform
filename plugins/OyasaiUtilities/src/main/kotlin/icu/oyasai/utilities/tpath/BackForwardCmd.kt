@@ -1,5 +1,6 @@
 package icu.oyasai.utilities.tpath
 
+import icu.oyasai.utilities.OyasaiUtilities
 import icu.oyasai.utilities.OyasaiUtilities.color
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -15,6 +16,10 @@ object BackForwardCmd : CommandExecutor {
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("&cYou are not a Player")
+      return true
+    }
+    if (OyasaiUtilities.plugin.teleportFeature?.isJailed(sender) == true) {
+      sender.sendMessage("&c入獄中はテレポート履歴を使えません".color())
       return true
     }
     val name = command.name

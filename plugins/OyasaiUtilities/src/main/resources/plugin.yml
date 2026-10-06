@@ -7,13 +7,201 @@ api-version: "1.21"
 version: "0.1.0"
 softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
 commands:
+  home:
+    usage: /<command>
+    permission: essentials.home
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [homes]
+  sethome:
+    usage: /<command>
+    permission: essentials.sethome
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  delhome:
+    usage: /<command>
+    permission: essentials.delhome
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [remhome]
+  warp:
+    usage: /<command>
+    permission: essentials.warp
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [warps]
+  tp:
+    usage: /<command>
+    permission: essentials.tp
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [tp2p]
+  tphere:
+    usage: /<command>
+    permission: essentials.tphere
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [s]
+  tpa:
+    usage: /<command>
+    permission: essentials.tpa
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [tpask]
+  tpaccept:
+    usage: /<command>
+    permission: essentials.tpaccept
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [tpyes]
+  tpdeny:
+    usage: /<command>
+    permission: essentials.tpdeny
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [tpno]
+  tpacancel:
+    usage: /<command>
+    permission: essentials.tpacancel
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  tpahere:
+    usage: /<command>
+    permission: essentials.tpahere
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  togglejail:
+    usage: /<command>
+    permission: essentials.togglejail
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [jail, unjail]
+  gamemode:
+    usage: /<command>
+    permission: essentials.gamemode
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [gm, gmc, gms, gmsp, gma, sp, spec, spectator, survival, creative]
+  fly:
+    usage: /<command>
+    permission: essentials.fly
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  speed:
+    usage: /<command>
+    permission: essentials.speed
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [flyspeed]
+  jump:
+    usage: /<command>
+    permission: essentials.jump
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [j, jumpto]
+  time:
+    usage: /<command>
+    permission: essentials.time
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [day, night]
+  weather:
+    usage: /<command>
+    permission: essentials.weather
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [sun, rain]
+  ptime:
+    usage: /<command>
+    permission: essentials.ptime
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [playertime]
+  heal:
+    usage: /<command>
+    permission: essentials.heal
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  afk:
+    usage: /<command>
+    permission: essentials.afk
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  nick:
+    usage: /<command>
+    permission: essentials.nick
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  realname:
+    usage: /<command>
+    permission: essentials.realname
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  workbench:
+    usage: /<command>
+    permission: essentials.workbench
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [craft, wb]
+  enderchest:
+    usage: /<command> [player]
+    permission: essentials.enderchest
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [ec]
+  disposal:
+    usage: /<command>
+    permission: essentials.disposal
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [trash]
+  anvil:
+    usage: /<command>
+    permission: essentials.anvil
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  loom:
+    usage: /<command>
+    permission: essentials.loom
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  grindstone:
+    usage: /<command>
+    permission: essentials.grindstone
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  stonecutter:
+    usage: /<command>
+    permission: essentials.stonecutter
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  smithingtable:
+    usage: /<command>
+    permission: essentials.smithingtable
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  hat:
+    usage: /<command> [remove]
+    permission: essentials.hat
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [head]
+  skull:
+    usage: /<command> [owner] [player]
+    permission: essentials.skull
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+    aliases: [eskull, playerskull]
+  annaimode:
+    usage: /annaimode [<player>]
+  guidecheck:
+    usage: /guidecheck <player>
+    permission: group.jokyu
+  annai:
+    usage: /annai [<text>]
+    permission: server.annai.use
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  annai-en:
+    usage: /annai-en [<text>]
+    permission: server.annai.use
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  anshi:
+    usage: /anshi
+    permission: oyasai.night_vision
+    permission-message: "§cこのコマンドを使う権限がありません"
+  sokudo:
+    usage: /sokudo <number>
+    permission: oyasai.flyspeed
+    permission-message: "§cこのコマンドを使う権限がありません"
+  reach:
+    usage: /reach [<text>]
+    permission: reach.use
+    permission-message: "§cこのコマンドを使用する権限がありません。"
+  getdebugstick:
+    usage: /getdebugstick
+  scale:
+    usage: /scale [<text>] [<text>]
+  c:
+    usage: /c
+  d:
+    usage: /d
+  l:
+    usage: /l
   tpset:
     description: "Teleport setting."
     usage: "/<command> [option]"
     permission: tpswitch.tpset
     permission-message: "§4No permission!!!"
   sit:
-    description: "座る・右クリック座りを切り替える"
+    description: "座る・右クリック座りとPlayerSitモードを切り替える"
+    usage: "/<command> [toggle|playermode [rank|all]]"
     aliases: [gsit]
   lay:
     description: "仰向けに寝そべる"
@@ -92,9 +280,208 @@ commands:
   spawn:
     description: "スポーン地点へテレポートする"
     usage: /spawn [player]
-    permission: oyasaiutilities.spawn
+    permission: essentials.spawn
 
 permissions:
+  essentials.spawn:
+    default: op
+  essentials.spawn.others:
+    default: op
+  essentials.home:
+    default: op
+  essentials.sethome:
+    default: op
+  essentials.delhome:
+    default: op
+  essentials.warp:
+    default: op
+  essentials.tp:
+    default: op
+  essentials.tphere:
+    default: op
+  essentials.tpa:
+    default: op
+  essentials.tpaccept:
+    default: op
+  essentials.tpdeny:
+    default: op
+  essentials.tpacancel:
+    default: op
+  essentials.tpahere:
+    default: op
+  essentials.togglejail:
+    default: op
+  essentials.home.others:
+    default: op
+  essentials.home.bed:
+    default: op
+  essentials.sethome.others:
+    default: op
+  essentials.sethome.multiple:
+    default: op
+  essentials.sethome.multiple.unlimited:
+    default: op
+  essentials.sethome.multiple.vip:
+    default: op
+  essentials.sethome.multiple.staff:
+    default: op
+  essentials.delhome.others:
+    default: op
+  essentials.warp.list:
+    default: op
+  essentials.warp.others:
+    default: op
+  essentials.warp.otherplayers:
+    default: op
+  essentials.tp.others:
+    default: op
+  essentials.tp.position:
+    default: op
+  essentials.togglejail.offline:
+    default: op
+  essentials.jail.exempt:
+    default: op
+  essentials.jail.notify:
+    default: op
+  essentials.gamemode:
+    default: op
+  essentials.fly:
+    default: op
+  essentials.speed:
+    default: op
+  essentials.jump:
+    default: op
+  essentials.time:
+    default: op
+  essentials.weather:
+    default: op
+  essentials.ptime:
+    default: op
+  essentials.heal:
+    default: op
+  essentials.afk:
+    default: op
+  essentials.nick:
+    default: op
+  essentials.realname:
+    default: op
+  essentials.gamemode.all:
+    default: op
+  essentials.gamemode.others:
+    default: op
+  essentials.gamemode.survival:
+    default: op
+  essentials.gamemode.creative:
+    default: op
+  essentials.gamemode.adventure:
+    default: op
+  essentials.gamemode.spectator:
+    default: op
+  essentials.fly.others:
+    default: op
+  essentials.fly.safelogin:
+    default: op
+  essentials.speed.others:
+    default: op
+  essentials.speed.fly:
+    default: op
+  essentials.speed.walk:
+    default: op
+  essentials.speed.bypass:
+    default: op
+  essentials.jump.lock:
+    default: op
+  essentials.time.set:
+    default: op
+  essentials.time.world.all:
+    default: op
+  essentials.ptime.others:
+    default: op
+  essentials.heal.others:
+    default: op
+  essentials.heal.cooldown.bypass:
+    default: op
+  essentials.afk.others:
+    default: op
+  essentials.afk.message:
+    default: op
+  essentials.afk.auto:
+    default: false
+  essentials.afk.kickexempt:
+    default: op
+  essentials.sleepingignored:
+    default: op
+  essentials.nick.color:
+    default: op
+  essentials.nick.format:
+    default: op
+  essentials.nick.magic:
+    default: op
+  essentials.nick.rgb:
+    default: op
+  essentials.nick.others:
+    default: op
+  essentials.nick.allowunsafe:
+    default: false
+  essentials.nick.changecolors:
+    default: op
+  essentials.nick.changecolors.bypass:
+    default: op
+  essentials.nick.blacklist.bypass:
+    default: op
+  essentials.nick.hideprefix:
+    default: false
+  essentials.keepinv:
+    default: false
+  essentials.keepxp:
+    default: false
+  essentials.gamemode.*:
+    default: op
+    children:
+      essentials.gamemode: true
+      essentials.gamemode.others: true
+      essentials.gamemode.all: true
+  essentials.vanish.interact:
+    default: op
+  essentials.workbench:
+    default: op
+  essentials.enderchest:
+    default: op
+  essentials.disposal:
+    default: op
+  essentials.anvil:
+    default: op
+  essentials.loom:
+    default: op
+  essentials.grindstone:
+    default: op
+  essentials.stonecutter:
+    default: op
+  essentials.smithingtable:
+    default: op
+  essentials.hat:
+    default: op
+  essentials.skull:
+    default: op
+  essentials.enderchest.others:
+    default: op
+  essentials.enderchest.modify:
+    default: op
+  essentials.hat.ignore-binding:
+    default: op
+  essentials.hat.prevent-type.<item-name>:
+    default: op
+  essentials.skull.others:
+    default: op
+  essentials.skull.modify:
+    default: op
+  essentials.skull.spawn:
+    default: op
+  essentials.skull.spawn.others:
+    default: op
+  oyasai.utilities.sit.admin:
+    description: "PlayerSitモードの変更権限"
+    default: op
   tpswitch.tpset:
     description: "Teleport setting permission."
     default: true

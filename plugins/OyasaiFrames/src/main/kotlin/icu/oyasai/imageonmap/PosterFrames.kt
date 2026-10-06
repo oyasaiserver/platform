@@ -11,8 +11,8 @@ import org.bukkit.util.BoundingBox
 internal object PosterFrames {
   private val directions = listOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
 
-  fun mapIndex(columns: Int, rows: Int, face: BlockFace, col: Int, rowFromBottom: Int): Int =
-      (rows - rowFromBottom - 1) * columns + if (face == BlockFace.DOWN) columns - 1 - col else col
+  fun mapIndex(columns: Int, rows: Int, col: Int, rowFromBottom: Int): Int =
+      (rows - rowFromBottom - 1) * columns + col
 
   private fun vectors(face: BlockFace, up: BlockFace): Pair<Pair<Int, Int>, Pair<Int, Int>> =
       when (face) {
@@ -21,13 +21,17 @@ internal object PosterFrames {
         BlockFace.EAST -> (0 to -1) to (0 to 0)
         BlockFace.WEST -> (0 to 1) to (0 to 0)
         BlockFace.UP,
-        BlockFace.DOWN ->
-            when (up) {
-              BlockFace.NORTH -> (1 to 0) to (0 to -1)
-              BlockFace.SOUTH -> (-1 to 0) to (0 to 1)
-              BlockFace.EAST -> (0 to 1) to (1 to 0)
-              else -> (0 to -1) to (-1 to 0)
-            }
+        BlockFace.DOWN -> {
+          val (right, rise) =
+              when (up) {
+                BlockFace.NORTH -> (1 to 0) to (0 to -1)
+                BlockFace.SOUTH -> (-1 to 0) to (0 to 1)
+                BlockFace.EAST -> (0 to 1) to (1 to 0)
+                else -> (0 to -1) to (-1 to 0)
+              }
+          // 天井は見上げると手前が絵の上になる。右は床と同じ
+          if (face == BlockFace.DOWN) right to (-rise.first to -rise.second) else right to rise
+        }
         else -> error("unsupported face")
       }
 
@@ -66,13 +70,12 @@ internal object PosterFrames {
                         it.location.blockZ == at.blockZ))
           }
 
-  fun rotation(face: BlockFace, up: BlockFace, first: Boolean): Rotation {
+  fun rotation(face: BlockFace, up: BlockFace): Rotation {
     if (face != BlockFace.UP && face != BlockFace.DOWN) return Rotation.NONE
     val quarter = directions.indexOf(up).let { if (it < 0) 0 else it }
     val steps = if (face == BlockFace.UP) quarter else (4 - quarter) % 4
-    val adjusted = (steps + if (first) 3 else 0) % 4
-    return listOf(Rotation.NONE, Rotation.CLOCKWISE, Rotation.FLIPPED, Rotation.COUNTER_CLOCKWISE)[
-        adjusted]
+    // 額縁の地図は Rotation の 1 段（CLOCKWISE_45）で 90° 回る（vanilla は rotation % 4 * 90°）
+    return Rotation.entries[steps]
   }
 
   fun matches(
@@ -80,10 +83,9 @@ internal object PosterFrames {
       poster: Poster,
       index: Int,
       managed: (ItemFrame) -> Boolean,
+      baseMapId: (Int) -> Int = { it },
   ): List<ItemFrame> {
-    val col =
-        if (hit.facing == BlockFace.DOWN) poster.columns - 1 - index % poster.columns
-        else index % poster.columns
+    val col = index % poster.columns
     val row = poster.rows - 1 - index / poster.columns
     val orientations =
         if (hit.facing == BlockFace.UP || hit.facing == BlockFace.DOWN) directions
@@ -106,11 +108,11 @@ internal object PosterFrames {
                             mapIndex(
                                 poster.columns,
                                 poster.rows,
-                                hit.facing,
                                 i % poster.columns,
                                 i / poster.columns,
                             )]
-                if (managed(frame) && meta?.hasMapId() == true && meta.mapId == expected) frame
+                if (managed(frame) && meta?.hasMapId() == true && baseMapId(meta.mapId) == expected)
+                    frame
                 else null
               }
         }

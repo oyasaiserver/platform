@@ -78,6 +78,7 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
 
   /** /msg <player>で使う1対1の会話モード開始。 */
   fun startConversation(source: Player, targetInput: String): Boolean {
+    if (plugin.rejectMuted(source)) return false
     val input = targetInput.trim()
     if (input.isBlank()) {
       source.sendMessage(chat.formatter.error("Player name must not be empty."))
@@ -239,6 +240,7 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       deliverLocal: Boolean = true,
       recipientIds: Set<UUID>? = null,
   ): Boolean {
+    if (plugin.rejectMuted(source)) return false
     if (message.isBlank()) {
       source.sendMessage(chat.formatter.error("Message must not be empty."))
       return false
@@ -351,6 +353,7 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
               sender.sendMessage(chat.formatter.error("Only players can use /r."))
               return false
             }
+    if (plugin.rejectMuted(player)) return false
     if (message.isBlank()) {
       sender.sendMessage(chat.formatter.error("Message must not be empty."))
       return false

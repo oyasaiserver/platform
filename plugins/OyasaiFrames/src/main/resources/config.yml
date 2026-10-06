@@ -1,0 +1,15 @@
+animation:
+  # 動く GIF 1 枚の最大タイル数（4×4 枚）。
+  max-tiles: 16
+  # 動く GIF 1 枚の最大コマ数。
+  max-frames: 60
+  # 使い回し後の動く GIF 1 枚の最大地図数。
+  max-maps: 500
+  # プレイヤーが持つ動く GIF の合計地図数（非表示も含む）。
+  max-maps-per-player: 2000
+  # 見る人が今のワールド・接続中に先送りで受け取る地図の最大数。
+  max-maps-per-viewer: 3000
+  # 動く GIF の各コマを表示する最短 tick 数。
+  min-delay-ticks: 2
+  # 1 tick にプレイヤーへ送る地図の最大数。
+  push-maps-per-tick: 50

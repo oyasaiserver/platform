@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface DataCloudflarePipelineStreamConfig extends cdktf.TerraformMetaA
   /**
   * Specifies the public ID of the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream#account_id DataCloudflarePipelineStream#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream#account_id DataCloudflarePipelineStream#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream#filter DataCloudflarePipelineStream#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream#filter DataCloudflarePipelineStream#filter}
   */
   readonly filter?: DataCloudflarePipelineStreamFilter;
   /**
   * Specifies the public ID of the stream.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream#stream_id DataCloudflarePipelineStream#stream_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream#stream_id DataCloudflarePipelineStream#stream_id}
   */
   readonly streamId?: string;
 }
@@ -28,13 +28,13 @@ export interface DataCloudflarePipelineStreamFilter {
   /**
   * Filters streams by name (case-insensitive substring).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream#name DataCloudflarePipelineStream#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream#name DataCloudflarePipelineStream#name}
   */
   readonly name?: string;
   /**
   * Specifies the public ID of the pipeline.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream#pipeline_id DataCloudflarePipelineStream#pipeline_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream#pipeline_id DataCloudflarePipelineStream#pipeline_id}
   */
   readonly pipelineId?: string;
 }
@@ -453,85 +453,6 @@ export class DataCloudflarePipelineStreamSchemaFieldsList extends cdktf.ComplexL
     return new DataCloudflarePipelineStreamSchemaFieldsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
-export interface DataCloudflarePipelineStreamSchemaFormat {
-}
-
-export function dataCloudflarePipelineStreamSchemaFormatToTerraform(struct?: DataCloudflarePipelineStreamSchemaFormat): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  return {
-  }
-}
-
-
-export function dataCloudflarePipelineStreamSchemaFormatToHclTerraform(struct?: DataCloudflarePipelineStreamSchemaFormat): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  const attrs = {
-  };
-  return attrs;
-}
-
-export class DataCloudflarePipelineStreamSchemaFormatOutputReference extends cdktf.ComplexObject {
-  private isEmptyObject = false;
-
-  /**
-  * @param terraformResource The parent resource
-  * @param terraformAttribute The attribute on the parent resource this class is referencing
-  */
-  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
-    super(terraformResource, terraformAttribute, false);
-  }
-
-  public get internalValue(): DataCloudflarePipelineStreamSchemaFormat | undefined {
-    let hasAnyValues = this.isEmptyObject;
-    const internalValueResult: any = {};
-    return hasAnyValues ? internalValueResult : undefined;
-  }
-
-  public set internalValue(value: DataCloudflarePipelineStreamSchemaFormat | undefined) {
-    if (value === undefined) {
-      this.isEmptyObject = false;
-    }
-    else {
-      this.isEmptyObject = Object.keys(value).length === 0;
-    }
-  }
-
-  // compression - computed: true, optional: false, required: false
-  public get compression() {
-    return this.getStringAttribute('compression');
-  }
-
-  // decimal_encoding - computed: true, optional: false, required: false
-  public get decimalEncoding() {
-    return this.getStringAttribute('decimal_encoding');
-  }
-
-  // row_group_bytes - computed: true, optional: false, required: false
-  public get rowGroupBytes() {
-    return this.getNumberAttribute('row_group_bytes');
-  }
-
-  // timestamp_format - computed: true, optional: false, required: false
-  public get timestampFormat() {
-    return this.getStringAttribute('timestamp_format');
-  }
-
-  // type - computed: true, optional: false, required: false
-  public get type() {
-    return this.getStringAttribute('type');
-  }
-
-  // unstructured - computed: true, optional: false, required: false
-  public get unstructured() {
-    return this.getBooleanAttribute('unstructured');
-  }
-}
 export interface DataCloudflarePipelineStreamSchema {
 }
 
@@ -585,12 +506,6 @@ export class DataCloudflarePipelineStreamSchemaOutputReference extends cdktf.Com
   private _fields = new DataCloudflarePipelineStreamSchemaFieldsList(this, "fields", false);
   public get fields() {
     return this._fields;
-  }
-
-  // format - computed: true, optional: false, required: false
-  private _format = new DataCloudflarePipelineStreamSchemaFormatOutputReference(this, "format");
-  public get format() {
-    return this._format;
   }
 
   // inferred - computed: true, optional: false, required: false
@@ -654,7 +569,7 @@ export class DataCloudflarePipelineStreamWorkerBindingOutputReference extends cd
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream cloudflare_pipeline_stream}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream cloudflare_pipeline_stream}
 */
 export class DataCloudflarePipelineStream extends cdktf.TerraformDataSource {
 
@@ -670,7 +585,7 @@ export class DataCloudflarePipelineStream extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflarePipelineStream resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflarePipelineStream to import
-  * @param importFromId The id of the existing DataCloudflarePipelineStream that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflarePipelineStream that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflarePipelineStream to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -682,7 +597,7 @@ export class DataCloudflarePipelineStream extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_stream cloudflare_pipeline_stream} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_stream cloudflare_pipeline_stream} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -693,7 +608,7 @@ export class DataCloudflarePipelineStream extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_pipeline_stream',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.24.0'
+        providerVersion: '5.25.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

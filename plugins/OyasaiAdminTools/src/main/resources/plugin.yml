@@ -4,7 +4,35 @@ main: io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 api-version: "1.21"
 softdepend:
   - TokenManager
+  - Essentials
 commands:
+  invsee:
+    description: 運営用 invsee
+    permission: essentials.invsee
+  vanish:
+    description: 運営用 vanish
+    permission: essentials.vanish
+    aliases: [v]
+  socialspy:
+    description: 運営用 socialspy
+    permission: essentials.socialspy
+  whois:
+    description: 運営用 whois
+    permission: essentials.whois
+  sudo:
+    description: 運営用 sudo
+    permission: essentials.sudo
+  seen:
+    description: 運営用 seen
+    permission: essentials.seen
+  tpoffline:
+    description: 運営用 tpoffline
+    permission: essentials.tpoffline
+  applylifeworldsettings:
+    description: lifeworld と同じ基本設定を適用する
+    usage: /applylifeworldsettings <world>
+    permission: oyasai.admintools.applylifeworldsettings
+    permission-message: "§cこのコマンドを使用する権限がありません。"
   syokaku:
     description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）
     usage: |
@@ -44,6 +72,9 @@ commands:
     description: 最新のアンケートを開く (短縮用)
     permission: oyasai.survey
 permissions:
+  oyasai.admintools.applylifeworldsettings:
+    description: applylifeworldsettingsコマンドの使用権限
+    default: op
   oyasai.survey:
     description: お知らせ・アンケートコマンドの使用権限
     default: true
@@ -65,3 +96,65 @@ permissions:
   oyasai.worldborder:
     description: /wb によるワールドボーダー操作
     default: op
+  essentials.invsee:
+    default: op
+  essentials.invsee.equip:
+    default: op
+  essentials.invsee.modify:
+    default: op
+  essentials.invsee.preventmodify:
+    default: false
+  essentials.vanish:
+    default: op
+  essentials.vanish.others:
+    default: op
+  essentials.vanish.see:
+    default: op
+  essentials.vanish.effect:
+    default: op
+  essentials.vanish.interact:
+    default: op
+  essentials.vanish.pickup:
+    default: op
+  essentials.vanish.pvp:
+    default: op
+  essentials.socialspy:
+    default: op
+  essentials.socialspy.others:
+    default: op
+  essentials.chat.spy.exempt:
+    default: op
+  essentials.sudo:
+    default: op
+  essentials.sudo.exempt:
+    default: false
+  essentials.sudo.multiple:
+    default: op
+  essentials.whois:
+    default: op
+  essentials.whois.ip:
+    default: op
+  essentials.seen:
+    default: op
+  essentials.seen.uuid:
+    default: op
+  essentials.seen.firstlogin:
+    default: op
+  essentials.seen.ip:
+    default: op
+  essentials.seen.location:
+    default: op
+  essentials.seen.whitelist:
+    default: op
+  essentials.seen.banreason:
+    default: op
+  essentials.tpoffline:
+    default: op
+  essentials.seen.extra:
+    default: op
+    children:
+      essentials.seen.ip: true
+      essentials.seen.location: true
+      essentials.seen.uuid: true
+      essentials.seen.firstlogin: true
+      essentials.seen.whitelist: true

@@ -15,14 +15,6 @@
       }
     }
   },
-  "crackshotguns": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/48301.jar",
-        "hash": "sha256-Hd7DJB+7JNf9JhCc+VzeA52e7fqxyEhqAgz8sIoXoTY="
-      }
-    }
-  },
   "decentholograms": {
     "paper": {
       "26.2": {
@@ -117,30 +109,6 @@
       }
     }
   },
-  "pvparena": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/16584.jar",
-        "hash": "sha256-ww4DPTY76jRCx2EQjztEE1jmnmOMmk0xj+KfF26mbs4="
-      }
-    }
-  },
-  "sba": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/lJPKRQLl/versions/axn2z8yT/SBA-1.5.21-all.jar",
-        "hash": "sha256-BKN1kgCXCeA6gDALmdSumB+93aXPOeJS5QWbSvuGk6I="
-      }
-    }
-  },
-  "screamingbedwars": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/8sg1aj4I/versions/nUPEYDAm/BedWars-0.2.44.jar",
-        "hash": "sha256-UQ1G0xDf8qQmRhxWdgUbvxn/N7VT7guYdVl6vkukDVw="
-      }
-    }
-  },
   "signshop": {
     "paper": {
       "26.2": {
@@ -154,22 +122,6 @@
       "26.2": {
         "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/4JYDcsAm/Skript-2.16.2.jar",
         "hash": "sha256-FM90PuLHzdAUvGOZPJCSll7ew73s/5OuR2Jv3vXSOxA="
-      }
-    }
-  },
-  "slotmachine": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/22023.jar",
-        "hash": "sha256-qg+XVjITD4WzBQMDrNi4h5jX+p7oH07KamobDvSmk2k="
-      }
-    }
-  },
-  "tntruneloaded": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/53359.jar",
-        "hash": "sha256-KS80G8n9ljR8ioNcrQpt+XTeOexJ4aNgmtFpgKMiW30="
       }
     }
   },

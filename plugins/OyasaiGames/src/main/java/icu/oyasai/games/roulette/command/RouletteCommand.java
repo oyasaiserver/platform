@@ -73,7 +73,7 @@ public class RouletteCommand implements CommandExecutor, TabCompleter {
         }
 
         // GUI画面を開く
-        RouletteSession session = manager.getOrCreateSession(player.getUniqueId());
+        RouletteSession session = manager.getOrCreateSession(player);
         RouletteGui.open(player, session);
         return true;
     }

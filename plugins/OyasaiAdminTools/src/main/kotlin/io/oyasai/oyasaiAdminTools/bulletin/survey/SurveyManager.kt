@@ -8,7 +8,6 @@ import io.oyasai.oyasaiAdminTools.bulletin.survey.models.SurveyProgress
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTaskRegistry
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTimerHandler
-import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.MMUtils.mm
 import java.util.UUID
 import net.kyori.adventure.inventory.Book
@@ -35,12 +34,12 @@ object SurveyManager {
 
   fun load() {
     stopAll()
-    surveys = JsonUtils.readJsonFileSafe("surveys.json", mutableListOf<Survey>()).toMutableList()
+    surveys = plugin.db.loadSurveys()
     startAll()
   }
 
   fun save() {
-    JsonUtils.writeJsonFile("surveys.json", surveys)
+    plugin.db.saveSurveys(surveys)
   }
 
   fun startAll() {
@@ -299,7 +298,6 @@ object SurveyManager {
 
     val currentCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
     survey.respondedPlayers[player.uniqueId.toString()] = currentCount + 1
-    save()
 
     player.sendMessage("<green>アンケートにご協力ありがとうございました！</green>".mm())
 
@@ -310,15 +308,18 @@ object SurveyManager {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd)
       }
       survey.rewardedPlayers[player.uniqueId.toString()] = rewardCount + 1
-      save()
     } else {
       player.sendMessage("<gray>報酬は既に上限回数（${survey.maxRewards}回）受け取っているため、今回は付与されません。</gray>".mm())
     }
 
-    // Log answers
-    plugin.logger.info("Player ${player.name} finished survey ${survey.id}: ${progress.answers}")
-
-    SurveyExporter.saveResult(survey.id, player.uniqueId, player.name, progress.answers)
+    plugin.db.saveAnswer(
+        survey.id,
+        player.uniqueId.toString(),
+        player.name,
+        survey.respondedPlayers.getValue(player.uniqueId.toString()),
+        survey.rewardedPlayers.getOrDefault(player.uniqueId.toString(), 0),
+        progress.answers,
+    )
     SurveyExporter.sendDiscordNotification(survey, player, progress.answers)
   }
 }

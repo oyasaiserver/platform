@@ -1,13 +1,10 @@
 package io.oyasai.oyasaiAdminTools.worldborder
 
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
-import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.World
-import org.bukkit.configuration.file.FileConfiguration
-import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
@@ -51,14 +48,7 @@ object WorldBorderManager {
 
   private var borderTask: BukkitTask? = null
 
-  private val ownFile: File
-    get() = File(plugin.dataFolder, "worldborder.yml")
-
-  private val legacyFile: File
-    get() = File(plugin.dataFolder.parentFile, "WorldBorder/config.yml")
-
   fun enable() {
-    plugin.dataFolder.mkdirs()
     load()
     applyAllLoadedWorlds()
     startTimer()
@@ -67,7 +57,6 @@ object WorldBorderManager {
   fun disable() {
     borderTask?.cancel()
     borderTask = null
-    save()
   }
 
   fun reload() {
@@ -99,7 +88,7 @@ object WorldBorderManager {
             shapeRound = previous?.shapeRound,
         )
     borders[worldName] = data
-    save()
+    plugin.db.saveBorder(worldName, data)
     Bukkit.getWorld(worldName)?.let { applyToWorld(it) }
     return data
   }
@@ -112,7 +101,7 @@ object WorldBorderManager {
   fun removeBorder(worldName: String): Boolean {
     val removed = borders.remove(worldName) != null
     if (removed) {
-      save()
+      plugin.db.deleteBorder(worldName)
       Bukkit.getWorld(worldName)?.worldBorder?.reset()
     }
     return removed
@@ -178,89 +167,17 @@ object WorldBorderManager {
 
   private fun load() {
     borders.clear()
-    val own = ownFile
-    val ownCfg = if (own.exists()) YamlConfiguration.loadConfiguration(own) else null
-    val ownWorlds = ownCfg?.getConfigurationSection("worlds")?.getKeys(false)
-
-    if (ownCfg != null && !ownWorlds.isNullOrEmpty()) {
-      loadFrom(ownCfg)
-      plugin.logger.info("Loaded ${borders.size} world borders from ${own.name}")
-      return
-    }
-
-    if (legacyFile.exists()) {
-      loadFrom(YamlConfiguration.loadConfiguration(legacyFile))
-      save()
-      plugin.logger.info(
-          "Migrated ${borders.size} world borders from WorldBorder/config.yml to ${own.name}"
-      )
-      return
-    }
-
-    if (ownCfg != null) {
-      loadFrom(ownCfg)
-    }
-    save()
-    plugin.logger.info("No world borders configured yet (${own.name})")
-  }
-
-  private fun loadFrom(cfg: FileConfiguration) {
-    message = cfg.getString("message") ?: DEFAULT_MESSAGE
-    roundBorder = cfg.getBoolean("round-border", false)
-    whooshEffect = cfg.getBoolean("whoosh-effect", true)
-    portalRedirection = cfg.getBoolean("portal-redirection", true)
-    knockBack = cfg.getDouble("knock-back-dist", DEFAULT_KNOCKBACK)
-    timerDelayTicks = cfg.getInt("timer-delay-ticks", DEFAULT_TIMER_TICKS).coerceAtLeast(1)
-    denyEnderpearl = cfg.getBoolean("deny-enderpearl", true)
-
-    val worlds = cfg.getConfigurationSection("worlds") ?: return
-    for (rawName in worlds.getKeys(false)) {
-      val section = worlds.getConfigurationSection(rawName) ?: continue
-      val worldName = rawName.replace("<", ".")
-      val radiusX: Int
-      val radiusZ: Int
-      if (section.isSet("radius") && !section.isSet("radiusX")) {
-        val radius = section.getInt("radius")
-        radiusX = radius
-        radiusZ = radius
-      } else {
-        radiusX = section.getInt("radiusX", 0)
-        radiusZ = section.getInt("radiusZ", 0)
-      }
-      val shapeRound =
-          if (section.contains("shape-round")) section.getBoolean("shape-round") else null
-      borders[worldName] =
-          WorldBorderData(
-              x = section.getDouble("x", 0.0),
-              z = section.getDouble("z", 0.0),
-              radiusX = radiusX,
-              radiusZ = radiusZ,
-              shapeRound = shapeRound,
-          )
-    }
-  }
-
-  fun save() {
-    plugin.dataFolder.mkdirs()
-    val yaml = YamlConfiguration()
-    yaml.set("cfg-version", 12)
-    yaml.set("message", message)
-    yaml.set("round-border", roundBorder)
-    yaml.set("whoosh-effect", whooshEffect)
-    yaml.set("portal-redirection", portalRedirection)
-    yaml.set("knock-back-dist", knockBack)
-    yaml.set("timer-delay-ticks", timerDelayTicks)
-    yaml.set("deny-enderpearl", denyEnderpearl)
-
-    for ((name, border) in borders) {
-      val key = name.replace(".", "<")
-      yaml.set("worlds.$key.x", border.x)
-      yaml.set("worlds.$key.z", border.z)
-      yaml.set("worlds.$key.radiusX", border.radiusX)
-      yaml.set("worlds.$key.radiusZ", border.radiusZ)
-      border.shapeRound?.let { yaml.set("worlds.$key.shape-round", it) }
-    }
-    yaml.save(ownFile)
+    plugin.reloadConfig()
+    val cfg = plugin.config
+    message = cfg.getString("worldborder.message", DEFAULT_MESSAGE) ?: DEFAULT_MESSAGE
+    roundBorder = cfg.getBoolean("worldborder.round-border", false)
+    whooshEffect = cfg.getBoolean("worldborder.whoosh-effect", true)
+    portalRedirection = cfg.getBoolean("worldborder.portal-redirection", true)
+    knockBack = cfg.getDouble("worldborder.knock-back-dist", DEFAULT_KNOCKBACK)
+    timerDelayTicks =
+        cfg.getInt("worldborder.timer-delay-ticks", DEFAULT_TIMER_TICKS).coerceAtLeast(1)
+    denyEnderpearl = cfg.getBoolean("worldborder.deny-enderpearl", true)
+    borders.putAll(plugin.db.loadBorders())
   }
 
   private fun applyAllLoadedWorlds() {

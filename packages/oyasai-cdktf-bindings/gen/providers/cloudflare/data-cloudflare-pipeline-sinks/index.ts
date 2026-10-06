@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_sinks
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_sinks
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,23 +10,23 @@ export interface DataCloudflarePipelineSinksConfig extends cdktf.TerraformMetaAr
   /**
   * Specifies the public ID of the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_sinks#account_id DataCloudflarePipelineSinks#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_sinks#account_id DataCloudflarePipelineSinks#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_sinks#max_items DataCloudflarePipelineSinks#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_sinks#max_items DataCloudflarePipelineSinks#max_items}
   */
   readonly maxItems?: number;
   /**
   * Filters sinks by name (case-insensitive substring).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_sinks#name DataCloudflarePipelineSinks#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_sinks#name DataCloudflarePipelineSinks#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_sinks#pipeline_id DataCloudflarePipelineSinks#pipeline_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_sinks#pipeline_id DataCloudflarePipelineSinks#pipeline_id}
   */
   readonly pipelineId?: string;
 }
@@ -488,85 +488,6 @@ export class DataCloudflarePipelineSinksResultSchemaFieldsList extends cdktf.Com
     return new DataCloudflarePipelineSinksResultSchemaFieldsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
-export interface DataCloudflarePipelineSinksResultSchemaFormat {
-}
-
-export function dataCloudflarePipelineSinksResultSchemaFormatToTerraform(struct?: DataCloudflarePipelineSinksResultSchemaFormat): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  return {
-  }
-}
-
-
-export function dataCloudflarePipelineSinksResultSchemaFormatToHclTerraform(struct?: DataCloudflarePipelineSinksResultSchemaFormat): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  const attrs = {
-  };
-  return attrs;
-}
-
-export class DataCloudflarePipelineSinksResultSchemaFormatOutputReference extends cdktf.ComplexObject {
-  private isEmptyObject = false;
-
-  /**
-  * @param terraformResource The parent resource
-  * @param terraformAttribute The attribute on the parent resource this class is referencing
-  */
-  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
-    super(terraformResource, terraformAttribute, false);
-  }
-
-  public get internalValue(): DataCloudflarePipelineSinksResultSchemaFormat | undefined {
-    let hasAnyValues = this.isEmptyObject;
-    const internalValueResult: any = {};
-    return hasAnyValues ? internalValueResult : undefined;
-  }
-
-  public set internalValue(value: DataCloudflarePipelineSinksResultSchemaFormat | undefined) {
-    if (value === undefined) {
-      this.isEmptyObject = false;
-    }
-    else {
-      this.isEmptyObject = Object.keys(value).length === 0;
-    }
-  }
-
-  // compression - computed: true, optional: false, required: false
-  public get compression() {
-    return this.getStringAttribute('compression');
-  }
-
-  // decimal_encoding - computed: true, optional: false, required: false
-  public get decimalEncoding() {
-    return this.getStringAttribute('decimal_encoding');
-  }
-
-  // row_group_bytes - computed: true, optional: false, required: false
-  public get rowGroupBytes() {
-    return this.getNumberAttribute('row_group_bytes');
-  }
-
-  // timestamp_format - computed: true, optional: false, required: false
-  public get timestampFormat() {
-    return this.getStringAttribute('timestamp_format');
-  }
-
-  // type - computed: true, optional: false, required: false
-  public get type() {
-    return this.getStringAttribute('type');
-  }
-
-  // unstructured - computed: true, optional: false, required: false
-  public get unstructured() {
-    return this.getBooleanAttribute('unstructured');
-  }
-}
 export interface DataCloudflarePipelineSinksResultSchema {
 }
 
@@ -620,12 +541,6 @@ export class DataCloudflarePipelineSinksResultSchemaOutputReference extends cdkt
   private _fields = new DataCloudflarePipelineSinksResultSchemaFieldsList(this, "fields", false);
   public get fields() {
     return this._fields;
-  }
-
-  // format - computed: true, optional: false, required: false
-  private _format = new DataCloudflarePipelineSinksResultSchemaFormatOutputReference(this, "format");
-  public get format() {
-    return this._format;
   }
 
   // inferred - computed: true, optional: false, required: false
@@ -748,7 +663,7 @@ export class DataCloudflarePipelineSinksResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_sinks cloudflare_pipeline_sinks}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_sinks cloudflare_pipeline_sinks}
 */
 export class DataCloudflarePipelineSinks extends cdktf.TerraformDataSource {
 
@@ -764,7 +679,7 @@ export class DataCloudflarePipelineSinks extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflarePipelineSinks resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflarePipelineSinks to import
-  * @param importFromId The id of the existing DataCloudflarePipelineSinks that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_sinks#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflarePipelineSinks that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_sinks#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflarePipelineSinks to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -776,7 +691,7 @@ export class DataCloudflarePipelineSinks extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/pipeline_sinks cloudflare_pipeline_sinks} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_sinks cloudflare_pipeline_sinks} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -787,7 +702,7 @@ export class DataCloudflarePipelineSinks extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_pipeline_sinks',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.24.0'
+        providerVersion: '5.25.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

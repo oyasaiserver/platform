@@ -10,5 +10,5 @@ softdepend:
   - TokenManager
   - Vault
   - LuckPerms
-  - Essentials
+  - OyasaiUtilities
   - DynamicProfile

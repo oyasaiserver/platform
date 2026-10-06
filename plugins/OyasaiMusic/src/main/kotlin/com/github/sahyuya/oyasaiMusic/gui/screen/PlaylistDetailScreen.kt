@@ -30,8 +30,6 @@ private constructor(
     // サヒュヤ氏の指示: 5×8フル(40スロット)、slot1(左上)から詰めて表示する。
     val SLOTS: List<Int> = ContentGrid.SLOTS
     private const val PAGE_SIZE = 40
-    /** 曲間の間隔: 0.75秒。 */
-    private const val ADVANCE_DELAY_TICKS = 15L
 
     fun forFavorites(plugin: OyasaiMusic, menuManager: MenuManager, viewer: Player) =
         PlaylistDetailScreen(plugin, menuManager, viewer, null)
@@ -45,12 +43,11 @@ private constructor(
   }
 
   private var songs: List<Song> = emptyList()
+  private var listRevision = 0L
   private var page = 0
   private var pendingRemoveSongId: Long? = null
-  private var autoPlayIndex = 0
   private var draggingSongId: Long? = null
   private var draggingFromIndex: Int? = null
-  private var pendingAdvanceTask: org.bukkit.scheduler.BukkitTask? = null
 
   init {
     reload(autoPlayFirst = true)
@@ -75,6 +72,20 @@ private constructor(
                   .runTask(
                       plugin,
                       Runnable {
+                        if (songs.map { it.id } != list.map { it.id }) {
+                          val oldRevision = listRevision++
+                          val ids =
+                              list
+                                  .filter { it.published || it.authorUuid == viewer.uniqueId }
+                                  .mapNotNull { it.id }
+                          plugin.playbackController.updateList(
+                              viewer,
+                              this to oldRevision,
+                              this to listRevision,
+                          ) {
+                            ids
+                          }
+                        }
                         songs = list
                         page = page.coerceAtMost(((songs.size - 1).coerceAtLeast(0)) / PAGE_SIZE)
                         render()
@@ -175,12 +186,6 @@ private constructor(
             page++
             render()
           }
-      ControllerSlots.PREV_SONG -> {
-        if (songs.isEmpty()) return
-        val prevIndex = (autoPlayIndex - 1).let { if (it < 0) songs.size - 1 else it }
-        playIndex(prevIndex, delayTicks = ADVANCE_DELAY_TICKS)
-      }
-      ControllerSlots.NEXT_SONG -> scheduleAdvance()
       else -> {
         if (plugin.playbackController.handleControllerClick(slot, viewer)) return
         if (index == -1) return
@@ -288,68 +293,16 @@ private constructor(
         )
   }
 
-  private fun playIndex(index: Int, delayTicks: Long = 0) {
+  private fun playIndex(index: Int) {
     val song = songs.getOrNull(index) ?: return
-    autoPlayIndex = index
-    pendingAdvanceTask?.cancel()
-    pendingAdvanceTask = null
-    if (delayTicks <= 0) {
-      plugin.playbackController.play(viewer, song, onCompletion = { scheduleAdvance() })
-    } else {
-      pendingAdvanceTask =
-          Bukkit.getScheduler()
-              .runTaskLater(
-                  plugin,
-                  Runnable {
-                    pendingAdvanceTask = null
-                    plugin.playbackController.play(
-                        viewer,
-                        song,
-                        onCompletion = { scheduleAdvance() },
-                    )
-                  },
-                  delayTicks,
-              )
+    val ids = songs.filter { it.published || it.authorUuid == viewer.uniqueId }.mapNotNull { it.id }
+    plugin.playbackController.playList(
+        viewer,
+        song,
+        key = this to listRevision,
+        sequential = true,
+    ) {
+      ids
     }
-  }
-
-  /**
-   * UI/UX設計書6章「以降は設定順に順次再生」への対応。末尾まで再生したらループ設定に従う。 シャッフルONの場合は次の曲をランダムに選ぶ（サヒュヤ氏の指示「シャッフル、ループ機能」対応）。
-   * 曲と曲の間には約1秒の間隔を空ける（サヒュヤ氏の指示）。
-   */
-  private fun scheduleAdvance() {
-    if (songs.isEmpty()) return
-    pendingAdvanceTask?.cancel()
-    pendingAdvanceTask =
-        Bukkit.getScheduler()
-            .runTaskLater(
-                plugin,
-                Runnable {
-                  pendingAdvanceTask = null
-                  // 曲間待機中に切り替えたループ/シャッフル設定を、ここで改めて反映する。
-                  val nextIndex =
-                      resolveNextIndex(plugin.controllerStateService.stateFor(viewer.uniqueId))
-                          ?: return@Runnable
-                  playIndex(nextIndex)
-                },
-                ADVANCE_DELAY_TICKS,
-            )
-  }
-
-  private fun resolveNextIndex(
-      state: com.github.sahyuya.oyasaiMusic.gui.PlayerControllerState
-  ): Int? {
-    if (state.loopMode == LoopMode.SINGLE) return autoPlayIndex
-    if (state.shuffle) {
-      if (songs.size == 1) return if (state.loopMode != LoopMode.OFF) 0 else null
-      var next: Int
-      do {
-        next = songs.indices.random()
-      } while (next == autoPlayIndex)
-      return next
-    }
-    val nextIndex = autoPlayIndex + 1
-    if (nextIndex < songs.size) return nextIndex
-    return if (state.loopMode == LoopMode.LIST) 0 else null
   }
 }

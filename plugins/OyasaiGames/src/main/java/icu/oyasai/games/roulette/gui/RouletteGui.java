@@ -66,11 +66,12 @@ public class RouletteGui {
 
         RouletteMode currentMode = session.getSelectedMode();
         int currentCount = session.getSelectedCount();
+        boolean hasSpecial = session.hasSpecialAccess();
 
         // 2. モード選択ボタン（表示順厳守：全建築用 ➜ フルブロック ➜ それ以外）
-        inv.setItem(SLOT_MODE_ALL, createModeItem(RouletteMode.ALL, currentMode == RouletteMode.ALL));
-        inv.setItem(SLOT_MODE_FULL, createModeItem(RouletteMode.FULL_BLOCK, currentMode == RouletteMode.FULL_BLOCK));
-        inv.setItem(SLOT_MODE_NON_FULL, createModeItem(RouletteMode.NON_FULL_BLOCK, currentMode == RouletteMode.NON_FULL_BLOCK));
+        inv.setItem(SLOT_MODE_ALL, createModeItem(RouletteMode.ALL, currentMode == RouletteMode.ALL, hasSpecial));
+        inv.setItem(SLOT_MODE_FULL, createModeItem(RouletteMode.FULL_BLOCK, currentMode == RouletteMode.FULL_BLOCK, hasSpecial));
+        inv.setItem(SLOT_MODE_NON_FULL, createModeItem(RouletteMode.NON_FULL_BLOCK, currentMode == RouletteMode.NON_FULL_BLOCK, hasSpecial));
 
         // 3. 回数選択ボタン（1回, 3回, 5回）
         inv.setItem(SLOT_COUNT_1, createCountItem(1, currentCount == 1));
@@ -216,7 +217,7 @@ public class RouletteGui {
         ));
     }
 
-    private static ItemStack createModeItem(RouletteMode mode, boolean isSelected) {
+    private static ItemStack createModeItem(RouletteMode mode, boolean isSelected, boolean hasSpecialAccess) {
         ItemStack item = new ItemStack(mode.getIconMaterial());
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -226,6 +227,14 @@ public class RouletteGui {
 
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text(mode.getDescription(), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.empty());
+
+            // 匠特典 / ロック中の表示
+            if (hasSpecialAccess) {
+                lore.add(Component.text("✨ 匠特典: コマンドブロック等の特殊アイテム解放中！", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
+            } else {
+                lore.add(Component.text("🔒 匠限定ブロック（コマブロ等）: ロック中", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
+            }
             lore.add(Component.empty());
 
             if (isSelected) {
@@ -292,6 +301,18 @@ public class RouletteGui {
             lore.add(Component.text("・公開設定　：", NamedTextColor.GRAY)
                     .append(Component.text(session.isBroadcastToAll() ? "全体公開" : "自分のみ（非公開）", session.isBroadcastToAll() ? NamedTextColor.GREEN : NamedTextColor.AQUA, TextDecoration.BOLD))
                     .decoration(TextDecoration.ITALIC, false));
+
+            // 匠特典 / ロック中ステータス
+            if (session.hasSpecialAccess()) {
+                lore.add(Component.text("・特殊ブロック：", NamedTextColor.GRAY)
+                        .append(Component.text("✨ 匠特典: コマンドブロック等の特殊アイテム解放中！", NamedTextColor.YELLOW, TextDecoration.BOLD))
+                        .decoration(TextDecoration.ITALIC, false));
+            } else {
+                lore.add(Component.text("・特殊ブロック：", NamedTextColor.GRAY)
+                        .append(Component.text("🔒 匠限定ブロック: ロック中", NamedTextColor.RED))
+                        .decoration(TextDecoration.ITALIC, false));
+            }
+
             lore.add(Component.empty());
             lore.add(Component.text("右下のトーチをクリックすると抽選を開始します！", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
 

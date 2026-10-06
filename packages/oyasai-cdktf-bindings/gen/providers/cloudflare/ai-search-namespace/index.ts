@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,21 +8,21 @@ import * as cdktf from 'cdktf';
 
 export interface AiSearchNamespaceConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#account_id AiSearchNamespace#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#account_id AiSearchNamespace#account_id}
   */
   readonly accountId: string;
   /**
   * Optional description for the namespace. Max 256 characters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#description AiSearchNamespace#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#description AiSearchNamespace#description}
   */
   readonly description?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#name AiSearchNamespace#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#name AiSearchNamespace#name}
   */
   readonly name: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#public_endpoint_params AiSearchNamespace#public_endpoint_params}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#public_endpoint_params AiSearchNamespace#public_endpoint_params}
   */
   readonly publicEndpointParams?: AiSearchNamespacePublicEndpointParams;
 }
@@ -30,7 +30,7 @@ export interface AiSearchNamespacePublicEndpointParamsChatCompletionsEndpoint {
   /**
   * Disable chat completions endpoint for this public endpoint
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#disabled AiSearchNamespace#disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#disabled AiSearchNamespace#disabled}
   */
   readonly disabled?: boolean | cdktf.IResolvable;
 }
@@ -124,13 +124,13 @@ export class AiSearchNamespacePublicEndpointParamsChatCompletionsEndpointOutputR
 }
 export interface AiSearchNamespacePublicEndpointParamsMcp {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#description AiSearchNamespace#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#description AiSearchNamespace#description}
   */
   readonly description?: string;
   /**
   * Disable MCP endpoint for this public endpoint
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#disabled AiSearchNamespace#disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#disabled AiSearchNamespace#disabled}
   */
   readonly disabled?: boolean | cdktf.IResolvable;
 }
@@ -253,17 +253,17 @@ export class AiSearchNamespacePublicEndpointParamsMcpOutputReference extends cdk
 }
 export interface AiSearchNamespacePublicEndpointParamsRateLimit {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#period_ms AiSearchNamespace#period_ms}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#period_ms AiSearchNamespace#period_ms}
   */
   readonly periodMs?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#requests AiSearchNamespace#requests}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#requests AiSearchNamespace#requests}
   */
   readonly requests?: number;
   /**
   * Available values: "fixed", "sliding".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#technique AiSearchNamespace#technique}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#technique AiSearchNamespace#technique}
   */
   readonly technique?: string;
 }
@@ -417,7 +417,7 @@ export interface AiSearchNamespacePublicEndpointParamsSearchEndpoint {
   /**
   * Disable search endpoint for this public endpoint
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#disabled AiSearchNamespace#disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#disabled AiSearchNamespace#disabled}
   */
   readonly disabled?: boolean | cdktf.IResolvable;
 }
@@ -511,45 +511,45 @@ export class AiSearchNamespacePublicEndpointParamsSearchEndpointOutputReference 
 }
 export interface AiSearchNamespacePublicEndpointParams {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#authorized_hosts AiSearchNamespace#authorized_hosts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#authorized_hosts AiSearchNamespace#authorized_hosts}
   */
   readonly authorizedHosts?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#chat_completions_endpoint AiSearchNamespace#chat_completions_endpoint}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#chat_completions_endpoint AiSearchNamespace#chat_completions_endpoint}
   */
   readonly chatCompletionsEndpoint?: AiSearchNamespacePublicEndpointParamsChatCompletionsEndpoint;
   /**
   * Custom domain hostnames that alias this public endpoint. GET and create responses return the current set; on update (PUT) this field is only echoed back when supplied in the request body, otherwise it is null (omit it to leave domains unchanged).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#custom_domains AiSearchNamespace#custom_domains}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#custom_domains AiSearchNamespace#custom_domains}
   */
   readonly customDomains?: string[];
   /**
   * When false, the instance is reachable only via a registered custom domain and the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404. Requires at least one custom domain. Defaults to true. public_endpoint_params is replaced wholesale on update, so resend default_domain_enabled on every update to keep the default host off — omitting it resets to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#default_domain_enabled AiSearchNamespace#default_domain_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#default_domain_enabled AiSearchNamespace#default_domain_enabled}
   */
   readonly defaultDomainEnabled?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#enabled AiSearchNamespace#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#enabled AiSearchNamespace#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Instance IDs exposed through the namespace public endpoint. Empty means nothing is searchable. Every ID must be an existing instance in this namespace, and the list cannot exceed the account's multi-instance search limit.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#instances_allowed AiSearchNamespace#instances_allowed}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#instances_allowed AiSearchNamespace#instances_allowed}
   */
   readonly instancesAllowed?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#mcp AiSearchNamespace#mcp}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#mcp AiSearchNamespace#mcp}
   */
   readonly mcp?: AiSearchNamespacePublicEndpointParamsMcp;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#rate_limit AiSearchNamespace#rate_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#rate_limit AiSearchNamespace#rate_limit}
   */
   readonly rateLimit?: AiSearchNamespacePublicEndpointParamsRateLimit;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#search_endpoint AiSearchNamespace#search_endpoint}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#search_endpoint AiSearchNamespace#search_endpoint}
   */
   readonly searchEndpoint?: AiSearchNamespacePublicEndpointParamsSearchEndpoint;
 }
@@ -875,7 +875,7 @@ export class AiSearchNamespacePublicEndpointParamsOutputReference extends cdktf.
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace cloudflare_ai_search_namespace}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace cloudflare_ai_search_namespace}
 */
 export class AiSearchNamespace extends cdktf.TerraformResource {
 
@@ -891,7 +891,7 @@ export class AiSearchNamespace extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AiSearchNamespace resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AiSearchNamespace to import
-  * @param importFromId The id of the existing AiSearchNamespace that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AiSearchNamespace that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AiSearchNamespace to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -903,7 +903,7 @@ export class AiSearchNamespace extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/ai_search_namespace cloudflare_ai_search_namespace} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_namespace cloudflare_ai_search_namespace} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -914,7 +914,7 @@ export class AiSearchNamespace extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_ai_search_namespace',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.24.0'
+        providerVersion: '5.25.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

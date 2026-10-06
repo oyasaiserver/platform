@@ -93,25 +93,19 @@ class SearchMenuScreen(
                         menuManager,
                         viewer,
                         title = "題名検索: $text",
+                        playbackIds = { sort ->
+                          plugin.songRepository.listPlaybackIds(sort, titleLike = text)
+                        },
                         availableSorts =
                             listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
                         initialSort = SongSort.CREATED_AT_DESC,
                     ) { sort, limit, offset ->
-                      MainMenuScreens.mergeOwnDrafts(
-                          plugin,
-                          viewer,
-                          offset,
-                          limit,
-                          titleFilter = text,
+                      plugin.songRepository.searchPublished(
+                          titleLike = text,
                           sort = sort,
-                      ) { o, l ->
-                        plugin.songRepository.searchPublished(
-                            titleLike = text,
-                            sort = sort,
-                            limit = l,
-                            offset = o,
-                        )
-                      }
+                          limit = limit,
+                          offset = offset,
+                      )
                     },
                     false,
                 )

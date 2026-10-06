@@ -11,12 +11,6 @@
       "type": "modrinth"
     }
   },
-  "crackshotguns": {
-    "paper": {
-      "id": 48301,
-      "type": "spiget"
-    }
-  },
   "decentholograms": {
     "paper": {
       "slug": "decentholograms",
@@ -91,25 +85,6 @@
       "type": "modrinth"
     }
   },
-  "pvparena": {
-    "paper": {
-      "id": 16584,
-      "type": "spiget"
-    }
-  },
-  "sba": {
-    "paper": {
-      "skipVersionCheck": true,
-      "slug": "sba",
-      "type": "modrinth"
-    }
-  },
-  "screamingbedwars": {
-    "paper": {
-      "slug": "screamingbedwars",
-      "type": "modrinth"
-    }
-  },
   "signshop": {
     "paper": {
       "id": 10997,
@@ -120,18 +95,6 @@
     "paper": {
       "slug": "skript",
       "type": "modrinth"
-    }
-  },
-  "slotmachine": {
-    "paper": {
-      "id": 22023,
-      "type": "spiget"
-    }
-  },
-  "tntruneloaded": {
-    "paper": {
-      "id": 53359,
-      "type": "spiget"
     }
   },
   "vault": {
