@@ -1,11 +1,8 @@
 # docs について
 
-この `docs/` フォルダーは、OyasaiServer の `platform` リポジトリで使う公開ドキュメント置き場です。中身は2つの区画に分かれています。
+この `docs/` フォルダーは、OyasaiServer の `platform` リポジトリで使う公開ドキュメント置き場です。開発者と AI エージェントが読む場所で、中身は [`dev/`](dev/projects/INDEX.md) にまとめています。各プラグイン・ツールの入口、作業手順、運用知識を置き、AI が迷わず開発を進められるようにします。
 
-| 区画 | 読む人 | 役割 |
-|---|---|---|
-| [`wiki/`](wiki/_MANIFEST.md) | プレイヤー | おやさいサーバーの遊び方・ルール・機能の説明。oyasai.io で公開する |
-| [`dev/`](dev/projects/INDEX.md) | 開発者と AI エージェント | 各プラグイン・ツールの入口、作業手順、運用知識。AI が迷わず開発を進めるための場所 |
+プレイヤー向けの Wiki は別リポジトリ [`oyasaiserver/wiki`](https://github.com/oyasaiserver/wiki) にあります（[oyasai-wiki](dev/projects/web/oyasai-wiki/PROJECT.md)）。
 
 個人情報、秘密情報、非公開のサーバー詳細、生ログ、個人的な作業メモはここに置きません。公開してよい内容だけを残します。
 
@@ -19,24 +16,20 @@
 flowchart TD
   Readme["README.md<br/>人間向けの全体説明"]
   Root["_MANIFEST.md<br/>憲法と地図<br/>AI が最初に読む"]
-  Wiki["wiki/<br/>プレイヤー向け Wiki"]
   Workflows["dev/WORKFLOWS.md<br/>共通手順"]
   Projects["dev/projects/<br/>プロジェクト別の入口"]
   Guides["dev/guides/<br/>横断的な運用知識"]
   Archive["dev/archive/<br/>公開できる過去資料"]
   Local["local/<br/>Git管理外のローカルメモ"]
   Impl["plugins/ / packages/ / nix/<br/>実装の正本"]
-  Site["oyasai.io"]
 
   Readme --> Root
-  Root --> Wiki
   Root --> Workflows
   Root --> Projects
   Root --> Guides
   Root --> Archive
   Root --> Local
   Projects --> Impl
-  Wiki --> Site
 ```
 
 ## ページ同士のつながり
@@ -51,7 +44,6 @@ flowchart TD
 
 | 場所 | Git追跡 | 用途 |
 |---|---:|---|
-| `docs/wiki/` | あり | プレイヤー向けの公開ページ |
 | `docs/dev/` | あり | 開発者と AI 向けの公開コンテキスト |
 | `docs/local/` | なし | 非公開、ローカル依存、生ログ、判断保留のメモ。生成物の退避先 |
 | ルート `local/` | なし | ローカルサーバーや実行時データ |
@@ -73,7 +65,7 @@ AI が次回からよりよく動くための知識は [`dev/guides/ops/agentic-
 
 | 内容 | 置き場所 |
 |---|---|
-| プレイヤーに伝えたい説明 | `wiki/` |
+| プレイヤーに伝えたい説明 | 別リポジトリ [`oyasaiserver/wiki`](https://github.com/oyasaiserver/wiki) |
 | 特定プロジェクトの状態・設計の理由 | 該当する `dev/projects/.../PROJECT.md` |
 | 何度も使う作業手順 | [`dev/WORKFLOWS.md`](dev/WORKFLOWS.md) または `dev/guides/ops/` |
 | AI が次回から守るべき訂正 | `dev/guides/ops/agentic-learning-loop/corrections.md` |

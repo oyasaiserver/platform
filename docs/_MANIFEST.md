@@ -41,7 +41,6 @@ docs/
   _MANIFEST.md     This file. Constitution and map. Protected.
   README.md        Human-readable overview.
   AGENTS.md / CLAUDE.md / GEMINI.md   Thin entrypoints that point here.
-  wiki/            Player-facing wiki. Published to oyasai.io.
   dev/             AI-driven development area.
     WORKFLOWS.md   Shared agent procedures.
     check_links.py Broken-link and orphan checker.
@@ -65,7 +64,7 @@ it defines how corrections and reusable rules are kept for future agents.
 | Add or update a project page | [dev/projects/_MANIFEST.md](dev/projects/_MANIFEST.md) |
 | Update ops runbooks or tool guides | [dev/guides/_MANIFEST.md](dev/guides/_MANIFEST.md) |
 | Deploy or run the local server | [deploy](dev/guides/ops/deploy.md), [local server](dev/guides/ops/local-server.md) |
-| Write or edit player-facing wiki pages | [wiki/_MANIFEST.md](wiki/_MANIFEST.md) |
+| Write or edit player-facing wiki pages | [oyasai-wiki](dev/projects/web/oyasai-wiki/PROJECT.md) (separate repository `oyasaiserver/wiki`) |
 | Route agent memory or corrections | [memory routing](dev/guides/ops/agentic-learning-loop/memory-routing.md) |
 | Check old public docs | [dev/archive/_MANIFEST.md](dev/archive/_MANIFEST.md) |
 
@@ -78,7 +77,7 @@ otherwise.
 - Plugin implementation: `plugins/*/`
 - Packages and infrastructure: `packages/*/`, `nix/`, `flake.nix`, `build.gradle.kts`
 - Project context and navigation: `docs/dev/projects/<category>/<project>/PROJECT.md`
-- Player-facing explanations: `docs/wiki/`
+- Player-facing explanations: the separate [`oyasaiserver/wiki`](https://github.com/oyasaiserver/wiki) repository
 
 ## Links
 

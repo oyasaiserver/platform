@@ -1,44 +1,37 @@
 ---
 title: "oyasai-wiki"
-category: tool
+category: web
 status: active
 owner: marzipan99
-source_of_truth: "~/Desktop/Nexus/01_Projects/oyasai-wiki/"
-related_paths: []
-last_validated: "2026-05-20"
+source_of_truth: "https://github.com/oyasaiserver/wiki"
+related_paths:
+  - packages/oyasai-cdktf/src/stacks/platform-infra.ts
+last_validated: "2026-10-06"
 agent_task: null
+project_kind: web
+runtime_kind: static-site
+minecraft_related: true
 ---
 
 # oyasai-wiki
 
 ## 概要
 
-おやさいサーバーの静的Wikiサイト。HTML/JSで構築されており、サーバーのルール・機能・コマンドなどをプレイヤー向けに提供する。
+おやさいサーバーのプレイヤー向け Wiki。原稿は別リポジトリ [`oyasaiserver/wiki`](https://github.com/oyasaiserver/wiki) の Markdown で、MkDocs（Material）でサイトにする。人は Decap CMS の編集画面から、AI はブランチと PR で編集する。どちらも PR を通って `main` に入る。
 
-## ディレクトリ構成
+今の公開中の Wiki は `wiki.oyasai.io`（Seesaa Wiki）。ページは順に新しいリポジトリへ移す。
 
-```
-oyasai-wiki/
-├── index.html          # エントリーポイント
-├── content/            # Wikiページコンテンツ
-├── assets/             # 画像・スタイルシート
-└── scripts/            # クライアントサイドJS
-```
-
-## 使用方法
-
-静的ファイルをWebサーバー（Nginx等）またはGitHub Pagesでホスト。  
-`index.html` をブラウザで直接開いてもローカル確認可能。
-
-## 技術仕様
+## AI 作業入口
 
 | 項目 | 内容 |
-|------|------|
-| 技術スタック | HTML / JavaScript / CSS |
-| ホスティング | 静的サイト（サーバーレス） |
-| ビルドツール | 不要（純粋な静的ファイル） |
+|---|---|
+| 実装の正本 | [`oyasaiserver/wiki`](https://github.com/oyasaiserver/wiki)。最初に読むのはそのリポジトリの `AGENTS.md` |
+| 事実の出どころ | プラグインの機能・コマンド・権限は、この platform リポジトリの各 `PROJECT.md` と `plugins/<Plugin>/` |
+| DNS | `wiki.oyasai.io` の DNS は platform の cdktf（`packages/oyasai-cdktf/src/stacks/platform-infra.ts`）で管理。今は Seesaa への CNAME |
+| 公開先 | 未定 |
+| 非公開メモの扱い | Wiki にもこのページにも書かない。`docs/local/` へ |
 
 ## つながり
 
-- [移行先のプレイヤー向け Wiki（docs/wiki）](../../../../wiki/_MANIFEST.md)
+- [oyasaiserver/wiki](https://github.com/oyasaiserver/wiki) — 原稿のリポジトリ
 - [プロジェクト一覧](../../INDEX.md)
