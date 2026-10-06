@@ -17,16 +17,17 @@ object MainMenuScreens {
           availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
           initialSort = SongSort.CREATED_AT_DESC,
           ownTab = NavTab.MY_SONGS,
-          playbackIds = { sort ->
-            plugin.songRepository.listPlaybackIds(sort, viewer.uniqueId, includeDrafts = true)
+          playbackIds = { sort, access ->
+            plugin.songRepository.visibleIds(access, sort, viewer.uniqueId, drafts = true)
           },
-      ) { sort, limit, offset ->
-        plugin.songRepository.findByAuthor(
-            viewer.uniqueId,
-            includeDrafts = true,
-            sort = sort,
-            limit = limit,
-            offset = offset,
+      ) { sort, limit, offset, access ->
+        plugin.songRepository.searchVisible(
+            access,
+            sort,
+            limit,
+            offset,
+            author = viewer.uniqueId,
+            drafts = true,
         )
       }
 
@@ -46,9 +47,9 @@ object MainMenuScreens {
               ),
           initialSort = SongSort.CREATED_AT_DESC,
           ownTab = NavTab.ALL_SONGS,
-          playbackIds = { sort -> plugin.songRepository.listPlaybackIds(sort) },
-      ) { sort, limit, offset ->
-        plugin.songRepository.searchPublished(sort = sort, limit = limit, offset = offset)
+          playbackIds = { sort, access -> plugin.songRepository.visibleIds(access, sort) },
+      ) { sort, limit, offset, access ->
+        plugin.songRepository.searchVisible(access, sort, limit, offset)
       }
 
   fun authorWorks(
@@ -63,16 +64,12 @@ object MainMenuScreens {
           menuManager,
           viewer,
           title = "$authorName の作品",
-          playbackIds = { sort -> plugin.songRepository.listPlaybackIds(sort, authorUuid) },
+          playbackIds = { sort, access ->
+            plugin.songRepository.visibleIds(access, sort, authorUuid)
+          },
           availableSorts = listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
           initialSort = SongSort.CREATED_AT_DESC,
-      ) { sort, limit, offset ->
-        plugin.songRepository.findByAuthor(
-            authorUuid,
-            includeDrafts = false,
-            sort = sort,
-            limit = limit,
-            offset = offset,
-        )
+      ) { sort, limit, offset, access ->
+        plugin.songRepository.searchVisible(access, sort, limit, offset, author = authorUuid)
       }
 }

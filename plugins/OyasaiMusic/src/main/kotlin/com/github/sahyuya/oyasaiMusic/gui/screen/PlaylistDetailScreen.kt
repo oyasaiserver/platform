@@ -72,11 +72,14 @@ private constructor(
                   .runTask(
                       plugin,
                       Runnable {
+                        SongAccess.upgrade(plugin, viewer, list)
+                        val access = SongAccess.snapshot(plugin, viewer)
+                        val list = list.filter { access.canListen(it) }
                         if (songs.map { it.id } != list.map { it.id }) {
                           val oldRevision = listRevision++
                           val ids =
                               list
-                                  .filter { it.published || it.authorUuid == viewer.uniqueId }
+                                  .filter { SongAccess.canListen(plugin, viewer, it) }
                                   .mapNotNull { it.id }
                           plugin.playbackController.updateList(
                               viewer,
@@ -295,7 +298,7 @@ private constructor(
 
   private fun playIndex(index: Int) {
     val song = songs.getOrNull(index) ?: return
-    val ids = songs.filter { it.published || it.authorUuid == viewer.uniqueId }.mapNotNull { it.id }
+    val ids = songs.filter { SongAccess.canListen(plugin, viewer, it) }.mapNotNull { it.id }
     plugin.playbackController.playList(
         viewer,
         song,

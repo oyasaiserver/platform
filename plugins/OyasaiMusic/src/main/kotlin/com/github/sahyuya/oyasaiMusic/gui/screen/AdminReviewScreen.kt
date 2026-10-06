@@ -1,11 +1,9 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
-import com.github.sahyuya.oyasaiMusic.audio.SongAudioFile
 import com.github.sahyuya.oyasaiMusic.db.ReviewSort
 import com.github.sahyuya.oyasaiMusic.model.Song
 import com.github.sahyuya.oyasaiMusic.model.SongStatus
-import java.io.File
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
@@ -98,6 +96,7 @@ class AdminReviewScreen(
         null,
         state,
         sortLabel = sortLabel(currentSort()),
+        sortOptions = AVAILABLE_SORTS.map(::sortLabel),
         viewer = viewer,
         plugin = plugin,
         actionModeCategory = null,
@@ -132,7 +131,12 @@ class AdminReviewScreen(
     val lore =
         mutableListOf(
             Component.text("作者: $authorName", NamedTextColor.GRAY),
-            Component.text("公開: ${if (song.published) "公開中" else "非公開"}", NamedTextColor.GRAY),
+            Component.text(
+                "公開: ${when { song.published -> "公開中"
+ song.limitedPublication -> "限定公開中"
+ else -> "非公開" }}",
+                NamedTextColor.GRAY,
+            ),
             Component.text(
                 "依頼: ${if (song.reviewRequestedAt != null) "あり" else "履歴のみ"}",
                 NamedTextColor.GRAY,
@@ -204,27 +208,8 @@ class AdminReviewScreen(
   }
 
   private fun playSong(song: Song) {
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              val file = File(plugin.audioDirectory, song.fileName)
-              if (!file.exists()) {
-                Bukkit.getScheduler()
-                    .runTask(plugin, Runnable { viewer.sendMessage("§c音源ファイルが見つかりません。") })
-                return@Runnable
-              }
-              val audio = SongAudioFile.read(file)
-              Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        plugin.playbackController.play(viewer, song)
-                        // 試聴のみ目的のため視聴回数・報酬は計上しない（onListenThresholdReachedを渡さない）。
-                      },
-                  )
-            },
-        )
+    if (!hasAccess()) return
+    plugin.playbackController.play(viewer, song, reviewPreview = true)
   }
 
   private fun cycleApproval(song: Song) {

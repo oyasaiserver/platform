@@ -93,15 +93,16 @@ class SearchMenuScreen(
                         menuManager,
                         viewer,
                         title = "題名検索: $text",
-                        playbackIds = { sort ->
-                          plugin.songRepository.listPlaybackIds(sort, titleLike = text)
+                        playbackIds = { sort, access ->
+                          plugin.songRepository.visibleIds(access, sort, title = text)
                         },
                         availableSorts =
                             listOf(SongSort.CREATED_AT_DESC, SongSort.ID_ASC, SongSort.TITLE_ASC),
                         initialSort = SongSort.CREATED_AT_DESC,
-                    ) { sort, limit, offset ->
-                      plugin.songRepository.searchPublished(
-                          titleLike = text,
+                    ) { sort, limit, offset, access ->
+                      plugin.songRepository.searchVisible(
+                          access = access,
+                          title = text,
                           sort = sort,
                           limit = limit,
                           offset = offset,

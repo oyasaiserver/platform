@@ -31,8 +31,8 @@ class SongRepository(private val db: DatabaseManager) {
         conn
             .prepareStatement(
                 """
-                INSERT INTO songs (id, author_uuid, title, created_at, bpm, record_material, price, status, likes, views, file_name, supports_positional, published)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, 0)
+                INSERT INTO songs (id, author_uuid, title, created_at, bpm, record_material, price, status, likes, views, file_name, supports_positional, published, record_identity)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, 0, ?)
                 """
                     .trimIndent()
             )
@@ -47,6 +47,7 @@ class SongRepository(private val db: DatabaseManager) {
               ps.setInt(8, SongStatus.DRAFT.code)
               ps.setString(9, fileName)
               ps.setInt(10, if (supportsPositional) 1 else 0)
+              ps.setString(11, UUID.randomUUID().toString())
               ps.executeUpdate()
               songId
             }
@@ -72,6 +73,99 @@ class SongRepository(private val db: DatabaseManager) {
     }
     return candidate
   }
+
+  fun findByIds(ids: Set<Long>): List<Song> {
+    if (ids.isEmpty()) return emptyList()
+    require(ids.size <= 1000)
+    return db.transaction { conn ->
+      conn
+          .prepareStatement(
+              "SELECT * FROM songs WHERE id IN (" + ids.joinToString(",") { "?" } + ")"
+          )
+          .use { ps ->
+            ids.forEachIndexed { index, id -> ps.setLong(index + 1, id) }
+            ps.executeQuery().use { it.toSongList() }
+          }
+    }
+  }
+
+  fun searchVisible(
+      access: com.github.sahyuya.oyasaiMusic.gui.SongAccess.Snapshot,
+      sort: SongSort,
+      limit: Int,
+      offset: Int,
+      author: UUID? = null,
+      title: String? = null,
+      drafts: Boolean = false,
+  ): List<Song> =
+      visibleQuery(access, sort, limit, offset, author, title, drafts, "*", { toSong() })
+
+  fun visibleIds(
+      access: com.github.sahyuya.oyasaiMusic.gui.SongAccess.Snapshot,
+      sort: SongSort,
+      author: UUID? = null,
+      title: String? = null,
+      drafts: Boolean = false,
+  ): List<Long> =
+      visibleQuery(access, sort, Int.MAX_VALUE, 0, author, title, drafts, "id", { getLong(1) })
+
+  private fun <T> visibleQuery(
+      access: com.github.sahyuya.oyasaiMusic.gui.SongAccess.Snapshot,
+      sort: SongSort,
+      limit: Int,
+      offset: Int,
+      author: UUID?,
+      title: String?,
+      drafts: Boolean,
+      columns: String,
+      row: ResultSet.() -> T,
+  ): List<T> =
+      db.transaction { conn ->
+        require(!drafts || author == access.viewer)
+        val args = mutableListOf<Any>(UuidUtil.toBytes(access.viewer))
+        val rights =
+            access.tokens.entries.map { (id, identities) ->
+              args += id
+              if ("" in identities) "id = ?"
+              else {
+                args.addAll(identities)
+                "(id = ? AND record_identity IN (" + identities.joinToString(",") { "?" } + "))"
+              }
+            }
+        val eligibility =
+            if (drafts) "author_uuid = ?"
+            else
+                "(published = 1 OR (limited_publication = 1 AND (author_uuid = ? OR (collectible = 1 AND (" +
+                    rights.joinToString(" OR ").ifEmpty { "0" } +
+                    ")))))"
+        if (drafts) {
+          args.clear()
+          args.add(UuidUtil.toBytes(access.viewer))
+        }
+        val filters = mutableListOf(eligibility)
+        if (author != null) {
+          filters += "author_uuid = ?"
+          args.add(UuidUtil.toBytes(author))
+        }
+        if (title != null) {
+          filters += "title LIKE ? ESCAPE '\\'"
+          args += "%" + escapeLike(title) + "%"
+        }
+        args += limit
+        args += offset
+        conn
+            .prepareStatement(
+                "SELECT $columns FROM songs WHERE " +
+                    filters.joinToString(" AND ") +
+                    " ORDER BY " +
+                    sort.orderBy +
+                    " LIMIT ? OFFSET ?"
+            )
+            .use { ps ->
+              args.forEachIndexed { index, value -> ps.setObject(index + 1, value) }
+              ps.executeQuery().use { rs -> buildList { while (rs.next()) add(rs.row()) } }
+            }
+      }
 
   fun findById(id: Long): Song? =
       db.transaction { conn ->
@@ -109,60 +203,12 @@ class SongRepository(private val db: DatabaseManager) {
         }
       }
 
-  /** Project only IDs for playback; no Song materialization or per-row follow-up queries. */
-  fun listPlaybackIds(
-      sort: SongSort,
-      authorUuid: UUID? = null,
-      includeDrafts: Boolean = false,
-      titleLike: String? = null,
-  ): List<Long> =
-      db.transaction { conn ->
-        require(!includeDrafts || authorUuid != null)
-        val where = mutableListOf<String>()
-        if (!includeDrafts) where += "published = 1"
-        if (authorUuid != null) where += "author_uuid = ?"
-        if (titleLike != null) where += "title LIKE ? ESCAPE '\\'"
-        conn
-            .prepareStatement(
-                "SELECT id FROM songs WHERE " +
-                    where.joinToString(" AND ") +
-                    " ORDER BY " +
-                    sort.orderBy
-            )
-            .use { ps ->
-              var index = 1
-              if (authorUuid != null) ps.setBytes(index++, UuidUtil.toBytes(authorUuid))
-              if (titleLike != null) ps.setString(index, "%" + escapeLike(titleLike) + "%")
-              ps.executeQuery().use { rs -> buildList { while (rs.next()) add(rs.getLong(1)) } }
-            }
-      }
-
-  /** 公開済み(published=true)の楽曲を条件付きで検索する。 */
-  fun searchPublished(
-      titleLike: String? = null,
-      sort: SongSort = SongSort.CREATED_AT_DESC,
-      limit: Int = 200,
-      offset: Int = 0,
-  ): List<Song> =
-      db.transaction { conn ->
-        val where = StringBuilder("WHERE published = 1")
-        if (titleLike != null) where.append(" AND title LIKE ? ESCAPE '\\'")
-        val sql = "SELECT * FROM songs $where ORDER BY ${sort.orderBy} LIMIT ? OFFSET ?"
-        conn.prepareStatement(sql).use { ps ->
-          var idx = 1
-          if (titleLike != null) ps.setString(idx++, "%${escapeLike(titleLike)}%")
-          ps.setInt(idx++, limit)
-          ps.setInt(idx, offset)
-          ps.executeQuery().use { rs -> rs.toSongList() }
-        }
-      }
-
   /** GUIフェーズで追加: OP専用「審査・履歴管理GUI」用の全楽曲一覧（公開/非公開を問わず全件対象）。 */
   fun listForReview(sort: ReviewSort, limit: Int, offset: Int): List<Song> =
       db.transaction { conn ->
         // 審査依頼済み、または既に判定履歴を持つ楽曲だけを対象にする。
         val sql =
-            "SELECT * FROM songs WHERE published = 1 AND (review_requested_at IS NOT NULL OR status != ?) ORDER BY ${sort.orderBy} LIMIT ? OFFSET ?"
+            "SELECT * FROM songs WHERE (published = 1 OR limited_publication = 1) AND (review_requested_at IS NOT NULL OR status != ?) ORDER BY ${sort.orderBy} LIMIT ? OFFSET ?"
         conn.prepareStatement(sql).use { ps ->
           ps.setInt(1, SongStatus.DRAFT.code)
           ps.setInt(2, limit)
@@ -177,7 +223,7 @@ class SongRepository(private val db: DatabaseManager) {
       db.transaction { conn ->
         conn
             .prepareStatement(
-                "UPDATE songs SET status = ?, review_requested_at = ? WHERE id = ? AND published = 1 AND review_requested_at IS NULL"
+                "UPDATE songs SET status = ?, review_requested_at = ? WHERE id = ? AND (published = 1 OR limited_publication = 1) AND review_requested_at IS NULL"
             )
             .use { ps ->
               ps.setInt(1, SongStatus.TEMP_OK.code)
@@ -212,13 +258,21 @@ class SongRepository(private val db: DatabaseManager) {
       }
 
   /** 公開状態を更新し、初回公開時だけ true を返す。通知済み状態をDBへ永続化するため、 非公開→再公開やサーバー再起動後にも新曲通知が重複しない。 */
-  fun setPublishedAndClaimFirstAnnouncement(id: Long, published: Boolean): Boolean =
+  fun setPublishedAndClaimFirstAnnouncement(
+      id: Long,
+      published: Boolean,
+      limited: Boolean = false,
+  ): Boolean =
       db.transaction { conn ->
         if (!published) {
-          conn.prepareStatement("UPDATE songs SET published = 0 WHERE id = ?").use { ps ->
-            ps.setLong(1, id)
-            ps.executeUpdate()
-          }
+          conn
+              .prepareStatement(
+                  "UPDATE songs SET published = 0, limited_publication = ${if (limited) 1 else 0} WHERE id = ?"
+              )
+              .use { ps ->
+                ps.setLong(1, id)
+                ps.executeUpdate()
+              }
           return@transaction false
         }
         val firstPublish =
@@ -228,7 +282,7 @@ class SongRepository(private val db: DatabaseManager) {
             }
         conn
             .prepareStatement(
-                "UPDATE songs SET published = 1, first_published_at = COALESCE(first_published_at, ?) WHERE id = ?"
+                "UPDATE songs SET published = 1, limited_publication = 0, first_published_at = COALESCE(first_published_at, ?) WHERE id = ?"
             )
             .use { ps ->
               ps.setLong(1, System.currentTimeMillis() / 1000)
@@ -238,6 +292,15 @@ class SongRepository(private val db: DatabaseManager) {
         firstPublish
       }
 
+  fun togglePublication(id: Long, limitedClick: Boolean): Pair<Song, Boolean> =
+      db.transaction {
+        val current = requireNotNull(findById(id))
+        val publish = !current.released && !limitedClick
+        val limited = !current.released && limitedClick
+        val notify = setPublishedAndClaimFirstAnnouncement(id, publish, limited)
+        requireNotNull(findById(id)) to notify
+      }
+
   fun updateSettings(
       id: Long,
       title: String? = null,
@@ -245,6 +308,7 @@ class SongRepository(private val db: DatabaseManager) {
       recordMaterial: String? = null,
       price: Int? = null,
       referenceUrl: String? = null,
+      collectible: Boolean? = null,
   ) =
       db.transaction { conn ->
         val fields = mutableListOf<String>()
@@ -261,7 +325,12 @@ class SongRepository(private val db: DatabaseManager) {
           fields += "record_material = ?"
           values += it
         }
+        collectible?.let {
+          fields += "collectible = ?"
+          values += if (it) 1 else 0
+        }
         price?.let {
+          require(it >= -1)
           fields += "price = ?"
           values += it
         }
@@ -312,6 +381,9 @@ class SongRepository(private val db: DatabaseManager) {
           fileName = getString("file_name"),
           supportsPositional = getInt("supports_positional") != 0,
           published = getInt("published") != 0,
+          limitedPublication = getInt("limited_publication") != 0,
+          collectible = getInt("collectible") != 0,
+          recordIdentity = getString("record_identity") ?: "",
           reviewRequestedAt = getLong("review_requested_at").let { if (wasNull()) null else it },
       )
 

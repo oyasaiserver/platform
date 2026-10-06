@@ -39,8 +39,24 @@ data class Song(
     val fileName: String,
     val supportsPositional: Boolean = false,
     val published: Boolean = false,
+    val limitedPublication: Boolean = false,
+    val collectible: Boolean = false,
+    val recordIdentity: String = "",
     val reviewRequestedAt: Long? = null,
 ) {
+  val released: Boolean
+    get() = published || limitedPublication
+
+  fun canListen(viewer: UUID, possesses: Boolean): Boolean =
+      authorUuid == viewer || published || (limitedPublication && collectible && possesses)
+
+  fun purchasePrice(viewer: UUID): Int? =
+      when {
+        viewer == authorUuid -> 0
+        !released || (limitedPublication && !collectible) || price < 0 -> null
+        else -> price
+      }
+
   /**
    * 収益化（視聴ポイント・レコード売上）が有効かどうか。 UI/UX設計書 7章: 参考URL登録 or OP審査通過（仮OK/永続OK）が条件。
    * 公開状態([published])とは独立した判定（非公開でも審査自体は通過し得る）。

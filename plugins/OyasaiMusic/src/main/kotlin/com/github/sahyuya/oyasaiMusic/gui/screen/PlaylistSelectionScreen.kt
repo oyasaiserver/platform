@@ -32,7 +32,7 @@ class PlaylistSelectionScreen(
   private var page = 0
 
   init {
-    if (!targetSong.published) {
+    if (!targetSong.released) {
       GuiFeedback.invalid(viewer, "非公開の楽曲はお気に入り・プレイリストへ追加できません")
       menuManager.openPrevious(viewer)
     } else reload()
@@ -98,6 +98,10 @@ class PlaylistSelectionScreen(
       }
 
   override fun onClick(event: InventoryClickEvent) {
+    if (!SongAccess.canSocial(plugin, viewer, targetSong)) {
+      viewer.sendMessage("§cこの曲へのアクセス権がありません。")
+      return
+    }
     val slot = event.rawSlot
     if (slot == ControllerSlots.PAGE_PREV) {
       if (page > 0) {

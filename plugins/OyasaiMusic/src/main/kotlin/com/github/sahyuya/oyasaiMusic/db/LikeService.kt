@@ -20,7 +20,7 @@ class LikeService(
 
   /** @return true = 新規にいいねを反映できた / false = 既にいいね済みだった（何もしない） */
   fun like(likerUuid: UUID, song: Song): Boolean {
-    if (!song.published) return false
+    if (!song.released) return false
     val songId = song.id ?: return false
     return socialRepository.registerLikeWithAuthorReward(
         likerUuid = likerUuid,

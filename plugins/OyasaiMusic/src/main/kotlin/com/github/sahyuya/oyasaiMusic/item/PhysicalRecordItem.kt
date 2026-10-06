@@ -61,6 +61,20 @@ enum class AmbientTrigger(val label: String) {
 /** 購入済みレコードのPDC読み書きを担当する。 楽曲ID・再生範囲・トリガー・ループ設定を1つのアイテムに保存し、購入用と環境BGM用を 同じレコードとして扱う。 */
 object PhysicalRecordItem {
 
+  private fun identityKey(plugin: Plugin) = NamespacedKey(plugin, "record_identity_v1")
+
+  fun identity(plugin: Plugin, item: ItemStack?): String? =
+      item?.itemMeta?.persistentDataContainer?.get(identityKey(plugin), PersistentDataType.STRING)
+
+  fun withIdentity(plugin: Plugin, item: ItemStack, identity: String): ItemStack {
+    require(runCatching { java.util.UUID.fromString(identity) }.isSuccess)
+    return item.clone().also { copy ->
+      copy.editMeta {
+        it.persistentDataContainer.set(identityKey(plugin), PersistentDataType.STRING, identity)
+      }
+    }
+  }
+
   private fun songIdKey(plugin: Plugin) = NamespacedKey(plugin, "record_song_id")
 
   private fun rangeKey(plugin: Plugin) = NamespacedKey(plugin, "record_range")
@@ -76,6 +90,7 @@ object PhysicalRecordItem {
       songId: Long,
       title: String,
       authorName: String,
+      identity: String,
   ): ItemStack {
     val item = ItemStack(material)
     item.editMeta { meta ->
@@ -99,7 +114,7 @@ object PhysicalRecordItem {
       pdc.set(triggerKey(plugin), PersistentDataType.STRING, AmbientTrigger.JUKEBOX.name)
       pdc.set(loopKey(plugin), PersistentDataType.BYTE, 0)
     }
-    return item
+    return withIdentity(plugin, item, identity)
   }
 
   fun songId(plugin: Plugin, item: ItemStack?): Long? {
@@ -107,7 +122,8 @@ object PhysicalRecordItem {
     return meta.persistentDataContainer.get(songIdKey(plugin), PersistentDataType.LONG)
   }
 
-  fun isRecordItem(plugin: Plugin, item: ItemStack?): Boolean = songId(plugin, item) != null
+  fun isRecordItem(plugin: Plugin, item: ItemStack?): Boolean =
+      item != null && item.type.name.startsWith("MUSIC_DISC_") && (songId(plugin, item) ?: 0) > 0
 
   fun range(plugin: Plugin, item: ItemStack): AmbientPlaybackRange {
     val pdc = item.itemMeta?.persistentDataContainer ?: return AmbientPlaybackRange.DEFAULT

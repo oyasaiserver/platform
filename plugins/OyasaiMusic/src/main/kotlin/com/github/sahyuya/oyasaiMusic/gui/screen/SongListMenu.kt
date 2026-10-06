@@ -35,8 +35,9 @@ class SongListMenu(
      * 同じタブを再クリックした際にメインメニューへ戻る挙動([NavTabRouter])に使う。
      */
     private val ownTab: NavTab? = null,
-    private val playbackIds: (SongSort) -> List<Long>,
-    private val loader: (sort: SongSort, limit: Int, offset: Int) -> List<Song>,
+    private val playbackIds: (SongSort, SongAccess.Snapshot) -> List<Long>,
+    private val loader:
+        (sort: SongSort, limit: Int, offset: Int, access: SongAccess.Snapshot) -> List<Song>,
 ) : BaseGridMenu(viewer, Component.text(title)) {
 
   companion object {
@@ -62,17 +63,19 @@ class SongListMenu(
     val generation = ++reloadGeneration
     val requestedSort = currentSort()
     val requestedPage = page
+    val access = SongAccess.snapshot(plugin, viewer)
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val songs = loader(requestedSort, PAGE_SIZE + 1, requestedPage * PAGE_SIZE)
+              val songs = loader(requestedSort, PAGE_SIZE + 1, requestedPage * PAGE_SIZE, access)
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
                         if (generation != reloadGeneration) return@Runnable
                         hasNextPage = songs.size > PAGE_SIZE
+                        SongAccess.upgrade(plugin, viewer, songs)
                         pageSongs = songs.take(PAGE_SIZE)
                         render()
                       },
@@ -88,6 +91,7 @@ class SongListMenu(
         ownTab,
         state,
         sortLabel = sortDisplayName(currentSort()),
+        sortOptions = availableSorts.map(::sortDisplayName),
         viewer = viewer,
         plugin = plugin,
         actionModeCategory = ActionModeCategory.SONG_LIST,
@@ -112,7 +116,7 @@ class SongListMenu(
     // UI/UX設計書8章「未公開（下書き）状態: …「レコードの破片」として…」に対応。
     // 公開済みでない楽曲(自分の作成中の楽曲)は、実際のレコード種類ではなく
     // レコードの欠片(DISC_FRAGMENT_5)で視覚的に区別する（サヒュヤ氏の指示で追加）。
-    if (!song.published) {
+    if (!song.released) {
       val lore: MutableList<Component> =
           mutableListOf(
               SongLoreComponents.author(authorName),
@@ -186,8 +190,9 @@ class SongListMenu(
         val oldSort = currentSort()
         sortIndex = (sortIndex + 1) % availableSorts.size
         val newSort = currentSort()
+        val access = SongAccess.snapshot(plugin, viewer)
         plugin.playbackController.updateList(viewer, this to oldSort, this to newSort) {
-          playbackIds(newSort)
+          playbackIds(newSort, access)
         }
         page = 0
         reload()
@@ -211,7 +216,7 @@ class SongListMenu(
     val song = pageSongs.getOrNull(index) ?: return
     val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
     val action = resolveActionMode(viewer, event, ActionModeCategory.SONG_LIST, prefix)
-    if (!song.published && action in setOf(ActionMode.TERTIARY, ActionMode.QUATERNARY)) {
+    if (!song.released && action in setOf(ActionMode.TERTIARY, ActionMode.QUATERNARY)) {
       GuiFeedback.invalid(viewer, "非公開の楽曲にはいいね・お気に入り追加はできません")
       return
     }
@@ -220,7 +225,7 @@ class SongListMenu(
       ActionMode.SECONDARY -> {
         // 下書き楽曲は「詳細」ではなく直接「設定」を開く方が実用的なため分岐する。
         if (
-            !song.published &&
+            !song.released &&
                 (song.authorUuid == viewer.uniqueId || viewer.hasPermission("oyasaimusic.admin"))
         ) {
           menuManager.open(viewer, SongSettingsScreen(plugin, menuManager, viewer, song))
@@ -234,7 +239,11 @@ class SongListMenu(
   }
 
   private fun likeSong(song: Song) {
-    if (!song.published) {
+    if (!SongAccess.canSocial(plugin, viewer, song)) {
+      GuiFeedback.invalid(viewer, "この曲へのアクセス権がありません")
+      return
+    }
+    if (!song.released) {
       GuiFeedback.invalid(viewer, "非公開の楽曲にはいいねできません")
       return
     }
@@ -266,7 +275,11 @@ class SongListMenu(
   }
 
   private fun favoriteSong(song: Song) {
-    if (!song.published) {
+    if (!SongAccess.canSocial(plugin, viewer, song)) {
+      GuiFeedback.invalid(viewer, "この曲へのアクセス権がありません")
+      return
+    }
+    if (!song.released) {
       GuiFeedback.invalid(viewer, "非公開の楽曲は追加できません")
       return
     }
@@ -275,6 +288,9 @@ class SongListMenu(
 
   private fun playSong(song: Song) {
     val sort = currentSort()
-    plugin.playbackController.playList(viewer, song, key = this to sort) { playbackIds(sort) }
+    val access = SongAccess.snapshot(plugin, viewer)
+    plugin.playbackController.playList(viewer, song, key = this to sort) {
+      playbackIds(sort, access)
+    }
   }
 }

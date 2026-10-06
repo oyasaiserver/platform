@@ -6,7 +6,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 /** 楽曲カードで繰り返し使う作者・統計行の配色を統一する。 */
 object SongLoreComponents {
   private val creationFormat =
-      java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+      java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")
           .withZone(java.time.ZoneId.of("Asia/Tokyo"))
 
   fun creationTime(epochSeconds: Long): String =

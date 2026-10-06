@@ -39,6 +39,12 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
       st.execute("PRAGMA foreign_keys=ON;")
     }
     createSchema()
+    // VACUUM INTO includes committed WAL data; never copy a live SQLite file alone.
+    if (!columnExists(connection, "songs", "record_identity")) {
+      val backup =
+          File(plugin.dataFolder, databaseFileNameForBackup()).absolutePath.replace("'", "''")
+      connection.createStatement().use { it.execute("VACUUM INTO '$backup'") }
+    }
     migrateSchema()
   }
 
@@ -260,8 +266,51 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
    * `CREATE TABLE IF NOT EXISTS` だけでは既存DBに新しいカラムは追加されないため、 GUIフェーズで新設したカラムをここで後付けする。`PRAGMA
    * table_info` で存在確認してから `ALTER TABLE ... ADD COLUMN` を実行することで、複数回の起動でも安全に実行できる。
    */
+  private fun databaseFileNameForBackup() =
+      dbFile.name + ".before-record-v1-" + java.util.UUID.randomUUID() + ".bak"
+
   private fun migrateSchema() {
     transaction { conn ->
+      conn.createStatement().use { st ->
+        if (!columnExists(conn, "songs", "limited_publication"))
+            st.executeUpdate(
+                "ALTER TABLE songs ADD COLUMN limited_publication INTEGER NOT NULL DEFAULT 0"
+            )
+        if (!columnExists(conn, "songs", "collectible"))
+            st.executeUpdate("ALTER TABLE songs ADD COLUMN collectible INTEGER NOT NULL DEFAULT 0")
+        if (!columnExists(conn, "songs", "record_identity"))
+            st.executeUpdate("ALTER TABLE songs ADD COLUMN record_identity TEXT")
+        st.executeUpdate(
+            "CREATE TABLE IF NOT EXISTS music_feature_schema (feature TEXT PRIMARY KEY, version INTEGER NOT NULL)"
+        )
+      }
+      conn.createStatement().use { st ->
+        st.executeQuery(
+                "SELECT version FROM music_feature_schema WHERE feature = 'limited-records'"
+            )
+            .use { rs ->
+              check(!rs.next() || rs.getInt(1) == 1) {
+                "Unsupported limited-records schema version"
+              }
+            }
+      }
+      val missing =
+          conn.createStatement().use { st ->
+            st.executeQuery("SELECT id FROM songs WHERE record_identity IS NULL").use { rs ->
+              buildList { while (rs.next()) add(rs.getLong(1)) }
+            }
+          }
+      conn.prepareStatement("UPDATE songs SET record_identity = ? WHERE id = ?").use { ps ->
+        missing.forEach {
+          ps.setString(1, java.util.UUID.randomUUID().toString())
+          ps.setLong(2, it)
+          ps.addBatch()
+        }
+        ps.executeBatch()
+      }
+      conn.createStatement().use {
+        it.executeUpdate("INSERT OR IGNORE INTO music_feature_schema VALUES ('limited-records',1)")
+      }
       // 【修正】supports_positional は published / review_requested_at と同時期に
       // 追加されたカラムだが、このマイグレーション処理には含まれていなかった。
       // それより前に作成されたDBでは INSERT/SELECT が

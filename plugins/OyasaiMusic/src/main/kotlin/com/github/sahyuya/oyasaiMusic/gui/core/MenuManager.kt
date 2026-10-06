@@ -99,7 +99,9 @@ class MenuManager(private val plugin: OyasaiMusic) : Listener {
 
   @EventHandler
   fun onDrag(event: InventoryDragEvent) {
-    if (event.inventory.holder is OyasaiMusicMenuHolder) event.isCancelled = true
+    val holder = event.inventory.holder as? OyasaiMusicMenuHolder ?: return
+    event.isCancelled = true
+    (holder.menu as? RecordStorageScreen)?.onDrag(event)
   }
 
   @EventHandler
