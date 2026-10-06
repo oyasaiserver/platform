@@ -48,6 +48,17 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   private val shortcutCommands = mutableMapOf<String, Command>()
   private val displacedCommands = mutableMapOf<String, Command>()
 
+  internal var mute: io.oyasai.chat.paper.mute.MuteFeature? = null
+    private set
+
+  internal fun muteRejection(player: Player): String? = mute?.rejection(player)
+
+  internal fun rejectMuted(player: Player): Boolean {
+    val reason = muteRejection(player) ?: return false
+    player.sendMessage(runtime.formatter.error(reason))
+    return true
+  }
+
   internal lateinit var runtime: PaperRuntime
   internal lateinit var textTransformers: RecipientTextTransformerRegistry
 
@@ -68,6 +79,31 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
               return
             }
     this.runtime = runtime
+    if (config.getBoolean("mute.enabled", runtime.config.network.backendId == "main")) {
+      var candidate: io.oyasai.chat.paper.mute.MuteFeature? = null
+      runCatching {
+            candidate = io.oyasai.chat.paper.mute.MuteFeature(this)
+            candidate.enable()
+            mute = candidate
+          }
+          .onFailure {
+            runCatching { candidate?.close() }
+            logger.log(
+                java.util.logging.Level.SEVERE,
+                "Mute enable failed; other chat features remain enabled",
+                it,
+            )
+            getCommand("mute")?.setExecutor { sender, _, _, _ ->
+              sender.sendMessage("mute は有効化に失敗しています。ログを確認してください。")
+              true
+            }
+          }
+    } else {
+      getCommand("mute")?.setExecutor { sender, _, _, _ ->
+        sender.sendMessage("このバックエンドでは mute は無効です。")
+        true
+      }
+    }
     runtime.discord.enable()
 
     server.pluginManager.registerEvents(this, this)
@@ -176,6 +212,9 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   }
 
   override fun onDisable() {
+    runCatching { mute?.close() }
+        .onFailure { logger.log(java.util.logging.Level.SEVERE, "Mute shutdown failed", it) }
+    mute = null
     server.servicesManager.unregisterAll(this)
     if (::textTransformers.isInitialized) textTransformers.close()
     if (!::runtime.isInitialized) return
