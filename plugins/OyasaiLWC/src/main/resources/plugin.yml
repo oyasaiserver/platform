@@ -1,4 +1,5 @@
-name: LWC
+name: OyasaiLWC
+provides: [LWC]
 version: ${version}
 main: icu.oyasai.lwc.LwcPlugin
 api-version: "1.21"

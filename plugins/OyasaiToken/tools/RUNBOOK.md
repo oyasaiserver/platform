@@ -85,8 +85,9 @@ sqlite3 /tmp/tokens.db "SELECT key FROM schema_meta;"
 
 ```bash
 # 旧 plugins/TokenManager/ は手順2で退避済み
-# 新しい data folder に tokens.db を置く（plugin.yml の name が TokenManager のため同じ場所）
-cp /tmp/tokens.db /opt/platform/master/minecraft-main/plugins/TokenManager/tokens.db
+# 新しい data folder に tokens.db を置く（現在の plugin.yml name は OyasaiToken）
+mkdir -p /opt/platform/master/minecraft-main/plugins/OyasaiToken
+cp /tmp/tokens.db /opt/platform/master/minecraft-main/plugins/OyasaiToken/tokens.db
 ```
 
 JAR は Nix イメージ側で `tokenmanager`（第三者版）→ `oyasaitoken` に切り替わる（コミット `31bd0f2f`）。
@@ -118,3 +119,15 @@ mv plugins/TokenManager.bak-<timestamp> plugins/TokenManager
 MariaDB `token.tokenmanager` は移行では**一切変更しない**（読み取りのみ）。
 そのため第三者版へ戻せば残高はそのまま復元される。
 MariaDB を消すのは、OyasaiToken の安定稼働を十分に確認した後にする。
+
+## OyasaiToken へのプラグイン名変更
+
+現在のプラグイン名は `OyasaiToken`、データフォルダは `plugins/OyasaiToken/`。
+`provides: [TokenManager]` により旧名の依存宣言・プラグイン検索を維持する。
+新フォルダが存在しない場合だけ、`onLoad` で旧 `plugins/TokenManager/` の
+全ファイルをコピーしてから設定と SQLite を開く。旧フォルダは削除しない。
+新フォルダがある場合はコピーしないため、手動配置時は設定類も一緒に用意する。
+コピー失敗時は SQLite を開かず起動を中断する。停止状態で原因を直して再起動する。
+旧外製版の `config.yml` に MySQL パスワードが残っている可能性がある
+（エクスポートスクリプトがその設定を読む）。コピー後も秘密情報になり得るため、
+本番反映前に非公開環境で確認し、不要な認証情報と旧フォルダは確認後に人が削除する。

@@ -1,4 +1,5 @@
-name: SignShop
+name: OyasaiSignShop
+provides: [SignShop]
 version: ${version}
 main: io.oyasai.signshop.SignShopPlugin
 api-version: "1.21"
