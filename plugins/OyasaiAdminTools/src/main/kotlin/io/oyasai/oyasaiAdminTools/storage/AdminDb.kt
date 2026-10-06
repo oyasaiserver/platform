@@ -45,7 +45,7 @@ class AdminDb(private val file: File, private val logger: Logger) : AutoCloseabl
     )
   }
 
-  private fun ensureFeature(name: String, version: Int, tables: List<String>) {
+  fun ensureFeature(name: String, version: Int, tables: List<String>) = ordered {
     require(name.matches(Regex("[a-z]+")))
     transaction {
       connection.createStatement().use {
@@ -89,11 +89,12 @@ class AdminDb(private val file: File, private val logger: Logger) : AutoCloseabl
     }
   }
 
-  private fun transaction(block: () -> Unit) {
+  private fun <T> transaction(block: () -> T): T {
     connection.autoCommit = false
     try {
-      block()
+      val result = block()
       connection.commit()
+      return result
     } catch (failure: Exception) {
       connection.rollback()
       throw failure
@@ -365,6 +366,11 @@ class AdminDb(private val file: File, private val logger: Logger) : AutoCloseabl
       it.executeUpdate()
     }
   }
+
+  /** All feature SQL shares the ordered connection; failures propagate to the caller. */
+  fun <T> readFeature(block: (Connection) -> T): T = ordered { block(connection) }
+
+  fun <T> writeFeature(block: (Connection) -> T): T = ordered { transaction { block(connection) } }
 
   fun flush() {
     ordered {}

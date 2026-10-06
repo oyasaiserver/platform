@@ -7,3 +7,8 @@ worldborder:
   knock-back-dist: 3.0
   timer-delay-ticks: 5
   deny-enderpearl: true
+staff:
+  hide-displayname-in-vanish: true
+  sleep-ignores-vanished: true
+  world-teleport-permissions: false
+  socialspy-commands: [msg, w, r, mail, m, t, whisper, emsg, tell, er, reply, ereply, email, action, describe, eme, eaction, edescribe, etell, ewhisper, pm, message]
