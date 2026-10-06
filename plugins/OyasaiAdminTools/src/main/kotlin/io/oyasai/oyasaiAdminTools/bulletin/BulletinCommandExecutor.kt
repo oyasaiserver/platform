@@ -1,5 +1,6 @@
 package io.oyasai.oyasaiAdminTools.bulletin
 
+import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import io.oyasai.oyasaiAdminTools.bulletin.announcement.AnnouncementManager
 import io.oyasai.oyasaiAdminTools.bulletin.announcement.commands.AnnouncementSubCommand
 import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyManager
@@ -19,6 +20,10 @@ object BulletinCommandExecutor : CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
+    if (!OyasaiAdminTools.plugin.bulletinAvailable) {
+      sender.sendMessage("Bulletin storage is unavailable. Check the server log.")
+      return true
+    }
     if (sender !is Player) {
       sender.sendMessage("このコマンドはプレイヤーのみ実行可能です。")
       return true

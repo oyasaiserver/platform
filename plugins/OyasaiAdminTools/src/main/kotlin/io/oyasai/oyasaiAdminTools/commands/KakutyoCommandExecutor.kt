@@ -1,5 +1,6 @@
 package io.oyasai.oyasaiAdminTools.commands
 
+import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import io.oyasai.oyasaiAdminTools.worldborder.WorldBorderManager
 import me.realized.tokenmanager.api.TokenManager
 import org.bukkit.Bukkit
@@ -17,6 +18,10 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): Boolean {
+    if (!OyasaiAdminTools.plugin.worldborderAvailable) {
+      sender.sendMessage("§cWorldborder storage is unavailable. Check the server log.")
+      return true
+    }
     if (sender !is Player) {
       sender.sendMessage("§cこのコマンドはプレイヤーのみ実行可能です。")
       return true
