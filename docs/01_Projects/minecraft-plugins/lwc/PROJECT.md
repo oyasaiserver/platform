@@ -9,13 +9,13 @@ related_paths:
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
-last_validated: "2026-09-27"
+last_validated: "2026-10-06"
 agent_task: null
 ---
 
 # OyasaiLWC
 
-外製 LWC の SQLite データ形式を引き継ぐ、自作のブロック保護プラグイン。plugin.yml の名前は `LWC` のまま。既存 DB の version が 6 以外なら書き込まずに無効化する。本番 package の外製 LWC は別途切り替える。
+外製 LWC の SQLite データ形式を引き継ぐ、自作のブロック保護プラグイン。plugin.yml の名前は `OyasaiLWC`、`provides: [LWC]` で旧名の依存と検索を維持する。既存 DB の version が 6 以外なら書き込まずに無効化する。本番 package は `oyasailwc` を選択する。
 
 ## AI 作業入口
 
@@ -36,7 +36,7 @@ private / display、プレイヤー共有、HOPPER フラグ、保護対象の�
 
 SignShop 向けに `com.griefcraft.lwc.LWCPlugin`、`LWC.findProtection`、`LWC.canAccessProtection` の最小互換 API を持つ。自動ロック用の `protectBlock` は非対応。
 
-本番切り替え時は `packages/oyasai-minecraft-main.nix` の `lwc` を `oyasailwc` に置き換える。
+データ読み込み前の `onLoad` で、新フォルダ `plugins/OyasaiLWC/` が存在せず旧フォルダ `plugins/LWC/` がある場合だけ全内容をコピーする。`lwc.db`、SQLite の補助ファイル、設定やサブフォルダも対象とし、旧フォルダは残す。コピー失敗時は新フォルダを公開せず、DB を開かずに無効化する。既存の新フォルダは上書きしない。旧フォルダの削除は本番確認後に手動で行う。
 
 ## 外製版から削った機能
 

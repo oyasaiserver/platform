@@ -36,6 +36,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
 class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
+  private var migrationFailure: Exception? = null
   private lateinit var store: ProtectionStore
   private val compatibility = LWC(this)
 
@@ -69,7 +70,20 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
           "cdefault",
       )
 
+  override fun onLoad() {
+    try {
+      migrateLegacyData(dataFolder, logger::info)
+    } catch (error: Exception) {
+      migrationFailure = error
+      logger.severe("LWC データのコピーに失敗したため起動を中止します: ${error.message}")
+    }
+  }
+
   override fun onEnable() {
+    if (migrationFailure != null) {
+      server.pluginManager.disablePlugin(this)
+      return
+    }
     try {
       store = ProtectionStore(this)
     } catch (error: Exception) {
