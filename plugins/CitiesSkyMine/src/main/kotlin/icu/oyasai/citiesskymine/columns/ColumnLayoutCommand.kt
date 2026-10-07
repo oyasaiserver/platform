@@ -31,10 +31,7 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.COLUMNS)) return true
 
     if (args.isEmpty() || args[0].equals("help", ignoreCase = true)) {
@@ -96,11 +93,12 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
         sender,
         "柱を生成しました: ${plan.logicalColumns} columns / ${plan.placements.size} blocks / material=${material.key.key} / mode=${parsed.mode.label} / grid=${parsed.grid}",
     )
-    if (faweUndoRecorded) {
-      MessageUtil.info(sender, "FAWE の //undo でこの柱生成を取り消せます。")
-    } else {
-      MessageUtil.warn(sender, "柱生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-    }
+    MessageUtil.undoResult(
+        sender,
+        faweUndoRecorded,
+        "FAWE の //undo でこの柱生成を取り消せます。",
+        "柱生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+    )
     return true
   }
 

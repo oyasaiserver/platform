@@ -46,10 +46,7 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.SELECTION)) return true
 
     val first = args.getOrNull(0)?.lowercase()

@@ -35,10 +35,7 @@ class SchematicCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.SCHEMATIC)) return true
 
     val first = args.getOrNull(0)
@@ -231,11 +228,12 @@ class SchematicCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     if (selectionApplied) {
       MessageUtil.info(player, "貼り付け範囲を WorldEdit 選択に設定しました。")
     }
-    if (result.undoRecorded) {
-      MessageUtil.info(player, "FAWE の //undo で取り消せます。")
-    } else {
-      MessageUtil.warn(player, "貼り付けは完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-    }
+    MessageUtil.undoResult(
+        player,
+        result.undoRecorded,
+        "FAWE の //undo で取り消せます。",
+        "貼り付けは完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+    )
   }
 
   private fun listSchematics(player: Player) {

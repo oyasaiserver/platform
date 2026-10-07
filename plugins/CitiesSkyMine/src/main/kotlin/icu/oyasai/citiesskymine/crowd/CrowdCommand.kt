@@ -67,10 +67,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       handleHeads(sender, label, args.drop(1))
       return true
     }
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.CROWD)) return true
     if (args.firstOrNull().equals("remove", true)) {
       if (args.size == 1) removeMannequins(sender)
@@ -210,8 +207,12 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         "群衆を生成しました: ${figures.size}人 / $groups グループ / seed=$seed",
     )
     if (failedHeads > 0) MessageUtil.warn(player, "頭のスキンを $failedHeads 個適用できませんでした。")
-    if (undoRecorded) MessageUtil.info(player, "FAWE の //undo でこの群衆生成を取り消せます。")
-    else MessageUtil.warn(player, "群衆生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
+    MessageUtil.undoResult(
+        player,
+        undoRecorded,
+        "FAWE の //undo でこの群衆生成を取り消せます。",
+        "群衆生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+    )
   }
 
   override fun onTabComplete(
@@ -270,10 +271,11 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       "add" -> if (args.size == 2) heads.add(sender, args[1]) else headsUsage(sender, label)
       "remove" -> if (args.size == 2) heads.remove(sender, args[1]) else headsUsage(sender, label)
       "import" -> {
-        if (sender !is Player) MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-        else if (args.size > 2 || args.getOrNull(1) !in listOf(null, "selection", "clipboard"))
-            headsUsage(sender, label)
-        else importHeads(sender, args.getOrNull(1) ?: "selection")
+        if (MessageUtil.requirePlayer(sender)) {
+          if (args.size > 2 || args.getOrNull(1) !in listOf(null, "selection", "clipboard"))
+              headsUsage(sender, label)
+          else importHeads(sender, args.getOrNull(1) ?: "selection")
+        }
       }
       else -> headsUsage(sender, label)
     }
