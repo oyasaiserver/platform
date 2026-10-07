@@ -4,7 +4,7 @@
 
 ## 本番移行
 
-1. 本番の `plugins/Votifier/config.yml` から `host`、`port`、`tokens.default`（およびサービス別トークン）、`rsa/public.key` と `rsa/private.key` をこのプラグインのデータディレクトリへ移す。鍵とトークンはリポジトリへ追加しない。
+1. Bukkit のプラグイン名は `OyasaiVotifier`、データフォルダは `plugins/OyasaiVotifier/`。`provides: [Votifier]` で旧名への依存を維持する。初回ロード時、新フォルダが無く旧 `plugins/Votifier/` がある場合だけ、設定を読む前に中身をすべてコピーする。`config.yml`（`host`、`port`、`tokens.default` およびサービス別トークン）、`rsa/public.key`、`rsa/private.key`、`party-progress.yml` とその他のファイル・サブフォルダも対象で、旧フォルダは残す。新フォルダが既にあれば補完・上書きしない。鍵とトークンの読み方は変えず、リポジトリへ追加しない。
 2. `rewards.individual` と `rewards.party.rewards` は、`weight`、`money`、`tokens`、`commands` の重み付き抽選表である。各抽選は独立し、weight は合計100でなくてもよい。表が欠ける・空の場合は起動を拒否する。
 3. 同梱 `config.yml` は本番 zVoteParty の値をそのまま例示している。個別は 50% ¥30,000 + 15P、40% ¥20,000 + 10P、10% ¥50,000 + 20P（各 tier でオンライン全員へ順に 3P/2P/5P）、Party は 60 票でオンライン各人が 50% ¥10,000 + 20P / 50% ¥5,000 + 10P を抽選する。旧 `tokenaddall` は現在の `token addall` として `commands` に残している。
 4. 旧 zVoteParty の個別 `needToBeOnline: false` と同様、個別の金額・個人ポイントはオフラインプレイヤーにも付与を試みる。Party は閾値到達時のオンラインプレイヤーだけが対象である。
