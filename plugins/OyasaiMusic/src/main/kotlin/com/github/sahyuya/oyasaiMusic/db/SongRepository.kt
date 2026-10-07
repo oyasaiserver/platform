@@ -365,28 +365,6 @@ class SongRepository(private val db: DatabaseManager) {
         }
       }
 
-  private fun ResultSet.toSong(): Song =
-      Song(
-          id = getLong("id"),
-          authorUuid = UuidUtil.fromBytes(getBytes("author_uuid")),
-          title = getString("title"),
-          createdAt = getLong("created_at"),
-          bpm = getInt("bpm"),
-          recordMaterial = getString("record_material"),
-          price = getInt("price"),
-          referenceUrl = getString("reference_url"),
-          status = SongStatus.fromCode(getInt("status")),
-          likes = getLong("likes"),
-          views = getLong("views"),
-          fileName = getString("file_name"),
-          supportsPositional = getInt("supports_positional") != 0,
-          published = getInt("published") != 0,
-          limitedPublication = getInt("limited_publication") != 0,
-          collectible = getInt("collectible") != 0,
-          recordIdentity = getString("record_identity") ?: "",
-          reviewRequestedAt = getLong("review_requested_at").let { if (wasNull()) null else it },
-      )
-
   private fun ResultSet.toSongList(): List<Song> {
     val list = mutableListOf<Song>()
     while (next()) list += toSong()
@@ -418,3 +396,25 @@ enum class ReviewSort(val orderBy: String) {
   UNREVIEWED_OLDEST_FIRST("(status != 0) ASC, created_at ASC"),
   REVIEWED_NEWEST_FIRST("(status = 0) ASC, created_at DESC"),
 }
+
+internal fun ResultSet.toSong(): Song =
+    Song(
+        id = getLong("id"),
+        authorUuid = UuidUtil.fromBytes(getBytes("author_uuid")),
+        title = getString("title"),
+        createdAt = getLong("created_at"),
+        bpm = getInt("bpm"),
+        recordMaterial = getString("record_material"),
+        price = getInt("price"),
+        referenceUrl = getString("reference_url"),
+        status = SongStatus.fromCode(getInt("status")),
+        likes = getLong("likes"),
+        views = getLong("views"),
+        fileName = getString("file_name"),
+        supportsPositional = getInt("supports_positional") != 0,
+        published = getInt("published") != 0,
+        limitedPublication = getInt("limited_publication") != 0,
+        collectible = getInt("collectible") != 0,
+        recordIdentity = getString("record_identity") ?: "",
+        reviewRequestedAt = getLong("review_requested_at").let { if (wasNull()) null else it },
+    )

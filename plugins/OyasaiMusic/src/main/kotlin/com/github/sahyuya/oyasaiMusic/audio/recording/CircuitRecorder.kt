@@ -258,7 +258,7 @@ object CircuitRecorder {
         }
 
         // ボタン・レバー本体は、横に接続されたダストも直接起動できる。
-        if (data != null && isDirectDustPowerSource(data)) {
+        if (data != null && isPowerSource(data)) {
           enqueueDustNextToSource(signal.pos, signal.timeMs, signal.power)
         }
       }
@@ -462,7 +462,6 @@ object CircuitRecorder {
       }
 
   /** 電源部品は横に接続されたダストを直接通電できる。トーチは支持ブロックを通電しない。 */
-  private fun isDirectDustPowerSource(data: BlockData): Boolean = isPowerSource(data)
 
   /** RedstoneWireの接続面をそのまま使い、同じ高さ・上り坂・下り坂のダストだけを返す。 下り坂は低い側のダストがUP接続を持つため、その逆向きの面を確認する。 */
   private fun connectedWireNeighbors(

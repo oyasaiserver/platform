@@ -137,13 +137,6 @@ class OyasaiMusic : JavaPlugin() {
     private set
 
   override fun onEnable() {
-    // --- FAWE必須依存チェック（plugin.ymlのdependでも保証されるが、明示的なメッセージを出すため二重チェック） ---
-    if (server.pluginManager.getPlugin("FastAsyncWorldEdit") == null) {
-      logger.severe("FastAsyncWorldEdit(FAWE)が見つかりません。OyasaiMusicはFAWEを必須依存としています。")
-      server.pluginManager.disablePlugin(this)
-      return
-    }
-
     saveDefaultConfig()
     reloadConfig()
 

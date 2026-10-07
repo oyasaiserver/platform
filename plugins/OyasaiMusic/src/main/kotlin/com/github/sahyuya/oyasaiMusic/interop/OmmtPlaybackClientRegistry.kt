@@ -259,8 +259,6 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
 
   fun isUnknown(playerId: UUID): Boolean = presence[playerId] == null && pending[playerId] == null
 
-  fun isVanillaOnly(playerId: UUID): Boolean = presence[playerId] == Presence.VANILLA_ONLY
-
   fun isCapable(playerId: UUID): Boolean =
       presence[playerId] == Presence.MOD_PRESENT && generations[playerId] != null
 
@@ -279,17 +277,6 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
   fun supportsBankManifest(playerId: UUID): Boolean =
       supportsV2(playerId) &&
           (clientCapabilities[playerId] ?: 0) and PlaybackBuffer.CLIENT_CAP_BANK_MANIFEST_V1 != 0
-
-  /**
-   * Eager probe for join-time bank decision: sends SERVER_CAPABILITIES + PROBE without needing a
-   * playback.
-   */
-  fun probeForBankDecision(player: Player) {
-    check(plugin.server.isPrimaryThread)
-    if (presence[player.uniqueId] != null || pending[player.uniqueId] != null) return
-    // Reuse resolveForPlayback logic but with a no-op callback that just sets presence
-    resolveForPlayback(player) {}
-  }
 
   fun expectReady(playerId: UUID, session: UUID, hash: ByteArray, deadlineMillis: Long) {
     sweep()
