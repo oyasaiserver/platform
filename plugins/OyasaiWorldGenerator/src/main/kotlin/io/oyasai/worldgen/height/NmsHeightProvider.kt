@@ -21,20 +21,20 @@ import org.bukkit.World
 import org.bukkit.craftbukkit.CraftWorld
 import sun.misc.Unsafe
 
-class NmsHeightProvider(private val logger: Logger) : HeightProvider {
-  override val name: String = "NMS/Purpur-26.2"
+class NmsHeightProvider(private val logger: Logger) {
+  val name: String = "NMS/Purpur-26.2"
 
   private val declarations = ConcurrentHashMap<String, HeightDeclaration>()
   private val unsafe: Unsafe by lazy { resolveUnsafe() }
 
-  override fun declare(worldName: String, spec: HeightSpec, environment: World.Environment) {
+  fun declare(worldName: String, spec: HeightSpec, environment: World.Environment) {
     declarations[worldName] = HeightDeclaration(spec, environment)
     logger.info(
         "[OWG][height] Declared $worldName: environment=$environment min=${spec.minY} max=${spec.maxHeight} logical=${spec.logicalHeight}"
     )
   }
 
-  override fun apply(world: World): Boolean {
+  fun apply(world: World): Boolean {
     val declaration = declarations[world.name] ?: return false
     val spec = declaration.spec
     if (!isSupportedServer()) {
@@ -91,7 +91,7 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     }
   }
 
-  override fun verify(world: World, spec: HeightSpec): Boolean {
+  fun verify(world: World, spec: HeightSpec): Boolean {
     return try {
       val serverLevel = (world as CraftWorld).handle
       val dimension = serverLevel.dimensionType()
