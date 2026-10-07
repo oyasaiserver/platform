@@ -45,29 +45,6 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
 
   private val pending = mutableMapOf<UUID, Pending>()
   private val auto = mutableMapOf<UUID, Long>()
-  private val retired =
-      setOf(
-          "lwc",
-          "cadmin",
-          "cpublic",
-          "cpassword",
-          "cdonation",
-          "csupply",
-          "cunlock",
-          "cremoveall",
-          "climits",
-          "credstone",
-          "cmagnet",
-          "cdroptransfer",
-          "cpersist",
-          "cnolock",
-          "cnospam",
-          "cexempt",
-          "cautoclose",
-          "callowexplosions",
-          "ctnt",
-          "cdefault",
-      )
 
   override fun onEnable() {
     try {
@@ -77,7 +54,7 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
       server.pluginManager.disablePlugin(this)
       return
     }
-    listOf("lock", "cdisplay", "unlock", "cinfo", "cmodify", "chopper").plus(retired).forEach {
+    listOf("lock", "cdisplay", "unlock", "cinfo", "cmodify", "chopper").forEach {
       getCommand(it)?.setExecutor(this)
     }
     server.pluginManager.registerEvents(this, this)
@@ -96,10 +73,6 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
       args: Array<out String>,
   ): Boolean {
     val name = command.name.lowercase()
-    if (name in retired) {
-      sender.sendMessage("このコマンドは廃止しました")
-      return true
-    }
     val player =
         sender as? Player
             ?: run {
