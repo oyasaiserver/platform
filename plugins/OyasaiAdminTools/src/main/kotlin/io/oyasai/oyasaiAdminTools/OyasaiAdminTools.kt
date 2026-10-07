@@ -55,38 +55,8 @@ class OyasaiAdminTools : JavaPlugin() {
       return
     }
 
-    bulletinAvailable =
-        try {
-          db.importBulletinIfNeeded(dataFolder)?.let { logger.info("Bulletin legacy import: $it") }
-          true
-        } catch (failure: Exception) {
-          logger.severe("Bulletin disabled: legacy import failed: ${failure.message}")
-          false
-        }
-    worldborderAvailable =
-        try {
-          val keys =
-              listOf(
-                  "message",
-                  "round-border",
-                  "whoosh-effect",
-                  "portal-redirection",
-                  "knock-back-dist",
-                  "timer-delay-ticks",
-                  "deny-enderpearl",
-              )
-          val settings = keys.associateWith { config.get("worldborder.$it") }
-          db.importWorldborderIfNeeded(
-                  dataFolder,
-                  File(dataFolder.parentFile, "WorldBorder/config.yml"),
-                  settings,
-              )
-              ?.let { logger.info("Worldborder legacy import: $it") }
-          true
-        } catch (failure: Exception) {
-          logger.severe("Worldborder disabled: legacy import failed: ${failure.message}")
-          false
-        }
+    bulletinAvailable = true
+    worldborderAvailable = true
 
     if (bulletinAvailable) {
       AnnouncementManager.load()
