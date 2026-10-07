@@ -124,6 +124,56 @@ object GoogleResponse {
   }
 }
 
+data class Translation(val text: String, val language: String, val confidence: Double)
+
+object GoogleTranslationResponse {
+  fun parse(json: String): Translation {
+    val root = JsonParser.parseString(json)
+    require(root.isJsonArray && root.asJsonArray.size() > 6) { "Invalid translation response" }
+    val response = root.asJsonArray
+    require(response[0].isJsonArray && response[0].asJsonArray.size() > 0)
+    val text =
+        response[0].asJsonArray.joinToString("") { item ->
+          require(item.isJsonArray && item.asJsonArray.size() > 0)
+          val translated = item.asJsonArray[0]
+          require(translated.isJsonPrimitive && translated.asJsonPrimitive.isString)
+          translated.asString
+        }
+    require(text.isNotBlank())
+    require(response[2].isJsonPrimitive && response[2].asJsonPrimitive.isString)
+    require(response[6].isJsonPrimitive && response[6].asJsonPrimitive.isNumber)
+    val confidence = response[6].asDouble
+    require(confidence.isFinite() && confidence in 0.0..1.0)
+    return Translation(text, response[2].asString, confidence)
+  }
+}
+
+class GoogleTranslator(private val timeoutMillis: Long) {
+  private val client =
+      HttpClient.newBuilder().connectTimeout(Duration.ofMillis(timeoutMillis)).build()
+
+  fun translate(text: String): CompletableFuture<Translation?> {
+    val request =
+        HttpRequest.newBuilder(
+                URI.create(
+                    "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ja&dt=t&q=" +
+                        URLEncoder.encode(text, Charsets.UTF_8)
+                )
+            )
+            .timeout(Duration.ofMillis(timeoutMillis))
+            .GET()
+            .build()
+    return client
+        .sendAsync(request, HttpResponse.BodyHandlers.ofString(Charsets.UTF_8))
+        .thenApply<Translation?> { response ->
+          require(response.statusCode() == 200)
+          GoogleTranslationResponse.parse(response.body())
+        }
+        .orTimeout(timeoutMillis, java.util.concurrent.TimeUnit.MILLISECONDS)
+        .exceptionally { null }
+  }
+}
+
 class GoogleTransliterator(private val timeoutMillis: Long) {
   private val client =
       HttpClient.newBuilder().connectTimeout(Duration.ofMillis(timeoutMillis)).build()
@@ -158,6 +208,9 @@ class GoogleTransliterator(private val timeoutMillis: Long) {
 /** Injectable network boundary for deterministic unit tests. */
 class Japanizer(
     private val settings: JapanizeSettings,
+    private val translate: (String) -> CompletableFuture<Translation?> = {
+      CompletableFuture.completedFuture(null)
+    },
     private val convert: (String) -> CompletableFuture<String>,
 ) {
   fun prepare(
@@ -179,6 +232,30 @@ class Japanizer(
       return CompletableFuture.completedFuture(ChatMessage(visible))
     }
     val parts = JapanizePreparation.parts(text, dictionary, names)
+    // Whole-message translation must not expose or alter protected dictionary/name/URL runs.
+    val translationEligible =
+        parts.none { it.protected } &&
+            text.split(Regex("\\s+")).count { word ->
+              word.any { it in 'a'..'z' || it in 'A'..'Z' } && !word.all { it == 'w' || it == 'W' }
+            } >= 2
+    if (!translationEligible) return transliterate(text, parts)
+    return runCatching { translate(text) }
+        .getOrElse { CompletableFuture.completedFuture(null) }
+        .orTimeout(settings.timeoutMillis, java.util.concurrent.TimeUnit.MILLISECONDS)
+        .exceptionally { null }
+        .thenCompose { translation ->
+          if (
+              translation != null &&
+                  translation.language == "en" &&
+                  translation.confidence in 0.9..1.0 &&
+                  translation.text.isNotBlank()
+          )
+              CompletableFuture.completedFuture(display(text, translation.text))
+          else transliterate(text, parts)
+        }
+  }
+
+  private fun transliterate(text: String, parts: List<TextPart>): CompletableFuture<ChatMessage> {
     val hasLetters = text.any { it in 'a'..'z' || it in 'A'..'Z' }
     val futures =
         parts.map { part ->
@@ -192,15 +269,20 @@ class Japanizer(
         }
     return CompletableFuture.allOf(*futures.toTypedArray()).thenApply {
       val result = futures.joinToString("") { it.getNow("") }
-      // Protocol bounds include both strings; never truncate Unicode or drop the original silently.
-      if (
-          result == text ||
-              (!hasLetters && Normalizer.normalize(result, Normalizer.Form.NFKC) == text) ||
-              result.isBlank() ||
-              result.length + text.length + settings.format.length > 4096
-      )
-          ChatMessage(text)
-      else ChatMessage(result, text, settings.format)
+      display(text, result)
     }
+  }
+
+  private fun display(text: String, result: String): ChatMessage {
+    val hasLetters = text.any { it in 'a'..'z' || it in 'A'..'Z' }
+    // Protocol bounds include both strings; never truncate Unicode or drop the original silently.
+    return if (
+        result == text ||
+            (!hasLetters && Normalizer.normalize(result, Normalizer.Form.NFKC) == text) ||
+            result.isBlank() ||
+            result.length + text.length + settings.format.length > 4096
+    )
+        ChatMessage(text)
+    else ChatMessage(result, text, settings.format)
   }
 }
