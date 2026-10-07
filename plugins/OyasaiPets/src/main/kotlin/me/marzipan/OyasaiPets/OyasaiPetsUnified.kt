@@ -8881,6 +8881,7 @@ class ChildAISystem(private val plugin: JavaPlugin) {
               val owner = Bukkit.getPlayer(ownerUuid) ?: continue
 
               if (owner.isInsideVehicle) continue
+              if (entity.world != owner.world) continue
               if (entity.location.distance(owner.location) > 30) continue
 
               // クールダウンチェック
@@ -9297,6 +9298,10 @@ class FetchSystem(
                 return
               }
               val playerLoc = player.location
+              if (entity.world != playerLoc.world) {
+                cleanup(true)
+                return
+              }
               val dist = entity.location.distance(playerLoc)
               if (dist < 2.5) {
                 entity.equipment?.setItemInMainHand(null)
