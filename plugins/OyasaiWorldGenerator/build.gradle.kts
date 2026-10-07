@@ -99,3 +99,5 @@ tasks.register<ShadowJar>("failureTestShadowJar") {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   dependsOn(failureTest.classesTaskName)
 }
+
+tasks.named("check") { dependsOn(generateFailureTestProvider) }
