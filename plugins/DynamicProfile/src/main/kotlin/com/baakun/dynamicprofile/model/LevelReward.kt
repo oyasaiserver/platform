@@ -90,7 +90,9 @@ object LevelReward {
               }
               reward.runnables.add {
                 item.addText("&a[Lv.${lv}] &fレベル報酬", mutableListOf()).allFlag()
-                player.inventory.addItem(item)
+                player.inventory.addItem(item).values.forEach {
+                  player.world.dropItemNaturally(player.location, it)
+                }
               }
             }
             else -> {
@@ -98,7 +100,9 @@ object LevelReward {
               text.add("${item.type.name}×${item.amount}")
               reward.runnables.add {
                 item.addText("&a[Lv.${lv}] &fレベル報酬", mutableListOf()).allFlag()
-                player.inventory.addItem(item)
+                player.inventory.addItem(item).values.forEach {
+                  player.world.dropItemNaturally(player.location, it)
+                }
               }
             }
           }
