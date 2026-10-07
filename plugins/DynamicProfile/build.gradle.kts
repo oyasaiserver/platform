@@ -7,4 +7,5 @@ dependencies {
   compileOnly(project(":plugins:SocialLikes3"))
   implementation(libs.kotlin.stdlib)
   implementation(libs.gson)
+  implementation(libs.discord.webhooks)
 }

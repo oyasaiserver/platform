@@ -1,4 +1,4 @@
-package io.oyasai.oyasaiAdminTools.utils
+package com.baakun.dynamicprofile.promotion.utils
 
 import java.time.LocalDateTime
 import java.time.ZoneId

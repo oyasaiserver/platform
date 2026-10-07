@@ -21,6 +21,9 @@ import com.baakun.dynamicprofile.model.GiftItem
 import com.baakun.dynamicprofile.profile.playerTitle.Title
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
+import com.baakun.dynamicprofile.promotion.PromotionMigration
+import com.baakun.dynamicprofile.promotion.commands.SyokakuCommandExecutor
+import com.baakun.dynamicprofile.promotion.commands.SyokakuManagerCommandExecutor
 import com.baakun.dynamicprofile.util.JsonUtils
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.plugin
@@ -83,6 +86,8 @@ class DynamicProfile : JavaPlugin() {
         }
     )
     saveDefaultConfig()
+    PromotionMigration.copyLegacyFiles(dataFolder)
+    reloadConfig()
     NumberBanner.createBanner()
     setupPermissions()
 
@@ -153,6 +158,11 @@ class DynamicProfile : JavaPlugin() {
               }
             },
         )
+
+    getCommand("syokaku")?.setExecutor(SyokakuCommandExecutor)
+    getCommand("syokaku")?.tabCompleter = SyokakuCommandExecutor
+    getCommand("syokakumanager")?.setExecutor(SyokakuManagerCommandExecutor)
+    getCommand("syokakumanager")?.tabCompleter = SyokakuManagerCommandExecutor
 
     server.getPluginCommand("dprofile")?.setExecutor(DProfileCmd)
     server.getPluginCommand("dpmanager")?.setExecutor(OperatorCommand)

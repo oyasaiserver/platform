@@ -1,13 +1,13 @@
-package io.oyasai.oyasaiAdminTools.commands.syokaku
+package com.baakun.dynamicprofile.promotion.commands.syokaku
 
+import com.baakun.dynamicprofile.promotion.rank.RankManager.getNextRank
+import com.baakun.dynamicprofile.promotion.rank.RankManager.isCandidate
+import com.baakun.dynamicprofile.promotion.utils.DateTimeUtils
+import com.baakun.dynamicprofile.promotion.utils.PermsUtils.getCurrentRank
+import com.baakun.dynamicprofile.promotion.utils.PlayerUtils
+import com.baakun.dynamicprofile.util.Tools.plugin
 import com.baakun.dynamicprofile.util.Tools.readStats
 import com.github.srain3.sociallikes.datas.Data
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.rank.RankManager.getNextRank
-import io.oyasai.oyasaiAdminTools.rank.RankManager.isCandidate
-import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
-import io.oyasai.oyasaiAdminTools.utils.PermsUtils.getCurrentRank
-import io.oyasai.oyasaiAdminTools.utils.PlayerUtils
 import java.time.temporal.ChronoUnit
 import org.bukkit.Bukkit
 import org.bukkit.Statistic

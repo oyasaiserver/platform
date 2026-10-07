@@ -1,11 +1,11 @@
-package io.oyasai.oyasaiAdminTools.commands.syokaku
+package com.baakun.dynamicprofile.promotion.commands.syokaku
 
+import com.baakun.dynamicprofile.promotion.utils.DateTimeUtils
+import com.baakun.dynamicprofile.promotion.utils.PermsUtils
+import com.baakun.dynamicprofile.promotion.utils.PlayerUtils
+import com.baakun.dynamicprofile.util.Tools.plugin
 import com.baakun.dynamicprofile.util.Tools.readStats
 import com.github.srain3.sociallikes.datas.Data
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
-import io.oyasai.oyasaiAdminTools.utils.PermsUtils
-import io.oyasai.oyasaiAdminTools.utils.PlayerUtils
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.*

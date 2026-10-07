@@ -1,14 +1,14 @@
-package io.oyasai.oyasaiAdminTools.commands.syokakuManager
+package com.baakun.dynamicprofile.promotion.commands.syokakuManager
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allUser
 import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.PromotionType
+import com.baakun.dynamicprofile.promotion.rank.RankManager.getPreviousRank
+import com.baakun.dynamicprofile.promotion.rank.RankManager.getRankByGroupName
+import com.baakun.dynamicprofile.promotion.utils.DateTimeUtils
+import com.baakun.dynamicprofile.util.Tools.plugin
 import com.baakun.dynamicprofile.util.Tools.recordPromotion
 import com.github.srain3.sociallikes.datas.Data
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.rank.RankManager.getPreviousRank
-import io.oyasai.oyasaiAdminTools.rank.RankManager.getRankByGroupName
-import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.command.Command

@@ -1,18 +1,18 @@
-package io.oyasai.oyasaiAdminTools.commands.syokaku
+package com.baakun.dynamicprofile.promotion.commands.syokaku
 
 import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.PromotionType
 import com.baakun.dynamicprofile.model.Calculator
+import com.baakun.dynamicprofile.promotion.notifications.PromotionNotification
+import com.baakun.dynamicprofile.promotion.notifications.PromotionNotifier
+import com.baakun.dynamicprofile.promotion.rank.RankManager
+import com.baakun.dynamicprofile.promotion.utils.DateTimeUtils
+import com.baakun.dynamicprofile.promotion.utils.PermsUtils
+import com.baakun.dynamicprofile.promotion.utils.PlayerUtils
+import com.baakun.dynamicprofile.util.Tools.plugin
 import com.baakun.dynamicprofile.util.Tools.readStats
 import com.baakun.dynamicprofile.util.Tools.recordPromotion
 import com.github.srain3.sociallikes.datas.Data
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.notifications.PromotionNotification
-import io.oyasai.oyasaiAdminTools.notifications.PromotionNotifier
-import io.oyasai.oyasaiAdminTools.rank.RankManager
-import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
-import io.oyasai.oyasaiAdminTools.utils.PermsUtils
-import io.oyasai.oyasaiAdminTools.utils.PlayerUtils
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.Statistic

@@ -1,6 +1,6 @@
-package io.oyasai.oyasaiAdminTools.commands.syokaku
+package com.baakun.dynamicprofile.promotion.commands.syokaku
 
-import io.oyasai.oyasaiAdminTools.rank.RankManager
+import com.baakun.dynamicprofile.promotion.rank.RankManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender

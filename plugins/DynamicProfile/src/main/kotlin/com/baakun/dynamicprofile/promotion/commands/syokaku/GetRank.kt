@@ -1,8 +1,8 @@
-package io.oyasai.oyasaiAdminTools.commands.syokaku
+package com.baakun.dynamicprofile.promotion.commands.syokaku
 
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.utils.PermsUtils
-import io.oyasai.oyasaiAdminTools.utils.PlayerUtils
+import com.baakun.dynamicprofile.promotion.utils.PermsUtils
+import com.baakun.dynamicprofile.promotion.utils.PlayerUtils
+import com.baakun.dynamicprofile.util.Tools.plugin
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

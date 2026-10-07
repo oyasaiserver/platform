@@ -33,18 +33,6 @@ commands:
     usage: /applylifeworldsettings <world>
     permission: oyasai.admintools.applylifeworldsettings
     permission-message: "§cこのコマンドを使用する権限がありません。"
-  syokaku:
-    description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）
-    usage: |
-      /syokaku promote <player>
-      /syokaku demote <player>
-      /syokaku getrank <player>
-      /syokaku iscandidate <player>
-      /syokaku seerequirements <rank>
-      /syokaku seeplayerinfo <player>
-    permission: oyasai.syokaku
-  syokakumanager:
-    permission: oyasai.syokakumanager
   playermanager:
     aliases:
       - pm
@@ -80,12 +68,6 @@ permissions:
     default: true
   oyasai.admin:
     description: 管理者用権限
-    default: op
-  oyasai.syokaku:
-    description: syokakuコマンドの使用権限
-    default: op
-  oyasai.syokakumanager:
-    description: syokakumanagerコマンドの使用権限
     default: op
   oyasai.playermanager:
     description: playermanagerコマンドの使用権限

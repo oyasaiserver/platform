@@ -1,6 +1,6 @@
-package io.oyasai.oyasaiAdminTools.utils
+package com.baakun.dynamicprofile.promotion.utils
 
-import io.oyasai.oyasaiAdminTools.rank.RankManager
+import com.baakun.dynamicprofile.promotion.rank.RankManager
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import net.luckperms.api.LuckPermsProvider
@@ -43,7 +43,9 @@ object PermsUtils {
     return inheritedGroups.any { groups.contains(it.name) }
   }
 
-  fun getCurrentRank(player: UUID): CompletableFuture<io.oyasai.oyasaiAdminTools.rank.Rank?> {
+  fun getCurrentRank(
+      player: UUID
+  ): CompletableFuture<com.baakun.dynamicprofile.promotion.rank.Rank?> {
     val api = LuckPermsProvider.get()
     return api.userManager.loadUser(player).thenApplyAsync { user ->
       val inheritedGroups = user.getInheritedGroups(user.queryOptions)

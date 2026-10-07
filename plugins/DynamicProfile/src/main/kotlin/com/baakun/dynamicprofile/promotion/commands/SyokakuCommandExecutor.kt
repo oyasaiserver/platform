@@ -1,12 +1,12 @@
-package io.oyasai.oyasaiAdminTools.commands
+package com.baakun.dynamicprofile.promotion.commands
 
-import io.oyasai.oyasaiAdminTools.commands.syokaku.Demote
-import io.oyasai.oyasaiAdminTools.commands.syokaku.GetRank
-import io.oyasai.oyasaiAdminTools.commands.syokaku.IsCandidate
-import io.oyasai.oyasaiAdminTools.commands.syokaku.Promote
-import io.oyasai.oyasaiAdminTools.commands.syokaku.SeePlayerInfo
-import io.oyasai.oyasaiAdminTools.commands.syokaku.SeeRequirements
-import io.oyasai.oyasaiAdminTools.rank.RankManager
+import com.baakun.dynamicprofile.promotion.commands.syokaku.Demote
+import com.baakun.dynamicprofile.promotion.commands.syokaku.GetRank
+import com.baakun.dynamicprofile.promotion.commands.syokaku.IsCandidate
+import com.baakun.dynamicprofile.promotion.commands.syokaku.Promote
+import com.baakun.dynamicprofile.promotion.commands.syokaku.SeePlayerInfo
+import com.baakun.dynamicprofile.promotion.commands.syokaku.SeeRequirements
+import com.baakun.dynamicprofile.promotion.rank.RankManager
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

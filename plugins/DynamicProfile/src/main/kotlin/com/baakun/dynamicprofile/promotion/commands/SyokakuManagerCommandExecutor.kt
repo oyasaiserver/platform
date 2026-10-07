@@ -1,6 +1,6 @@
-package io.oyasai.oyasaiAdminTools.commands
+package com.baakun.dynamicprofile.promotion.commands
 
-import io.oyasai.oyasaiAdminTools.commands.syokakuManager.LoadPast
+import com.baakun.dynamicprofile.promotion.commands.syokakuManager.LoadPast
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
