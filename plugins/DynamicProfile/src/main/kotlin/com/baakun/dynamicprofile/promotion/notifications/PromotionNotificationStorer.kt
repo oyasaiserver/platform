@@ -1,6 +1,6 @@
-package io.oyasai.oyasaiAdminTools.notifications
+package com.baakun.dynamicprofile.promotion.notifications
 
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
+import com.baakun.dynamicprofile.util.Tools.plugin
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitTask
 

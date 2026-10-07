@@ -5,13 +5,32 @@ main: com.baakun.dynamicprofile.DynamicProfile
 api-version: "1.20"
 version: "0.0.1"
 depend: [Votifier, Vault, TokenManager]
+softdepend: [LuckPerms, SocialLikes3]
 permissions:
+  oyasai.syokaku:
+    description: syokakuコマンドの使用権限
+    default: op
+  oyasai.syokakumanager:
+    description: syokakumanagerコマンドの使用権限
+    default: op
   dprofile.basic:
     description: "基本権限、鯖民向け"
     default: true
   dprofile.op:
     description: "設定変更等、OP向け"
 commands:
+  syokaku:
+    description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）
+    usage: |
+      /syokaku promote <player>
+      /syokaku demote <player>
+      /syokaku getrank <player>
+      /syokaku iscandidate <player>
+      /syokaku seerequirements <rank>
+      /syokaku seeplayerinfo <player>
+    permission: oyasai.syokaku
+  syokakumanager:
+    permission: oyasai.syokakumanager
   dpmanager:
     permission: dprofile.op
     aliases: [dpma, dpm]

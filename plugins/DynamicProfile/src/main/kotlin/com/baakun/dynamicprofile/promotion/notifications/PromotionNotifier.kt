@@ -1,9 +1,9 @@
-package io.oyasai.oyasaiAdminTools.notifications
+package com.baakun.dynamicprofile.promotion.notifications
 
 import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.PromotionType
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.discord.SendEmbedMessage
+import com.baakun.dynamicprofile.promotion.discord.SendEmbedMessage
+import com.baakun.dynamicprofile.util.Tools.plugin
 import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.Sound

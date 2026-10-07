@@ -1,15 +1,14 @@
-package io.oyasai.oyasaiAdminTools.commands.syokakuManager
+package com.baakun.dynamicprofile.promotion.commands.syokakuManager
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allUser
 import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.PromotionType
-import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.promotion.rank.RankManager.getPreviousRank
+import com.baakun.dynamicprofile.promotion.rank.RankManager.getRankByGroupName
+import com.baakun.dynamicprofile.promotion.utils.DateTimeUtils
+import com.baakun.dynamicprofile.util.Tools.plugin
+import com.baakun.dynamicprofile.util.Tools.recordPromotion
 import com.github.srain3.sociallikes.datas.Data
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.rank.RankManager.getPreviousRank
-import io.oyasai.oyasaiAdminTools.rank.RankManager.getRankByGroupName
-import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
-import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -34,7 +33,6 @@ object LoadPast : CommandExecutor {
     try {
       api.actionLogger.log.thenAcceptAsync { logs ->
         allUser.forEach { uuid ->
-          val statsData = getStats(uuid)
           val log = logs.getUserHistory(uuid).toList().sortedBy { it.timestamp }
           Bukkit.getScheduler()
               .runTask(
@@ -64,7 +62,8 @@ object LoadPast : CommandExecutor {
                       val lastBuild = buildsBeforePromote.maxByOrNull { it.time }
                       val buildCount = buildsBeforePromote.size
 
-                      statsData.promotions.records.addFirst(
+                      recordPromotion(
+                          uuid,
                           PromotionRecord(
                               type = PromotionType.PROMOTE,
                               newRank = groupName,
@@ -78,10 +77,10 @@ object LoadPast : CommandExecutor {
                               builds = buildCount,
                               lastLv = 0,
                               lastExp = 0,
-                          )
+                          ),
+                          prepend = true,
                       )
                     }
-                    JsonUtils.saveUserJson(uuid)
                   },
               )
         }

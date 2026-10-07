@@ -1,11 +1,11 @@
-package io.oyasai.oyasaiAdminTools.commands.syokaku
+package com.baakun.dynamicprofile.promotion.commands.syokaku
 
-import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.promotion.utils.DateTimeUtils
+import com.baakun.dynamicprofile.promotion.utils.PermsUtils
+import com.baakun.dynamicprofile.promotion.utils.PlayerUtils
+import com.baakun.dynamicprofile.util.Tools.plugin
+import com.baakun.dynamicprofile.util.Tools.readStats
 import com.github.srain3.sociallikes.datas.Data
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
-import io.oyasai.oyasaiAdminTools.utils.PermsUtils
-import io.oyasai.oyasaiAdminTools.utils.PlayerUtils
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -48,12 +48,13 @@ object SeePlayerInfo : CommandExecutor {
               }
 
               val player = Bukkit.getOfflinePlayer(playerUUID)
-              val statsData = getStats(player.uniqueId) // DynamicProfile依存
+              val statsData = readStats(player.uniqueId) // DynamicProfile依存
               val builds = Data.getSLDataAll().filter { it.owner == player.uniqueId }
               // 初建築からの日数
               // 最後の建築からの日数
               if (args.size == 1) {
-                val lastPromo = getStats(player.uniqueId).promotions.records.maxByOrNull { it.date }
+                val lastPromo =
+                    readStats(player.uniqueId).promotions.records.maxByOrNull { it.date }
                 val lastPromoDate =
                     if (lastPromo != null) DateTimeUtils.parseToJST(lastPromo.date)
                     else DateTimeUtils.getCurrentJST()
@@ -107,7 +108,7 @@ object SeePlayerInfo : CommandExecutor {
                 }
               } else {
                 // GUI一覧表示・チャットで1個ずつ表示
-                val history = getStats(player.uniqueId).promotions
+                val history = readStats(player.uniqueId).promotions
                 if (args[1].toIntOrNull() != null) {
                   val page = args[1].toInt() - 1
                   if (page < 0 || page >= history.records.size) {

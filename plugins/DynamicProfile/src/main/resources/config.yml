@@ -32,3 +32,5 @@ RecommendBroadcastIntervalSeconds: 600
 RecommendBroadcastMode: 0
 # おすすめ放送の特別枠の間隔（n回ごとに特別枠）
 specialFrameInterval: 3
+
+# 昇格通知用 webhook-url は未設定時に OyasaiAdminTools/config.yml からコピーする

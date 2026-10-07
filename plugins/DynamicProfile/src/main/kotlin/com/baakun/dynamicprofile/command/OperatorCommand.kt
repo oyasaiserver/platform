@@ -15,15 +15,14 @@ import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.giveTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.removeTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
-import com.baakun.dynamicprofile.util.JsonUtils
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.levelGroups
 import com.baakun.dynamicprofile.util.Tools.plugin
 import com.baakun.dynamicprofile.util.Tools.rewardReceiveStatus
+import com.baakun.dynamicprofile.util.Tools.saveStats
 import com.github.srain3.sociallikes.datas.Data
 import com.google.gson.GsonBuilder
 import java.io.File
-import java.io.FileWriter
 import java.nio.charset.StandardCharsets
 import java.util.*
 import net.kyori.adventure.text.Component
@@ -124,11 +123,8 @@ object OperatorCommand : CommandExecutor {
         val vehicleExp = Calculator.expAmount(BehType.VEHICLE) * vehicleCount
         statsData.exp += vehicleExp
 
-        val file = File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${uuid}.json")
         try {
-          file.parentFile?.mkdirs()
-          if (!file.exists()) file.createNewFile()
-          FileWriter(file).use { writer -> gson.toJson(statsData, writer) }
+          saveStats(uuid)
         } catch (e: Exception) {
           plugin.logger.warning("[$threadName] ${pl.name} の保存失敗: ${e.message}")
         }
@@ -166,26 +162,9 @@ object OperatorCommand : CommandExecutor {
             sender.sendMessage("このコマンドはプレイヤーから実行してください。")
             return true
           }
-          val statsData = getStats(player.uniqueId)
-          Bukkit.getScheduler()
-              .runTaskAsynchronously(
-                  plugin,
-                  Runnable {
-                    val file =
-                        File(
-                            plugin.dataFolder.absolutePath +
-                                "/UserStatsJSON/${player.uniqueId}.json"
-                        )
-                    try {
-                      file.parentFile?.mkdirs()
-                      if (!file.exists()) file.createNewFile()
-                      FileWriter(file).use { writer -> gson.toJson(statsData, writer) }
-                    } catch (e: Exception) {
-                      plugin.logger.warning("保存失敗: ${e.message}")
-                    }
-                  },
-              )
+          saveStats(player.uniqueId)
         }
+
         "kakonoEXP" -> {
           if (player == null) {
             sender.sendMessage("このコマンドはプレイヤーから実行してください。")
@@ -519,9 +498,7 @@ object OperatorCommand : CommandExecutor {
             }
             if (changed) {
               try {
-                val userstats = getStats(it)
-                val file = File(plugin.dataFolder, "UserStatsJSON/${it}.json")
-                JsonUtils.toJsonFile(file, userstats, Stats::class.java)
+                saveStats(it)
               } catch (e: Exception) {
                 plugin.logger.warning("Failed to save data for ${it}: ${e.message}")
                 e.printStackTrace()

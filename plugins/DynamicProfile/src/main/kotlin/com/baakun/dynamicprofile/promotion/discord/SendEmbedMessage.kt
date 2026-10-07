@@ -1,4 +1,4 @@
-package io.oyasai.oyasaiAdminTools.discord
+package com.baakun.dynamicprofile.promotion.discord
 
 import club.minnced.discord.webhook.WebhookClient
 import club.minnced.discord.webhook.send.WebhookEmbed
@@ -6,8 +6,8 @@ import club.minnced.discord.webhook.send.WebhookEmbedBuilder
 import club.minnced.discord.webhook.send.WebhookMessageBuilder
 import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.PromotionType
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.rank.RankManager
+import com.baakun.dynamicprofile.promotion.rank.RankManager
+import com.baakun.dynamicprofile.util.Tools.plugin
 import java.util.UUID
 
 object SendEmbedMessage {

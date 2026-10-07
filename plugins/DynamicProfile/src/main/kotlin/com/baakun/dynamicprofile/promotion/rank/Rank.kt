@@ -1,4 +1,4 @@
-package io.oyasai.oyasaiAdminTools.rank
+package com.baakun.dynamicprofile.promotion.rank
 
 data class Rank(
     val name: String,

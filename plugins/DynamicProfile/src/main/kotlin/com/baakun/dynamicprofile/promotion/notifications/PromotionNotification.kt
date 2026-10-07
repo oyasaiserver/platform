@@ -1,4 +1,4 @@
-package io.oyasai.oyasaiAdminTools.notifications
+package com.baakun.dynamicprofile.promotion.notifications
 
 import com.baakun.dynamicprofile.data.PromotionRecord
 import java.util.UUID

@@ -1,11 +1,13 @@
-package io.oyasai.oyasaiAdminTools.rank
+package com.baakun.dynamicprofile.promotion.rank
 
-import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.promotion.utils.DateTimeUtils
+import com.baakun.dynamicprofile.promotion.utils.PermsUtils.getCurrentRank
+import com.baakun.dynamicprofile.util.Tools.plugin
+import com.baakun.dynamicprofile.util.Tools.readStats
 import com.github.srain3.sociallikes.datas.Data
-import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
-import io.oyasai.oyasaiAdminTools.utils.JsonUtils.readJsonFile
-import io.oyasai.oyasaiAdminTools.utils.PermsUtils.getCurrentRank
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.File
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -15,7 +17,9 @@ import org.bukkit.Statistic
 
 object RankManager {
   val ranks: MutableList<Rank> by lazy {
-    readJsonFile(path = "ranks.json", default = mutableListOf())
+    val file = File(plugin.dataFolder, "ranks.json")
+    if (!file.exists() || file.length() == 0L) mutableListOf()
+    else Gson().fromJson(file.readText(), object : TypeToken<MutableList<Rank>>() {}.type)
   }
 
   fun addRank(rank: Rank) {
@@ -49,7 +53,7 @@ object RankManager {
                 if (currentRank != null) {
                   val nextRank = getNextRank(currentRank)
                   if (nextRank != null) {
-                    val statsData = getStats(player.uniqueId) // DynamicProfile依存
+                    val statsData = readStats(player.uniqueId) // DynamicProfile依存
                     val tick = player.getStatistic(Statistic.PLAY_ONE_MINUTE)
                     val minute = (tick / 20) / 60
                     val hour = minute / 60

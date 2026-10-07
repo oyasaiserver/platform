@@ -1,4 +1,4 @@
-package io.oyasai.oyasaiAdminTools.utils
+package com.baakun.dynamicprofile.promotion.utils
 
 import com.google.gson.JsonParser
 import java.net.URI
