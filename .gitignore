@@ -442,3 +442,7 @@ AGENTS.md
 
 # Docs
 docs/*Outputs/**
+
+# Python
+__pycache__/
+*.pyc
