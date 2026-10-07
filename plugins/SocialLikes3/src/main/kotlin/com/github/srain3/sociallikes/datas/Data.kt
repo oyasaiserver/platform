@@ -747,92 +747,123 @@ object Data {
     player.sendMessage(Tools.socialLikesLOGO + "&f空き地を探しています...".color())
 
     Thread {
-          var switch = true
-          var totalCount = 0
-          var biomeCount = 0
-          while (switch) {
-            val randomCX = (minCX..maxCX).random()
-            val randomCZ = (minCZ..maxCZ).random()
+          try {
+            var switch = true
+            var totalCount = 0
+            var biomeCount = 0
+            while (switch) {
+              val randomCX = (minCX..maxCX).random()
+              val randomCZ = (minCZ..maxCZ).random()
 
-            if (biome != null) {
-              biomeCount++
-              val x = randomCX * 16 + 8
-              val z = randomCZ * 16 + 8
-              val hitBiome = loc.world.getBiome(x, 200, z)
-              if (biome.name() != hitBiome.name()) {
-                if (biomeCount >= 33) {
-                  object : BukkitRunnable() {
-                        override fun run() {
-                          player.sendMessage(Tools.socialLikesLOGO + "&eバイオームが見つかりませんでした。".color())
+              if (biome != null) {
+                biomeCount++
+                val x = randomCX * 16 + 8
+                val z = randomCZ * 16 + 8
+                val hitBiome =
+                    Bukkit.getScheduler()
+                        .callSyncMethod(Tools.plugin) { loc.world.getBiome(x, 200, z) }
+                        .get()
+                if (biome.name() != hitBiome.name()) {
+                  if (biomeCount >= 33) {
+                    object : BukkitRunnable() {
+                          override fun run() {
+                            player.sendMessage(
+                                Tools.socialLikesLOGO + "&eバイオームが見つかりませんでした。".color()
+                            )
+                          }
                         }
-                      }
-                      .runTask(Tools.plugin)
-                  switch = false
+                        .runTask(Tools.plugin)
+                    switch = false
+                  }
+                  continue
                 }
-                continue
               }
-            }
 
-            var count = 0
-            for (x in randomCX - r..randomCX + r) {
-              for (z in randomCZ - r..randomCZ + r) {
-                val slDataSet = data[x]?.get(z) ?: continue
-                count += slDataSet.size
+              var count = 0
+              for (x in randomCX - r..randomCX + r) {
+                for (z in randomCZ - r..randomCZ + r) {
+                  val slDataSet = data[x]?.get(z) ?: continue
+                  count += slDataSet.size
+                }
               }
-            }
 
-            if (count <= c) {
-              val x = randomCX * 16 + 8
-              val z = randomCZ * 16 + 8
-              object : BukkitRunnable() {
-                    override fun run() {
-                      var switchY = true
-                      val sLoc =
-                          Location(loc.world, x.toDouble(), 321.0, z.toDouble(), loc.yaw, loc.pitch)
-                      while (switchY) {
-                        if (sLoc.block.isPassable) {
-                          if (!sLoc.block.getRelative(BlockFace.DOWN).isPassable) {
-                            switchY = false
-                            continue
+              if (count <= c) {
+                val x = randomCX * 16 + 8
+                val z = randomCZ * 16 + 8
+                object : BukkitRunnable() {
+                      override fun run() {
+                        try {
+                          var switchY = true
+                          val sLoc =
+                              Location(
+                                  loc.world,
+                                  x.toDouble(),
+                                  321.0,
+                                  z.toDouble(),
+                                  loc.yaw,
+                                  loc.pitch,
+                              )
+                          while (switchY) {
+                            if (sLoc.block.isPassable) {
+                              if (!sLoc.block.getRelative(BlockFace.DOWN).isPassable) {
+                                switchY = false
+                                continue
+                              }
+                              if (
+                                  sLoc.block.getRelative(BlockFace.DOWN).blockData.material ==
+                                      Material.WATER
+                              ) {
+                                switchY = false
+                                continue
+                              }
+                            }
+                            sLoc.y -= 1.0
+                            if (sLoc.y <= -64.0) {
+                              player.sendMessage(
+                                  Tools.socialLikesLOGO + "&e足場が無いためテレポートできませんでした".color()
+                              )
+                              return
+                            }
                           }
-                          if (
-                              sLoc.block.getRelative(BlockFace.DOWN).blockData.material ==
-                                  Material.WATER
-                          ) {
-                            switchY = false
-                            continue
-                          }
-                        }
-                        sLoc.y -= 1.0
-                        if (sLoc.y <= -64.0) {
-                          player.sendMessage(
-                              Tools.socialLikesLOGO + "&e足場が無いためテレポートできませんでした".color()
+                          Bukkit.dispatchCommand(
+                              Bukkit.getConsoleSender(),
+                              "tp ${player.name} $x ${sLoc.y} $z",
                           )
-                          return
+                        } catch (e: Exception) {
+                          reportVacantTpFailure(player, e)
                         }
                       }
-                      Bukkit.dispatchCommand(
-                          Bukkit.getConsoleSender(),
-                          "tp ${player.name} $x ${sLoc.y} $z",
-                      )
                     }
-                  }
-                  .runTask(Tools.plugin)
-              switch = false
-            }
-            totalCount++
-            if (totalCount >= 33) {
-              object : BukkitRunnable() {
-                    override fun run() {
-                      player.sendMessage(Tools.socialLikesLOGO + "&e空き地が見つかりませんでした。".color())
+                    .runTask(Tools.plugin)
+                switch = false
+              }
+              totalCount++
+              if (totalCount >= 33) {
+                object : BukkitRunnable() {
+                      override fun run() {
+                        player.sendMessage(Tools.socialLikesLOGO + "&e空き地が見つかりませんでした。".color())
+                      }
                     }
-                  }
-                  .runTask(Tools.plugin)
-              switch = false
+                    .runTask(Tools.plugin)
+                switch = false
+              }
             }
+          } catch (e: Exception) {
+            if (e is InterruptedException) Thread.currentThread().interrupt()
+            reportVacantTpFailure(player, e)
           }
-          return@Thread
         }
         .start()
+  }
+
+  private fun reportVacantTpFailure(player: Player, exception: Exception) {
+    Tools.plugin.logger.log(Level.WARNING, "[SL3] Vacant teleport search failed", exception)
+    Bukkit.getScheduler()
+        .runTask(
+            Tools.plugin,
+            Runnable {
+              player.sendMessage(Tools.socialLikesLOGO + "&c空き地の検索に失敗しました。運営に報告してください。".color())
+            },
+        )
   }
 }
