@@ -63,9 +63,6 @@ data class DiceMode(
     return copy(diceCount = clamped)
   }
 
-  /** 1個バージョンの基準モードを取得 */
-  fun baseType(): DiceMode = copy(diceCount = 1)
-
   companion object {
     @JvmField val D2 = DiceMode(DiceType.D2, 1)
     @JvmField val D4 = DiceMode(DiceType.D4, 1)

@@ -21,13 +21,6 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     return activeGroups.any { it.ownerUuid == uuid }
   }
 
-  /** サイコロを新しく入手できるかチェック（1人1個まで） */
-  fun canGiveDice(player: Player): Boolean {
-    if (hasActiveDice(player)) return false
-    if (diceItem.hasDice(player)) return false
-    return true
-  }
-
   /**
    * 安全にサイコロを1個配布する（重複入手・投擲中の不正入手防止）
    *

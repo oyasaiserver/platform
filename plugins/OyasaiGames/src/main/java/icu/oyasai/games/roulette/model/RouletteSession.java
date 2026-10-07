@@ -9,23 +9,17 @@ import java.util.UUID;
  * プレイヤーごとにインスタンスを生成して管理します。
  */
 public class RouletteSession {
-    private final UUID playerUuid;
     private RouletteMode selectedMode;
     private int selectedCount;
     private boolean broadcastToAll;
     private boolean hasSpecialAccess;
 
     public RouletteSession(UUID playerUuid) {
-        this.playerUuid = playerUuid;
         // 初期値：全建築用アイテム、1回、全体公開、特殊アクセスなし
         this.selectedMode = RouletteMode.ALL;
         this.selectedCount = 1;
         this.broadcastToAll = true;
         this.hasSpecialAccess = false;
-    }
-
-    public UUID getPlayerUuid() {
-        return playerUuid;
     }
 
     public RouletteMode getSelectedMode() {
@@ -46,10 +40,6 @@ public class RouletteSession {
 
     public boolean isBroadcastToAll() {
         return broadcastToAll;
-    }
-
-    public void setBroadcastToAll(boolean broadcastToAll) {
-        this.broadcastToAll = broadcastToAll;
     }
 
     public void toggleBroadcast() {

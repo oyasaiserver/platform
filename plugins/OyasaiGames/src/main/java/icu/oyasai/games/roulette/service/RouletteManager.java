@@ -73,13 +73,6 @@ public class RouletteManager {
     }
 
     /**
-     * プレイヤーのセッションを取得します。存在しない場合は新規作成します。
-     */
-    public RouletteSession getOrCreateSession(UUID uuid) {
-        return sessions.computeIfAbsent(uuid, RouletteSession::new);
-    }
-
-    /**
      * プレイヤーのセッションを削除します。
      */
     public void removeSession(UUID uuid) {
