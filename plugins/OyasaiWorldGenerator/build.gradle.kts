@@ -35,24 +35,36 @@ val generateFailureTestProvider by
       outputs.file(failureTestProvider)
       doLast {
         var source = productionProvider.asFile.readText()
+        val beforeApplyAnchor =
+            "val declaration = declarations[world.name] ?: return false\n    val spec = declaration.spec\n    if (!isSupportedServer())"
+        check(source.contains(beforeApplyAnchor)) {
+          "failure injection anchor missing: before-apply"
+        }
         source =
             source.replace(
-                "val declaration = declarations[world.name] ?: return false\n    val spec = declaration.spec\n    if (!isSupportedServer())",
+                beforeApplyAnchor,
                 "val declaration = declarations[world.name] ?: return false\n" +
                     "    val spec = declaration.spec\n" +
                     "    OwgFailureTestControl.fail(\"before-apply\", world.name)\n" +
                     "    if (!isSupportedServer())",
             )
+        val afterLevelAnchor =
+            "patchLevel(serverLevel, registration.holder, spec, levelSnapshot)\n      starlightMutationStarted = true"
+        check(source.contains(afterLevelAnchor)) { "failure injection anchor missing: after-level" }
         source =
             source.replace(
-                "patchLevel(serverLevel, registration.holder, spec, levelSnapshot)\n      starlightMutationStarted = true",
+                afterLevelAnchor,
                 "patchLevel(serverLevel, registration.holder, spec, levelSnapshot)\n" +
                     "      OwgFailureTestControl.fail(\"after-level\", world.name)\n" +
                     "      starlightMutationStarted = true",
             )
+        val finalVerifyAnchor = "check(verify(world, spec)) {"
+        check(source.contains(finalVerifyAnchor)) {
+          "failure injection anchor missing: final-verify"
+        }
         source =
             source.replace(
-                "check(verify(world, spec)) {",
+                finalVerifyAnchor,
                 "check(verify(world, spec) && " +
                     "!OwgFailureTestControl.shouldFail(\"final-verify\", world.name)) {",
             )
