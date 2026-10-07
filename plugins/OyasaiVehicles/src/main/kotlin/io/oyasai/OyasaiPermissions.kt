@@ -47,8 +47,6 @@ fun CommandSender.canCreateCarBuilder2(): Boolean =
 fun CommandSender.canRideCarBuilder2(): Boolean =
     canUseCarBuilder2() || hasPermission(OyasaiPermissions.CAR_BUILDER2_RIDE)
 
-fun CommandSender.canRideCarBuilder2OrAdmin(): Boolean = canRideCarBuilder2()
-
 fun CommandSender.canUseAircraftBuilder(): Boolean =
     hasAdminOrPermission(OyasaiPermissions.AIRCRAFT_BUILDER_USE)
 
@@ -57,5 +55,3 @@ fun CommandSender.canCreateAircraftBuilder(): Boolean =
 
 fun CommandSender.canRideAircraftBuilder(): Boolean =
     canUseAircraftBuilder() || hasPermission(OyasaiPermissions.AIRCRAFT_BUILDER_RIDE)
-
-fun CommandSender.canRideAircraftBuilderOrAdmin(): Boolean = canRideAircraftBuilder()

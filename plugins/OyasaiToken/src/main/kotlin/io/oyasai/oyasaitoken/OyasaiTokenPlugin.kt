@@ -15,8 +15,6 @@ import io.oyasai.oyasaitoken.internal.MutationContext
 import io.oyasai.oyasaitoken.internal.NotificationType
 import io.oyasai.oyasaitoken.internal.TokenLedger
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -43,7 +41,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
-import org.yaml.snakeyaml.Yaml
 
 class OyasaiTokenPlugin :
     JavaPlugin(),
@@ -54,7 +51,6 @@ class OyasaiTokenPlugin :
     CommandExecutor,
     TabCompleter,
     Listener {
-  private var legacyDataReady = false
   private val dbLock = Any()
   private val nextTransactionId = AtomicLong(1L)
   private lateinit var connection: Connection
@@ -64,13 +60,7 @@ class OyasaiTokenPlugin :
   @Volatile private var notificationSettings = NotificationSettings.disabled()
   private var tabPlaceholderIntegration: TabPlaceholderIntegration? = null
 
-  override fun onLoad() {
-    migrateLegacyData(dataFolder, logger::info)
-    legacyDataReady = true
-  }
-
   override fun onEnable() {
-    check(legacyDataReady) { "Legacy data copy did not complete; refusing to open token storage" }
     saveDefaultConfig()
     dataFolder.mkdirs()
     saveNotificationDefaults()
@@ -90,7 +80,6 @@ class OyasaiTokenPlugin :
         )
     ledger.replaceAll(loadBalances())
     initializeTransactionCounter()
-    importTokenManagerDataYml()
     startPersistenceWorker()
 
     server.servicesManager.register(
@@ -185,7 +174,7 @@ class OyasaiTokenPlugin :
 
   override fun addTokensWithCommit(uuid: UUID, amount: Long): CompletableFuture<Boolean> {
     val completion = CompletableFuture<Boolean>()
-    val change = ledger.addWithCommit(uuid, null, amount, completion)
+    val change = ledger.add(uuid, null, amount, MutationContext.SILENT, completion)
     if (change == null) {
       completion.complete(false)
     } else {
@@ -1156,176 +1145,6 @@ class OyasaiTokenPlugin :
         }
   }
 
-  private fun importTokenManagerDataYml(): ImportResult {
-    migrationImportPreflight()?.let {
-      return it
-    }
-    val imported =
-        executePreparedTokenManagerDataYmlImport(
-            prepareTokenManagerDataYmlImport(
-                parseTokenManagerDataYml(File(dataFolder, "data.yml")),
-            )
-        )
-    imported.loadedBalances?.let(ledger::replaceAll)
-    return imported.result
-  }
-
-  /**
-   * Phase (b): resolves Bukkit identities while the caller is on the primary thread. The returned
-   * values are immutable and are safe to pass to the SQLite import worker.
-   */
-  private fun prepareTokenManagerDataYmlImport(
-      raw: RawMigrationPreparation,
-  ): MigrationPreparation {
-    check(Bukkit.isPrimaryThread()) {
-      "TokenManager data.yml identities must be resolved on the Bukkit primary thread."
-    }
-    migrationImportPreflight()?.let {
-      return MigrationPreparation.Skipped(it)
-    }
-    if (raw is RawMigrationPreparation.Skipped) {
-      return MigrationPreparation.Skipped(raw.result)
-    }
-    val entries =
-        (raw as RawMigrationPreparation.Ready).entries.map { entry ->
-          val target = resolveLegacyIdentifier(entry.identifier)
-          MigrationEntry(
-              entry.identifier,
-              entry.identifierType,
-              target,
-              entry.amount,
-          )
-        }
-    return MigrationPreparation.Ready(entries.toList(), migrationExecutionOptions())
-  }
-
-  private fun migrationImportPreflight(): ImportResult? {
-    if (!config.getBoolean("migration.import-tokenmanager-data-yml", true)) {
-      return ImportResult(0, "TokenManager data.yml import is disabled in config.yml.")
-    }
-    val alreadyImportedAt = getMeta("tokenmanager_data_yml_imported_at")
-    if (alreadyImportedAt != null) {
-      return ImportResult(
-          0,
-          "TokenManager data.yml was already imported at $alreadyImportedAt.",
-      )
-    }
-    if (ledger.isNotEmpty()) {
-      return ImportResult(
-          0,
-          "Skipped automatic data.yml import because tokens.db already contains balances.",
-      )
-    }
-    return null
-  }
-
-  private fun migrationExecutionOptions(): MigrationExecutionOptions =
-      MigrationExecutionOptions(
-          config.getBoolean("migration.backup-before-import", true),
-          File(
-              dataFolder,
-              config.getString("migration.backup-directory", "migration-backups")
-                  ?: "migration-backups",
-          ),
-      )
-
-  /** Phase (a): parses only local YAML and must not call Bukkit APIs. */
-  private fun parseTokenManagerDataYml(dataFile: File): RawMigrationPreparation {
-    if (!dataFile.isFile) {
-      return RawMigrationPreparation.Skipped(
-          ImportResult(0, "TokenManager data.yml was not found.")
-      )
-    }
-    val root =
-        Files.newBufferedReader(dataFile.toPath()).use { reader -> Yaml().load<Any?>(reader) }
-    val players =
-        (root as? Map<*, *>)?.get("Players") as? Map<*, *>
-            ?: return RawMigrationPreparation.Skipped(
-                ImportResult(0, "TokenManager data.yml has no Players section.")
-            )
-    val entries =
-        players.entries.map { (key, value) ->
-          val identifier = key.toString()
-          RawMigrationEntry(
-              identifier,
-              if (identifier.toUuidOrNull() != null) "uuid" else "name",
-              value.toLongOrZero().coerceAtLeast(0),
-          )
-        }
-    if (entries.isEmpty()) {
-      return RawMigrationPreparation.Skipped(
-          ImportResult(0, "TokenManager data.yml has no player entries.")
-      )
-    }
-    return RawMigrationPreparation.Ready(entries.toList())
-  }
-
-  /** Phase (c): performs only queue draining and SQLite I/O. */
-  private fun executePreparedTokenManagerDataYmlImport(
-      preparation: MigrationPreparation,
-  ): MigrationImportCompletion {
-    if (preparation is MigrationPreparation.Skipped) {
-      return MigrationImportCompletion(preparation.result)
-    }
-    val ready = preparation as MigrationPreparation.Ready
-    val entries = ready.entries
-    val backup = backupDatabaseBeforeImport(ready.options)
-    val now = System.currentTimeMillis()
-    withTransaction {
-      var lastAppliedTxId: Long? = null
-      entries.forEach { entry ->
-        val persisted =
-            PersistedBalance(
-                nextTransactionId.getAndIncrement(),
-                BalanceWrite(
-                    entry.target.uuid,
-                    entry.target.name,
-                    entry.amount,
-                    0,
-                    "migration:data.yml",
-                ),
-            )
-        if (!transactionExists(persisted.txId)) {
-          writeBalanceRows(persisted)
-          lastAppliedTxId = persisted.txId
-        }
-        connection
-            .prepareStatement(
-                """
-                INSERT OR REPLACE INTO token_legacy_ids
-                  (source, identifier_type, identifier, uuid, migrated_at)
-                VALUES ('data.yml', ?, ?, ?, ?)
-                """
-                    .trimIndent()
-            )
-            .use { statement ->
-              statement.setString(1, entry.identifierType)
-              statement.setString(2, entry.identifier)
-              statement.setString(3, entry.target.uuid.toString())
-              statement.setLong(4, now)
-              statement.executeUpdate()
-            }
-      }
-      lastAppliedTxId?.let { setMetaRows(LAST_APPLIED_TX_ID_KEY, it.toString()) }
-      setMetaRows("tokenmanager_data_yml_imported_at", now.toString())
-    }
-    val loadedBalances = loadBalances()
-    logger.info("Imported ${entries.size} TokenManager data.yml balances into SQLite.")
-    val suffix =
-        if (backup != null) {
-          " Backup: ${backup.name}."
-        } else {
-          ""
-        }
-    return MigrationImportCompletion(
-        ImportResult(
-            entries.size,
-            "Imported ${entries.size} entries from TokenManager data.yml.$suffix",
-        ),
-        loadedBalances,
-    )
-  }
-
   private fun getMeta(key: String): String? {
     synchronized(dbLock) {
       return connection.prepareStatement("SELECT value FROM schema_meta WHERE key = ?").use {
@@ -1373,35 +1192,6 @@ class OyasaiTokenPlugin :
     }
   }
 
-  private fun backupDatabaseBeforeImport(options: MigrationExecutionOptions): File? {
-    if (!options.backupBeforeImport) return null
-    if (!::databaseFile.isInitialized || !databaseFile.isFile) return null
-
-    synchronized(dbLock) {
-      connection.createStatement().use { statement ->
-        statement.execute("PRAGMA wal_checkpoint(FULL)")
-      }
-    }
-
-    val backupDir = options.backupDirectory
-    backupDir.mkdirs()
-    val timestamp = System.currentTimeMillis()
-    val backup = File(backupDir, "${databaseFile.name}.$timestamp.bak")
-    Files.copy(databaseFile.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING)
-
-    listOf("-wal", "-shm").forEach { suffix ->
-      val sidecar = File(databaseFile.parentFile, databaseFile.name + suffix)
-      if (sidecar.isFile) {
-        Files.copy(
-            sidecar.toPath(),
-            File(backupDir, "${sidecar.name}.$timestamp.bak").toPath(),
-            StandardCopyOption.REPLACE_EXISTING,
-        )
-      }
-    }
-    return backup
-  }
-
   private fun resolveTarget(identifier: String): Target {
     identifier.toUuidOrNull()?.let { uuid ->
       val name = Bukkit.getPlayer(uuid)?.name ?: ledger.nameOf(uuid)
@@ -1411,14 +1201,6 @@ class OyasaiTokenPlugin :
     if (player != null) return Target(player.uniqueId, player.name)
     val offline = Bukkit.getOfflinePlayer(identifier)
     return Target(offline.uniqueId, offline.name ?: identifier)
-  }
-
-  private fun resolveLegacyIdentifier(identifier: String): Target {
-    identifier.toUuidOrNull()?.let { uuid ->
-      val name = Bukkit.getOfflinePlayer(uuid).name
-      return Target(uuid, name)
-    }
-    return resolveTarget(identifier)
   }
 
   private fun parseAmount(raw: String): Long? {
@@ -1448,12 +1230,6 @@ class OyasaiTokenPlugin :
     return runCatching { UUID.fromString(this) }.getOrNull()
   }
 
-  private fun Any?.toLongOrZero(): Long =
-      when (this) {
-        is Number -> toLong()
-        else -> toString().toLongOrNull() ?: 0L
-      }
-
   private fun ResultSet.getStringOrNull(column: String): String? {
     val value = getString(column)
     return if (wasNull()) null else value
@@ -1469,46 +1245,6 @@ class OyasaiTokenPlugin :
   }
 
   private data class PersistedBalance(val txId: Long, val write: BalanceWrite)
-
-  private data class ImportResult(val imported: Int, val message: String)
-
-  private data class MigrationImportCompletion(
-      val result: ImportResult,
-      val loadedBalances: Map<UUID, BalanceRecord>? = null,
-  )
-
-  private sealed class RawMigrationPreparation {
-    data class Ready(val entries: List<RawMigrationEntry>) : RawMigrationPreparation()
-
-    data class Skipped(val result: ImportResult) : RawMigrationPreparation()
-  }
-
-  private data class RawMigrationEntry(
-      val identifier: String,
-      val identifierType: String,
-      val amount: Long,
-  )
-
-  private data class MigrationExecutionOptions(
-      val backupBeforeImport: Boolean,
-      val backupDirectory: File,
-  )
-
-  private sealed class MigrationPreparation {
-    data class Ready(
-        val entries: List<MigrationEntry>,
-        val options: MigrationExecutionOptions,
-    ) : MigrationPreparation()
-
-    data class Skipped(val result: ImportResult) : MigrationPreparation()
-  }
-
-  private data class MigrationEntry(
-      val identifier: String,
-      val identifierType: String,
-      val target: Target,
-      val amount: Long,
-  )
 
   private data class Target(val uuid: UUID, val name: String?)
 

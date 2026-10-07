@@ -29,60 +29,37 @@ class TpSwitchTest {
   }
 
   @Test
-  fun `legacy YAML imports once with defaults and reports bad UUIDs`() {
+  fun `settings survive reopening with the current schema`() {
     val owner = UUID.randomUUID()
     val member = UUID.randomUUID()
     val defaultOwner = UUID.randomUUID()
-    val legacy = tempDir.resolve("config.yml").toFile()
-    legacy.writeText(
-        """
-      # legacy config
-      $owner:
-        switch: false
-        WhiteList:
-          $member: true
-          invalid-uuid: true
-        BlackList:
-          $member: true
-        WhiteListName:
-          Alice: true
-        BlackListName:
-          Bob: true
-      $defaultOwner:
-        WhiteListName:
-          Carol: true
-      invalid-owner:
-        switch: false
-    """
-            .trimIndent()
-    )
-    val parsed = readLegacy(legacy)
-    assertEquals(ImportCounts(2, 1, 1, 2, 1, 2), parsed.counts)
-    assertFalse(parsed.players.getValue(owner).open)
-    assertTrue(parsed.players.getValue(defaultOwner).open)
+    val players =
+        linkedMapOf(
+            owner to
+                TpSettings(
+                    false,
+                    linkedSetOf(member),
+                    linkedSetOf(member),
+                    linkedSetOf("Alice"),
+                    linkedSetOf("Bob"),
+                ),
+            defaultOwner to TpSettings(whiteNames = linkedSetOf("Carol")),
+        )
     val database = tempDir.resolve("tpswitch.db").toFile()
     TpStore(database).use { store ->
       store.open()
-      assertFalse(store.imported())
-      store.importLegacy(parsed)
-      assertTrue(store.imported())
-      assertEquals(parsed.players, store.load())
+      players.forEach { (id, settings) -> store.save(id, settings) }
+      assertEquals(players, store.load())
     }
     TpStore(database).use { store ->
       store.open()
-      assertTrue(store.imported())
-      assertEquals(parsed.players, store.load())
+      assertEquals(players, store.load())
     }
     DriverManager.getConnection("jdbc:sqlite:${database.absolutePath}").use { connection ->
       connection.createStatement().use { statement ->
         statement.executeQuery("PRAGMA user_version").use { rows ->
           rows.next()
           assertEquals(1, rows.getInt(1))
-        }
-        statement.executeQuery("SELECT value FROM tp_meta WHERE key = 'legacy_skipped'").use { rows
-          ->
-          rows.next()
-          assertEquals(2, rows.getInt(1))
         }
       }
     }

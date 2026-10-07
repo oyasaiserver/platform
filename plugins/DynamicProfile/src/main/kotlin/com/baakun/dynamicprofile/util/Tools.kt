@@ -41,16 +41,6 @@ object Tools {
     return start until end
   }
 
-  fun getFirstEnd(page: Int, amount: Int): Pair<Int, Int> {
-    return Pair(page * amount, page * amount + amount - 1)
-  }
-
-  fun runEachIndex(page: Int, amount: Int, runnable: Runnable) {
-    for (i in page * amount..<page * amount + amount) {
-      runnable.run()
-    }
-  }
-
   fun getWeeklyLB(uuid: UUID): LBStats {
     return UUIDMap.getOrPut(uuid) { LBStats(uuid) }
   }
@@ -104,11 +94,6 @@ object Tools {
   /** &を§(カラーコード)へ変換 */
   fun String.color(): String {
     return ChatColor.translateAlternateColorCodes('&', this)
-  }
-
-  /** §(カラーコード)を除去 */
-  fun String.unColor(): String {
-    return ChatColor.stripColor(this) ?: this
   }
 
   /** ItemStackに表示名と説明を追加する(自動カラー化付き) */

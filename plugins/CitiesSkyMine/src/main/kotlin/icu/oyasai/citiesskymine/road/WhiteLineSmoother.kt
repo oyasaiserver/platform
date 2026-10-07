@@ -32,7 +32,8 @@ object WhiteLineSmoother {
             .filter { it.zone.isLine() }
     var affected = 0
     for (slot in slots) {
-      val traced = traceBlocksForOffset(path, slot.offset)
+      val traced =
+          RoadBuilder.traceBlocksForOffset(path, slot.offset, avoidRightAngleCorners = true).blocks
       val zigzagOrientations = computeZigzagOrientations(traced, slot.offset)
       for (i in traced.indices) {
         val block = traced[i]
@@ -143,68 +144,6 @@ object WhiteLineSmoother {
     }
   }
 
-  private fun traceBlocksForOffset(path: List<PathPoint>, offset: Int): List<TracedBlock> {
-    if (path.isEmpty()) return emptyList()
-    val traced = mutableListOf<TracedBlock>()
-
-    var lastExactX = Double.NaN
-    var lastExactY = Double.NaN
-    var lastExactZ = Double.NaN
-    var lastBlock: BlockPos? = null
-
-    for (point in path) {
-      val h = point.heading
-      val perpX = -sin(h)
-      val perpZ = cos(h)
-      val px = point.x + offset * perpX
-      val py = point.y
-      val pz = point.z + offset * perpZ
-      val targetBlock = BlockPos(floor(px).toInt(), floor(py).toInt(), floor(pz).toInt())
-
-      if (lastBlock == null) {
-        traced += TracedBlock(targetBlock, h)
-        lastBlock = targetBlock
-        lastExactX = px
-        lastExactY = py
-        lastExactZ = pz
-        continue
-      }
-
-      val segment = walkGrid(lastExactX, lastExactY, lastExactZ, px, py, pz, h)
-      if (segment.isEmpty() && targetBlock != lastBlock) {
-        traced += TracedBlock(targetBlock, h)
-        traced.removeRightAngleCornerIfNeeded()
-      } else {
-        for (block in segment) {
-          traced += block
-          traced.removeRightAngleCornerIfNeeded()
-        }
-      }
-
-      lastBlock = targetBlock
-      lastExactX = px
-      lastExactY = py
-      lastExactZ = pz
-    }
-
-    return traced
-  }
-
-  private fun MutableList<TracedBlock>.removeRightAngleCornerIfNeeded() {
-    if (size < 3) return
-    val c = this[size - 1].pos
-    val b = this[size - 2].pos
-    val a = this[size - 3].pos
-    val dx1 = b.x - a.x
-    val dz1 = b.z - a.z
-    val dx2 = c.x - b.x
-    val dz2 = c.z - b.z
-    if (abs(dx1) + abs(dz1) != 1) return
-    if (abs(dx2) + abs(dz2) != 1) return
-    if (dx1 * dx2 + dz1 * dz2 != 0) return
-    removeAt(size - 2)
-  }
-
   private data class Orientation(val facing: BlockFace, val shape: Stairs.Shape)
 
   private fun BlockPos.vectorTo(other: BlockPos): Vec {
@@ -297,7 +236,7 @@ object WhiteLineSmoother {
     val leavingDiag = nextVec[end - 1]?.takeIf { it.isDiagonal() }
     var baseFace =
         enteringDiag?.let { enteringFace(it, dir) }
-            ?: leavingDiag?.let { leavingFace(it, dir).opposite() }
+            ?: leavingDiag?.let { leavingFace(it, dir).oppositeFace }
             ?: perpendicularFace(dir)
     val cornerShape = Stairs.Shape.INNER_LEFT
     val hasMiddle = length % 2 == 1
@@ -309,14 +248,14 @@ object WhiteLineSmoother {
       for (i in start until end) {
         if (i == middle) {
           buffer[i] = Orientation(currentFace, cornerShape)
-          currentFace = currentFace.opposite()
+          currentFace = currentFace.oppositeFace
           pairCount = 0
           continue
         }
         buffer[i] = Orientation(currentFace, Stairs.Shape.STRAIGHT)
         pairCount++
         if (pairCount == 2) {
-          currentFace = currentFace.opposite()
+          currentFace = currentFace.oppositeFace
           pairCount = 0
         }
       }
@@ -326,7 +265,7 @@ object WhiteLineSmoother {
     if (leavingDiag != null) {
       val expected = leavingFace(leavingDiag, dir)
       if (buffer[end - 1]?.facing != expected) {
-        baseFace = baseFace.opposite()
+        baseFace = baseFace.oppositeFace
         fill(baseFace)
       }
     }
@@ -341,19 +280,10 @@ object WhiteLineSmoother {
   }
 
   private fun leavingFace(diagonal: Vec, dir: Vec): BlockFace {
-    return enteringFace(diagonal, dir).opposite()
+    return enteringFace(diagonal, dir).oppositeFace
   }
 
   private fun perpendicularFace(vec: Vec): BlockFace {
     return vec.rotateCW().toFace()
   }
-
-  private fun BlockFace.opposite(): BlockFace =
-      when (this) {
-        BlockFace.NORTH -> BlockFace.SOUTH
-        BlockFace.SOUTH -> BlockFace.NORTH
-        BlockFace.EAST -> BlockFace.WEST
-        BlockFace.WEST -> BlockFace.EAST
-        else -> this
-      }
 }

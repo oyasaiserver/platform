@@ -309,11 +309,6 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
               content = "SET",
           ),
       )
-      plugin.runtime.discord.onPrivateMessage(
-          source.name,
-          local.name,
-          chat.formatter.plain(chat.formatter.body(message)),
-      )
       return true
     }
     if (!chat.config.network.deliveryEnabled) {

@@ -29,14 +29,6 @@ class TpSwitchFeature(private val plugin: Main) : Listener, CommandExecutor, Tab
   fun enable() {
     try {
       store.open()
-      val legacy = File(plugin.dataFolder.parentFile, "TPswitch/config.yml")
-      if (legacy.isFile && !store.imported()) {
-        val data = readLegacy(legacy)
-        store.importLegacy(data)
-        plugin.logger.info(
-            "TPswitch import: players=${data.counts.players}, WhiteList=${data.counts.whiteIds}, BlackList=${data.counts.blackIds}, WhiteListName=${data.counts.whiteNames}, BlackListName=${data.counts.blackNames}, skipped=${data.counts.skipped}, remaining=${data.counts.skipped}"
-        )
-      }
       settings.putAll(store.load())
       ready = true
       plugin.server.pluginManager.registerEvents(this, plugin)

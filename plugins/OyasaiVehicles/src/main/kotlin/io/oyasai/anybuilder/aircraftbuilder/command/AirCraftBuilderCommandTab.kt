@@ -3,7 +3,7 @@ package io.oyasai.anybuilder.aircraftbuilder.command
 import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseCache
 import io.oyasai.anybuilder.common.command.BuilderCommandTabSupport
 import io.oyasai.canCreateAircraftBuilder
-import io.oyasai.canRideAircraftBuilderOrAdmin
+import io.oyasai.canRideAircraftBuilder
 import io.oyasai.canUseAircraftBuilder
 import io.oyasai.hasOyasaiAdminPermission
 import org.bukkit.command.Command
@@ -44,7 +44,7 @@ fun handleAircraftBuilderTab(
         return BuilderCommandTabSupport.filterStartsWith(args[1], subCommands)
       }
       val subCommands = mutableListOf<String>()
-      if (sender.canRideAircraftBuilderOrAdmin()) {
+      if (sender.canRideAircraftBuilder()) {
         subCommands.add("spawn")
       }
       if (sender.canUseAircraftBuilder()) {

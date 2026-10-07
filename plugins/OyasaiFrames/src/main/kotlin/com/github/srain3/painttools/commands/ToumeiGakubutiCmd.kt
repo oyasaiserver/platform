@@ -1,13 +1,12 @@
 package com.github.srain3.painttools.commands
 
 import com.github.srain3.painttools.tools.ToolBox
-import kotlin.math.PI
+import com.github.srain3.painttools.tools.frameLookVector
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
-import org.bukkit.util.Vector
 
 /** 透明額縁を簡単に作れるコマンド */
 object ToumeiGakubutiCmd : CommandExecutor {
@@ -61,9 +60,7 @@ object ToumeiGakubutiCmd : CommandExecutor {
       }
     }
 
-    val vec = Vector(0.0, 0.0, 1.0)
-    vec.rotateAroundX(PI / 180 * sender.eyeLocation.pitch)
-    vec.rotateAroundY(PI / 180 * -sender.eyeLocation.yaw)
+    val vec = frameLookVector(sender.eyeLocation)
 
     val entity =
         sender.world

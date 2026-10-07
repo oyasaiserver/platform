@@ -4,15 +4,11 @@ import com.github.sahyuya.oyasaiMenu.OyasaiMenu
 import com.github.sahyuya.oyasaiMenu.manager.CooldownManager
 import com.github.sahyuya.oyasaiMenu.model.*
 import com.github.sahyuya.oyasaiMenu.util.CustomHead
+import com.github.sahyuya.oyasaiMenu.util.GuiUtil
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import io.papermc.paper.datacomponent.DataComponentTypes
 import io.papermc.paper.datacomponent.item.TooltipDisplay
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.event.ClickEvent
-import net.kyori.adventure.text.event.HoverEvent
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -392,23 +388,7 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
         }
         PopupActionType.SUGGEST_COMMAND -> {
           val cmd = action.value.replace("%player%", player.name)
-          val msg =
-              Component.text()
-                  .decoration(TextDecoration.ITALIC, false)
-                  .append(Component.text("▶ ").color(NamedTextColor.GREEN))
-                  .append(
-                      Component.text(cmd)
-                          .color(NamedTextColor.YELLOW)
-                          .clickEvent(ClickEvent.suggestCommand(cmd))
-                          .hoverEvent(
-                              HoverEvent.showText(
-                                  Component.text("クリックでチャット欄に入力されます")
-                                      .color(NamedTextColor.GRAY)
-                                      .decoration(TextDecoration.ITALIC, false)
-                              )
-                          )
-                  )
-                  .build()
+          val msg = GuiUtil.buildSuggestCommandComponent(cmd, "クリックでチャット欄に入力されます")
           player.sendMessage(msg)
         }
         PopupActionType.OPEN_POPUP -> open(player, action.value)

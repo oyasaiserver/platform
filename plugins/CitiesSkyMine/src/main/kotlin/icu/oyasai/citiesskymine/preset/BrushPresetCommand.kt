@@ -24,10 +24,7 @@ class BrushPresetCommand(private val plugin: Main) : CommandExecutor, TabComplet
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.PRESET)) return true
 
     val sub = args.getOrNull(0)?.lowercase()

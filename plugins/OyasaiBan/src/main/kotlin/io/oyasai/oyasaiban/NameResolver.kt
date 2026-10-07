@@ -89,5 +89,5 @@ class NameResolver(
 
 private object FloodgateNameResolver {
   fun resolve(gamertag: String): CompletableFuture<UUID?> =
-      org.geysermc.floodgate.api.FloodgateApi.getInstance().getUuidFor(gamertag).thenApply { it }
+      org.geysermc.floodgate.api.FloodgateApi.getInstance().getUuidFor(gamertag)
 }

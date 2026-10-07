@@ -25,10 +25,7 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.BEZIER)) return true
 
     when (args.getOrNull(0)?.lowercase()) {
@@ -276,11 +273,12 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         player,
         "ベジェ曲線を生成しました: mode=${buildOptions.mode.id} material=${buildOptions.material.name.lowercase()} size=${buildOptions.size} blocks=${blocks.size}",
     )
-    if (result.undoRecorded) {
-      MessageUtil.info(player, "FAWE の //undo でこの生成を取り消せます。")
-    } else {
-      MessageUtil.warn(player, "生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-    }
+    MessageUtil.undoResult(
+        player,
+        result.undoRecorded,
+        "FAWE の //undo でこの生成を取り消せます。",
+        "生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+    )
   }
 
   private fun status(player: Player) {

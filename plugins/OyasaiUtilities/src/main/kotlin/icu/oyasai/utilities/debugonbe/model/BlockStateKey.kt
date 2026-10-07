@@ -38,7 +38,4 @@ object BlockStateKey {
         .sorted()
         .joinToString(",") { key -> "$key=${stateMap[key]}" }
   }
-
-  /** 全状態の「デフォルト」キー文字列（すべてのキーを false/none などの初期値で生成）。 実際の値は使わず、キー名の一覧だけを返す（UI表示用）。 */
-  fun keysOf(shape: BlockShape): List<String> = shape.stateKeys.sorted()
 }

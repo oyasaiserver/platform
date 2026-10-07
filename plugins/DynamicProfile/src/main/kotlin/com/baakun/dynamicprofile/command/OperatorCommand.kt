@@ -15,13 +15,13 @@ import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.giveTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.removeTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
+import com.baakun.dynamicprofile.util.JsonUtils.gson
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.levelGroups
 import com.baakun.dynamicprofile.util.Tools.plugin
 import com.baakun.dynamicprofile.util.Tools.rewardReceiveStatus
 import com.baakun.dynamicprofile.util.Tools.saveStats
 import com.github.srain3.sociallikes.datas.Data
-import com.google.gson.GsonBuilder
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -37,9 +37,6 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 object OperatorCommand : CommandExecutor {
-  var last = 0L
-  private val gson =
-      GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
 
   private fun processUserStats(
       userList: List<UUID>,
@@ -189,10 +186,6 @@ object OperatorCommand : CommandExecutor {
                             synchronized(allUserLock) {
                               if (!allUser.contains(likeuser)) {
                                 allUser.add(likeuser)
-                                if (System.currentTimeMillis() - last > 1000) {
-                                  last = System.currentTimeMillis()
-                                  plugin.logger.info("working")
-                                }
                               }
                             }
                             synchronized(userLikesLock) {
@@ -206,10 +199,6 @@ object OperatorCommand : CommandExecutor {
                           synchronized(allUserLock) {
                             if (!allUser.contains(data.owner)) {
                               allUser.add(data.owner)
-                              if (System.currentTimeMillis() - last > 1000) {
-                                last = System.currentTimeMillis()
-                                plugin.logger.info("working.")
-                              }
                             }
                           }
                         }

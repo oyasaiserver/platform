@@ -36,7 +36,6 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
 class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
-  private var migrationFailure: Exception? = null
   private lateinit var store: ProtectionStore
   private val compatibility = LWC(this)
 
@@ -46,44 +45,8 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
 
   private val pending = mutableMapOf<UUID, Pending>()
   private val auto = mutableMapOf<UUID, Long>()
-  private val retired =
-      setOf(
-          "lwc",
-          "cadmin",
-          "cpublic",
-          "cpassword",
-          "cdonation",
-          "csupply",
-          "cunlock",
-          "cremoveall",
-          "climits",
-          "credstone",
-          "cmagnet",
-          "cdroptransfer",
-          "cpersist",
-          "cnolock",
-          "cnospam",
-          "cexempt",
-          "cautoclose",
-          "callowexplosions",
-          "ctnt",
-          "cdefault",
-      )
-
-  override fun onLoad() {
-    try {
-      migrateLegacyData(dataFolder, logger::info)
-    } catch (error: Exception) {
-      migrationFailure = error
-      logger.severe("LWC データのコピーに失敗したため起動を中止します: ${error.message}")
-    }
-  }
 
   override fun onEnable() {
-    if (migrationFailure != null) {
-      server.pluginManager.disablePlugin(this)
-      return
-    }
     try {
       store = ProtectionStore(this)
     } catch (error: Exception) {
@@ -91,15 +54,13 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
       server.pluginManager.disablePlugin(this)
       return
     }
-    listOf("lock", "cdisplay", "unlock", "cinfo", "cmodify", "chopper").plus(retired).forEach {
+    listOf("lock", "cdisplay", "unlock", "cinfo", "cmodify", "chopper").forEach {
       getCommand(it)?.setExecutor(this)
     }
     server.pluginManager.registerEvents(this, this)
     server.scheduler.runTaskTimer(this, Runnable { tickAuto() }, 20L, 20L)
-    logger.info("保護 ${countProtections()} 件を読み込み、未対応 type ${store.ignoredTypes} 件を読み飛ばしました")
+    logger.info("保護 ${store.count()} 件を読み込み、未対応 type ${store.ignoredTypes} 件を読み飛ばしました")
   }
-
-  private fun countProtections(): Int = store.count()
 
   override fun onDisable() {
     if (::store.isInitialized) store.close()
@@ -112,10 +73,6 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
       args: Array<out String>,
   ): Boolean {
     val name = command.name.lowercase()
-    if (name in retired) {
-      sender.sendMessage("このコマンドは廃止しました")
-      return true
-    }
     val player =
         sender as? Player
             ?: run {

@@ -12,7 +12,4 @@ object MMUtils {
 
   /** Extension to send MiniMessage-formatted messages. */
   fun CommandSender.msg(text: String) = this.sendMessage(text.mm())
-
-  /** Global access to MiniMessage instance. */
-  fun get() = mm
 }

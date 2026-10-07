@@ -150,9 +150,6 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     return result
   }
 
-  fun getPlayerState(player: Player): PlayerMenuState? =
-      (player.openInventory.topInventory.holder as? MenuHolder)?.state
-
   fun clearCache() {
     Bukkit.getOnlinePlayers()
         .filter { it.openInventory.topInventory.holder is MenuHolder }

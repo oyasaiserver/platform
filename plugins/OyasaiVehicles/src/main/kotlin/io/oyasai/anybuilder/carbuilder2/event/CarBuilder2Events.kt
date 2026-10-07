@@ -6,7 +6,7 @@ import io.oyasai.anybuilder.carbuilder2.CarBuilder2Spawn
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
 import io.oyasai.anybuilder.common.event.VehicleEventListenerBase
-import io.oyasai.canRideCarBuilder2OrAdmin
+import io.oyasai.canRideCarBuilder2
 import java.util.*
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -49,7 +49,7 @@ object CarBuilder2Events : VehicleEventListenerBase() {
     val item = event.item?.clone() ?: return
     handleVehicleItemRightClickWithPermission(
         event = event,
-        canRide = { it.canRideCarBuilder2OrAdmin() },
+        canRide = { it.canRideCarBuilder2() },
         deniedMessage = "[CarBuilder2] 実行権限がありません。",
         getItem = { item },
         isBuilderItem = { stack -> event.hasBlock() && CarBuilder2Item.checkCarItem(stack) },
@@ -73,7 +73,7 @@ object CarBuilder2Events : VehicleEventListenerBase() {
   fun playerArmorStandRightClick(event: PlayerInteractAtEntityEvent) {
     handleSeatArmorStandRightClickWithPermission(
         event = event,
-        canRide = { it.canRideCarBuilder2OrAdmin() },
+        canRide = { it.canRideCarBuilder2() },
         deniedMessage = "[CarBuilder2] 実行権限がありません。",
         isSeatArmorStand = CarBuilder2EntityList::checkSeatArmorStand,
         getDrivingSeatData = CarBuilder2EntityList::checkDrivingSeat,

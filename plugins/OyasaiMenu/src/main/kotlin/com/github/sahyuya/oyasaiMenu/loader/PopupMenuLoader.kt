@@ -56,8 +56,6 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
 
   fun getPopup(id: String): PopupMenuDef? = popups[id]
 
-  fun getPopupIds(): List<String> = popups.keys.sorted()
-
   fun reload() = loadAll()
 
   private fun loadFile(file: File, id: String): PopupMenuDef {

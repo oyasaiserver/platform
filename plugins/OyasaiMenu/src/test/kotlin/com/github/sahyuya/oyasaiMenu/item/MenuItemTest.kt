@@ -1,12 +1,12 @@
 package com.github.sahyuya.oyasaiMenu.item
 
 import java.lang.reflect.Proxy
-import java.nio.file.Files
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
@@ -85,14 +85,26 @@ class MenuItemTest {
   }
 
   private fun feature(tick: () -> Int = { 0 }): MenuItem {
-    val folder = Files.createTempDirectory("command-items-test").toFile()
     val plugin =
-        proxy(Plugin::class.java) { method, _ ->
-          if (method == "getDataFolder") folder else error("Unexpected plugin method: $method")
-        }
-    return MenuItem(plugin, tick, { held, saved -> held === saved }, { it }).also {
-      it.item = template
-    }
+        proxy(Plugin::class.java) { method, _ -> error("Unexpected plugin method: $method") }
+    return MenuItem(plugin, tick, { held, saved -> held === saved }, { it }, template)
+  }
+
+  @Test
+  fun fixedBookComponentsMatchProductionStructure() {
+    val serializer = GsonComponentSerializer.gson()
+    assertEquals(
+        serializer.deserialize("""{"text":"menu本","color":"green","bold":true}"""),
+        MenuBook.name,
+    )
+    assertEquals(
+        listOf(
+            serializer.deserialize(
+                """{"text":"右クリックで","color":"gold","bold":true,"extra":[{"text":"/menu","color":"blue","bold":true},{"text":"代わりに!","color":"gold","bold":true}]}"""
+            )
+        ),
+        MenuBook.lore,
+    )
   }
 
   private fun bareItemStack(): ItemStack {

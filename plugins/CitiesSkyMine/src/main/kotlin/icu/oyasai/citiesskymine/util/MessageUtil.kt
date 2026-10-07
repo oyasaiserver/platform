@@ -1,8 +1,11 @@
 package icu.oyasai.citiesskymine.util
 
 import icu.oyasai.citiesskymine.Main
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
 object MessageUtil {
 
@@ -15,8 +18,16 @@ object MessageUtil {
     sender.sendMessage(mm.deserialize(prefix + message))
   }
 
-  fun sendRaw(sender: CommandSender, message: String) {
-    sender.sendMessage(mm.deserialize(message))
+  @OptIn(ExperimentalContracts::class)
+  fun requirePlayer(sender: CommandSender): Boolean {
+    contract { returns(true) implies (sender is Player) }
+    if (sender is Player) return true
+    error(sender, "このコマンドはプレイヤーから実行してください。")
+    return false
+  }
+
+  fun undoResult(sender: CommandSender, recorded: Boolean, success: String, failure: String) {
+    if (recorded) info(sender, success) else warn(sender, failure)
   }
 
   fun error(sender: CommandSender, message: String) {
