@@ -40,7 +40,21 @@ object LevelReward {
         if (rawItem == null) continue
 
         val item = rawItem.clone()
-        val lv = Integer.parseInt(item.itemMeta.displayName.split(",").get(0))
+        val lv =
+            try {
+              val fields = item.itemMeta.displayName.split(",")
+              val level = fields[0].toInt()
+              when (item.type) {
+                Material.IRON_INGOT -> require(fields[1].toDouble().isFinite())
+                Material.GOLD_INGOT,
+                Material.COAL -> fields[1].toInt()
+                else -> Unit
+              }
+              level
+            } catch (error: Exception) {
+              plugin.logger.warning("無効なレベル報酬アイテムをスキップしました (${item.type}): ${error.message}")
+              continue
+            }
         val reward = rewards.getOrDefault(lv, Reward(lv, item, mutableListOf(), mutableListOf()))
 
         if (Calculator.getLevel(player) >= lv && !statsData.getReceiveRewardStatus(lv)) {
