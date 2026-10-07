@@ -1,5 +1,7 @@
 package icu.oyasai.games.gui;
 
+import icu.oyasai.games.dice.DiceMode;
+import icu.oyasai.games.dice.DiceModule;
 import icu.oyasai.games.roulette.gui.RouletteGui;
 import icu.oyasai.games.roulette.model.RouletteSession;
 import icu.oyasai.games.roulette.service.RouletteManager;
@@ -16,9 +18,11 @@ import org.bukkit.event.inventory.InventoryDragEvent;
  */
 public class GamesHubListener implements Listener {
     private final RouletteManager rouletteManager;
+    private final DiceModule diceModule;
 
-    public GamesHubListener(RouletteManager rouletteManager) {
+    public GamesHubListener(RouletteManager rouletteManager, DiceModule diceModule) {
         this.rouletteManager = rouletteManager;
+        this.diceModule = diceModule;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -48,6 +52,12 @@ public class GamesHubListener implements Listener {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.2f);
                 RouletteSession session = rouletteManager.getOrCreateSession(player);
                 RouletteGui.open(player, session);
+            }
+            case GamesHubGui.SLOT_DICE -> {
+                player.closeInventory();
+                if (diceModule != null) {
+                    diceModule.getDiceManager().giveDiceSafely(player, DiceMode.ONE_D6);
+                }
             }
             case GamesHubGui.SLOT_BEDWARS -> {
                 player.closeInventory();
