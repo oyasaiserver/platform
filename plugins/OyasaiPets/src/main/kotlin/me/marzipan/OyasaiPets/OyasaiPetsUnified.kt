@@ -1437,12 +1437,11 @@ object PetDataManager {
   }
 
   fun removePetFromCache(ownerUuid: UUID, petId: String) {
-    cache[ownerUuid.toString()]?.remove(petId)
+    val pets = loadPlayerPets(ownerUuid)
+    val petData = pets.remove(petId) ?: return
 
     // ファイルも削除
     val playerFolder = getPlayerFolder(ownerUuid)
-    val pets = loadPlayerPets(ownerUuid)
-    val petData = pets[petId] ?: return
     val fileName = getPetFileName(petData)
     val file = File(playerFolder, fileName)
     if (file.exists()) {
