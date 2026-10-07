@@ -107,7 +107,11 @@ class BedWarsConfigTest {
     File(old, "shop-extra.yml").writeText("shop: []")
     File(old, "database").mkdirs()
     File(old, "database/bw_stats_players.yml").writeText("data: {}")
-    File(old, ":w").writeText("")
+    if (!System.getProperty("os.name").lowercase().contains("win")) {
+      File(old, ":w").writeText("")
+    } else {
+      File(old, "vim_w").writeText("")
+    }
     val sba = File(folder, "addon").apply { mkdirs() }
     File(sba, "sbaconfig.yml").writeText("game-scoreboard:\n  enabled: true")
     File(sba, "quickbuy").mkdirs()
