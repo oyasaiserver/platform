@@ -85,14 +85,6 @@
       }
     }
   },
-  "vault": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.spiget.org/file/spiget-resources/34315.jar",
-        "hash": "sha256-prXtl/Q6XPW7rwCnyM0jxa/JvQA/hJh1r4s25s930B0="
-      }
-    }
-  },
   "viaversion": {
     "paper": {
       "26.2": {
