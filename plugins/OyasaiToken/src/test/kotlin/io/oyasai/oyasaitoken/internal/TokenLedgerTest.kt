@@ -101,7 +101,7 @@ class TokenLedgerTest {
   }
 
   @Test
-  fun `insufficient removal and transfers do not persist or complete the future`() {
+  fun `insufficient removal and transfers complete false without persisting`() {
     val f = Fixture()
     f.ledger.replaceAll(mapOf(source to BalanceRecord("source", 10)))
     val removal = CompletableFuture<Boolean>()
@@ -114,11 +114,14 @@ class TokenLedgerTest {
     assertEquals(10, f.balance(source))
     assertEquals(1, f.ledger.size())
     assertTrue(f.jobs.isEmpty())
-    listOf(removal, transfer, selfTransfer).forEach { assertFalse(it.isDone) }
+    listOf(removal, transfer, selfTransfer).forEach {
+      assertTrue(it.isDone)
+      assertFalse(it.join())
+    }
   }
 
   @Test
-  fun `overflow rejects add and transfer without persisting or completing`() {
+  fun `overflow completes false for add and transfer without persisting`() {
     val f = Fixture()
     f.ledger.replaceAll(
         mapOf(
@@ -134,8 +137,10 @@ class TokenLedgerTest {
     assertEquals(10, f.balance(source))
     assertEquals(Long.MAX_VALUE, f.balance(target))
     assertTrue(f.jobs.isEmpty())
-    assertFalse(addition.isDone)
-    assertFalse(transfer.isDone)
+    assertTrue(addition.isDone)
+    assertFalse(addition.join())
+    assertTrue(transfer.isDone)
+    assertFalse(transfer.join())
   }
 
   @Test
@@ -206,7 +211,8 @@ class TokenLedgerTest {
         assertEquals(record.name, f.ledger.nameOf(uuid))
       }
       assertSame(completion, f.jobs.single().completion)
-      assertFalse(completion.isDone)
+      assertTrue(completion.isDone)
+      assertFalse(completion.join())
     }
   }
 
@@ -350,12 +356,13 @@ class TokenLedgerTest {
   }
 
   @Test
-  fun `minimum long removal returns null without completing or persisting`() {
+  fun `minimum long removal completes false without persisting`() {
     val f = Fixture()
     val completion = CompletableFuture<Boolean>()
 
     assertNull(f.ledger.remove(source, null, Long.MIN_VALUE, completion = completion))
-    assertFalse(completion.isDone)
+    assertTrue(completion.isDone)
+    assertFalse(completion.join())
     assertEquals(0, f.ledger.size())
     assertTrue(f.jobs.isEmpty())
   }
@@ -364,11 +371,19 @@ class TokenLedgerTest {
   fun `invalid set and transfer amounts throw without persisting`() {
     val f = Fixture()
 
-    assertFailsWith<IllegalArgumentException> { f.ledger.set(source, null, -1) }
+    val setCompletion = CompletableFuture<Boolean>()
+    assertFailsWith<IllegalArgumentException> {
+      f.ledger.set(source, null, -1, completion = setCompletion)
+    }
+    assertTrue(setCompletion.isDone)
+    assertFalse(setCompletion.join())
     listOf(0L, -1L).forEach { amount ->
+      val completion = CompletableFuture<Boolean>()
       assertFailsWith<IllegalArgumentException> {
-        f.ledger.transfer(source, null, target, null, amount)
+        f.ledger.transfer(source, null, target, null, amount, completion)
       }
+      assertTrue(completion.isDone)
+      assertFalse(completion.join())
     }
     assertEquals(0, f.ledger.size())
     assertTrue(f.jobs.isEmpty())
