@@ -32,33 +32,6 @@ object Calculator {
     }
   }
 
-  fun enumToName(type: BehType): String {
-
-    return when (type) {
-      BehType.MOVE -> "Move"
-
-      BehType.VEHICLE -> "Vehicle"
-
-      BehType.FLY -> "Move"
-
-      BehType.JUMP -> "Jump"
-
-      BehType.PLACE_BLOCK -> "Block"
-
-      BehType.VOTE -> "Vote"
-
-      BehType.LIKE -> "Like"
-
-      BehType.RECEIVE_LIKE -> "ReceiveLike"
-
-      BehType.JOIN -> "Join"
-
-      BehType.CHAT -> "Chat"
-
-      BehType.PLAY_TIME -> "PlayTime"
-    }
-  }
-
   fun calculateLv(exp: Int): Int {
     var remainExp = exp
     var level = 0
@@ -75,12 +48,6 @@ object Calculator {
       }
     }
     return level
-  }
-
-  fun OfflinePlayer.getLeve(): Int {
-    val statsData = getStats(this.uniqueId)
-    val remainExp = statsData.exp
-    return calculateLv(remainExp)
   }
 
   fun OfflinePlayer.getExp(): Int {
