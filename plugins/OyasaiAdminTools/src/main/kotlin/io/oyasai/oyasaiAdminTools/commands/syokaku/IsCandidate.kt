@@ -1,6 +1,6 @@
 package io.oyasai.oyasaiAdminTools.commands.syokaku
 
-import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.readStats
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.rank.RankManager.getNextRank
@@ -49,7 +49,7 @@ object IsCandidate : CommandExecutor {
               }
               val player = Bukkit.getOfflinePlayer(playerUUID)
               isCandidate(player).thenAccept { nextRank ->
-                val statsData = getStats(player.uniqueId) // DynamicProfile依存
+                val statsData = readStats(player.uniqueId) // DynamicProfile依存
                 val tick = player.getStatistic(Statistic.PLAY_ONE_MINUTE)
                 val minute = (tick / 20) / 60
                 val hour = minute / 60

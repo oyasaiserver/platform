@@ -1,6 +1,6 @@
 package io.oyasai.oyasaiAdminTools.rank
 
-import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.readStats
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
@@ -49,7 +49,7 @@ object RankManager {
                 if (currentRank != null) {
                   val nextRank = getNextRank(currentRank)
                   if (nextRank != null) {
-                    val statsData = getStats(player.uniqueId) // DynamicProfile依存
+                    val statsData = readStats(player.uniqueId) // DynamicProfile依存
                     val tick = player.getStatistic(Statistic.PLAY_ONE_MINUTE)
                     val minute = (tick / 20) / 60
                     val hour = minute / 60

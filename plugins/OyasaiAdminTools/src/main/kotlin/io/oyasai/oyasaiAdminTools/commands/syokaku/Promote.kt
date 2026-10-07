@@ -1,17 +1,16 @@
 package io.oyasai.oyasaiAdminTools.commands.syokaku
 
-import com.baakun.dynamicprofile.data.PromotionHistory
 import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.PromotionType
 import com.baakun.dynamicprofile.model.Calculator
-import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.readStats
+import com.baakun.dynamicprofile.util.Tools.recordPromotion
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.notifications.PromotionNotification
 import io.oyasai.oyasaiAdminTools.notifications.PromotionNotifier
 import io.oyasai.oyasaiAdminTools.rank.RankManager
 import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
-import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import io.oyasai.oyasaiAdminTools.utils.PlayerUtils
 import net.luckperms.api.LuckPermsProvider
@@ -100,19 +99,8 @@ object Promote : CommandExecutor {
                                                           )
                                                       user.data().add(nextGroupNode)
                                                       api.userManager.saveUser(user)
-                                                      val statsData = getStats(player.uniqueId)
+                                                      val statsData = readStats(player.uniqueId)
 
-                                                      val temp = PromotionHistory()
-
-                                                      val plugin =
-                                                          Bukkit.getPluginManager()
-                                                              .getPlugin("DynamicProfile")
-                                                      plugin
-                                                          ?.logger
-                                                          ?.info(temp.records.size.toString())
-                                                      temp.records.addAll(
-                                                          statsData.promotions.records
-                                                      )
                                                       val record =
                                                           PromotionRecord(
                                                               type = PromotionType.PROMOTE,
@@ -143,21 +131,11 @@ object Promote : CommandExecutor {
                                                               lastLv = Calculator.getLevel(player),
                                                               lastExp = statsData.exp,
                                                           )
-                                                      temp.records.add(record)
-                                                      if (plugin != null && plugin.isEnabled) {
-                                                        plugin.logger.info(
-                                                            temp.records.size.toString()
-                                                        )
-                                                        temp.records.forEach {
-                                                          plugin.logger.info(it.date)
-                                                        }
-                                                        statsData.promotions = temp
-                                                        statsData.promotions.records.forEach {
-                                                          plugin.logger.info(it.date)
-                                                        }
-                                                        statsData.move += 100
-                                                      }
-                                                      JsonUtils.saveUserJson(player.uniqueId)
+                                                      recordPromotion(
+                                                          player.uniqueId,
+                                                          record,
+                                                          moveBonus = 100,
+                                                      )
                                                       val notification =
                                                           PromotionNotification(
                                                               player.uniqueId,

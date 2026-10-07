@@ -5,8 +5,13 @@ package com.baakun.dynamicprofile.util
 import com.baakun.dynamicprofile.DynamicProfile
 import com.baakun.dynamicprofile.DynamicProfile.Companion.UUIDMap
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allStats
+import com.baakun.dynamicprofile.data.PromotionHistory
+import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.leaderBoard.LBStats
+import com.baakun.dynamicprofile.profile.playerTitle.Title
+import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
+import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -53,6 +58,48 @@ object Tools {
 
   fun getStats(uuid: UUID): Stats {
     return allStats.getOrPut(uuid) { Stats(uuid.toString()) }
+  }
+
+  /** 外部からの参照用。コレクションを含め、保存中のデータとは共有しない。 */
+  fun readStats(uuid: UUID): Stats {
+    val stats = getStats(uuid)
+    return stats.copy(
+        recommends = stats.recommends.toMutableMap(),
+        friends = stats.friends.toMutableList(),
+        promotions = PromotionHistory().also { it.records.addAll(stats.promotions.records) },
+    )
+  }
+
+  /** 昇格・降格の記録と保存は DynamicProfile が所有する。 */
+  fun recordPromotion(
+      uuid: UUID,
+      record: PromotionRecord,
+      prepend: Boolean = false,
+      moveBonus: Int = 0,
+  ) {
+    val stats = getStats(uuid)
+    if (prepend) stats.promotions.records.addFirst(record) else stats.promotions.records.add(record)
+    stats.move += moveBonus
+    saveStats(uuid)
+  }
+
+  /** 既存の称号検証と同じ条件で無効な選択を解除する。 */
+  fun validatedTitle(uuid: UUID): Title? {
+    val stats = getStats(uuid)
+    if (stats.title == -1) return null
+    val title = getTitleFromId(stats.title)
+    if (title.id != -1) return title
+    stats.title = -1
+    saveStats(uuid)
+    return null
+  }
+
+  fun saveStats(uuid: UUID) {
+    JsonUtils.toJsonFile(
+        File(plugin.dataFolder, "UserStatsJSON/$uuid.json"),
+        getStats(uuid),
+        Stats::class.java,
+    )
   }
 
   /** &を§(カラーコード)へ変換 */
