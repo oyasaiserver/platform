@@ -28,8 +28,6 @@ class ChatService(
   lateinit var bridge: PaperNetworkBridge
   lateinit var privateMessages: PrivateMessageService
 
-  fun ownsTransformation(surface: ChatTextSurface): Boolean = delivery.hasTransformer(surface)
-
   /** サーバースレッド上でチャットの配信計画を作成。 不変データだけを返し、Paperの非同期イベント処理から安全に利用。 */
   fun planLocalChat(playerId: UUID): LocalChatPlan {
     val player =
@@ -222,11 +220,6 @@ class ChatService(
         player,
         formatter.plain(formatter.body(message)),
     )
-  }
-
-  fun handleLocalChat(player: Player, message: String) {
-    val plan = planLocalChat(player.uniqueId)
-    commitLocalChat(player.uniqueId, plan, message)
   }
 
   fun handleExternalChat(

@@ -63,8 +63,6 @@ class DiscordIntegration(
         }
   }
 
-  override fun onPrivateMessage(senderName: String, targetName: String, message: String) = Unit
-
   inner class ApiListener {
     @Subscribe
     fun onGameChatMessage(event: GameChatMessagePreProcessEvent) {

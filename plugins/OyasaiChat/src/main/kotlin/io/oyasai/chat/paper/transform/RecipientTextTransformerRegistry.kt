@@ -1,6 +1,5 @@
 package io.oyasai.chat.paper.transform
 
-import io.oyasai.chat.api.ChatTextSurface
 import io.oyasai.chat.api.OyasaiChatApi
 import io.oyasai.chat.api.RecipientTextTransformRequest
 import io.oyasai.chat.api.RecipientTextTransformResult
@@ -32,7 +31,6 @@ internal class RecipientTextTransformerRegistry(
   private var closed = false
   private var nextOrder = 0L
   private val entries = mutableListOf<Entry>()
-  @Volatile private var activeSurfaces = emptySet<ChatTextSurface>()
 
   override fun registerTextTransformer(
       owner: Plugin,
@@ -54,11 +52,8 @@ internal class RecipientTextTransformerRegistry(
         )
     entries += entry
     entries.sortWith(compareByDescending<Entry> { it.descriptor.priority }.thenBy(Entry::order))
-    publishActiveSurfaces()
     return Registration(entry)
   }
-
-  fun hasTransformer(surface: ChatTextSurface): Boolean = surface in activeSurfaces
 
   fun transform(
       request: RecipientTextTransformRequest,
@@ -90,7 +85,6 @@ internal class RecipientTextTransformerRegistry(
   fun unregisterOwner(owner: Plugin) {
     checkMainThread("unregister")
     entries.removeIf { it.owner === owner }
-    publishActiveSurfaces()
   }
 
   override fun close() {
@@ -98,12 +92,6 @@ internal class RecipientTextTransformerRegistry(
     if (closed) return
     closed = true
     entries.clear()
-    activeSurfaces = emptySet()
-  }
-
-  private fun publishActiveSurfaces() {
-    activeSurfaces =
-        entries.filter { it.owner.isEnabled }.flatMap { it.descriptor.surfaces }.toSet()
   }
 
   private fun checkMainThread(operation: String) {
@@ -122,7 +110,6 @@ internal class RecipientTextTransformerRegistry(
     override fun close() {
       checkMainThread("unregister")
       entries.remove(entry)
-      publishActiveSurfaces()
     }
   }
 }
