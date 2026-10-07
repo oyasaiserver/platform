@@ -115,12 +115,7 @@ internal class TokenLedger(
       context: MutationContext,
       completion: CompletableFuture<Boolean>?,
   ): BalanceChange? {
-    if (amount < 0) {
-      // This completion-bearing API is deliberately add-only: forwarding to remove would not
-      // carry the completion through the separate removal path.
-      completion?.complete(false)
-      return null
-    }
+    if (amount < 0) return reject(completion)
     return synchronized(lock) {
       val current = account(uuid, name)
       val next = current.record.balance.checkedAdd(amount) ?: return@synchronized reject(completion)
@@ -158,14 +153,7 @@ internal class TokenLedger(
       context: MutationContext = MutationContext.SILENT,
       completion: CompletableFuture<Boolean>? = null,
   ): BalanceChange? {
-    if (amount < 0) {
-      if (amount == Long.MIN_VALUE) return reject(completion)
-      val addContext =
-          context.copy(
-              notificationType = context.notificationType?.let { NotificationType.ADD },
-          )
-      return add(uuid, name, -amount, addContext, completion)
-    }
+    if (amount < 0) return reject(completion)
     return synchronized(lock) {
       val current = account(uuid, name)
       if (current.record.balance < amount) return@synchronized reject(completion)

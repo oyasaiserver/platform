@@ -324,35 +324,50 @@ class TokenLedgerTest {
   }
 
   @Test
-  fun `negative add completes false while negative remove adds and changes notification type`() {
-    val f = Fixture()
-    val rejected = CompletableFuture<Boolean>()
-    val accepted = CompletableFuture<Boolean>()
-
-    assertNull(f.ledger.addWithCommit(source, "source", -3, rejected))
-    assertFalse(rejected.join())
-    assertTrue(f.jobs.isEmpty())
-    assertEquals(0, f.ledger.size())
-    assertEquals(
-        BalanceChange(source, "source", 10, 13, 3, "add"),
-        f.ledger.remove(
-            source,
-            "source",
-            -3,
-            MutationContext(actor, NotificationType.REMOVE),
-            accepted,
-        ),
-    )
-    assertEquals(
-        listOf(
-            BalanceWrite(source, "source", 10, 0, "default"),
-            BalanceWrite(source, "source", 13, 3, "add", actor, NotificationType.ADD),
-        ),
-        f.jobs.single().writes,
-    )
-    assertEquals(13, f.balance(source))
-    assertSame(accepted, f.jobs.single().completion)
-    assertFalse(accepted.isDone)
+  fun `negative add and remove complete false without changing known or unknown accounts`() {
+    listOf(-1L, -3L, Long.MIN_VALUE).forEach { amount ->
+      listOf(false, true).forEach { known ->
+        val f = Fixture()
+        if (known) f.ledger.replaceAll(mapOf(source to BalanceRecord("old", 10)))
+        val mutations: List<(CompletableFuture<Boolean>?) -> BalanceChange?> =
+            listOf(
+                { completion ->
+                  f.ledger.add(
+                      source,
+                      "new",
+                      amount,
+                      MutationContext(actor, NotificationType.ADD),
+                      completion,
+                  )
+                },
+                { completion ->
+                  f.ledger.remove(
+                      source,
+                      "new",
+                      amount,
+                      MutationContext(actor, NotificationType.REMOVE),
+                      completion,
+                  )
+                },
+            )
+        mutations.forEach { mutate ->
+          val completion = CompletableFuture<Boolean>()
+          assertNull(mutate(completion))
+          assertTrue(completion.isDone)
+          assertFalse(completion.join())
+          assertNull(mutate(null))
+          assertTrue(f.jobs.isEmpty())
+          assertEquals(if (known) 1 else 0, f.ledger.size())
+          assertEquals(if (known) "old" else null, f.ledger.nameOf(source))
+          assertEquals(10, f.balance(source))
+        }
+        val addition = CompletableFuture<Boolean>()
+        assertNull(f.ledger.addWithCommit(source, "new", amount, addition))
+        assertTrue(addition.isDone)
+        assertFalse(addition.join())
+        assertTrue(f.jobs.isEmpty())
+      }
+    }
   }
 
   @Test
