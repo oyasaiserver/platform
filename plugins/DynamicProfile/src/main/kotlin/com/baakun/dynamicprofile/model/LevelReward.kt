@@ -119,12 +119,13 @@ object LevelReward {
                         .hoverEvent(Component.text("クリックしてサバイバルモードに変更"))
                 player.sendMessage(message)
               } else {
-                player.playSound(player.eyeLocation, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 1F)
-                player.sendMessage(Component.text("&6[Lv.${reward.lv}] &fのレベル報酬を受け取りました！".color()))
-                statsData.addReceiveRewardStatus(reward.lv)
+                if (statsData.getReceiveRewardStatus(reward.lv)) return@guiRun
                 for (run in reward.runnables) {
                   run.run()
                 }
+                statsData.addReceiveRewardStatus(reward.lv)
+                player.playSound(player.eyeLocation, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 1F)
+                player.sendMessage(Component.text("&6[Lv.${reward.lv}] &fのレベル報酬を受け取りました！".color()))
                 display(player) // 開きなおす(表示の順番を詰める)
               }
             }
