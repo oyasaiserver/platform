@@ -11,7 +11,6 @@ import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.leaderBoard.LBStats
 import com.baakun.dynamicprofile.profile.playerTitle.Title
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
-import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -57,6 +56,9 @@ object Tools {
   }
 
   fun getStats(uuid: UUID): Stats {
+    // Before bootstrap completes, read-only integrations see the same initial level as before.
+    // Do not cache these temporary values: they must never replace imported profiles.
+    if (!plugin.statsReady) return Stats(uuid.toString())
     return allStats.getOrPut(uuid) { Stats(uuid.toString()) }
   }
 
@@ -77,6 +79,7 @@ object Tools {
       prepend: Boolean = false,
       moveBonus: Int = 0,
   ) {
+    check(plugin.statsReady) { "Profile data has not finished loading" }
     val stats = getStats(uuid)
     if (prepend) stats.promotions.records.addFirst(record) else stats.promotions.records.add(record)
     stats.move += moveBonus
@@ -95,11 +98,7 @@ object Tools {
   }
 
   fun saveStats(uuid: UUID) {
-    JsonUtils.toJsonFile(
-        File(plugin.dataFolder, "UserStatsJSON/$uuid.json"),
-        getStats(uuid),
-        Stats::class.java,
-    )
+    plugin.saveStats(uuid)
   }
 
   /** &を§(カラーコード)へ変換 */
