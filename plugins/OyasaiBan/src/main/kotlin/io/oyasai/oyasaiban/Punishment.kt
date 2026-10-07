@@ -79,7 +79,7 @@ sealed interface BanArguments {
         if (arguments.size < 2) return Invalid("§c理由を指定してください。")
         return Valid(
             duration,
-            if (duration is PunishmentDuration.Permanent) "永久" else first,
+            first,
             arguments.drop(1).joinToString(" "),
             arguments[1],
         )

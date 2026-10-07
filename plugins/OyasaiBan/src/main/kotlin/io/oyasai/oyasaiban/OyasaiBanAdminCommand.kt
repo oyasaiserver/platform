@@ -4,7 +4,6 @@ import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.proxy.ConsoleCommandSource
 import java.nio.file.Files
 import java.util.UUID
-import java.util.concurrent.CompletionException
 import net.kyori.adventure.text.Component
 import org.slf4j.Logger
 
@@ -104,6 +103,4 @@ class OyasaiBanAdminCommand(
           )
         }
   }
-
-  private fun Throwable.unwrap(): Throwable = (this as? CompletionException)?.cause ?: this
 }
