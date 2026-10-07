@@ -7076,12 +7076,6 @@ class PetReviveService(
       return
     }
 
-    // ポイント消費
-    val cost = BigWolfConfig.reviveCost
-    if (!economySystem.consumeTokens(player, cost)) {
-      return
-    }
-
     // ペットを復活（上空からの降臨演出）
     val type = runCatching { EntityType.valueOf(petData.type) }.getOrNull() ?: EntityType.WOLF
     val spec = PetRegistry.get(type)
@@ -7092,11 +7086,19 @@ class PetReviveService(
       return
     }
 
+    // ポイント消費
+    val cost = BigWolfConfig.reviveCost
+    if (!economySystem.consumeTokens(player, cost)) {
+      return
+    }
+
     // 上空10ブロックからスタート
     val spawnLoc = safeGround.clone().add(0.0, 10.0, 0.0)
 
-    val entity = player.world.spawnEntity(spawnLoc, type) as? LivingEntity
-    if (entity == null) {
+    val entity =
+        runCatching { player.world.spawnEntity(spawnLoc, type) as? LivingEntity }.getOrNull()
+    if (entity == null || !entity.isValid) {
+      economySystem.refundTokens(player, cost)
       player.sendMessage(Component.text("この場所ではペットを復活できません。", RED))
       return
     }
