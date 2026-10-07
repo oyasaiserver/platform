@@ -1341,6 +1341,8 @@ object SLDatabase {
 
   fun getCachedPlayerName(uuid: String): String? = playerNameCache[uuid]
 
+  internal fun getCachedPlayerNames(): List<String> = playerNameCache.values.toList()
+
   /**
    * Resolves the supplied UUIDs with one query, then falls back to Bukkit's offline-player cache.
    */
