@@ -1,5 +1,6 @@
 package io.oyasai.anybuilder.common
 
+import io.oyasai.milepoint.MileagePoint
 import io.oyasai.toolbox.CustomHead
 import io.oyasai.toolbox.OyasaiMenu
 import io.oyasai.toolbox.PaginatedOyasaiMenu
@@ -8,6 +9,7 @@ import io.oyasai.toolbox.Tools.allHide
 import io.oyasai.toolbox.Tools.unColor
 import io.oyasai.toolbox.legacyDisplayName
 import java.util.*
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -121,6 +123,61 @@ object BuilderMenuSupport {
     }
     return gui
   }
+
+  fun vehicleListRow(
+      ownerUUID: UUID,
+      name: String,
+      material: Material?,
+      entityCount: Int,
+      buy: Boolean,
+  ): VehicleListRow =
+      VehicleListRow(
+          ownerUUID,
+          name,
+          material,
+          listOf(
+              "&aエンティティ数&7: &a$entityCount",
+              "&3作者&7: &b${Bukkit.getOfflinePlayer(ownerUUID).name ?: "Unknown"}",
+              if (buy) "&7クリックすると&9マイルポイント&b100P&7で車両を購入する" else "&7クリックで無料の試乗車両をスポーンさせます",
+          ),
+      )
+
+  fun selectVehicle(
+      player: Player,
+      name: String,
+      buy: Boolean,
+      buyItem: (String, String) -> ItemStack?,
+      inventoryFullMessage: String,
+      boughtMessage: String,
+      insufficientPointsMessage: String,
+      trialCommand: String,
+  ) {
+    if (buy) {
+      if (player.inventory.firstEmpty() == -1) {
+        player.playSound(player.location, Sound.ITEM_DYE_USE, 0.35f, 0.5f)
+        player.sendMessage(inventoryFullMessage)
+        return
+      }
+      val boughtItem = buyItem(name, player.name) ?: return
+      if (MileagePoint.payment(player.uniqueId, 100)) {
+        player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.235f)
+        player.inventory.addItem(boughtItem)
+        player.sendMessage(boughtMessage)
+      } else {
+        player.playSound(player.location, Sound.ITEM_DYE_USE, 0.35f, 0.5f)
+        player.sendMessage(insufficientPointsMessage)
+      }
+    } else {
+      player.performCommand(trialCommand)
+    }
+  }
+
+  val commonStatRows =
+      listOf(
+          VehicleStatRow("&f最高速", "&7上限:180"),
+          VehicleStatRow("&fパワー", "&7上限:1000"),
+          VehicleStatRow("&fブレーキ", "&7上限:1000"),
+      )
 
   fun setupVehicleSelectionMenu(gui: OyasaiMenu, spec: VehicleSelectionMenuSpec) {
     gui.setGlobalClickAction { event -> event.isCancelled = true }

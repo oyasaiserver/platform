@@ -239,9 +239,6 @@ object Tools {
 
   fun String.unColor(): String = stripColors(this)
 
-  fun buildText(message: String, color: Color = Color.WHITE): TextComponent =
-      buildTextComponent(message, color)
-
   val ldtFormat: DateTimeFormatter
     get() = toolboxDateFormat
 
