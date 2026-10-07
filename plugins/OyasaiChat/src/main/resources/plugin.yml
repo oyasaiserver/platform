@@ -8,8 +8,6 @@ softdepend:
   - Vault
   - LuckPerms
   - DiscordSRV
-loadbefore:
-  - Essentials
 commands:
   mute:
     description: Toggle or update a player mute
