@@ -185,7 +185,7 @@ class OyasaiTokenPlugin :
 
   override fun addTokensWithCommit(uuid: UUID, amount: Long): CompletableFuture<Boolean> {
     val completion = CompletableFuture<Boolean>()
-    val change = ledger.addWithCommit(uuid, null, amount, completion)
+    val change = ledger.add(uuid, null, amount, MutationContext.SILENT, completion)
     if (change == null) {
       completion.complete(false)
     } else {
