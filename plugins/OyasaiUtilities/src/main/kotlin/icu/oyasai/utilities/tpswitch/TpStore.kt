@@ -1,5 +1,6 @@
 package icu.oyasai.utilities.tpswitch
 
+import icu.oyasai.utilities.storage.transaction
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
@@ -126,7 +127,7 @@ internal class TpStore(private val file: File) : AutoCloseable {
         ) {
           "TPswitch tables exist without a schema version"
         }
-        transaction {
+        connection.transaction {
           connection.createStatement().use {
             it.execute("CREATE TABLE tp_players (owner TEXT PRIMARY KEY, open INTEGER NOT NULL)")
             it.execute(
@@ -180,7 +181,7 @@ internal class TpStore(private val file: File) : AutoCloseable {
 
   // Remove this import path after production SQLite reports legacy_imported=1 and legacy_skipped=0.
   fun importLegacy(data: LegacyData) {
-    transaction {
+    connection.transaction {
       for ((owner, state) in data.players) saveRows(owner, state)
       for ((key, value) in
           mapOf(
@@ -201,7 +202,7 @@ internal class TpStore(private val file: File) : AutoCloseable {
     }
   }
 
-  fun save(owner: UUID, settings: TpSettings) = transaction { saveRows(owner, settings) }
+  fun save(owner: UUID, settings: TpSettings) = connection.transaction { saveRows(owner, settings) }
 
   private fun saveRows(owner: UUID, settings: TpSettings) {
     val id = owner.toString()
@@ -244,19 +245,6 @@ internal class TpStore(private val file: File) : AutoCloseable {
         }
       }
       statement.executeBatch()
-    }
-  }
-
-  private fun transaction(block: () -> Unit) {
-    connection.autoCommit = false
-    try {
-      block()
-      connection.commit()
-    } catch (failure: Exception) {
-      connection.rollback()
-      throw failure
-    } finally {
-      connection.autoCommit = true
     }
   }
 

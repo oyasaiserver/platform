@@ -76,25 +76,4 @@ object ArmorStandSpawner {
 
     return stand
   }
-
-  /** デフォルト設定の「編集用」防具立てをスポーンする。 プレイヤーが /cbm add したときに基準ブロックの中心に出現する防具立て。 */
-  fun spawnEditing(blockLoc: Location): ArmorStand {
-    val spawnLoc =
-        Location(
-            blockLoc.world!!,
-            blockLoc.blockX + 0.5,
-            blockLoc.blockY.toDouble(),
-            blockLoc.blockZ + 0.5,
-        )
-
-    val stand = blockLoc.world!!.spawnEntity(spawnLoc, EntityType.ARMOR_STAND) as ArmorStand
-    stand.isSmall = true
-    stand.isVisible = true
-    stand.isInvulnerable = true
-    stand.setGravity(false)
-    stand.isSilent = true
-    stand.isMarker = false
-    stand.setBasePlate(false)
-    return stand
-  }
 }

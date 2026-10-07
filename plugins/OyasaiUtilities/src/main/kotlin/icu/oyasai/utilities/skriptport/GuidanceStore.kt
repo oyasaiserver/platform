@@ -1,5 +1,6 @@
 package icu.oyasai.utilities.skriptport
 
+import icu.oyasai.utilities.storage.transaction
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.charset.CodingErrorAction
@@ -133,7 +134,7 @@ internal class GuidanceStore(private val file: File) : AutoCloseable {
 
   fun importLegacy(data: GuidanceImport): Boolean {
     if (!canImport()) return false
-    transaction {
+    connection.transaction {
       data.clicked.forEach { (uuid, sign) -> saveClicked(uuid, sign) }
       (data.guides.keys + data.names.keys + data.dates.keys).forEach { uuid ->
         saveRecord(uuid, GuidanceRecord(data.guides[uuid], data.names[uuid], data.dates[uuid]))
@@ -167,10 +168,11 @@ internal class GuidanceStore(private val file: File) : AutoCloseable {
         }
       }
 
-  fun complete(uuid: UUID, sign: String, guide: UUID, name: String, at: Long) = transaction {
-    saveClicked(uuid, sign)
-    saveRecord(uuid, GuidanceRecord(guide.toString(), name, at))
-  }
+  fun complete(uuid: UUID, sign: String, guide: UUID, name: String, at: Long) =
+      connection.transaction {
+        saveClicked(uuid, sign)
+        saveRecord(uuid, GuidanceRecord(guide.toString(), name, at))
+      }
 
   private fun saveClicked(uuid: UUID, sign: String) {
     connection.prepareStatement("INSERT INTO guide_clicked(uuid, sign_id) VALUES (?, ?)").use {
@@ -192,19 +194,6 @@ internal class GuidanceStore(private val file: File) : AutoCloseable {
           if (record.at == null) it.setNull(4, java.sql.Types.BIGINT) else it.setLong(4, record.at)
           it.executeUpdate()
         }
-  }
-
-  private fun transaction(block: () -> Unit) {
-    connection.autoCommit = false
-    try {
-      block()
-      connection.commit()
-    } catch (failure: Exception) {
-      connection.rollback()
-      throw failure
-    } finally {
-      connection.autoCommit = true
-    }
   }
 
   override fun close() {
