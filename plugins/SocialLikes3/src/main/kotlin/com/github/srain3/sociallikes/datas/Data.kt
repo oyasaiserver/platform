@@ -36,6 +36,14 @@ object Data {
 
   /** Persists to the selected primary store; the other store remains a best-effort mirror. */
   fun save(data: SLData, actorUuid: UUID? = null) {
+    saveWithCompletion(data, actorUuid) {}
+  }
+
+  internal fun saveWithCompletion(data: SLData, actorUuid: UUID?, onSuccess: () -> Unit) {
+    val saved = {
+      Bukkit.getScheduler().runTask(Tools.plugin, Runnable { onSuccess() })
+      Unit
+    }
     // 1. メモリ (キャッシュ) を先行更新
     if (data.deletedAt != null) {
       removeFromCache(data)
@@ -45,15 +53,22 @@ object Data {
     }
 
     if (activeReadSource == ReadSource.SQLITE) {
-      SLDatabase.saveBuild(data) {
-        DirtyBuildManager.markDirty(data.id)
-        notifyPlayerFailure(actorUuid, "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）")
-      }
+      SLDatabase.saveBuildWithCompletion(
+          data,
+          {
+            DirtyBuildManager.markDirty(data.id)
+            notifyPlayerFailure(actorUuid, "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）")
+          },
+          saved,
+      )
       saveYamlAsync(data)
     } else {
       // Before the explicit offline migration, YAML is authoritative. SQLite failures must not
       // reject a YAML-backed write; reconciliation records the shadow write for later repair.
-      saveYamlAsync(data)
+      saveYamlWithCompletion(data) { success ->
+        if (success) saved()
+        else notifyPlayerFailure(actorUuid, "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）")
+      }
       SLDatabase.saveBuild(data) { DirtyBuildManager.markDirty(data.id) }
     }
   }

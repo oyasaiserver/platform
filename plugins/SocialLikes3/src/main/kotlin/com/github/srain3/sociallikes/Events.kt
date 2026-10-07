@@ -269,7 +269,33 @@ object Events : Listener {
         data.likes.add(e.player.uniqueId)
         newlyLiked = true
         data.likesWithTimestamp[e.player.uniqueId] = System.currentTimeMillis()
-        Data.save(data, e.player.uniqueId)
+        Data.saveWithCompletion(data, e.player.uniqueId) {
+          val likeEvent = LikeEvent(e.player.uniqueId, data.owner)
+          Bukkit.getPluginManager().callEvent(likeEvent)
+
+          if (e.player.uniqueId != data.owner) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give ${e.player.name} 1000")
+          }
+
+          // 制作者がオンラインの場合通知
+          val ownerPlayer = Bukkit.getPlayer(data.owner)
+          if (ownerPlayer?.isOnline == true) {
+            Tools.displaySocialLikeToast(
+                ownerPlayer,
+                ItemStack(Material.OAK_SIGN),
+                Tools.socialLikesLOGOShort +
+                    "&a${data.title} &7ID:${id}&r\n${e.player.name}&7 > &rイイね!".color(),
+            )
+            ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
+            if (e.player.uniqueId != data.owner) {
+              if (Tools.addTokens(ownerPlayer, 2)) {
+                sendLikeRewardMessage(ownerPlayer, 2)
+              }
+            }
+          } else {
+            addOfflineLikePoints(data.owner, 2)
+          }
+        }
         SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
         Data.changeUserLikesInt(data.owner, 1)
 
@@ -288,32 +314,6 @@ object Events : Listener {
         block.location.world?.playSound(block.location, Sound.BLOCK_NOTE_BLOCK_CHIME, 2F, 1.225F)
         val text = TextComponent("イイねしました！")
         e.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, text)
-
-        val likeEvent = LikeEvent(e.player.uniqueId, data.owner)
-        Bukkit.getPluginManager().callEvent(likeEvent)
-
-        if (e.player.uniqueId != data.owner) {
-          Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give ${e.player.name} 1000")
-        }
-
-        // 制作者がオンラインの場合通知
-        val ownerPlayer = Bukkit.getPlayer(data.owner)
-        if (ownerPlayer?.isOnline == true) {
-          Tools.displaySocialLikeToast(
-              ownerPlayer,
-              ItemStack(Material.OAK_SIGN),
-              Tools.socialLikesLOGOShort +
-                  "&a${data.title} &7ID:${id}&r\n${e.player.name}&7 > &rイイね!".color(),
-          )
-          ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
-          if (e.player.uniqueId != data.owner) {
-            if (Tools.addTokens(ownerPlayer, 2)) {
-              sendLikeRewardMessage(ownerPlayer, 2)
-            }
-          }
-        } else {
-          addOfflineLikePoints(data.owner, 2)
-        }
       } else {
         // すでにいいねをしている
         val text = TextComponent("既にイイねしています！")

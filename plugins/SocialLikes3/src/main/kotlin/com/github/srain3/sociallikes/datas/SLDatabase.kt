@@ -1031,11 +1031,22 @@ object SLDatabase {
   }
 
   fun saveBuild(data: SLData, onFinalFailure: ((Exception) -> Unit)? = null) {
+    saveBuildWithCompletion(data, onFinalFailure) {}
+  }
+
+  internal fun saveBuildWithCompletion(
+      data: SLData,
+      onFinalFailure: ((Exception) -> Unit)?,
+      onSuccess: () -> Unit,
+  ) {
     val snapshot = data.toBuildSnapshot()
     submitWrite(
         "saveBuild[${snapshot.id}]",
         onFinalFailure = onFinalFailure,
-        onSuccess = { DirtyBuildManager.markClean(snapshot.id) },
+        onSuccess = {
+          DirtyBuildManager.markClean(snapshot.id)
+          onSuccess()
+        },
     ) {
       upsertBuild(snapshot)
     }
