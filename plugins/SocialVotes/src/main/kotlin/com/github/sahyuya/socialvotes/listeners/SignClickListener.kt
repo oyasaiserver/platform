@@ -120,11 +120,17 @@ class SignClickListener : Listener {
     // Update モード
     // ==================================================
     if (UpdateModeManager.isWatching(p.uniqueId)) {
-
+      if (!p.hasPermission("socialvotes.admin")) {
+        UpdateModeManager.cancel(p.uniqueId)
+        NotifyUtil.invalid(p, "この操作には管理者権限が必要です。")
+        return
+      }
       val svSign = dm.signById[signId] ?: return
 
       // 旧実体削除
-      svSign.toLocation()?.block?.type = Material.AIR
+      svSign.toLocation()?.block?.let { oldBlock ->
+        if (oldBlock != block && oldBlock.state is Sign) oldBlock.type = Material.AIR
+      }
 
       // 座標更新
       dm.updateSignLocation(signId, block.location)
