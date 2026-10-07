@@ -409,6 +409,18 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   }
 
   override fun onDisable() {
+    if (::storageService.isInitialized) {
+      for (player in server.onlinePlayers) {
+        val pets = ActivePetRegistry.getByOwner(player.uniqueId.toString())
+        if (pets.isEmpty()) continue
+        if (::fetchSystem.isInitialized) {
+          for (entity in pets) {
+            fetchSystem.stopFetchTask(entity)
+          }
+        }
+        storageService.storeAllPets(player)
+      }
+    }
     // 子供AIシステムのクリーンアップ
     if (::childAISystem.isInitialized) {
       childAISystem.cleanup()
