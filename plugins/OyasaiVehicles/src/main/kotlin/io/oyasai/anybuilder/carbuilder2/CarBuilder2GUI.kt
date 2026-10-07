@@ -56,10 +56,9 @@ object CarBuilder2GUI {
                   player.sendMessage("[CarBuilder2] インベントリを開けてください!")
                   return@onSelection
                 }
+                val boughtItem = CarBuilder2Item.buyCarItem(name, player.name) ?: return@onSelection
                 if (MileagePoint.payment(player.uniqueId, 100)) {
                   player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.235f)
-                  val boughtItem =
-                      CarBuilder2Item.buyCarItem(name, player.name) ?: return@onSelection
                   player.inventory.addItem(boughtItem)
                   player.sendMessage("[CarBuilder2] ${name}を購入しました!")
                 } else {
