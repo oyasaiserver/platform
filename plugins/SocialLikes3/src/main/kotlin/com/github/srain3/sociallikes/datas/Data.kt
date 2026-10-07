@@ -13,6 +13,7 @@ import java.io.File
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.logging.Level
@@ -373,49 +374,72 @@ object Data {
         .start()
   }
 
-  fun saveYamlAsync(data: SLData) {
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            Tools.plugin,
-            Runnable {
-              try {
-                val dirName = getDirName(data.id)
-                val yml = CustomYaml("data/" + dirName + "/${data.id}.yml")
-                val likesStr = data.likes.map { it.toString() }
-                val likesWithTimestampStr = mutableMapOf<String, Long>()
-                data.likesWithTimestamp.forEach { (uuid, ts) ->
-                  likesWithTimestampStr[uuid.toString()] = ts
-                }
+  private val yamlWrites = mutableMapOf<Int, CompletableFuture<Void>>()
 
-                yml.apply {
-                  set("id", data.id)
-                  set("loc.world", data.worldName)
-                  set("loc.x", data.loc.x)
-                  set("loc.y", data.loc.y)
-                  set("loc.z", data.loc.z)
-                  // Build creation time is immutable. Keep a legacy value intact when an existing
-                  // YAML record is saved for another reason; only new records start as epoch ms.
-                  set("time", yml.getString("time") ?: BuildTimestamps.toStored(data.time))
-                  set("owner", data.owner.toString())
-                  set("title", data.title)
-                  set("likes", likesStr)
-                  set("likesWithTimestamp", likesWithTimestampStr)
-                  set("check", data.check)
-                  set("comment", data.comment)
-                  set("DiscordTextID", data.discordTextID)
-                  set("deleted", data.deletedAt != null)
-                  set("deleted_at", data.deletedAt?.let(BuildTimestamps::toStored))
-                  set("deleted_by", data.deletedBy?.toString())
-                  set("sign_material", data.signMaterial)
-                }
-                yml.save()
-              } catch (e: Exception) {
-                Tools.plugin.logger.warning(
-                    "[SL3] YAML fallback save failed for ID ${data.id}: ${e.message}"
-                )
-              }
-            },
+  fun saveYamlAsync(data: SLData) {
+    saveYamlWithCompletion(data) {}
+  }
+
+  private fun saveYamlWithCompletion(data: SLData, onComplete: (Boolean) -> Unit) {
+    val snapshot =
+        data.copy(
+            loc = data.loc.clone(),
+            likes = data.likes.toMutableList(),
+            likesWithTimestamp = data.likesWithTimestamp.toMutableMap(),
         )
+    synchronized(yamlWrites) {
+      val previous = yamlWrites[data.id] ?: CompletableFuture.completedFuture(null)
+      val write =
+          previous.thenRunAsync(
+              Runnable {
+                val data = snapshot
+                var saved = false
+                try {
+                  val dirName = getDirName(data.id)
+                  val yml = CustomYaml("data/" + dirName + "/${data.id}.yml")
+                  val likesStr = data.likes.map { it.toString() }
+                  val likesWithTimestampStr = mutableMapOf<String, Long>()
+                  data.likesWithTimestamp.forEach { (uuid, ts) ->
+                    likesWithTimestampStr[uuid.toString()] = ts
+                  }
+
+                  yml.apply {
+                    set("id", data.id)
+                    set("loc.world", data.worldName)
+                    set("loc.x", data.loc.x)
+                    set("loc.y", data.loc.y)
+                    set("loc.z", data.loc.z)
+                    // Build creation time is immutable. Keep a legacy value intact when an existing
+                    // YAML record is saved for another reason; only new records start as epoch ms.
+                    set("time", yml.getString("time") ?: BuildTimestamps.toStored(data.time))
+                    set("owner", data.owner.toString())
+                    set("title", data.title)
+                    set("likes", likesStr)
+                    set("likesWithTimestamp", likesWithTimestampStr)
+                    set("check", data.check)
+                    set("comment", data.comment)
+                    set("DiscordTextID", data.discordTextID)
+                    set("deleted", data.deletedAt != null)
+                    set("deleted_at", data.deletedAt?.let(BuildTimestamps::toStored))
+                    set("deleted_by", data.deletedBy?.toString())
+                    set("sign_material", data.signMaterial)
+                  }
+                  yml.save(File(Tools.plugin.dataFolder, "data/$dirName/${data.id}.yml"))
+                  saved = true
+                } catch (e: Exception) {
+                  Tools.plugin.logger.warning(
+                      "[SL3] YAML fallback save failed for ID ${data.id}: ${e.message}"
+                  )
+                }
+                onComplete(saved)
+              },
+              { task -> Bukkit.getScheduler().runTaskAsynchronously(Tools.plugin, task) },
+          )
+      yamlWrites[data.id] = write
+      write.whenComplete { _, _ ->
+        synchronized(yamlWrites) { if (yamlWrites[data.id] === write) yamlWrites.remove(data.id) }
+      }
+    }
   }
 
   fun removeFromCache(data: SLData) {
