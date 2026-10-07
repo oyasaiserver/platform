@@ -65,11 +65,6 @@ class SignClickListener : Listener {
                 return
               }
 
-      if (!p.isOp && group.owner != p.uniqueId) {
-        NotifyUtil.invalid(p, "この操作はグループ作成者またはOPのみ可能です。")
-        return
-      }
-
       if (group.signIds.size >= 45) {
         NotifyUtil.invalid(p, "45個を超えるため追加できません。")
         return
@@ -125,11 +120,6 @@ class SignClickListener : Listener {
     // Update モード
     // ==================================================
     if (UpdateModeManager.isWatching(p.uniqueId)) {
-      if (!p.hasPermission("socialvotes.admin")) {
-        UpdateModeManager.cancel(p.uniqueId)
-        NotifyUtil.invalid(p, "この操作には管理者権限が必要です。")
-        return
-      }
       val svSign = dm.signById[signId] ?: return
 
       // 旧実体削除

@@ -16,10 +16,6 @@ class SvUpdateCommand : CommandExecutor {
       sender.sendMessage("プレイヤーのみ実行できます。")
       return true
     }
-    if (!sender.hasPermission("socialvotes.admin")) {
-      sender.sendMessage("§cこの操作には管理者権限が必要です。")
-      return true
-    }
     UpdateModeManager.watchPlayer(sender.uniqueId)
     sender.sendMessage("更新したいSV看板を右クリックでアップデートできます。\n(看板以外をクリックで追加状態を解除)")
     return true
