@@ -49,13 +49,6 @@ data class NormalWorld(
         },
 )
 
-internal data class LegacyWorlds(
-    val worlds: Map<String, NormalWorld>,
-    val skippedLegacy: Int,
-    val skippedInvalid: Int,
-    val skippedHeight: Int,
-)
-
 internal fun loadNormalYaml(file: File): YamlConfiguration =
     YamlConfiguration().apply {
       options().pathSeparator('\u0000')
@@ -65,80 +58,6 @@ internal fun loadNormalYaml(file: File): YamlConfiguration =
 
 private inline fun <reified T : Enum<T>> normalEnumValue(value: String?, fallback: T): T =
     enumValues<T>().firstOrNull { it.name.equals(value, true) } ?: fallback
-
-internal fun parseLegacyWorlds(
-    source: File,
-    heightWorldNames: Set<String> = emptySet(),
-): LegacyWorlds {
-  val config = loadNormalYaml(source)
-  val parsed = linkedMapOf<String, NormalWorld>()
-  var skippedLegacy = 0
-  var skippedInvalid = 0
-  var skippedHeight = 0
-  for (rawKey in config.getKeys(false)) {
-    if (!rawKey.startsWith("minecraft:")) {
-      skippedLegacy++
-      continue
-    }
-    // MV encodes dots only to protect Bukkit's YAML path separator.
-    val key = runCatching { NamespacedKey.fromString(rawKey.replace("[dot]", ".")) }.getOrNull()
-    val section = config.getConfigurationSection(rawKey)
-    val name = section?.getConfigurationSection("read-only")?.getString("legacy-world-name")
-    if (
-        key == null ||
-            name.isNullOrEmpty() ||
-            !OwgConfig.isSafeWorldName(name) ||
-            name == "." ||
-            name == ".." ||
-            parsed.containsKey(name)
-    ) {
-      skippedInvalid++
-      continue
-    }
-    if (name in heightWorldNames) {
-      skippedHeight++
-      continue
-    }
-    val spawn = section.getConfigurationSection("spawn-location")
-    val alias = section.getString("alias").orEmpty()
-    parsed[name] =
-        NormalWorld(
-            name,
-            key,
-            normalEnumValue(
-                section.getConfigurationSection("read-only")?.getString("environment"),
-                World.Environment.NORMAL,
-            ),
-            section.getString("generator").orEmpty(),
-            normalEnumValue(section.getString("difficulty"), Difficulty.NORMAL),
-            section.getBoolean("pvp", true),
-            section.getBoolean("allow-flight", false),
-            section
-                .getConfigurationSection("spawning")
-                ?.getConfigurationSection("monster")
-                ?.getBoolean("spawn", true) ?: true,
-            section
-                .getConfigurationSection("spawning")
-                ?.getConfigurationSection("animal")
-                ?.getBoolean("spawn", true) ?: true,
-            spawn
-                ?.takeIf { it.contains("x") && it.contains("y") && it.contains("z") }
-                ?.let {
-                  listOf(
-                      it.getDouble("x"),
-                      it.getDouble("y"),
-                      it.getDouble("z"),
-                      it.getDouble("yaw"),
-                      it.getDouble("pitch"),
-                  )
-                },
-            alias.takeUnless { it == name }.orEmpty(),
-            section.getBoolean("keep-spawn-in-memory", true),
-            section.getBoolean("auto-load", true),
-        )
-  }
-  return LegacyWorlds(parsed, skippedLegacy, skippedInvalid, skippedHeight)
-}
 
 internal fun normalWorldFolder(root: Path, key: NamespacedKey): File? {
   val dimensions = root.resolve("dimensions").toAbsolutePath().normalize()
@@ -183,23 +102,10 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
 
   fun initialize() {
     if (!file.exists()) {
-      val source = File(plugin.server.pluginsFolder, "Multiverse-Core/worlds.yml")
-      if (source.isFile) importLegacy(source)
-      else {
-        plugin.logger.warning("[OWG][normal] MV worlds.yml absent; starting with empty registry")
-        save()
-      }
+      plugin.logger.warning("[OWG][normal] Starting with empty registry")
+      save()
     }
     readFile()
-  }
-
-  private fun importLegacy(source: File) {
-    val result = parseLegacyWorlds(source, heightConfig().configuredWorldNames)
-    worlds.putAll(result.worlds)
-    save()
-    plugin.logger.info(
-        "[OWG][normal] Imported ${result.worlds.size}; skipped legacy=${result.skippedLegacy} invalid=${result.skippedInvalid} height=${result.skippedHeight}"
-    )
   }
 
   private fun readFile() {
