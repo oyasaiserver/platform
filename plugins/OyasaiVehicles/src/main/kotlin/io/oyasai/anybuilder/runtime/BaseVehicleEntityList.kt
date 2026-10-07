@@ -3,8 +3,6 @@ package io.oyasai.anybuilder.runtime
 import io.oyasai.toolbox.Tools
 import java.io.File
 import java.util.*
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import org.bukkit.Bukkit
 import org.bukkit.boss.BossBar
 import org.bukkit.entity.Player
@@ -90,28 +88,29 @@ abstract class BaseVehicleCache<T : VehicleBaseData>(
   protected abstract fun createBaseData(name: String): T
 
   fun reloadCache() {
-    cache.clear()
     Bukkit.getLogger().info("[$logPrefix] Load ${folderName}...")
     val plugin = requireNotNull(Tools.pl) { "Plugin is not initialized" }
     Thread(
             {
+              val loadedCache: SortedMap<String, T> = TreeMap()
               val dir = File(plugin.dataFolder, folderName)
               if (dir.isDirectory) {
-                val tp = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
                 dir.listFiles()
                     ?.filter { it.isDirectory }
                     ?.forEach { file ->
-                      tp.execute {
-                        val data = createBaseData(file.name)
-                        if (!data.isEmpty()) cache[file.name] = data
-                      }
+                      val data = createBaseData(file.name)
+                      if (!data.isEmpty()) loadedCache[file.name] = data
                     }
-                tp.shutdown()
-                try {
-                  tp.awaitTermination(7L, TimeUnit.DAYS)
-                } catch (_: InterruptedException) {}
               }
-              Bukkit.getLogger().info("[$logPrefix] Load $folderName completion!")
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        cache.clear()
+                        cache.putAll(loadedCache)
+                        Bukkit.getLogger().info("[$logPrefix] Load $folderName completion!")
+                      },
+                  )
             },
             "$logPrefix-reloadCache",
         )
