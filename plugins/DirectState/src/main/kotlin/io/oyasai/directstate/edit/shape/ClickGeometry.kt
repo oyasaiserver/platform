@@ -58,34 +58,6 @@ internal object ClickGeometry {
         else -> Point(1.0 - point.z, point.y, point.x)
       }
 
-  /** テストで、クリック面を南向き階段の面へ回す。 */
-  fun faceToCanonical(face: Face, facing: Int): Face {
-    if (face == Face.UP || face == Face.DOWN) return face
-    val world = horizontalIndex(face)
-    return horizontalFace((world + 2 - facing).mod(4))
-  }
-
-  /** テストで、南向き基準の面を元の階段の面へ戻す。 */
-  fun faceFromCanonical(face: Face, facing: Int): Face {
-    if (face == Face.UP || face == Face.DOWN) return face
-    val canonical = horizontalIndex(face)
-    return horizontalFace((canonical - 2 + facing).mod(4))
-  }
-
-  /** 水平面をNORTH=0から時計回りの番号へ変換する。 */
-  private fun horizontalIndex(face: Face) =
-      when (face) {
-        Face.NORTH -> 0
-        Face.EAST -> 1
-        Face.SOUTH -> 2
-        Face.WEST -> 3
-        else -> error("Vertical face has no horizontal index")
-      }
-
-  /** 時計回りの番号を水平面へ戻す。 */
-  private fun horizontalFace(index: Int) =
-      listOf(Face.NORTH, Face.EAST, Face.SOUTH, Face.WEST)[index.mod(4)]
-
   /** 素手デバッグ棒の階段編集で、打点をNW=0、NE=1、SE=2、SW=3へ分類する。 */
   fun quarter(point: Point): Int =
       when {

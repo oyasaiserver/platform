@@ -36,12 +36,6 @@ internal class TypeReplacement(private val blockNames: Set<String>) {
     return Variant(familyFromShape(name), kind)
   }
 
-  /** 二つのブロックが同じ形なら、状態をそのまま引き継げると判定する。 */
-  fun compatible(source: String, target: String): Boolean {
-    val sourceKind = kind(source) ?: return false
-    return sourceKind == kind(target)
-  }
-
   /** 登録済みブロック名から、置換に使う材質系統を取り出す。 */
   private fun family(name: String): String? {
     if (name !in blockNames) return null
