@@ -9,6 +9,8 @@ softdepend:
   - Multiverse-Core
   - DiscordSRV
   - LuckPerms
+  - FastAsyncWorldEdit
+  - floodgate
 commands:
   sltp:
     description: "SL看板へ飛ぶコマンド"

@@ -4,3 +4,5 @@ main: io.oyasai.vertex.Vertex
 api-version: "1.21"
 authors:
   - shunueda
+softdepend:
+  - FastAsyncWorldEdit
