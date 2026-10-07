@@ -5,7 +5,6 @@ main: com.baakun.dynamicprofile.DynamicProfile
 api-version: "1.20"
 version: "0.0.1"
 depend: [Votifier, Vault, TokenManager]
-softdepend: [LuckPerms, SocialLikes3]
 permissions:
   oyasai.syokaku:
     description: syokakuコマンドの使用権限
