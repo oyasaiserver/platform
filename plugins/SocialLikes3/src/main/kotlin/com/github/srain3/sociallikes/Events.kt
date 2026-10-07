@@ -31,19 +31,25 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
+import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.HangingSign
 import org.bukkit.block.Sign
 import org.bukkit.block.data.type.WallSign
 import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockExplodeEvent
+import org.bukkit.event.block.BlockPistonExtendEvent
+import org.bukkit.event.block.BlockPistonRetractEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.block.SignChangeEvent
+import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
@@ -531,7 +537,37 @@ object Events : Listener {
   /** SocialLikesの看板が壊れないようにする */
   @EventHandler
   fun brakeSign(e: BlockBreakEvent) {
-    val block = e.block.state
+    protectSignAndSupport(e.block, e)
+  }
+
+  @EventHandler
+  fun entityExplode(e: EntityExplodeEvent) {
+    e.blockList().forEach { protectSignAndSupport(it, e) }
+  }
+
+  @EventHandler
+  fun blockExplode(e: BlockExplodeEvent) {
+    e.blockList().forEach { protectSignAndSupport(it, e) }
+  }
+
+  @EventHandler
+  fun pistonExtend(e: BlockPistonExtendEvent) {
+    e.blocks.forEach {
+      protectSignAndSupport(it, e)
+      protectSignAndSupport(it.getRelative(e.direction), e)
+    }
+  }
+
+  @EventHandler
+  fun pistonRetract(e: BlockPistonRetractEvent) {
+    e.blocks.forEach {
+      protectSignAndSupport(it, e)
+      protectSignAndSupport(it.getRelative(e.direction), e)
+    }
+  }
+
+  private fun protectSignAndSupport(target: Block, e: Cancellable) {
+    val block = target.state
     if (block is Sign) {
       // 直接看板を破壊した場合
       checkSLSign(block, e)
@@ -559,7 +595,7 @@ object Events : Listener {
   }
 
   /** SL看板の場合イベントキャンセルする */
-  private fun checkSLSign(block: Sign, e: BlockBreakEvent) {
+  private fun checkSLSign(block: Sign, e: Cancellable) {
     // 表面の1行目をカラーコードを外して取得、SL3の看板のみ中へ進む
     val unColorFrontL0 = block.getSide(Side.FRONT).getLine(0).unColor()
     if (slSignRegex.containsMatchIn(unColorFrontL0)) {
