@@ -88,15 +88,7 @@ internal class VoteRewards(
       plugin.logger.warning("Skipped vote command for unsafe username '$player'")
       return null
     }
-    if ("%service%" in template && !vote.serviceName.matches(SERVICE)) {
-      plugin.logger.warning("Skipped vote command for unsafe service '${vote.serviceName}'")
-      return null
-    }
-    return template
-        .removePrefix("/")
-        .replace("%player%", player)
-        .replace("%service%", vote.serviceName)
-        .replace("%votes%", votes.toString())
+    return commandTemplate(vote, votes, template, "vote", player)
   }
 
   private fun runCommand(command: String) {
@@ -111,12 +103,23 @@ internal class VoteRewards(
       )
       return null
     }
+    return commandTemplate(vote, votes, template, "party")
+  }
+
+  private fun commandTemplate(
+      vote: Vote,
+      votes: Int,
+      template: String,
+      kind: String,
+      player: String? = null,
+  ): String? {
     if ("%service%" in template && !vote.serviceName.matches(SERVICE)) {
-      plugin.logger.warning("Skipped party command for unsafe service '${vote.serviceName}'")
+      plugin.logger.warning("Skipped $kind command for unsafe service '${vote.serviceName}'")
       return null
     }
     return template
         .removePrefix("/")
+        .let { if (player == null) it else it.replace("%player%", player) }
         .replace("%service%", vote.serviceName)
         .replace("%votes%", votes.toString())
   }
