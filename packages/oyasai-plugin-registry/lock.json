@@ -31,14 +31,6 @@
       }
     }
   },
-  "essentialsx": {
-    "paper": {
-      "26.2": {
-        "url": "https://repo.essentialsx.net/snapshots/net/essentialsx/EssentialsX/2.22.1-SNAPSHOT/EssentialsX-2.22.1-20260624.223341-11.jar",
-        "hash": "sha256-7QxEMrsobOBoILpaFi/6yR404C66ZEz89mrsT9qGr0I="
-      }
-    }
-  },
   "fastasyncvoxelsniper": {
     "paper": {
       "26.2": {
@@ -90,14 +82,6 @@
       "26.2": {
         "url": "https://cdn.modrinth.com/data/yro4niHu/versions/j22EUw2Y/PlugManX-3.2.1.jar",
         "hash": "sha256-ZgpIxZdasermepJz6OsP22B/NNdkRzDlEEHT+L3+3PI="
-      }
-    }
-  },
-  "skript": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/4JYDcsAm/Skript-2.16.2.jar",
-        "hash": "sha256-FM90PuLHzdAUvGOZPJCSll7ew73s/5OuR2Jv3vXSOxA="
       }
     }
   },

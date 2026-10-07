@@ -47,7 +47,6 @@ oyasaiPurpur rec {
     discordsrv
     dynamicprofile
     entitypose
-    essentialsx
     ezedits
     fastasyncvoxelsniper
     fastasyncworldedit
@@ -69,7 +68,6 @@ oyasaiPurpur rec {
     oyasaivotifier
     oyasaiworldgenerator
     plugmanx
-    skript
     sociallikes3
     socialvotes
     vault
