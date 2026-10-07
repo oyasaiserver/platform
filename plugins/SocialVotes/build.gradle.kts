@@ -1,4 +1,1 @@
-dependencies {
-  compileOnly(libs.purpur.api)
-  compileOnly(libs.vault.api)
-}
+dependencies { compileOnly(libs.purpur.api) }
