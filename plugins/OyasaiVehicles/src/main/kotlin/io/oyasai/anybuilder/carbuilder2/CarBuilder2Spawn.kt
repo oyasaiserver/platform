@@ -53,7 +53,7 @@ object CarBuilder2Spawn {
     val size = getCarSize(data)
     val x = size.x
     val y = size.y
-    val maxSize = sqrt(x * x + x * x)
+    val maxSize = sqrt(x * x + size.z * size.z)
     val bodyArmorStandInt = (totalEntity.toDouble() / 100.0).roundToInt() + 1
     val bodyArmorStandList =
         BuilderSpawnSupport.spawnBodyArmorStands(
