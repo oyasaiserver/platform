@@ -75,13 +75,19 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
     }
 
     // 100ポイント = 半径50ブロック
-    val expansionRadius = ((points / 100) * 50).toInt()
+    val expansionRadius = (points / 100) * 50
     val currentRadiusX = borderData.radiusX
     val currentRadiusZ = borderData.radiusZ
     val centerX = borderData.x
     val centerZ = borderData.z
-    val newRadiusX = currentRadiusX + expansionRadius
-    val newRadiusZ = currentRadiusZ + expansionRadius
+    val radiusX = currentRadiusX.toLong() + expansionRadius
+    val radiusZ = currentRadiusZ.toLong() + expansionRadius
+    if (radiusX !in 1..Int.MAX_VALUE.toLong() || radiusZ !in 1..Int.MAX_VALUE.toLong()) {
+      sender.sendMessage("§c拡張後の半径が上限 (${Int.MAX_VALUE}) を超えます。")
+      return true
+    }
+    val newRadiusX = radiusX.toInt()
+    val newRadiusZ = radiusZ.toInt()
 
     WorldBorderManager.setRadii(currentWorldName, newRadiusX, newRadiusZ)
 
