@@ -74,7 +74,7 @@ object LevelReward {
                 Bukkit.getServer()
                     .dispatchCommand(
                         Bukkit.getConsoleSender(),
-                        "milepoint add ${item.itemMeta.displayName.split(",").get(1)}",
+                        "milepoint add ${item.itemMeta.displayName.split(",").get(1)} ${player.name}",
                     )
               }
             }
