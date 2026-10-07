@@ -62,6 +62,12 @@ class OyasaiFrames : ImageOnMap() {
     } catch (e: Exception) {
       logger.severe("Painting failed to start: ${e.message}")
     }
+
+    getCommand("getdye")?.setExecutor { sender, _, _, _ ->
+      if (sender is Player) sender.performCommand("painttools dye")
+      else sender.sendMessage("このコマンドはプレイヤー専用です。")
+      true
+    }
   }
 
   override fun onDisable() {

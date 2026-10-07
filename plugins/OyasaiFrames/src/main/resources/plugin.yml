@@ -29,6 +29,9 @@ commands:
   painttools:
     description: "PaintTools plugin command."
     permission: "painttools.command.painttools"
+  getdye:
+    usage: /getdye
+    description: Dye Box を開く
   toumeigakubuti:
     aliases: ["toumei", "invisibleframe"]
     description: "Frame transparency"
