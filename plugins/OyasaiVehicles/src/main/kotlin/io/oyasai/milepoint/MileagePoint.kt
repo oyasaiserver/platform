@@ -4,6 +4,7 @@ import io.oyasai.anybuilder.carbuilder2.CarBuilder2SmokeGUI
 import io.oyasai.toolbox.CustomYaml
 import io.oyasai.toolbox.Tools
 import java.util.*
+import org.bukkit.Location
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
@@ -13,7 +14,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Vector
 
 data class MileagePointData(
     val playerUUID: UUID,
@@ -91,7 +91,8 @@ object MileagePoint : Listener {
 }
 
 object MileageTracker {
-  private val oldVecMap: MutableMap<Entity, Vector> = mutableMapOf()
+  private const val MAX_DISTANCE_PER_TICK = 16.0
+  private val oldVecMap: MutableMap<Entity, Location> = mutableMapOf()
   private val mileage: MutableMap<Entity, Double> = mutableMapOf()
   private val mileagePercentMap: MutableMap<Pair<ArmorStand, Entity?>, Double> = mutableMapOf()
 
@@ -131,7 +132,7 @@ object MileageTracker {
                 continue
               }
 
-              val currentVec = mainArmorStand.location.toVector()
+              val currentVec = mainArmorStand.location
               val playerList = mutableMapOf<Pair<Int, ArmorStand>, Entity?>()
 
               for (seatArmorStands in data.seats) {
@@ -149,13 +150,18 @@ object MileageTracker {
         .runTaskTimer(plugin, 1L, 1L)
   }
 
-  private fun task(newVec: Vector, list: Map<Pair<Int, ArmorStand>, Entity?>, addMileageP: Double) {
+  private fun task(
+      newVec: Location,
+      list: Map<Pair<Int, ArmorStand>, Entity?>,
+      addMileageP: Double,
+  ) {
     for ((bodyArmorStands, player) in list) {
       if (player != null && player is Player) {
         val currentMileage = mileage.getOrDefault(player, 0.0)
         val lastVec = oldVecMap.getOrDefault(player, newVec)
 
-        mileage[player] = currentMileage + lastVec.distance(newVec)
+        val distance = if (lastVec.world == newVec.world) lastVec.distance(newVec) else 0.0
+        mileage[player] = currentMileage + if (distance <= MAX_DISTANCE_PER_TICK) distance else 0.0
         oldVecMap[player] = newVec
 
         if (mileagePercentMap.keys.none { it.second == player }) {
