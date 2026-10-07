@@ -125,7 +125,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
     // サービス・システムの初期化
     economySystem = EconomySystem(logger)
-    interactionService = PetInteractionService(this)
+    interactionService = PetInteractionService()
     storageService = PetStorageService(this)
     queryService = PetQueryService(economySystem, storageService)
 
@@ -273,9 +273,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
     val playerActionListener =
         PlayerActionListener(
-            this,
             fetchSystem,
-            petSpawnSystem,
             skillSystem,
             dropCooldowns,
             mountCooldowns,
@@ -4766,21 +4764,14 @@ object PetItemFactory {
 
   /** ペットフードアイテムを生成 */
   fun createPetFoodItem(): ItemStack =
-      ItemStack(Material.COOKED_BEEF).apply {
-        itemMeta =
-            itemMeta.apply {
-              displayName(Component.text("★ 魔法のペットフード", GOLD))
-              lore(listOf(Component.text("右クリックで与える", YELLOW)))
-              addEnchant(Enchantment.UNBREAKING, 1, true)
-              addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            }
-      }
+      createCareItem(
+          Material.COOKED_BEEF,
+          Component.text("★ 魔法のペットフード", GOLD),
+          listOf(Component.text("右クリックで与える", YELLOW)),
+      )
 
   /** アイテムがペットフードかどうか判定 */
-  fun isPetFood(item: ItemStack): Boolean =
-      item.type == Material.COOKED_BEEF &&
-          PLAIN_TEXT.serialize(item.itemMeta?.displayName() ?: Component.empty())
-              .contains("魔法のペットフード")
+  fun isPetFood(item: ItemStack): Boolean = isCareItem(item, Material.COOKED_BEEF, "魔法のペットフード")
 
   // ==========================================
   // ペットブラシ
@@ -4788,20 +4779,14 @@ object PetItemFactory {
 
   /** ペットブラシアイテムを生成 */
   fun createPetBrushItem(): ItemStack =
-      ItemStack(Material.BRUSH).apply {
-        itemMeta =
-            itemMeta.apply {
-              displayName(Component.text("★ ペットブラシ", GOLD))
-              lore(listOf(Component.text("右クリックでなでる", YELLOW)))
-              addEnchant(Enchantment.UNBREAKING, 1, true)
-              addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            }
-      }
+      createCareItem(
+          Material.BRUSH,
+          Component.text("★ ペットブラシ", GOLD),
+          listOf(Component.text("右クリックでなでる", YELLOW)),
+      )
 
   /** アイテムがペットブラシかどうか判定 */
-  fun isPetBrush(item: ItemStack): Boolean =
-      item.type == Material.BRUSH &&
-          PLAIN_TEXT.serialize(item.itemMeta?.displayName() ?: Component.empty()).contains("ペットブラシ")
+  fun isPetBrush(item: ItemStack): Boolean = isCareItem(item, Material.BRUSH, "ペットブラシ")
 
   // ==========================================
   // ペットのおやつ
@@ -4809,48 +4794,53 @@ object PetItemFactory {
 
   /** ペットのおやつアイテムを生成 */
   fun createPetTreatItem(): ItemStack =
-      ItemStack(Material.COOKIE).apply {
-        itemMeta =
-            itemMeta.apply {
-              displayName(Component.text("★ ペットのおやつ", GOLD))
-              lore(listOf(Component.text("右クリックで与える", YELLOW)))
-              addEnchant(Enchantment.UNBREAKING, 1, true)
-              addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            }
-      }
+      createCareItem(
+          Material.COOKIE,
+          Component.text("★ ペットのおやつ", GOLD),
+          listOf(Component.text("右クリックで与える", YELLOW)),
+      )
 
   /** アイテムがペットのおやつかどうか判定 */
-  fun isPetTreat(item: ItemStack): Boolean =
-      item.type == Material.COOKIE &&
-          PLAIN_TEXT.serialize(item.itemMeta?.displayName() ?: Component.empty()).contains("おやつ")
+  fun isPetTreat(item: ItemStack): Boolean = isCareItem(item, Material.COOKIE, "おやつ")
 
   // ==========================================
   // ヒールポーション
   // ==========================================
 
   /** ヒールポーションアイテムを生成 */
-  fun createPetHealItem(): ItemStack =
-      ItemStack(Material.GOLDEN_APPLE).apply {
-        val healAmount = BigWolfConfig.healItemAmount
+  fun createPetHealItem(): ItemStack {
+    val healAmount = BigWolfConfig.healItemAmount
+    return createCareItem(
+        Material.GOLDEN_APPLE,
+        Component.text("ヒールポーション", AQUA),
+        listOf(
+            Component.text("ペットに右クリックで使用", GRAY),
+            Component.text("体力を${healAmount}回復させます", YELLOW),
+        ),
+    )
+  }
+
+  /** アイテムがヒールポーションかどうか判定 */
+  fun isPetHeal(item: ItemStack): Boolean = isCareItem(item, Material.GOLDEN_APPLE, "ヒールポーション")
+
+  private fun createCareItem(
+      material: Material,
+      name: Component,
+      lore: List<Component>,
+  ): ItemStack =
+      ItemStack(material).apply {
         itemMeta =
             itemMeta.apply {
-              displayName(Component.text("ヒールポーション", AQUA))
-              lore(
-                  listOf(
-                      Component.text("ペットに右クリックで使用", GRAY),
-                      Component.text("体力を${healAmount}回復させます", YELLOW),
-                  )
-              )
+              displayName(name)
+              lore(lore)
               addEnchant(Enchantment.UNBREAKING, 1, true)
               addItemFlags(ItemFlag.HIDE_ENCHANTS)
             }
       }
 
-  /** アイテムがヒールポーションかどうか判定 */
-  fun isPetHeal(item: ItemStack): Boolean =
-      item.type == Material.GOLDEN_APPLE &&
-          PLAIN_TEXT.serialize(item.itemMeta?.displayName() ?: Component.empty())
-              .contains("ヒールポーション")
+  private fun isCareItem(item: ItemStack, material: Material, name: String): Boolean =
+      item.type == material &&
+          PLAIN_TEXT.serialize(item.itemMeta?.displayName() ?: Component.empty()).contains(name)
 
   // ==========================================
   // スキルブック
@@ -6108,9 +6098,7 @@ class PetShopGuiListener(
  * - onPlayerSkillTrigger: Left-click to activate pet skills
  */
 class PlayerActionListener(
-    @Suppress("unused") private val plugin: BigWolfPlugin,
     private val fetchSystem: FetchSystem,
-    @Suppress("unused") private val petSpawnSystem: PetSpawnSystem,
     private val skillSystem: SkillSystem,
     private val dropCooldowns: MutableMap<UUID, Long>,
     private val mountCooldowns: MutableMap<UUID, Long>,
@@ -6352,7 +6340,7 @@ class PetCommandService(private val breedingSystem: BreedingSystem, private val 
 
 // ===== File: services/PetInteractionService.kt =====
 /** ペットとプレイヤーの相互作用を管理するサービス スキル、パーティクル、餌やり、ブラシ、おやつなど */
-class PetInteractionService(@Suppress("unused") private val plugin: JavaPlugin) {
+class PetInteractionService {
 
   private val brushCooldowns = mutableMapOf<java.util.UUID, Long>()
 
@@ -7441,13 +7429,7 @@ class PetShopGuiService(
     inv.setItem(invSize - 9, backItem)
 
     // 所持ポイント表示（中央下）
-    val pointsItem =
-        ItemStack(Material.EMERALD).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("所持ポイント: ${getPlayerTokens(player)}pt", GOLD))
-              }
-        }
+    val pointsItem = createBalanceItem(player)
     inv.setItem(invSize - 5, pointsItem)
 
     player.openInventory(inv)
@@ -7546,12 +7528,7 @@ class PetShopGuiService(
     // スロット22: 所持ポイント
     inv.setItem(
         22,
-        ItemStack(Material.EMERALD).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("所持ポイント: ${getPlayerTokens(player)}pt", GOLD))
-              }
-        },
+        createBalanceItem(player),
     )
 
     player.openInventory(inv)
@@ -7569,30 +7546,17 @@ class PetShopGuiService(
             CareItem(7, PetItemFactory.createPetHealItem(), BigWolfConfig.itemShopHealPotionCost),
         )
         .forEach { ci ->
-          val meta = ci.item.itemMeta ?: return@forEach
-          val currentLore = meta.lore() ?: mutableListOf()
-          meta.lore(
-              currentLore +
-                  listOf(Component.text("価格: ${ci.cost}pt", GOLD), Component.text("クリックで購入", GREEN))
-          )
-          ci.item.itemMeta = meta
+          if (!addPriceLore(ci.item, ci.cost)) return@forEach
           inv.setItem(ci.slot, ci.item)
         }
 
     inv.setItem(
         9,
-        ItemStack(Material.ARROW).apply {
-          itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
-        },
+        createItemShopBackItem(),
     )
     inv.setItem(
         13,
-        ItemStack(Material.EMERALD).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("所持ポイント: ${getPlayerTokens(player)}pt", GOLD))
-              }
-        },
+        createBalanceItem(player),
     )
 
     player.openInventory(inv)
@@ -7605,31 +7569,18 @@ class PetShopGuiService(
     listOf(1, 2, 3).forEach { level ->
       val item = PetItemFactory.createSkillUnlockItem(level)
       val cost = BigWolfConfig.getSkillBookShopCost(level)
-      val meta = item.itemMeta ?: return@forEach
-      val currentLore = meta.lore() ?: mutableListOf()
-      meta.lore(
-          currentLore +
-              listOf(Component.text("価格: ${cost}pt", GOLD), Component.text("クリックで購入", GREEN))
-      )
-      item.itemMeta = meta
+      if (!addPriceLore(item, cost)) return@forEach
       val slot = (level - 1) * 2 + 2 // 2, 4, 6
       inv.setItem(slot, item)
     }
 
     inv.setItem(
         9,
-        ItemStack(Material.ARROW).apply {
-          itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
-        },
+        createItemShopBackItem(),
     )
     inv.setItem(
         13,
-        ItemStack(Material.EMERALD).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("所持ポイント: ${getPlayerTokens(player)}pt", GOLD))
-              }
-        },
+        createBalanceItem(player),
     )
 
     player.openInventory(inv)
@@ -7642,30 +7593,17 @@ class PetShopGuiService(
 
     (5..10).forEachIndexed { idx, particleId ->
       val item = PetItemFactory.createParticleUnlockItem(particleId)
-      val meta = item.itemMeta ?: return@forEachIndexed
-      val currentLore = meta.lore() ?: mutableListOf()
-      meta.lore(
-          currentLore +
-              listOf(Component.text("価格: ${cost}pt", GOLD), Component.text("クリックで購入", GREEN))
-      )
-      item.itemMeta = meta
+      if (!addPriceLore(item, cost)) return@forEachIndexed
       inv.setItem(idx + 1, item)
     }
 
     inv.setItem(
         9,
-        ItemStack(Material.ARROW).apply {
-          itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
-        },
+        createItemShopBackItem(),
     )
     inv.setItem(
         13,
-        ItemStack(Material.EMERALD).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("所持ポイント: ${getPlayerTokens(player)}pt", GOLD))
-              }
-        },
+        createBalanceItem(player),
     )
 
     player.openInventory(inv)
@@ -7684,33 +7622,44 @@ class PetShopGuiService(
 
     toyItems.forEachIndexed { idx, item ->
       if (idx >= controlRowStart) return@forEachIndexed
-      val meta = item.itemMeta ?: return@forEachIndexed
-      val currentLore = meta.lore() ?: mutableListOf()
-      meta.lore(
-          currentLore +
-              listOf(Component.text("価格: ${cost}pt", GOLD), Component.text("クリックで購入", GREEN))
-      )
-      item.itemMeta = meta
+      if (!addPriceLore(item, cost)) return@forEachIndexed
       inv.setItem(idx, item)
     }
 
     inv.setItem(
         controlRowStart,
-        ItemStack(Material.ARROW).apply {
-          itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
-        },
+        createItemShopBackItem(),
     )
     inv.setItem(
         controlRowStart + 4,
-        ItemStack(Material.EMERALD).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("所持ポイント: ${getPlayerTokens(player)}pt", GOLD))
-              }
-        },
+        createBalanceItem(player),
     )
 
     player.openInventory(inv)
+  }
+
+  private fun createItemShopBackItem(): ItemStack =
+      ItemStack(Material.ARROW).apply {
+        itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
+      }
+
+  private fun createBalanceItem(player: Player): ItemStack =
+      ItemStack(Material.EMERALD).apply {
+        itemMeta =
+            itemMeta?.apply {
+              displayName(Component.text("所持ポイント: ${getPlayerTokens(player)}pt", GOLD))
+            }
+      }
+
+  private fun addPriceLore(item: ItemStack, cost: Int): Boolean {
+    val meta = item.itemMeta ?: return false
+    val currentLore = meta.lore() ?: mutableListOf()
+    meta.lore(
+        currentLore +
+            listOf(Component.text("価格: ${cost}pt", GOLD), Component.text("クリックで購入", GREEN))
+    )
+    item.itemMeta = meta
+    return true
   }
 }
 
