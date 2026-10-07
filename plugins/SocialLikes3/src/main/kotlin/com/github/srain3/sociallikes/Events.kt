@@ -402,7 +402,7 @@ object Events : Listener {
   private val offlineLikesPoint = mutableMapOf<UUID, Int>()
   private val offlineLikesPointLock = Any()
   private val offlineLikePointStore by lazy { OfflineLikePointStore(plugin.dataFolder.toPath()) }
-  private const val OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS = 750L
+  private val offlineLikeCommits = mutableSetOf<UUID>()
 
   private fun sendLikeRewardMessage(player: Player, amount: Long, offline: Boolean = false) {
     val message =
@@ -428,9 +428,10 @@ object Events : Listener {
   private fun removeOfflineLikePoints(uuid: UUID, expectedPoints: Int): Boolean {
     synchronized(offlineLikesPointLock) {
       val currentPoints = offlineLikesPoint[uuid] ?: return false
-      if (currentPoints != expectedPoints) return false
+      if (currentPoints < expectedPoints) return false
 
-      offlineLikesPoint.remove(uuid)
+      if (currentPoints == expectedPoints) offlineLikesPoint.remove(uuid)
+      else offlineLikesPoint[uuid] = currentPoints - expectedPoints
       if (persistOfflineLikePointsLocked()) return true
 
       offlineLikesPoint[uuid] = currentPoints
@@ -468,13 +469,16 @@ object Events : Listener {
   @EventHandler
   fun joinEvent(e: PlayerJoinEvent) {
     SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
-    val pointInt =
-        synchronized(offlineLikesPointLock) { offlineLikesPoint[e.player.uniqueId] } ?: return
     val player = e.player
     val playerUuid = player.uniqueId
     object : BukkitRunnable() {
           override fun run() {
             if (!player.isOnline) return
+            val pointInt =
+                synchronized(offlineLikesPointLock) {
+                  if (playerUuid in offlineLikeCommits) return
+                  offlineLikesPoint[playerUuid]
+                } ?: return
             val tokenManager = Tools.getTokenManager()
             val tokenCommitAdd = tokenManager?.let(Tools::findAddTokensWithCommit)
             if (tokenCommitAdd == null) {
@@ -488,42 +492,37 @@ object Events : Listener {
               return
             }
 
-            Bukkit.getScheduler()
-                .runTaskAsynchronously(
-                    plugin,
-                    Runnable {
-                      val committed =
-                          Tools.awaitTokenCommit(
-                              tokenCommitAdd,
-                              playerUuid,
-                              pointInt.toLong(),
-                              OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS,
-                          )
-                      // A timeout is intentionally treated as an indeterminate outcome: retaining
-                      // the durable pending entry favors recovery over silently losing a reward.
-                      // The writer API normally settles immediately after its own transaction;
-                      // avoiding recurring timeouts is essential because a later retry may follow
-                      // an operation whose final SQLite result was not observed by this task.
-                      if (!committed) return@Runnable
-
-                      if (!removeOfflineLikePoints(playerUuid, pointInt)) {
-                        plugin.logger.warning(
-                            "Committed offline-like reward ${pointInt} for $playerUuid, but could not atomically clear its pending entry; not notifying."
-                        )
-                        return@Runnable
-                      }
-
-                      Bukkit.getScheduler()
-                          .runTask(
-                              plugin,
-                              Runnable {
-                                Bukkit.getPlayer(playerUuid)?.takeIf(Player::isOnline)?.let {
-                                  sendLikeRewardMessage(it, pointInt.toLong(), offline = true)
-                                }
-                              },
-                          )
-                    },
-                )
+            synchronized(offlineLikesPointLock) { if (!offlineLikeCommits.add(playerUuid)) return }
+            Tools.tokenCommit(tokenCommitAdd, playerUuid, pointInt.toLong()).whenComplete {
+                committed,
+                failure ->
+              try {
+                if (failure != null) {
+                  plugin.logger.warning(
+                      "Failed to commit offline-like reward for $playerUuid: ${failure.message}"
+                  )
+                  return@whenComplete
+                }
+                if (committed != true) return@whenComplete
+                if (!removeOfflineLikePoints(playerUuid, pointInt)) {
+                  plugin.logger.warning(
+                      "Committed offline-like reward $pointInt for $playerUuid, but could not atomically clear its pending entry; not notifying."
+                  )
+                  return@whenComplete
+                }
+                Bukkit.getScheduler()
+                    .runTask(
+                        plugin,
+                        Runnable {
+                          Bukkit.getPlayer(playerUuid)?.takeIf(Player::isOnline)?.let {
+                            sendLikeRewardMessage(it, pointInt.toLong(), offline = true)
+                          }
+                        },
+                    )
+              } finally {
+                synchronized(offlineLikesPointLock) { offlineLikeCommits.remove(playerUuid) }
+              }
+            }
           }
         }
         .runTaskLater(plugin, 20L)
