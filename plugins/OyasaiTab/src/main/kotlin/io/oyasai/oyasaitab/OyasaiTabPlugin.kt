@@ -335,12 +335,7 @@ private class PaperTabSnapshotBridge(
     private val config: OyasaiTabConfig,
 ) {
   // hex を落とさずに送る。既定の legacySection() は hex を近い既定色へ丸める
-  private val legacy =
-      LegacyComponentSerializer.builder()
-          .character(LegacyComponentSerializer.SECTION_CHAR)
-          .hexColors()
-          .useUnusualXRepeatedCharacterHexFormat()
-          .build()
+  private val legacy = TAB_SECTION_SERIALIZER
 
   fun start() {
     Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, OYASAI_TAB_CHANNEL)
