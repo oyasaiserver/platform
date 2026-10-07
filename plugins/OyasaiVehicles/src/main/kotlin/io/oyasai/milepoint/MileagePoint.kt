@@ -43,6 +43,7 @@ object MileagePoint : Listener {
 
     if (!firstBonus) {
       changePoint(uuid, FIRST_BONUS)
+      file.set("NowPoint", dataList.getValue(uuid).mile)
       file.set("FirstBonus", true)
       file.save()
     }
