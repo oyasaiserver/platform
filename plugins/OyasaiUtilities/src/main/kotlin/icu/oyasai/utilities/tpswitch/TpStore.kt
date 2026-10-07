@@ -5,8 +5,6 @@ import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.UUID
-import org.bukkit.configuration.ConfigurationSection
-import org.bukkit.configuration.file.YamlConfiguration
 
 internal data class TpSettings(
     var open: Boolean = true,
@@ -27,76 +25,6 @@ internal data class TpSettings(
 
 internal fun denied(settings: TpSettings, sender: UUID, op: Boolean): Boolean =
     !op && if (settings.open) sender in settings.blackIds else sender !in settings.whiteIds
-
-internal data class ImportCounts(
-    val players: Int,
-    val whiteIds: Int,
-    val blackIds: Int,
-    val whiteNames: Int,
-    val blackNames: Int,
-    val skipped: Int,
-)
-
-internal data class LegacyData(val players: Map<UUID, TpSettings>, val counts: ImportCounts)
-
-internal fun readLegacy(file: File): LegacyData {
-  val yaml = YamlConfiguration().apply { load(file) }
-  val players = linkedMapOf<UUID, TpSettings>()
-  var skipped = 0
-  for (key in yaml.getKeys(false)) {
-    val owner = runCatching { UUID.fromString(key) }.getOrNull()
-    val section = yaml.getConfigurationSection(key)
-    if (owner == null || section == null) {
-      skipped++
-      continue
-    }
-    val settings = TpSettings()
-    if (section.contains("switch")) {
-      if (section.isBoolean("switch")) settings.open = section.getBoolean("switch") else skipped++
-    }
-    fun readIds(path: String, target: MutableSet<UUID>) {
-      val node = section.get(path) ?: return
-      if (node !is ConfigurationSection) {
-        skipped++
-        return
-      }
-      for (name in node.getKeys(false)) {
-        if (node.get(name) != true) {
-          skipped++
-          continue
-        }
-        val id = runCatching { UUID.fromString(name) }.getOrNull()
-        if (id == null) skipped++ else target.add(id)
-      }
-    }
-    fun readNames(path: String, target: MutableSet<String>) {
-      val node = section.get(path) ?: return
-      if (node !is ConfigurationSection) {
-        skipped++
-        return
-      }
-      for (name in node.getKeys(false)) {
-        if (node.get(name) == true) target.add(name) else skipped++
-      }
-    }
-    readIds("WhiteList", settings.whiteIds)
-    readIds("BlackList", settings.blackIds)
-    readNames("WhiteListName", settings.whiteNames)
-    readNames("BlackListName", settings.blackNames)
-    players[owner] = settings
-  }
-  return LegacyData(
-      players,
-      ImportCounts(
-          players.size,
-          players.values.sumOf { it.whiteIds.size },
-          players.values.sumOf { it.blackIds.size },
-          players.values.sumOf { it.whiteNames.size },
-          players.values.sumOf { it.blackNames.size },
-          skipped,
-      ),
-  )
-}
 
 internal class TpStore(private val file: File) : AutoCloseable {
   private lateinit var connection: Connection
@@ -172,34 +100,6 @@ internal class TpStore(private val file: File) : AutoCloseable {
       }
     }
     return players
-  }
-
-  fun imported(): Boolean =
-      connection.prepareStatement("SELECT 1 FROM tp_meta WHERE key = 'legacy_imported'").use {
-        it.executeQuery().use { rows -> rows.next() }
-      }
-
-  // Remove this import path after production SQLite reports legacy_imported=1 and legacy_skipped=0.
-  fun importLegacy(data: LegacyData) {
-    connection.transaction {
-      for ((owner, state) in data.players) saveRows(owner, state)
-      for ((key, value) in
-          mapOf(
-              "legacy_imported" to 1,
-              "legacy_players" to data.counts.players,
-              "legacy_white_ids" to data.counts.whiteIds,
-              "legacy_black_ids" to data.counts.blackIds,
-              "legacy_white_names" to data.counts.whiteNames,
-              "legacy_black_names" to data.counts.blackNames,
-              "legacy_skipped" to data.counts.skipped,
-          )) {
-        connection.prepareStatement("INSERT INTO tp_meta (key, value) VALUES (?, ?)").use {
-          it.setString(1, key)
-          it.setInt(2, value)
-          it.executeUpdate()
-        }
-      }
-    }
   }
 
   fun save(owner: UUID, settings: TpSettings) = connection.transaction { saveRows(owner, settings) }
