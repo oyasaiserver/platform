@@ -39,6 +39,84 @@ class JapanizeTranslationTest {
   }
 
   @Test
+  fun identityDictionaryEntriesAllowWholeMessageTranslationIgnoringCase() {
+    val requests = mutableListOf<String>()
+    val engine =
+        Japanizer(
+            settings,
+            translate = {
+              requests += it
+              CompletableFuture.completedFuture(Translation("素敵な造り", "en", 0.97))
+            },
+        ) {
+          error("Accepted translation must skip transliteration")
+        }
+    listOf(mapOf("nice" to "nice"), mapOf("NICE" to "nice"), mapOf("nice" to "NICE")).forEach {
+        dictionary ->
+      val prepared = engine.prepare("nice build", true, emptyList(), dictionary).join()
+      assertEquals(ChatMessage("素敵な造り", "nice build", settings.format), prepared)
+    }
+    assertEquals(List(3) { "nice build" }, requests)
+  }
+
+  @Test
+  fun identityDictionaryEntriesDoNotOverrideOtherTranslationProtection() {
+    val requests = mutableListOf<String>()
+    val engine =
+        Japanizer(
+            settings,
+            translate = {
+              requests += it
+              CompletableFuture.completedFuture(Translation("不採用", "en", 0.97))
+            },
+        ) {
+          CompletableFuture.completedFuture(it)
+        }
+    val dictionary = mapOf("nice" to "nice", "kakezumou" to "賭け相撲")
+    assertEquals(
+        "nice ぶいld 賭け相撲",
+        engine.prepare("nice build kakezumou", true, emptyList(), dictionary).join().text,
+    )
+    assertEquals(
+        "nice ぶいld https:///fixture",
+        engine.prepare("nice build https:///fixture", true, emptyList(), dictionary).join().text,
+    )
+    assertEquals(
+        "nice ぶいld Player_1",
+        engine.prepare("nice build Player_1", true, listOf("Player_1"), dictionary).join().text,
+    )
+    // A name remains protected even when it also matches an identity dictionary entry.
+    assertEquals(
+        "nice ぶいld",
+        engine.prepare("nice build", true, listOf("NICE"), dictionary).join().text,
+    )
+    assertTrue(requests.isEmpty())
+  }
+
+  @Test
+  fun identityDictionaryEntriesRemainProtectedDuringTranslationFallback() {
+    val translations = mutableListOf<String>()
+    val conversions = mutableListOf<String>()
+    val engine =
+        Japanizer(
+            settings,
+            translate = {
+              translations += it
+              CompletableFuture.completedFuture(Translation("不採用", "en", 0.85))
+            },
+        ) {
+          conversions += it
+          CompletableFuture.completedFuture(it)
+        }
+    assertEquals(
+        ChatMessage("nice ぶいld", "nice build", settings.format),
+        engine.prepare("nice build", true, emptyList(), mapOf("nice" to "nice")).join(),
+    )
+    assertEquals(listOf("nice build"), translations)
+    assertEquals(listOf(" ぶいld"), conversions)
+  }
+
+  @Test
   fun lowConfidenceAndNonEnglishFallBackToRomanization() {
     listOf(Translation("不採用", "en", 0.85), Translation("不採用", "ja", 0.99)).forEach { response ->
       val requests = mutableListOf<String>()

@@ -46,7 +46,11 @@ data class JapanizeSettings(
     val dictionary: Map<String, String> = emptyMap(),
 )
 
-data class TextPart(val text: String, val protected: Boolean)
+data class TextPart(
+    val text: String,
+    val protected: Boolean,
+    val blocksTranslation: Boolean = protected,
+)
 
 object JapanizePreparation {
   private val url = Regex("https?://[^\\s]+", RegexOption.IGNORE_CASE)
@@ -60,7 +64,7 @@ object JapanizePreparation {
           text.isNotBlank() &&
           (settings.marker.isEmpty() || !text.startsWith(settings.marker))
 
-  /** URL first, then whole dictionary keys / player names. Protected runs never reach Google. */
+  /** URL first, then whole dictionary keys / player names. Protected runs skip transliteration. */
   fun parts(
       text: String,
       dictionary: Map<String, String>,
@@ -93,10 +97,15 @@ object JapanizePreparation {
       if (link != null || key != null) {
         flush()
         val literal = link ?: text.substring(i, i + key!!.length)
-        val replacement =
-            if (link != null) link
-            else dictionary.entries.firstOrNull { it.key.equals(key, true) }?.value ?: literal
-        result += TextPart(replacement, true)
+        val entry =
+            if (link == null) dictionary.entries.firstOrNull { it.key.equals(key, true) } else null
+        val replacement = link ?: entry?.value ?: literal
+        val blocksTranslation =
+            link != null ||
+                names.any { it.equals(key, true) } ||
+                entry == null ||
+                !entry.key.equals(entry.value, true)
+        result += TextPart(replacement, true, blocksTranslation)
         i += literal.length
       } else {
         pending.append(text[i])
@@ -232,9 +241,9 @@ class Japanizer(
       return CompletableFuture.completedFuture(ChatMessage(visible))
     }
     val parts = JapanizePreparation.parts(text, dictionary, names)
-    // Whole-message translation must not expose or alter protected dictionary/name/URL runs.
+    // Identity dictionary entries allow translation; URLs, names and replacements still block it.
     val translationEligible =
-        parts.none { it.protected } &&
+        parts.none { it.blocksTranslation } &&
             text.split(Regex("\\s+")).count { word ->
               word.any { it in 'a'..'z' || it in 'A'..'Z' } && !word.all { it == 'w' || it == 'W' }
             } >= 2
