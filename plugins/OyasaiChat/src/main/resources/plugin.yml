@@ -7,8 +7,7 @@ author: takucan
 softdepend:
   - Vault
   - LuckPerms
-loadbefore:
-  - Essentials
+  - DiscordSRV
 commands:
   mute:
     description: Toggle or update a player mute

@@ -5,6 +5,9 @@ api-version: "1.21"
 softdepend:
   - TokenManager
   - Essentials
+  - DynamicProfile
+  - SocialLikes3
+  - LuckPerms
 commands:
   invsee:
     description: 運営用 invsee

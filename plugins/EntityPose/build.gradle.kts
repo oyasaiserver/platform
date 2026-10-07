@@ -1,6 +1,5 @@
 dependencies {
   compileOnly(libs.purpur.api)
-  compileOnly(libs.luckperms.api)
 
   testImplementation(libs.purpur.api)
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.4.0")
