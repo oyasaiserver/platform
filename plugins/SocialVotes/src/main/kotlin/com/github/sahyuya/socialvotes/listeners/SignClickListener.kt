@@ -65,6 +65,11 @@ class SignClickListener : Listener {
                 return
               }
 
+      if (!p.isOp && group.owner != p.uniqueId) {
+        NotifyUtil.invalid(p, "この操作はグループ作成者またはOPのみ可能です。")
+        return
+      }
+
       if (group.signIds.size >= 45) {
         NotifyUtil.invalid(p, "45個を超えるため追加できません。")
         return
