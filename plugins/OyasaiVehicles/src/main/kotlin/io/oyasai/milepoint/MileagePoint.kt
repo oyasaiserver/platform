@@ -52,6 +52,7 @@ object MileagePoint : Listener {
   private fun saveAndRemovePlayerData(player: Player) {
     val uuid = player.uniqueId
     dataList[uuid]?.let { data ->
+      MileageTracker.settlePlayer(player)
       CarBuilder2SmokeGUI.quitPlayerColorList(uuid)
       data.file.set("NowPoint", data.mile)
       data.file.set("Mileage", data.mileage)
@@ -200,6 +201,10 @@ object MileageTracker {
         data.mileage += mileage0
       }
     }
+  }
+
+  internal fun settlePlayer(player: Player) {
+    mileagePercentMap.keys.filter { it.second == player }.forEach { vehicleExitTask(player, it) }
   }
 
   fun start(
