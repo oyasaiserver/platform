@@ -63,10 +63,6 @@ class SvCommand : CommandExecutor {
           NotifyUtil.error(sender, "グループが見つかりません。")
           return true
         }
-        if (!sender.isOp && group.owner != sender.uniqueId) {
-          NotifyUtil.invalid(sender, "この操作はグループ作成者またはOPのみ可能です。")
-          return true
-        }
         // put player into a temporary 'add mode' state
         AddModeManager.watchPlayerForAdd(sender.uniqueId, groupName)
         sender.sendMessage("SV看板を右クリックで $groupName に追加します。\n(看板以外をクリックで追加状態を解除)")
