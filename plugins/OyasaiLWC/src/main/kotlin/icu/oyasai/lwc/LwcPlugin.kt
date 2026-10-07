@@ -96,10 +96,8 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
     }
     server.pluginManager.registerEvents(this, this)
     server.scheduler.runTaskTimer(this, Runnable { tickAuto() }, 20L, 20L)
-    logger.info("保護 ${countProtections()} 件を読み込み、未対応 type ${store.ignoredTypes} 件を読み飛ばしました")
+    logger.info("保護 ${store.count()} 件を読み込み、未対応 type ${store.ignoredTypes} 件を読み飛ばしました")
   }
-
-  private fun countProtections(): Int = store.count()
 
   override fun onDisable() {
     if (::store.isInitialized) store.close()
