@@ -5952,7 +5952,9 @@ class PetShopGuiListener(
       }
       val buyItem = clickedItem.clone().apply { amount = 1 }
       // loreから価格行を除いた元アイテムを渡すため、単純にcloneして支給
-      player.inventory.addItem(buyItem)
+      player.inventory.addItem(buyItem).values.forEach {
+        player.world.dropItem(player.location, it)
+      }
       player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
       player.sendMessage(Component.text("購入しました！ (-${cost}pt)", GREEN))
       return
@@ -5974,7 +5976,9 @@ class PetShopGuiListener(
         player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
         return
       }
-      player.inventory.addItem(PetItemFactory.createSkillUnlockItem(level))
+      player.inventory.addItem(PetItemFactory.createSkillUnlockItem(level)).values.forEach {
+        player.world.dropItem(player.location, it)
+      }
       player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
       player.sendMessage(Component.text("購入しました！ (-${cost}pt)", GREEN))
       return
@@ -5996,7 +6000,9 @@ class PetShopGuiListener(
         player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
         return
       }
-      player.inventory.addItem(PetItemFactory.createParticleUnlockItem(particleId))
+      player.inventory.addItem(PetItemFactory.createParticleUnlockItem(particleId)).values.forEach {
+        player.world.dropItem(player.location, it)
+      }
       player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
       player.sendMessage(Component.text("購入しました！ (-${cost}pt)", GREEN))
       return
@@ -6017,7 +6023,9 @@ class PetShopGuiListener(
         player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
         return
       }
-      player.inventory.addItem(spec.createToyItem())
+      player.inventory.addItem(spec.createToyItem()).values.forEach {
+        player.world.dropItem(player.location, it)
+      }
       player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
       player.sendMessage(Component.text("購入しました！ (-${cost}pt)", GREEN))
       return
