@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.NotePlayEvent
+import org.bukkit.event.player.PlayerQuitEvent
 
 /**
  * ノートブロックの発音イベントを検知し、動的録音中の全プレイヤーのセッションへ橋渡しする。 `NotePlayEvent` は「プレイヤー操作またはレッドストーン信号によってノートブロックが
@@ -13,6 +14,12 @@ import org.bukkit.event.block.NotePlayEvent
 class NotePlayListener(
     private val sessionManager: RecordingSessionManager,
 ) : Listener {
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  fun onQuit(event: PlayerQuitEvent) {
+    sessionManager.stopDynamic(event.player.uniqueId)
+    sessionManager.stopLiveCircuit(event.player.uniqueId)
+  }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onNotePlay(event: NotePlayEvent) {
