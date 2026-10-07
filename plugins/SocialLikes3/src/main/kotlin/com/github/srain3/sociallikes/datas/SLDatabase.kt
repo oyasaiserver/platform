@@ -1031,11 +1031,22 @@ object SLDatabase {
   }
 
   fun saveBuild(data: SLData, onFinalFailure: ((Exception) -> Unit)? = null) {
+    saveBuildWithCompletion(data, onFinalFailure) {}
+  }
+
+  internal fun saveBuildWithCompletion(
+      data: SLData,
+      onFinalFailure: ((Exception) -> Unit)?,
+      onSuccess: () -> Unit,
+  ) {
     val snapshot = data.toBuildSnapshot()
     submitWrite(
         "saveBuild[${snapshot.id}]",
         onFinalFailure = onFinalFailure,
-        onSuccess = { DirtyBuildManager.markClean(snapshot.id) },
+        onSuccess = {
+          DirtyBuildManager.markClean(snapshot.id)
+          onSuccess()
+        },
     ) {
       upsertBuild(snapshot)
     }
@@ -1329,6 +1340,8 @@ object SLDatabase {
   private val playerNameCache = java.util.concurrent.ConcurrentHashMap<String, String>()
 
   fun getCachedPlayerName(uuid: String): String? = playerNameCache[uuid]
+
+  internal fun getCachedPlayerNames(): List<String> = playerNameCache.values.toList()
 
   /**
    * Resolves the supplied UUIDs with one query, then falls back to Bukkit's offline-player cache.

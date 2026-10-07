@@ -379,7 +379,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     if (sender !is Player || !sender.isOp) return emptyList()
     return buildSet {
           Bukkit.getOnlinePlayers().mapTo(this) { it.name }
-          Bukkit.getOfflinePlayers().mapNotNullTo(this) { it.name }
+          addAll(SLDatabase.getCachedPlayerNames())
         }
         .filter { it.startsWith(input, ignoreCase = true) }
         .sortedBy { it.lowercase() }

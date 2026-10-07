@@ -182,7 +182,9 @@ object SLSignSetting {
               } else {
                 val sltpSignItem = createCommandSignItem(sign.type, slData, player.uniqueId)
                 token.removeTokens(player, cost)
-                player.inventory.addItem(sltpSignItem)
+                player.inventory.addItem(sltpSignItem).values.forEach {
+                  player.world.dropItemNaturally(player.location, it)
+                }
                 player.sendMessage("${Tools.socialLikesLOGO} &aSLTP看板を付与しました。".color())
                 player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
               }

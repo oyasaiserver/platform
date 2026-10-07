@@ -58,6 +58,32 @@ class UserRepository(private val db: DatabaseManager) {
             }
       }
 
+  /** 受取対象を送金前に確定する。読取と消費は同一トランザクションで行う。 */
+  internal fun takePending(uuid: UUID): UserRewardData =
+      db.transaction {
+        val pending = get(uuid)
+        consumePending(uuid, pending.pendingMoney, pending.pendingPoints)
+        pending
+      }
+
+  /** 入金失敗分だけ未受取残高と累計を戻す。受取中に加算された報酬は保持する。 */
+  internal fun restorePending(uuid: UUID, money: Long = 0, points: Long = 0) =
+      db.transaction { conn ->
+        conn
+            .prepareStatement(
+                "UPDATE users SET pending_money = pending_money + ?, pending_points = pending_points + ?, " +
+                    "total_money = total_money - ?, total_points = total_points - ? WHERE uuid = ?"
+            )
+            .use { ps ->
+              ps.setLong(1, money)
+              ps.setLong(2, points)
+              ps.setLong(3, money)
+              ps.setLong(4, points)
+              ps.setBytes(5, UuidUtil.toBytes(uuid))
+              ps.executeUpdate()
+            }
+      }
+
   /** 外部経済への送金成功後に、送金済み分だけ残高から差し引く。 送金処理中に新しい報酬が加算されても、その新規分は残る。 */
   fun consumePending(uuid: UUID, money: Long = 0, points: Long = 0) =
       db.transaction { conn ->

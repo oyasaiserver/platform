@@ -13,6 +13,7 @@ import java.io.File
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.logging.Level
@@ -35,6 +36,14 @@ object Data {
 
   /** Persists to the selected primary store; the other store remains a best-effort mirror. */
   fun save(data: SLData, actorUuid: UUID? = null) {
+    saveWithCompletion(data, actorUuid) {}
+  }
+
+  internal fun saveWithCompletion(data: SLData, actorUuid: UUID?, onSuccess: () -> Unit) {
+    val saved = {
+      Bukkit.getScheduler().runTask(Tools.plugin, Runnable { onSuccess() })
+      Unit
+    }
     // 1. メモリ (キャッシュ) を先行更新
     if (data.deletedAt != null) {
       removeFromCache(data)
@@ -44,15 +53,22 @@ object Data {
     }
 
     if (activeReadSource == ReadSource.SQLITE) {
-      SLDatabase.saveBuild(data) {
-        DirtyBuildManager.markDirty(data.id)
-        notifyPlayerFailure(actorUuid, "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）")
-      }
+      SLDatabase.saveBuildWithCompletion(
+          data,
+          {
+            DirtyBuildManager.markDirty(data.id)
+            notifyPlayerFailure(actorUuid, "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）")
+          },
+          saved,
+      )
       saveYamlAsync(data)
     } else {
       // Before the explicit offline migration, YAML is authoritative. SQLite failures must not
       // reject a YAML-backed write; reconciliation records the shadow write for later repair.
-      saveYamlAsync(data)
+      saveYamlWithCompletion(data) { success ->
+        if (success) saved()
+        else notifyPlayerFailure(actorUuid, "この看板のデータを保存できませんでした。運営に報告してください（ID: ${data.id}）")
+      }
       SLDatabase.saveBuild(data) { DirtyBuildManager.markDirty(data.id) }
     }
   }
@@ -373,49 +389,72 @@ object Data {
         .start()
   }
 
-  fun saveYamlAsync(data: SLData) {
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            Tools.plugin,
-            Runnable {
-              try {
-                val dirName = getDirName(data.id)
-                val yml = CustomYaml("data/" + dirName + "/${data.id}.yml")
-                val likesStr = data.likes.map { it.toString() }
-                val likesWithTimestampStr = mutableMapOf<String, Long>()
-                data.likesWithTimestamp.forEach { (uuid, ts) ->
-                  likesWithTimestampStr[uuid.toString()] = ts
-                }
+  private val yamlWrites = mutableMapOf<Int, CompletableFuture<Void>>()
 
-                yml.apply {
-                  set("id", data.id)
-                  set("loc.world", data.worldName)
-                  set("loc.x", data.loc.x)
-                  set("loc.y", data.loc.y)
-                  set("loc.z", data.loc.z)
-                  // Build creation time is immutable. Keep a legacy value intact when an existing
-                  // YAML record is saved for another reason; only new records start as epoch ms.
-                  set("time", yml.getString("time") ?: BuildTimestamps.toStored(data.time))
-                  set("owner", data.owner.toString())
-                  set("title", data.title)
-                  set("likes", likesStr)
-                  set("likesWithTimestamp", likesWithTimestampStr)
-                  set("check", data.check)
-                  set("comment", data.comment)
-                  set("DiscordTextID", data.discordTextID)
-                  set("deleted", data.deletedAt != null)
-                  set("deleted_at", data.deletedAt?.let(BuildTimestamps::toStored))
-                  set("deleted_by", data.deletedBy?.toString())
-                  set("sign_material", data.signMaterial)
-                }
-                yml.save()
-              } catch (e: Exception) {
-                Tools.plugin.logger.warning(
-                    "[SL3] YAML fallback save failed for ID ${data.id}: ${e.message}"
-                )
-              }
-            },
+  fun saveYamlAsync(data: SLData) {
+    saveYamlWithCompletion(data) {}
+  }
+
+  private fun saveYamlWithCompletion(data: SLData, onComplete: (Boolean) -> Unit) {
+    val snapshot =
+        data.copy(
+            loc = data.loc.clone(),
+            likes = data.likes.toMutableList(),
+            likesWithTimestamp = data.likesWithTimestamp.toMutableMap(),
         )
+    synchronized(yamlWrites) {
+      val previous = yamlWrites[data.id] ?: CompletableFuture.completedFuture(null)
+      val write =
+          previous.thenRunAsync(
+              Runnable {
+                val data = snapshot
+                var saved = false
+                try {
+                  val dirName = getDirName(data.id)
+                  val yml = CustomYaml("data/" + dirName + "/${data.id}.yml")
+                  val likesStr = data.likes.map { it.toString() }
+                  val likesWithTimestampStr = mutableMapOf<String, Long>()
+                  data.likesWithTimestamp.forEach { (uuid, ts) ->
+                    likesWithTimestampStr[uuid.toString()] = ts
+                  }
+
+                  yml.apply {
+                    set("id", data.id)
+                    set("loc.world", data.worldName)
+                    set("loc.x", data.loc.x)
+                    set("loc.y", data.loc.y)
+                    set("loc.z", data.loc.z)
+                    // Build creation time is immutable. Keep a legacy value intact when an existing
+                    // YAML record is saved for another reason; only new records start as epoch ms.
+                    set("time", yml.getString("time") ?: BuildTimestamps.toStored(data.time))
+                    set("owner", data.owner.toString())
+                    set("title", data.title)
+                    set("likes", likesStr)
+                    set("likesWithTimestamp", likesWithTimestampStr)
+                    set("check", data.check)
+                    set("comment", data.comment)
+                    set("DiscordTextID", data.discordTextID)
+                    set("deleted", data.deletedAt != null)
+                    set("deleted_at", data.deletedAt?.let(BuildTimestamps::toStored))
+                    set("deleted_by", data.deletedBy?.toString())
+                    set("sign_material", data.signMaterial)
+                  }
+                  yml.save(File(Tools.plugin.dataFolder, "data/$dirName/${data.id}.yml"))
+                  saved = true
+                } catch (e: Exception) {
+                  Tools.plugin.logger.warning(
+                      "[SL3] YAML fallback save failed for ID ${data.id}: ${e.message}"
+                  )
+                }
+                onComplete(saved)
+              },
+              { task -> Bukkit.getScheduler().runTaskAsynchronously(Tools.plugin, task) },
+          )
+      yamlWrites[data.id] = write
+      write.whenComplete { _, _ ->
+        synchronized(yamlWrites) { if (yamlWrites[data.id] === write) yamlWrites.remove(data.id) }
+      }
+    }
   }
 
   fun removeFromCache(data: SLData) {
@@ -708,92 +747,123 @@ object Data {
     player.sendMessage(Tools.socialLikesLOGO + "&f空き地を探しています...".color())
 
     Thread {
-          var switch = true
-          var totalCount = 0
-          var biomeCount = 0
-          while (switch) {
-            val randomCX = (minCX..maxCX).random()
-            val randomCZ = (minCZ..maxCZ).random()
+          try {
+            var switch = true
+            var totalCount = 0
+            var biomeCount = 0
+            while (switch) {
+              val randomCX = (minCX..maxCX).random()
+              val randomCZ = (minCZ..maxCZ).random()
 
-            if (biome != null) {
-              biomeCount++
-              val x = randomCX * 16 + 8
-              val z = randomCZ * 16 + 8
-              val hitBiome = loc.world.getBiome(x, 200, z)
-              if (biome.name() != hitBiome.name()) {
-                if (biomeCount >= 33) {
-                  object : BukkitRunnable() {
-                        override fun run() {
-                          player.sendMessage(Tools.socialLikesLOGO + "&eバイオームが見つかりませんでした。".color())
+              if (biome != null) {
+                biomeCount++
+                val x = randomCX * 16 + 8
+                val z = randomCZ * 16 + 8
+                val hitBiome =
+                    Bukkit.getScheduler()
+                        .callSyncMethod(Tools.plugin) { loc.world.getBiome(x, 200, z) }
+                        .get()
+                if (biome.name() != hitBiome.name()) {
+                  if (biomeCount >= 33) {
+                    object : BukkitRunnable() {
+                          override fun run() {
+                            player.sendMessage(
+                                Tools.socialLikesLOGO + "&eバイオームが見つかりませんでした。".color()
+                            )
+                          }
                         }
-                      }
-                      .runTask(Tools.plugin)
-                  switch = false
+                        .runTask(Tools.plugin)
+                    switch = false
+                  }
+                  continue
                 }
-                continue
               }
-            }
 
-            var count = 0
-            for (x in randomCX - r..randomCX + r) {
-              for (z in randomCZ - r..randomCZ + r) {
-                val slDataSet = data[x]?.get(z) ?: continue
-                count += slDataSet.size
+              var count = 0
+              for (x in randomCX - r..randomCX + r) {
+                for (z in randomCZ - r..randomCZ + r) {
+                  val slDataSet = data[x]?.get(z) ?: continue
+                  count += slDataSet.size
+                }
               }
-            }
 
-            if (count <= c) {
-              val x = randomCX * 16 + 8
-              val z = randomCZ * 16 + 8
-              object : BukkitRunnable() {
-                    override fun run() {
-                      var switchY = true
-                      val sLoc =
-                          Location(loc.world, x.toDouble(), 321.0, z.toDouble(), loc.yaw, loc.pitch)
-                      while (switchY) {
-                        if (sLoc.block.isPassable) {
-                          if (!sLoc.block.getRelative(BlockFace.DOWN).isPassable) {
-                            switchY = false
-                            continue
+              if (count <= c) {
+                val x = randomCX * 16 + 8
+                val z = randomCZ * 16 + 8
+                object : BukkitRunnable() {
+                      override fun run() {
+                        try {
+                          var switchY = true
+                          val sLoc =
+                              Location(
+                                  loc.world,
+                                  x.toDouble(),
+                                  321.0,
+                                  z.toDouble(),
+                                  loc.yaw,
+                                  loc.pitch,
+                              )
+                          while (switchY) {
+                            if (sLoc.block.isPassable) {
+                              if (!sLoc.block.getRelative(BlockFace.DOWN).isPassable) {
+                                switchY = false
+                                continue
+                              }
+                              if (
+                                  sLoc.block.getRelative(BlockFace.DOWN).blockData.material ==
+                                      Material.WATER
+                              ) {
+                                switchY = false
+                                continue
+                              }
+                            }
+                            sLoc.y -= 1.0
+                            if (sLoc.y <= -64.0) {
+                              player.sendMessage(
+                                  Tools.socialLikesLOGO + "&e足場が無いためテレポートできませんでした".color()
+                              )
+                              return
+                            }
                           }
-                          if (
-                              sLoc.block.getRelative(BlockFace.DOWN).blockData.material ==
-                                  Material.WATER
-                          ) {
-                            switchY = false
-                            continue
-                          }
-                        }
-                        sLoc.y -= 1.0
-                        if (sLoc.y <= -64.0) {
-                          player.sendMessage(
-                              Tools.socialLikesLOGO + "&e足場が無いためテレポートできませんでした".color()
+                          Bukkit.dispatchCommand(
+                              Bukkit.getConsoleSender(),
+                              "tp ${player.name} $x ${sLoc.y} $z",
                           )
-                          return
+                        } catch (e: Exception) {
+                          reportVacantTpFailure(player, e)
                         }
                       }
-                      Bukkit.dispatchCommand(
-                          Bukkit.getConsoleSender(),
-                          "tp ${player.name} $x ${sLoc.y} $z",
-                      )
                     }
-                  }
-                  .runTask(Tools.plugin)
-              switch = false
-            }
-            totalCount++
-            if (totalCount >= 33) {
-              object : BukkitRunnable() {
-                    override fun run() {
-                      player.sendMessage(Tools.socialLikesLOGO + "&e空き地が見つかりませんでした。".color())
+                    .runTask(Tools.plugin)
+                switch = false
+              }
+              totalCount++
+              if (totalCount >= 33) {
+                object : BukkitRunnable() {
+                      override fun run() {
+                        player.sendMessage(Tools.socialLikesLOGO + "&e空き地が見つかりませんでした。".color())
+                      }
                     }
-                  }
-                  .runTask(Tools.plugin)
-              switch = false
+                    .runTask(Tools.plugin)
+                switch = false
+              }
             }
+          } catch (e: Exception) {
+            if (e is InterruptedException) Thread.currentThread().interrupt()
+            reportVacantTpFailure(player, e)
           }
-          return@Thread
         }
         .start()
+  }
+
+  private fun reportVacantTpFailure(player: Player, exception: Exception) {
+    Tools.plugin.logger.log(Level.WARNING, "[SL3] Vacant teleport search failed", exception)
+    Bukkit.getScheduler()
+        .runTask(
+            Tools.plugin,
+            Runnable {
+              player.sendMessage(Tools.socialLikesLOGO + "&c空き地の検索に失敗しました。運営に報告してください。".color())
+            },
+        )
   }
 }

@@ -45,18 +45,17 @@ internal class ElevatorListener(private val plugin: JavaPlugin) : Listener {
     if (!isElevatorFloor(block.type, block.getRelative(0, -1, 0).type)) return
 
     val world = block.world
-    val column =
-        (world.minHeight until world.maxHeight).map { y ->
-          world.getBlockAt(block.x, y, block.z).type
-        }
-    when (val floor = findFloor(column, block.y - world.minHeight, up, ::isEmpty)) {
+    val minY = maxOf(world.minHeight, block.y - 41)
+    val maxY = minOf(world.maxHeight - 1, block.y + 42)
+    val column = (minY..maxY).map { y -> world.getBlockAt(block.x, y, block.z).type }
+    when (val floor = findFloor(column, block.y - minY, up, ::isEmpty)) {
       FloorSearch.Missing -> return
       FloorSearch.TooFar -> {
         player.sendActionBar(Component.text("次の階が遠すぎます（40ブロックまで）", NamedTextColor.RED))
         return
       }
       is FloorSearch.Found -> {
-        val destination = world.getBlockAt(block.x, floor.y + world.minHeight, block.z)
+        val destination = world.getBlockAt(block.x, floor.y + minY, block.z)
         Bukkit.getScheduler()
             .runTask(
                 plugin,

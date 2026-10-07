@@ -40,7 +40,21 @@ object LevelReward {
         if (rawItem == null) continue
 
         val item = rawItem.clone()
-        val lv = Integer.parseInt(item.itemMeta.displayName.split(",").get(0))
+        val lv =
+            try {
+              val fields = item.itemMeta.displayName.split(",")
+              val level = fields[0].toInt()
+              when (item.type) {
+                Material.IRON_INGOT -> require(fields[1].toDouble().isFinite())
+                Material.GOLD_INGOT,
+                Material.COAL -> fields[1].toInt()
+                else -> Unit
+              }
+              level
+            } catch (error: Exception) {
+              plugin.logger.warning("無効なレベル報酬アイテムをスキップしました (${item.type}): ${error.message}")
+              continue
+            }
         val reward = rewards.getOrDefault(lv, Reward(lv, item, mutableListOf(), mutableListOf()))
 
         if (Calculator.getLevel(player) >= lv && !statsData.getReceiveRewardStatus(lv)) {
@@ -74,7 +88,7 @@ object LevelReward {
                 Bukkit.getServer()
                     .dispatchCommand(
                         Bukkit.getConsoleSender(),
-                        "milepoint add ${item.itemMeta.displayName.split(",").get(1)}",
+                        "milepoint add ${item.itemMeta.displayName.split(",").get(1)} ${player.name}",
                     )
               }
             }
@@ -90,7 +104,9 @@ object LevelReward {
               }
               reward.runnables.add {
                 item.addText("&a[Lv.${lv}] &fレベル報酬", mutableListOf()).allFlag()
-                player.inventory.addItem(item)
+                player.inventory.addItem(item).values.forEach {
+                  player.world.dropItemNaturally(player.location, it)
+                }
               }
             }
             else -> {
@@ -98,7 +114,9 @@ object LevelReward {
               text.add("${item.type.name}×${item.amount}")
               reward.runnables.add {
                 item.addText("&a[Lv.${lv}] &fレベル報酬", mutableListOf()).allFlag()
-                player.inventory.addItem(item)
+                player.inventory.addItem(item).values.forEach {
+                  player.world.dropItemNaturally(player.location, it)
+                }
               }
             }
           }
@@ -119,12 +137,13 @@ object LevelReward {
                         .hoverEvent(Component.text("クリックしてサバイバルモードに変更"))
                 player.sendMessage(message)
               } else {
-                player.playSound(player.eyeLocation, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 1F)
-                player.sendMessage(Component.text("&6[Lv.${reward.lv}] &fのレベル報酬を受け取りました！".color()))
-                statsData.addReceiveRewardStatus(reward.lv)
+                if (statsData.getReceiveRewardStatus(reward.lv)) return@guiRun
                 for (run in reward.runnables) {
                   run.run()
                 }
+                statsData.addReceiveRewardStatus(reward.lv)
+                player.playSound(player.eyeLocation, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 1F)
+                player.sendMessage(Component.text("&6[Lv.${reward.lv}] &fのレベル報酬を受け取りました！".color()))
                 display(player) // 開きなおす(表示の順番を詰める)
               }
             }

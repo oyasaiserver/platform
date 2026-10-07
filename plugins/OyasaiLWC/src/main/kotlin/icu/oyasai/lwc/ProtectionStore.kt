@@ -85,9 +85,8 @@ internal class ProtectionStore(private val plugin: JavaPlugin) {
   fun count(): Int = cache.size
 
   fun add(protection: Protection, material: Material) {
-    cache[protection.key] = protection
     val json = protection.json()
-    write {
+    write(wait = true) {
       val blockName = material.key.toString()
       var blockId =
           connection.prepareStatement("SELECT id FROM lwc_blocks WHERE name = ?").use { statement ->
@@ -134,16 +133,17 @@ internal class ProtectionStore(private val plugin: JavaPlugin) {
             }
           }
     }
+    cache[protection.key] = protection
   }
 
   fun remove(protection: Protection) {
-    cache.remove(protection.key)
-    write {
+    write(wait = true) {
       connection.prepareStatement("DELETE FROM lwc_protections WHERE id = ?").use { statement ->
         statement.setInt(1, protection.id)
         statement.executeUpdate()
       }
     }
+    cache.remove(protection.key)
   }
 
   fun update(protection: Protection) {
@@ -158,14 +158,17 @@ internal class ProtectionStore(private val plugin: JavaPlugin) {
     }
   }
 
-  private fun write(action: () -> Unit) {
-    writer.execute {
-      try {
-        action()
-      } catch (error: Exception) {
-        plugin.logger.severe("LWC データベースの書き込みに失敗しました: ${error.message}")
-      }
-    }
+  private fun write(wait: Boolean = false, action: () -> Unit) {
+    val result =
+        writer.submit {
+          try {
+            action()
+          } catch (error: Exception) {
+            plugin.logger.severe("LWC データベースの書き込みに失敗しました: ${error.message}")
+            throw error
+          }
+        }
+    if (wait) result.get()
   }
 
   fun close() {

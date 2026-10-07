@@ -409,6 +409,18 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   }
 
   override fun onDisable() {
+    if (::storageService.isInitialized) {
+      for (player in server.onlinePlayers) {
+        val pets = ActivePetRegistry.getByOwner(player.uniqueId.toString())
+        if (pets.isEmpty()) continue
+        if (::fetchSystem.isInitialized) {
+          for (entity in pets) {
+            fetchSystem.stopFetchTask(entity)
+          }
+        }
+        storageService.storeAllPets(player)
+      }
+    }
     // 子供AIシステムのクリーンアップ
     if (::childAISystem.isInitialized) {
       childAISystem.cleanup()
@@ -1437,12 +1449,11 @@ object PetDataManager {
   }
 
   fun removePetFromCache(ownerUuid: UUID, petId: String) {
-    cache[ownerUuid.toString()]?.remove(petId)
+    val pets = loadPlayerPets(ownerUuid)
+    val petData = pets.remove(petId) ?: return
 
     // ファイルも削除
     val playerFolder = getPlayerFolder(ownerUuid)
-    val pets = loadPlayerPets(ownerUuid)
-    val petData = pets[petId] ?: return
     val fileName = getPetFileName(petData)
     val file = File(playerFolder, fileName)
     if (file.exists()) {
@@ -5953,7 +5964,9 @@ class PetShopGuiListener(
       }
       val buyItem = clickedItem.clone().apply { amount = 1 }
       // loreから価格行を除いた元アイテムを渡すため、単純にcloneして支給
-      player.inventory.addItem(buyItem)
+      player.inventory.addItem(buyItem).values.forEach {
+        player.world.dropItem(player.location, it)
+      }
       player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
       player.sendMessage(Component.text("購入しました！ (-${cost}pt)", GREEN))
       return
@@ -5975,7 +5988,9 @@ class PetShopGuiListener(
         player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
         return
       }
-      player.inventory.addItem(PetItemFactory.createSkillUnlockItem(level))
+      player.inventory.addItem(PetItemFactory.createSkillUnlockItem(level)).values.forEach {
+        player.world.dropItem(player.location, it)
+      }
       player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
       player.sendMessage(Component.text("購入しました！ (-${cost}pt)", GREEN))
       return
@@ -5997,7 +6012,9 @@ class PetShopGuiListener(
         player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
         return
       }
-      player.inventory.addItem(PetItemFactory.createParticleUnlockItem(particleId))
+      player.inventory.addItem(PetItemFactory.createParticleUnlockItem(particleId)).values.forEach {
+        player.world.dropItem(player.location, it)
+      }
       player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
       player.sendMessage(Component.text("購入しました！ (-${cost}pt)", GREEN))
       return
@@ -6018,7 +6035,9 @@ class PetShopGuiListener(
         player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
         return
       }
-      player.inventory.addItem(spec.createToyItem())
+      player.inventory.addItem(spec.createToyItem()).values.forEach {
+        player.world.dropItem(player.location, it)
+      }
       player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
       player.sendMessage(Component.text("購入しました！ (-${cost}pt)", GREEN))
       return
@@ -6852,6 +6871,17 @@ class PetQueryService(
       return
     }
 
+    val hasEgg =
+        (player.inventory.contents.asSequence() + player.enderChest.contents.asSequence()).any {
+          it?.itemMeta
+              ?.persistentDataContainer
+              ?.get(BigWolfKeys.STORED_ID, PersistentDataType.STRING) == petData.petId
+        }
+    if (hasEgg) {
+      player.sendMessage(Component.text("このペットのスポーンエッグはインベントリかエンダーチェストにあります。", RED))
+      return
+    }
+
     // ポイント消費
     val cost = BigWolfConfig.recoverCost
     if (!economySystem.consumeTokens(player, cost)) {
@@ -7069,12 +7099,6 @@ class PetReviveService(
       return
     }
 
-    // ポイント消費
-    val cost = BigWolfConfig.reviveCost
-    if (!economySystem.consumeTokens(player, cost)) {
-      return
-    }
-
     // ペットを復活（上空からの降臨演出）
     val type = runCatching { EntityType.valueOf(petData.type) }.getOrNull() ?: EntityType.WOLF
     val spec = PetRegistry.get(type)
@@ -7085,11 +7109,19 @@ class PetReviveService(
       return
     }
 
+    // ポイント消費
+    val cost = BigWolfConfig.reviveCost
+    if (!economySystem.consumeTokens(player, cost)) {
+      return
+    }
+
     // 上空10ブロックからスタート
     val spawnLoc = safeGround.clone().add(0.0, 10.0, 0.0)
 
-    val entity = player.world.spawnEntity(spawnLoc, type) as? LivingEntity
-    if (entity == null) {
+    val entity =
+        runCatching { player.world.spawnEntity(spawnLoc, type) as? LivingEntity }.getOrNull()
+    if (entity == null || !entity.isValid) {
+      economySystem.refundTokens(player, cost)
       player.sendMessage(Component.text("この場所ではペットを復活できません。", RED))
       return
     }
@@ -8849,6 +8881,7 @@ class ChildAISystem(private val plugin: JavaPlugin) {
               val owner = Bukkit.getPlayer(ownerUuid) ?: continue
 
               if (owner.isInsideVehicle) continue
+              if (entity.world != owner.world) continue
               if (entity.location.distance(owner.location) > 30) continue
 
               // クールダウンチェック
@@ -9265,6 +9298,10 @@ class FetchSystem(
                 return
               }
               val playerLoc = player.location
+              if (entity.world != playerLoc.world) {
+                cleanup(true)
+                return
+              }
               val dist = entity.location.distance(playerLoc)
               if (dist < 2.5) {
                 entity.equipment?.setItemInMainHand(null)

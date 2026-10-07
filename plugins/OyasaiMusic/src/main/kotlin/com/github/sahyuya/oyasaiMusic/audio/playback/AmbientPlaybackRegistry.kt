@@ -228,6 +228,35 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
     entries.remove(k)
   }
 
+  internal fun dropRecord(location: Location) {
+    val entry = entryAt(location) ?: return
+    val songId = entry.song.id ?: return
+    val authorName = Bukkit.getOfflinePlayer(entry.song.authorUuid).name ?: "不明"
+    val material =
+        org.bukkit.Material.matchMaterial(entry.song.recordMaterial)
+            ?: org.bukkit.Material.MUSIC_DISC_13
+    var item =
+        com.github.sahyuya.oyasaiMusic.item.PhysicalRecordItem.create(
+            plugin,
+            material,
+            songId,
+            entry.song.title,
+            authorName,
+            entry.song.recordIdentity,
+        )
+    item =
+        com.github.sahyuya.oyasaiMusic.item.PhysicalRecordItem.withRange(plugin, item, entry.range)
+    item =
+        com.github.sahyuya.oyasaiMusic.item.PhysicalRecordItem.withTrigger(
+            plugin,
+            item,
+            entry.trigger,
+        )
+    item = com.github.sahyuya.oyasaiMusic.item.PhysicalRecordItem.withLoop(plugin, item, entry.loop)
+    unregister(location)
+    location.world?.dropItemNaturally(location, item)
+  }
+
   fun onRedstoneChange(location: Location, powered: Boolean) {
     val k = key(location)
     val entry = entries[k] ?: return
@@ -258,8 +287,7 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
         return@forEach
       }
       if (entry.location.block.type != org.bukkit.Material.JUKEBOX) {
-        stopPlayback(k)
-        entries.remove(k)
+        dropRecord(entry.location)
         return@forEach
       }
       val nearby = nearbyPlayers(entry)
