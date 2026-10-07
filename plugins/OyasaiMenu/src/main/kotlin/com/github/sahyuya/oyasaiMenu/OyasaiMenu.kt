@@ -13,8 +13,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class OyasaiMenu : JavaPlugin(), Listener {
-  private var menuItem: MenuItem? = null
-
   lateinit var menuLoader: MenuLoader
   lateinit var shopLoader: ShopLoader
   lateinit var pointShopLoader: PointShopLoader
@@ -36,7 +34,6 @@ class OyasaiMenu : JavaPlugin(), Listener {
 
     try {
       val item = MenuItem(this)
-      menuItem = item
       item.enable()
     } catch (e: Exception) {
       logger.severe("Menu item failed to start: ${e.message}")
@@ -106,8 +103,6 @@ class OyasaiMenu : JavaPlugin(), Listener {
   }
 
   override fun onDisable() {
-    runCatching { menuItem?.disable() }
-        .onFailure { logger.severe("Menu item shutdown failed: ${it.message}") }
     logger.info("OyasaiMenu を無効化しました。")
   }
 

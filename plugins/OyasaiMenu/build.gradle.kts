@@ -4,7 +4,6 @@ dependencies {
   compileOnly(libs.luckperms.api)
   compileOnly(project(":plugins:OyasaiToken"))
   compileOnly(project(":plugins:DynamicProfile"))
-  implementation(libs.sqlite.jdbc)
   testImplementation(libs.purpur.api)
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.4.0")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.4")
