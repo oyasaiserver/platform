@@ -61,6 +61,14 @@ subprojects {
   apply(plugin = "org.jetbrains.kotlin.jvm")
   apply(plugin = "com.gradleup.shadow")
   apply(plugin = "java-library")
+
+  dependencies {
+    add("testImplementation", rootProject.libs.kotlin.test.junit5)
+    add("testImplementation", rootProject.libs.junit.jupiter.engine)
+    add("testRuntimeOnly", rootProject.libs.junit.platform.launcher)
+  }
+
+  tasks.withType<Test>().configureEach { useJUnitPlatform() }
   afterEvaluate {
     tasks.withType<Jar>().configureEach {
       if (name == "jar") {

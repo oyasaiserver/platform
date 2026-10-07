@@ -1,4 +1,7 @@
 [libraries]
+kotlin-test-junit5 = {module = "org.jetbrains.kotlin:kotlin-test-junit5", version = "2.4.0"}
+junit-jupiter-engine = {module = "org.junit.jupiter:junit-jupiter-engine", version = "5.11.4"}
+junit-platform-launcher = {module = "org.junit.platform:junit-platform-launcher"}
 imageio-webp = {module = "com.twelvemonkeys.imageio:imageio-webp", version = "3.15.2"}
 sqlite-jdbc = {module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc"}
 zstd-jni = {module = "com.github.luben:zstd-jni", version.ref = "zstd-jni"}
