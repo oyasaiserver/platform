@@ -12,6 +12,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -34,10 +35,11 @@ object VehicleGarageService : Listener {
 
   @EventHandler fun joinPlayer(e: PlayerJoinEvent) = loadPlayerCache(e.player)
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR)
   fun quitPlayer(e: PlayerQuitEvent) {
     val uuid = e.player.uniqueId
     userInvList[uuid]?.let { closeTask(it, uuid) }
+    itemCache[uuid]?.let { save(uuid, it) }
     removePlayerCache(e.player)
   }
 
