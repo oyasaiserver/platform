@@ -51,7 +51,9 @@ object SLTPSignBreak : CommandExecutor {
       }
       val item = SLSignSetting.createCommandSignItem(targetBlock.type, data, sender.uniqueId)
       targetBlock.type = Material.AIR
-      sender.inventory.addItem(item)
+      sender.inventory.addItem(item).values.forEach {
+        sender.world.dropItemNaturally(sender.location, it)
+      }
       sender.sendMessage("§a看板の再入手に成功しました")
     } else {
       sender.sendMessage("§cIDが存在しないため、看板の再入手に失敗しました")
