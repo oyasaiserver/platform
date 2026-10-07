@@ -1,6 +1,9 @@
 package com.github.sahyuya.oyasaiMenu.util
 
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Material
@@ -15,6 +18,24 @@ object GuiUtil {
     item.itemMeta = meta
     return item
   }
+
+  fun buildSuggestCommandComponent(command: String, hoverText: String): Component =
+      Component.text()
+          .decoration(TextDecoration.ITALIC, false)
+          .append(Component.text("▶ ").color(NamedTextColor.GREEN))
+          .append(
+              Component.text(command)
+                  .color(NamedTextColor.YELLOW)
+                  .clickEvent(ClickEvent.suggestCommand(command))
+                  .hoverEvent(
+                      HoverEvent.showText(
+                          Component.text(hoverText)
+                              .color(NamedTextColor.GRAY)
+                              .decoration(TextDecoration.ITALIC, false)
+                      )
+                  )
+          )
+          .build()
 
   fun colorizeComponent(text: String): Component =
       LegacyComponentSerializer.legacyAmpersand()
