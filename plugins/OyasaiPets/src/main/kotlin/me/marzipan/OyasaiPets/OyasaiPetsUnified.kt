@@ -6871,6 +6871,17 @@ class PetQueryService(
       return
     }
 
+    val hasEgg =
+        (player.inventory.contents.asSequence() + player.enderChest.contents.asSequence()).any {
+          it?.itemMeta
+              ?.persistentDataContainer
+              ?.get(BigWolfKeys.STORED_ID, PersistentDataType.STRING) == petData.petId
+        }
+    if (hasEgg) {
+      player.sendMessage(Component.text("このペットのスポーンエッグはインベントリかエンダーチェストにあります。", RED))
+      return
+    }
+
     // ポイント消費
     val cost = BigWolfConfig.recoverCost
     if (!economySystem.consumeTokens(player, cost)) {
