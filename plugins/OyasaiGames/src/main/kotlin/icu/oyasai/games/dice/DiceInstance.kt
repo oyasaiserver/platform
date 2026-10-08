@@ -61,6 +61,7 @@ class DiceInstance(
     private set
 
   private var physicsTask: BukkitTask? = null
+  private var settleStayTask: BukkitTask? = null
 
   private val currentLocation = startLoc.clone()
   private val velocity = initialVelocity.clone()
@@ -240,6 +241,7 @@ class DiceInstance(
                 bedrockItem?.let { bItem ->
                   if (bItem.isValid) {
                     bItem.teleport(currentLocation)
+                    bItem.velocity = Vector(0.0, 0.0, 0.0)
                   }
                 }
                 val rotQuat =
@@ -309,6 +311,34 @@ class DiceInstance(
               Quaternionf(),
           )
     }
+
+    // 統合版アイテムの最終位置固定と慣性速度の完全消去
+    bedrockItem?.let { bItem ->
+      if (bItem.isValid) {
+        bItem.teleport(currentLocation)
+        bItem.velocity = Vector(0.0, 0.0, 0.0)
+      }
+    }
+
+    // 停止後の位置ロックタスク（プレイヤーの接触やバニラ物理によるスライドを完全防止）
+    settleStayTask =
+        plugin.server.scheduler.runTaskTimer(
+            plugin,
+            Runnable {
+              val bItem = bedrockItem
+              if (bItem != null && bItem.isValid) {
+                if (bItem.location.distanceSquared(currentLocation) > 0.005) {
+                  bItem.teleport(currentLocation)
+                  bItem.velocity = Vector(0.0, 0.0, 0.0)
+                }
+              } else {
+                settleStayTask?.cancel()
+                settleStayTask = null
+              }
+            },
+            1L,
+            2L,
+        )
 
     // 頭上ホログラム（TextDisplay）のスポーン
     spawnHologram()
@@ -575,6 +605,8 @@ class DiceInstance(
   fun remove() {
     physicsTask?.cancel()
     physicsTask = null
+    settleStayTask?.cancel()
+    settleStayTask = null
     interactionEntity?.remove()
     interactionEntity = null
     itemDisplay?.remove()
