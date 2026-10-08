@@ -41,18 +41,42 @@ class DiceListener(
     if (diceItem.isDice(player.inventory.itemInMainHand)) return true
     if (diceItem.isDice(player.inventory.itemInOffHand)) return true
     if (chargeManager.isCharging(player) || chargeManager.isRecentThrower(player)) return true
+
+    // 設置されようとしているブロックがサイコロ素材の場合
     if (placedType != null && diceMaterials.contains(placedType)) {
+      if (placedType == org.bukkit.Material.LODESTONE)
+          return true // LODESTONEブロックの設置は無条件でサイコロ誤設置とみなして遮断
       if (diceItem.hasDice(player)) return true
       if (diceManager.hasActiveDice(player)) return true
       if (player.hasCooldown(placedType)) return true
+      val main = player.inventory.itemInMainHand
+      if (main.type == placedType) {
+        if (
+            diceItem.isDice(main) ||
+                main.containsEnchantment(org.bukkit.enchantments.Enchantment.UNBREAKING)
+        )
+            return true
+      }
     }
+
+    // 手持ちアイテムがサイコロ素材の場合
+    val mainItem = player.inventory.itemInMainHand
+    if (diceMaterials.contains(mainItem.type)) {
+      if (mainItem.type == org.bukkit.Material.LODESTONE) return true
+      if (diceItem.hasDice(player)) return true
+      if (diceManager.hasActiveDice(player)) return true
+      if (player.hasCooldown(mainItem.type)) return true
+    }
+
     return false
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   fun onBlockCanBuild(event: BlockCanBuildEvent) {
     val player = event.player ?: return
-    if (isDiceRelated(player, player.inventory.itemInMainHand, event.block.type)) {
+    val main = player.inventory.itemInMainHand
+    val off = player.inventory.itemInOffHand
+    if (isDiceRelated(player, main, main.type) || isDiceRelated(player, off, off.type)) {
       event.isBuildable = false
     }
   }
@@ -70,28 +94,59 @@ class DiceListener(
   private fun handleBlockPlace(event: BlockPlaceEvent) {
     val player = event.player
     val placedType = event.blockPlaced.type
+    val block = event.blockPlaced
+    val loc = block.location
+    val previousType = event.blockReplacedState.type
+    val previousData = event.blockReplacedState.blockData
+
     if (isDiceRelated(player, event.itemInHand, placedType)) {
       event.isCancelled = true
       event.setBuild(false)
       event.blockReplacedState.update(true, false)
       player.updateInventory()
 
-      // フェールセーフ: 万が一クライアント予測や非同期パケットでブロックが設置された場合、即座に元の状態に戻す
-      val block = event.blockPlaced
-      val loc = block.location
-      val previousType = event.blockReplacedState.type
-      val previousData = event.blockReplacedState.blockData
+      // 1. 即時同期: 元のブロック状態を送信してクライアント側の即時予測を上書き
+      player.sendBlockChange(loc, previousData)
+
+      // 2. 1tick後: クライアント予測によるゴーストブロックを完全に抹消
       diceManager.plugin.server.scheduler.runTaskLater(
           diceManager.plugin,
           Runnable {
             if (loc.block.type == placedType) {
               loc.block.type = previousType
               loc.block.setBlockData(previousData, false)
-              player.sendBlockChange(loc, previousData)
-              player.updateInventory()
             }
+            player.sendBlockChange(loc, previousData)
+            player.updateInventory()
           },
           1L,
+      )
+
+      // 3. 3tick後: GeyserMCのパケット遅延時にも確実に同期
+      diceManager.plugin.server.scheduler.runTaskLater(
+          diceManager.plugin,
+          Runnable {
+            if (loc.block.type == placedType) {
+              loc.block.type = previousType
+              loc.block.setBlockData(previousData, false)
+            }
+            player.sendBlockChange(loc, previousData)
+            player.updateInventory()
+          },
+          3L,
+      )
+
+      // 4. 5tick後: 念押し同期
+      diceManager.plugin.server.scheduler.runTaskLater(
+          diceManager.plugin,
+          Runnable {
+            if (loc.block.type == placedType) {
+              loc.block.type = previousType
+              loc.block.setBlockData(previousData, false)
+            }
+            player.sendBlockChange(loc, previousData)
+          },
+          5L,
       )
     }
   }
@@ -99,12 +154,26 @@ class DiceListener(
   @EventHandler(priority = EventPriority.LOWEST)
   fun onPlayerInteract(event: PlayerInteractEvent) {
     val player = event.player
-    val item = event.item
-    val isHoldingDice = diceItem.isDice(item) || diceItem.isDice(player.inventory.itemInMainHand)
+    val mainHand = player.inventory.itemInMainHand
+    val offHand = player.inventory.itemInOffHand
+    val eventItem = event.item
+    val effectiveItem = if (eventItem != null && !eventItem.type.isAir) eventItem else mainHand
 
-    // サイコロの右クリック操作（メインハンド優先、オフハンドでのブロック設置重複を完全遮断）
+    // 誤って世界に残ってしまったLODESTONEブロックを右クリックした場合、自動で消去（空気化）
+    if (event.clickedBlock?.type == org.bukkit.Material.LODESTONE) {
+      val cBlock = event.clickedBlock!!
+      cBlock.type = org.bukkit.Material.AIR
+      player.sendBlockChange(cBlock.location, org.bukkit.Material.AIR.createBlockData())
+    }
+
+    val isHoldingDice =
+        diceItem.isDice(mainHand) || diceItem.isDice(offHand) || diceItem.isDice(effectiveItem)
+    val isDiceContext =
+        isHoldingDice || isDiceRelated(player, effectiveItem, event.clickedBlock?.type)
+
+    // オフハンド操作、またはメインハンド以外でのブロック設置・誤操作を完全遮断
     if (event.hand != EquipmentSlot.HAND) {
-      if (isHoldingDice || isDiceRelated(player, item, event.clickedBlock?.type)) {
+      if (isDiceContext) {
         event.setUseItemInHand(Event.Result.DENY)
         event.setUseInteractedBlock(Event.Result.DENY)
         event.isCancelled = true
@@ -112,8 +181,7 @@ class DiceListener(
       return
     }
 
-    if (item != null && diceItem.isDice(item)) {
-      diceItem.sanitizePlayerDice(player)
+    if (isDiceContext) {
       val action = event.action
 
       if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
@@ -121,21 +189,49 @@ class DiceListener(
         event.setUseInteractedBlock(Event.Result.DENY)
         event.isCancelled = true
 
-        // 手の届く範囲のブロックを右クリックした場合、クライアント側のゴースト設置を防止
+        // ブロックを右クリックした場合、ゴースト設置を未然かつ確実に消去
         if (action == Action.RIGHT_CLICK_BLOCK) {
-          val placedBlock = event.clickedBlock?.getRelative(event.blockFace)
-          if (placedBlock != null) {
-            player.sendBlockChange(placedBlock.location, placedBlock.blockData)
+          val clicked = event.clickedBlock
+          if (clicked != null) {
+            val face = event.blockFace
+            val targetLoc = clicked.getRelative(face).location
+            val currentData = targetLoc.block.blockData
+            val clickedData = clicked.blockData
+
+            player.sendBlockChange(targetLoc, currentData)
+            player.sendBlockChange(clicked.location, clickedData)
+
+            diceManager.plugin.server.scheduler.runTaskLater(
+                diceManager.plugin,
+                Runnable {
+                  player.sendBlockChange(targetLoc, targetLoc.block.blockData)
+                  player.sendBlockChange(clicked.location, clicked.location.block.blockData)
+                  player.updateInventory()
+                },
+                1L,
+            )
+            diceManager.plugin.server.scheduler.runTaskLater(
+                diceManager.plugin,
+                Runnable {
+                  player.sendBlockChange(targetLoc, targetLoc.block.blockData)
+                  player.sendBlockChange(clicked.location, clicked.location.block.blockData)
+                  player.updateInventory()
+                },
+                3L,
+            )
           }
         }
 
+        val diceToUse = if (diceItem.isDice(mainHand)) mainHand else effectiveItem
+        diceItem.sanitizePlayerDice(player)
+
         if (player.isSneaking) {
           chargeManager.cancel(player)
-          val currentMode = diceItem.getDiceMode(item)
-          val isBroadcast = diceItem.isBroadcast(item)
+          val currentMode = diceItem.getDiceMode(diceToUse)
+          val isBroadcast = diceItem.isBroadcast(diceToUse)
           DiceMenuGui.open(player, currentMode, isBroadcast, diceItem)
         } else {
-          chargeManager.onRightClick(player, item)
+          chargeManager.onRightClick(player, diceToUse)
         }
       } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
         chargeManager.cancel(player)

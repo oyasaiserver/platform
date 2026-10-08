@@ -26,7 +26,13 @@ class DiceItem(private val plugin: Plugin) {
     if (meta.persistentDataContainer.has(diceKey, PersistentDataType.BYTE)) return true
     if (meta.persistentDataContainer.has(modeKey, PersistentDataType.STRING)) return true
 
-    // 2. Lore判定（プレーンテキストで確実にチェック）
+    // 2. 耐久力エンチャント判定（サイコロ素材かつ耐久力エンチャントが付与されている）
+    if (
+        meta.hasEnchant(Enchantment.UNBREAKING) && DiceType.entries.any { it.material == item.type }
+    )
+        return true
+
+    // 3. Lore判定（プレーンテキストで確実にチェック）
     val loreList = meta.lore()
     if (loreList != null && loreList.isNotEmpty()) {
       val plain = PlainTextComponentSerializer.plainText()
@@ -36,7 +42,7 @@ class DiceItem(private val plugin: Plugin) {
       }
     }
 
-    // 3. 表示名判定（プレーンテキストで確実にチェック）
+    // 4. 表示名判定（プレーンテキストで確実にチェック）
     val display = meta.displayName()
     if (display != null) {
       val plain = PlainTextComponentSerializer.plainText()
