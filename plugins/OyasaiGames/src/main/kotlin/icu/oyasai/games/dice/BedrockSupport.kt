@@ -36,4 +36,31 @@ object BedrockSupport {
       }
     }
   }
+
+  /**
+   * ホログラムの可視性をJava版・統合版で分離します。
+   * - Java版プレイヤー: javaHolo を表示し、bedrockHolo を非表示
+   * - 統合版プレイヤー: bedrockHolo を表示し、javaHolo を非表示
+   */
+  fun separateHologramVisibility(plugin: Plugin, javaHolo: Entity?, bedrockHolo: Entity?) {
+    val world = javaHolo?.world ?: bedrockHolo?.world ?: return
+    for (p in world.players) {
+      updatePlayerHologramVisibility(plugin, p, javaHolo, bedrockHolo)
+    }
+  }
+
+  fun updatePlayerHologramVisibility(
+      plugin: Plugin,
+      player: Player,
+      javaHolo: Entity?,
+      bedrockHolo: Entity?,
+  ) {
+    if (isBedrockPlayer(player)) {
+      if (javaHolo != null && javaHolo.isValid) player.hideEntity(plugin, javaHolo)
+      if (bedrockHolo != null && bedrockHolo.isValid) player.showEntity(plugin, bedrockHolo)
+    } else {
+      if (bedrockHolo != null && bedrockHolo.isValid) player.hideEntity(plugin, bedrockHolo)
+      if (javaHolo != null && javaHolo.isValid) player.showEntity(plugin, javaHolo)
+    }
+  }
 }

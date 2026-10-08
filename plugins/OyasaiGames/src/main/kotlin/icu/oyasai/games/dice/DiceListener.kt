@@ -139,12 +139,12 @@ class DiceListener(
 
   @EventHandler(priority = EventPriority.MONITOR)
   fun onPlayerJoin(event: PlayerJoinEvent) {
-    diceManager.hideBedrockEntitiesFor(event.player)
+    diceManager.updatePlayerVisibility(event.player)
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   fun onPlayerChangedWorld(event: PlayerChangedWorldEvent) {
-    diceManager.hideBedrockEntitiesFor(event.player)
+    diceManager.updatePlayerVisibility(event.player)
   }
 
   @EventHandler(priority = EventPriority.HIGH)

@@ -50,7 +50,12 @@ class DiceInstance(
   private val ownerKey = NamespacedKey(plugin, "dice_owner")
   private val diceItemIdKey = NamespacedKey(plugin, "dice_item_id")
   private var itemDisplay: ItemDisplay? = null
-  private var textDisplay: TextDisplay? = null
+  var textDisplayJava: TextDisplay? = null
+    private set
+
+  var textDisplayBedrock: TextDisplay? = null
+    private set
+
   private var interactionEntity: Interaction? = null
   var bedrockItem: Item? = null
     private set
@@ -335,78 +340,157 @@ class DiceInstance(
 
   private fun spawnHologram() {
     val world = currentLocation.world ?: return
-
-    // 止まったサイコロの頭上にふわっと浮き上がる位置
     val holoLoc = currentLocation.clone().add(0.0, HOLO_Y_OFFSET, 0.0)
 
-    val text =
-        when (mode.maxEyes) {
-          2 -> formatD2Text(resultEye)
-          6 -> formatD6Text(resultEye)
-          20 -> formatD20Text(resultEye)
-          else -> formatPolyhedralText(mode, resultEye)
-        }
+    val textJava = formatTextJava()
+    val textBedrock = formatTextBedrock()
 
-    val display =
+    val displayJava =
         world.spawn(holoLoc, TextDisplay::class.java) { entity ->
-          entity.text(text)
-          entity.billboard = Display.Billboard.CENTER
-          entity.isSeeThrough = false
-          entity.isShadowed = true
-          entity.backgroundColor = org.bukkit.Color.fromARGB(160, 0, 0, 0)
-          entity.isPersistent = false
-          entity.persistentDataContainer.set(
-              ownerKey,
-              PersistentDataType.STRING,
-              ownerUuid.toString(),
-          )
-
-          // ふわっと浮き上がるアニメーション設定
-          entity.transformation =
-              Transformation(
-                  Vector3f(0f, -0.1f, 0f),
-                  AxisAngle4f(0f, 0f, 1f, 0f),
-                  Vector3f(0.85f, 0.85f, 0.85f),
-                  AxisAngle4f(0f, 0f, 1f, 0f),
-              )
-          entity.interpolationDuration = 10
-          entity.interpolationDelay = 0
+          configureTextDisplay(entity, textJava)
+        }
+    val displayBedrock =
+        world.spawn(holoLoc, TextDisplay::class.java) { entity ->
+          configureTextDisplay(entity, textBedrock)
         }
 
-    this.textDisplay = display
+    this.textDisplayJava = displayJava
+    this.textDisplayBedrock = displayBedrock
+
+    BedrockSupport.separateHologramVisibility(plugin, displayJava, displayBedrock)
 
     // 1tick後に元の位置へふわっと上昇させる
     plugin.server.scheduler.runTaskLater(
         plugin,
         Runnable {
-          if (display.isValid) {
-            display.transformation =
-                Transformation(
-                    Vector3f(0f, 0f, 0f),
-                    AxisAngle4f(0f, 0f, 1f, 0f),
-                    Vector3f(1.0f, 1.0f, 1.0f),
-                    AxisAngle4f(0f, 0f, 1f, 0f),
-                )
-          }
+          applyHologramFloatingAnimation(displayJava)
+          applyHologramFloatingAnimation(displayBedrock)
         },
         1L,
     )
   }
 
-  private fun formatD2Text(eye: Int): Component {
+  private fun configureTextDisplay(entity: TextDisplay, text: Component) {
+    entity.text(text)
+    entity.billboard = Display.Billboard.CENTER
+    entity.isSeeThrough = false
+    entity.isShadowed = true
+    entity.backgroundColor = org.bukkit.Color.fromARGB(160, 0, 0, 0)
+    entity.isPersistent = false
+    entity.persistentDataContainer.set(
+        ownerKey,
+        PersistentDataType.STRING,
+        ownerUuid.toString(),
+    )
+    entity.transformation =
+        Transformation(
+            Vector3f(0f, -0.1f, 0f),
+            AxisAngle4f(0f, 0f, 1f, 0f),
+            Vector3f(0.85f, 0.85f, 0.85f),
+            AxisAngle4f(0f, 0f, 1f, 0f),
+        )
+    entity.interpolationDuration = 10
+    entity.interpolationDelay = 0
+  }
+
+  private fun applyHologramFloatingAnimation(display: TextDisplay?) {
+    if (display != null && display.isValid) {
+      display.transformation =
+          Transformation(
+              Vector3f(0f, 0f, 0f),
+              AxisAngle4f(0f, 0f, 1f, 0f),
+              Vector3f(1.0f, 1.0f, 1.0f),
+              AxisAngle4f(0f, 0f, 1f, 0f),
+          )
+    }
+  }
+
+  private fun formatTextJava(): Component {
+    return when (mode.maxEyes) {
+      2 -> formatD2TextJava(resultEye)
+      6 -> formatD6TextJava(resultEye)
+      20 -> formatD20TextJava(resultEye)
+      else -> formatPolyhedralTextJava(mode, resultEye)
+    }
+  }
+
+  private fun formatTextBedrock(): Component {
+    return when (mode.maxEyes) {
+      2 -> formatD2TextBedrock(resultEye)
+      6 -> formatD6TextBedrock(resultEye)
+      20 -> formatD20TextBedrock(resultEye)
+      else -> formatPolyhedralTextBedrock(mode, resultEye)
+    }
+  }
+
+  // --- Java版フォーマット（リソースパックのサイコロ🎲やコイン🪙を復元。Javaで豆腐になる⚀〜⚅は使用しない） ---
+  private fun formatD6TextJava(eye: Int): Component {
+    val color =
+        when (eye) {
+          1 -> NamedTextColor.RED
+          6 -> NamedTextColor.GOLD
+          else -> NamedTextColor.YELLOW
+        }
+
+    return Component.text("🎲 ", NamedTextColor.GOLD)
+        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text("$eye", color, TextDecoration.BOLD))
+        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text(" 🎲", NamedTextColor.GOLD))
+  }
+
+  private fun formatD2TextJava(eye: Int): Component {
     val isHead = eye == 1
     val label = if (isHead) "表 (1)" else "裏 (2)"
     val color = if (isHead) NamedTextColor.GOLD else NamedTextColor.WHITE
 
-    return Component.text("◆ ", NamedTextColor.GOLD)
+    return Component.text("🪙 ", NamedTextColor.GOLD)
         .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
         .append(Component.text("コイン: ", NamedTextColor.GRAY))
         .append(Component.text(label, color, TextDecoration.BOLD))
         .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text(" ◆", NamedTextColor.GOLD))
+        .append(Component.text(" 🪙", NamedTextColor.GOLD))
   }
 
-  private fun formatD6Text(eye: Int): Component {
+  private fun formatD20TextJava(eye: Int): Component {
+    return when (eye) {
+      20 -> {
+        Component.text("⭐ ", NamedTextColor.GOLD)
+            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text("D20: 20 (Critical!)", NamedTextColor.GOLD, TextDecoration.BOLD))
+            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text(" ⭐", NamedTextColor.GOLD))
+      }
+      1 -> {
+        Component.text("💀 ", NamedTextColor.RED)
+            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text("D20: 1 (Fumble)", NamedTextColor.DARK_RED, TextDecoration.BOLD))
+            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text(" 💀", NamedTextColor.RED))
+      }
+      else -> {
+        Component.text("🎲 ", NamedTextColor.AQUA)
+            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text("D20: ", NamedTextColor.GRAY))
+            .append(Component.text("$eye", NamedTextColor.YELLOW, TextDecoration.BOLD))
+            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text(" 🎲", NamedTextColor.AQUA))
+      }
+    }
+  }
+
+  private fun formatPolyhedralTextJava(mode: DiceMode, eye: Int): Component {
+    val tag = "D${mode.maxEyes}"
+    return Component.text("🎲 ", NamedTextColor.AQUA)
+        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text("$tag: ", NamedTextColor.GRAY))
+        .append(Component.text("$eye", NamedTextColor.YELLOW, TextDecoration.BOLD))
+        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text(" 🎲", NamedTextColor.AQUA))
+  }
+
+  // --- 統合版（Bedrock）フォーマット（🎲などの豆腐化絵文字を避け、Bedrock標準で描画可能な⚀〜⚅等を使用） ---
+  private fun formatD6TextBedrock(eye: Int): Component {
     val (symbol, color) =
         when (eye) {
           1 -> "⚀" to NamedTextColor.RED
@@ -423,7 +507,20 @@ class DiceInstance(
         .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
   }
 
-  private fun formatD20Text(eye: Int): Component {
+  private fun formatD2TextBedrock(eye: Int): Component {
+    val isHead = eye == 1
+    val label = if (isHead) "表 (1)" else "裏 (2)"
+    val color = if (isHead) NamedTextColor.GOLD else NamedTextColor.WHITE
+
+    return Component.text("◆ ", NamedTextColor.GOLD)
+        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text("コイン: ", NamedTextColor.GRAY))
+        .append(Component.text(label, color, TextDecoration.BOLD))
+        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text(" ◆", NamedTextColor.GOLD))
+  }
+
+  private fun formatD20TextBedrock(eye: Int): Component {
     return when (eye) {
       20 -> {
         Component.text("★ ", NamedTextColor.GOLD)
@@ -448,7 +545,7 @@ class DiceInstance(
     }
   }
 
-  private fun formatPolyhedralText(mode: DiceMode, eye: Int): Component {
+  private fun formatPolyhedralTextBedrock(mode: DiceMode, eye: Int): Component {
     val tag = "D${mode.maxEyes}"
     return Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
         .append(Component.text("$tag: ", NamedTextColor.GRAY))
@@ -458,7 +555,8 @@ class DiceInstance(
 
   fun matchesEntity(entityId: Int): Boolean {
     return itemDisplay?.entityId == entityId ||
-        textDisplay?.entityId == entityId ||
+        textDisplayJava?.entityId == entityId ||
+        textDisplayBedrock?.entityId == entityId ||
         interactionEntity?.entityId == entityId ||
         bedrockItem?.entityId == entityId
   }
@@ -475,8 +573,10 @@ class DiceInstance(
     interactionEntity = null
     itemDisplay?.remove()
     itemDisplay = null
-    textDisplay?.remove()
-    textDisplay = null
+    textDisplayJava?.remove()
+    textDisplayJava = null
+    textDisplayBedrock?.remove()
+    textDisplayBedrock = null
     bedrockItem?.remove()
     bedrockItem = null
   }
