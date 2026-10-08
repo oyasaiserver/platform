@@ -146,24 +146,6 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     }
   }
 
-  fun hideBedrockEntitiesFor(player: Player) {
-    if (BedrockSupport.isBedrockPlayer(player)) return
-    for (group in activeGroups) {
-      group.totalHologramBedrock?.let { stand ->
-        if (stand.isValid) {
-          player.hideEntity(plugin, stand)
-        }
-      }
-      for (dice in group.dices) {
-        dice.bedrockItem?.let { item ->
-          if (item.isValid) {
-            player.hideEntity(plugin, item)
-          }
-        }
-      }
-    }
-  }
-
   fun removeGroup(group: DiceGroup) {
     activeGroups.remove(group)
   }

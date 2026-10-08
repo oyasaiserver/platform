@@ -14,11 +14,9 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.player.PlayerAnimationEvent
-import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
 
@@ -135,16 +133,6 @@ class DiceListener(
   fun onPlayerQuit(event: PlayerQuitEvent) {
     chargeManager.cancel(event.player)
     diceManager.handlePlayerQuit(event.player)
-  }
-
-  @EventHandler(priority = EventPriority.MONITOR)
-  fun onPlayerJoin(event: PlayerJoinEvent) {
-    diceManager.hideBedrockEntitiesFor(event.player)
-  }
-
-  @EventHandler(priority = EventPriority.MONITOR)
-  fun onPlayerChangedWorld(event: PlayerChangedWorldEvent) {
-    diceManager.hideBedrockEntitiesFor(event.player)
   }
 
   @EventHandler(priority = EventPriority.HIGH)

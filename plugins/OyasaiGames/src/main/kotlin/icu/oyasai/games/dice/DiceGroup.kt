@@ -6,7 +6,6 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Location
 import org.bukkit.Sound
-import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Display
 import org.bukkit.entity.Player
 import org.bukkit.entity.TextDisplay
@@ -28,9 +27,6 @@ class DiceGroup(
 ) {
   val dices = mutableListOf<DiceInstance>()
   private var totalHologram: TextDisplay? = null
-  var totalHologramBedrock: ArmorStand? = null
-    private set
-
   private var autoCollectTask: BukkitTask? = null
   private var globalFailsafeTask: BukkitTask? = null
   private var isFinished = false
@@ -198,12 +194,10 @@ class DiceGroup(
     val formula = dices.joinToString(" + ") { it.resultEye.toString() }
 
     val text =
-        Component.text("🎲 ", NamedTextColor.GOLD)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+        Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
             .append(Component.text("合計: ", NamedTextColor.GRAY))
             .append(Component.text("$sum", NamedTextColor.GREEN, TextDecoration.BOLD))
             .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" 🎲", NamedTextColor.GOLD))
             .append(Component.newline())
             .append(Component.text("( $formula )", NamedTextColor.GRAY))
 
@@ -223,20 +217,6 @@ class DiceGroup(
                   AxisAngle4f(0f, 0f, 1f, 0f),
               )
         }
-
-    // 統合版（Bedrock / Floodgate）用合計ホログラムのスポーン
-    val stand =
-        world.spawn(midLoc, ArmorStand::class.java) { entity ->
-          entity.isInvisible = true
-          entity.isMarker = true
-          entity.isSmall = true
-          entity.setGravity(false)
-          entity.isPersistent = false
-          entity.customName(text)
-          entity.isCustomNameVisible = true
-        }
-    this.totalHologramBedrock = stand
-    BedrockSupport.hideBedrockEntityFromJava(plugin, stand)
   }
 
   private fun sendMessage(sourcePlayer: Player?, message: Component) {
@@ -257,7 +237,6 @@ class DiceGroup(
 
   fun containsEntity(entityId: Int): Boolean {
     if (totalHologram?.entityId == entityId) return true
-    if (totalHologramBedrock?.entityId == entityId) return true
     return dices.any { it.matchesEntity(entityId) }
   }
 
@@ -282,8 +261,6 @@ class DiceGroup(
     dices.clear()
     totalHologram?.remove()
     totalHologram = null
-    totalHologramBedrock?.remove()
-    totalHologramBedrock = null
 
     // アイテム返却
     val owner = plugin.server.getPlayer(ownerUuid)
@@ -310,7 +287,5 @@ class DiceGroup(
     dices.clear()
     totalHologram?.remove()
     totalHologram = null
-    totalHologramBedrock?.remove()
-    totalHologramBedrock = null
   }
 }
