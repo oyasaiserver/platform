@@ -502,9 +502,11 @@ class DiceInstance(
           else -> "⚀" to NamedTextColor.WHITE
         }
 
-    return Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
-        .append(Component.text("$symbol $eye", color, TextDecoration.BOLD))
+    return Component.text("$symbol ", NamedTextColor.GOLD)
+        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text("$eye", color, TextDecoration.BOLD))
         .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text(" $symbol", NamedTextColor.GOLD))
   }
 
   private fun formatD2TextBedrock(eye: Int): Component {
@@ -537,20 +539,24 @@ class DiceInstance(
             .append(Component.text(" ✖", NamedTextColor.RED))
       }
       else -> {
-        Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
+        Component.text("⚅ ", NamedTextColor.AQUA)
+            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
             .append(Component.text("D20: ", NamedTextColor.GRAY))
             .append(Component.text("$eye", NamedTextColor.YELLOW, TextDecoration.BOLD))
             .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text(" ⚅", NamedTextColor.AQUA))
       }
     }
   }
 
   private fun formatPolyhedralTextBedrock(mode: DiceMode, eye: Int): Component {
     val tag = "D${mode.maxEyes}"
-    return Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
+    return Component.text("⚅ ", NamedTextColor.AQUA)
+        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
         .append(Component.text("$tag: ", NamedTextColor.GRAY))
         .append(Component.text("$eye", NamedTextColor.YELLOW, TextDecoration.BOLD))
         .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+        .append(Component.text(" ⚅", NamedTextColor.AQUA))
   }
 
   fun matchesEntity(entityId: Int): Boolean {

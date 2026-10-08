@@ -205,10 +205,12 @@ class DiceGroup(
             .append(Component.text("( $formula )", NamedTextColor.GRAY))
 
     val textBedrock =
-        Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
+        Component.text("⚅ ", NamedTextColor.GOLD)
+            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
             .append(Component.text("合計: ", NamedTextColor.GRAY))
             .append(Component.text("$sum", NamedTextColor.GREEN, TextDecoration.BOLD))
             .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text(" ⚅", NamedTextColor.GOLD))
             .append(Component.newline())
             .append(Component.text("( $formula )", NamedTextColor.GRAY))
 
