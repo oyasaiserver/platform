@@ -13,7 +13,12 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
   @Volatile private var closed = false
   private val dictionary = plugin.runtime.dictionary
   private val settings = plugin.runtime.config.japanize
-  private val engine = Japanizer(settings, GoogleTransliterator(settings.timeoutMillis)::convert)
+  private val engine =
+      Japanizer(
+          settings,
+          translate = GoogleTranslator(settings.timeoutMillis)::translate,
+          convert = GoogleTransliterator(settings.timeoutMillis)::convert,
+      )
 
   fun enqueue(player: Player, text: String, deliver: (ChatMessage) -> Unit) {
     check(plugin.server.isPrimaryThread)
