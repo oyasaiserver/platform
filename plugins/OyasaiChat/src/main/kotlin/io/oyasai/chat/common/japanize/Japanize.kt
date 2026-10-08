@@ -11,7 +11,12 @@ import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
 /** Plain text plus optional source-owned display metadata, transported without recipient I/O. */
-data class ChatMessage(val text: String, val original: String? = null, val format: String? = null) {
+data class ChatMessage(
+    val text: String,
+    val original: String? = null,
+    val format: String? = null,
+    val input: String? = null,
+) {
   companion object {
     fun from(envelope: io.oyasai.chat.common.protocol.NetworkEnvelope) =
         ChatMessage(envelope.content, envelope.japanizeOriginal, envelope.japanizeFormat)
@@ -133,7 +138,18 @@ object GoogleResponse {
   }
 }
 
-data class Translation(val text: String, val language: String, val confidence: Double)
+data class LanguageCandidate(
+    val language: String,
+    val confidence: Double,
+    val detail: String = language,
+)
+
+data class Translation(
+    val text: String,
+    val language: String,
+    val confidence: Double,
+    val candidates: List<LanguageCandidate> = emptyList(),
+)
 
 object GoogleTranslationResponse {
   fun parse(json: String): Translation {
@@ -153,7 +169,58 @@ object GoogleTranslationResponse {
     require(response[6].isJsonPrimitive && response[6].asJsonPrimitive.isNumber)
     val confidence = response[6].asDouble
     require(confidence.isFinite() && confidence in 0.0..1.0)
-    return Translation(text, response[2].asString, confidence)
+    val candidates = if (response.size() > 8) parseCandidates(response[8]) else emptyList()
+    return Translation(text, response[2].asString, confidence, candidates)
+  }
+
+  private fun parseCandidates(value: com.google.gson.JsonElement): List<LanguageCandidate> {
+    // Optional detection metadata must never invalidate an otherwise usable translation.
+    return runCatching {
+          if (!value.isJsonArray || value.asJsonArray.size() < 4) return emptyList()
+          val detection = value.asJsonArray
+          if (!detection[0].isJsonArray || !detection[2].isJsonArray || !detection[3].isJsonArray)
+              return emptyList()
+          val languages = detection[0].asJsonArray
+          val scores = detection[2].asJsonArray
+          val details = detection[3].asJsonArray
+          languages
+              .mapIndexedNotNull { index, language ->
+                val score = if (index < scores.size()) scores[index] else null
+                val detail = if (index < details.size()) details[index] else null
+                if (
+                    !language.isJsonPrimitive ||
+                        !language.asJsonPrimitive.isString ||
+                        score == null ||
+                        !score.isJsonPrimitive ||
+                        !score.asJsonPrimitive.isNumber
+                )
+                    null
+                else {
+                  val confidence = score.asDouble
+                  if (
+                      !confidence.isFinite() ||
+                          confidence !in 0.0..1.0 ||
+                          LanguageMode.code(language.asString) == null
+                  )
+                      null
+                  else
+                      LanguageCandidate(
+                          language.asString,
+                          confidence,
+                          if (
+                              detail != null &&
+                                  detail.isJsonPrimitive &&
+                                  detail.asJsonPrimitive.isString
+                          )
+                              detail.asString
+                          else language.asString,
+                      )
+                }
+              }
+              .sortedByDescending { it.confidence }
+              .take(3)
+        }
+        .getOrDefault(emptyList())
   }
 }
 
@@ -161,11 +228,12 @@ class GoogleTranslator(private val timeoutMillis: Long) {
   private val client =
       HttpClient.newBuilder().connectTimeout(Duration.ofMillis(timeoutMillis)).build()
 
-  fun translate(text: String): CompletableFuture<Translation?> {
+  fun translate(text: String, target: String = "ja"): CompletableFuture<Translation?> {
+    require(LanguageMode.code(target) != null)
     val request =
         HttpRequest.newBuilder(
                 URI.create(
-                    "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ja&dt=t&q=" +
+                    "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=$target&dt=t&dt=ld&q=" +
                         URLEncoder.encode(text, Charsets.UTF_8)
                 )
             )
@@ -264,7 +332,7 @@ class Japanizer(
         }
   }
 
-  private fun transliterate(text: String, parts: List<TextPart>): CompletableFuture<ChatMessage> {
+  fun transliterate(text: String, parts: List<TextPart>): CompletableFuture<ChatMessage> {
     val hasLetters = text.any { it in 'a'..'z' || it in 'A'..'Z' }
     val futures =
         parts.map { part ->
@@ -274,6 +342,7 @@ class Japanizer(
           else
               runCatching { convert(part.text) }
                   .getOrElse { CompletableFuture.completedFuture(part.text) }
+                  .orTimeout(settings.timeoutMillis, java.util.concurrent.TimeUnit.MILLISECONDS)
                   .exceptionally { part.text }
         }
     return CompletableFuture.allOf(*futures.toTypedArray()).thenApply {

@@ -87,6 +87,7 @@ internal fun PrivateMessageService.receivePrivateResult(envelope: NetworkEnvelop
                 message = chat.formatter.body(pending.message),
                 presentation = chat.formatter.snapshot(sender),
             )
+        val indicator = plugin.sourceMessages.indicator(pending.message, listOf(sender))
         chat.delivery.dispatch(
             messageId = java.util.UUID.randomUUID(),
             surface = io.oyasai.chat.api.ChatTextSurface.PRIVATE_MESSAGE,
@@ -100,12 +101,14 @@ internal fun PrivateMessageService.receivePrivateResult(envelope: NetworkEnvelop
             originalBody = chat.formatter.body(pending.message),
             recipients = listOf(sender),
             render = { _, body ->
-              chat.formatter.privateMessage(
-                  sender.name,
-                  targetName,
-                  body,
-                  chat.formatter.snapshot(sender),
-              )
+              chat.formatter
+                  .privateMessage(
+                      sender.name,
+                      targetName,
+                      body,
+                      chat.formatter.snapshot(sender),
+                  )
+                  .append(indicator)
             },
         )
         plugin.server.consoleSender.sendMessage(component)

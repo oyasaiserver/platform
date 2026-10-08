@@ -44,6 +44,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
           "msg",
           "r",
           "japanize",
+          "lang",
           "oyasaichat",
       )
   private val shortcutCommands = mutableMapOf<String, Command>()

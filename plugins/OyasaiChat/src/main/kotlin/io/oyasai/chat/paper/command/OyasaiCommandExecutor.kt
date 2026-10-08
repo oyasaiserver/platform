@@ -68,6 +68,29 @@ class OyasaiCommandExecutor(
         else pm.reply(sender, args.joinToString(" "))
         true
       }
+      "lang" -> {
+        val player = requirePlayer(sender) ?: return true
+        when (val argument = io.oyasai.chat.common.japanize.languageArgument(args.toList())) {
+          io.oyasai.chat.common.japanize.LanguageArgument.Show ->
+              player.sendMessage(
+                  chat.formatter.info("言語モード: " + chat.states.get(player).languageMode)
+              )
+          is io.oyasai.chat.common.japanize.LanguageArgument.Set -> {
+            if (plugin.importInProgress) {
+              player.sendMessage(chat.formatter.error("設定を取り込み中です。しばらく待ってください"))
+            } else {
+              chat.states.get(player).languageMode = argument.mode
+              chat.states.save(player)
+              player.sendMessage(chat.formatter.info("言語モード: " + argument.mode))
+            }
+          }
+          is io.oyasai.chat.common.japanize.LanguageArgument.Check ->
+              plugin.sourceMessages.check(player, argument.id)
+          null ->
+              player.sendMessage(chat.formatter.error("Usage: /lang [auto|off|言語コード|check <id>]"))
+        }
+        true
+      }
       "japanize" -> {
         if (args.firstOrNull()?.equals("dict", true) == true)
             return dictionaryCommand.execute(sender, args.drop(1).toTypedArray())
@@ -167,6 +190,12 @@ class OyasaiCommandExecutor(
                   .filter { it.lowercase().startsWith(partial.lowercase()) }
                   .sorted()
             } else emptyList()
+        "lang" ->
+            if (args.size == 1)
+                io.oyasai.chat.common.japanize.LanguageMode.suggestions.filter {
+                  it.startsWith(args[0], true)
+                }
+            else emptyList()
         "japanize" ->
             if (args.firstOrNull()?.equals("dict", true) == true && args.size > 1)
                 dictionaryCommand.complete(sender, args.drop(1).toTypedArray())

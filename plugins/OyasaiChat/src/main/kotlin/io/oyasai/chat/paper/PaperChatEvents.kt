@@ -91,6 +91,7 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
     plugin.runtime.config.network.identity.forget(event.player.uniqueId)
     plugin.runtime.delivery.clear(event.player.uniqueId)
     plugin.runtime.privateMessages.onQuit(event.player)
+    plugin.sourceMessages.forget(event.player)
     plugin.runtime.states.remove(event.player)
   }
 

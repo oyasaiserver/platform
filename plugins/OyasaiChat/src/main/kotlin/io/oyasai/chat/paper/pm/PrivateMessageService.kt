@@ -260,6 +260,9 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       chat.states.save(local)
       if (deliverLocal) {
         val presentation = chat.formatter.snapshot(source)
+        val recipients =
+            listOf(source, local).filter { recipientIds == null || it.uniqueId in recipientIds }
+        val indicator = plugin.sourceMessages.indicator(message, recipients)
         chat.delivery.dispatch(
             messageId = UUID.randomUUID(),
             surface = ChatTextSurface.PRIVATE_MESSAGE,
@@ -271,17 +274,16 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
                 ),
             originalText = chat.formatter.plain(chat.formatter.body(message)),
             originalBody = chat.formatter.body(message),
-            recipients =
-                listOf(source, local).filter {
-                  recipientIds == null || it.uniqueId in recipientIds
-                },
+            recipients = recipients,
             render = { _, body ->
-              chat.formatter.privateMessage(
-                  senderName = source.name,
-                  targetName = local.name,
-                  message = body,
-                  presentation = presentation,
-              )
+              chat.formatter
+                  .privateMessage(
+                      senderName = source.name,
+                      targetName = local.name,
+                      message = body,
+                      presentation = presentation,
+                  )
+                  .append(indicator)
             },
             afterDelivery = { recipient ->
               if (recipient.uniqueId == local.uniqueId) playReceiveSound(recipient)
