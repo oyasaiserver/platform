@@ -317,6 +317,10 @@ class DiceGroup(
     val owner = plugin.server.getPlayer(ownerUuid)
     if (owner != null && owner.isOnline) {
       diceManager.returnDiceItem(owner, mode, isBroadcast)
+      // 回収時の画面タップ連打による誤設置を防止するためクールダウンと設置遮断を設定
+      owner.setCooldown(mode.material, 15)
+      diceManager.chargeManager?.recordRecentAction(owner, 1500L)
+
       if (collector != null) {
         owner.playSound(owner.location, Sound.ENTITY_ITEM_PICKUP, 0.7f, 1.2f)
         owner.sendMessage(Component.text("サイコロを回収しました。", NamedTextColor.GREEN))

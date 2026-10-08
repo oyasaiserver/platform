@@ -52,6 +52,10 @@ class DiceChargeManager(
     return System.currentTimeMillis() < expiry
   }
 
+  fun recordRecentAction(player: Player, durationMs: Long = 2000L) {
+    recentThrowers[player.uniqueId] = System.currentTimeMillis() + durationMs
+  }
+
   private fun cleanRecentThrowers() {
     if (currentTick % 20L == 0L && recentThrowers.isNotEmpty()) {
       val now = System.currentTimeMillis()

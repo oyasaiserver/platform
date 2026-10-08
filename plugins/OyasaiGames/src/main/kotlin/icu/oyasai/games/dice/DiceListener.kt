@@ -41,11 +41,10 @@ class DiceListener(
     if (diceItem.isDice(player.inventory.itemInMainHand)) return true
     if (diceItem.isDice(player.inventory.itemInOffHand)) return true
     if (chargeManager.isCharging(player) || chargeManager.isRecentThrower(player)) return true
-    if (placedType != null && diceMaterials.contains(placedType) && diceItem.hasDice(player))
-        return true
-    if (item != null && item.hasItemMeta()) {
-      val name = item.itemMeta?.displayName()?.toString() ?: ""
-      if (name.contains("サイコロ") || name.contains("ダイス") || name.contains("コイン")) return true
+    if (placedType != null && diceMaterials.contains(placedType)) {
+      if (diceItem.hasDice(player)) return true
+      if (diceManager.hasActiveDice(player)) return true
+      if (player.hasCooldown(placedType)) return true
     }
     return false
   }
@@ -78,14 +77,18 @@ class DiceListener(
       player.updateInventory()
 
       // フェールセーフ: 万が一クライアント予測や非同期パケットでブロックが設置された場合、即座に元の状態に戻す
-      val loc = event.blockPlaced.location
-      val previousState = event.blockReplacedState
+      val block = event.blockPlaced
+      val loc = block.location
+      val previousType = event.blockReplacedState.type
+      val previousData = event.blockReplacedState.blockData
       diceManager.plugin.server.scheduler.runTaskLater(
           diceManager.plugin,
           Runnable {
             if (loc.block.type == placedType) {
-              previousState.update(true, false)
-              player.sendBlockChange(loc, loc.block.blockData)
+              loc.block.type = previousType
+              loc.block.setBlockData(previousData, false)
+              player.sendBlockChange(loc, previousData)
+              player.updateInventory()
             }
           },
           1L,

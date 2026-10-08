@@ -3,6 +3,7 @@ package icu.oyasai.games.dice
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
@@ -20,7 +21,30 @@ class DiceItem(private val plugin: Plugin) {
   fun isDice(item: ItemStack?): Boolean {
     if (item == null || item.type.isAir) return false
     val meta = item.itemMeta ?: return false
-    return meta.persistentDataContainer.has(diceKey, PersistentDataType.BYTE)
+
+    // 1. PDC (PersistentDataContainer) 判定
+    if (meta.persistentDataContainer.has(diceKey, PersistentDataType.BYTE)) return true
+    if (meta.persistentDataContainer.has(modeKey, PersistentDataType.STRING)) return true
+
+    // 2. Lore判定（プレーンテキストで確実にチェック）
+    val loreList = meta.lore()
+    if (loreList != null && loreList.isNotEmpty()) {
+      val plain = PlainTextComponentSerializer.plainText()
+      for (line in loreList) {
+        val text = plain.serialize(line)
+        if (text.contains("投げて遊べる本格サイコロ") || text.contains("サイコロ")) return true
+      }
+    }
+
+    // 3. 表示名判定（プレーンテキストで確実にチェック）
+    val display = meta.displayName()
+    if (display != null) {
+      val plain = PlainTextComponentSerializer.plainText()
+      val text = plain.serialize(display)
+      if (text.contains("サイコロ") || text.contains("ダイス") || text.contains("コイントス")) return true
+    }
+
+    return false
   }
 
   fun getDiceMode(item: ItemStack?): DiceMode {
