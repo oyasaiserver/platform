@@ -12,6 +12,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Display
 import org.bukkit.entity.Interaction
+import org.bukkit.entity.Item
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.TextDisplay
 import org.bukkit.inventory.ItemStack
@@ -47,9 +48,13 @@ class DiceInstance(
     private set
 
   private val ownerKey = NamespacedKey(plugin, "dice_owner")
+  private val diceItemIdKey = NamespacedKey(plugin, "dice_item_id")
   private var itemDisplay: ItemDisplay? = null
   private var textDisplay: TextDisplay? = null
   private var interactionEntity: Interaction? = null
+  var bedrockItem: Item? = null
+    private set
+
   private var physicsTask: BukkitTask? = null
 
   private val currentLocation = startLoc.clone()
@@ -85,6 +90,37 @@ class DiceInstance(
           )
         }
     this.itemDisplay = display
+
+    // 統合版（Bedrock / Floodgate）用エンティティの生成
+    // マージ（結合）防止のため固有のPersistentDataを付与
+    val diceItem = ItemStack(mode.material)
+    diceItem.editMeta { meta ->
+      meta.persistentDataContainer.set(
+          diceItemIdKey,
+          PersistentDataType.STRING,
+          UUID.randomUUID().toString(),
+      )
+    }
+
+    val bItem =
+        world.spawn(startLoc, Item::class.java) { entity ->
+          entity.itemStack = diceItem
+          entity.pickupDelay = 32767
+          entity.setCanMobPickup(false)
+          entity.setCanPlayerPickup(false)
+          entity.isPersistent = false
+          entity.setWillAge(false)
+          entity.setGravity(false)
+          entity.persistentDataContainer.set(
+              ownerKey,
+              PersistentDataType.STRING,
+              ownerUuid.toString(),
+          )
+        }
+    this.bedrockItem = bItem
+
+    // Java版プレイヤーにはBedrock用エンティティを非表示にする
+    BedrockSupport.hideBedrockEntityFromJava(plugin, bItem)
 
     startPhysicsLoop()
   }
@@ -196,6 +232,11 @@ class DiceInstance(
 
                 // Entity位置更新
                 display.teleport(currentLocation)
+                bedrockItem?.let { bItem ->
+                  if (bItem.isValid) {
+                    bItem.teleport(currentLocation)
+                  }
+                }
                 val rotQuat =
                     Quaternionf()
                         .rotateY(Math.toRadians(rotYaw.toDouble()).toFloat())
@@ -264,8 +305,17 @@ class DiceInstance(
           )
     }
 
+    // 統合版（Bedrock）用アイテムの頭上ネームタグに出目を反映
+    val resultText = getResultHologramComponent()
+    bedrockItem?.let { bItem ->
+      if (bItem.isValid) {
+        bItem.customName(resultText)
+        bItem.isCustomNameVisible = true
+      }
+    }
+
     // 頭上ホログラム（TextDisplay）のスポーン
-    spawnHologram()
+    spawnHologram(resultText)
 
     // 手動回収用インタラクション判定（広めの当たり判定）のスポーン
     spawnInteraction()
@@ -292,19 +342,20 @@ class DiceInstance(
     this.interactionEntity = inter
   }
 
-  private fun spawnHologram() {
+  fun getResultHologramComponent(): Component {
+    return when (mode.maxEyes) {
+      2 -> formatD2Text(resultEye)
+      6 -> formatD6Text(resultEye)
+      20 -> formatD20Text(resultEye)
+      else -> formatPolyhedralText(mode, resultEye)
+    }
+  }
+
+  private fun spawnHologram(text: Component) {
     val world = currentLocation.world ?: return
 
     // 止まったサイコロの頭上にふわっと浮き上がる位置
     val holoLoc = currentLocation.clone().add(0.0, HOLO_Y_OFFSET, 0.0)
-
-    val text =
-        when (mode.maxEyes) {
-          2 -> formatD2Text(resultEye)
-          6 -> formatD6Text(resultEye)
-          20 -> formatD20Text(resultEye)
-          else -> formatPolyhedralText(mode, resultEye)
-        }
 
     val display =
         world.spawn(holoLoc, TextDisplay::class.java) { entity ->
@@ -424,7 +475,8 @@ class DiceInstance(
   fun matchesEntity(entityId: Int): Boolean {
     return itemDisplay?.entityId == entityId ||
         textDisplay?.entityId == entityId ||
-        interactionEntity?.entityId == entityId
+        interactionEntity?.entityId == entityId ||
+        bedrockItem?.entityId == entityId
   }
 
   fun getDistanceSquared(loc: Location): Double {
@@ -441,5 +493,7 @@ class DiceInstance(
     itemDisplay = null
     textDisplay?.remove()
     textDisplay = null
+    bedrockItem?.remove()
+    bedrockItem = null
   }
 }

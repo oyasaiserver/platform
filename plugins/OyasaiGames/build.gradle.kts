@@ -4,6 +4,7 @@ dependencies {
   compileOnly(libs.purpur.api)
   compileOnly(libs.vault.api)
   compileOnly(libs.fawe.bukkit)
+  compileOnly(libs.floodgate.api) { isTransitive = false }
   implementation(libs.kotlin.stdlib)
   implementation(libs.sqlite.jdbc)
 

@@ -4,7 +4,7 @@ main: icu.oyasai.games.OyasaiGamesPlugin
 api-version: "1.21"
 author: ukieo
 description: おやさい鯖 ミニゲーム・生活アイテム・武器・PvP・BedWars・TNTRun統合プラットフォーム (OyasaiGames)
-softdepend: [Vault, SlotMachine, CrackShot, pvparena, WorldEdit, FastAsyncWorldEdit, BedWars, ScreamingBedWars, SBA, TNTRun_reloaded, Multiverse-Core]
+softdepend: [Vault, SlotMachine, CrackShot, pvparena, WorldEdit, FastAsyncWorldEdit, BedWars, ScreamingBedWars, SBA, TNTRun_reloaded, Multiverse-Core, floodgate]
 commands:
   bw:
     description: BedWars の参加・退出・統計・参加GUI
