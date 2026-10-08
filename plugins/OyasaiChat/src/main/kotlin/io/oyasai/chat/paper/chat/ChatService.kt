@@ -163,6 +163,7 @@ class ChatService(
   ) {
     val presentation = formatter.snapshot(player)
     val recipients = recipients(channel)
+    val indicator = plugin.sourceMessages.indicator(message, recipients)
     delivery.dispatch(
         messageId = UUID.randomUUID(),
         surface = ChatTextSurface.PUBLIC_CHAT,
@@ -171,11 +172,13 @@ class ChatService(
         originalBody = formatter.body(message),
         recipients = recipients,
         render = { _, body ->
-          formatter.chat(
-              channel,
-              presentation,
-              body,
-          )
+          formatter
+              .chat(
+                  channel,
+                  presentation,
+                  body,
+              )
+              .append(indicator)
         },
     )
     plugin.server.consoleSender.sendMessage(
@@ -318,6 +321,10 @@ class ChatService(
         "${consoleSafe(prefixText)}[${channel.displayName}] <$senderName> ${consoleSafe(formatter.plain(formatter.body(message)))}${consoleSafe(suffixText)}"
     )
     val recipients = recipients(channel)
+    val indicator =
+        if (senderId != null && surface == ChatTextSurface.PUBLIC_CHAT)
+            plugin.sourceMessages.indicator(message, recipients)
+        else Component.empty()
     val render: (Player, Component) -> Component = { _, body ->
       val component =
           if (senderPresentation != null) {
@@ -336,7 +343,7 @@ class ChatService(
                 externalAuthorized,
             )
           }
-      prefix.append(component).append(suffix)
+      prefix.append(component).append(suffix).append(indicator)
     }
     delivery.dispatch(
         messageId = messageId,
@@ -351,6 +358,7 @@ class ChatService(
 
   private fun deliverPublicChat(player: Player, plan: LocalChatPlan.Public, message: ChatMessage) {
     val recipients = plan.recipientIds.mapNotNull(plugin.server::getPlayer)
+    val indicator = plugin.sourceMessages.indicator(message, recipients)
     delivery.dispatch(
         messageId = UUID.randomUUID(),
         surface = ChatTextSurface.PUBLIC_CHAT,
@@ -359,11 +367,13 @@ class ChatService(
         originalBody = formatter.body(message),
         recipients = recipients,
         render = { _, body ->
-          formatter.chat(
-              plan.channel,
-              plan.presentation,
-              body,
-          )
+          formatter
+              .chat(
+                  plan.channel,
+                  plan.presentation,
+                  body,
+              )
+              .append(indicator)
         },
     )
   }

@@ -37,6 +37,10 @@ commands:
     description: Send a private message
     usage: /msg <player> <message>
     aliases: [tell, message, pm]
+  lang:
+    description: Select your speech language or check one message
+    usage: /lang [auto|off|language-code|check <id>]
+    permission: oyasaichat.lang
   japanize:
     description: Toggle Japanese chat conversion or manage its dictionary
     usage: /japanize [on|off] or /japanize dict <add|remove|list|lookup>
@@ -49,6 +53,9 @@ commands:
     description: OyasaiChat administrative commands
     usage: /oyasaichat reload
 permissions:
+  oyasaichat.lang:
+    description: Select speech language and check messages
+    default: true
   oyasaichat.japanize.dictionary:
     description: Manage Japanese conversion dictionary entries
     default: op

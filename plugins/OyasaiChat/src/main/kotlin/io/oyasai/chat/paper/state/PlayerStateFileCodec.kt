@@ -25,7 +25,12 @@ object PlayerStateFileCodec {
     return runCatching {
           val yaml = YamlConfiguration().apply { load(file) }
           PlayerChatState(
-              japanizeEnabled = yaml.getBoolean("japanize-enabled", defaultJapanizeEnabled),
+              languageMode =
+                  if (!yaml.getBoolean("japanize-enabled", defaultJapanizeEnabled)) "off"
+                  else
+                      io.oyasai.chat.common.japanize.LanguageMode.parse(
+                          yaml.getString("language-mode") ?: "auto"
+                      ) ?: "auto",
               activeChannel = yaml.getString("active-channel", "") ?: "",
               joinedChannels = yaml.getStringList("joined-channels").toMutableSet(),
               privateMessagesEnabled =
@@ -52,6 +57,7 @@ object PlayerStateFileCodec {
       joinedChannels: List<String>,
       privateMessagesEnabled: Boolean,
       japanizeEnabled: Boolean = true,
+      languageMode: String = if (japanizeEnabled) "auto" else "off",
   ) {
     val directory = file.parentFile ?: error("Player state file has no parent directory")
     if (!directory.exists() && !directory.mkdirs() && !directory.isDirectory)
@@ -62,6 +68,7 @@ object PlayerStateFileCodec {
           set("joined-channels", joinedChannels)
           set("private-messages-enabled", privateMessagesEnabled)
           set("japanize-enabled", japanizeEnabled)
+          set("language-mode", if (japanizeEnabled) languageMode else "off")
         }
     val temporary = File.createTempFile("${file.nameWithoutExtension}-", ".tmp", directory)
     try {
