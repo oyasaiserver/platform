@@ -90,11 +90,17 @@ class JapanizeTest {
 
   @Test
   fun skippedInputsNeverCallProvider() {
-    val engine = Japanizer(settings) { error("Must not call network") }
-    listOf("日本語 kon'nichiha", "123 !", "#kon'nichiha").forEach {
+    val requests = mutableListOf<String>()
+    val engine =
+        Japanizer(settings) {
+          requests += it
+          CompletableFuture.completedFuture(it)
+        }
+    listOf("日本語 kon'nichiha", "", "   ", "!!", "?", "...", "#kon'nichiha", "#1*2=").forEach {
       assertNull(engine.prepare(it, true, emptyList()).join().original)
     }
     assertEquals("kon'nichiha", engine.prepare("kon'nichiha", false, emptyList()).join().text)
+    assertTrue(requests.isEmpty())
     assertEquals(
         "#kon'nichiha",
         Japanizer(settings.copy(enabled = false)) { error("network") }
@@ -102,6 +108,106 @@ class JapanizeTest {
             .join()
             .text,
     )
+  }
+
+  @Test
+  fun numericExpressionsUseGoogleFirstCandidate() {
+    val requests = mutableListOf<String>()
+    val responses =
+        mapOf("1*2=" to """[["1*2=",["2"]]]""", "100/3=" to """[["100/3=",["33.333333"]]]""")
+    val engine =
+        Japanizer(settings) {
+          requests += it
+          CompletableFuture.completedFuture(GoogleResponse.parse(responses.getValue(it)))
+        }
+    mapOf("1*2=" to "2", "100/3=" to "33.333333").forEach { (input, expected) ->
+      assertTrue(JapanizePreparation.eligible(input, settings, true))
+      val prepared = engine.prepare(input, true, emptyList()).join()
+      assertEquals(ChatMessage(expected, input, settings.format), prepared)
+      assertEquals(
+          "$expected $input",
+          net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+              .serialize(prepared.component()),
+      )
+    }
+    assertEquals(listOf("1*2=", "100/3="), requests)
+  }
+
+  @Test
+  fun numericWidthOnlyChangesKeepOriginalDisplay() {
+    val responses =
+        mapOf(
+            "8888" to """[["8888",["８８８８"]]]""",
+            "3+4" to """[["3",["３"]],["+",["＋"]],["4",["４"]]]""",
+        )
+    val requests = mutableListOf<String>()
+    val engine =
+        Japanizer(settings) {
+          requests += it
+          CompletableFuture.completedFuture(GoogleResponse.parse(responses.getValue(it)))
+        }
+    responses.keys.forEach { input ->
+      val prepared = engine.prepare(input, true, emptyList()).join()
+      assertEquals(ChatMessage(input), prepared)
+      assertEquals(
+          input,
+          net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+              .serialize(prepared.component()),
+      )
+    }
+    assertEquals(responses.keys.toList(), requests)
+  }
+
+  @Test
+  fun nonAlphabeticDictionaryKeysAndNamesRemainProtected() {
+    val requests = mutableListOf<String>()
+    val engine =
+        Japanizer(settings) {
+          requests += it
+          CompletableFuture.completedFuture(it)
+        }
+    val dictionary = mapOf("8888" to "👏", "!!" to "❗")
+    assertEquals(
+        ChatMessage("👏", "8888", settings.format),
+        engine.prepare("8888", true, emptyList(), dictionary).join(),
+    )
+    assertEquals(
+        ChatMessage("👏 !", "8888 !", settings.format),
+        engine.prepare("8888 !", true, emptyList(), dictionary).join(),
+    )
+    assertEquals(
+        ChatMessage("❗", "!!", settings.format),
+        engine.prepare("!!", true, emptyList(), dictionary).join(),
+    )
+    assertTrue(JapanizePreparation.eligible("8888", settings, true))
+    assertEquals(ChatMessage("8888"), engine.prepare("8888", true, listOf("8888")).join())
+    assertTrue(requests.isEmpty())
+    assertFalse(JapanizePreparation.parts("18888", dictionary, emptyList()).any { it.protected })
+  }
+
+  @Test
+  fun alphabeticWidthOnlyChangesStillDisplayConversion() {
+    val requests = mutableListOf<String>()
+    val engine =
+        Japanizer(settings) {
+          requests += it
+          CompletableFuture.completedFuture("Ａ８")
+        }
+    assertEquals(
+        ChatMessage("Ａ８", "A8", settings.format),
+        engine.prepare("A8", true, emptyList()).join(),
+    )
+    assertEquals(listOf("あ8"), requests)
+  }
+
+  @Test
+  fun googleStillSkipsLatinTextWithoutHiragana() {
+    val provider = GoogleTransliterator(settings.timeoutMillis)
+    listOf("b2", "B2", "!!", " ").forEach { input ->
+      val result = provider.convert(input)
+      assertTrue(result.isDone)
+      assertEquals(input, result.join())
+    }
   }
 
   @Test

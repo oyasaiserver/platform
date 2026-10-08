@@ -6,6 +6,7 @@ import java.net.URLEncoder
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.text.Normalizer
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
@@ -56,7 +57,7 @@ object JapanizePreparation {
       settings.enabled &&
           playerEnabled &&
           text.all { it.code < 128 } &&
-          text.any { it in 'a'..'z' || it in 'A'..'Z' } &&
+          text.isNotBlank() &&
           (settings.marker.isEmpty() || !text.startsWith(settings.marker))
 
   /** URL first, then whole dictionary keys / player names. Protected runs never reach Google. */
@@ -128,7 +129,10 @@ class GoogleTransliterator(private val timeoutMillis: Long) {
       HttpClient.newBuilder().connectTimeout(Duration.ofMillis(timeoutMillis)).build()
 
   fun convert(hiragana: String): CompletableFuture<String> {
-    if (hiragana.none { it in '\u3041'..'\u3096' })
+    if (
+        hiragana.none { it in '\u3041'..'\u3096' } &&
+            (hiragana.none { it in '0'..'9' } || hiragana.any { it in 'a'..'z' || it in 'A'..'Z' })
+    )
         return CompletableFuture.completedFuture(hiragana)
     val request =
         HttpRequest.newBuilder(
@@ -175,9 +179,12 @@ class Japanizer(
       return CompletableFuture.completedFuture(ChatMessage(visible))
     }
     val parts = JapanizePreparation.parts(text, dictionary, names)
+    val hasLetters = text.any { it in 'a'..'z' || it in 'A'..'Z' }
     val futures =
         parts.map { part ->
-          if (part.protected) CompletableFuture.completedFuture(part.text)
+          // Resolve dictionary keys first, but do not send punctuation-only runs to Google.
+          if (part.protected || (!hasLetters && part.text.none { it in '0'..'9' }))
+              CompletableFuture.completedFuture(part.text)
           else
               runCatching { convert(part.text) }
                   .getOrElse { CompletableFuture.completedFuture(part.text) }
@@ -188,6 +195,7 @@ class Japanizer(
       // Protocol bounds include both strings; never truncate Unicode or drop the original silently.
       if (
           result == text ||
+              (!hasLetters && Normalizer.normalize(result, Normalizer.Form.NFKC) == text) ||
               result.isBlank() ||
               result.length + text.length + settings.format.length > 4096
       )
