@@ -28,29 +28,68 @@ class DiceListener(
     private val chargeManager: DiceChargeManager,
 ) : Listener {
 
+  private val diceMaterials: Set<org.bukkit.Material> by lazy {
+    DiceType.entries.map { it.material }.toSet()
+  }
+
+  private fun isDiceRelated(
+      player: Player,
+      item: org.bukkit.inventory.ItemStack?,
+      placedType: org.bukkit.Material? = null,
+  ): Boolean {
+    if (diceItem.isDice(item)) return true
+    if (diceItem.isDice(player.inventory.itemInMainHand)) return true
+    if (diceItem.isDice(player.inventory.itemInOffHand)) return true
+    if (chargeManager.isCharging(player) || chargeManager.isRecentThrower(player)) return true
+    if (placedType != null && diceMaterials.contains(placedType) && diceItem.hasDice(player))
+        return true
+    if (item != null && item.hasItemMeta()) {
+      val name = item.itemMeta?.displayName()?.toString() ?: ""
+      if (name.contains("サイコロ") || name.contains("ダイス") || name.contains("コイン")) return true
+    }
+    return false
+  }
+
   @EventHandler(priority = EventPriority.LOWEST)
   fun onBlockCanBuild(event: BlockCanBuildEvent) {
     val player = event.player ?: return
-    if (
-        diceItem.isDice(player.inventory.itemInMainHand) ||
-            diceItem.isDice(player.inventory.itemInOffHand)
-    ) {
+    if (isDiceRelated(player, player.inventory.itemInMainHand, event.block.type)) {
       event.isBuildable = false
     }
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
-  fun onBlockPlace(event: BlockPlaceEvent) {
+  fun onBlockPlaceLowest(event: BlockPlaceEvent) {
+    handleBlockPlace(event)
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+  fun onBlockPlaceHighest(event: BlockPlaceEvent) {
+    handleBlockPlace(event)
+  }
+
+  private fun handleBlockPlace(event: BlockPlaceEvent) {
     val player = event.player
-    if (
-        diceItem.isDice(event.itemInHand) ||
-            diceItem.isDice(player.inventory.itemInMainHand) ||
-            diceItem.isDice(player.inventory.itemInOffHand)
-    ) {
+    val placedType = event.blockPlaced.type
+    if (isDiceRelated(player, event.itemInHand, placedType)) {
       event.isCancelled = true
       event.setBuild(false)
       event.blockReplacedState.update(true, false)
       player.updateInventory()
+
+      // フェールセーフ: 万が一クライアント予測や非同期パケットでブロックが設置された場合、即座に元の状態に戻す
+      val loc = event.blockPlaced.location
+      val previousState = event.blockReplacedState
+      diceManager.plugin.server.scheduler.runTaskLater(
+          diceManager.plugin,
+          Runnable {
+            if (loc.block.type == placedType) {
+              previousState.update(true, false)
+              player.sendBlockChange(loc, loc.block.blockData)
+            }
+          },
+          1L,
+      )
     }
   }
 
@@ -58,10 +97,11 @@ class DiceListener(
   fun onPlayerInteract(event: PlayerInteractEvent) {
     val player = event.player
     val item = event.item
+    val isHoldingDice = diceItem.isDice(item) || diceItem.isDice(player.inventory.itemInMainHand)
 
     // サイコロの右クリック操作（メインハンド優先、オフハンドでのブロック設置重複を完全遮断）
     if (event.hand != EquipmentSlot.HAND) {
-      if (item != null && diceItem.isDice(item)) {
+      if (isHoldingDice || isDiceRelated(player, item, event.clickedBlock?.type)) {
         event.setUseItemInHand(Event.Result.DENY)
         event.setUseInteractedBlock(Event.Result.DENY)
         event.isCancelled = true
@@ -100,9 +140,15 @@ class DiceListener(
       return
     }
 
-    // サイコロを持っていない場合でも、周囲・視線のサイコロを手動回収可能にする
+    // サイコロを持っていない場合でも、投擲直後や周囲・視線のサイコロ回収処理
     val action = event.action
     if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+      if (chargeManager.isRecentThrower(player)) {
+        event.setUseItemInHand(Event.Result.DENY)
+        event.setUseInteractedBlock(Event.Result.DENY)
+        event.isCancelled = true
+      }
+
       val targetLoc = event.clickedBlock?.location?.add(0.5, 0.5, 0.5)
       if (diceManager.tryCollectNearby(player, targetLoc)) {
         event.isCancelled = true
@@ -128,6 +174,8 @@ class DiceListener(
 
   @EventHandler
   fun onPlayerAnimation(event: PlayerAnimationEvent) {
+    // 統合版（Bedrock）プレイヤーの場合、画面タッチ操作でアームスイングが発生するためチャージをキャンセルしない
+    if (BedrockSupport.isBedrockPlayer(event.player)) return
     chargeManager.cancel(event.player)
   }
 
