@@ -12,6 +12,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Display
 import org.bukkit.entity.Interaction
+import org.bukkit.entity.Item
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.TextDisplay
 import org.bukkit.inventory.ItemStack
@@ -47,9 +48,13 @@ class DiceInstance(
     private set
 
   private val ownerKey = NamespacedKey(plugin, "dice_owner")
+  private val diceItemIdKey = NamespacedKey(plugin, "dice_item_id")
   private var itemDisplay: ItemDisplay? = null
   private var textDisplay: TextDisplay? = null
   private var interactionEntity: Interaction? = null
+  var bedrockItem: Item? = null
+    private set
+
   private var physicsTask: BukkitTask? = null
 
   private val currentLocation = startLoc.clone()
@@ -85,6 +90,37 @@ class DiceInstance(
           )
         }
     this.itemDisplay = display
+
+    // 統合版（Bedrock / Floodgate）用エンティティの生成
+    // ※ ホログラムはGeyserがTextDisplayを描画するため、customNameは設定せず本体ブロックのみ同期表示する
+    val diceItem = ItemStack(mode.material)
+    diceItem.editMeta { meta ->
+      meta.persistentDataContainer.set(
+          diceItemIdKey,
+          PersistentDataType.STRING,
+          UUID.randomUUID().toString(),
+      )
+    }
+
+    val bItem =
+        world.spawn(startLoc, Item::class.java) { entity ->
+          entity.itemStack = diceItem
+          entity.pickupDelay = 32767
+          entity.setCanMobPickup(false)
+          entity.setCanPlayerPickup(false)
+          entity.isPersistent = false
+          entity.setWillAge(false)
+          entity.setGravity(false)
+          entity.persistentDataContainer.set(
+              ownerKey,
+              PersistentDataType.STRING,
+              ownerUuid.toString(),
+          )
+        }
+    this.bedrockItem = bItem
+
+    // Java版プレイヤーにはBedrock用エンティティを非表示にする（二重表示防止）
+    BedrockSupport.hideBedrockEntityFromJava(plugin, bItem)
 
     startPhysicsLoop()
   }
@@ -196,6 +232,11 @@ class DiceInstance(
 
                 // Entity位置更新
                 display.teleport(currentLocation)
+                bedrockItem?.let { bItem ->
+                  if (bItem.isValid) {
+                    bItem.teleport(currentLocation)
+                  }
+                }
                 val rotQuat =
                     Quaternionf()
                         .rotateY(Math.toRadians(rotYaw.toDouble()).toFloat())
@@ -418,7 +459,8 @@ class DiceInstance(
   fun matchesEntity(entityId: Int): Boolean {
     return itemDisplay?.entityId == entityId ||
         textDisplay?.entityId == entityId ||
-        interactionEntity?.entityId == entityId
+        interactionEntity?.entityId == entityId ||
+        bedrockItem?.entityId == entityId
   }
 
   fun getDistanceSquared(loc: Location): Double {
@@ -435,5 +477,7 @@ class DiceInstance(
     itemDisplay = null
     textDisplay?.remove()
     textDisplay = null
+    bedrockItem?.remove()
+    bedrockItem = null
   }
 }
