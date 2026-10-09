@@ -72,6 +72,7 @@ class DiceChargeManager(
     val mode = diceItem.getDiceMode(item)
     val isBroadcast = diceItem.isBroadcast(item)
     val existing = sessions[player.uniqueId]
+    val isBedrock = BedrockSupport.isBedrockPlayer(player)
 
     if (existing == null) {
       // チャージ開始
@@ -79,8 +80,26 @@ class DiceChargeManager(
           ChargeSession(player.uniqueId, currentTick, currentTick, mode, isBroadcast)
       playChargeTickSound(player, 0.0)
     } else {
-      // 長押し中（継続パケット受信）: 最終インタラクト時刻を更新
-      existing.lastInteractTick = currentTick
+      if (isBedrock) {
+        val totalChargeTicks = currentTick - existing.startTick
+        // 最初のタップ時のパケット重複（4tick未満）は同一タップとして無視
+        if (totalChargeTicks < 4L) {
+          existing.lastInteractTick = currentTick
+          return
+        }
+
+        // 4tick以上経過後のタップは意図的な2回目のタップ！その瞬間のパワーで投擲！
+        val maxChargeTicks = 22.0
+        val ratio = min(1.0, totalChargeTicks / maxChargeTicks).coerceAtLeast(0.15)
+        sessions.remove(player.uniqueId)
+
+        val heldItem = player.inventory.itemInMainHand
+        val diceToThrow = if (diceItem.isDice(heldItem)) heldItem else item
+        executeThrow(player, diceToThrow, ratio, existing.mode, existing.isBroadcast)
+      } else {
+        // Java版: マウス長押しによる継続更新
+        existing.lastInteractTick = currentTick
+      }
     }
   }
 
@@ -121,10 +140,15 @@ class DiceChargeManager(
       }
 
       // リリース判定:
-      // 長押しを離した（パケットが途絶えた）または最大チャージ到達
       val idleTicks = currentTick - session.lastInteractTick
-      val releaseThreshold = if (isBedrock) 7L else 6L
-      val shouldRelease = idleTicks >= releaseThreshold || chargeTicks >= (maxChargeTicks + 2)
+      val shouldRelease =
+          if (isBedrock) {
+            // 統合版: 最大チャージ（22tick = 約1.1秒）に達したら自動で最高パワー投擲！
+            chargeTicks >= maxChargeTicks
+          } else {
+            // Java版: 長押しを離した（6tick以上パケット途絶）または最大チャージ到達
+            idleTicks >= 6L || chargeTicks >= (maxChargeTicks + 4)
+          }
 
       if (shouldRelease) {
         iterator.remove()
@@ -176,7 +200,7 @@ class DiceChargeManager(
 
     val hintText =
         if (isBedrock) {
-          " (長押しでチャージ、指を離して投擲)"
+          " (タップで投擲)"
         } else {
           ""
         }
@@ -199,8 +223,9 @@ class DiceChargeManager(
   }
 
   fun cancel(player: Player) {
-    sessions.remove(player.uniqueId)
-    player.sendActionBar(Component.empty())
+    if (sessions.remove(player.uniqueId) != null) {
+      player.sendActionBar(Component.empty())
+    }
   }
 
   fun shutdown() {

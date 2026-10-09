@@ -234,7 +234,9 @@ class DiceListener(
           chargeManager.onRightClick(player, diceToUse)
         }
       } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-        chargeManager.cancel(player)
+        if (chargeManager.isCharging(player)) {
+          chargeManager.cancel(player)
+        }
       }
       return
     }
@@ -273,14 +275,19 @@ class DiceListener(
 
   @EventHandler
   fun onPlayerAnimation(event: PlayerAnimationEvent) {
+    val player = event.player
     // 統合版（Bedrock）プレイヤーの場合、画面タッチ操作でアームスイングが発生するためチャージをキャンセルしない
-    if (BedrockSupport.isBedrockPlayer(event.player)) return
-    chargeManager.cancel(event.player)
+    if (BedrockSupport.isBedrockPlayer(player)) return
+    if (chargeManager.isCharging(player)) {
+      chargeManager.cancel(player)
+    }
   }
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
-    chargeManager.cancel(event.player)
+    if (chargeManager.isCharging(event.player)) {
+      chargeManager.cancel(event.player)
+    }
     diceManager.handlePlayerQuit(event.player)
   }
 

@@ -5,8 +5,11 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.NamespacedKey
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -205,5 +208,18 @@ class DiceItem(private val plugin: Plugin) {
     meta.lore(lore)
     meta.addEnchant(Enchantment.UNBREAKING, 1, true)
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES)
+
+    // 地面を向いていてもブロック設置が誤爆しないよう、メインハンド所持時のブロック操作範囲（リーチ）を0に短縮
+    val reachKey = NamespacedKey(plugin, "dice_reach")
+    meta.removeAttributeModifier(Attribute.BLOCK_INTERACTION_RANGE)
+    meta.addAttributeModifier(
+        Attribute.BLOCK_INTERACTION_RANGE,
+        AttributeModifier(
+            reachKey,
+            -4.5,
+            AttributeModifier.Operation.ADD_NUMBER,
+            EquipmentSlotGroup.MAINHAND,
+        ),
+    )
   }
 }
