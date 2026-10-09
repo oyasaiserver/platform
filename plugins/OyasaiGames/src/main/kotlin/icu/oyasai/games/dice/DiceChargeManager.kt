@@ -72,7 +72,6 @@ class DiceChargeManager(
     val mode = diceItem.getDiceMode(item)
     val isBroadcast = diceItem.isBroadcast(item)
     val existing = sessions[player.uniqueId]
-    val isBedrock = BedrockSupport.isBedrockPlayer(player)
 
     if (existing == null) {
       // チャージ開始
@@ -80,29 +79,8 @@ class DiceChargeManager(
           ChargeSession(player.uniqueId, currentTick, currentTick, mode, isBroadcast)
       playChargeTickSound(player, 0.0)
     } else {
-      val ticksSinceLast = currentTick - existing.lastInteractTick
-      val totalChargeTicks = currentTick - existing.startTick
-
-      if (isBedrock) {
-        // 統合版（スマホ）:
-        // 同一タップのパケット連続（3tick以内かつ合計6tick未満）は長押し継続として扱う
-        if (ticksSinceLast <= 3L && totalChargeTicks < 6L) {
-          existing.lastInteractTick = currentTick
-          return
-        }
-
-        // 意図的な2回目のタップと判定して即座に投擲！
-        val maxChargeTicks = 22.0
-        val ratio = min(1.0, totalChargeTicks / maxChargeTicks).coerceAtLeast(0.2)
-        sessions.remove(player.uniqueId)
-
-        val heldItem = player.inventory.itemInMainHand
-        val diceToThrow = if (diceItem.isDice(heldItem)) heldItem else item
-        executeThrow(player, diceToThrow, ratio, existing.mode, existing.isBroadcast)
-      } else {
-        // Java版: マウス長押しによる継続更新
-        existing.lastInteractTick = currentTick
-      }
+      // 長押し中（継続パケット受信）: 最終インタラクト時刻を更新
+      existing.lastInteractTick = currentTick
     }
   }
 
@@ -143,21 +121,15 @@ class DiceChargeManager(
       }
 
       // リリース判定:
+      // 長押しを離した（パケットが途絶えた）または最大チャージ到達
       val idleTicks = currentTick - session.lastInteractTick
-      val shouldRelease =
-          if (isBedrock) {
-            // 統合版:
-            // 1) 最大チャージに達した (自動発射)
-            // 2) 画面長押しを離した (6tick以上継続してチャージ後、5tick以上パケット途絶)
-            chargeTicks >= maxChargeTicks || (chargeTicks >= 6L && idleTicks >= 5L)
-          } else {
-            // Java版: 長押しを離した (6tick以上経過) または最大チャージ到達後
-            idleTicks >= 6L || chargeTicks >= (maxChargeTicks + 4)
-          }
+      val releaseThreshold = if (isBedrock) 7L else 6L
+      val shouldRelease = idleTicks >= releaseThreshold || chargeTicks >= (maxChargeTicks + 2)
 
       if (shouldRelease) {
         iterator.remove()
-        executeThrow(player, heldItem, ratio, session.mode, session.isBroadcast)
+        val finalRatio = if (chargeTicks >= maxChargeTicks) 1.0 else ratio.coerceAtLeast(0.15)
+        executeThrow(player, heldItem, finalRatio, session.mode, session.isBroadcast)
       }
     }
   }
@@ -174,6 +146,7 @@ class DiceChargeManager(
 
     // 手持ちアイテムを1個消費
     heldItem.amount = heldItem.amount - 1
+    player.updateInventory()
 
     // 2秒間(40ticks)のクールタイムを設定
     player.setCooldown(heldItem.type, 40)
@@ -203,7 +176,7 @@ class DiceChargeManager(
 
     val hintText =
         if (isBedrock) {
-          " (長押し または タップで投擲)"
+          " (長押しでチャージ、指を離して投擲)"
         } else {
           ""
         }
