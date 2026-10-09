@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.util.Vector
 
 class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
+  var chargeManager: DiceChargeManager? = null
   private val activeGroups = CopyOnWriteArrayList<DiceGroup>()
 
   /** 指定したプレイヤーが投げたサイコロがフィールド上に現在存在するか（投擲中〜回収前） */
@@ -146,22 +147,14 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     }
   }
 
-  fun hideBedrockEntitiesFor(player: Player) {
-    if (BedrockSupport.isBedrockPlayer(player)) return
+  fun updatePlayerVisibility(player: Player) {
     for (group in activeGroups) {
-      group.totalHologramBedrock?.let { stand ->
-        if (stand.isValid) {
-          player.hideEntity(plugin, stand)
-        }
-      }
-      for (dice in group.dices) {
-        dice.bedrockItem?.let { item ->
-          if (item.isValid) {
-            player.hideEntity(plugin, item)
-          }
-        }
-      }
+      group.updatePlayerVisibility(player)
     }
+  }
+
+  fun hideBedrockEntitiesFor(player: Player) {
+    updatePlayerVisibility(player)
   }
 
   fun removeGroup(group: DiceGroup) {

@@ -6,7 +6,6 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Location
 import org.bukkit.Sound
-import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Display
 import org.bukkit.entity.Player
 import org.bukkit.entity.TextDisplay
@@ -27,10 +26,8 @@ class DiceGroup(
     val isBroadcast: Boolean = true,
 ) {
   val dices = mutableListOf<DiceInstance>()
-  private var totalHologram: TextDisplay? = null
-  var totalHologramBedrock: ArmorStand? = null
-    private set
-
+  private var totalHologramJava: TextDisplay? = null
+  private var totalHologramBedrock: TextDisplay? = null
   private var autoCollectTask: BukkitTask? = null
   private var globalFailsafeTask: BukkitTask? = null
   private var isFinished = false
@@ -197,7 +194,7 @@ class DiceGroup(
     val midLoc = Location(world, avgX, maxY + 1.25, avgZ)
     val formula = dices.joinToString(" + ") { it.resultEye.toString() }
 
-    val text =
+    val textJava =
         Component.text("🎲 ", NamedTextColor.GOLD)
             .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
             .append(Component.text("合計: ", NamedTextColor.GRAY))
@@ -207,36 +204,45 @@ class DiceGroup(
             .append(Component.newline())
             .append(Component.text("( $formula )", NamedTextColor.GRAY))
 
-    totalHologram =
+    val textBedrock =
+        Component.text("⚅ ", NamedTextColor.GOLD)
+            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text("合計: ", NamedTextColor.GRAY))
+            .append(Component.text("$sum", NamedTextColor.GREEN, TextDecoration.BOLD))
+            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text(" ⚅", NamedTextColor.GOLD))
+            .append(Component.newline())
+            .append(Component.text("( $formula )", NamedTextColor.GRAY))
+
+    val holoJava =
         world.spawn(midLoc, TextDisplay::class.java) { entity ->
-          entity.text(text)
-          entity.billboard = Display.Billboard.CENTER
-          entity.isSeeThrough = false
-          entity.isShadowed = true
-          entity.backgroundColor = org.bukkit.Color.fromARGB(180, 0, 0, 0)
-          entity.isPersistent = false
-          entity.transformation =
-              Transformation(
-                  Vector3f(0f, 0f, 0f),
-                  AxisAngle4f(0f, 0f, 1f, 0f),
-                  Vector3f(1.1f, 1.1f, 1.1f),
-                  AxisAngle4f(0f, 0f, 1f, 0f),
-              )
+          configureTotalHologram(entity, textJava)
+        }
+    val holoBedrock =
+        world.spawn(midLoc, TextDisplay::class.java) { entity ->
+          configureTotalHologram(entity, textBedrock)
         }
 
-    // 統合版（Bedrock / Floodgate）用合計ホログラムのスポーン
-    val stand =
-        world.spawn(midLoc, ArmorStand::class.java) { entity ->
-          entity.isInvisible = true
-          entity.isMarker = true
-          entity.isSmall = true
-          entity.setGravity(false)
-          entity.isPersistent = false
-          entity.customName(text)
-          entity.isCustomNameVisible = true
-        }
-    this.totalHologramBedrock = stand
-    BedrockSupport.hideBedrockEntityFromJava(plugin, stand)
+    this.totalHologramJava = holoJava
+    this.totalHologramBedrock = holoBedrock
+
+    BedrockSupport.separateHologramVisibility(plugin, holoJava, holoBedrock)
+  }
+
+  private fun configureTotalHologram(entity: TextDisplay, text: Component) {
+    entity.text(text)
+    entity.billboard = Display.Billboard.CENTER
+    entity.isSeeThrough = false
+    entity.isShadowed = true
+    entity.backgroundColor = org.bukkit.Color.fromARGB(180, 0, 0, 0)
+    entity.isPersistent = false
+    entity.transformation =
+        Transformation(
+            Vector3f(0f, 0f, 0f),
+            AxisAngle4f(0f, 0f, 1f, 0f),
+            Vector3f(1.1f, 1.1f, 1.1f),
+            AxisAngle4f(0f, 0f, 1f, 0f),
+        )
   }
 
   private fun sendMessage(sourcePlayer: Player?, message: Component) {
@@ -256,14 +262,36 @@ class DiceGroup(
   }
 
   fun containsEntity(entityId: Int): Boolean {
-    if (totalHologram?.entityId == entityId) return true
-    if (totalHologramBedrock?.entityId == entityId) return true
+    if (totalHologramJava?.entityId == entityId || totalHologramBedrock?.entityId == entityId)
+        return true
     return dices.any { it.matchesEntity(entityId) }
   }
 
   fun isNear(targetLoc: Location, maxDistSq: Double = 6.25): Boolean {
     if (dices.isEmpty()) return false
     return dices.any { it.isSettled && it.getDistanceSquared(targetLoc) <= maxDistSq }
+  }
+
+  fun updatePlayerVisibility(player: Player) {
+    for (dice in dices) {
+      dice.bedrockItem?.let { bItem ->
+        if (!BedrockSupport.isBedrockPlayer(player)) {
+          player.hideEntity(plugin, bItem)
+        }
+      }
+      BedrockSupport.updatePlayerHologramVisibility(
+          plugin,
+          player,
+          dice.textDisplayJava,
+          dice.textDisplayBedrock,
+      )
+    }
+    BedrockSupport.updatePlayerHologramVisibility(
+        plugin,
+        player,
+        totalHologramJava,
+        totalHologramBedrock,
+    )
   }
 
   fun collect(collector: Player?): Boolean {
@@ -280,8 +308,8 @@ class DiceGroup(
     // エンティティ消去
     dices.forEach { it.remove() }
     dices.clear()
-    totalHologram?.remove()
-    totalHologram = null
+    totalHologramJava?.remove()
+    totalHologramJava = null
     totalHologramBedrock?.remove()
     totalHologramBedrock = null
 
@@ -289,6 +317,10 @@ class DiceGroup(
     val owner = plugin.server.getPlayer(ownerUuid)
     if (owner != null && owner.isOnline) {
       diceManager.returnDiceItem(owner, mode, isBroadcast)
+      // 回収時の画面タップ連打による誤設置を防止するためクールダウンと設置遮断を設定
+      DiceType.entries.forEach { owner.setCooldown(it.material, 20) }
+      diceManager.chargeManager?.recordRecentAction(owner, 2000L)
+
       if (collector != null) {
         owner.playSound(owner.location, Sound.ENTITY_ITEM_PICKUP, 0.7f, 1.2f)
         owner.sendMessage(Component.text("サイコロを回収しました。", NamedTextColor.GREEN))
@@ -308,8 +340,8 @@ class DiceGroup(
     autoCollectTask = null
     dices.forEach { it.remove() }
     dices.clear()
-    totalHologram?.remove()
-    totalHologram = null
+    totalHologramJava?.remove()
+    totalHologramJava = null
     totalHologramBedrock?.remove()
     totalHologramBedrock = null
   }

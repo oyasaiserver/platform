@@ -16,6 +16,7 @@ class DiceModule(private val plugin: OyasaiGamesPlugin) {
     diceItem = DiceItem(plugin)
     diceManager = DiceManager(plugin, diceItem)
     chargeManager = DiceChargeManager(plugin, diceItem, diceManager)
+    diceManager.chargeManager = chargeManager
     chargeManager.start()
 
     val listener = DiceListener(diceItem, diceManager, chargeManager)

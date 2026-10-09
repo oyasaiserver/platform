@@ -28,40 +28,152 @@ class DiceListener(
     private val chargeManager: DiceChargeManager,
 ) : Listener {
 
+  private val diceMaterials: Set<org.bukkit.Material> by lazy {
+    DiceType.entries.map { it.material }.toSet()
+  }
+
+  private fun isDiceRelated(
+      player: Player,
+      item: org.bukkit.inventory.ItemStack?,
+      placedType: org.bukkit.Material? = null,
+  ): Boolean {
+    if (diceItem.isDice(item)) return true
+    if (diceItem.isDice(player.inventory.itemInMainHand)) return true
+    if (diceItem.isDice(player.inventory.itemInOffHand)) return true
+    if (chargeManager.isCharging(player) || chargeManager.isRecentThrower(player)) return true
+
+    // 設置されようとしているブロックがサイコロ素材の場合
+    if (placedType != null && diceMaterials.contains(placedType)) {
+      if (placedType == org.bukkit.Material.LODESTONE)
+          return true // LODESTONEブロックの設置は無条件でサイコロ誤設置とみなして遮断
+      if (diceItem.hasDice(player)) return true
+      if (diceManager.hasActiveDice(player)) return true
+      if (player.hasCooldown(placedType)) return true
+      val main = player.inventory.itemInMainHand
+      if (main.type == placedType) {
+        if (
+            diceItem.isDice(main) ||
+                main.containsEnchantment(org.bukkit.enchantments.Enchantment.UNBREAKING)
+        )
+            return true
+      }
+    }
+
+    // 手持ちアイテムがサイコロ素材の場合
+    val mainItem = player.inventory.itemInMainHand
+    if (diceMaterials.contains(mainItem.type)) {
+      if (mainItem.type == org.bukkit.Material.LODESTONE) return true
+      if (diceItem.hasDice(player)) return true
+      if (diceManager.hasActiveDice(player)) return true
+      if (player.hasCooldown(mainItem.type)) return true
+    }
+
+    return false
+  }
+
   @EventHandler(priority = EventPriority.LOWEST)
   fun onBlockCanBuild(event: BlockCanBuildEvent) {
     val player = event.player ?: return
-    if (
-        diceItem.isDice(player.inventory.itemInMainHand) ||
-            diceItem.isDice(player.inventory.itemInOffHand)
-    ) {
+    val main = player.inventory.itemInMainHand
+    val off = player.inventory.itemInOffHand
+    if (isDiceRelated(player, main, main.type) || isDiceRelated(player, off, off.type)) {
       event.isBuildable = false
     }
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
-  fun onBlockPlace(event: BlockPlaceEvent) {
+  fun onBlockPlaceLowest(event: BlockPlaceEvent) {
+    handleBlockPlace(event)
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+  fun onBlockPlaceHighest(event: BlockPlaceEvent) {
+    handleBlockPlace(event)
+  }
+
+  private fun handleBlockPlace(event: BlockPlaceEvent) {
     val player = event.player
-    if (
-        diceItem.isDice(event.itemInHand) ||
-            diceItem.isDice(player.inventory.itemInMainHand) ||
-            diceItem.isDice(player.inventory.itemInOffHand)
-    ) {
+    val placedType = event.blockPlaced.type
+    val block = event.blockPlaced
+    val loc = block.location
+    val previousType = event.blockReplacedState.type
+    val previousData = event.blockReplacedState.blockData
+
+    if (isDiceRelated(player, event.itemInHand, placedType)) {
       event.isCancelled = true
       event.setBuild(false)
       event.blockReplacedState.update(true, false)
       player.updateInventory()
+
+      // 1. 即時同期: 元のブロック状態を送信してクライアント側の即時予測を上書き
+      player.sendBlockChange(loc, previousData)
+
+      // 2. 1tick後: クライアント予測によるゴーストブロックを完全に抹消
+      diceManager.plugin.server.scheduler.runTaskLater(
+          diceManager.plugin,
+          Runnable {
+            if (loc.block.type == placedType) {
+              loc.block.type = previousType
+              loc.block.setBlockData(previousData, false)
+            }
+            player.sendBlockChange(loc, previousData)
+            player.updateInventory()
+          },
+          1L,
+      )
+
+      // 3. 3tick後: GeyserMCのパケット遅延時にも確実に同期
+      diceManager.plugin.server.scheduler.runTaskLater(
+          diceManager.plugin,
+          Runnable {
+            if (loc.block.type == placedType) {
+              loc.block.type = previousType
+              loc.block.setBlockData(previousData, false)
+            }
+            player.sendBlockChange(loc, previousData)
+            player.updateInventory()
+          },
+          3L,
+      )
+
+      // 4. 5tick後: 念押し同期
+      diceManager.plugin.server.scheduler.runTaskLater(
+          diceManager.plugin,
+          Runnable {
+            if (loc.block.type == placedType) {
+              loc.block.type = previousType
+              loc.block.setBlockData(previousData, false)
+            }
+            player.sendBlockChange(loc, previousData)
+          },
+          5L,
+      )
     }
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   fun onPlayerInteract(event: PlayerInteractEvent) {
     val player = event.player
-    val item = event.item
+    val mainHand = player.inventory.itemInMainHand
+    val offHand = player.inventory.itemInOffHand
+    val eventItem = event.item
+    val effectiveItem = if (eventItem != null && !eventItem.type.isAir) eventItem else mainHand
 
-    // サイコロの右クリック操作（メインハンド優先、オフハンドでのブロック設置重複を完全遮断）
+    // 誤って世界に残ってしまったLODESTONEブロックを右クリックした場合、自動で消去（空気化）
+    if (event.clickedBlock?.type == org.bukkit.Material.LODESTONE) {
+      val cBlock = event.clickedBlock!!
+      cBlock.type = org.bukkit.Material.AIR
+      player.sendBlockChange(cBlock.location, org.bukkit.Material.AIR.createBlockData())
+    }
+
+    val isHoldingDice =
+        diceItem.isDice(mainHand) || diceItem.isDice(offHand) || diceItem.isDice(effectiveItem)
+    val isDiceContext =
+        isHoldingDice || isDiceRelated(player, effectiveItem, event.clickedBlock?.type)
+
+    // オフハンド操作、またはメインハンド以外でのブロック設置・誤操作を完全遮断
     if (event.hand != EquipmentSlot.HAND) {
-      if (item != null && diceItem.isDice(item)) {
+      if (isDiceContext) {
         event.setUseItemInHand(Event.Result.DENY)
         event.setUseInteractedBlock(Event.Result.DENY)
         event.isCancelled = true
@@ -69,8 +181,7 @@ class DiceListener(
       return
     }
 
-    if (item != null && diceItem.isDice(item)) {
-      diceItem.sanitizePlayerDice(player)
+    if (isDiceContext) {
       val action = event.action
 
       if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
@@ -78,31 +189,67 @@ class DiceListener(
         event.setUseInteractedBlock(Event.Result.DENY)
         event.isCancelled = true
 
-        // 手の届く範囲のブロックを右クリックした場合、クライアント側のゴースト設置を防止
+        // ブロックを右クリックした場合、ゴースト設置を未然かつ確実に消去
         if (action == Action.RIGHT_CLICK_BLOCK) {
-          val placedBlock = event.clickedBlock?.getRelative(event.blockFace)
-          if (placedBlock != null) {
-            player.sendBlockChange(placedBlock.location, placedBlock.blockData)
+          val clicked = event.clickedBlock
+          if (clicked != null) {
+            val face = event.blockFace
+            val targetLoc = clicked.getRelative(face).location
+            val currentData = targetLoc.block.blockData
+            val clickedData = clicked.blockData
+
+            player.sendBlockChange(targetLoc, currentData)
+            player.sendBlockChange(clicked.location, clickedData)
+
+            diceManager.plugin.server.scheduler.runTaskLater(
+                diceManager.plugin,
+                Runnable {
+                  player.sendBlockChange(targetLoc, targetLoc.block.blockData)
+                  player.sendBlockChange(clicked.location, clicked.location.block.blockData)
+                  player.updateInventory()
+                },
+                1L,
+            )
+            diceManager.plugin.server.scheduler.runTaskLater(
+                diceManager.plugin,
+                Runnable {
+                  player.sendBlockChange(targetLoc, targetLoc.block.blockData)
+                  player.sendBlockChange(clicked.location, clicked.location.block.blockData)
+                  player.updateInventory()
+                },
+                3L,
+            )
           }
         }
 
+        val diceToUse = if (diceItem.isDice(mainHand)) mainHand else effectiveItem
+        diceItem.sanitizePlayerDice(player)
+
         if (player.isSneaking) {
           chargeManager.cancel(player)
-          val currentMode = diceItem.getDiceMode(item)
-          val isBroadcast = diceItem.isBroadcast(item)
+          val currentMode = diceItem.getDiceMode(diceToUse)
+          val isBroadcast = diceItem.isBroadcast(diceToUse)
           DiceMenuGui.open(player, currentMode, isBroadcast, diceItem)
         } else {
-          chargeManager.onRightClick(player, item)
+          chargeManager.onRightClick(player, diceToUse)
         }
       } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-        chargeManager.cancel(player)
+        if (chargeManager.isCharging(player)) {
+          chargeManager.cancel(player)
+        }
       }
       return
     }
 
-    // サイコロを持っていない場合でも、周囲・視線のサイコロを手動回収可能にする
+    // サイコロを持っていない場合でも、投擲直後や周囲・視線のサイコロ回収処理
     val action = event.action
     if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+      if (chargeManager.isRecentThrower(player)) {
+        event.setUseItemInHand(Event.Result.DENY)
+        event.setUseInteractedBlock(Event.Result.DENY)
+        event.isCancelled = true
+      }
+
       val targetLoc = event.clickedBlock?.location?.add(0.5, 0.5, 0.5)
       if (diceManager.tryCollectNearby(player, targetLoc)) {
         event.isCancelled = true
@@ -128,23 +275,30 @@ class DiceListener(
 
   @EventHandler
   fun onPlayerAnimation(event: PlayerAnimationEvent) {
-    chargeManager.cancel(event.player)
+    val player = event.player
+    // 統合版（Bedrock）プレイヤーの場合、画面タッチ操作でアームスイングが発生するためチャージをキャンセルしない
+    if (BedrockSupport.isBedrockPlayer(player)) return
+    if (chargeManager.isCharging(player)) {
+      chargeManager.cancel(player)
+    }
   }
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
-    chargeManager.cancel(event.player)
+    if (chargeManager.isCharging(event.player)) {
+      chargeManager.cancel(event.player)
+    }
     diceManager.handlePlayerQuit(event.player)
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   fun onPlayerJoin(event: PlayerJoinEvent) {
-    diceManager.hideBedrockEntitiesFor(event.player)
+    diceManager.updatePlayerVisibility(event.player)
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   fun onPlayerChangedWorld(event: PlayerChangedWorldEvent) {
-    diceManager.hideBedrockEntitiesFor(event.player)
+    diceManager.updatePlayerVisibility(event.player)
   }
 
   @EventHandler(priority = EventPriority.HIGH)

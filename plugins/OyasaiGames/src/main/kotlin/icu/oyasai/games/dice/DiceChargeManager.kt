@@ -27,6 +27,7 @@ class DiceChargeManager(
   )
 
   private val sessions = ConcurrentHashMap<UUID, ChargeSession>()
+  private val recentThrowers = ConcurrentHashMap<UUID, Long>()
   private var tickerTask: BukkitTask? = null
   private var currentTick: Long = 0
 
@@ -36,9 +37,30 @@ class DiceChargeManager(
               override fun run() {
                 currentTick++
                 tickSessions()
+                cleanRecentThrowers()
               }
             }
             .runTaskTimer(plugin, 1L, 1L)
+  }
+
+  fun isCharging(player: Player): Boolean {
+    return sessions.containsKey(player.uniqueId)
+  }
+
+  fun isRecentThrower(player: Player): Boolean {
+    val expiry = recentThrowers[player.uniqueId] ?: return false
+    return System.currentTimeMillis() < expiry
+  }
+
+  fun recordRecentAction(player: Player, durationMs: Long = 2000L) {
+    recentThrowers[player.uniqueId] = System.currentTimeMillis() + durationMs
+  }
+
+  private fun cleanRecentThrowers() {
+    if (currentTick % 20L == 0L && recentThrowers.isNotEmpty()) {
+      val now = System.currentTimeMillis()
+      recentThrowers.entries.removeIf { it.value < now }
+    }
   }
 
   fun onRightClick(player: Player, item: ItemStack) {
@@ -50,13 +72,34 @@ class DiceChargeManager(
     val mode = diceItem.getDiceMode(item)
     val isBroadcast = diceItem.isBroadcast(item)
     val existing = sessions[player.uniqueId]
+    val isBedrock = BedrockSupport.isBedrockPlayer(player)
 
     if (existing == null) {
+      // チャージ開始
       sessions[player.uniqueId] =
           ChargeSession(player.uniqueId, currentTick, currentTick, mode, isBroadcast)
       playChargeTickSound(player, 0.0)
     } else {
-      existing.lastInteractTick = currentTick
+      if (isBedrock) {
+        val totalChargeTicks = currentTick - existing.startTick
+        // 最初のタップ時のパケット重複（4tick未満）は同一タップとして無視
+        if (totalChargeTicks < 4L) {
+          existing.lastInteractTick = currentTick
+          return
+        }
+
+        // 4tick以上経過後のタップは意図的な2回目のタップ！その瞬間のパワーで投擲！
+        val maxChargeTicks = 22.0
+        val ratio = min(1.0, totalChargeTicks / maxChargeTicks).coerceAtLeast(0.15)
+        sessions.remove(player.uniqueId)
+
+        val heldItem = player.inventory.itemInMainHand
+        val diceToThrow = if (diceItem.isDice(heldItem)) heldItem else item
+        executeThrow(player, diceToThrow, ratio, existing.mode, existing.isBroadcast)
+      } else {
+        // Java版: マウス長押しによる継続更新
+        existing.lastInteractTick = currentTick
+      }
     }
   }
 
@@ -83,12 +126,13 @@ class DiceChargeManager(
         continue
       }
 
+      val isBedrock = BedrockSupport.isBedrockPlayer(player)
       val chargeTicks = currentTick - session.startTick
       val maxChargeTicks = 22.0 // 約1.1秒でフルチャージ
       val ratio = min(1.0, chargeTicks / maxChargeTicks)
 
       // アクションバーの描画
-      displayActionBar(player, ratio)
+      displayActionBar(player, ratio, isBedrock)
 
       // チャージ音（3tickおき）
       if (chargeTicks % 3L == 0L && ratio < 1.0) {
@@ -96,14 +140,20 @@ class DiceChargeManager(
       }
 
       // リリース判定:
-      // 1. 長押しを離した (最後のクリックから 6tick 以上経過)
-      // 2. または最大チャージ到達後 3tick 経過で自動リリース
       val idleTicks = currentTick - session.lastInteractTick
-      val shouldRelease = idleTicks >= 6L || chargeTicks >= (maxChargeTicks + 4)
+      val shouldRelease =
+          if (isBedrock) {
+            // 統合版: 最大チャージ（22tick = 約1.1秒）に達したら自動で最高パワー投擲！
+            chargeTicks >= maxChargeTicks
+          } else {
+            // Java版: 長押しを離した（6tick以上パケット途絶）または最大チャージ到達
+            idleTicks >= 6L || chargeTicks >= (maxChargeTicks + 4)
+          }
 
       if (shouldRelease) {
         iterator.remove()
-        executeThrow(player, heldItem, ratio, session.mode, session.isBroadcast)
+        val finalRatio = if (chargeTicks >= maxChargeTicks) 1.0 else ratio.coerceAtLeast(0.15)
+        executeThrow(player, heldItem, finalRatio, session.mode, session.isBroadcast)
       }
     }
   }
@@ -115,11 +165,16 @@ class DiceChargeManager(
       mode: DiceMode,
       isBroadcast: Boolean,
   ) {
+    // 直近投擲者として記録（2.5秒間ブロック設置を厳重遮断）
+    recentThrowers[player.uniqueId] = System.currentTimeMillis() + 2500L
+
     // 手持ちアイテムを1個消費
     heldItem.amount = heldItem.amount - 1
+    player.updateInventory()
 
     // 2秒間(40ticks)のクールタイムを設定
     player.setCooldown(heldItem.type, 40)
+    DiceType.entries.forEach { player.setCooldown(it.material, 40) }
 
     // アクションバー消去
     player.sendActionBar(Component.empty())
@@ -128,7 +183,7 @@ class DiceChargeManager(
     diceManager.throwDice(player, ratio, mode, isBroadcast)
   }
 
-  private fun displayActionBar(player: Player, ratio: Double) {
+  private fun displayActionBar(player: Player, ratio: Double, isBedrock: Boolean) {
     val totalBars = 10
     val filledBars = (ratio * totalBars).toInt()
     val percent = (ratio * 100).toInt()
@@ -143,6 +198,13 @@ class DiceChargeManager(
     val filledString = "■".repeat(filledBars)
     val emptyString = "□".repeat(totalBars - filledBars)
 
+    val hintText =
+        if (isBedrock) {
+          " (タップで投擲)"
+        } else {
+          ""
+        }
+
     val bar =
         Component.text("投擲パワー: ", NamedTextColor.GOLD, TextDecoration.BOLD)
             .append(Component.text("[", NamedTextColor.GRAY))
@@ -150,6 +212,7 @@ class DiceChargeManager(
             .append(Component.text(emptyString, NamedTextColor.DARK_GRAY))
             .append(Component.text("] ", NamedTextColor.GRAY))
             .append(Component.text("$percent%", NamedTextColor.WHITE, TextDecoration.BOLD))
+            .append(Component.text(hintText, NamedTextColor.AQUA))
 
     player.sendActionBar(bar)
   }
@@ -160,13 +223,15 @@ class DiceChargeManager(
   }
 
   fun cancel(player: Player) {
-    sessions.remove(player.uniqueId)
-    player.sendActionBar(Component.empty())
+    if (sessions.remove(player.uniqueId) != null) {
+      player.sendActionBar(Component.empty())
+    }
   }
 
   fun shutdown() {
     tickerTask?.cancel()
     tickerTask = null
     sessions.clear()
+    recentThrowers.clear()
   }
 }
