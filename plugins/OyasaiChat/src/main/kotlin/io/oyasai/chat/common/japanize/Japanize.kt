@@ -41,6 +41,8 @@ data class ChatMessage(
   fun isBlank(): Boolean = text.isBlank()
 }
 
+fun judgmentSource(message: ChatMessage): String = message.original ?: message.input ?: message.text
+
 data class JapanizeSettings(
     val enabled: Boolean = true,
     val playerDefault: Boolean = true,
@@ -200,7 +202,7 @@ object GoogleTranslationResponse {
                   if (
                       !confidence.isFinite() ||
                           confidence !in 0.0..1.0 ||
-                          LanguageMode.code(language.asString) == null
+                          !LanguageMode.validCode(language.asString)
                   )
                       null
                   else
@@ -229,7 +231,7 @@ class GoogleTranslator(private val timeoutMillis: Long) {
       HttpClient.newBuilder().connectTimeout(Duration.ofMillis(timeoutMillis)).build()
 
   fun translate(text: String, target: String = "ja"): CompletableFuture<Translation?> {
-    require(LanguageMode.code(target) != null)
+    require(LanguageMode.validCode(target))
     val request =
         HttpRequest.newBuilder(
                 URI.create(

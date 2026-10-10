@@ -28,7 +28,7 @@ object PlayerStateFileCodec {
               languageMode =
                   if (!yaml.getBoolean("japanize-enabled", defaultJapanizeEnabled)) "off"
                   else
-                      io.oyasai.chat.common.japanize.LanguageMode.parse(
+                      io.oyasai.chat.common.japanize.LanguageMode.storedMode(
                           yaml.getString("language-mode") ?: "auto"
                       ) ?: "auto",
               activeChannel = yaml.getString("active-channel", "") ?: "",

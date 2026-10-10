@@ -91,7 +91,7 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
       recipients: Collection<Player>,
   ): net.kyori.adventure.text.Component =
       speeches.indicator(
-          message.input ?: message.original ?: message.text,
+          judgmentSource(message),
           recipients.map { it.uniqueId }.toSet(),
       )
 

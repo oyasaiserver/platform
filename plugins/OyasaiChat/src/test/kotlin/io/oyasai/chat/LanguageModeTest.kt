@@ -46,6 +46,24 @@ class LanguageModeTest {
   }
 
   @Test
+  fun judgmentUsesTheSameKanaForHiraganaAndRomanizedTranslation() {
+    val engine =
+        LanguageEngine(
+            settings,
+            { _, _ -> CompletableFuture.completedFuture(Translation("Olá", "ja", 1.0)) },
+            { CompletableFuture.completedFuture(it) },
+        )
+    val hiragana = engine.prepare("こんにちは", "pt", emptyList(), emptyMap()).join()
+    val romanized = engine.prepare("kon'nichiha", "pt", emptyList(), emptyMap()).join()
+    assertEquals("こんにちは", hiragana.original)
+    assertEquals("こんにちは", romanized.original)
+    assertEquals("こんにちは", judgmentSource(hiragana.copy(input = "こんにちは")))
+    assertEquals("こんにちは", judgmentSource(romanized.copy(input = "kon'nichiha")))
+    assertEquals("raw", judgmentSource(ChatMessage("shown", input = "raw")))
+    assertEquals("shown", judgmentSource(ChatMessage("shown")))
+  }
+
+  @Test
   fun japaneseModeTranslatesRawRomajiWithoutTransliteration() {
     val requests = mutableListOf<Pair<String, String>>()
     val engine =
@@ -348,13 +366,73 @@ class LanguageModeTest {
   }
 
   @Test
-  fun validatesArgumentsAndAcceptsUnlistedLanguageCodes() {
+  fun validatesArgumentsAndOnlyAcceptsLanguageNames() {
     assertEquals(LanguageArgument.Show, languageArgument(emptyList()))
-    listOf("auto", "off", "pt", "EN", "zh-CN", "zh-TW", "fil", "sr-Latn").forEach {
-      assertIs<LanguageArgument.Set>(languageArgument(listOf(it)))
+    assertEquals(
+        listOf(
+            "auto",
+            "off",
+            "ポルトガル語",
+            "日本語",
+            "英語",
+            "韓国語",
+            "スペイン語",
+            "ドイツ語",
+            "インドネシア語",
+            "フランス語",
+            "中国語（簡体字）",
+            "中国語（繁体字）",
+            "ロシア語",
+            "タイ語",
+            "ベトナム語",
+        ),
+        LanguageMode.suggestions,
+    )
+    val languages =
+        mapOf(
+            "ポルトガル語" to "pt",
+            "日本語" to "ja",
+            "英語" to "en",
+            "韓国語" to "ko",
+            "スペイン語" to "es",
+            "ドイツ語" to "de",
+            "インドネシア語" to "id",
+            "フランス語" to "fr",
+            "中国語（簡体字）" to "zh-CN",
+            "中国語（繁体字）" to "zh-TW",
+            "ロシア語" to "ru",
+            "タイ語" to "th",
+            "ベトナム語" to "vi",
+        )
+    languages.forEach { (name, code) ->
+      assertEquals(code, LanguageMode.code(name))
+      assertEquals(code, LanguageMode.parse(name))
+      assertEquals(LanguageArgument.Set(code), languageArgument(listOf(name)))
+      assertEquals(name, LanguageMode.languageName(code))
     }
+    assertEquals(LanguageArgument.Set("auto"), languageArgument(listOf("auto")))
+    assertEquals(LanguageArgument.Set("off"), languageArgument(listOf("off")))
     assertEquals(LanguageArgument.Check(12), languageArgument(listOf("check", "12")))
-    assertEquals("zh-CN", LanguageMode.parse("ZH-cn"))
+    assertNull(LanguageMode.code("pt"))
+    assertNull(LanguageMode.parse("pt"))
+    listOf(
+            "pt",
+            "ja",
+            "en",
+            "ko",
+            "es",
+            "de",
+            "id",
+            "fr",
+            "zh-CN",
+            "zh-TW",
+            "ru",
+            "th",
+            "vi",
+            "fil",
+            "sr-Latn",
+        )
+        .forEach { assertNull(languageArgument(listOf(it)), it) }
     listOf(
             listOf("a"),
             listOf("ja_XX"),
@@ -367,7 +445,7 @@ class LanguageModeTest {
             listOf("check", "0"),
             listOf("check", ""),
             listOf("check", "999999999999999999999"),
-            listOf("pt", "en"),
+            listOf("ポルトガル語", "英語"),
             listOf("check", "1", "extra"),
         )
         .forEach { assertNull(languageArgument(it), it.toString()) }
@@ -392,6 +470,10 @@ class LanguageModeTest {
       assertFalse(loaded.privateMessagesEnabled)
       assertEquals(setOf("global"), loaded.joinedChannels)
     }
+    file.writeText("japanize-enabled: true\nlanguage-mode: pt\n")
+    assertEquals("pt", PlayerStateFileCodec.load(file, true).languageMode)
+    file.writeText("japanize-enabled: true\nlanguage-mode: sr-Latn\n")
+    assertEquals("sr-latn", PlayerStateFileCodec.load(file, true).languageMode)
     file.writeText("japanize-enabled: true\nlanguage-mode: invalid_XX\n")
     assertEquals("auto", PlayerStateFileCodec.load(file, true).languageMode)
     file.writeText("japanize-enabled: false\nlanguage-mode: pt\n")
