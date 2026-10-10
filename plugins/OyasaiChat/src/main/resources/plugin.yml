@@ -39,7 +39,7 @@ commands:
     aliases: [tell, message, pm]
   lang:
     description: Select your speech language or check one message
-    usage: /lang [auto|off|language-code|check <id>]
+    usage: /lang [auto|off|language-name|check <id>]
     permission: oyasaichat.lang
   japanize:
     description: Toggle Japanese chat conversion or manage its dictionary

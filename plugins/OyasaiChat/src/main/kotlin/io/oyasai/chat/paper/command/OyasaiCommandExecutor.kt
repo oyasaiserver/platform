@@ -73,7 +73,12 @@ class OyasaiCommandExecutor(
         when (val argument = io.oyasai.chat.common.japanize.languageArgument(args.toList())) {
           io.oyasai.chat.common.japanize.LanguageArgument.Show ->
               player.sendMessage(
-                  chat.formatter.info("言語モード: " + chat.states.get(player).languageMode)
+                  chat.formatter.info(
+                      "言語モード: " +
+                          io.oyasai.chat.common.japanize.LanguageMode.languageName(
+                              chat.states.get(player).languageMode
+                          )
+                  )
               )
           is io.oyasai.chat.common.japanize.LanguageArgument.Set -> {
             if (plugin.importInProgress) {
@@ -81,13 +86,17 @@ class OyasaiCommandExecutor(
             } else {
               chat.states.get(player).languageMode = argument.mode
               chat.states.save(player)
-              player.sendMessage(chat.formatter.info("言語モード: " + argument.mode))
+              player.sendMessage(
+                  chat.formatter.info(
+                      "言語モード: " +
+                          io.oyasai.chat.common.japanize.LanguageMode.languageName(argument.mode)
+                  )
+              )
             }
           }
           is io.oyasai.chat.common.japanize.LanguageArgument.Check ->
               plugin.sourceMessages.check(player, argument.id)
-          null ->
-              player.sendMessage(chat.formatter.error("Usage: /lang [auto|off|言語コード|check <id>]"))
+          null -> player.sendMessage(chat.formatter.error("Usage: /lang [auto|off|言語名|check <id>]"))
         }
         true
       }

@@ -8,33 +8,41 @@ import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.roundToInt
 
 object LanguageMode {
-  val suggestions =
-      listOf(
-          "auto",
-          "off",
-          "pt",
-          "en",
-          "ko",
-          "ja",
-          "es",
-          "de",
-          "id",
-          "fr",
-          "zh-CN",
-          "zh-TW",
-          "ru",
-          "th",
-          "vi",
+  private val names =
+      linkedMapOf(
+          "pt" to "ポルトガル語",
+          "ja" to "日本語",
+          "en" to "英語",
+          "ko" to "韓国語",
+          "es" to "スペイン語",
+          "de" to "ドイツ語",
+          "id" to "インドネシア語",
+          "fr" to "フランス語",
+          "zh-CN" to "中国語（簡体字）",
+          "zh-TW" to "中国語（繁体字）",
+          "ru" to "ロシア語",
+          "th" to "タイ語",
+          "vi" to "ベトナム語",
       )
+  private val codePattern = Regex("[A-Za-z]{2,8}(?:-[A-Za-z]{2,8}){0,2}")
 
-  fun code(value: String): String? =
-      value
-          .takeIf {
-            it.length in 2..20 && Regex("[A-Za-z]{2,8}(?:-[A-Za-z]{2,8}){0,2}").matches(it)
-          }
-          ?.let { code ->
-            suggestions.firstOrNull { it.equals(code, true) } ?: code.lowercase(Locale.ROOT)
-          }
+  val suggestions = listOf("auto", "off") + names.values
+
+  /** Command input uses names; language codes remain the internal and persisted representation. */
+  fun code(value: String): String? = names.entries.firstOrNull { it.value == value }?.key
+
+  fun languageName(code: String): String =
+      names.entries.firstOrNull { it.key.equals(code, true) }?.value ?: code
+
+  fun validCode(value: String): Boolean = value.length in 2..20 && codePattern.matches(value)
+
+  fun storedMode(value: String): String? =
+      parse(value)
+          ?: value
+              .takeIf { !it.equals("check", true) && validCode(it) }
+              ?.let { saved ->
+                names.keys.firstOrNull { it.equals(saved, true) } ?: saved.lowercase(Locale.ROOT)
+              }
 
   fun parse(value: String): String? =
       when (value.lowercase(Locale.ROOT)) {
@@ -131,7 +139,7 @@ class LanguageEngine(
               }
           val labels =
               candidates.take(3).joinToString("、") { candidate ->
-                languageName(candidate.language) +
+                LanguageMode.languageName(candidate.language) +
                     " " +
                     (candidate.confidence * 100).roundToInt() +
                     "%"
@@ -151,23 +159,6 @@ class LanguageEngine(
           ChatMessage(original)
       else ChatMessage(translated, original, settings.format)
 }
-
-private fun languageName(code: String): String =
-    mapOf(
-        "pt" to "ポルトガル語",
-        "en" to "英語",
-        "ko" to "韓国語",
-        "ja" to "日本語",
-        "es" to "スペイン語",
-        "de" to "ドイツ語",
-        "id" to "インドネシア語",
-        "fr" to "フランス語",
-        "zh-cn" to "中国語（簡体字）",
-        "zh-tw" to "中国語（繁体字）",
-        "ru" to "ロシア語",
-        "th" to "タイ語",
-        "vi" to "ベトナム語",
-    )[code.lowercase(Locale.ROOT)] ?: code
 
 /** Main-thread memory only. Recipient membership prevents guessing private/channel message IDs. */
 class RecentSpeech(
