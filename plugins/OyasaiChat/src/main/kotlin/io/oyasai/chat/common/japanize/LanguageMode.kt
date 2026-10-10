@@ -10,26 +10,26 @@ import kotlin.math.roundToInt
 object LanguageMode {
   private val names =
       linkedMapOf(
-          "pt" to "ポルトガル語",
-          "ja" to "日本語",
-          "en" to "英語",
-          "ko" to "韓国語",
-          "es" to "スペイン語",
-          "de" to "ドイツ語",
-          "id" to "インドネシア語",
-          "fr" to "フランス語",
-          "zh-CN" to "中国語（簡体字）",
-          "zh-TW" to "中国語（繁体字）",
-          "ru" to "ロシア語",
-          "th" to "タイ語",
-          "vi" to "ベトナム語",
+          "pt" to "Portuguese",
+          "en" to "English",
+          "ko" to "Korean",
+          "ja" to "Japanese",
+          "es" to "Spanish",
+          "de" to "German",
+          "id" to "Indonesian",
+          "fr" to "French",
+          "zh-CN" to "Chinese-Simplified",
+          "zh-TW" to "Chinese-Traditional",
+          "ru" to "Russian",
+          "th" to "Thai",
+          "vi" to "Vietnamese",
       )
   private val codePattern = Regex("[A-Za-z]{2,8}(?:-[A-Za-z]{2,8}){0,2}")
 
   val suggestions = listOf("auto", "off") + names.values
 
   /** Command input uses names; language codes remain the internal and persisted representation. */
-  fun code(value: String): String? = names.entries.firstOrNull { it.value == value }?.key
+  fun code(value: String): String? = names.entries.firstOrNull { it.value.equals(value, true) }?.key
 
   fun languageName(code: String): String =
       names.entries.firstOrNull { it.key.equals(code, true) }?.value ?: code

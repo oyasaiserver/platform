@@ -96,7 +96,10 @@ class OyasaiCommandExecutor(
           }
           is io.oyasai.chat.common.japanize.LanguageArgument.Check ->
               plugin.sourceMessages.check(player, argument.id)
-          null -> player.sendMessage(chat.formatter.error("Usage: /lang [auto|off|言語名|check <id>]"))
+          null ->
+              player.sendMessage(
+                  chat.formatter.error("Usage: /lang [auto|off|language-name|check <id>]")
+              )
         }
         true
       }
