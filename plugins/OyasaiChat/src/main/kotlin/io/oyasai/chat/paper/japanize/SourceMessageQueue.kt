@@ -105,9 +105,7 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
       player.sendMessage(net.kyori.adventure.text.Component.text("数秒待ってから判定してください"))
       return
     }
-    val mode = plugin.runtime.states.get(player).languageMode
-    val names = plugin.runtime.presence.snapshot() + plugin.server.onlinePlayers.map { it.name }
-    engine.check(text, mode, names, dictionary.effective()).whenComplete { result, error ->
+    engine.check(text).whenComplete { result, error ->
       runCatching {
         plugin.server.scheduler.runTask(
             plugin,
