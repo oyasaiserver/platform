@@ -252,40 +252,110 @@ class LanguageModeTest {
   }
 
   @Test
-  fun checkShowsJapaneseLatinRomanizationAndTargetsReadersMode() {
-    val targets = mutableListOf<String>()
+  fun checkShowsJapaneseLatinAsJapaneseWithoutRomanization() {
+    val requests = mutableListOf<Pair<String, String>>()
     val engine =
         LanguageEngine(
             settings,
-            { _, target ->
-              targets += target
+            { text, target ->
+              requests += text to target
               CompletableFuture.completedFuture(
                   Translation("unused", "ja", 1.0, listOf(LanguageCandidate("ja", 1.0, "ja-Latn")))
               )
             },
-            { CompletableFuture.completedFuture(it.replace("こんばんは", "今晩は")) },
+            { error("judgment must not romanize") },
         )
-    assertEquals(
-        "[判定] Japanese 100% → 今晩は",
-        engine.check("konbanha", "pt", emptyList(), emptyMap()).join(),
-    )
-    engine.check("konbanha", "auto", emptyList(), emptyMap()).join()
-    engine.check("konbanha", "off", emptyList(), emptyMap()).join()
-    assertEquals(listOf("pt", "ja", "ja"), targets)
+    assertEquals("[判定] Japanese 100%", engine.check("konbanha").join())
+    assertEquals(listOf("konbanha" to "ja"), requests)
     val noCandidates =
         LanguageEngine(
             settings,
             { _, _ -> CompletableFuture.completedFuture(Translation("こんばんは", "pt", 1.0)) },
             { error("not romaji") },
         )
-    assertEquals(
-        "[判定] Portuguese 100% → こんばんは",
-        noCandidates.check("boa noite", "auto", emptyList(), emptyMap()).join(),
-    )
+    assertEquals("[判定] Portuguese 100%", noCandidates.check("boa noite").join())
     val failed = LanguageEngine(settings, { _, _ -> error("fixture") }, { error("fixture") })
-    assertTrue(
-        failed.check("boa noite", "auto", emptyList(), emptyMap()).join().contains("判定できませんでした")
-    )
+    assertTrue(failed.check("boa noite").join().contains("判定できませんでした"))
+  }
+
+  @Test
+  fun checkShowsSingleJapaneseCandidateWithoutTranslation() {
+    val engine =
+        LanguageEngine(
+            settings,
+            { _, _ ->
+              CompletableFuture.completedFuture(
+                  Translation("Hello", "ja", 1.0, listOf(LanguageCandidate("ja", 1.0)))
+              )
+            },
+            { error("judgment must not convert") },
+        )
+    assertEquals("[判定] Japanese 100%", engine.check("こんにちは").join())
+  }
+
+  @Test
+  fun checkShowsTopThreeCandidatesSeparatedByJapaneseCommas() {
+    val result =
+        GoogleTranslationResponse.parse(
+            """[[["Hello"]],null,"ja",null,null,null,0.7,null,[["ko","en","ja","de"],null,[0.05,0.2,0.7,0.03],["ko","en","ja","de"]]]"""
+        )
+    val engine =
+        LanguageEngine(
+            settings,
+            { _, _ -> CompletableFuture.completedFuture(result) },
+            { error("judgment must not convert") },
+        )
+    assertEquals("[判定] Japanese 70%、English 20%、Korean 5%", engine.check("fixture").join())
+  }
+
+  @Test
+  fun checkNormalizesJapaneseLatinDetailForEveryCandidate() {
+    val engine =
+        LanguageEngine(
+            settings,
+            { _, _ ->
+              CompletableFuture.completedFuture(
+                  Translation(
+                      "unused",
+                      "en",
+                      0.7,
+                      listOf(
+                          LanguageCandidate("en", 0.7),
+                          LanguageCandidate("ja-Latn", 0.3, "JA-latn"),
+                      ),
+                  )
+              )
+            },
+            { error("judgment must not romanize") },
+        )
+    assertEquals("[判定] English 70%、Japanese 30%", engine.check("fixture").join())
+  }
+
+  @Test
+  fun checkReturnsTheSameJudgmentForHiraganaAndConvertedKana() {
+    val requests = mutableListOf<Pair<String, String>>()
+    val engine =
+        LanguageEngine(
+            settings,
+            { text, target ->
+              requests += text to target
+              CompletableFuture.completedFuture(
+                  if (target == "pt") Translation("Olá", "ja", 1.0)
+                  else if (text == "こんにちは") Translation("unused", "ja", 1.0)
+                  else Translation("unused", "en", 0.5)
+              )
+            },
+            { CompletableFuture.completedFuture(it) },
+        )
+    val hiragana = engine.prepare("こんにちは", "pt", emptyList(), emptyMap()).join()
+    val romanized = engine.prepare("kon'nichiha", "pt", emptyList(), emptyMap()).join()
+    requests.clear()
+    val hiraganaJudgment = engine.check(judgmentSource(hiragana.copy(input = "こんにちは"))).join()
+    val romanizedJudgment =
+        engine.check(judgmentSource(romanized.copy(input = "kon'nichiha"))).join()
+    assertEquals("[判定] Japanese 100%", hiraganaJudgment)
+    assertEquals(hiraganaJudgment, romanizedJudgment)
+    assertEquals(listOf("こんにちは" to "ja", "こんにちは" to "ja"), requests)
   }
 
   @Test
@@ -311,8 +381,8 @@ class LanguageModeTest {
             { error("fixture") },
         )
     assertEquals(
-        "[判定] xx 50%、Portuguese 30%、English 10% → 訳",
-        engine.check("fixture", "en", emptyList(), emptyMap()).join(),
+        "[判定] xx 50%、Portuguese 30%、English 10%",
+        engine.check("fixture").join(),
     )
   }
 

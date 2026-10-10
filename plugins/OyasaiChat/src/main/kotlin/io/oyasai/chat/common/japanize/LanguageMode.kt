@@ -52,8 +52,6 @@ object LanguageMode {
         else -> code(value)
       }
 
-  fun target(mode: String): String = if (mode == "auto" || mode == "off") "ja" else mode
-
   fun same(source: String, target: String): Boolean =
       source.equals(target, true) || (source.equals("ja-Latn", true) && target.equals("ja", true))
 }
@@ -94,7 +92,7 @@ class LanguageEngine(
           .orTimeout(settings.timeoutMillis, TimeUnit.MILLISECONDS)
           .exceptionally { null }
 
-  fun romanize(
+  private fun romanize(
       text: String,
       names: Collection<String>,
       dictionary: Map<String, String>,
@@ -124,14 +122,9 @@ class LanguageEngine(
     }
   }
 
-  fun check(
-      text: String,
-      mode: String,
-      names: Collection<String>,
-      dictionary: Map<String, String>,
-  ): CompletableFuture<String> =
-      request(text, LanguageMode.target(mode)).thenCompose { result ->
-        if (result == null) CompletableFuture.completedFuture("[判定] 判定できませんでした。時間を空けて再試行してください")
+  fun check(text: String): CompletableFuture<String> =
+      request(text, "ja").thenApply { result ->
+        if (result == null) "[判定] 判定できませんでした。時間を空けて再試行してください"
         else {
           val candidates =
               result.candidates.ifEmpty {
@@ -139,14 +132,14 @@ class LanguageEngine(
               }
           val labels =
               candidates.take(3).joinToString("、") { candidate ->
-                LanguageMode.languageName(candidate.language) +
+                val language =
+                    if (candidate.detail.equals("ja-Latn", true)) "ja" else candidate.language
+                LanguageMode.languageName(language) +
                     " " +
                     (candidate.confidence * 100).roundToInt() +
                     "%"
               }
-          if (candidates.first().detail.equals("ja-Latn", true)) {
-            romanize(text, names, dictionary).thenApply { "[判定] $labels → " + it.text }
-          } else CompletableFuture.completedFuture("[判定] $labels → " + result.text)
+          "[判定] $labels"
         }
       }
 
