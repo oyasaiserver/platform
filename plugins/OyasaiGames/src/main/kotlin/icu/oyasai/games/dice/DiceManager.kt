@@ -153,10 +153,6 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     }
   }
 
-  fun hideBedrockEntitiesFor(player: Player) {
-    updatePlayerVisibility(player)
-  }
-
   fun removeGroup(group: DiceGroup) {
     activeGroups.remove(group)
   }
