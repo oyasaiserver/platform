@@ -2,6 +2,7 @@ package icu.oyasai.games.roulette.gui;
 
 import icu.oyasai.games.roulette.model.RouletteMode;
 import icu.oyasai.games.roulette.model.RouletteSession;
+import icu.oyasai.games.roulette.service.RouletteManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -35,6 +36,7 @@ public class RouletteGui {
     public static final int SLOT_CANCEL = 18;
     public static final int SLOT_VISIBILITY = 20;
     public static final int SLOT_INFO = 22;
+    public static final int SLOT_RECEIVE_CHAT = 24;
     public static final int SLOT_START = 26;
 
     /**
@@ -46,7 +48,7 @@ public class RouletteGui {
         Inventory inv = Bukkit.createInventory(holder, INVENTORY_SIZE, title);
         holder.setInventory(inv);
 
-        render(inv, session);
+        render(inv, player, session);
         player.openInventory(inv);
     }
 
@@ -54,6 +56,14 @@ public class RouletteGui {
      * 現在のセッション状態に合わせてGUI内のアイテムを描画・更新します。
      */
     public static void render(Inventory inv, RouletteSession session) {
+        Player player = Bukkit.getPlayer(session.getPlayerUuid());
+        render(inv, player, session);
+    }
+
+    /**
+     * プレイヤーおよび現在のセッション状態に合わせてGUI内のアイテムを描画・更新します。
+     */
+    public static void render(Inventory inv, Player player, RouletteSession session) {
         if (inv.getHolder() instanceof RouletteGuiHolder holder) {
             holder.setState(RouletteGuiHolder.State.SELECTING);
         }
@@ -78,10 +88,20 @@ public class RouletteGui {
         inv.setItem(SLOT_COUNT_3, createCountItem(3, currentCount == 3));
         inv.setItem(SLOT_COUNT_5, createCountItem(5, currentCount == 5));
 
+        // 他人の結果受信設定の取得
+        boolean isReceiveChat = true;
+        if (player != null && icu.oyasai.games.OyasaiGamesPlugin.getInstance() != null) {
+            RouletteManager rm = icu.oyasai.games.OyasaiGamesPlugin.getInstance().getRouletteManager();
+            if (rm != null) {
+                isReceiveChat = rm.isChatReceiveEnabled(player);
+            }
+        }
+
         // 4. 下段操作ボタン
         inv.setItem(SLOT_CANCEL, createCancelButton());
         inv.setItem(SLOT_VISIBILITY, createVisibilityButton(session.isBroadcastToAll()));
-        inv.setItem(SLOT_INFO, createInfoItem(session));
+        inv.setItem(SLOT_INFO, createInfoItem(session, isReceiveChat));
+        inv.setItem(SLOT_RECEIVE_CHAT, createReceiveChatItem(isReceiveChat));
         inv.setItem(SLOT_START, createStartButton());
     }
 
@@ -286,6 +306,10 @@ public class RouletteGui {
     }
 
     private static ItemStack createInfoItem(RouletteSession session) {
+        return createInfoItem(session, true);
+    }
+
+    private static ItemStack createInfoItem(RouletteSession session, boolean isReceiveChat) {
         ItemStack item = new ItemStack(Material.BOOK);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -300,6 +324,9 @@ public class RouletteGui {
                     .decoration(TextDecoration.ITALIC, false));
             lore.add(Component.text("・公開設定　：", NamedTextColor.GRAY)
                     .append(Component.text(session.isBroadcastToAll() ? "全体公開" : "自分のみ（非公開）", session.isBroadcastToAll() ? NamedTextColor.GREEN : NamedTextColor.AQUA, TextDecoration.BOLD))
+                    .decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("・他人の結果受信：", NamedTextColor.GRAY)
+                    .append(Component.text(isReceiveChat ? "受信する (ON)" : "非表示 (OFF)", isReceiveChat ? NamedTextColor.GREEN : NamedTextColor.RED, TextDecoration.BOLD))
                     .decoration(TextDecoration.ITALIC, false));
 
             // 匠特典 / ロック中ステータス
@@ -317,6 +344,45 @@ public class RouletteGui {
             lore.add(Component.text("右下のトーチをクリックすると抽選を開始します！", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
 
             meta.lore(lore);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    public static ItemStack createReceiveChatItem(boolean isReceive) {
+        ItemStack item = new ItemStack(Material.BELL);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            if (isReceive) {
+                Component name = Component.text("🔔 他人の結果受信: 【ON】", NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false);
+                meta.displayName(name);
+                List<Component> lore = new ArrayList<>();
+                lore.add(Component.text("他プレイヤーのルーレット結果を", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text("チャットで受信します。", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+                lore.add(Component.text("現在の設定: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
+                        .append(Component.text("受信する (ON)", NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false)));
+                lore.add(Component.text("▶ クリックして「受信OFF (非表示)」に切り替え", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+                lore.add(Component.text("※自分が回したルーレットの結果は常に表示されます", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
+                meta.lore(lore);
+                meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            } else {
+                Component name = Component.text("🔕 他人の結果受信: 【OFF】", NamedTextColor.RED, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false);
+                meta.displayName(name);
+                List<Component> lore = new ArrayList<>();
+                lore.add(Component.text("他プレイヤーのルーレット結果を", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text("チャットに流さないようにミュートします。", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+                lore.add(Component.text("現在の設定: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
+                        .append(Component.text("非表示 (OFF)", NamedTextColor.RED, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false)));
+                lore.add(Component.text("▶ クリックして「受信ON (表示)」に切り替え", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+                lore.add(Component.text("※自分が回したルーレットの結果は常に表示されます", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
+                meta.lore(lore);
+            }
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
         }
         return item;
