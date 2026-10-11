@@ -104,7 +104,7 @@ class DiceListener(
           chargeManager.cancel(player)
           val currentMode = diceItem.getDiceMode(diceToUse)
           val isBroadcast = diceItem.isBroadcast(diceToUse)
-          DiceMenuGui.open(player, currentMode, isBroadcast, diceItem)
+          DiceMenuGui.open(player, currentMode, isBroadcast, diceItem, diceManager)
         } else {
           chargeManager.onRightClick(player, diceToUse)
         }
@@ -233,12 +233,31 @@ class DiceListener(
         val statusText = if (newBroadcast) "全体公開 (ON)" else "自分のみ (OFF)"
         val statusColor = if (newBroadcast) NamedTextColor.GREEN else NamedTextColor.RED
         player.sendMessage(
-            Component.text("[おやさいサイコロ] チャット通知を ", NamedTextColor.GOLD)
+            Component.text("[おやさいサイコロ] 投擲時のチャット通知を ", NamedTextColor.GOLD)
                 .append(Component.text(statusText, statusColor))
                 .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
         )
         val refreshedMode = diceItem.getDiceMode(heldItem)
-        DiceMenuGui.open(player, refreshedMode, newBroadcast, diceItem)
+        DiceMenuGui.open(player, refreshedMode, newBroadcast, diceItem, diceManager)
+      }
+      DiceMenuGui.SLOT_RECEIVE_CHAT -> {
+        val newReceive = diceManager.toggleChatReceive(player)
+        player.playSound(
+            player.location,
+            Sound.UI_BUTTON_CLICK,
+            0.8f,
+            if (newReceive) 1.4f else 0.8f,
+        )
+        val statusText = if (newReceive) "受信する (ON)" else "受信しない (OFF)"
+        val statusColor = if (newReceive) NamedTextColor.GREEN else NamedTextColor.RED
+        player.sendMessage(
+            Component.text("[おやさいサイコロ] 他人のサイコロ結果のチャット通知を ", NamedTextColor.GOLD)
+                .append(Component.text(statusText, statusColor))
+                .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
+        )
+        val currentMode = diceItem.getDiceMode(heldItem)
+        val isBroadcast = diceItem.isBroadcast(heldItem)
+        DiceMenuGui.open(player, currentMode, isBroadcast, diceItem, diceManager)
       }
       DiceMenuGui.SLOT_STATUS -> {
         player.playSound(player.location, Sound.ITEM_BOOK_PAGE_TURN, 0.7f, 1.0f)
@@ -263,7 +282,7 @@ class DiceListener(
             .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
     )
     val isBroadcast = diceItem.isBroadcast(item)
-    DiceMenuGui.open(player, mode, isBroadcast, diceItem)
+    DiceMenuGui.open(player, mode, isBroadcast, diceItem, diceManager)
   }
 
   private fun updateCountAndRefresh(
@@ -287,7 +306,7 @@ class DiceListener(
             .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
     )
     val isBroadcast = diceItem.isBroadcast(item)
-    DiceMenuGui.open(player, newMode, isBroadcast, diceItem)
+    DiceMenuGui.open(player, newMode, isBroadcast, diceItem, diceManager)
   }
 
   @EventHandler(priority = EventPriority.HIGH)

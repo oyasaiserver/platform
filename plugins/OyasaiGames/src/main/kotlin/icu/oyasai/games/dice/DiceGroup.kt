@@ -256,7 +256,10 @@ class DiceGroup(
     // 半径30ブロック以内のプレイヤーにメッセージを届ける
     for (p in world.players) {
       if (p.location.distanceSquared(center) <= 30.0 * 30.0) {
-        p.sendMessage(message)
+        // 投げた本人、または他人のサイコロ結果のチャット受信を有効にしているプレイヤーにのみ送信
+        if (p == sourcePlayer || diceManager.isChatReceiveEnabled(p)) {
+          p.sendMessage(message)
+        }
       }
     }
   }

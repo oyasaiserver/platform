@@ -4,14 +4,39 @@ import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
 import org.bukkit.util.Vector
 
 class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
   var chargeManager: DiceChargeManager? = null
   private val activeGroups = CopyOnWriteArrayList<DiceGroup>()
+  val chatReceiveKey = NamespacedKey(plugin, "dice_chat_receive")
+
+  /** 他人のサイコロ結果をチャットで受信するかどうか（デフォルト: true） */
+  fun isChatReceiveEnabled(player: Player): Boolean {
+    val value = player.persistentDataContainer.get(chatReceiveKey, PersistentDataType.BYTE)
+    return value == null || value == 1.toByte()
+  }
+
+  /** 他人のサイコロ結果のチャット受信を設定 */
+  fun setChatReceiveEnabled(player: Player, enabled: Boolean) {
+    player.persistentDataContainer.set(
+        chatReceiveKey,
+        PersistentDataType.BYTE,
+        if (enabled) 1.toByte() else 0.toByte(),
+    )
+  }
+
+  /** 他人のサイコロ結果のチャット受信設定を反転切り替え */
+  fun toggleChatReceive(player: Player): Boolean {
+    val next = !isChatReceiveEnabled(player)
+    setChatReceiveEnabled(player, next)
+    return next
+  }
 
   /** 指定したプレイヤーが投げたサイコロがフィールド上に現在存在するか（投擲中〜回収前） */
   fun hasActiveDice(player: Player): Boolean {

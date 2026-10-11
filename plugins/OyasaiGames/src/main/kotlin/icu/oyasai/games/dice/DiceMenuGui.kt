@@ -53,12 +53,19 @@ object DiceMenuGui {
   const val SLOT_COUNT_9 = 32
   const val SLOT_COUNT_10 = 33
 
-  // 5段目 (一番下の段): キャンセル (一番左下), チャット通知, 現在の設定情報(本)
+  // 5段目 (一番下の段): キャンセル (一番左下), チャット通知, 現在の設定情報(本), 他人結果受信設定
   const val SLOT_CLOSE = 36
   const val SLOT_BROADCAST = 38
   const val SLOT_STATUS = 40
+  const val SLOT_RECEIVE_CHAT = 42
 
-  fun open(player: Player, currentMode: DiceMode, isBroadcast: Boolean, diceItem: DiceItem) {
+  fun open(
+      player: Player,
+      currentMode: DiceMode,
+      isBroadcast: Boolean,
+      diceItem: DiceItem,
+      diceManager: DiceManager,
+  ) {
     val holder = DiceMenuHolder()
     val title = Component.text("🎲 ダイス設定・モード変更", NamedTextColor.DARK_AQUA, TextDecoration.BOLD)
     val inv = Bukkit.createInventory(holder, INVENTORY_SIZE, title)
@@ -129,10 +136,12 @@ object DiceMenuGui {
     inv.setItem(SLOT_COUNT_9, createCountItem(9, currentMode.diceCount == 9))
     inv.setItem(SLOT_COUNT_10, createCountItem(10, currentMode.diceCount == 10))
 
-    // 5段目 (一番下の段): キャンセル (一番左下), チャット通知設定 (エンダーアイ), 現在の設定情報 (本)
+    // 5段目 (一番下の段): キャンセル, 投擲時公開設定, 現在の設定情報, 他人結果受信設定
+    val isReceiveChat = diceManager.isChatReceiveEnabled(player)
     inv.setItem(SLOT_CLOSE, createCancelButton())
     inv.setItem(SLOT_BROADCAST, createBroadcastItem(isBroadcast))
-    inv.setItem(SLOT_STATUS, createStatusItem(player, currentMode, isBroadcast))
+    inv.setItem(SLOT_STATUS, createStatusItem(player, currentMode, isBroadcast, isReceiveChat))
+    inv.setItem(SLOT_RECEIVE_CHAT, createReceiveChatItem(isReceiveChat))
 
     player.openInventory(inv)
   }
@@ -287,6 +296,7 @@ object DiceMenuGui {
       player: Player,
       mode: DiceMode,
       isBroadcast: Boolean,
+      isReceiveChat: Boolean,
   ): ItemStack {
     val item = ItemStack(Material.BOOK)
     val meta = item.itemMeta ?: return item
@@ -300,9 +310,16 @@ object DiceMenuGui {
 
     val broadcastText =
         if (isBroadcast) {
-          Component.text("全体公開", NamedTextColor.GREEN, TextDecoration.BOLD)
+          Component.text("全体公開 (ON)", NamedTextColor.GREEN, TextDecoration.BOLD)
         } else {
           Component.text("自分のみ（非公開）", NamedTextColor.AQUA, TextDecoration.BOLD)
+        }
+
+    val receiveChatText =
+        if (isReceiveChat) {
+          Component.text("受信する (ON)", NamedTextColor.GREEN, TextDecoration.BOLD)
+        } else {
+          Component.text("非表示 (OFF)", NamedTextColor.RED, TextDecoration.BOLD)
         }
 
     val eyesRange =
@@ -314,15 +331,15 @@ object DiceMenuGui {
 
     val lore =
         listOf(
-            Component.text("・プレイヤー名：", NamedTextColor.GRAY)
+            Component.text("・プレイヤー名　：", NamedTextColor.GRAY)
                 .append(Component.text(player.name, NamedTextColor.WHITE, TextDecoration.BOLD))
                 .decoration(TextDecoration.ITALIC, false),
-            Component.text("・選択中ダイス：", NamedTextColor.GRAY)
+            Component.text("・選択中ダイス　：", NamedTextColor.GRAY)
                 .append(
                     Component.text(mode.displayName, NamedTextColor.YELLOW, TextDecoration.BOLD)
                 )
                 .decoration(TextDecoration.ITALIC, false),
-            Component.text("・投げる個数　：", NamedTextColor.GRAY)
+            Component.text("・投げる個数　　：", NamedTextColor.GRAY)
                 .append(
                     Component.text(
                         "${mode.diceCount} 個 (${mode.diceCount}D)",
@@ -331,16 +348,19 @@ object DiceMenuGui {
                     )
                 )
                 .decoration(TextDecoration.ITALIC, false),
-            Component.text("・出目範囲　　：", NamedTextColor.GRAY)
+            Component.text("・出目範囲　　　：", NamedTextColor.GRAY)
                 .append(Component.text(eyesRange, NamedTextColor.AQUA, TextDecoration.BOLD))
                 .decoration(TextDecoration.ITALIC, false),
-            Component.text("・公開設定　　：", NamedTextColor.GRAY)
+            Component.text("・投擲時公開設定：", NamedTextColor.GRAY)
                 .append(broadcastText)
                 .decoration(TextDecoration.ITALIC, false),
-            Component.text("・クールタイム：", NamedTextColor.GRAY)
+            Component.text("・他人の結果受信：", NamedTextColor.GRAY)
+                .append(receiveChatText)
+                .decoration(TextDecoration.ITALIC, false),
+            Component.text("・クールタイム　：", NamedTextColor.GRAY)
                 .append(Component.text("2 秒", NamedTextColor.WHITE, TextDecoration.BOLD))
                 .decoration(TextDecoration.ITALIC, false),
-            Component.text("・自動回収　　：", NamedTextColor.GRAY)
+            Component.text("・自動回収　　　：", NamedTextColor.GRAY)
                 .append(Component.text("15 秒 (または右クリック手動回収)", NamedTextColor.WHITE))
                 .decoration(TextDecoration.ITALIC, false),
             Component.empty(),
@@ -349,6 +369,72 @@ object DiceMenuGui {
         )
 
     meta.lore(lore)
+    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+    item.itemMeta = meta
+    return item
+  }
+
+  private fun createReceiveChatItem(isReceive: Boolean): ItemStack {
+    val item = ItemStack(Material.BELL)
+    val meta = item.itemMeta ?: return item
+
+    if (isReceive) {
+      val name =
+          Component.text("🔔 他人の結果受信: 【ON】", NamedTextColor.GREEN, TextDecoration.BOLD)
+              .decoration(TextDecoration.ITALIC, false)
+      meta.customName(name)
+      meta.displayName(name)
+      meta.lore(
+          listOf(
+              Component.text("周囲のプレイヤーがサイコロを振った結果を", NamedTextColor.GRAY)
+                  .decoration(TextDecoration.ITALIC, false),
+              Component.text("チャットで受信します。", NamedTextColor.GRAY)
+                  .decoration(TextDecoration.ITALIC, false),
+              Component.empty(),
+              Component.text("現在の設定: ", NamedTextColor.GRAY)
+                  .decoration(TextDecoration.ITALIC, false)
+                  .append(
+                      Component.text("受信する (ON)", NamedTextColor.GREEN, TextDecoration.BOLD)
+                          .decoration(TextDecoration.ITALIC, false)
+                  ),
+              Component.text("▶ クリックして「受信OFF (非表示)」に切り替え", NamedTextColor.YELLOW)
+                  .decoration(TextDecoration.ITALIC, false),
+              Component.empty(),
+              Component.text("※自分が振ったサイコロの結果は常に表示されます", NamedTextColor.DARK_GRAY)
+                  .decoration(TextDecoration.ITALIC, false),
+          )
+      )
+      meta.setEnchantmentGlintOverride(true)
+      meta.addEnchant(Enchantment.UNBREAKING, 1, true)
+      meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+    } else {
+      val name =
+          Component.text("🔕 他人の結果受信: 【OFF】", NamedTextColor.RED, TextDecoration.BOLD)
+              .decoration(TextDecoration.ITALIC, false)
+      meta.customName(name)
+      meta.displayName(name)
+      meta.lore(
+          listOf(
+              Component.text("周囲のプレイヤーがサイコロを振った結果を", NamedTextColor.GRAY)
+                  .decoration(TextDecoration.ITALIC, false),
+              Component.text("チャットに流さないようにミュートします。", NamedTextColor.GRAY)
+                  .decoration(TextDecoration.ITALIC, false),
+              Component.empty(),
+              Component.text("現在の設定: ", NamedTextColor.GRAY)
+                  .decoration(TextDecoration.ITALIC, false)
+                  .append(
+                      Component.text("非表示 (OFF)", NamedTextColor.RED, TextDecoration.BOLD)
+                          .decoration(TextDecoration.ITALIC, false)
+                  ),
+              Component.text("▶ クリックして「受信ON (表示)」に切り替え", NamedTextColor.YELLOW)
+                  .decoration(TextDecoration.ITALIC, false),
+              Component.empty(),
+              Component.text("※自分が振ったサイコロの結果は常に表示されます", NamedTextColor.DARK_GRAY)
+                  .decoration(TextDecoration.ITALIC, false),
+          )
+      )
+    }
+
     meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
     item.itemMeta = meta
     return item
