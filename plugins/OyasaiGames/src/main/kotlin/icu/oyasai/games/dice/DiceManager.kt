@@ -99,7 +99,13 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
   }
 
   @JvmOverloads
-  fun throwDice(player: Player, powerRatio: Double, mode: DiceMode, isBroadcast: Boolean = true) {
+  fun throwDice(
+      player: Player,
+      powerRatio: Double,
+      mode: DiceMode,
+      isBroadcast: Boolean = true,
+      playerInertia: Vector? = null,
+  ) {
     // プレイヤーの視線方向ベクトル
     val eyeLoc = player.eyeLocation
     val direction = eyeLoc.direction.normalize()
@@ -107,8 +113,20 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     // パワー係数 (最小0.45, 最大1.6)
     val speed = 0.45 + powerRatio * 1.15
 
-    // 少し上向きに放物線を描かせる
-    val velocity = direction.multiply(speed).add(Vector(0.0, 0.15 + powerRatio * 0.1, 0.0))
+    // 基本の初速（視線方向＋少し上向き放物線）
+    val baseVelocity = direction.multiply(speed).add(Vector(0.0, 0.15 + powerRatio * 0.1, 0.0))
+
+    // 走った分・ジャンプした分の移動慣性をサイコロ初速度に上乗せ
+    val velocity =
+        if (playerInertia != null && playerInertia.lengthSquared() > 0.0001) {
+          // 水平方向は走った勢いをそのまま加算 (1.0倍)
+          // 垂直方向(Y)は、ジャンプ中の上昇力(0.8倍)を反映し、落下時は下がりすぎないよう抑える(0.3倍)
+          val inertiaY = if (playerInertia.y > 0) playerInertia.y * 0.8 else playerInertia.y * 0.3
+          val inertia = Vector(playerInertia.x * 1.0, inertiaY, playerInertia.z * 1.0)
+          baseVelocity.add(inertia)
+        } else {
+          baseVelocity
+        }
 
     val spawnLoc = eyeLoc.clone().add(direction.clone().multiply(0.4))
 
