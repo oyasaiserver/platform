@@ -230,10 +230,10 @@ class DiceListener(
             0.8f,
             if (newBroadcast) 1.4f else 0.8f,
         )
-        val statusText = if (newBroadcast) "全体公開 (ON)" else "自分のみ (OFF)"
-        val statusColor = if (newBroadcast) NamedTextColor.GREEN else NamedTextColor.RED
+        val statusText = if (newBroadcast) "全体公開 (ON)" else "自分のみ (非公開)"
+        val statusColor = if (newBroadcast) NamedTextColor.GREEN else NamedTextColor.AQUA
         player.sendMessage(
-            Component.text("[おやさいサイコロ] 投擲時のチャット通知を ", NamedTextColor.GOLD)
+            Component.text("[おやさいサイコロ] 投擲時の公開設定を ", NamedTextColor.GOLD)
                 .append(Component.text(statusText, statusColor))
                 .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
         )

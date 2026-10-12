@@ -249,12 +249,13 @@ object DiceMenuGui {
   }
 
   private fun createBroadcastItem(isBroadcast: Boolean): ItemStack {
-    val item = ItemStack(Material.ENDER_EYE)
+    val material = if (isBroadcast) Material.ENDER_EYE else Material.ENDER_PEARL
+    val item = ItemStack(material)
     val meta = item.itemMeta ?: return item
 
     if (isBroadcast) {
       val name =
-          Component.text("📢 チャット通知: 全体公開 【ON】", NamedTextColor.GREEN, TextDecoration.BOLD)
+          Component.text("📢 公開設定: 【全体公開】", NamedTextColor.GREEN, TextDecoration.BOLD)
               .decoration(TextDecoration.ITALIC, false)
       meta.customName(name)
       meta.displayName(name)
@@ -263,7 +264,7 @@ object DiceMenuGui {
               Component.text("サイコロを振った結果を周囲のプレイヤーに通知します。", NamedTextColor.GRAY)
                   .decoration(TextDecoration.ITALIC, false),
               Component.empty(),
-              Component.text("▶ クリックして「自分のみ（非公開）」に切り替え", NamedTextColor.YELLOW)
+              Component.text("▶ クリックして「自分のみ（非公開）」に切り替え", NamedTextColor.AQUA)
                   .decoration(TextDecoration.ITALIC, false),
           )
       )
@@ -272,7 +273,7 @@ object DiceMenuGui {
       meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
     } else {
       val name =
-          Component.text("🔒 チャット通知: 自分のみ 【OFF】", NamedTextColor.RED, TextDecoration.BOLD)
+          Component.text("🔒 公開設定: 【自分のみ（非公開）】", NamedTextColor.AQUA, TextDecoration.BOLD)
               .decoration(TextDecoration.ITALIC, false)
       meta.customName(name)
       meta.displayName(name)
@@ -281,7 +282,7 @@ object DiceMenuGui {
               Component.text("結果通知はあなたのチャットにのみ届きます（周囲に通知しません）。", NamedTextColor.GRAY)
                   .decoration(TextDecoration.ITALIC, false),
               Component.empty(),
-              Component.text("▶ クリックして「全体公開」に切り替え", NamedTextColor.YELLOW)
+              Component.text("▶ クリックして「全体公開」に切り替え", NamedTextColor.GREEN)
                   .decoration(TextDecoration.ITALIC, false),
           )
       )
