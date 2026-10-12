@@ -247,11 +247,6 @@ public class RouletteGui {
             meta.displayName(Component.text(prefix + mode.getDisplayName(), titleColor, bold).decoration(TextDecoration.ITALIC, false));
 
             List<Component> lore = new ArrayList<>();
-            if (isSelected) {
-                lore.add(Component.text("✔ 現在選択中", NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.empty());
-            }
-
             lore.add(Component.text(mode.getDescription(), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
             lore.add(Component.empty());
 
@@ -295,11 +290,6 @@ public class RouletteGui {
             meta.displayName(Component.text(prefix + count + " 回 抽選", titleColor, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
 
             List<Component> lore = new ArrayList<>();
-            if (isSelected) {
-                lore.add(Component.text("✔ 現在選択中", NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.empty());
-            }
-
             lore.add(Component.text(count + "個のブロックをランダムに抽選します。", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
 
             if (isSelected) {
