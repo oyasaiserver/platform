@@ -243,9 +243,15 @@ public class RouletteGui {
         if (meta != null) {
             NamedTextColor titleColor = isSelected ? NamedTextColor.GREEN : NamedTextColor.WHITE;
             TextDecoration bold = TextDecoration.BOLD;
-            meta.displayName(Component.text(mode.getDisplayName(), titleColor, bold).decoration(TextDecoration.ITALIC, false));
+            String prefix = isSelected ? "✔ 【選択中】" : "";
+            meta.displayName(Component.text(prefix + mode.getDisplayName(), titleColor, bold).decoration(TextDecoration.ITALIC, false));
 
             List<Component> lore = new ArrayList<>();
+            if (isSelected) {
+                lore.add(Component.text("✔ 現在選択中", NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+            }
+
             lore.add(Component.text(mode.getDescription(), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
             lore.add(Component.empty());
 
@@ -255,14 +261,15 @@ public class RouletteGui {
             } else {
                 lore.add(Component.text("🔒 匠限定ブロック（コマブロ等）: ロック中", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
             }
-            lore.add(Component.empty());
 
             if (isSelected) {
-                lore.add(Component.text("✔ 現在選択中", NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+                meta.setEnchantmentGlintOverride(true);
                 meta.addEnchant(Enchantment.UNBREAKING, 1, true);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             } else {
+                lore.add(Component.empty());
                 lore.add(Component.text("▶ クリックして選択", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                meta.setEnchantmentGlintOverride(false);
             }
 
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -283,19 +290,26 @@ public class RouletteGui {
         ItemStack item = new ItemStack(mat, count);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            NamedTextColor titleColor = isSelected ? NamedTextColor.AQUA : NamedTextColor.WHITE;
-            meta.displayName(Component.text(count + " 回 抽選", titleColor, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+            NamedTextColor titleColor = isSelected ? NamedTextColor.GREEN : NamedTextColor.WHITE;
+            String prefix = isSelected ? "✔ 【選択中】" : "";
+            meta.displayName(Component.text(prefix + count + " 回 抽選", titleColor, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
 
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.text(count + "個のブロックをランダムに抽選します。", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-            lore.add(Component.empty());
-
             if (isSelected) {
                 lore.add(Component.text("✔ 現在選択中", NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+            }
+
+            lore.add(Component.text(count + "個のブロックをランダムに抽選します。", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+
+            if (isSelected) {
+                meta.setEnchantmentGlintOverride(true);
                 meta.addEnchant(Enchantment.UNBREAKING, 1, true);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             } else {
+                lore.add(Component.empty());
                 lore.add(Component.text("▶ クリックして選択", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                meta.setEnchantmentGlintOverride(false);
             }
 
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -366,6 +380,7 @@ public class RouletteGui {
                 lore.add(Component.empty());
                 lore.add(Component.text("※自分が回したルーレットの結果は常に表示されます", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
                 meta.lore(lore);
+                meta.setEnchantmentGlintOverride(true);
                 meta.addEnchant(Enchantment.UNBREAKING, 1, true);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             } else {
@@ -381,6 +396,7 @@ public class RouletteGui {
                 lore.add(Component.empty());
                 lore.add(Component.text("※自分が回したルーレットの結果は常に表示されます", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
                 meta.lore(lore);
+                meta.setEnchantmentGlintOverride(false);
             }
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
@@ -407,6 +423,9 @@ public class RouletteGui {
                 lore.add(Component.empty());
                 lore.add(Component.text("▶ クリックで「自分のみ（非公開）」に切り替え", NamedTextColor.AQUA).decoration(TextDecoration.ITALIC, false));
                 meta.lore(lore);
+                meta.setEnchantmentGlintOverride(true);
+                meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             } else {
                 meta.displayName(Component.text("公開設定: 【自分のみ（非公開）】", NamedTextColor.AQUA, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
                 List<Component> lore = new ArrayList<>();
@@ -414,6 +433,7 @@ public class RouletteGui {
                 lore.add(Component.empty());
                 lore.add(Component.text("▶ クリックで「全体公開」に切り替え", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
                 meta.lore(lore);
+                meta.setEnchantmentGlintOverride(false);
             }
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
