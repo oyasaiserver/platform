@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 import org.bukkit.entity.Player
 
 // プレイヤー状態のメモリ・ファイル管理。
-data class PlayerChatState(
+class PlayerChatState(
     var activeChannel: String,
     val joinedChannels: MutableSet<String>,
     var lastPrivateMessagePeer: UUID? = null,
@@ -17,8 +17,15 @@ data class PlayerChatState(
     var privateMessageModePeer: UUID? = null,
     var privateMessageModeName: String? = null,
     var privateMessagesEnabled: Boolean = true,
-    var japanizeEnabled: Boolean = true,
-)
+    japanizeEnabled: Boolean = true,
+    var languageMode: String = if (japanizeEnabled) "auto" else "off",
+) {
+  var japanizeEnabled: Boolean
+    get() = languageMode != "off"
+    set(value) {
+      languageMode = if (value) "auto" else "off"
+    }
+}
 
 private data class StateSnapshot(
     val uuid: UUID,
@@ -26,6 +33,7 @@ private data class StateSnapshot(
     val joinedChannels: List<String>,
     val privateMessagesEnabled: Boolean,
     val japanizeEnabled: Boolean,
+    val languageMode: String,
 )
 
 class PlayerStateStore(
@@ -87,7 +95,7 @@ class PlayerStateStore(
         preferences
             .mapNotNull { (uuid, enabled) ->
               states[uuid]?.let { current ->
-                val changed = current.japanizeEnabled != enabled
+                val changed = current.languageMode != if (enabled) "auto" else "off"
                 current.japanizeEnabled = enabled
                 uuid to (snapshot(uuid, current) to changed)
               }
@@ -110,7 +118,7 @@ class PlayerStateStore(
                       }
                   else null
               val needsWrite =
-                  (existing?.second ?: (state!!.japanizeEnabled != enabled)) ||
+                  (existing?.second ?: (state!!.languageMode != if (enabled) "auto" else "off")) ||
                       !PlayerStateFileCodec.hasJapanizeSetting(file(uuid))
               if (needsWrite) {
                 val value =
@@ -121,6 +129,7 @@ class PlayerStateStore(
                     value.joinedChannels,
                     value.privateMessagesEnabled,
                     value.japanizeEnabled,
+                    value.languageMode,
                 )
                 changed++
               }
@@ -186,6 +195,7 @@ class PlayerStateStore(
               snapshot.joinedChannels,
               snapshot.privateMessagesEnabled,
               snapshot.japanizeEnabled,
+              snapshot.languageMode,
           )
         }
         .onFailure {
@@ -200,6 +210,7 @@ class PlayerStateStore(
           state.joinedChannels.toList(),
           state.privateMessagesEnabled,
           state.japanizeEnabled,
+          state.languageMode,
       )
 
   private fun file(uuid: UUID): File = File(directory, "$uuid.yml")
