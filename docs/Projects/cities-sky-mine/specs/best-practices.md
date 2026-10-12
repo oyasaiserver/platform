@@ -3,11 +3,11 @@ title: "CitiesSkyMine Best Practices"
 category: specification
 status: active
 owner: marzipan99
-source_of_truth: "docs/Projects/citiesskymine/specs/best-practices.md"
+source_of_truth: "docs/Projects/cities-sky-mine/specs/best-practices.md"
 related_paths:
-  - docs/Projects/citiesskymine/specs/command-conventions.md
-  - docs/Projects/citiesskymine/specs/implementation-conventions.md
-  - docs/Projects/citiesskymine/PROJECT.md
+  - docs/Projects/cities-sky-mine/specs/command-conventions.md
+  - docs/Projects/cities-sky-mine/specs/implementation-conventions.md
+  - docs/Projects/cities-sky-mine/PROJECT.md
   - plugins/CitiesSkyMine/
 project_kind: plugin
 runtime_kind: paper-plugin

@@ -6,7 +6,7 @@ owner: marzipan99
 source_of_truth: "plugins/CitiesSkyMine/"
 related_paths:
   - plugins/CitiesSkyMine/
-  - docs/Projects/citiesskymine/specs/
+  - docs/Projects/cities-sky-mine/specs/
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
@@ -25,7 +25,7 @@ CitiesSkylinesの都市データをMinecraftワールドに変換し、道路・
 | 実装の正本 | `plugins/CitiesSkyMine/` |
 | 主要コード | `plugins/CitiesSkyMine/src/main/kotlin/` |
 | プラグイン定義 | `plugins/CitiesSkyMine/src/main/resources/plugin.yml` |
-| 仕様・規約入口 | `docs/Projects/citiesskymine/specs/README.md` |
+| 仕様・規約入口 | `docs/Projects/cities-sky-mine/specs/README.md` |
 | コマンド追加・変更 | `specs/command-conventions.md` を先に読み、命名・ショートカット・引数・タブ補完・権限の規約に合わせる |
 | 関連資料 | `docs/Projects/oyasai-menu/editors-doc/` |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:CitiesSkyMine:compileKotlin` |

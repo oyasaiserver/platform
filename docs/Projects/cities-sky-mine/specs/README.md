@@ -3,9 +3,9 @@ title: "CitiesSkyMine Specs"
 category: specification
 status: active
 owner: marzipan99
-source_of_truth: "docs/Projects/citiesskymine/specs/README.md"
+source_of_truth: "docs/Projects/cities-sky-mine/specs/README.md"
 related_paths:
-  - docs/Projects/citiesskymine/PROJECT.md
+  - docs/Projects/cities-sky-mine/PROJECT.md
   - plugins/CitiesSkyMine/
 project_kind: plugin
 runtime_kind: paper-plugin
@@ -22,7 +22,7 @@ This directory contains public specifications and implementation conventions for
 
 For CitiesSkyMine work, read:
 
-1. `docs/Projects/citiesskymine/PROJECT.md`
+1. `docs/Projects/cities-sky-mine/PROJECT.md`
 2. This file
 3. The task-relevant spec below
 4. `plugins/CitiesSkyMine/` implementation files

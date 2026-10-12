@@ -3,10 +3,10 @@ title: "CitiesSkyMine Command Conventions"
 category: specification
 status: active
 owner: marzipan99
-source_of_truth: "docs/Projects/citiesskymine/specs/command-conventions.md"
+source_of_truth: "docs/Projects/cities-sky-mine/specs/command-conventions.md"
 related_paths:
-  - docs/Projects/citiesskymine/PROJECT.md
-  - docs/Projects/citiesskymine/specs/README.md
+  - docs/Projects/cities-sky-mine/PROJECT.md
+  - docs/Projects/cities-sky-mine/specs/README.md
   - plugins/CitiesSkyMine/src/main/resources/plugin.yml
   - plugins/CitiesSkyMine/src/main/kotlin/icu/oyasai/citiesskymine/command/CitiesSkyMineCommand.kt
   - plugins/CitiesSkyMine/src/main/kotlin/icu/oyasai/citiesskymine/access/CsmAccessController.kt
@@ -113,4 +113,4 @@ When adding a command domain, update the relevant files:
 | `CitiesSkyMineCommand.kt` | routing, root tab completion, help entry |
 | `CsmAccessController.kt` | command key and default roles |
 | `config.yml` | limits and access defaults |
-| `docs/Projects/citiesskymine/PROJECT.md` or specs | public routing when the command adds a durable concept |
+| `docs/Projects/cities-sky-mine/PROJECT.md` or specs | public routing when the command adds a durable concept |

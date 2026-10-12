@@ -3,9 +3,9 @@ title: "CitiesSkyMine Column Layout Assistant"
 category: specification
 status: draft
 owner: marzipan99
-source_of_truth: "docs/Projects/citiesskymine/specs/column-layout-assistant.md"
+source_of_truth: "docs/Projects/cities-sky-mine/specs/column-layout-assistant.md"
 related_paths:
-  - docs/Projects/citiesskymine/PROJECT.md
+  - docs/Projects/cities-sky-mine/PROJECT.md
   - plugins/CitiesSkyMine/
 project_kind: plugin
 runtime_kind: paper-plugin

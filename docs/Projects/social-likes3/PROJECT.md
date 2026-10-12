@@ -5,7 +5,7 @@ status: active
 owner: marzipan99
 source_of_truth: "plugins/SocialLikes3/src/main/kotlin/com/github/srain3/sociallikes/"
 related_paths:
-  - docs/Projects/sociallikes3/sqlite-migration-design.md
+  - docs/Projects/social-likes3/sqlite-migration-design.md
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
@@ -23,7 +23,7 @@ agent_task: null
 |---|---|
 | 実装の正本 | `plugins/SocialLikes3/src/main/kotlin/com/github/srain3/sociallikes/` |
 | 主要コード | `SocialLikes.kt`（メイン）、`datas/SLDatabase.kt`（SQLite）、`command/`、`gui/`、`discord/SLDiscord.kt` |
-| 設計資料 | `docs/Projects/sociallikes3/sqlite-migration-design.md`（SQLite移行設計） |
+| 設計資料 | `docs/Projects/social-likes3/sqlite-migration-design.md`（SQLite移行設計） |
 | コマンド | `/sltp`, `/sla`, `/slbuild`, `/sluser`, `/slupdate`, `/slsignget`, `/slmenu`, `/slnear`, `/vacanttp`（`vtp`）, `/slrankup`, `/slsignbreak` |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:SocialLikes3:compileKotlin` |
 | 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置く |
