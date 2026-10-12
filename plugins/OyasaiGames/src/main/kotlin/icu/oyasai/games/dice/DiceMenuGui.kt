@@ -57,7 +57,7 @@ object DiceMenuGui {
   const val SLOT_CLOSE = 36
   const val SLOT_BROADCAST = 38
   const val SLOT_RECEIVE_CHAT = 39
-  const val SLOT_STATUS = 42
+  const val SLOT_STATUS = 43
 
   fun open(
       player: Player,

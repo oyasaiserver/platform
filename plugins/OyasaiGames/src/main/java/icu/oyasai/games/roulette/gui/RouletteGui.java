@@ -37,7 +37,7 @@ public class RouletteGui {
     public static final int SLOT_VISIBILITY = 20;
     public static final int SLOT_RECEIVE_CHAT = 21;
     public static final int SLOT_STATUS = 22;
-    public static final int SLOT_INFO = 24;
+    public static final int SLOT_INFO = 25;
     public static final int SLOT_START = 26;
 
     /**
