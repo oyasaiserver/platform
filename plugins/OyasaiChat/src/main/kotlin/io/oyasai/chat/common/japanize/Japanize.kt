@@ -83,6 +83,7 @@ object JapanizePreparation {
       text: String,
       dictionary: Map<String, String>,
       names: Collection<String>,
+      romanize: Boolean = true,
   ): List<TextPart> {
     val keys =
         (dictionary.keys + names)
@@ -93,7 +94,11 @@ object JapanizePreparation {
     val pending = StringBuilder()
     fun flush() {
       if (pending.isNotEmpty()) {
-        result += TextPart(Romaji.convert(pending.toString()), false)
+        result +=
+            TextPart(
+                if (romanize) Romaji.convert(pending.toString()) else pending.toString(),
+                false,
+            )
         pending.setLength(0)
       }
     }

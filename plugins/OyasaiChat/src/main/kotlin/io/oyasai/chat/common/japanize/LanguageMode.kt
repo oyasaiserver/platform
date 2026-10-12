@@ -126,12 +126,17 @@ class LanguageEngine(
   ): CompletableFuture<ChatMessage> {
     fun auto() = japanizer.prepare(text, mode != "off", names, dictionary)
     if (mode == "auto" || mode == "off" || !settings.enabled) return auto()
-    // Single ASCII words follow auto mode: romanize without requesting translation.
+    // Single ASCII words keep their spelling; only dictionary and name replacements apply.
     if (
         JapanizePreparation.eligible(text, settings, true) &&
             !JapanizePreparation.hasMultipleTranslationWords(text)
-    )
-        return auto()
+    ) {
+      val replaced =
+          JapanizePreparation.parts(text, dictionary, names, romanize = false).joinToString("") {
+            it.text
+          }
+      return CompletableFuture.completedFuture(display(text, replaced))
+    }
     val source =
         if (mode != "ja" && JapanizePreparation.eligible(text, settings, true))
             romanize(text, names, dictionary)

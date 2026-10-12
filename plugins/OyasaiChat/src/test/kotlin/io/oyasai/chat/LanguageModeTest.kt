@@ -37,7 +37,7 @@ class LanguageModeTest {
   }
 
   @Test
-  fun japaneseModeRomanizesUnprotectedSingleGoodWithoutTranslation() {
+  fun japaneseModeKeepsUnprotectedSingleGoodWithoutTranslation() {
     var requests = 0
     val converted = mutableListOf<String>()
     val engine =
@@ -54,14 +54,16 @@ class LanguageModeTest {
         )
     val result = engine.prepare("good", "ja", emptyList(), emptyMap()).join()
     assertEquals(0, requests)
-    assertEquals(listOf("ごおd"), converted)
-    assertEquals(ChatMessage("ごおd", "good", settings.format), result)
-    assertEquals("ごおd good", PlainTextComponentSerializer.plainText().serialize(result.component()))
+    assertEquals(emptyList(), converted)
+    assertEquals(ChatMessage("good"), result)
+    assertNull(result.original)
+    assertEquals("good", PlainTextComponentSerializer.plainText().serialize(result.component()))
   }
 
   @Test
-  fun portugueseModeRomanizesSingleAreWithoutTranslation() {
+  fun portugueseModeKeepsSingleAreWithoutTranslation() {
     var requests = 0
+    var conversions = 0
     val engine =
         LanguageEngine(
             settings,
@@ -69,12 +71,54 @@ class LanguageModeTest {
               requests++
               CompletableFuture.completedFuture(Translation("unused", "en", 1.0))
             },
-            { CompletableFuture.completedFuture(it) },
+            {
+              conversions++
+              CompletableFuture.completedFuture(it)
+            },
         )
     val result = engine.prepare("are", "pt", emptyList(), emptyMap()).join()
     assertEquals(0, requests)
-    assertEquals(ChatMessage("あれ", "are", settings.format), result)
-    assertEquals("あれ are", PlainTextComponentSerializer.plainText().serialize(result.component()))
+    assertEquals(0, conversions)
+    assertEquals(ChatMessage("are"), result)
+    assertNull(result.original)
+    assertEquals("are", PlainTextComponentSerializer.plainText().serialize(result.component()))
+  }
+
+  @Test
+  fun japaneseModeReplacesSingleDictionaryWordWithoutTranslation() {
+    var requests = 0
+    var conversions = 0
+    val engine =
+        LanguageEngine(
+            settings,
+            { _, _ ->
+              requests++
+              CompletableFuture.completedFuture(null)
+            },
+            {
+              conversions++
+              CompletableFuture.completedFuture(it)
+            },
+        )
+    val result = engine.prepare("kakezumou", "ja", emptyList(), mapOf("kakezumou" to "賭け相撲")).join()
+    assertEquals(0, requests)
+    assertEquals(0, conversions)
+    assertEquals(ChatMessage("賭け相撲", "kakezumou", settings.format), result)
+    assertEquals(
+        "賭け相撲 kakezumou",
+        PlainTextComponentSerializer.plainText().serialize(result.component()),
+    )
+  }
+
+  @Test
+  fun japaneseModeProtectsSinglePlayerNameWithoutConversion() {
+    val engine =
+        LanguageEngine(
+            settings,
+            { _, _ -> error("Single names must skip translation") },
+            { error("Single names must skip conversion") },
+        )
+    assertEquals(ChatMessage("Kan"), engine.prepare("Kan", "ja", listOf("Kan"), emptyMap()).join())
   }
 
   @Test
@@ -144,7 +188,7 @@ class LanguageModeTest {
   }
 
   @Test
-  fun judgmentUsesOriginalRomajiWhenSingleWordOnlyRomanizes() {
+  fun judgmentUsesOriginalRomajiWhenSingleWordStaysAsTyped() {
     val engine =
         LanguageEngine(
             settings,
@@ -154,7 +198,8 @@ class LanguageModeTest {
     val hiragana = engine.prepare("こんにちは", "pt", emptyList(), emptyMap()).join()
     val romanized = engine.prepare("kon'nichiha", "pt", emptyList(), emptyMap()).join()
     assertEquals("こんにちは", hiragana.original)
-    assertEquals(ChatMessage("こんにちは", "kon'nichiha", settings.format), romanized)
+    assertEquals(ChatMessage("kon'nichiha"), romanized)
+    assertNull(romanized.original)
     assertEquals("こんにちは", judgmentSource(hiragana.copy(input = "こんにちは")))
     assertEquals("kon'nichiha", judgmentSource(romanized.copy(input = "kon'nichiha")))
     assertEquals("raw", judgmentSource(ChatMessage("shown", input = "raw")))
@@ -178,6 +223,24 @@ class LanguageModeTest {
         engine.prepare("boa noite", "ja", emptyList(), emptyMap()).join(),
     )
     assertEquals(listOf("boa noite" to "ja"), requests)
+  }
+
+  @Test
+  fun japaneseModeNeverRomanizesAlreadyJapaneseDetection() {
+    val engine =
+        LanguageEngine(
+            settings,
+            { _, _ ->
+              CompletableFuture.completedFuture(
+                  Translation("unused", "ja", 1.0, listOf(LanguageCandidate("ja", 1.0, "ja-Latn")))
+              )
+            },
+            { error("ja mode must not romanize") },
+        )
+    assertEquals(
+        ChatMessage("konbanha"),
+        engine.prepare("konbanha", "ja", emptyList(), emptyMap()).join(),
+    )
   }
 
   @Test
