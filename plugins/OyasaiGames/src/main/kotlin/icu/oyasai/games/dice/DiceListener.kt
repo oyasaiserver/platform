@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
-import org.bukkit.event.block.BlockCanBuildEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
@@ -21,6 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.ItemStack
 
 class DiceListener(
     private val diceItem: DiceItem,
@@ -28,40 +28,60 @@ class DiceListener(
     private val chargeManager: DiceChargeManager,
 ) : Listener {
 
-  @EventHandler(priority = EventPriority.LOWEST)
-  fun onBlockCanBuild(event: BlockCanBuildEvent) {
-    val player = event.player ?: return
-    if (
-        diceItem.isDice(player.inventory.itemInMainHand) ||
-            diceItem.isDice(player.inventory.itemInOffHand)
-    ) {
-      event.isBuildable = false
-    }
+  /** サイコロに関連する操作かどうかを判定。 一般の建築（通常のLodestone等の設置）を誤って巻き込まないよう、サイコロ所持中またはチャージ中・直近投擲時のみ対象とする。 */
+  private fun isDiceAction(player: Player, item: ItemStack?): Boolean {
+    if (diceItem.isDice(item)) return true
+    if (diceItem.isDice(player.inventory.itemInMainHand)) return true
+    if (diceItem.isDice(player.inventory.itemInOffHand)) return true
+    if (chargeManager.isCharging(player)) return true
+    if (chargeManager.isRecentThrower(player)) return true
+    return false
   }
 
+  /** サイコロ使用中の誤ったブロック設置を防止。 (DiceItemのBLOCK_INTERACTION_RANGE短縮により通常は届かないが、万が一パケットが飛んだ場合の安全弁) */
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
   fun onBlockPlace(event: BlockPlaceEvent) {
     val player = event.player
-    if (
-        diceItem.isDice(event.itemInHand) ||
-            diceItem.isDice(player.inventory.itemInMainHand) ||
-            diceItem.isDice(player.inventory.itemInOffHand)
-    ) {
-      event.isCancelled = true
-      event.setBuild(false)
-      event.blockReplacedState.update(true, false)
-      player.updateInventory()
-    }
+    if (!isDiceAction(player, event.itemInHand)) return
+
+    event.isCancelled = true
+    event.setBuild(false)
+    event.blockReplacedState.update(true, false)
+    player.updateInventory()
+
+    val loc = event.blockPlaced.location
+    val previousData = event.blockReplacedState.blockData
+    player.sendBlockChange(loc, previousData)
+
+    // クライアント側（統合版等）のゴーストブロック予測を1tick後に再同期して確実に解消
+    diceManager.plugin.server.scheduler.runTaskLater(
+        diceManager.plugin,
+        Runnable {
+          if (loc.block.type == event.blockPlaced.type) {
+            loc.block.setBlockData(previousData, false)
+          }
+          player.sendBlockChange(loc, previousData)
+          player.updateInventory()
+        },
+        1L,
+    )
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   fun onPlayerInteract(event: PlayerInteractEvent) {
     val player = event.player
-    val item = event.item
+    val mainHand = player.inventory.itemInMainHand
+    val offHand = player.inventory.itemInOffHand
+    val eventItem = event.item
+    val effectiveItem = if (eventItem != null && !eventItem.type.isAir) eventItem else mainHand
 
-    // サイコロの右クリック操作（メインハンド優先、オフハンドでのブロック設置重複を完全遮断）
+    val isHoldingDice =
+        diceItem.isDice(mainHand) || diceItem.isDice(offHand) || diceItem.isDice(effectiveItem)
+    val isDiceContext = isHoldingDice || isDiceAction(player, effectiveItem)
+
+    // オフハンド操作、またはサイコロ操作時のメインハンド以外での操作は無効化
     if (event.hand != EquipmentSlot.HAND) {
-      if (item != null && diceItem.isDice(item)) {
+      if (isDiceContext) {
         event.setUseItemInHand(Event.Result.DENY)
         event.setUseInteractedBlock(Event.Result.DENY)
         event.isCancelled = true
@@ -69,8 +89,7 @@ class DiceListener(
       return
     }
 
-    if (item != null && diceItem.isDice(item)) {
-      diceItem.sanitizePlayerDice(player)
+    if (isDiceContext) {
       val action = event.action
 
       if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
@@ -78,31 +97,34 @@ class DiceListener(
         event.setUseInteractedBlock(Event.Result.DENY)
         event.isCancelled = true
 
-        // 手の届く範囲のブロックを右クリックした場合、クライアント側のゴースト設置を防止
-        if (action == Action.RIGHT_CLICK_BLOCK) {
-          val placedBlock = event.clickedBlock?.getRelative(event.blockFace)
-          if (placedBlock != null) {
-            player.sendBlockChange(placedBlock.location, placedBlock.blockData)
-          }
-        }
+        val diceToUse = if (diceItem.isDice(mainHand)) mainHand else effectiveItem
+        diceItem.sanitizePlayerDice(player)
 
         if (player.isSneaking) {
           chargeManager.cancel(player)
-          val currentMode = diceItem.getDiceMode(item)
-          val isBroadcast = diceItem.isBroadcast(item)
-          DiceMenuGui.open(player, currentMode, isBroadcast, diceItem)
+          val currentMode = diceItem.getDiceMode(diceToUse)
+          val isBroadcast = diceItem.isBroadcast(diceToUse)
+          DiceMenuGui.open(player, currentMode, isBroadcast, diceItem, diceManager)
         } else {
-          chargeManager.onRightClick(player, item)
+          chargeManager.onRightClick(player, diceToUse)
         }
       } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-        chargeManager.cancel(player)
+        if (chargeManager.isCharging(player)) {
+          chargeManager.cancel(player)
+        }
       }
       return
     }
 
-    // サイコロを持っていない場合でも、周囲・視線のサイコロを手動回収可能にする
+    // サイコロを持っていなくても、周囲の止まったサイコロを右クリックで回収可能
     val action = event.action
     if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+      if (chargeManager.isRecentThrower(player)) {
+        event.setUseItemInHand(Event.Result.DENY)
+        event.setUseInteractedBlock(Event.Result.DENY)
+        event.isCancelled = true
+      }
+
       val targetLoc = event.clickedBlock?.location?.add(0.5, 0.5, 0.5)
       if (diceManager.tryCollectNearby(player, targetLoc)) {
         event.isCancelled = true
@@ -128,23 +150,30 @@ class DiceListener(
 
   @EventHandler
   fun onPlayerAnimation(event: PlayerAnimationEvent) {
-    chargeManager.cancel(event.player)
+    val player = event.player
+    // 統合版（Bedrock）プレイヤーの場合、画面タッチ操作でアームスイングが発生するためチャージをキャンセルしない
+    if (BedrockSupport.isBedrockPlayer(player)) return
+    if (chargeManager.isCharging(player)) {
+      chargeManager.cancel(player)
+    }
   }
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
-    chargeManager.cancel(event.player)
+    if (chargeManager.isCharging(event.player)) {
+      chargeManager.cancel(event.player)
+    }
     diceManager.handlePlayerQuit(event.player)
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   fun onPlayerJoin(event: PlayerJoinEvent) {
-    diceManager.hideBedrockEntitiesFor(event.player)
+    diceManager.updatePlayerVisibility(event.player)
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   fun onPlayerChangedWorld(event: PlayerChangedWorldEvent) {
-    diceManager.hideBedrockEntitiesFor(event.player)
+    diceManager.updatePlayerVisibility(event.player)
   }
 
   @EventHandler(priority = EventPriority.HIGH)
@@ -201,15 +230,34 @@ class DiceListener(
             0.8f,
             if (newBroadcast) 1.4f else 0.8f,
         )
-        val statusText = if (newBroadcast) "全体公開 (ON)" else "自分のみ (OFF)"
-        val statusColor = if (newBroadcast) NamedTextColor.GREEN else NamedTextColor.RED
+        val statusText = if (newBroadcast) "全体公開 (ON)" else "自分のみ (非公開)"
+        val statusColor = if (newBroadcast) NamedTextColor.GREEN else NamedTextColor.AQUA
         player.sendMessage(
-            Component.text("[おやさいサイコロ] チャット通知を ", NamedTextColor.GOLD)
+            Component.text("[おやさいサイコロ] 投擲時の公開設定を ", NamedTextColor.GOLD)
                 .append(Component.text(statusText, statusColor))
                 .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
         )
         val refreshedMode = diceItem.getDiceMode(heldItem)
-        DiceMenuGui.open(player, refreshedMode, newBroadcast, diceItem)
+        DiceMenuGui.open(player, refreshedMode, newBroadcast, diceItem, diceManager)
+      }
+      DiceMenuGui.SLOT_RECEIVE_CHAT -> {
+        val newReceive = diceManager.toggleChatReceive(player)
+        player.playSound(
+            player.location,
+            Sound.UI_BUTTON_CLICK,
+            0.8f,
+            if (newReceive) 1.4f else 0.8f,
+        )
+        val statusText = if (newReceive) "受信する (ON)" else "受信しない (OFF)"
+        val statusColor = if (newReceive) NamedTextColor.GREEN else NamedTextColor.RED
+        player.sendMessage(
+            Component.text("[おやさいサイコロ] 他人のサイコロ結果のチャット通知を ", NamedTextColor.GOLD)
+                .append(Component.text(statusText, statusColor))
+                .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
+        )
+        val currentMode = diceItem.getDiceMode(heldItem)
+        val isBroadcast = diceItem.isBroadcast(heldItem)
+        DiceMenuGui.open(player, currentMode, isBroadcast, diceItem, diceManager)
       }
       DiceMenuGui.SLOT_STATUS -> {
         player.playSound(player.location, Sound.ITEM_BOOK_PAGE_TURN, 0.7f, 1.0f)
@@ -223,7 +271,7 @@ class DiceListener(
 
   private fun updateModeAndRefresh(
       player: Player,
-      item: org.bukkit.inventory.ItemStack,
+      item: ItemStack,
       mode: DiceMode,
   ) {
     diceItem.updateDiceSettings(item, newMode = mode)
@@ -234,12 +282,12 @@ class DiceListener(
             .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
     )
     val isBroadcast = diceItem.isBroadcast(item)
-    DiceMenuGui.open(player, mode, isBroadcast, diceItem)
+    DiceMenuGui.open(player, mode, isBroadcast, diceItem, diceManager)
   }
 
   private fun updateCountAndRefresh(
       player: Player,
-      item: org.bukkit.inventory.ItemStack,
+      item: ItemStack,
       currentMode: DiceMode,
       targetCount: Int,
   ) {
@@ -258,7 +306,7 @@ class DiceListener(
             .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
     )
     val isBroadcast = diceItem.isBroadcast(item)
-    DiceMenuGui.open(player, newMode, isBroadcast, diceItem)
+    DiceMenuGui.open(player, newMode, isBroadcast, diceItem, diceManager)
   }
 
   @EventHandler(priority = EventPriority.HIGH)

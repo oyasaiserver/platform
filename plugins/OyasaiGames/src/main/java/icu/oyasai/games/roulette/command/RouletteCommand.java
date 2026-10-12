@@ -53,6 +53,36 @@ public class RouletteCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        // サブコマンド: /roulette chat [on|off]
+        if (args.length > 0 && args[0].equalsIgnoreCase("chat")) {
+            if (!player.hasPermission("oyasaigames.roulette.use") && !player.hasPermission("oyasaigames.use")) {
+                player.sendMessage(Component.text("ルーレットを使用する権限がありません。", NamedTextColor.RED));
+                return true;
+            }
+
+            boolean next;
+            if (args.length >= 2) {
+                if (args[1].equalsIgnoreCase("on")) {
+                    next = true;
+                } else if (args[1].equalsIgnoreCase("off")) {
+                    next = false;
+                } else {
+                    next = !manager.isChatReceiveEnabled(player);
+                }
+            } else {
+                next = !manager.isChatReceiveEnabled(player);
+            }
+            manager.setChatReceiveEnabled(player, next);
+            String statusText = next ? "受信する (ON)" : "受信しない (OFF)";
+            NamedTextColor statusColor = next ? NamedTextColor.GREEN : NamedTextColor.RED;
+            player.sendMessage(
+                    Component.text("[おやさいルーレット] 他人のルーレット結果のチャット通知を ", NamedTextColor.GOLD)
+                            .append(Component.text(statusText, statusColor, net.kyori.adventure.text.format.TextDecoration.BOLD))
+                            .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
+            );
+            return true;
+        }
+
         // 実行権限チェック
         if (!player.hasPermission("oyasaigames.roulette.use") && !player.hasPermission("oyasaigames.use")) {
             player.sendMessage(Component.text("ルーレットを使用する権限がありません。", NamedTextColor.RED));
@@ -80,10 +110,24 @@ public class RouletteCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length == 1 && (sender.hasPermission("oyasaigames.roulette.admin") || sender.hasPermission("oyasaigames.admin"))) {
+        if (args.length == 1) {
             List<String> completions = new ArrayList<>();
-            if ("reload".startsWith(args[0].toLowerCase())) {
+            if ("chat".startsWith(args[0].toLowerCase())) {
+                completions.add("chat");
+            }
+            if ((sender.hasPermission("oyasaigames.roulette.admin") || sender.hasPermission("oyasaigames.admin"))
+                    && "reload".startsWith(args[0].toLowerCase())) {
                 completions.add("reload");
+            }
+            return completions;
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("chat")) {
+            List<String> completions = new ArrayList<>();
+            if ("on".startsWith(args[1].toLowerCase())) {
+                completions.add("on");
+            }
+            if ("off".startsWith(args[1].toLowerCase())) {
+                completions.add("off");
             }
             return completions;
         }

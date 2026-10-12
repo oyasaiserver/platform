@@ -4,13 +4,39 @@ import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
 import org.bukkit.util.Vector
 
 class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
+  var chargeManager: DiceChargeManager? = null
   private val activeGroups = CopyOnWriteArrayList<DiceGroup>()
+  val chatReceiveKey = NamespacedKey(plugin, "dice_chat_receive")
+
+  /** 他人のサイコロ結果をチャットで受信するかどうか（デフォルト: true） */
+  fun isChatReceiveEnabled(player: Player): Boolean {
+    val value = player.persistentDataContainer.get(chatReceiveKey, PersistentDataType.BYTE)
+    return value == null || value == 1.toByte()
+  }
+
+  /** 他人のサイコロ結果のチャット受信を設定 */
+  fun setChatReceiveEnabled(player: Player, enabled: Boolean) {
+    player.persistentDataContainer.set(
+        chatReceiveKey,
+        PersistentDataType.BYTE,
+        if (enabled) 1.toByte() else 0.toByte(),
+    )
+  }
+
+  /** 他人のサイコロ結果のチャット受信設定を反転切り替え */
+  fun toggleChatReceive(player: Player): Boolean {
+    val next = !isChatReceiveEnabled(player)
+    setChatReceiveEnabled(player, next)
+    return next
+  }
 
   /** 指定したプレイヤーが投げたサイコロがフィールド上に現在存在するか（投擲中〜回収前） */
   fun hasActiveDice(player: Player): Boolean {
@@ -73,7 +99,13 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
   }
 
   @JvmOverloads
-  fun throwDice(player: Player, powerRatio: Double, mode: DiceMode, isBroadcast: Boolean = true) {
+  fun throwDice(
+      player: Player,
+      powerRatio: Double,
+      mode: DiceMode,
+      isBroadcast: Boolean = true,
+      playerInertia: Vector? = null,
+  ) {
     // プレイヤーの視線方向ベクトル
     val eyeLoc = player.eyeLocation
     val direction = eyeLoc.direction.normalize()
@@ -81,8 +113,20 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     // パワー係数 (最小0.45, 最大1.6)
     val speed = 0.45 + powerRatio * 1.15
 
-    // 少し上向きに放物線を描かせる
-    val velocity = direction.multiply(speed).add(Vector(0.0, 0.15 + powerRatio * 0.1, 0.0))
+    // 基本の初速（視線方向＋少し上向き放物線）
+    val baseVelocity = direction.multiply(speed).add(Vector(0.0, 0.15 + powerRatio * 0.1, 0.0))
+
+    // 走った分・ジャンプした分の移動慣性をサイコロ初速度に上乗せ
+    val velocity =
+        if (playerInertia != null && playerInertia.lengthSquared() > 0.0001) {
+          // 水平方向は走った勢いをそのまま加算 (1.0倍)
+          // 垂直方向(Y)は、ジャンプ中の上昇力(0.8倍)を反映し、落下時は下がりすぎないよう抑える(0.3倍)
+          val inertiaY = if (playerInertia.y > 0) playerInertia.y * 0.8 else playerInertia.y * 0.3
+          val inertia = Vector(playerInertia.x * 1.0, inertiaY, playerInertia.z * 1.0)
+          baseVelocity.add(inertia)
+        } else {
+          baseVelocity
+        }
 
     val spawnLoc = eyeLoc.clone().add(direction.clone().multiply(0.4))
 
@@ -146,21 +190,9 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     }
   }
 
-  fun hideBedrockEntitiesFor(player: Player) {
-    if (BedrockSupport.isBedrockPlayer(player)) return
+  fun updatePlayerVisibility(player: Player) {
     for (group in activeGroups) {
-      group.totalHologramBedrock?.let { stand ->
-        if (stand.isValid) {
-          player.hideEntity(plugin, stand)
-        }
-      }
-      for (dice in group.dices) {
-        dice.bedrockItem?.let { item ->
-          if (item.isValid) {
-            player.hideEntity(plugin, item)
-          }
-        }
-      }
+      group.updatePlayerVisibility(player)
     }
   }
 
