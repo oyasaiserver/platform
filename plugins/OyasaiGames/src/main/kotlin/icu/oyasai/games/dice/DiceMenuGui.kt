@@ -53,11 +53,11 @@ object DiceMenuGui {
   const val SLOT_COUNT_9 = 32
   const val SLOT_COUNT_10 = 33
 
-  // 5段目 (一番下の段): キャンセル (一番左下), チャット通知, 現在の設定情報(本), 他人結果受信設定
+  // 5段目 (一番下の段): キャンセル (一番左下), チャット通知, 他人結果受信設定(ベル), 現在の設定情報(本)
   const val SLOT_CLOSE = 36
   const val SLOT_BROADCAST = 38
-  const val SLOT_STATUS = 40
-  const val SLOT_RECEIVE_CHAT = 42
+  const val SLOT_RECEIVE_CHAT = 40
+  const val SLOT_STATUS = 42
 
   fun open(
       player: Player,
@@ -136,12 +136,12 @@ object DiceMenuGui {
     inv.setItem(SLOT_COUNT_9, createCountItem(9, currentMode.diceCount == 9))
     inv.setItem(SLOT_COUNT_10, createCountItem(10, currentMode.diceCount == 10))
 
-    // 5段目 (一番下の段): キャンセル, 投擲時公開設定, 現在の設定情報, 他人結果受信設定
+    // 5段目 (一番下の段): キャンセル, 投擲時公開設定, 他人結果受信設定, 現在の設定情報
     val isReceiveChat = diceManager.isChatReceiveEnabled(player)
     inv.setItem(SLOT_CLOSE, createCancelButton())
     inv.setItem(SLOT_BROADCAST, createBroadcastItem(isBroadcast))
-    inv.setItem(SLOT_STATUS, createStatusItem(player, currentMode, isBroadcast, isReceiveChat))
     inv.setItem(SLOT_RECEIVE_CHAT, createReceiveChatItem(isReceiveChat))
+    inv.setItem(SLOT_STATUS, createStatusItem(player, currentMode, isBroadcast, isReceiveChat))
 
     player.openInventory(inv)
   }
