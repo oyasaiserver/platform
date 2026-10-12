@@ -35,8 +35,9 @@ public class RouletteGui {
 
     public static final int SLOT_CANCEL = 18;
     public static final int SLOT_VISIBILITY = 20;
-    public static final int SLOT_INFO = 22;
-    public static final int SLOT_RECEIVE_CHAT = 24;
+    public static final int SLOT_RECEIVE_CHAT = 21;
+    public static final int SLOT_STATUS = 22;
+    public static final int SLOT_INFO = 25;
     public static final int SLOT_START = 26;
 
     /**
@@ -100,8 +101,8 @@ public class RouletteGui {
         // 4. 下段操作ボタン
         inv.setItem(SLOT_CANCEL, createCancelButton());
         inv.setItem(SLOT_VISIBILITY, createVisibilityButton(session.isBroadcastToAll()));
-        inv.setItem(SLOT_INFO, createInfoItem(session, isReceiveChat));
         inv.setItem(SLOT_RECEIVE_CHAT, createReceiveChatItem(isReceiveChat));
+        inv.setItem(SLOT_INFO, createInfoItem(session, isReceiveChat));
         inv.setItem(SLOT_START, createStartButton());
     }
 
@@ -158,7 +159,7 @@ public class RouletteGui {
             meta.lore(lore);
             statusItem.setItemMeta(meta);
         }
-        inv.setItem(SLOT_INFO, statusItem);
+        inv.setItem(SLOT_STATUS, statusItem);
 
         // 左下に閉じるボタン（バリア）
         inv.setItem(SLOT_CANCEL, createBarrierButton(
@@ -216,7 +217,7 @@ public class RouletteGui {
             meta.lore(lore);
             doneItem.setItemMeta(meta);
         }
-        inv.setItem(SLOT_INFO, doneItem);
+        inv.setItem(SLOT_STATUS, doneItem);
 
         // 右下に「もう一度設定・抽選する」ボタン（レッドストーントーチ）
         ItemStack retryItem = new ItemStack(Material.REDSTONE_TORCH);
