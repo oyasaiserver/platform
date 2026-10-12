@@ -272,7 +272,7 @@ class DiceGroup(
 
   fun isNear(targetLoc: Location, maxDistSq: Double = 6.25): Boolean {
     if (dices.isEmpty()) return false
-    return dices.any { it.isSettled && it.getDistanceSquared(targetLoc) <= maxDistSq }
+    return dices.any { it.getDistanceSquared(targetLoc) <= maxDistSq }
   }
 
   fun updatePlayerVisibility(player: Player) {

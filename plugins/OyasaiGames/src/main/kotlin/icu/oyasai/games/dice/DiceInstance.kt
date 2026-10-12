@@ -159,8 +159,8 @@ class DiceInstance(
                   return
                 }
 
-                // タイムアウト保護（10秒以上転がり続けた場合強制停止）
-                if (tickCount > 200) {
+                // タイムアウト保護（5秒以上転がり続けた場合強制停止・確定）
+                if (tickCount > 100) {
                   settle()
                   cancel()
                   return
@@ -193,8 +193,9 @@ class DiceInstance(
                     val reflection = velocity.clone().subtract(normal.clone().multiply(2.0 * dot))
 
                     if (normal.y > 0.4) {
-                      // 床面衝突: バウンド＆摩擦
-                      reflection.y = -reflection.y * 0.42
+                      // 床面衝突: バウンド＆摩擦（微小反発は0に収束させて速やかに静止）
+                      val bounceY = -reflection.y * 0.42
+                      reflection.y = if (Math.abs(bounceY) < 0.035) 0.0 else bounceY
                       reflection.x *= 0.75
                       reflection.z *= 0.75
                     } else {
@@ -213,11 +214,29 @@ class DiceInstance(
                   }
                 }
 
-                // 接地・停止判定
-                val blockBelow = currentLocation.clone().subtract(0.0, 0.1, 0.0).block
-                val isOnGround = !blockBelow.type.isAir && blockBelow.type.isSolid
+                // 接地・足元衝突判定（PLAYER_HEAD, SLAB, ANVIL 等の非フルブロックも正確に判定）
+                val blockAtLoc = currentLocation.block
+                val blockBelow = currentLocation.clone().subtract(0.0, 0.15, 0.0).block
 
-                if (isOnGround && velocity.lengthSquared() < 0.003) {
+                // 通り抜け不可ブロック判定 (isPassable == false: ヘッド、スラブ、金床、チェスト等を含む)
+                val isGroundBlock =
+                    (!blockBelow.type.isAir && !blockBelow.isPassable) ||
+                        (!blockAtLoc.type.isAir && !blockAtLoc.isPassable)
+
+                // 真下方向への短いレイキャスト衝突判定（ヘッドやスラブ等の表面を確実に検知）
+                val hasCollisionBelow =
+                    isGroundBlock ||
+                        (world.rayTraceBlocks(
+                            currentLocation,
+                            Vector(0.0, -1.0, 0.0),
+                            0.25,
+                            FluidCollisionMode.NEVER,
+                            true,
+                        ) != null)
+
+                val isOnGround = hasCollisionBelow
+
+                if (isOnGround && velocity.lengthSquared() < 0.005) {
                   velocity.zero()
                   restTickCount++
                   if (restTickCount >= 4) {
