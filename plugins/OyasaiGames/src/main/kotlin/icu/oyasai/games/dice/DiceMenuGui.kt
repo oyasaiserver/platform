@@ -56,7 +56,7 @@ object DiceMenuGui {
   // 5段目 (一番下の段): キャンセル (一番左下), チャット通知, 他人結果受信設定(ベル), 現在の設定情報(本)
   const val SLOT_CLOSE = 36
   const val SLOT_BROADCAST = 38
-  const val SLOT_RECEIVE_CHAT = 40
+  const val SLOT_RECEIVE_CHAT = 39
   const val SLOT_STATUS = 42
 
   fun open(
