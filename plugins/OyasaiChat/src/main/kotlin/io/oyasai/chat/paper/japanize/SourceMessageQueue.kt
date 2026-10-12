@@ -45,29 +45,37 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
     val accepted =
         ordered.enqueue(player.uniqueId) {
           val done = CompletableFuture<Void>()
-          engine.prepare(text, mode, names, dictionary.effective()).whenComplete { message, error ->
-            runCatching {
-                  val commit = Runnable {
-                    try {
-                      if (
-                          !closed &&
-                              player.isOnline &&
-                              plugin.server.getPlayer(player.uniqueId) === player
-                      ) {
-                        val prepared = if (error == null) message else ChatMessage(text)
-                        if (!prepared.isBlank()) deliver(prepared.copy(input = text))
+          engine
+              .prepare(text, mode, names, dictionary.effective())
+              .handle { message, error ->
+                (if (error == null) message else ChatMessage(text)).copy(input = text)
+              }
+              // Keep detection in the source slot, before scheduling the main-thread commit.
+              .thenCompose(engine::prepareForeignMarker)
+              .whenComplete { message, error ->
+                runCatching {
+                      val commit = Runnable {
+                        try {
+                          if (
+                              !closed &&
+                                  player.isOnline &&
+                                  plugin.server.getPlayer(player.uniqueId) === player
+                          ) {
+                            val prepared =
+                                if (error == null) message else ChatMessage(text, input = text)
+                            if (!prepared.isBlank()) deliver(prepared)
+                          }
+                        } catch (failure: Exception) {
+                          plugin.logger.warning("Unable to commit chat message: ${failure.message}")
+                        } finally {
+                          finishWhenPrivateIdle(player.uniqueId, done)
+                        }
                       }
-                    } catch (failure: Exception) {
-                      plugin.logger.warning("Unable to commit chat message: ${failure.message}")
-                    } finally {
-                      finishWhenPrivateIdle(player.uniqueId, done)
+                      if (plugin.server.isPrimaryThread) commit.run()
+                      else plugin.server.scheduler.runTask(plugin, commit)
                     }
-                  }
-                  if (plugin.server.isPrimaryThread) commit.run()
-                  else plugin.server.scheduler.runTask(plugin, commit)
-                }
-                .onFailure { done.complete(null) }
-          }
+                    .onFailure { done.complete(null) }
+              }
           done
         }
     if (!accepted)
@@ -90,7 +98,7 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
       message: ChatMessage,
       recipients: Collection<Player>,
   ): net.kyori.adventure.text.Component =
-      speeches.indicator(message, recipients.map { it.uniqueId }.toSet(), engine::foreignMarker)
+      speeches.indicator(message, recipients.map { it.uniqueId }.toSet())
 
   fun check(player: Player, id: Long) {
     val text = speeches.text(id, player.uniqueId)

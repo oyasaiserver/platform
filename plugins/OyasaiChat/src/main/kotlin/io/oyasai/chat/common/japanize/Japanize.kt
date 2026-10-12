@@ -16,8 +16,10 @@ data class ChatMessage(
     val original: String? = null,
     val format: String? = null,
     val input: String? = null,
+    val foreign: Boolean = false,
 ) {
   companion object {
+    // The envelope carries no source language verdict; remote messages stay unmarked.
     fun from(envelope: io.oyasai.chat.common.protocol.NetworkEnvelope) =
         ChatMessage(envelope.content, envelope.japanizeOriginal, envelope.japanizeFormat)
   }

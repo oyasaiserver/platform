@@ -165,6 +165,13 @@ class LanguageEngine(
   fun foreignMarker(text: String): CompletableFuture<Boolean> =
       request(text, "ja").thenApply(::isConfidentForeignLanguage)
 
+  fun prepareForeignMarker(message: ChatMessage): CompletableFuture<ChatMessage> {
+    val text = judgmentSource(message)
+    if (!needsForeignMarker(text, message.text))
+        return CompletableFuture.completedFuture(message.copy(foreign = false))
+    return foreignMarker(text).thenApply { message.copy(foreign = it) }
+  }
+
   private fun display(original: String, translated: String): ChatMessage =
       if (
           original == translated ||
@@ -200,13 +207,9 @@ class RecentSpeech(
   fun indicator(
       message: ChatMessage,
       readers: Set<UUID>,
-      detect: (String) -> CompletableFuture<Boolean>,
   ): net.kyori.adventure.text.Component {
+    if (!message.foreign) return net.kyori.adventure.text.Component.empty()
     val text = judgmentSource(message)
-    if (!needsForeignMarker(text, message.text)) return net.kyori.adventure.text.Component.empty()
-    // Pending/failed detection must not delay or update a delivered message.
-    if (!runCatching { detect(text).getNow(false) }.getOrDefault(false))
-        return net.kyori.adventure.text.Component.empty()
     val id = remember(text, readers)
     return net.kyori.adventure.text.Component.text(
             " [?]",
