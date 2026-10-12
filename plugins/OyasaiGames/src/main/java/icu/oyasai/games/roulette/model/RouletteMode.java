@@ -14,7 +14,7 @@ public enum RouletteMode {
     ALL(
         1,
         "全建築用アイテム",
-        Material.COBBLESTONE,
+        Material.GRASS_BLOCK,
         "設置可能なすべてのブロック・アイテムが対象です。"
     ),
     FULL_BLOCK(
