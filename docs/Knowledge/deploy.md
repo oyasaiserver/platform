@@ -50,18 +50,6 @@ cp plugins/OyasaiMenu/build/libs/OyasaiMenu.jar local/paperclip-tmp/plugins/
 - Paper 1.21.11 build 69（`paper-paperclip.jar`）
 - 起動・停止・トラブルシューティングの詳細は [[local-server.md]] を参照
 
-## 外部ツール（Nexus）のデプロイ
-
-各ツールはHTMLファイル1枚で動作するため、以下の方法でデプロイ可能:
-
-| ツール | デプロイ方法 |
-|---|---|
-| glass-gradient | GitHub Pages / CDNにそのまま配置 |
-| plateau-viewer | 同上 |
-| minecraft-analyzer | 同上 |
-| anamorph-voxel | 同上 |
-| citygml-converter | 同上 / Dockerで `python api.py` |
-
 ## CI/CD
 
 - フォーマットチェック: `nix fmt`（treefmt）がCIで実行される

@@ -41,5 +41,5 @@ CitiesSkylinesの都市データをMinecraftワールドに変換し、道路・
 - **ユーザーガイド（Discord投稿用）**: [`citiesskymine-user-guide.md`](citiesskymine-user-guide.md)
 - **管理者ガイド（Discord投稿用）**: [`citiesskymine-admin-guide.md`](citiesskymine-admin-guide.md)
 - メニュー編集: `docs/Projects/oyasai-menu/editors-doc/`
-- PLATEAU Viewer: [`../plateau-viewer/PROJECT.md`](../plateau-viewer/PROJECT.md)
-- CityGML Converter: [`../citygml-converter/PROJECT.md`](../citygml-converter/PROJECT.md)
+- PLATEAU Viewer: https://github.com/marzipan99/plateau-viewer
+- CityGML Converter: https://github.com/marzipan99/citygml-converter
