@@ -77,6 +77,25 @@ fun languageArgument(args: List<String>): LanguageArgument? =
       else -> null
     }
 
+/** Cheap gates run before any language-detection request. Kanji alone do not identify Japanese. */
+fun needsForeignMarker(original: String, displayed: String): Boolean =
+    original == displayed &&
+        original.codePoints().noneMatch {
+          val script = Character.UnicodeScript.of(it)
+          script == Character.UnicodeScript.HIRAGANA || script == Character.UnicodeScript.KATAKANA
+        } &&
+        JapanizePreparation.hasMultipleTranslationWords(original)
+
+fun isConfidentForeignLanguage(result: Translation?): Boolean {
+  if (result == null) return false
+  val candidate =
+      result.candidates.maxByOrNull { it.confidence }
+          ?: LanguageCandidate(result.language, result.confidence)
+  return candidate.confidence in 0.9..1.0 &&
+      !LanguageMode.same(candidate.language, "ja") &&
+      !LanguageMode.same(candidate.detail, "ja")
+}
+
 /** Both network boundaries are injectable; each stage has a finite timeout. */
 class LanguageEngine(
     private val settings: JapanizeSettings,
@@ -107,6 +126,17 @@ class LanguageEngine(
   ): CompletableFuture<ChatMessage> {
     fun auto() = japanizer.prepare(text, mode != "off", names, dictionary)
     if (mode == "auto" || mode == "off" || !settings.enabled) return auto()
+    // Single ASCII words keep their spelling; only dictionary and name replacements apply.
+    if (
+        JapanizePreparation.eligible(text, settings, true) &&
+            !JapanizePreparation.hasMultipleTranslationWords(text)
+    ) {
+      val replaced =
+          JapanizePreparation.parts(text, dictionary, names, romanize = false).joinToString("") {
+            it.text
+          }
+      return CompletableFuture.completedFuture(display(text, replaced))
+    }
     val source =
         if (mode != "ja" && JapanizePreparation.eligible(text, settings, true))
             romanize(text, names, dictionary)
@@ -143,6 +173,16 @@ class LanguageEngine(
         }
       }
 
+  fun foreignMarker(text: String): CompletableFuture<Boolean> =
+      request(text, "ja").thenApply(::isConfidentForeignLanguage)
+
+  fun prepareForeignMarker(message: ChatMessage): CompletableFuture<ChatMessage> {
+    val text = judgmentSource(message)
+    if (!needsForeignMarker(text, message.text))
+        return CompletableFuture.completedFuture(message.copy(foreign = false))
+    return foreignMarker(text).thenApply { message.copy(foreign = it) }
+  }
+
   private fun display(original: String, translated: String): ChatMessage =
       if (
           original == translated ||
@@ -175,7 +215,12 @@ class RecentSpeech(
     return id
   }
 
-  fun indicator(text: String, readers: Set<UUID>): net.kyori.adventure.text.Component {
+  fun indicator(
+      message: ChatMessage,
+      readers: Set<UUID>,
+  ): net.kyori.adventure.text.Component {
+    if (!message.foreign) return net.kyori.adventure.text.Component.empty()
+    val text = judgmentSource(message)
     val id = remember(text, readers)
     return net.kyori.adventure.text.Component.text(
             " [?]",

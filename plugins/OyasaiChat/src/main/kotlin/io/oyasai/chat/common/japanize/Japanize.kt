@@ -16,8 +16,10 @@ data class ChatMessage(
     val original: String? = null,
     val format: String? = null,
     val input: String? = null,
+    val foreign: Boolean = false,
 ) {
   companion object {
+    // The envelope carries no source language verdict; remote messages stay unmarked.
     fun from(envelope: io.oyasai.chat.common.protocol.NetworkEnvelope) =
         ChatMessage(envelope.content, envelope.japanizeOriginal, envelope.japanizeFormat)
   }
@@ -64,6 +66,11 @@ object JapanizePreparation {
 
   private fun word(c: Char): Boolean = c.isLetterOrDigit() || c == '_' || c == '\''
 
+  fun hasMultipleTranslationWords(text: String): Boolean =
+      text.split(Regex("\\s+")).count { word ->
+        word.any { it in 'a'..'z' || it in 'A'..'Z' } && !word.all { it == 'w' || it == 'W' }
+      } >= 2
+
   fun eligible(text: String, settings: JapanizeSettings, playerEnabled: Boolean): Boolean =
       settings.enabled &&
           playerEnabled &&
@@ -76,6 +83,7 @@ object JapanizePreparation {
       text: String,
       dictionary: Map<String, String>,
       names: Collection<String>,
+      romanize: Boolean = true,
   ): List<TextPart> {
     val keys =
         (dictionary.keys + names)
@@ -86,7 +94,11 @@ object JapanizePreparation {
     val pending = StringBuilder()
     fun flush() {
       if (pending.isNotEmpty()) {
-        result += TextPart(Romaji.convert(pending.toString()), false)
+        result +=
+            TextPart(
+                if (romanize) Romaji.convert(pending.toString()) else pending.toString(),
+                false,
+            )
         pending.setLength(0)
       }
     }
@@ -313,10 +325,7 @@ class Japanizer(
     val parts = JapanizePreparation.parts(text, dictionary, names)
     // Identity dictionary entries allow translation; URLs, names and replacements still block it.
     val translationEligible =
-        parts.none { it.blocksTranslation } &&
-            text.split(Regex("\\s+")).count { word ->
-              word.any { it in 'a'..'z' || it in 'A'..'Z' } && !word.all { it == 'w' || it == 'W' }
-            } >= 2
+        parts.none { it.blocksTranslation } && JapanizePreparation.hasMultipleTranslationWords(text)
     if (!translationEligible) return transliterate(text, parts)
     return runCatching { translate(text) }
         .getOrElse { CompletableFuture.completedFuture(null) }

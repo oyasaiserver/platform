@@ -16,6 +16,14 @@ class JapanizeTest {
   private val settings = JapanizeSettings(enabled = true)
 
   @Test
+  fun partsWithoutRomanizationKeepUnreplacedSingleWord() {
+    assertEquals(
+        listOf(TextPart("good", false)),
+        JapanizePreparation.parts("good", emptyMap(), emptyList(), romanize = false),
+    )
+  }
+
+  @Test
   fun romanization() {
     mapOf(
             "saikinotiyasui" to "さいきのちやすい",
