@@ -35,10 +35,10 @@ public class RouletteGui {
 
     public static final int SLOT_CANCEL = 18;
     public static final int SLOT_VISIBILITY = 20;
-    public static final int SLOT_RECEIVE_CHAT = 22;
+    public static final int SLOT_RECEIVE_CHAT = 21;
+    public static final int SLOT_STATUS = 22;
     public static final int SLOT_INFO = 24;
     public static final int SLOT_START = 26;
-    public static final int SLOT_STATUS = 22;
 
     /**
      * プレイヤーにルーレットGUIを開きます。
