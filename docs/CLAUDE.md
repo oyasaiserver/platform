@@ -1,5 +1,3 @@
-# Claude Entry
+# AI Entry
 
-Read `docs/_MANIFEST.md` first.
-
-Shared context starts at `docs/00_Context/CONTEXT.md`.
+Read `docs/Home.md` first. It routes you to the notes for your task and tells you how to record what you learn while working.
