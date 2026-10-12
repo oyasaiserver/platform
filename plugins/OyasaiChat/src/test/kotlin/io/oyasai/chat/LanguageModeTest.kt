@@ -413,7 +413,10 @@ class LanguageModeTest {
   fun indicatorHasGrayHoverAndRunCommandWithoutChangingMessageBody() {
     val reader = UUID.randomUUID()
     val recent = RecentSpeech()
-    val indicator = recent.indicator("boa noite", setOf(reader))
+    val indicator =
+        recent.indicator(ChatMessage("boa noite"), setOf(reader)) {
+          CompletableFuture.completedFuture(true)
+        }
     val plain = PlainTextComponentSerializer.plainText()
     assertEquals(" [?]", plain.serialize(indicator))
     assertEquals(NamedTextColor.GRAY, indicator.color())

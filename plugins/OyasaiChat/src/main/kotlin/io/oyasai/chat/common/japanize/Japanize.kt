@@ -64,6 +64,11 @@ object JapanizePreparation {
 
   private fun word(c: Char): Boolean = c.isLetterOrDigit() || c == '_' || c == '\''
 
+  fun hasMultipleTranslationWords(text: String): Boolean =
+      text.split(Regex("\\s+")).count { word ->
+        word.any { it in 'a'..'z' || it in 'A'..'Z' } && !word.all { it == 'w' || it == 'W' }
+      } >= 2
+
   fun eligible(text: String, settings: JapanizeSettings, playerEnabled: Boolean): Boolean =
       settings.enabled &&
           playerEnabled &&
@@ -313,10 +318,7 @@ class Japanizer(
     val parts = JapanizePreparation.parts(text, dictionary, names)
     // Identity dictionary entries allow translation; URLs, names and replacements still block it.
     val translationEligible =
-        parts.none { it.blocksTranslation } &&
-            text.split(Regex("\\s+")).count { word ->
-              word.any { it in 'a'..'z' || it in 'A'..'Z' } && !word.all { it == 'w' || it == 'W' }
-            } >= 2
+        parts.none { it.blocksTranslation } && JapanizePreparation.hasMultipleTranslationWords(text)
     if (!translationEligible) return transliterate(text, parts)
     return runCatching { translate(text) }
         .getOrElse { CompletableFuture.completedFuture(null) }
