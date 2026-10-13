@@ -98,6 +98,10 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val rightAxis = HorizontalUnit(-depthAxis.z, depthAxis.x)
     val width = lengthAlong(bounds, rightAxis)
     val depth = lengthAlong(bounds, depthAxis)
+    if (width !in 1..256 || depth !in 1..256) {
+      MessageUtil.error(sender, "群衆生成の幅・奥行きは 256 ブロック以下にしてください。")
+      return true
+    }
     val requestedPeople = (natural.density * width.toLong() * depth).roundToInt()
     if (request.mannequin) {
       val max = plugin.config.getInt("crowd.max-mannequins", 300).coerceAtLeast(0)

@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
+import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -137,6 +138,14 @@ class MuteFeature(private val plugin: OyasaiChatPlugin) :
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun onCommand(event: PlayerCommandPreprocessEvent) {
     if (!MuteRules.blocksCommand(event.message, blockedCommands)) return
+    rejection(event.player)?.let {
+      event.isCancelled = true
+      event.player.sendMessage(it)
+    }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun onSignChange(event: SignChangeEvent) {
     rejection(event.player)?.let {
       event.isCancelled = true
       event.player.sendMessage(it)

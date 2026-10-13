@@ -35,6 +35,7 @@ class SongDetailScreen(
 
   private var song: Song = initialSong
   private var isFollowing = false
+  private var followLoaded = false
   private var hasLiked = false
   private var currentPlaybackMode: com.github.sahyuya.oyasaiMusic.audio.PlaybackMode =
       com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.DEFAULT
@@ -69,6 +70,7 @@ class SongDetailScreen(
                       plugin,
                       Runnable {
                         isFollowing = following
+                        followLoaded = true
                         hasLiked = liked
                         currentPlaybackMode = mode
                         render()
@@ -421,6 +423,8 @@ class SongDetailScreen(
 
   companion object {
     private val purchases = java.util.concurrent.ConcurrentHashMap.newKeySet<java.util.UUID>()
+    private val followUpdates =
+        java.util.concurrent.ConcurrentHashMap.newKeySet<Pair<java.util.UUID, java.util.UUID>>()
   }
 
   private fun openAuthorProfile() {
@@ -432,22 +436,39 @@ class SongDetailScreen(
   }
 
   private fun toggleFollow() {
+    val key = viewer.uniqueId to song.authorUuid
+    if (!followLoaded || !followUpdates.add(key)) return
+    val following = !isFollowing
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              if (isFollowing) {
-                plugin.socialRepository.unfollow(viewer.uniqueId, song.authorUuid)
-              } else {
-                plugin.socialRepository.follow(viewer.uniqueId, song.authorUuid)
+              val result = runCatching {
+                if (following) {
+                  plugin.socialRepository.follow(key.first, key.second)
+                } else {
+                  plugin.socialRepository.unfollow(key.first, key.second)
+                }
+              }
+              if (!plugin.isEnabled) {
+                followUpdates.remove(key)
+                return@Runnable
               }
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
-                        isFollowing = !isFollowing
-                        viewer.sendMessage(if (isFollowing) "§aフォローしました。" else "§7フォローを解除しました。")
-                        render()
+                        try {
+                          if (result.isSuccess) {
+                            isFollowing = following
+                            viewer.sendMessage(if (isFollowing) "§aフォローしました。" else "§7フォローを解除しました。")
+                            render()
+                          } else {
+                            viewer.sendMessage("§cフォロー情報の更新に失敗しました。もう一度お試しください。")
+                          }
+                        } finally {
+                          followUpdates.remove(key)
+                        }
                       },
                   )
             },

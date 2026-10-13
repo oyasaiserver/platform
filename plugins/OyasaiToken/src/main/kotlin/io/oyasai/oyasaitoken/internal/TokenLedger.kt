@@ -9,7 +9,8 @@ import java.util.concurrent.CompletableFuture
  * The [persist] callback must enqueue all supplied writes as one FIFO persistence job. The callback
  * is invoked while this ledger's lock is held, so a successful enqueue and the matching memory
  * update have one ordering point for every mutation, including transfers. A non-null completion is
- * completed by the persistence worker only after the job's transaction finishes.
+ * completed with false when the operation is rejected, or by the persistence worker after an
+ * accepted job's transaction finishes (true only on commit success).
  */
 internal class TokenLedger(
     private val defaultBalance: () -> Long,
@@ -66,6 +67,7 @@ internal class TokenLedger(
       context: MutationContext = MutationContext.SILENT,
       completion: CompletableFuture<Boolean>? = null,
   ): BalanceChange? {
+    if (amount < 0) completion?.complete(false)
     require(amount >= 0) { "amount must be non-negative" }
     return synchronized(lock) {
       val current = account(uuid, name)
@@ -113,15 +115,10 @@ internal class TokenLedger(
       context: MutationContext,
       completion: CompletableFuture<Boolean>?,
   ): BalanceChange? {
-    if (amount < 0) {
-      // This completion-bearing API is deliberately add-only: forwarding to remove would not
-      // carry the completion through the separate removal path.
-      completion?.complete(false)
-      return null
-    }
+    if (amount < 0) return reject(completion)
     return synchronized(lock) {
       val current = account(uuid, name)
-      val next = current.record.balance.checkedAdd(amount) ?: return@synchronized null
+      val next = current.record.balance.checkedAdd(amount) ?: return@synchronized reject(completion)
       val write =
           BalanceWrite(
               uuid = uuid,
@@ -156,17 +153,10 @@ internal class TokenLedger(
       context: MutationContext = MutationContext.SILENT,
       completion: CompletableFuture<Boolean>? = null,
   ): BalanceChange? {
-    if (amount < 0) {
-      if (amount == Long.MIN_VALUE) return null
-      val addContext =
-          context.copy(
-              notificationType = context.notificationType?.let { NotificationType.ADD },
-          )
-      return add(uuid, name, -amount, addContext, completion)
-    }
+    if (amount < 0) return reject(completion)
     return synchronized(lock) {
       val current = account(uuid, name)
-      if (current.record.balance < amount) return@synchronized null
+      if (current.record.balance < amount) return@synchronized reject(completion)
       val next = current.record.balance - amount
       val write =
           BalanceWrite(
@@ -207,10 +197,11 @@ internal class TokenLedger(
       amount: Long,
       completion: CompletableFuture<Boolean>? = null,
   ): Transfer? {
+    if (amount <= 0) completion?.complete(false)
     require(amount > 0) { "amount must be positive" }
     return synchronized(lock) {
       val source = account(sourceUuid, sourceName)
-      if (source.record.balance < amount) return@synchronized null
+      if (source.record.balance < amount) return@synchronized reject(completion)
 
       if (sourceUuid == targetUuid) {
         return@synchronized transferToSelf(source, sourceName, targetName, amount, completion)
@@ -218,7 +209,8 @@ internal class TokenLedger(
 
       val target = account(targetUuid, targetName)
       val sourceNext = source.record.balance - amount
-      val targetNext = target.record.balance.checkedAdd(amount) ?: return@synchronized null
+      val targetNext =
+          target.record.balance.checkedAdd(amount) ?: return@synchronized reject(completion)
       val sourceWrite =
           BalanceWrite(
               sourceUuid,
@@ -348,9 +340,14 @@ internal class TokenLedger(
       completion: CompletableFuture<Boolean>? = null,
       accepted: () -> T,
   ): T? {
-    if (!persist(writes, completion)) return null
+    if (!persist(writes, completion)) return reject(completion)
     balances.putAll(updates)
     return accepted()
+  }
+
+  private fun reject(completion: CompletableFuture<Boolean>?): Nothing? {
+    completion?.complete(false)
+    return null
   }
 
   private fun BalanceRecord.defaultWrite(uuid: UUID): BalanceWrite =

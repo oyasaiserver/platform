@@ -13,7 +13,12 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
   @Volatile private var closed = false
   private val dictionary = plugin.runtime.dictionary
   private val settings = plugin.runtime.config.japanize
-  private val engine = Japanizer(settings, GoogleTransliterator(settings.timeoutMillis)::convert)
+  private val engine =
+      LanguageEngine(
+          settings,
+          translate = GoogleTranslator(settings.timeoutMillis)::translate,
+          convert = GoogleTransliterator(settings.timeoutMillis)::convert,
+      )
 
   fun enqueue(player: Player, text: String, deliver: (ChatMessage) -> Unit) {
     check(plugin.server.isPrimaryThread)
@@ -30,7 +35,8 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
       player.sendMessage(plugin.runtime.formatter.error("Message must contain 1–4096 characters."))
       return
     }
-    val enabled = plugin.runtime.states.get(player).japanizeEnabled
+    val mode = plugin.runtime.states.get(player).languageMode
+    val enabled = mode != "off"
     val localNames = plugin.server.onlinePlayers.map { it.name }
     val names =
         if (JapanizePreparation.eligible(text, settings, enabled))
@@ -39,30 +45,37 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
     val accepted =
         ordered.enqueue(player.uniqueId) {
           val done = CompletableFuture<Void>()
-          engine.prepare(text, enabled, names, dictionary.effective()).whenComplete { message, error
-            ->
-            runCatching {
-                  val commit = Runnable {
-                    try {
-                      if (
-                          !closed &&
-                              player.isOnline &&
-                              plugin.server.getPlayer(player.uniqueId) === player
-                      ) {
-                        val prepared = if (error == null) message else ChatMessage(text)
-                        if (!prepared.isBlank()) deliver(prepared)
+          engine
+              .prepare(text, mode, names, dictionary.effective())
+              .handle { message, error ->
+                (if (error == null) message else ChatMessage(text)).copy(input = text)
+              }
+              // Keep detection in the source slot, before scheduling the main-thread commit.
+              .thenCompose(engine::prepareForeignMarker)
+              .whenComplete { message, error ->
+                runCatching {
+                      val commit = Runnable {
+                        try {
+                          if (
+                              !closed &&
+                                  player.isOnline &&
+                                  plugin.server.getPlayer(player.uniqueId) === player
+                          ) {
+                            val prepared =
+                                if (error == null) message else ChatMessage(text, input = text)
+                            if (!prepared.isBlank()) deliver(prepared)
+                          }
+                        } catch (failure: Exception) {
+                          plugin.logger.warning("Unable to commit chat message: ${failure.message}")
+                        } finally {
+                          finishWhenPrivateIdle(player.uniqueId, done)
+                        }
                       }
-                    } catch (failure: Exception) {
-                      plugin.logger.warning("Unable to commit chat message: ${failure.message}")
-                    } finally {
-                      finishWhenPrivateIdle(player.uniqueId, done)
+                      if (plugin.server.isPrimaryThread) commit.run()
+                      else plugin.server.scheduler.runTask(plugin, commit)
                     }
-                  }
-                  if (plugin.server.isPrimaryThread) commit.run()
-                  else plugin.server.scheduler.runTask(plugin, commit)
-                }
-                .onFailure { done.complete(null) }
-          }
+                    .onFailure { done.complete(null) }
+              }
           done
         }
     if (!accepted)
@@ -77,6 +90,45 @@ class SourceMessageQueue(private val plugin: OyasaiChatPlugin) : AutoCloseable {
     if (!closed && plugin.runtime.privateMessages.hasPendingSource(id)) {
       plugin.server.scheduler.runTaskLater(plugin, Runnable { finishWhenPrivateIdle(id, done) }, 1L)
     } else done.complete(null)
+  }
+
+  private val speeches = RecentSpeech()
+
+  fun indicator(
+      message: ChatMessage,
+      recipients: Collection<Player>,
+  ): net.kyori.adventure.text.Component =
+      speeches.indicator(message, recipients.map { it.uniqueId }.toSet())
+
+  fun check(player: Player, id: Long) {
+    val text = speeches.text(id, player.uniqueId)
+    if (text == null) {
+      player.sendMessage(net.kyori.adventure.text.Component.text("古い発言なので判定できません"))
+      return
+    }
+    if (!speeches.allow(player.uniqueId)) {
+      player.sendMessage(net.kyori.adventure.text.Component.text("数秒待ってから判定してください"))
+      return
+    }
+    engine.check(text).whenComplete { result, error ->
+      runCatching {
+        plugin.server.scheduler.runTask(
+            plugin,
+            Runnable {
+              if (!closed && player.isOnline && plugin.server.getPlayer(player.uniqueId) === player)
+                  player.sendMessage(
+                      net.kyori.adventure.text.Component.text(
+                          if (error == null) result else "[判定] 判定できませんでした"
+                      )
+                  )
+            },
+        )
+      }
+    }
+  }
+
+  fun forget(player: Player) {
+    speeches.forget(player.uniqueId)
   }
 
   fun canReloadSafely(): Boolean = ordered.isIdle()

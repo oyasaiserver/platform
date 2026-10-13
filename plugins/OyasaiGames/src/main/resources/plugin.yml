@@ -40,6 +40,10 @@ commands:
   headhunt:
     description: HeadHuntのメインコマンドです。
     aliases: [hhunt]
+  dice:
+    description: おやさいサイコロを取得・操作します
+    aliases: [saikoro, odice]
+    permission: oyasaigames.dice.use
   joingame:
     usage: "/joingame <text>"
   leavegame:
@@ -114,6 +118,9 @@ permissions:
   oyasaigames.admin:
     description: おやさいゲームズの管理権限
     default: op
+  oyasaigames.dice.use:
+    description: おやさいサイコロを使用する権限
+    default: true
   oyasaigames.roulette.use:
     description: ルーレットを使用する権限
     default: true

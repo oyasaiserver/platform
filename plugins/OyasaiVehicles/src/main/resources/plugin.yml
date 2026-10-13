@@ -63,3 +63,5 @@ permissions:
   oyasaivehicles.vip.car.smoke:
     description: "寄付者限定機能: 車のドリフト時の煙カスタム"
     default: false
+softdepend:
+  - FastAsyncWorldEdit

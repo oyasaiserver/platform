@@ -262,7 +262,20 @@ class MainMenuScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val pending = plugin.userRepository.get(viewer.uniqueId)
+              val pending =
+                  runCatching { plugin.userRepository.takePending(viewer.uniqueId) }
+                      .getOrElse { failure ->
+                        plugin.logger.warning("報酬の受取確定に失敗しました: ${failure.message}")
+                        Bukkit.getScheduler()
+                            .runTask(
+                                plugin,
+                                Runnable {
+                                  claimsInProgress.remove(viewer.uniqueId)
+                                  viewer.sendMessage("§c報酬の受取を確定できませんでした。もう一度お試しください。")
+                                },
+                            )
+                        return@Runnable
+                      }
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
@@ -274,7 +287,10 @@ class MainMenuScreen(
                         }
 
                         val moneyResult =
-                            plugin.economyService.deposit(viewer, pending.pendingMoney)
+                            runCatching {
+                                  plugin.economyService.deposit(viewer, pending.pendingMoney)
+                                }
+                                .getOrElse { PayoutResult.Failed("入金に失敗しました") }
                         val pointFuture =
                             plugin.economyService.grantPoints(viewer, pending.pendingPoints)
                         pointFuture.thenAccept { pointResult ->
@@ -282,39 +298,46 @@ class MainMenuScreen(
                               .runTaskAsynchronously(
                                   plugin,
                                   Runnable {
-                                    if (
-                                        moneyResult is PayoutResult.Success &&
-                                            pending.pendingMoney > 0
-                                    ) {
-                                      plugin.userRepository.consumePending(
-                                          viewer.uniqueId,
-                                          money = pending.pendingMoney,
-                                      )
-                                    }
-                                    if (
-                                        pointResult is PayoutResult.Success &&
-                                            pending.pendingPoints > 0
-                                    ) {
-                                      plugin.userRepository.consumePending(
-                                          viewer.uniqueId,
-                                          points = pending.pendingPoints,
-                                      )
-                                    }
+                                    val restored =
+                                        (moneyResult is PayoutResult.Success &&
+                                            pointResult is PayoutResult.Success) ||
+                                            runCatching {
+                                                  plugin.userRepository.restorePending(
+                                                      viewer.uniqueId,
+                                                      money =
+                                                          if (moneyResult is PayoutResult.Success) 0
+                                                          else pending.pendingMoney,
+                                                      points =
+                                                          if (pointResult is PayoutResult.Success) 0
+                                                          else pending.pendingPoints,
+                                                  )
+                                                }
+                                                .isSuccess
+                                    if (!restored)
+                                        plugin.logger.severe(
+                                            "報酬の失敗分を戻せませんでした: ${viewer.uniqueId} money=${pending.pendingMoney} points=${pending.pendingPoints}"
+                                        )
                                     Bukkit.getScheduler()
                                         .runTask(
                                             plugin,
                                             Runnable {
+                                              if (!restored)
+                                                  viewer.sendMessage(
+                                                      "§c失敗した報酬の残高を戻せませんでした。管理者に連絡してください。"
+                                                  )
                                               val messages = mutableListOf<String>()
                                               if (pending.pendingMoney > 0)
                                                   messages +=
                                                       if (moneyResult is PayoutResult.Success)
                                                           "${pending.pendingMoney}円"
-                                                      else "お金: ${payoutFailure(moneyResult)}"
+                                                      else
+                                                          "お金: ${payoutFailure(moneyResult, restored)}"
                                               if (pending.pendingPoints > 0)
                                                   messages +=
                                                       if (pointResult is PayoutResult.Success)
                                                           "${pending.pendingPoints}pt"
-                                                      else "ポイント: ${payoutFailure(pointResult)}"
+                                                      else
+                                                          "ポイント: ${payoutFailure(pointResult, restored)}"
                                               viewer.sendMessage(
                                                   "§a受取結果: §f${messages.joinToString(" / ")}"
                                               )
@@ -342,11 +365,11 @@ class MainMenuScreen(
         )
   }
 
-  private fun payoutFailure(result: PayoutResult): String =
+  private fun payoutFailure(result: PayoutResult, restored: Boolean): String =
       when (result) {
         PayoutResult.Success -> ""
-        is PayoutResult.Unavailable -> "${result.reason}（残高は保持）"
-        is PayoutResult.Failed -> "${result.reason}（残高は保持）"
+        is PayoutResult.Unavailable -> "${result.reason}（${if (restored) "残高は保持" else "残高の復元失敗"}）"
+        is PayoutResult.Failed -> "${result.reason}（${if (restored) "残高は保持" else "残高の復元失敗"}）"
       }
 
   private fun pendingRewardLine(): Component {

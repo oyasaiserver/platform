@@ -31,7 +31,7 @@ agent_task: null
 | TPswitch | `/tpset` で TP 受付と許可・拒否リストを管理。設定は SQLite に保存 |
 | CreativeManagement | クリエ/サバイバル間のアイテム受け渡し制限（`cm.bypass`） |
 | DebugOnBE | ブロック配置デバッグ表示・Togo設定GUI（`/debugonbe`, `/togo`, `/togom`） |
-| Workstations | EssentialsX 互換の `/skull`, `/hat`, `/enderchest`, 作業台系（仕様は `plugins/OyasaiUtilities/WORKSTATIONS.md`） |
+| Fart | しゃがむとおならの音と硫黄色の煙を出すモードを切り替える（`/fart`）。状態はメモリのみ |
 
 ## AI 作業入口
 
@@ -41,6 +41,7 @@ agent_task: null
 | 仕様の正本（Workstations） | `plugins/OyasaiUtilities/WORKSTATIONS.md` |
 | 主要コード | `Main.kt`（エントリ）、機能ごとに `adminbp/`, `ore_reappears/`, `oresmelter/`, `debugonbe/` 等のサブパッケージ |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:OyasaiUtilities:compileKotlin` |
+| しゃがみイベントの共有 | `PlayerToggleSneakEvent` は Sit（乗り物・這いの解除）、Elevator（下り）、Fart（おなら）が使う。新しいしゃがみ機能では cancel せず、他の機能の処理を止めない |
 | 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置く |
 
 ## 統合版（Bedrock）の頭（`/skull`）

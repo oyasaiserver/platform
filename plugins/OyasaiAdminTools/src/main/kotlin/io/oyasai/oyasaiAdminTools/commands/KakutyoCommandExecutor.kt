@@ -75,15 +75,19 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
     }
 
     // 100ポイント = 半径50ブロック
-    val expansionRadius = ((points / 100) * 50).toInt()
+    val expansionRadius = (points / 100) * 50
     val currentRadiusX = borderData.radiusX
     val currentRadiusZ = borderData.radiusZ
     val centerX = borderData.x
     val centerZ = borderData.z
-    val newRadiusX = currentRadiusX + expansionRadius
-    val newRadiusZ = currentRadiusZ + expansionRadius
-
-    WorldBorderManager.setRadii(currentWorldName, newRadiusX, newRadiusZ)
+    val radiusX = currentRadiusX.toLong() + expansionRadius
+    val radiusZ = currentRadiusZ.toLong() + expansionRadius
+    if (radiusX !in 1..Int.MAX_VALUE.toLong() || radiusZ !in 1..Int.MAX_VALUE.toLong()) {
+      sender.sendMessage("§c拡張後の半径が上限 (${Int.MAX_VALUE}) を超えます。")
+      return true
+    }
+    val newRadiusX = radiusX.toInt()
+    val newRadiusZ = radiusZ.toInt()
 
     sender.sendMessage("§aワールド §e$currentWorldName §aの拡張を開始します。")
     sender.sendMessage("§8中心: ($centerX, $centerZ)")
@@ -91,11 +95,11 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
 
     val success = tmPlugin.removeTokens(targetPlayer, points)
     if (success) {
+      WorldBorderManager.setRadii(currentWorldName, newRadiusX, newRadiusZ)
       sender.sendMessage("§b拡張成功！ ${targetName}から ${points}ポイント徴収しました。")
       targetPlayer.sendMessage("§gワールド拡張のため ${points}ポイント消費しました。")
     } else {
-      sender.sendMessage("§cトークン消費に失敗したため、ボーダーを元に戻します。")
-      WorldBorderManager.setRadii(currentWorldName, currentRadiusX, currentRadiusZ)
+      sender.sendMessage("§cトークン消費に失敗したため、拡張を中止しました。")
     }
     return true
   }

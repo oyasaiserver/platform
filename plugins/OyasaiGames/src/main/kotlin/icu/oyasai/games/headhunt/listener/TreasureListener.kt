@@ -164,6 +164,12 @@ class TreasureListener(
       return
     }
 
+    val player = event.player
+    if (!gameManager.isSetModeEnabled(player.uniqueId) || !player.hasPermission("headhunt.admin")) {
+      event.isCancelled = true
+      return
+    }
+
     val removedTreasure = treasureManager.unregisterAt(block)
     if (saveOrWarn(event.player)) {
       val message =

@@ -75,6 +75,7 @@ object Pita : Listener, CommandExecutor {
       sender.sendMessage("§aPita Mode: §bON (Pita!)")
       Bukkit.getLogger().info("${sender.name} has enabled Pita Mode.")
     }
+    saveData()
     return true
   }
 

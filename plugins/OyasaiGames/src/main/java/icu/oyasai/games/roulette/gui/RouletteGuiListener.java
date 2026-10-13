@@ -3,6 +3,9 @@ package icu.oyasai.games.roulette.gui;
 import icu.oyasai.games.roulette.model.RouletteMode;
 import icu.oyasai.games.roulette.model.RouletteSession;
 import icu.oyasai.games.roulette.service.RouletteManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -66,7 +69,7 @@ public class RouletteGuiListener implements Listener {
             } else if (slot == RouletteGui.SLOT_START) {
                 holder.setState(RouletteGuiHolder.State.SELECTING);
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.0f);
-                RouletteGui.render(inv, session);
+                RouletteGui.render(inv, player, session);
             }
             return;
         }
@@ -77,34 +80,34 @@ public class RouletteGuiListener implements Listener {
             case RouletteGui.SLOT_MODE_ALL -> {
                 session.setSelectedMode(RouletteMode.ALL);
                 playButtonSound(player);
-                RouletteGui.render(inv, session);
+                RouletteGui.render(inv, player, session);
             }
             case RouletteGui.SLOT_MODE_FULL -> {
                 session.setSelectedMode(RouletteMode.FULL_BLOCK);
                 playButtonSound(player);
-                RouletteGui.render(inv, session);
+                RouletteGui.render(inv, player, session);
             }
             case RouletteGui.SLOT_MODE_NON_FULL -> {
                 session.setSelectedMode(RouletteMode.NON_FULL_BLOCK);
                 playButtonSound(player);
-                RouletteGui.render(inv, session);
+                RouletteGui.render(inv, player, session);
             }
 
             // 回数選択
             case RouletteGui.SLOT_COUNT_1 -> {
                 session.setSelectedCount(1);
                 playButtonSound(player);
-                RouletteGui.render(inv, session);
+                RouletteGui.render(inv, player, session);
             }
             case RouletteGui.SLOT_COUNT_3 -> {
                 session.setSelectedCount(3);
                 playButtonSound(player);
-                RouletteGui.render(inv, session);
+                RouletteGui.render(inv, player, session);
             }
             case RouletteGui.SLOT_COUNT_5 -> {
                 session.setSelectedCount(5);
                 playButtonSound(player);
-                RouletteGui.render(inv, session);
+                RouletteGui.render(inv, player, session);
             }
 
             // キャンセルボタン
@@ -117,7 +120,31 @@ public class RouletteGuiListener implements Listener {
             case RouletteGui.SLOT_VISIBILITY -> {
                 session.toggleBroadcast();
                 playButtonSound(player);
-                RouletteGui.render(inv, session);
+                RouletteGui.render(inv, player, session);
+            }
+
+            // 他人の結果受信設定ボタン
+            case RouletteGui.SLOT_RECEIVE_CHAT -> {
+                boolean newReceive = manager.toggleChatReceive(player);
+                player.playSound(
+                        player.getLocation(),
+                        Sound.UI_BUTTON_CLICK,
+                        0.8f,
+                        newReceive ? 1.4f : 0.8f
+                );
+                String statusText = newReceive ? "受信する (ON)" : "受信しない (OFF)";
+                NamedTextColor statusColor = newReceive ? NamedTextColor.GREEN : NamedTextColor.RED;
+                player.sendMessage(
+                        Component.text("[おやさいルーレット] 他人のルーレット結果のチャット通知を ", NamedTextColor.GOLD)
+                                .append(Component.text(statusText, statusColor, TextDecoration.BOLD))
+                                .append(Component.text(" に切り替えました！", NamedTextColor.GOLD))
+                );
+                RouletteGui.render(inv, player, session);
+            }
+
+            // 設定内容アイコン
+            case RouletteGui.SLOT_INFO -> {
+                player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 0.7f, 1.0f);
             }
 
             // 抽選開始ボタン
@@ -143,7 +170,7 @@ public class RouletteGuiListener implements Listener {
                 boolean started = manager.startRoulette(player, session);
                 if (!started) {
                     holder.setState(RouletteGuiHolder.State.SELECTING);
-                    RouletteGui.render(inv, session);
+                    RouletteGui.render(inv, player, session);
                 }
             }
 

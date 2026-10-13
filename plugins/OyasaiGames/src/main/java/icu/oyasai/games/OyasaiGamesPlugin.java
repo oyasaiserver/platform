@@ -1,6 +1,7 @@
 package icu.oyasai.games;
 
 import icu.oyasai.games.command.GamesCommand;
+import icu.oyasai.games.dice.DiceModule;
 import icu.oyasai.games.gui.GamesHubListener;
 import icu.oyasai.games.headhunt.HeadHuntModule;
 import icu.oyasai.games.weapons.WeaponsModule;
@@ -36,6 +37,7 @@ public class OyasaiGamesPlugin extends JavaPlugin {
     private icu.oyasai.games.tntrun.TntrunModule tntrunModule;
     private KimodameshiModule kimodameshiModule;
     private ToysModule toysModule;
+    private DiceModule diceModule;
 
     @Override
     public void onEnable() {
@@ -106,6 +108,15 @@ public class OyasaiGamesPlugin extends JavaPlugin {
         toysModule = new ToysModule(this);
         toysModule.enable();
 
+        // おやさいサイコロモジュールの初期化
+        diceModule = new DiceModule(this);
+        try {
+            diceModule.enable();
+        } catch (Exception | LinkageError exception) {
+            shutdownModule("おやさいサイコロ", diceModule::disable);
+            getLogger().log(java.util.logging.Level.SEVERE, "おやさいサイコロの初期化に失敗しました。", exception);
+        }
+
         // 2. おやさいゲームズ共通ハブコマンド & リスナーの登録
         registerGamesHub();
 
@@ -146,6 +157,9 @@ public class OyasaiGamesPlugin extends JavaPlugin {
 
         if (kimodameshiModule != null) kimodameshiModule.disable();
         if (toysModule != null) toysModule.disable();
+        if (diceModule != null) {
+            shutdownModule("おやさいサイコロ", diceModule::disable);
+        }
 
         getLogger().info("OyasaiGames を安全に停止しました。");
         instance = null;
@@ -188,7 +202,7 @@ public class OyasaiGamesPlugin extends JavaPlugin {
             gamesCmd.setTabCompleter(cmd);
         }
 
-        getServer().getPluginManager().registerEvents(new GamesHubListener(rouletteManager), this);
+        getServer().getPluginManager().registerEvents(new GamesHubListener(rouletteManager, diceModule), this);
     }
 
     /**
@@ -247,5 +261,9 @@ public class OyasaiGamesPlugin extends JavaPlugin {
 
     public BlockClassifier getBlockClassifier() {
         return blockClassifier;
+    }
+
+    public DiceModule getDiceModule() {
+        return diceModule;
     }
 }

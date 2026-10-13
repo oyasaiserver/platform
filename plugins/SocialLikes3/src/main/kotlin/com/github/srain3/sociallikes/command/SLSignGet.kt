@@ -90,7 +90,9 @@ object SLSignGet : CommandExecutor, TabCompleter {
     meta.lore = listOf("&7設置後に&e/slupdate".color())
     item.itemMeta = meta
 
-    player.inventory.addItem(item)
+    player.inventory.addItem(item).values.forEach {
+      player.world.dropItemNaturally(player.location, it)
+    }
   }
 
   private fun resolveSignItemMaterial(slData: SLData, requestedHanging: Boolean?): Material {

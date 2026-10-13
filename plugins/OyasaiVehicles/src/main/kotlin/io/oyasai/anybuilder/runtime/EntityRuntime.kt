@@ -4,6 +4,7 @@ import io.oyasai.VehicleMenuCommand
 import io.oyasai.toolbox.ControlKey
 import io.oyasai.toolbox.Tools
 import java.lang.reflect.Method
+import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.Location
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Entity
@@ -12,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
 
 object EntityRuntime {
-  val displayEntityIds: MutableSet<Int> = mutableSetOf()
+  val displayEntityIds: MutableSet<Int> = ConcurrentHashMap.newKeySet()
   private var packetTickIndex: Int = 0
 
   private val methodCache = mutableMapOf<Class<*>, Method?>()

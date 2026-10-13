@@ -62,6 +62,7 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     val startedAt = System.currentTimeMillis()
     var ticks = 0
     var task: BukkitTask? = null
+    var commandStarted = false
   }
 
   fun enable() {
@@ -659,6 +660,8 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       )
       for (reward in spin.prize?.rewards.orEmpty()) {
         reward.command?.let { command ->
+          // Console commands may leave side effects even when they fail or throw.
+          spin.commandStarted = true
           check(
               Bukkit.dispatchCommand(
                   Bukkit.getConsoleSender(),
@@ -672,6 +675,7 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       player.inventory.storageContents = contents
       spin.payment.complete()
     } catch (failure: Exception) {
+      if (spin.commandStarted) throw failure
       player.inventory.storageContents = oldInventory
       data.loadFromString(oldPlayer)
       machine.yaml.set("timesUsed", oldUsed)
@@ -738,9 +742,18 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
   private fun abort(key: Pair<UUID, UUID>, spin: Spin, reason: String) {
     if (sessions.remove(key) == null) return
     spin.task?.cancel()
-    refund(spin.player, spin.payment)
+    if (spin.commandStarted) {
+      plugin.logger.severe(
+          "slot: COMMAND景品の実行開始後に中断しました (${spin.payment.phase})。自動返金せず経済ログとpaymentsを照合してください。"
+      )
+    } else {
+      refund(spin.player, spin.payment)
+    }
     if (spin.player.isOnline) {
-      spin.player.sendMessage("§c抽選を中止しました: $reason")
+      spin.player.sendMessage(
+          if (spin.commandStarted) "§c景品の処理が未確定です。自動返金せず管理者確認を待ちます: $reason"
+          else "§c抽選を中止しました: $reason"
+      )
       spin.player.closeInventory()
     }
   }

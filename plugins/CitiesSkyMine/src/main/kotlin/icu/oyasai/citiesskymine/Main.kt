@@ -39,6 +39,8 @@ import java.util.HashMap
 import java.util.UUID
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
@@ -83,29 +85,14 @@ class Main : JavaPlugin() {
     debugStickMemoryStore = DebugStickMemoryStore(this).also { it.load() }
 
     val rcHandler = RoadCurveCommand(this)
-    val rcCmd = getCommand("rc")
-    rcCmd?.setExecutor(rcHandler)
-    rcCmd?.tabCompleter = rcHandler
-    val dotRcCmd = getCommand(".rc")
-    dotRcCmd?.setExecutor(rcHandler)
-    dotRcCmd?.tabCompleter = rcHandler
+    bind(rcHandler, "rc", ".rc")
     server.pluginManager.registerEvents(WaypointListener(this), this)
 
     val riHandler = IntersectionCommand(this)
-    val riCmd = getCommand("ri")
-    riCmd?.setExecutor(riHandler)
-    riCmd?.tabCompleter = riHandler
-    val dotRiCmd = getCommand(".ri")
-    dotRiCmd?.setExecutor(riHandler)
-    dotRiCmd?.tabCompleter = riHandler
+    bind(riHandler, "ri", ".ri")
 
     val hbHandler = HaussmannCommand(this)
-    val hbCmd = getCommand("hb")
-    hbCmd?.setExecutor(hbHandler)
-    hbCmd?.tabCompleter = hbHandler
-    val dotHbCmd = getCommand(".hb")
-    dotHbCmd?.setExecutor(hbHandler)
-    dotHbCmd?.tabCompleter = hbHandler
+    bind(hbHandler, "hb", ".hb")
 
     val payloadHandler = PayloadCommand(this)
     val windowHandler = WindowCommand(this)
@@ -145,68 +132,42 @@ class Main : JavaPlugin() {
             brushPresetHandler,
             schematicHandler,
         )
-    val csmCmd = getCommand("csm")
-    csmCmd?.setExecutor(csmHandler)
-    csmCmd?.tabCompleter = csmHandler
-    val dotHelpCmd = getCommand(".help")
-    dotHelpCmd?.setExecutor(csmHandler)
-    dotHelpCmd?.tabCompleter = csmHandler
-    val dotPayloadCmd = getCommand(".pl")
-    dotPayloadCmd?.setExecutor(payloadHandler)
-    dotPayloadCmd?.tabCompleter = payloadHandler
-    val dotWindowCmd = getCommand(".win")
-    dotWindowCmd?.setExecutor(windowHandler)
-    dotWindowCmd?.tabCompleter = windowHandler
-    val dotSlabStairsCmd = getCommand(".ss")
-    dotSlabStairsCmd?.setExecutor(slabStairsHandler)
-    dotSlabStairsCmd?.tabCompleter = slabStairsHandler
-    val dotColumnCmd = getCommand(".col")
-    dotColumnCmd?.setExecutor(columnLayoutHandler)
-    dotColumnCmd?.tabCompleter = columnLayoutHandler
-    val dotStackCmd = getCommand(".ns")
-    dotStackCmd?.setExecutor(stackHandler)
-    dotStackCmd?.tabCompleter = stackHandler
-    val dotCrowdCmd = getCommand(".crowd")
-    dotCrowdCmd?.setExecutor(crowdHandler)
-    dotCrowdCmd?.tabCompleter = crowdHandler
-    val dotSelectionCmd = getCommand(".sel")
-    dotSelectionCmd?.setExecutor(selectionHandler)
-    dotSelectionCmd?.tabCompleter = selectionHandler
-    val dotSettingsCmd = getCommand(".settings")
-    dotSettingsCmd?.setExecutor(settingsHandler)
-    dotSettingsCmd?.tabCompleter = settingsHandler
-    val dotConfigCmd = getCommand(".config")
-    dotConfigCmd?.setExecutor(serverConfigHandler)
-    dotConfigCmd?.tabCompleter = serverConfigHandler
-    val dotCloudCmd = getCommand(".cloud")
-    dotCloudCmd?.setExecutor(cloudHandler)
-    dotCloudCmd?.tabCompleter = cloudHandler
-    val dotBezierCmd = getCommand(".bez")
-    dotBezierCmd?.setExecutor(bezierHandler)
-    dotBezierCmd?.tabCompleter = bezierHandler
+    bind(csmHandler, "csm", ".help")
+    bind(payloadHandler, ".pl")
+    bind(windowHandler, ".win")
+    bind(slabStairsHandler, ".ss")
+    bind(columnLayoutHandler, ".col")
+    bind(stackHandler, ".ns")
+    bind(crowdHandler, ".crowd")
+    bind(selectionHandler, ".sel")
+    bind(settingsHandler, ".settings")
+    bind(serverConfigHandler, ".config")
+    bind(cloudHandler, ".cloud")
+    bind(bezierHandler, ".bez")
     server.pluginManager.registerEvents(selectionHandler, this)
     selectionHandler.startTracking()
     server.pluginManager.registerEvents(settingsHandler, this)
-    val dotDebugStickCmd = getCommand(".ds")
-    dotDebugStickCmd?.setExecutor(debugStickHandler)
-    dotDebugStickCmd?.tabCompleter = debugStickHandler
-    val dotBrushPresetCmd = getCommand(".brp")
-    dotBrushPresetCmd?.setExecutor(brushPresetHandler)
-    dotBrushPresetCmd?.tabCompleter = brushPresetHandler
-    val dotSchematicCmd = getCommand(".sc")
-    dotSchematicCmd?.setExecutor(schematicHandler)
-    dotSchematicCmd?.tabCompleter = schematicHandler
+    bind(debugStickHandler, ".ds")
+    bind(brushPresetHandler, ".brp")
+    bind(schematicHandler, ".sc")
     val suiHandler = WorldEditSuiCommand(this)
-    getCommand(".sui")?.setExecutor(suiHandler)
-    getCommand(".sui")?.tabCompleter = suiHandler
-    getCommand(".hud")?.setExecutor(hudHandler)
-    getCommand(".hud")?.tabCompleter = hudHandler
+    bind(suiHandler, ".sui")
+    bind(hudHandler, ".hud")
     server.pluginManager.registerEvents(WorldEditHudListener(this), this)
     server.pluginManager.registerEvents(WorldEditSelectionPreview, this)
     worldEditHud.start()
     startSelectionParticles()
 
     logger.info("CitiesSkyMine enabled")
+  }
+
+  private fun <T> bind(handler: T, vararg names: String)
+      where T : CommandExecutor, T : TabCompleter {
+    for (name in names) {
+      val command = getCommand(name)
+      command?.setExecutor(handler)
+      command?.tabCompleter = handler
+    }
   }
 
   override fun onDisable() {

@@ -99,7 +99,11 @@ public class RouletteTask extends BukkitRunnable {
 
     private void sendMessageOrBroadcast(Component component) {
         if (session.isBroadcastToAll()) {
-            Bukkit.broadcast(component);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getUniqueId().equals(playerUuid) || manager.isChatReceiveEnabled(p)) {
+                    p.sendMessage(component);
+                }
+            }
         } else {
             Player player = Bukkit.getPlayer(playerUuid);
             if (player != null && player.isOnline()) {

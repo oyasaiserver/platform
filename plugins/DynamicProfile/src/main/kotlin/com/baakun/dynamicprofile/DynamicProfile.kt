@@ -16,16 +16,19 @@ import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.saveWeeklyLB
 import com.baakun.dynamicprofile.listener.DailyEvent
 import com.baakun.dynamicprofile.listener.MoveEvent
 import com.baakun.dynamicprofile.listener.SLEvents
-import com.baakun.dynamicprofile.model.BehType
 import com.baakun.dynamicprofile.model.GiftItem
 import com.baakun.dynamicprofile.profile.playerTitle.Title
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
-import com.baakun.dynamicprofile.util.JsonUtils
-import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.promotion.PromotionMigration
+import com.baakun.dynamicprofile.promotion.commands.SyokakuCommandExecutor
+import com.baakun.dynamicprofile.promotion.commands.SyokakuManagerCommandExecutor
+import com.baakun.dynamicprofile.storage.ProfileDatabase
 import com.baakun.dynamicprofile.util.Tools.plugin
 import java.io.File
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import net.luckperms.api.LuckPerms
 import net.milkbowl.vault.permission.Permission
 import org.apache.commons.lang3.tuple.MutablePair
@@ -42,7 +45,7 @@ class DynamicProfile : JavaPlugin() {
   companion object {
     var UUIDMap: MutableMap<UUID, LBStats> = Collections.synchronizedMap(mutableMapOf())
     val totalPlayTimes = MutablePair(0L, Collections.synchronizedList(mutableListOf<UUID>()))
-    lateinit var allTitles: MutableMap<Int, Title>
+    var allTitles: MutableMap<Int, Title> = mutableMapOf()
     val allUser = Collections.synchronizedList(mutableListOf<UUID>())
     val allStats = Collections.synchronizedMap(mutableMapOf<UUID, Stats>())
     val failedUser = Collections.synchronizedList(mutableListOf<UUID>())
@@ -50,9 +53,6 @@ class DynamicProfile : JavaPlugin() {
         Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
     val playTimes = Collections.synchronizedMap(mutableMapOf<Player, BukkitRunnable>())
     var perms: Permission? = null
-
-    private const val PLAYTIME_INTERVAL_TICKS = 60 * 20L
-    private const val PLAYTIME_DELAY_TICKS = 60 * 20L
 
     private fun setupPermissions(): Boolean {
       val rsp = plugin.server.servicesManager.getRegistration(Permission::class.java)
@@ -63,6 +63,21 @@ class DynamicProfile : JavaPlugin() {
     fun getPermissions(): Permission? {
       return perms
     }
+  }
+
+  @Volatile
+  var statsReady = false
+    private set
+
+  @Volatile private var stopping = false
+  @Volatile private var database: ProfileDatabase? = null
+  private val loader =
+      Executors.newSingleThreadExecutor { task -> Thread(task, "DynamicProfile-loader") }
+
+  /** Snapshot on the caller thread; all SQLite writes run on the serialized writer. */
+  fun saveStats(uuid: UUID) {
+    check(statsReady) { "Profile data has not finished loading" }
+    checkNotNull(database).save(uuid, com.baakun.dynamicprofile.util.Tools.readStats(uuid))
   }
 
   var recommendBroadcaster: RecommendBroadcaster? = null
@@ -83,76 +98,78 @@ class DynamicProfile : JavaPlugin() {
         }
     )
     saveDefaultConfig()
+    PromotionMigration.copyLegacyFiles(dataFolder)
+    reloadConfig()
     NumberBanner.createBanner()
     setupPermissions()
 
     if (perms == null) {
       logger.warning("LuckPerms is not found.")
     }
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            this,
-            Runnable {
-              try {
-                loadTitles()
-                loadWeeklyLB()
-
-                val userStatsDir = File(plugin.dataFolder, "/UserStatsJSON/")
-                userStatsDir.mkdirs()
-                val userFiles = userStatsDir.listFiles()?.toList().orEmpty()
-                if (userFiles.isNotEmpty()) {
-                  logger.info("Loading player data")
-                  val backupDir = File(plugin.dataFolder, "auto_backup").apply { mkdirs() }
-                  userFiles.forEach { file ->
-                    val fileName = file.name
-                    val uuid =
-                        fileName.substringBeforeLast('.', "").let {
-                          runCatching { UUID.fromString(it) }.getOrNull()
-                        }
-                    if (uuid == null) {
-                      logger.warning("Invalid file name (not UUID): $fileName, skipping.")
-                      return@forEach
+    loader.submit {
+      try {
+        val db =
+            ProfileDatabase(File(dataFolder, "dynamicprofile.db")) { failure ->
+              logger.severe("Failed to save profile data: ${failure.message}")
+            }
+        database = db
+        val imported =
+            db.importLegacy(File(dataFolder, "UserStatsJSON")) { filename ->
+              logger.warning("Failed to import JSON: $filename")
+            }
+        if (imported.imported) {
+          logger.info(
+              "Imported ${imported.loaded} player JSON files; ${imported.failedFiles.size} failed. Original JSON files retained."
+          )
+        } else {
+          logger.info("Legacy JSON import already completed; loading SQLite.")
+        }
+        val loaded = db.loadAll()
+        val failed = db.failedUsers()
+        loadTitles()
+        loadWeeklyLB()
+        if (!stopping) {
+          Bukkit.getScheduler()
+              .runTask(
+                  this,
+                  Runnable {
+                    if (!stopping) {
+                      allStats.clear()
+                      allStats.putAll(loaded)
+                      allUser.clear()
+                      allUser.addAll((loaded.keys + failed).distinct())
+                      failedUser.clear()
+                      failedUser.addAll(failed)
+                      statsReady = true
+                      startFeatures()
+                      logger.info("Loaded ${loaded.size} player profiles from SQLite")
                     }
-                    allUser.add(uuid)
-                    try {
-                      val stats: Stats = JsonUtils.fromJsonFile(file, Stats::class.java)
-                      allStats[uuid] = stats
-                    } catch (je: Exception) {
-                      logger.warning("Failed to load stats for $uuid: ${je.message}")
-                      failedUser.add(uuid)
-                      try {
-                        file.copyTo(File(backupDir, file.name), overwrite = true)
-                        logger.info("Backed up $fileName to auto_backup/")
-                      } catch (be: Exception) {
-                        logger.warning("Failed to backup $fileName: ${be.message}")
-                      }
-                    }
-                  }
-                  logger.info("Player data has been loaded")
-                } else {
-                  logger.info("Player data not found")
-                }
-              } catch (e: Exception) {
-                Bukkit.getPlayer("Nacukat")?.sendMessage("失敗")
-                e.message?.let { Bukkit.getPlayer("Nacukat")?.sendMessage(it) }
-                logger.warning("Error loading player data: ${e.message}")
-                e.printStackTrace()
-              }
-              for (player in Bukkit.getOnlinePlayers()) {
-                val file =
-                    File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${player.uniqueId}.json")
-                JsonUtils.toJsonFile(file, getStats(player.uniqueId), Stats::class.java)
-                val br =
-                    object : BukkitRunnable() {
-                      override fun run() {
-                        getStats(player.uniqueId).addCount(BehType.PLAY_TIME)
-                      }
-                    }
-                br.runTaskTimer(plugin, PLAYTIME_DELAY_TICKS, PLAYTIME_INTERVAL_TICKS)
-                playTimes[player] = br
-              }
-            },
+                  },
+              )
+        }
+      } catch (failure: Exception) {
+        logger.log(
+            java.util.logging.Level.SEVERE,
+            "Failed to initialize profile database",
+            failure,
         )
+        if (!stopping)
+            Bukkit.getScheduler()
+                .runTask(this, Runnable { server.pluginManager.disablePlugin(this) })
+      }
+    }
+  }
+
+  private fun startFeatures() {
+    for (player in Bukkit.getOnlinePlayers()) {
+      DailyEvent.startSession(player)
+      saveStats(player.uniqueId)
+    }
+
+    getCommand("syokaku")?.setExecutor(SyokakuCommandExecutor)
+    getCommand("syokaku")?.tabCompleter = SyokakuCommandExecutor
+    getCommand("syokakumanager")?.setExecutor(SyokakuManagerCommandExecutor)
+    getCommand("syokakumanager")?.tabCompleter = SyokakuManagerCommandExecutor
 
     server.getPluginCommand("dprofile")?.setExecutor(DProfileCmd)
     server.getPluginCommand("dpmanager")?.setExecutor(OperatorCommand)
@@ -187,17 +204,43 @@ class DynamicProfile : JavaPlugin() {
       playTimes.remove(player)
     }
 
-    logger.info("Saving player data")
-    saveTitles()
-    saveWeeklyLB()
-    for (player in Bukkit.getOnlinePlayers()) {
+    stopping = true
+    recommendBroadcasterTask?.cancel()
+    loader.shutdown()
+    var interrupted = false
+    while (!loader.isTerminated) {
       try {
-        val userstats = getStats(player.uniqueId)
-        val file = File(plugin.dataFolder, "UserStatsJSON/${player.uniqueId}.json")
-        JsonUtils.toJsonFile(file, userstats, Stats::class.java)
-      } catch (e: Exception) {
-        server.logger.warning("Failed to save data for ${player.name}: ${e.message}")
-        e.printStackTrace()
+        loader.awaitTermination(1, TimeUnit.SECONDS)
+      } catch (_: InterruptedException) {
+        interrupted = true
+      }
+    }
+
+    logger.info("Saving player data")
+    try {
+      if (statsReady) {
+        synchronized(allStats) { allStats.keys.toList() }
+            .forEach { uuid ->
+              try {
+                saveStats(uuid)
+              } catch (failure: Exception) {
+                logger.log(
+                    java.util.logging.Level.SEVERE,
+                    "Failed to queue profile save for $uuid",
+                    failure,
+                )
+              }
+            }
+        saveTitles()
+        saveWeeklyLB()
+      }
+    } finally {
+      try {
+        database?.close()
+      } finally {
+        database = null
+        statsReady = false
+        if (interrupted) Thread.currentThread().interrupt()
       }
     }
     logger.info("Player data has been saved")

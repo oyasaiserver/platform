@@ -14,13 +14,16 @@ import org.bukkit.block.Sign
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.EquipmentSlot
 
 class SignClickListener : Listener {
 
   @EventHandler
   fun onClick(e: PlayerInteractEvent) {
+    if (e.hand != EquipmentSlot.HAND || e.action != Action.RIGHT_CLICK_BLOCK) return
     val p = e.player
     val block = e.clickedBlock ?: return
     val dm = SocialVotes.dataManager
@@ -61,6 +64,11 @@ class SignClickListener : Listener {
                 NotifyUtil.invalid(p, "そのグループは存在しません。")
                 return
               }
+
+      if (!p.isOp && group.owner != p.uniqueId) {
+        NotifyUtil.invalid(p, "この操作はグループ作成者またはOPのみ可能です。")
+        return
+      }
 
       if (group.signIds.size >= 45) {
         NotifyUtil.invalid(p, "45個を超えるため追加できません。")
@@ -117,11 +125,17 @@ class SignClickListener : Listener {
     // Update モード
     // ==================================================
     if (UpdateModeManager.isWatching(p.uniqueId)) {
-
+      if (!p.hasPermission("socialvotes.admin")) {
+        UpdateModeManager.cancel(p.uniqueId)
+        NotifyUtil.invalid(p, "この操作には管理者権限が必要です。")
+        return
+      }
       val svSign = dm.signById[signId] ?: return
 
       // 旧実体削除
-      svSign.toLocation()?.block?.type = Material.AIR
+      svSign.toLocation()?.block?.let { oldBlock ->
+        if (oldBlock != block && oldBlock.state is Sign) oldBlock.type = Material.AIR
+      }
 
       // 座標更新
       dm.updateSignLocation(signId, block.location)

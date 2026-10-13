@@ -221,7 +221,7 @@ class OyasaiTokenPlugin :
             completion,
         )
     if (change == null) {
-      // remove() returns null before handing the future to persist(), so complete it here.
+      // The ledger has already completed false; preserve the detailed service failure result.
       completion.complete(false)
       val balance = readOrInitializeBalance(request.uuid, request.playerName)
       return CompletableFuture.completedFuture(

@@ -81,21 +81,25 @@ class PaperNetworkHandler(
     if (accepted) {
       targetState.lastPrivateMessagePeer = senderId
       chat.states.save(target)
+      val message = ChatMessage.from(envelope)
+      val indicator = plugin.sourceMessages.indicator(message, listOf(target))
       chat.delivery.dispatch(
           messageId = envelope.messageId,
           surface = ChatTextSurface.PRIVATE_MESSAGE,
           sender = ChatTextSender(senderId, envelope.senderName, envelope.senderLocale),
-          originalText = chat.formatter.plain(chat.formatter.body(ChatMessage.from(envelope))),
-          originalBody = chat.formatter.body(ChatMessage.from(envelope)),
+          originalText = chat.formatter.plain(chat.formatter.body(message)),
+          originalBody = chat.formatter.body(message),
           recipients = listOf(target),
           render = { _, body ->
-            chat.formatter.privateMessage(
-                senderName = envelope.senderName,
-                targetName = target.name,
-                message = body,
-                presentation = null,
-                senderCanSendLinks = envelope.senderCanSendLinks,
-            )
+            chat.formatter
+                .privateMessage(
+                    senderName = envelope.senderName,
+                    targetName = target.name,
+                    message = body,
+                    presentation = null,
+                    senderCanSendLinks = envelope.senderCanSendLinks,
+                )
+                .append(indicator)
           },
           afterDelivery = { current ->
             chat.privateMessages.playReceiveSound(current)

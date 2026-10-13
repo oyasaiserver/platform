@@ -83,6 +83,23 @@ object Tools {
     }
   }
 
+  internal fun tokenCommit(
+      tokenCommitAdd: TokenCommitAdd,
+      uuid: UUID,
+      amount: Long,
+  ): CompletableFuture<Boolean> {
+    return try {
+      val completion = tokenCommitAdd.method.invoke(tokenCommitAdd.tokenManager, uuid, amount)
+      (completion as? CompletableFuture<*>)?.thenApply { it == true }
+          ?: CompletableFuture.completedFuture(false)
+    } catch (exception: Exception) {
+      plugin.logger.warning(
+          "Could not commit offline-like reward $amount for $uuid: ${exception.message}"
+      )
+      CompletableFuture.completedFuture(false)
+    }
+  }
+
   fun awaitTokenCommit(
       tokenCommitAdd: TokenCommitAdd,
       uuid: UUID,

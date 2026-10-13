@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
@@ -62,6 +63,11 @@ class PhysicalMusicPlayerItem(
     if (event.action != Action.RIGHT_CLICK_AIR && event.action != Action.RIGHT_CLICK_BLOCK) return
     val item = event.item ?: return
     if (!isMusicPlayerItem(item)) return
+    if (
+        event.hand == EquipmentSlot.OFF_HAND &&
+            isMusicPlayerItem(event.player.inventory.itemInMainHand)
+    )
+        return
     event.isCancelled = true
 
     val player = event.player

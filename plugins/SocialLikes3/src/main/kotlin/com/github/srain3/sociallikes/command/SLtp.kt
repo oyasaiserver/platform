@@ -286,7 +286,7 @@ object SLtp : CommandExecutor, TabCompleter {
         -135F
       }
       WEST_NORTH_WEST -> {
-        67.5F
+        -67.5F
       }
       NORTH_NORTH_WEST -> {
         -22.5F

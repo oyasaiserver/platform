@@ -4,7 +4,9 @@ import com.github.sahyuya.socialvotes.util.NotifyUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil
 import com.github.sahyuya.socialvotes.util.TimeParser
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerChatEvent
@@ -29,7 +31,7 @@ object ChatInput : Listener {
   /* =====================
   外部呼び出し用 API
   ===================== */
-  private val states = mutableMapOf<UUID, InputState>()
+  private val states = ConcurrentHashMap<UUID, InputState>()
 
   fun start(uuid: UUID, state: InputState) {
     states[uuid] = state
@@ -47,6 +49,11 @@ object ChatInput : Listener {
     val p = e.player
     val state = states.remove(p.uniqueId) ?: return
     e.isCancelled = true
+    val msg = e.message.trim()
+    Bukkit.getScheduler().runTask(SocialVotes.instance, Runnable { handleInput(p, state, msg) })
+  }
+
+  private fun handleInput(p: Player, state: InputState, msg: String) {
     val dm = SocialVotes.dataManager
     val sign = dm.signById[state.signId]
     if (sign == null) {
@@ -55,7 +62,6 @@ object ChatInput : Listener {
       return
     }
     val group = sign.group?.let { dm.groupByName[it] }
-    val msg = e.message.trim()
 
     when (state.action) {
 

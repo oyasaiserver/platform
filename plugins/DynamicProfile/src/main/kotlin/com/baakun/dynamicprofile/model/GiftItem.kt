@@ -43,18 +43,17 @@ object GiftItem : Listener {
     val toPlayer = giftInventory[giftInv] ?: return
     if (!toPlayer.isOnline) {
       e.player.sendMessage("&c相手がオフラインです！".color())
-      giftInv.contents.forEach {
-        if (it == null) return@forEach
-        e.player.inventory.addItem(it)
-      }
+      returnItems(e.player, giftInv)
       e.player.sendMessage("&eアイテムを返却しました。".color())
       return
     }
 
-    val econResult = econ?.withdrawPlayer(e.player.name, 100.0) ?: return
-    val balance = econ?.getBalance(Bukkit.getOfflinePlayer(e.player.uniqueId)) ?: return
-    if (balance < 100.0) e.player.sendMessage("所持金額が${100-balance}足りません")
-    if (!econResult.transactionSuccess()) return
+    val econResult = econ?.withdrawPlayer(e.player.name, 100.0)
+    if (econResult == null || !econResult.transactionSuccess()) {
+      returnItems(e.player, giftInv)
+      e.player.sendMessage("&c支払いに失敗したため、アイテムを返却しました。".color())
+      return
+    }
     e.player.sendMessage("シュルカー代 ${econ?.format(econResult.amount)} を払いました。")
 
     val shulkerBoxItem = ItemStack(Material.SHULKER_BOX)
@@ -82,6 +81,15 @@ object GiftItem : Listener {
       toPlayer.sendMessage("[ｷﾞﾌﾄ] &eインベントリを確認してください".color())
     }
     recordGifts(e.player, toPlayer, bsm)
+  }
+
+  private fun returnItems(player: HumanEntity, inventory: Inventory) {
+    inventory.contents.filterNotNull().forEach { item ->
+      player.inventory.addItem(item).values.forEach {
+        player.world.dropItemNaturally(player.location, it)
+      }
+    }
+    inventory.clear()
   }
 
   private fun recordGifts(from: HumanEntity, to: Player, shulkerBoxMeta: BlockStateMeta) {

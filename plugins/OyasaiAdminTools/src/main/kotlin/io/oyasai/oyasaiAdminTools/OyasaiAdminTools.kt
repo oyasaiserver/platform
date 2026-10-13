@@ -94,10 +94,6 @@ class OyasaiAdminTools : JavaPlugin() {
     }
     if (worldborderAvailable) WorldBorderManager.enable()
 
-    this.getCommand("syokaku")?.setExecutor(SyokakuCommandExecutor)
-    this.getCommand("syokaku")?.tabCompleter = SyokakuCommandExecutor
-    this.getCommand("syokakumanager")?.setExecutor(SyokakuManagerCommandExecutor)
-    this.getCommand("syokakumanager")?.tabCompleter = SyokakuManagerCommandExecutor
     this.getCommand("playermanager")?.setExecutor(PlayerManagerCommandExecutor)
     this.getCommand("playermanager")?.tabCompleter = PlayerManagerCommandExecutor
     this.getCommand("kakutyo")?.setExecutor(KakutyoCommandExecutor)

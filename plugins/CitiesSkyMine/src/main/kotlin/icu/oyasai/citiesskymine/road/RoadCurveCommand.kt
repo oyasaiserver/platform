@@ -291,7 +291,12 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     try {
       when (param.lowercase()) {
         "radius" -> {
-          s.radius = value.toDouble()
+          val radius = value.toDouble()
+          if (!radius.isFinite() || radius <= 0 || radius > 1000.0) {
+            MessageUtil.error(player, "半径は 0 より大きく 1000 以下の有限値で指定してください。")
+            return false
+          }
+          s.radius = radius
           MessageUtil.success(player, "[RC] 半径: ${s.radius} ブロック")
         }
         "transition" -> {

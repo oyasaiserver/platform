@@ -21,7 +21,7 @@ private val floorPairs =
 
 internal fun isElevatorFloor(top: Material, bottom: Material): Boolean = top to bottom in floorPairs
 
-/** [column] starts at the world's minimum height; indexes are relative to that height. */
+/** [source] and returned indexes are relative to the start of [column]. */
 internal fun findFloor(
     column: List<Material>,
     source: Int,

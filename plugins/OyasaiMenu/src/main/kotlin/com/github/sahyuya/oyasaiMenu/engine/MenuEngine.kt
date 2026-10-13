@@ -1,8 +1,7 @@
 package com.github.sahyuya.oyasaiMenu.engine
 
 import com.baakun.dynamicprofile.model.Calculator
-import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
-import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.validatedTitle
 import com.github.sahyuya.oyasaiMenu.OyasaiMenu
 import com.github.sahyuya.oyasaiMenu.manager.CooldownManager
 import com.github.sahyuya.oyasaiMenu.manager.EconomyManager
@@ -202,11 +201,8 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
 internal fun dpLevel(player: Player): String {
   if (!Bukkit.getPluginManager().isPluginEnabled("DynamicProfile")) return "---"
   return runCatching {
-        val stats = getStats(player.uniqueId)
-        if (stats.title != -1) {
-          val title = getTitleFromId(stats.title)
-          if (title.id != -1) return@runCatching "${title.title}&r"
-          stats.title = -1
+        validatedTitle(player.uniqueId)?.let {
+          return@runCatching "${it.title}&r"
         }
         "Lv.${Calculator.getLevel(player)}"
       }

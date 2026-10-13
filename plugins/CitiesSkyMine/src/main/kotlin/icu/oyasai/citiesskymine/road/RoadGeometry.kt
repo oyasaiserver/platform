@@ -12,6 +12,8 @@ object RoadGeometry {
 
   /** 通過点列からカーブ付き道路中心線のサンプル点列を計算する。 各中間点に「緩和曲線（クロソイド）→円弧→緩和曲線」を自動挿入する。 */
   fun computePath(waypoints: List<Location>, settings: RoadSettings): List<PathPoint> {
+    if (!settings.radius.isFinite() || settings.radius <= 0 || settings.radius > 1000.0)
+        return emptyList()
     if (waypoints.size < 2) return emptyList()
     if (waypoints.size == 2) {
       val a = waypoints[0]

@@ -3,17 +3,15 @@ package com.baakun.dynamicprofile.listener
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allUser
 import com.baakun.dynamicprofile.DynamicProfile.Companion.failedUser
 import com.baakun.dynamicprofile.DynamicProfile.Companion.playTimes
-import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.model.BehType
-import com.baakun.dynamicprofile.util.JsonUtils
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.plugin
+import com.baakun.dynamicprofile.util.Tools.saveStats
 import com.vexsoftware.votifier.model.VotifierEvent
-import java.io.File
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
-import java.util.UUID
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -21,19 +19,9 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
 
 object DailyEvent : Listener {
-  private fun userStatsFile(uuid: UUID) = File(plugin.dataFolder, "UserStatsJSON/$uuid.json")
+  @EventHandler fun join(e: PlayerJoinEvent) = startSession(e.player)
 
-  private fun <T> writeJsonToFile(file: File, obj: T, clazz: Class<T>? = null) {
-    if (clazz != null) {
-      JsonUtils.toJsonFile(file, obj, clazz)
-    } else {
-      JsonUtils.toJsonFile(file, obj)
-    }
-  }
-
-  @EventHandler
-  fun join(e: PlayerJoinEvent) {
-    val player = e.player
+  fun startSession(player: Player) {
     if (failedUser.contains(player.uniqueId)) {
       object : BukkitRunnable() {
             override fun run() {
@@ -91,18 +79,15 @@ object DailyEvent : Listener {
   @EventHandler
   fun leave(e: PlayerQuitEvent) {
     val player = e.player
-    val userStats = getStats(player.uniqueId)
-    val file = userStatsFile(player.uniqueId)
-    writeJsonToFile(file, userStats, Stats::class.java)
+    saveStats(player.uniqueId)
     playTimes.remove(player)?.cancel()
   }
 
   @EventHandler
   fun vote(e: VotifierEvent) {
     val ofp = Bukkit.getOfflinePlayer(e.vote.username)
-    val file = userStatsFile(ofp.uniqueId)
     val userStats = getStats(ofp.uniqueId)
     userStats.addCount(BehType.VOTE)
-    writeJsonToFile(file, userStats)
+    saveStats(ofp.uniqueId)
   }
 }

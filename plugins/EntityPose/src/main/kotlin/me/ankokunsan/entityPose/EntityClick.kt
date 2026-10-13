@@ -68,7 +68,7 @@ class EntityClick : Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun offhandItem(event: PlayerInteractAtEntityEvent) {
     if (event.hand == EquipmentSlot.OFF_HAND) return
 
@@ -81,6 +81,11 @@ class EntityClick : Listener {
     if (!armorStand.hasArms()) return
 
     event.isCancelled = true
+    if (
+        !player.hasPermission("entitypose_arrange") ||
+            armorStand.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
+    )
+        return
 
     val oldItem = armorStand.equipment.itemInOffHand
 

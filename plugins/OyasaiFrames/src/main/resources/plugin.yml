@@ -2,7 +2,7 @@ name: OyasaiFrames
 main: icu.oyasai.frames.OyasaiFrames
 version: ${version}
 api-version: "1.21"
-softdepend: [WorldGuard]
+softdepend: [WorldGuard, FastAsyncWorldEdit]
 commands:
   savedyeitem:
     usage: /savedyeitem

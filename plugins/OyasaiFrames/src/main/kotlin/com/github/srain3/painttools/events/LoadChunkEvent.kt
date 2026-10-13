@@ -25,10 +25,10 @@ object LoadChunkEvent : Listener {
               PersistentDataType.INTEGER,
           ) ?: return@forEach
       if (!MapIdList.checkID(id)) return@forEach
-      val mapView = mapMeta.mapView ?: Bukkit.createMap(event.world)
       MapData.loadMapData(id) { mMap ->
         if (!frame.isValid) return@loadMapData
-        val currentMeta = frame.item.itemMeta as? MapMeta ?: return@loadMapData
+        val currentItem = frame.item
+        val currentMeta = currentItem.itemMeta as? MapMeta ?: return@loadMapData
         if (
             currentMeta.persistentDataContainer.get(
                 ToolBox.pl.paintIdKey,
@@ -36,12 +36,14 @@ object LoadChunkEvent : Listener {
             ) != id
         )
             return@loadMapData
+        val mapView = currentMeta.mapView ?: Bukkit.createMap(event.world)
         mapView.centerZ = frame.location.blockZ
         mapView.centerX = frame.location.blockX
         mapView.renderers.toList().forEach(mapView::removeRenderer)
         mapView.addRenderer(mMap.render())
         currentMeta.mapView = mapView
-        frame.item.itemMeta = currentMeta
+        currentItem.itemMeta = currentMeta
+        frame.setItem(currentItem, false)
       }
     }
   }

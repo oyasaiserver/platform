@@ -12,6 +12,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -34,10 +35,11 @@ object VehicleGarageService : Listener {
 
   @EventHandler fun joinPlayer(e: PlayerJoinEvent) = loadPlayerCache(e.player)
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR)
   fun quitPlayer(e: PlayerQuitEvent) {
     val uuid = e.player.uniqueId
     userInvList[uuid]?.let { closeTask(it, uuid) }
+    itemCache[uuid]?.let { save(uuid, it) }
     removePlayerCache(e.player)
   }
 
@@ -75,7 +77,7 @@ object VehicleGarageService : Listener {
   fun save(uuid: UUID, newList: MutableList<ItemStack?>) {
     val file = fileCache[uuid] ?: return
     persistGarageContents(file, uuid, newList)
-    itemCache[uuid] = newList.take(GARAGE_MAX_SIZE).toMutableList()
+    itemCache[uuid] = newList.toMutableList()
   }
 
   fun addItem(player: Player, item: ItemStack): Boolean =
@@ -106,8 +108,14 @@ object VehicleGarageService : Listener {
         player.world.dropItem(player.eyeLocation, item)
         player.sendMessage(translateColors("[OyasaiVehicles] &eガレージに空きがないため、足元にアイテムをドロップしました!"))
       }
-      removePlayerCache(player)
-      false
+      if (!player.isOnline) {
+        itemList.add(item)
+        save(uuid, itemList)
+        removePlayerCache(player)
+        true
+      } else {
+        false
+      }
     } else {
       itemList[index] = item
       if (!player.isOnline) {
@@ -180,19 +188,17 @@ object VehicleGarageService : Listener {
 
   private fun closeTask(view: InventoryView, uuid: UUID) {
     val contents = view.topInventory.contents
-    save(uuid, contents.toMutableList())
+    val itemList = contents.toMutableList()
+    for (item in getItemList(uuid).drop(GARAGE_MAX_SIZE)) {
+      val index = itemList.indexOfFirst { it == null }
+      if (index == -1) itemList.add(item) else itemList[index] = item
+    }
+    save(uuid, itemList)
     userInvList.remove(uuid)
   }
 
   private fun loadGarageItemList(file: CustomYaml, uuid: UUID): MutableList<ItemStack?> {
-    val requestedSize = file.getInt(GARAGE_ITEM_SIZE_KEY, GARAGE_MAX_SIZE)
-    val size = requestedSize.coerceAtMost(GARAGE_MAX_SIZE)
-    if (requestedSize > GARAGE_MAX_SIZE) {
-      Bukkit.getLogger()
-          .warning(
-              "[VehicleGarage] Garage for $uuid exceeded $GARAGE_MAX_SIZE slots. Truncating on load."
-          )
-    }
+    val size = file.getInt(GARAGE_ITEM_SIZE_KEY, GARAGE_MAX_SIZE)
     return (1..size).map { file.getItemStack(it.toString()) }.toMutableList()
   }
 
@@ -204,16 +210,8 @@ object VehicleGarageService : Listener {
     val oldSize = file.getInt(GARAGE_ITEM_SIZE_KEY, GARAGE_MAX_SIZE)
     (1..oldSize).forEach { file.set(it.toString(), null) }
 
-    val normalizedList = newList.take(GARAGE_MAX_SIZE).toMutableList()
-    if (newList.size > GARAGE_MAX_SIZE) {
-      Bukkit.getLogger()
-          .warning(
-              "[VehicleGarage] VehicleGarage for $uuid exceeded $GARAGE_MAX_SIZE slots. Truncating on save."
-          )
-    }
-
-    file.set(GARAGE_ITEM_SIZE_KEY, normalizedList.size)
-    normalizedList.forEachIndexed { index, item -> file.set((index + 1).toString(), item) }
+    file.set(GARAGE_ITEM_SIZE_KEY, newList.size)
+    newList.forEachIndexed { index, item -> file.set((index + 1).toString(), item) }
     file.save()
   }
 }

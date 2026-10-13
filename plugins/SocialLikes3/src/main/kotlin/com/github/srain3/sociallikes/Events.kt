@@ -31,19 +31,25 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
+import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.HangingSign
 import org.bukkit.block.Sign
 import org.bukkit.block.data.type.WallSign
 import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockExplodeEvent
+import org.bukkit.event.block.BlockPistonExtendEvent
+import org.bukkit.event.block.BlockPistonRetractEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.block.SignChangeEvent
+import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
@@ -269,7 +275,33 @@ object Events : Listener {
         data.likes.add(e.player.uniqueId)
         newlyLiked = true
         data.likesWithTimestamp[e.player.uniqueId] = System.currentTimeMillis()
-        Data.save(data, e.player.uniqueId)
+        Data.saveWithCompletion(data, e.player.uniqueId) {
+          val likeEvent = LikeEvent(e.player.uniqueId, data.owner)
+          Bukkit.getPluginManager().callEvent(likeEvent)
+
+          if (e.player.uniqueId != data.owner) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give ${e.player.name} 1000")
+          }
+
+          // 制作者がオンラインの場合通知
+          val ownerPlayer = Bukkit.getPlayer(data.owner)
+          if (ownerPlayer?.isOnline == true) {
+            Tools.displaySocialLikeToast(
+                ownerPlayer,
+                ItemStack(Material.OAK_SIGN),
+                Tools.socialLikesLOGOShort +
+                    "&a${data.title} &7ID:${id}&r\n${e.player.name}&7 > &rイイね!".color(),
+            )
+            ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
+            if (e.player.uniqueId != data.owner) {
+              if (Tools.addTokens(ownerPlayer, 2)) {
+                sendLikeRewardMessage(ownerPlayer, 2)
+              }
+            }
+          } else {
+            addOfflineLikePoints(data.owner, 2)
+          }
+        }
         SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
         Data.changeUserLikesInt(data.owner, 1)
 
@@ -288,32 +320,6 @@ object Events : Listener {
         block.location.world?.playSound(block.location, Sound.BLOCK_NOTE_BLOCK_CHIME, 2F, 1.225F)
         val text = TextComponent("イイねしました！")
         e.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, text)
-
-        val likeEvent = LikeEvent(e.player.uniqueId, data.owner)
-        Bukkit.getPluginManager().callEvent(likeEvent)
-
-        if (e.player.uniqueId != data.owner) {
-          Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give ${e.player.name} 1000")
-        }
-
-        // 制作者がオンラインの場合通知
-        val ownerPlayer = Bukkit.getPlayer(data.owner)
-        if (ownerPlayer?.isOnline == true) {
-          Tools.displaySocialLikeToast(
-              ownerPlayer,
-              ItemStack(Material.OAK_SIGN),
-              Tools.socialLikesLOGOShort +
-                  "&a${data.title} &7ID:${id}&r\n${e.player.name}&7 > &rイイね!".color(),
-          )
-          ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
-          if (e.player.uniqueId != data.owner) {
-            if (Tools.addTokens(ownerPlayer, 2)) {
-              sendLikeRewardMessage(ownerPlayer, 2)
-            }
-          }
-        } else {
-          addOfflineLikePoints(data.owner, 2)
-        }
       } else {
         // すでにいいねをしている
         val text = TextComponent("既にイイねしています！")
@@ -402,7 +408,7 @@ object Events : Listener {
   private val offlineLikesPoint = mutableMapOf<UUID, Int>()
   private val offlineLikesPointLock = Any()
   private val offlineLikePointStore by lazy { OfflineLikePointStore(plugin.dataFolder.toPath()) }
-  private const val OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS = 750L
+  private val offlineLikeCommits = mutableSetOf<UUID>()
 
   private fun sendLikeRewardMessage(player: Player, amount: Long, offline: Boolean = false) {
     val message =
@@ -428,9 +434,10 @@ object Events : Listener {
   private fun removeOfflineLikePoints(uuid: UUID, expectedPoints: Int): Boolean {
     synchronized(offlineLikesPointLock) {
       val currentPoints = offlineLikesPoint[uuid] ?: return false
-      if (currentPoints != expectedPoints) return false
+      if (currentPoints < expectedPoints) return false
 
-      offlineLikesPoint.remove(uuid)
+      if (currentPoints == expectedPoints) offlineLikesPoint.remove(uuid)
+      else offlineLikesPoint[uuid] = currentPoints - expectedPoints
       if (persistOfflineLikePointsLocked()) return true
 
       offlineLikesPoint[uuid] = currentPoints
@@ -468,13 +475,16 @@ object Events : Listener {
   @EventHandler
   fun joinEvent(e: PlayerJoinEvent) {
     SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
-    val pointInt =
-        synchronized(offlineLikesPointLock) { offlineLikesPoint[e.player.uniqueId] } ?: return
     val player = e.player
     val playerUuid = player.uniqueId
     object : BukkitRunnable() {
           override fun run() {
             if (!player.isOnline) return
+            val pointInt =
+                synchronized(offlineLikesPointLock) {
+                  if (playerUuid in offlineLikeCommits) return
+                  offlineLikesPoint[playerUuid]
+                } ?: return
             val tokenManager = Tools.getTokenManager()
             val tokenCommitAdd = tokenManager?.let(Tools::findAddTokensWithCommit)
             if (tokenCommitAdd == null) {
@@ -488,42 +498,37 @@ object Events : Listener {
               return
             }
 
-            Bukkit.getScheduler()
-                .runTaskAsynchronously(
-                    plugin,
-                    Runnable {
-                      val committed =
-                          Tools.awaitTokenCommit(
-                              tokenCommitAdd,
-                              playerUuid,
-                              pointInt.toLong(),
-                              OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS,
-                          )
-                      // A timeout is intentionally treated as an indeterminate outcome: retaining
-                      // the durable pending entry favors recovery over silently losing a reward.
-                      // The writer API normally settles immediately after its own transaction;
-                      // avoiding recurring timeouts is essential because a later retry may follow
-                      // an operation whose final SQLite result was not observed by this task.
-                      if (!committed) return@Runnable
-
-                      if (!removeOfflineLikePoints(playerUuid, pointInt)) {
-                        plugin.logger.warning(
-                            "Committed offline-like reward ${pointInt} for $playerUuid, but could not atomically clear its pending entry; not notifying."
-                        )
-                        return@Runnable
-                      }
-
-                      Bukkit.getScheduler()
-                          .runTask(
-                              plugin,
-                              Runnable {
-                                Bukkit.getPlayer(playerUuid)?.takeIf(Player::isOnline)?.let {
-                                  sendLikeRewardMessage(it, pointInt.toLong(), offline = true)
-                                }
-                              },
-                          )
-                    },
-                )
+            synchronized(offlineLikesPointLock) { if (!offlineLikeCommits.add(playerUuid)) return }
+            Tools.tokenCommit(tokenCommitAdd, playerUuid, pointInt.toLong()).whenComplete {
+                committed,
+                failure ->
+              try {
+                if (failure != null) {
+                  plugin.logger.warning(
+                      "Failed to commit offline-like reward for $playerUuid: ${failure.message}"
+                  )
+                  return@whenComplete
+                }
+                if (committed != true) return@whenComplete
+                if (!removeOfflineLikePoints(playerUuid, pointInt)) {
+                  plugin.logger.warning(
+                      "Committed offline-like reward $pointInt for $playerUuid, but could not atomically clear its pending entry; not notifying."
+                  )
+                  return@whenComplete
+                }
+                Bukkit.getScheduler()
+                    .runTask(
+                        plugin,
+                        Runnable {
+                          Bukkit.getPlayer(playerUuid)?.takeIf(Player::isOnline)?.let {
+                            sendLikeRewardMessage(it, pointInt.toLong(), offline = true)
+                          }
+                        },
+                    )
+              } finally {
+                synchronized(offlineLikesPointLock) { offlineLikeCommits.remove(playerUuid) }
+              }
+            }
           }
         }
         .runTaskLater(plugin, 20L)
@@ -532,7 +537,37 @@ object Events : Listener {
   /** SocialLikesの看板が壊れないようにする */
   @EventHandler
   fun brakeSign(e: BlockBreakEvent) {
-    val block = e.block.state
+    protectSignAndSupport(e.block, e)
+  }
+
+  @EventHandler
+  fun entityExplode(e: EntityExplodeEvent) {
+    e.blockList().forEach { protectSignAndSupport(it, e) }
+  }
+
+  @EventHandler
+  fun blockExplode(e: BlockExplodeEvent) {
+    e.blockList().forEach { protectSignAndSupport(it, e) }
+  }
+
+  @EventHandler
+  fun pistonExtend(e: BlockPistonExtendEvent) {
+    e.blocks.forEach {
+      protectSignAndSupport(it, e)
+      protectSignAndSupport(it.getRelative(e.direction), e)
+    }
+  }
+
+  @EventHandler
+  fun pistonRetract(e: BlockPistonRetractEvent) {
+    e.blocks.forEach {
+      protectSignAndSupport(it, e)
+      protectSignAndSupport(it.getRelative(e.direction), e)
+    }
+  }
+
+  private fun protectSignAndSupport(target: Block, e: Cancellable) {
+    val block = target.state
     if (block is Sign) {
       // 直接看板を破壊した場合
       checkSLSign(block, e)
@@ -560,7 +595,7 @@ object Events : Listener {
   }
 
   /** SL看板の場合イベントキャンセルする */
-  private fun checkSLSign(block: Sign, e: BlockBreakEvent) {
+  private fun checkSLSign(block: Sign, e: Cancellable) {
     // 表面の1行目をカラーコードを外して取得、SL3の看板のみ中へ進む
     val unColorFrontL0 = block.getSide(Side.FRONT).getLine(0).unColor()
     if (slSignRegex.containsMatchIn(unColorFrontL0)) {

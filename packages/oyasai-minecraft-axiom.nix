@@ -11,7 +11,7 @@ oyasaiPurpur rec {
     gamemode = "creative";
     online-mode = false; # handled by velocity
     white-list = true;
-    # keep-sorted endt
+    # keep-sorted end
   };
 
   paperConfig = {

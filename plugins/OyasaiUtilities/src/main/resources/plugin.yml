@@ -281,6 +281,9 @@ commands:
     description: "スポーン地点へテレポートする"
     usage: /spawn [player]
     permission: essentials.spawn
+  fart:
+    description: "しゃがむとおならの音と煙を出すモードを切り替える"
+    usage: /fart
 
 permissions:
   essentials.spawn:

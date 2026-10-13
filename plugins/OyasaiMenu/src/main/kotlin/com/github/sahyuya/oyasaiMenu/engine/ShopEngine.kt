@@ -285,12 +285,17 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       player.sendMessage(c("&c${item.materialId} を持っていません。"))
       return
     }
-    val error = EconomyManager.deposit(player, item.sellPrice * removed)
+    val removedItems = removeFromInventory(player, item, removed)
+    val error = EconomyManager.deposit(player, item.sellPrice * removedItems.sumOf { it.amount })
     if (error != null) {
+      removedItems.forEach { stack ->
+        player.inventory.addItem(stack).values.forEach {
+          player.world.dropItemNaturally(player.location, it)
+        }
+      }
       player.sendMessage(c(error))
       return
     }
-    removeFromInventory(player, item, removed)
     player.sendMessage(
         c(
             "&b売却: &7${item.materialId} ×$removed  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"
@@ -309,12 +314,17 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       player.sendMessage(c("&c${item.materialId} を持っていません。"))
       return
     }
-    val error = EconomyManager.deposit(player, item.sellPrice * total)
+    val removedItems = removeFromInventory(player, item, total)
+    val error = EconomyManager.deposit(player, item.sellPrice * removedItems.sumOf { it.amount })
     if (error != null) {
+      removedItems.forEach { stack ->
+        player.inventory.addItem(stack).values.forEach {
+          player.world.dropItemNaturally(player.location, it)
+        }
+      }
       player.sendMessage(c(error))
       return
     }
-    removeFromInventory(player, item, total)
     player.sendMessage(
         c(
             "&b全売却: &7${item.materialId} ×$total  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"
@@ -386,10 +396,12 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
           .filter { matchesShopItem(it, item) }
           .sumOf { it.amount }
 
-  private fun removeFromInventory(player: Player, item: ShopItem, quantity: Int): Int {
+  private fun removeFromInventory(player: Player, item: ShopItem, quantity: Int): List<ItemStack> {
     var remaining = quantity
+    val removedItems = mutableListOf<ItemStack>()
     player.inventory.contents.forEachIndexed { i, stack ->
       if (remaining <= 0 || stack == null || !matchesShopItem(stack, item)) return@forEachIndexed
+      removedItems.add(stack.clone().apply { amount = minOf(stack.amount, remaining) })
       if (stack.amount <= remaining) {
         remaining -= stack.amount
         player.inventory.setItem(i, null)
@@ -398,7 +410,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
         remaining = 0
       }
     }
-    return quantity - remaining
+    return removedItems
   }
 
   private class ShopMenuHolder(var state: PlayerShopState) : InventoryHolder {

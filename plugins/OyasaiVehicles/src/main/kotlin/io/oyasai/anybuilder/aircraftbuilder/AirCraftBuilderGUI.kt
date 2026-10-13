@@ -53,10 +53,10 @@ object AircraftBuilderGUI {
                   player.sendMessage("[AircraftBuilder] インベントリに空きがありません")
                   return@onSelection
                 }
+                val boughtItem =
+                    AircraftBuilderItem.buyItem(name, player.name) ?: return@onSelection
                 if (MileagePoint.payment(player.uniqueId, 100)) {
                   player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.235f)
-                  val boughtItem =
-                      AircraftBuilderItem.buyItem(name, player.name) ?: return@onSelection
                   player.inventory.addItem(boughtItem)
                   player.sendMessage("[AircraftBuilder] $name を購入しました")
                 } else {
