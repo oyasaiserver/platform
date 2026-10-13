@@ -13,7 +13,8 @@ related_paths:
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
-last_validated: "2026-06-17"
+last_validated: "2026-10-12"
+source: plugins/CitiesSkyMine/（コードから作成。ゲーム内での確認は未実施）
 agent_task: "Read before implementing or modifying CitiesSkyMine features."
 ---
 
@@ -33,7 +34,7 @@ Items here are rules, not suggestions.
 
 Command registration falls into three categories:
 
-- Legacy top-level commands such as `rc`, `ri`, and `hb` are registered directly in `Main.kt` with `getCommand(...)`. They do not route through `CitiesSkyMineCommand`.
+- Legacy top-level commands such as `rc`, `ri`, and `hb` are registered directly in `Main.kt` with `bind(...)` (which calls `getCommand(...)`). They do not route through `CitiesSkyMineCommand`.
 - Dot-prefixed shortcuts such as `.cloud`, `.bez`, and `.pl` are also registered directly in `Main.kt`.
 - Unified `/csm xxx` subcommands route through `CitiesSkyMineCommand`.
 
@@ -48,7 +49,7 @@ When adding a new command domain, update the following files in this order.
 Confirm each step before moving to the next.
 
 1. **`plugin.yml`** — Add `/csm` usage entry, shortcut command definition (e.g. `".cloud"`), and permission node.
-2. **`Main.kt`** — Instantiate the command handler and register it with `getCommand()`. Register shortcut commands. If the domain uses sessions, add a `UUID→Session` HashMap and session accessor methods.
+2. **`Main.kt`** — Instantiate the command handler and register it with `bind()` (which calls `getCommand()`). Register shortcut commands. If the domain uses sessions, add a `UUID→Session` HashMap and session accessor methods.
 3. **`CitiesSkyMineCommand.kt`** — Add routing in the `when` block, root tab completion entry, and help entry delegation.
 4. **`CsmAccessController.kt`** — Add a `CommandKey` enum entry with `id` and `legacyPermission`. Add default role mapping in `DEFAULT_COMMAND_ROLES`.
 5. **`config.yml`** — Add `limits.max-blocks-<domain>` and `access.commands.<domain>` defaults.
@@ -217,7 +218,7 @@ If the player is offline, stop the preview immediately.
 
 Treat plugin state as three separate lifecycle categories:
 
-- Transient sessions: in-memory command/session maps such as `sessions`, `intersectionSessions`, and `bezierSessions`. These are runtime-only and disappear when the player reconnects or the server restarts.
+- Transient sessions: in-memory command/session maps such as `sessions`, `intersectionSessions`, and `bezierSessions`. These are runtime-only and disappear when the plugin is disabled or the server restarts. Current `Main.kt` does not remove the session maps on player quit, so reconnecting retains points and settings in memory. Preview tasks stop when their timer observes the player offline; they do not automatically restart on reconnect.
 - Player defaults: persisted per-player settings handled by `PlayerDataStore`. These are YAML-backed and must be saved during plugin shutdown, including `onDisable`.
 - Feature memory: feature-specific persisted state such as `DebugStickMemoryStore`. These stores own their own lifecycle and should load during `onEnable` and save during `onDisable`.
 
