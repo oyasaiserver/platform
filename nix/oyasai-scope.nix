@@ -55,7 +55,7 @@ let
     in
     {
       inherit inputs constants oyasaiTerraformProviders;
-      inherit (pkgs) bore-cli;
+      inherit (pkgs) bore-cli mc-monitor;
       inherit (inputs.tools.packages.${system}) nix-flake-check-changed nix-grep-to-build npm-list;
       inherit (inputs.nix-minecraft.legacyPackages.${system})
         purpurServers
