@@ -24,6 +24,9 @@ AI は作業しながらここを読み、**作業中に学んだことをここ
 | プラグイン・ツールの編集          | `Projects/<name>/PROJECT.md`（一覧は `ls docs/Projects`）→ 実装 |
 | CI の失敗・自動デプロイ・PR 環境   | [ci-cd.md](Knowledge/ci-cd.md)                           |
 | インフラ（CDKTF）・イメージ・定期処理 | [oyasai-infra](Projects/oyasai-infra/PROJECT.md)         |
+| 外部プラグインの追加・更新（registry） | [architecture.md](Knowledge/architecture.md) の「外部プラグイン」 |
+| 定期処理 `oyasai-cron`・Web `oyasai-web` を直す | [oyasai-infra](Projects/oyasai-infra/PROJECT.md) |
+| 依存・整形・開発用シェルの道具 | [ci-cd.md](Knowledge/ci-cd.md) の「CI の整形検査で落ちやすいもの」「開発用シェルの道具」 |
 | ブランチ・コミット・PR          | [workflows.md](Knowledge/workflows.md)                   |
 | CI 失敗・PR の範囲・本番反映の前   | [mistakes.md](Knowledge/mistakes.md)                     |
 | ローカルサーバーで試す           | [local-server.md](Knowledge/local-server.md)             |
@@ -40,7 +43,7 @@ AI は作業しながらここを読み、**作業中に学んだことをここ
 | ------------------ | ------------------------------------------------------------------ |
 | `Projects/<name>/` | プロジェクトごとの入口 `PROJECT.md`、仕様、そのプロジェクトで分かったこと・判断。ツールは実体も同じフォルダに置いてよい |
 | `Knowledge/`       | 複数プロジェクトに効く知見・手順・過去の失敗                                             |
-| `Decisions/`       | 複数プロジェクトにまたがる判断。`YYYY-MM-DD-<topic>.md`                            |
+| `Decisions/`       | 複数プロジェクトにまたがる判断。`YYYY-MM-DD-<topic>.md`（必要になったら作る）                            |
 | `Archive/`         | 役目を終えた資料（必要になったら作る）。現状の根拠にしない                                      |
 | `local/`（Git 管理外）  | 公開できるか判断できないもの、生ログ、個人のメモ。なければ作ってよい                                 |
 

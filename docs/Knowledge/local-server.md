@@ -7,14 +7,16 @@
 | 項目 | 値 |
 |------|-----|
 | サーバーディレクトリ | `local/paperclip-tmp/` |
-| ソフトウェア | Paper 1.21.11 build 69 (`paper-paperclip.jar`) |
-| Java | Zulu 25 (`/usr/bin/java`) — プラグインが Java 25 でビルドされているため必須 |
+| ソフトウェア | Paper 1.21.11 build 69 (`paper-paperclip.jar`)。本番は Purpur 26.2（[architecture.md](architecture.md)）なので、版に依存する挙動は本番と同じ版で確かめる |
+| Java | JDK 25 なら配布元は問わない。`nix develop` の中では Temurin 25（`nix/oyasai-scope.nix`）。プラグインが Java 25 でビルドされているため必須 |
 | ポート | 8000 (`localhost:8000`) |
 | RCON | Optional local-only RCON. Configure the port and password in untracked `local/paperclip-tmp/server.properties`; do not commit real passwords |
 | online-mode | Local test setting only; never use this runbook as production configuration |
 | OP | ローカル検証者が自分の環境で設定する |
 
 ## 導入済みプラグイン
+
+SocialLikes3 を試したときの構成例。別のプラグインを試すときは、その `plugin.yml` の `depend`・`softdepend` に合わせて入れる。
 
 | プラグイン | 用途 |
 |-----------|------|
@@ -56,13 +58,13 @@ kill $(pgrep -f "paper-paperclip.jar")
 ```bash
 # 1. ビルド
 cd "$(git rev-parse --show-toplevel)"
-/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:SocialLikes3:build
+/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:<Plugin>:build
 
 # 2. JAR をコピー
-cp plugins/SocialLikes3/build/libs/SocialLikes3.jar local/paperclip-tmp/plugins/
+cp plugins/<Plugin>/build/libs/<Plugin>.jar local/paperclip-tmp/plugins/
 
 # 3. サーバー再起動、または PlugManX でリロード（ゲーム内）
-#    /plugman reload SocialLikes3
+#    /plugman reload <Plugin>
 ```
 
 コンパイルだけを速く確かめるときは `gradle :plugins:<Plugin>:compileKotlin`。
@@ -71,7 +73,7 @@ cp plugins/SocialLikes3/build/libs/SocialLikes3.jar local/paperclip-tmp/plugins/
 
 ### UnsupportedClassVersionError (class file version 69)
 
-プラグインが Java 25 でビルドされている。`/usr/bin/java -version` が 25 であることを確認。
+プラグインが Java 25 でビルドされている。起動に使う `java -version` が 25 であることを確認。
 
 ### NoClassDefFoundError: joptsimple/OptionException
 

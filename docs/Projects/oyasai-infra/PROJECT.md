@@ -190,9 +190,9 @@ source:
 
 - **master の変更は、空サーバーの瞬間に自動で反映される**（`auto-deploy-empty.yaml`。詳細は [ci-cd.md](../../Knowledge/ci-cd.md)）。master への push 自体ではデプロイされない。
 - **CI のジョブ名を変えるとマージできなくなる**: `common-internal.ts` の ruleset が必須チェックをジョブ名で列挙している。ジョブ名を変えたら ruleset も直して `common-internal` を適用する。
-- Infisical の機械アイデンティティは、このリポジトリの任意の ref の GitHub Actions OIDC で入れる条件になっている（`common-infra.ts` の `boundSubject`）。役割は admin。
+- Infisical への認証条件（`common-infra.ts`）を変えるときは、CI の全ワークフローが秘密を取り出せるかを PR 環境で確かめる。
 - `services` の state を失うと（TF Cloud のワークスペース削除など）、ランダム値（RCON パスワード、転送用シークレット、Floodgate 鍵）が作り直されて変わる。
-- MariaDB のパスワードはプラグインの設定ファイルにも書かれている（`secrets.ts` のコメント）。変えるときはプラグイン側も合わせる。
+- MariaDB の接続情報はプラグイン側の設定にも同じ値が要る（`secrets.ts` のコメント）。変えるときはプラグイン側も合わせる。
 - ワークスペースは `global-remote-state: true` で作る（`terraform_io.just`）。外す前に、出力を参照しているスタックがないか確認する。
 - DNS の A レコードと master の Docker 接続先は、`platform-infra.ts` の固定の IPv4（`ipv4`）を共有する。ホスト移転時はここを変える。
 - 秘密は Terraform の state に値として入る（Terraform の一般的な性質）。state のアクセス制御は TF Cloud 側の設定で、この repo からは確認できない。

@@ -125,6 +125,8 @@ PR 環境のコンテナは、Actions のランナー自身の Docker（`unix://
 
 注意: `mc-monitor` は overlay で `pkgs` に入っているが（`nix/oyasai-overlay.nix`）、flake の `packages` は `nix/oyasai-scope.nix` のスコープから作られ、そこに `mc-monitor` の指定が見当たらない。`nix run .#mc-monitor` が解決できているかは未確認。空きなのにデプロイされないときは、まずこの step を見る。
 
+観測（2026-10-13、本番の実行ログ）: `check-players` は毎回 `does not provide attribute \'apps.x86_64-linux.mc-monitor\'` で失敗しているが、パイプの終了コードが拾われずジョブは success になる。空きサーバーへの自動デプロイは意図どおり動いていない可能性が高い（修正は別作業）。
+
 根拠: `.github/workflows/auto-deploy-empty.yaml`、`nix/flake-parts/oyasai-scope.nix`、`nix/oyasai-scope.nix`、`nix/oyasai-overlay.nix`。
 
 ## 本番（master 環境）への反映
@@ -206,11 +208,36 @@ PR 環境のコンテナは、Actions のランナー自身の Docker（`unix://
 | キャッシュに載らない | `nix-copy-to-s3` の step（検査ジョブでは前段が落ちても走る） |
 | 自動更新の PR がマージされない | 必須チェックが起動・報告されているか（上の未確認点） |
 
+## CI の整形検査で落ちやすいもの
+
+整形と静的検査は `nix/treefmt.nix` にまとまっている。PR の前に `nix fmt` を通せば大半は直る。`docs/` と `plugins/` の一部は対象外（同ファイルの `excludes`）。
+
+| 道具 | 落ちる例 |
+|---|---|
+| `keep-sorted` | `# keep-sorted start` 〜 `end` の中の並びが崩れた（プラグイン一覧などに足したとき） |
+| `typos` | `packages/` や `.github/` の固有名詞・独自の識別子が誤字と判定された |
+| `actionlint` | `.github/workflows/*.yaml` の構文・式の誤り |
+| ソート系（JSON・TOML） | キーの並び順の崩れ |
+| `ktfmt`（Spotless） | `nix fmt` は通っても `./gradlew fmt` と差分が出た（CI の `non-nix-development`） |
+
+除外や個別の設定を足すときは `nix/treefmt.nix` を直す。
+
+## 開発用シェルの道具
+
+`nix develop` に入る道具（`nix/flake-parts/devshells.nix`）のうち、用途が分かりにくいもの。
+
+| 道具 | 用途 |
+|---|---|
+| `just` | `packages/oyasai-infra/` のレシピで Terraform Cloud のワークスペースを操作する（[oyasai-infra](../Projects/oyasai-infra/PROJECT.md)） |
+| `nvfetcher` | `packages/oyasai-standalone-images/nvfetcher.toml` から外部コンテナイメージの版とハッシュを固定し、`_sources/generated.nix` を作り直す |
+| `infisical` | 手元で秘密情報を参照するときの CLI。値は docs やコミットに書かない |
+| `restic` | バックアップの確認・取り出し |
+
 ## 未確認のこと（まとめ）
 
 - `common-internal` スタック（リポジトリ設定・必須チェック）が実際に適用されているか、誰がどう適用するか。
 - 外部アクション `nocommit` と、外部 flake の `nix-flake-check-changed` の中身（整形の check を含むか）。
-- `nix run .#mc-monitor` が flake の出力として解決できるか。
+- `nix run .#mc-monitor` は flake の出力として解決できない（2026-10-13 に `nix eval` と本番の実行ログで確認）。失敗が success 扱いになったとき、デプロイが走るのか止まるのかは未確認。
 - `oyasai-plugin-registry` の引数 `26.2` の意味。自動更新の PR で必須チェックが走るか。
 - イメージタグが内容で決まるか（nixpkgs の既定に依存）。
 - Terraform Cloud の workspace 一覧のページ数の上限。対象が空のときの matrix の挙動。

@@ -68,6 +68,8 @@ Notes on master protection (checked 2026-10-13):
 
 ## New Project Workflow
 
+Code-side steps for a new plugin (Gradle, server Nix files, registry) are in [architecture.md](architecture.md) section 6. This workflow covers the docs side.
+
 Use when adding a new project under `docs/Projects/`.
 
 1. Create `docs/Projects/<project>/PROJECT.md`.
