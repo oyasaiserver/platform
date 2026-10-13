@@ -138,7 +138,7 @@
   </ul>
 
   <h3>権限</h3>
-  <p>全コマンドで <code>oyasaimenu.admin</code> パーミッションが必要。<code>onTabComplete</code> も同じ権限チェック。</p>
+  <p>コマンド実行は plugin.yml の <code>oyasaimenu.admin</code> で制限されます。<code>/adminmenu</code> は <code>openAdminMenu</code> でも権限を確認します。<code>MenuEditCommand.onTabComplete</code> は権限を再確認しないため、候補の表示は実行可否を保証しません。</p>
 </section>
 
 </main>
