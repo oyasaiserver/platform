@@ -16,7 +16,7 @@ last_validated: "2026-10-13"
 
 画像地図、額縁のロック、PaintTools のお絵かき・透明化、染料起動アイテムをまとめたプラグインです。各機能は個別に初期化されます。既存データと PDC には旧名前空間を使います。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-frames/operator.md)
 - 移行時の補足: [プラグイン README](../../../plugins/OyasaiFrames/README.md)
 
 ## AI 作業入口
@@ -76,7 +76,7 @@ last_validated: "2026-10-13"
 | <code>frames.db</code> | SQLite user_version 1。<code>frames</code> 表の主キーは frame UUID。world UUID・名前・座標・owner UUID と、map ID・向き・設置日時を独立して持ちます。owner のない行はポスター記録、map ID のない行はロック記録になり、同じ行が両方を持つこともあります。 |
 | <code>pictures.db</code> | SQLite。MapStore は user_version 1～3 を開き、必要なら v3 に更新します。<code>images</code>・<code>maps</code>・<code>blobs</code> は画像索引と地図データ、<code>animations</code>・<code>map_books</code> は GIF 情報、<code>canvases</code>・<code>canvas_meta</code> は PaintTools を保存します。GIF の遅延と地図割当はカンマ区切り文字列です。 |
 | <code>command-items.db</code> | SQLite <code>command_items(name,item)</code> 表。version 管理はありません。 |
-| <code>config.yml</code> | GIF の枚数・コマ数・送信量を設定します。既定値は [運営向け](operator.md) に記載。 |
+| <code>config.yml</code> | GIF の枚数・コマ数・送信量を設定します。既定値は [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-frames/operator.md) に記載。 |
 
 <code>frames.db</code> と <code>pictures.db</code> は WAL、synchronous FULL、busy timeout 5000 ms を設定します。新規静止画タイルは SHA-256 をキーにした共有 <code>blobs</code> の zstd 圧縮データ、新規 GIF は <code>map_books</code> の zstd book、PaintTools は PNG として保存します。旧 GIF の個別地図データ（PNG・zlib 等）も読め、<code>recompress</code> で book に変換します（<code>MapStore.kt</code>）。DB の削除処理は参照のない blob を消しますが、DB ファイル容量は VACUUM まで縮まらない場合があります。
 
@@ -85,7 +85,7 @@ last_validated: "2026-10-13"
 - 額縁所有者: <code>gakubuchi-locker:owner</code>。DB 所有者を優先し、有効な UUID 文字列を PDC から補助的に読みます。
 - PaintTools キャンバス ID: <code>painttools:id</code> の整数。Bukkit の地図 ID とは別です。
 - 管理ポスター: <code>imageonmap:managed</code>、legacy 属性、<code>imageonmap:splatter</code> など旧 ImageOnMap 名前空間を保ちます。
-- <code>migrate_to_sqlite.py</code> は旧 ImageOnMap YAML/PNG から中間 <code>image.db</code> を作ります。<code>migrate_frames_pictures.py</code> は既存 DB と PaintTools データをスナップショットして2つの DB に出力し、CoreProtect CSV がある場合だけ確実な履歴に基づく一部ロック所有者を変更します。手順と停止条件は [運営向け](operator.md) を参照してください。
+- <code>migrate_to_sqlite.py</code> は旧 ImageOnMap YAML/PNG から中間 <code>image.db</code> を作ります。<code>migrate_frames_pictures.py</code> は既存 DB と PaintTools データをスナップショットして2つの DB に出力し、CoreProtect CSV がある場合だけ確実な履歴に基づく一部ロック所有者を変更します。手順と停止条件は [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-frames/operator.md) を参照してください。
 
 ### 同期・非同期
 

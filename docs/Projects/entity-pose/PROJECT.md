@@ -17,7 +17,7 @@ last_validated: "2026-10-13"
 
 アーマースタンドなどのエンティティを出して姿勢・向き・位置・スケールを調整し、範囲内のエンティティをコピー、貼り付け、削除する建築支援プラグイン。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/entity-pose/operator.md)
 
 ## AI 作業入口
 

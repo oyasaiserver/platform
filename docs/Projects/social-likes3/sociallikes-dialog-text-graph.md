@@ -14,7 +14,7 @@ agent_task: null
 
 ## 現行コードと記録の読み方（2026-10-12）
 
-以下の成功・失敗・経緯は過去の描画調整の記録として保持しています。本作業でその実機結果を再確認したわけではありません。現在の使い方は [player.md](player.md)、設定は [operator.md](operator.md)、集計・描画の仕様は [PROJECT.md](PROJECT.md) を参照してください。
+以下の成功・失敗・経緯は過去の描画調整の記録として保持しています。本作業でその実機結果を再確認したわけではありません。現在の使い方は [player.md](player.md)、設定は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md)、集計・描画の仕様は [PROJECT.md](PROJECT.md) を参照してください。
 
 現行 `SLData.kt` は通常グラフを LARGE・ASCII_LOW に固定します。`/sldata dialog week large low` の `large`・`low` は現在の引数解析では選択肢として機能せず、週・月・年だけを選びます。推奨コマンドは `/sldata week`。倍率は `sldata-dialog.yml` の large 設定を使います。下の通常サイズ・2倍表示を切り替える説明は当時の経緯です。
 

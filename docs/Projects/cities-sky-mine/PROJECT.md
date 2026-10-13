@@ -16,7 +16,7 @@ source: plugins/CitiesSkyMine/（コードから作成。レビュー指摘を�
 
 圧縮した建物データの配置と、道路・交差点・外壁・建築部品の生成を行うプラグイン。2026-10-12 にソース・設定・テストを照合し、2026-10-13 に文書レビューの指摘箇所をコードと再照合した仕様です。ゲーム内での確認と、この作業でのビルド・テスト実行は未実施です。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/cities-sky-mine/operator.md)
 
 ## AI 作業入口
 
@@ -30,7 +30,7 @@ source: plugins/CitiesSkyMine/（コードから作成。レビュー指摘を�
 | ビルド | `nix develop --command gradle :plugins:CitiesSkyMine:build`（`CitiesSkyMine.jar`）。コンパイルだけなら `:plugins:CitiesSkyMine:compileKotlin`、テストは `:plugins:CitiesSkyMine:test` |
 | Nix package | `packages/oyasai-plugins.nix` がプラグインフォルダを検出し `citiesskymine` を公開 |
 | 仕様・規約入口 | [specs/README.md](specs/README.md)。コマンド変更前に [command-conventions.md](specs/command-conventions.md)、内部変更前に [implementation-conventions.md](specs/implementation-conventions.md) |
-| 関連資料 | ローカル検証は `docs/Knowledge/local-server.md` |
+| 関連資料 | ローカル検証は非公開リポジトリ oyasaiserver/docs の `Knowledge/local-server.md` |
 
 ## 技術仕様
 

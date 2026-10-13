@@ -18,7 +18,7 @@ source: plugins/OyasaiWorldGenerator/（コードから作成。ゲーム内で�
 
 展示用のボイド・スーパーフラットワールドを管理し、Purpur 26.2 で高さを適用するプラグインです。通常ワールドと範囲ポータルの台帳も扱います。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-world-generator/operator.md)
 
 ## AI 作業入口
 

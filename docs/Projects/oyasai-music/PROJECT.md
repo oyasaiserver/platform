@@ -17,7 +17,7 @@ last_validated: "2026-10-13"
 
 ノートブロック録音、楽曲の公開・限定公開、ソーシャル操作、レコード販売、環境BGMを提供するプラグイン。同一JARにPaperの本体とVelocityの通信・統合版パック連携を含む。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-music/operator.md)
 
 ## AI 作業入口
 
@@ -47,7 +47,7 @@ last_validated: "2026-10-13"
 
 `onDisable` はコントローラー停止、OMMT保存処理の排出待ち（最大10秒）、環境BGM・再生停止、能力・パック状態の破棄、通信解除、DB終了。OMMTが排出できないとDBを閉じない。他の非同期作業の一括排出はしない。
 
-reloadは設定・パック・カタログ・通知するサーバー能力・報酬サービス・再生エンジンを更新し、旧エンジンを停止する。DB・音源保存先・録音コマンド・録音セッション・コントローラー全体は再作成しない。詳細な適用範囲は [operator.md](operator.md#reload-の範囲)。
+reloadは設定・パック・カタログ・通知するサーバー能力・報酬サービス・再生エンジンを更新し、旧エンジンを停止する。DB・音源保存先・録音コマンド・録音セッション・コントローラー全体は再作成しない。詳細な適用範囲は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-music/operator.md#reload-の範囲)。
 
 ### 録音とインポートの流れ
 
@@ -102,13 +102,13 @@ reloadは設定・パック・カタログ・通知するサーバー能力・�
 OYMIの安定楽器IDは `0→0、1→4、2→1、3→2、4→3、5〜19→同値` のruntime IDへ変換する。`importing/OyasaiMidiImportFile.kt` の `readCustomSounds` はv1の `customSounds` を禁止し、v2/v3では非空必須、v4では省略可だが空オブジェクトは拒否する。ノート番号キーは範囲内・数値として昇順で、v2の値はサウンドID文字列、v3/v4の値は `event`・`pattern` の2項目だけを許可する。
 
 OYMB読取は最大1,000,000音、余分な末尾を拒否。v4は時刻順・duration内・runtime楽器0〜19・音量・Pan・通常音のseedを厳密検査し、v1〜v3は音量・Panを補正する。書込は直接上書きで一時ファイル置換ではない。
-DBの構成・移行・バックアップ対象は [operator.md](operator.md#データと移行) を参照。プレイリスト・favorites等は曲削除でCASCADEする。ストレージ・実アイテム・ジュークボックスはSQLiteと別の保存単位。
+DBの構成・移行・バックアップ対象は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-music/operator.md#データと移行) を参照。プレイリスト・favorites等は曲削除でCASCADEする。ストレージ・実アイテム・ジュークボックスはSQLiteと別の保存単位。
 
 ### 環境BGMとイベント
 
 `PhysicalRecordListener` は主手での右クリックを処理し、存在・identity・範囲上限を検査してジュークボックスPDCを更新後、ゲームモードを問わず1枚消費する。交換は旧盤を返却し、空き不足・装填時GameMode不一致なら中止。回収も同様だが破壊によるdropにはGameMode制限がない。
 
-`AmbientPlaybackRegistry` は起動時のloadedChunksと `ChunkLoadEvent` でPDCを復元し、キャンセルされていない `ChunkUnloadEvent`（MONITOR）でセッション停止・メモリ登録を除く。2tickごとに範囲・通電を検査し、RSの立上がりで開始／停止をトグル。接近は人がいなくなったら停止。範囲は球形、worldなら同ワールド全員。途中入場は現在位置から受信。reloadは停止済みセッションへの参照を消さず、開始判定が `session == null` のためループONでも自動再開しない。復旧操作は [operator.md](operator.md#reload-の範囲) を参照。音源読取は非同期、再生は同期。設置後の公開状態・権限は再判定しない。
+`AmbientPlaybackRegistry` は起動時のloadedChunksと `ChunkLoadEvent` でPDCを復元し、キャンセルされていない `ChunkUnloadEvent`（MONITOR）でセッション停止・メモリ登録を除く。2tickごとに範囲・通電を検査し、RSの立上がりで開始／停止をトグル。接近は人がいなくなったら停止。範囲は球形、worldなら同ワールド全員。途中入場は現在位置から受信。reloadは停止済みセッションへの参照を消さず、開始判定が `session == null` のためループONでも自動再開しない。復旧操作は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-music/operator.md#reload-の範囲) を参照。音源読取は非同期、再生は同期。設置後の公開状態・権限は再判定しない。
 
 `BlockRedstoneEvent` は翌tickで近隣ジュークボックスを再確認。破壊時はHIGHESTで復元待ちをキャンセル、MONITOR・ignoreCancelledでレコードをdrop。`PlayerInteractEvent` の携帯プレイヤー・レコード操作はignoreCancelledではない。通常のブロック保護・爆発保護を提供する実装ではない。
 その他のイベントはGUIのclick／drag／close、金床prepare、book edit、join／quit、plugin disable、Plugin Message、Velocity初期化／終了／backend接続、Geyserのパック読込・切断。パーティクルは20tick周期で個人の頭上／再生中のジュークボックスだけに出す。
@@ -122,7 +122,7 @@ DBの構成・移行・バックアップ対象は [operator.md](operator.md#デ
 - `oyasaimusic:playback_v1`: nonce・接続世代つきの3秒PROBE。無応答は通常再生へ。OYPBは最大100,000音・圧縮4MiB・256チャンク、1tick2チャンクを送る。READYのhash、STARTED_ACKのhash／最初の可聴音時刻を照合してからクライアント再生を確定し、能力不足・期限切れ・失敗はサーバー位置からPaperの将来の音へ戻す。クライアント申告の失敗位置は信用しない。
 - `bedrock_transfer`／`bedrock_pack_status`／`pack_control` はproxyとの専用経路。現在のプレイヤー・対象ID・pack IDを照合し、クライアントからのproxy操作／status偽装を受け付けない。Velocityの通常OMMT中継は現在の `main` 接続に限定し、曲の解析・保存を行わない。
 - Java版のALLOWは保存値と現在接続のSUCCESSを分離。未知の設定はDENY。`OmmtPlaybackClientRegistry.matchesBank` はmanifest報告がある場合に現在世代・OYPB v2対応・期待hashの非ゼロ・SHA-256一致を検査する。報告がない場合はOYPB v2の4能力とbank対応能力ビットだけで受け入れる。`OyasaiResourcePackService.requestIfNeeded` はこのtrueでSUCCESSにしJava版パック要求を省略するため、SUCCESSは常にhash照合済みとは限らない。パック要求経路は読込callbackで適用を判断し、任意パック要求はrequired=false。600tickで待機終了。拡張bankの範囲は−4800〜7200セント、通常域0〜2400以外にF#アンカー−36／−12／36／60を使用する。モデルの許容域−5400〜7300の全域がbankで再生されるわけではない。
-- Geyserの登録状態は端末受諾完了を観測しない。最終確認はGeyser側classloaderのCumulusを反射で生成。XUID許可保存・再接続・旧設定移行は [operator.md](operator.md) の該当節を参照。
+- Geyserの登録状態は端末受諾完了を観測しない。最終確認はGeyser側classloaderのCumulusを反射で生成。XUID許可保存・再接続・旧設定移行は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-music/operator.md) の該当節を参照。
 - 経済はVaultとOyasaiTokenService、AFKはOyasaiUtilities metadata、ヘッドはPaperキャッシュ→PlayerDB。Toastは26.2のCraftBukkit／NMS進捗packetを直接送り、サーバー進捗データへ保存しない。バージョン変更時はこの依存も確認する。
 
 ### テストが保証する範囲・既知の制限

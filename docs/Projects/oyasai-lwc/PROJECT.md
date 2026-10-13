@@ -14,7 +14,7 @@ last_validated: "2026-10-12"
 
 外製 LWC の SQLite データ形式を引き継ぐ、自作のブロック保護プラグイン。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-lwc/operator.md)
 
 ## AI 作業入口
 

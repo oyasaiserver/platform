@@ -19,7 +19,7 @@ last_validated: "2026-10-13"
 
 TAB プラグインの本番で使っている部分（ヘッダー・フッター、タブ名、並び順、名前タグの接頭辞、ping の表示）を、Paper / Bukkit の API で置き換える自作プラグイン。Velocity 側では、別サーバーのプレイヤーをタブリストに出す。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-tab/operator.md)
 
 ## AI 作業入口
 
@@ -149,7 +149,7 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 - **サーバーの名前ラベル:** サーバー名の先頭だけを大文字にする（コードの注記。日本語名などは設定にしていない）。
 - **名前の書き戻し:** 本プラグインの計算結果が変わるまで `playerListName` を書き直さない（キャッシュ比較）。他のプラグインが書き換えると、その状態が続くことがある。
 - **設定の反映:** Paper・Velocity とも起動時に読むだけ。再読み込みの処理はない。
-- **メインスコアボードを使う:** 名前タグのチームと ping の objective は `mainScoreboard` に作る。TAB の同じ機能を併用すると衝突するため、TAB 側の該当機能を止める必要がある（[運営向け](operator.md)）。
+- **メインスコアボードを使う:** 名前タグのチームと ping の objective は `mainScoreboard` に作る。TAB の同じ機能を併用すると衝突するため、TAB 側の該当機能を止める必要がある（[運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-tab/operator.md)）。
 - **処理の負荷:** 毎秒、全プレイヤーにヘッダー・フッターを送り、所持金・トークン・レベルの値を取り直す。人数が多いときの負荷は未計測。
 
 ### 判断の記録（コードのコメントより。日付はコードに書かれていない）

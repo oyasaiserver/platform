@@ -16,7 +16,7 @@ last_validated: "2026-10-13"
 
 CarBuilder2 と AircraftBuilder で車両・航空機を作成、試乗、購入する Paper プラグインです。MileagePoint と TimeAttack も同梱します。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-vehicles/operator.md)
 
 ## AI 作業入口
 
@@ -68,7 +68,7 @@ CarBuilder2 と AircraftBuilder で車両・航空機を作成、試乗、購入
 - MT車の停止中のS入力は後退しない。RへシフトダウンしてWで後退する。クルーズ切替は前進速度0.05以上で、S系の入力で解除する（`CarVehicle.kt`）。飛行機のホットバー5は `(speed.z + 0.5) * -0.005` に速度依存の下降処理も加わるため高度固定ではない（`AircraftBuilderPhysics.kt`）。
 - `MileageTracker` の乗車分の精算は運転者 `floor(距離 / 250 × 2)`、同乗者 `floor(距離 / 250)`。両ビルダーが係数1.0で開始する。端数ポイントは持ち越さず、累計距離は別に加算する。ワールド変更と1tickで16m超の移動は距離に加算しない。
 - `TimeAttackCommand.kt` の `start N` は開始時刻を1個記録し、`sector 1`〜`sector N` と最後のゴールでN+1区間を計測する。finish は開始時のNを使用し、goal引数は完走判定に使わない。lap は finish の失敗後も再開始を試み、時刻が1個だけの場合は再開始不可。性能コスト変更で TimeData を作り直す。
-- コスト区分は0〜50が CP:50、51〜100が CP:100、101〜9999が `(cost / 100 + 1) * 100`（200なら CP:300）。範囲外は CP:Minus。保存できても CP:Minus と自己ベスト表示一覧外の区分は表示されない。コース設置手順は [運営向け](operator.md#タイムアタック計測) を参照。
+- コスト区分は0〜50が CP:50、51〜100が CP:100、101〜9999が `(cost / 100 + 1) * 100`（200なら CP:300）。範囲外は CP:Minus。保存できても CP:Minus と自己ベスト表示一覧外の区分は表示されない。コース設置手順は [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-vehicles/operator.md#タイムアタック計測) を参照。
 
 ### データ形式と永続化
 
@@ -76,7 +76,7 @@ CarBuilder2 と AircraftBuilder で車両・航空機を作成、試乗、購入
 - ビルダーの設定・schematic:
   - `CarBuilder2/<name>/<name>.yml` と `<name>_body.schem` / `<name>_wheel.schem` / `<name>_wheel2.schem` / `<name>_headlight.schem`
   - `AircraftBuilder/<name>/<name>.yml` と `<name>.schem`
-  - YAML は owner UUID、サイズ、offset、座席、CarBuilder2 の音・ばね値などを保持します。各既定値は [運営向け資料](operator.md#車両ごとの設定) を参照。
+  - YAML は owner UUID、サイズ、offset、座席、CarBuilder2 の音・ばね値などを保持します。各既定値は [運営向け資料](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-vehicles/operator.md#車両ごとの設定) を参照。
 - `VehicleGarage/<UUID>.yml` は `ItemSize` と 1 始まりのスロット番号に Bukkit の ItemStack を保存します。初期サイズは 54。
 - `MileagePoint/<UUID>.yml` は `NowPoint`、`Mileage`、`FirstBonus` を保持します。未設定の `FirstBonus` は false として扱い、ログイン時に初回 1,000 ポイントを付与して true にします。同ファイルに `CarSmoke` の色も保存します。
 - `NetworkModeSetting.yml` は UUID ごとの表示更新モード番号を保持し、初期値は 0 (`Ultra`) です。`TimeAttackData/<circuit>/<UUID>.yml` は `CP:<区分>.BEST.Time` と `BEST.Day` を保存します。

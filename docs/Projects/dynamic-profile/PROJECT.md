@@ -18,7 +18,7 @@ last_validated: "2026-10-13"
 
 プレイヤープロフィール GUI、行動統計とレベル、称号、おすすめ建築、全期間・週間リーダーボード、昇格・降格を扱う Paper プラグインです。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/dynamic-profile/operator.md)
 - 既存の移行・保存設計メモ: [plugins/DynamicProfile/README.md](../../../plugins/DynamicProfile/README.md)
 
 ## AI 作業入口
@@ -74,7 +74,7 @@ SQLite は `plugins/DynamicProfile/dynamicprofile.db` です。接続時に WAL�
 - `listener/DailyEvent.kt` は参加時に `ChronoUnit.DAYS` で前回加算日時との差を判定し、初回または差が0でない場合に `join` を1加算します。通常は24時間以上の経過が必要で、暦日ごと・オンライン中の日ごとの加算ではありません。`promotion/rank/RankManager.kt` の `minJoinDays` 判定もこの値を使います。
 - `listener/BookIntroListener.kt` は編集本の1ページ目だけを紹介文に保存します。署名時を除外する判定はなく、GUIの「署名して変更せず終了」という案内はキャンセルを保証しません。
 - `model/LevelReward.kt` は全報酬の表示名のカンマ前（カンマなしなら表示名全体）を整数レベルとして解析します。同レベルの報酬をまとめて付与し、`Stats.addReceiveRewardStatus` でレベル単位に受取済みを保存します。API未取得や付与結果の失敗を検査しない経路がありますが、例外時は受取済み保存前に中断する場合があります。
-- `RecommendBroadcaster.kt` はおすすめ登録済みのオンラインプレイヤーから選出します。初回と設定間隔ごとの特別枠は `donator` / `spdonator` が対象で、不在なら通常枠へ戻ります。モード別の選び方は [運営向け](operator.md#おすすめ紹介の選出) を参照してください。特別枠と通常枠のキャッシュは別で、`HYBRID` は選んだ人の建築がすべて既出になると枠の建築キャッシュ全体を消すため、全建築一巡までの重複回避を保証しません。削除済みIDも除外せず、建築名が `null` になり得ます。
+- `RecommendBroadcaster.kt` はおすすめ登録済みのオンラインプレイヤーから選出します。初回と設定間隔ごとの特別枠は `donator` / `spdonator` が対象で、不在なら通常枠へ戻ります。モード別の選び方は [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/dynamic-profile/operator.md#おすすめ紹介の選出) を参照してください。特別枠と通常枠のキャッシュは別で、`HYBRID` は選んだ人の建築がすべて既出になると枠の建築キャッシュ全体を消すため、全建築一巡までの重複回避を保証しません。削除済みIDも除外せず、建築名が `null` になり得ます。
 
 ### 同期・非同期
 

@@ -18,7 +18,7 @@ last_validated: "2026-10-13"
 
 建築の看板登録・いいね・訪問・フォロー・旅行ガイド・統計表示を提供するプラグイン。コード確認日: 2026-10-13。ゲーム内、外部サービス、本番データでの動作確認は未実施。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md)
 - 経緯: [SQLite移行の当初設計](sqlite-migration-design.md) / [Dialog描画の判断記録](sociallikes-dialog-text-graph.md)
 
 ## AI 作業入口
@@ -43,7 +43,7 @@ last_validated: "2026-10-13"
 
 ビルドはPurpur、DiscordSRV、LuckPerms、OyasaiToken、FAWEをcompileOnly、Kotlin stdlib・InventoryFramework・Javacord・Exposed core/jdbc・SQLite JDBCをimplementationに指定。FAWE由来のAdventureを除外してPaperとのバイナリ不一致を避ける。ルート `build.gradle.kts` がShadowJarの名前を `SocialLikes3.jar` にし、通常jarを無効化する。プラグイン固有ビルド定義は統計文言mdをresourcesへ追加する。旧設計にあるCoroutinesとライブラリrelocateは現行の固有定義にない。
 
-メインはobject単位のコマンド・イベント・画面を登録する。設定、画面、権限、外部サービスの起動条件は [operator.md](operator.md) が一覧。旧設計の「OyasaiTokenAPIへ全置換」「全件キャッシュ廃止」は現行実装と異なる。
+メインはobject単位のコマンド・イベント・画面を登録する。設定、画面、権限、外部サービスの起動条件は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md) が一覧。旧設計の「OyasaiTokenAPIへ全置換」「全件キャッシュ廃止」は現行実装と異なる。
 
 ### 起動と主要な処理の流れ
 
@@ -87,7 +87,7 @@ last_validated: "2026-10-13"
 
 SQLiteは `SocialLikesShadow.db`、WAL、busy_timeout=5000、foreign_keys=ON、synchronous=NORMAL。buildsのdeleted_at・deleted_by・sign_materialとガイド追加列は不足時にALTERするが、旧UUID直結build_likesを現形式へ変換する処理はない。現役座標の部分一意索引は作成失敗時に警告・重複列挙し、そのまま続ける。いいね同期はUUID重複の先頭を採用し、差分だけINSERT/UPDATE/DELETEする。日時のNULL→値・値→NULLも更新する。
 
-建築のYAMLは `data/<範囲>/<ID>.yml`。id、loc.world/x/y/z、time、owner、title、likes、likesWithTimestamp、check、comment、DiscordTextID、deleted/deleted_at/deleted_by、sign_materialを保存。YAMLロードは削除済みもキャッシュに持つが、SQLiteロードは現役行だけ。最大ID取得はSQLiteの削除済みも含む。保存先一覧は [operator.md](operator.md)。
+建築のYAMLは `data/<範囲>/<ID>.yml`。id、loc.world/x/y/z、time、owner、title、likes、likesWithTimestamp、check、comment、DiscordTextID、deleted/deleted_at/deleted_by、sign_materialを保存。YAMLロードは削除済みもキャッシュに持つが、SQLiteロードは現役行だけ。最大ID取得はSQLiteの削除済みも含む。保存先一覧は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md)。
 
 `BuildTimestamps` は新規保存をepoch msの文字列にする。旧ISO local値は2022-12-23以前をAmerica/New_York、2025-07-22以前をJST、それ以後をUTCとしてJSTへ変換する。不正値は警告してnull。既存建築のtime・created_atと既存宣伝timestampは通常保存・同期でその文字列を維持する。全データを自動正規化しない。
 
@@ -121,7 +121,7 @@ SQLiteは `SocialLikesShadow.db`、WAL、busy_timeout=5000、foreign_keys=ON、s
 
 TokenManager互換API・反射でのaddTokensWithCommit、OyasaiTokenService、コンソール `eco give`、LuckPerms、WorldEdit、Javacord、PlayerDB、floodgateの反射APIを使う。DiscordSRVはsoftdependとビルド指定があるが、本体にDiscordSRV APIを使う処理はない。Discordの反応をいいねへ取り込まない。
 
-保護は看板と一部の支えの破壊・爆発・ピストン。建築や土地全体の保護ではなく、キャンセル済みイベントの処理もある。移動の所有者検査なし、supportの分岐不足、SLTPの判定まで到達しない早期returnの範囲は [operator.md](operator.md) を参照。
+保護は看板と一部の支えの破壊・爆発・ピストン。建築や土地全体の保護ではなく、キャンセル済みイベントの処理もある。移動の所有者検査なし、supportの分岐不足、SLTPの判定まで到達しない早期returnの範囲は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md) を参照。
 
 ### テストが保証する範囲
 

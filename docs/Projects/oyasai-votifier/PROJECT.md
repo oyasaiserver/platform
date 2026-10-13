@@ -16,7 +16,7 @@ last_validated: "2026-10-13"
 
 NuVotifier v1/v2 互換の投票受付と、個人・投票パーティ報酬を扱う。旧 `Votifier`（NuVotifier）と `zVoteParty` の置き換え。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-votifier/operator.md)
 
 ## AI 作業入口
 

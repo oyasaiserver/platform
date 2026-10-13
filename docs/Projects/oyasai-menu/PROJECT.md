@@ -17,7 +17,7 @@ last_validated: "2026-10-13"
 
 YAML で定義したメニュー、Popup、通常ショップ、ポイントショップ、売却画面を提供する Paper プラグインです。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-menu/operator.md)
 - 既存の編集者向け資料: [editors-doc/index.html](editors-doc/index.html)
 
 ## AI 作業入口
@@ -48,7 +48,7 @@ YAML で定義したメニュー、Popup、通常ショップ、ポイントシ�
 - item slot の範囲・重複はローダーで検証しません。通常メニューでは表示条件を満たし実際に配置された後の item が上書きします。クリック処理は最初の定義を選び、その後に AIR・権限を判定するため、表示と実行が一致しない、または無反応になる場合があります。Popup のクリックも最初の定義で判定します（表示の AIR 消去は後述）。負の slot も通常メニューでは loader を通過して Inventory.setItem に渡るため、表示時の結果は未確認です。
 - ActionEngine はメニューを開く、Popup を開く、プレイヤー/コンソール/OP コマンド、メッセージ、サウンド、broadcast、URL 表示、クリップボードコピー、コマンド提案、ショップ・売却・ポイントショップを扱います。画面を開く一部アクションは1 tick後に実行します。コマンド実行結果は検査しません。
 - Popup のアクションはプレイヤー/コンソール/OP コマンド、URL・チャット表示、コマンド提案、Popup/通常メニュー/ショップ/売却/ポイントショップの遷移です。Popup の URL はクリック可能な Component ではなく、チャットへ文字列で送ります。Popup から同じ画面を再度開くと、1 tick 後に root メニューを開きます。
-- Popup の action value は `player_cmd`、`console_cmd`、`op_player_cmd`、`suggest_command` だけ実行時に `%player%` を置換します。`url`、`chat_paste`、画面遷移先は置換しません。Popup の title/name/lore には通常メニューの PlaceholderContext 置換を行いません。PointShop は name/lore/message/commands ごとに置換対象が異なります（運営向けの [メニュー定義の既定値](operator.md#メニュー定義の既定値) を参照）。
+- Popup の action value は `player_cmd`、`console_cmd`、`op_player_cmd`、`suggest_command` だけ実行時に `%player%` を置換します。`url`、`chat_paste`、画面遷移先は置換しません。Popup の title/name/lore には通常メニューの PlaceholderContext 置換を行いません。PointShop は name/lore/message/commands ごとに置換対象が異なります（運営向けの [メニュー定義の既定値](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-menu/operator.md#メニュー定義の既定値) を参照）。
 
 ### アクション設定契約
 
