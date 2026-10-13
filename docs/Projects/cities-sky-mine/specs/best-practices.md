@@ -2,7 +2,6 @@
 title: "CitiesSkyMine Best Practices"
 category: specification
 status: active
-owner: marzipan99
 source_of_truth: "docs/Projects/cities-sky-mine/specs/best-practices.md"
 related_paths:
   - docs/Projects/cities-sky-mine/specs/command-conventions.md

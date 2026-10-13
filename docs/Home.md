@@ -17,32 +17,56 @@ AI は作業しながらここを読み、**作業中に学んだことをここ
 
 ## 作業に応じた入口
 
-| 作業 | 読むもの |
-|---|---|
-| プラグイン・ツールの編集 | `Projects/<name>/PROJECT.md`（一覧は `ls docs/Projects`）→ 実装 |
-| ブランチ・コミット・PR | [workflows.md](Knowledge/workflows.md) |
-| CI 失敗・PR の範囲・本番反映の前 | [mistakes.md](Knowledge/mistakes.md) |
-| ローカルサーバーで試す | [local-server.md](Knowledge/local-server.md) |
-| デプロイ・本番反映 | [deploy.md](Knowledge/deploy.md) |
-| 横断的な判断の経緯 | `Decisions/`（`ls docs/Decisions`） |
+
+| 作業                    | 読むもの                                                     |
+| --------------------- | -------------------------------------------------------- |
+| 全体の構成を知る・新しいプラグインを足す  | [architecture.md](Knowledge/architecture.md)             |
+| プラグイン・ツールの編集          | `Projects/<name>/PROJECT.md`（一覧は `ls docs/Projects`）→ 実装 |
+| CI の失敗・自動デプロイ・PR 環境   | [ci-cd.md](Knowledge/ci-cd.md)                           |
+| インフラ（CDKTF）・イメージ・定期処理 | [oyasai-infra](Projects/oyasai-infra/PROJECT.md)         |
+| 外部プラグインの追加・更新（registry） | [architecture.md](Knowledge/architecture.md) の「外部プラグイン」 |
+| 定期処理 `oyasai-cron`・Web `oyasai-web` を直す | [oyasai-infra](Projects/oyasai-infra/PROJECT.md) |
+| 依存・整形・開発用シェルの道具 | [ci-cd.md](Knowledge/ci-cd.md) の「CI の整形検査で落ちやすいもの」「開発用シェルの道具」 |
+| ブランチ・コミット・PR          | [workflows.md](Knowledge/workflows.md)                   |
+| CI 失敗・PR の範囲・本番反映の前   | [mistakes.md](Knowledge/mistakes.md)                     |
+| ローカルサーバーで試す           | [local-server.md](Knowledge/local-server.md)             |
+| デプロイ・本番反映             | [ci-cd.md](Knowledge/ci-cd.md)                           |
+| 横断的な判断の経緯             | `Decisions/`（まだ無い。最初の横断的な判断を書くときに作る）                        |
+
+
+
 
 ## 置き場所
 
-| フォルダ | 置くもの |
-|---|---|
-| `Projects/<name>/` | プロジェクトごとの入口 `PROJECT.md`、仕様、そのプロジェクトで分かったこと・判断。ツールは実体も同じフォルダに置いてよい |
-| `Knowledge/` | 複数プロジェクトに効く知見・手順・過去の失敗 |
-| `Decisions/` | 複数プロジェクトにまたがる判断。`YYYY-MM-DD-<topic>.md` |
-| `Archive/` | 役目を終えた資料（必要になったら作る）。現状の根拠にしない |
-| `local/`（Git 管理外） | 公開できるか判断できないもの、生ログ、個人のメモ。なければ作ってよい |
 
-`PROJECT.md` の冒頭には、実装の正本（`source_of_truth`）と関連パス（`related_paths`）を書く。
+| フォルダ               | 置くもの                                                               |
+| ------------------ | ------------------------------------------------------------------ |
+| `Projects/<name>/` | プロジェクトごとの入口 `PROJECT.md`、仕様、そのプロジェクトで分かったこと・判断。ツールは実体も同じフォルダに置いてよい |
+| `Knowledge/`       | 複数プロジェクトに効く知見・手順・過去の失敗                                             |
+| `Decisions/`       | 複数プロジェクトにまたがる判断。`YYYY-MM-DD-<topic>.md`（必要になったら作る）                            |
+| `Archive/`         | 役目を終えた資料（必要になったら作る）。現状の根拠にしない                                      |
+| `local/`（Git 管理外）  | 公開できるか判断できないもの、生ログ、個人のメモ。なければ作ってよい                                 |
+
+
+プラグインのフォルダ名はプラグイン名のケバブケース（`OyasaiLWC` → `oyasai-lwc`）。各プラグインには次の3つを置く。書式の見本は [oyasai-lwc](Projects/oyasai-lwc/PROJECT.md)。
+
+
+| ファイル          | 読む人    | 中身                                                       |
+| ------------- | ------ | -------------------------------------------------------- |
+| `PROJECT.md`  | 開発者・AI | 作業の入口（実装の正本 `source_of_truth`・関連パス `related_paths`）と技術仕様 |
+| `player.md`   | プレイヤー  | 使い方・制限・困ったときの表示。内部実装や権限ノードは書かない                          |
+| `operator.md` | 運営     | 権限、管理コマンド、設定と既定値、データの場所、移行・障害時の注意                        |
+
+
+プラグインの挙動を変えたら、この3つのうち影響する文書も同じ PR で直す。
 
 ## 記憶の読み方
 
 - ノートは書かれた時点の記録。日付や `last_validated` を見て、現状を問われたらコード・設定・実機で確かめる。確かめられない部分は不明と伝える。
 - 過去の判断は当時の判断として読む。後から書かれた文が無条件に正しいわけではない。
 - 実測・人の明示発言・AI の推測を区別する。AI が書いた要約を一次情報として扱わない。
+
+
 
 ## 記憶の残し方
 
@@ -51,7 +75,7 @@ AI は作業しながらここを読み、**作業中に学んだことをここ
 - 調べて分かった仕様・API の癖・落とし穴 → 該当の `PROJECT.md`。複数プロジェクトに効くなら `Knowledge/<topic>.md`
 - ビルド・テスト・検証で詰まったことと解決法 → 同上
 - 設計の判断と理由 → `PROJECT.md` の「判断の記録」節（日付付き）。横断的なら `Decisions/`
-- ユーザーに訂正されたこと、失敗した行動と次回の正しい行動 → [mistakes.md](Knowledge/mistakes.md)
+- 作業の誤りとして訂正されたこと、失敗した行動と次回の正しい行動 → [mistakes.md](Knowledge/mistakes.md)。個人の好みは書かない（「公開リポジトリとして守ること」）
 - 繰り返す作業手順 → [workflows.md](Knowledge/workflows.md)
 - 新しい種類の作業の入口 → このファイルの「作業に応じた入口」表
 
@@ -68,16 +92,18 @@ AI は作業しながらここを読み、**作業中に学んだことをここ
 
 ## 公開リポジトリとして守ること
 
+ここは個人の記憶ではない。リポジトリの作業者全員で共有する、公開できる作業の知見だけを置く。特定の人の好み・人物像・個人的な判断や事情は、各自の手元に残し、ここには書かない。個人のメモの名前・場所・使っている道具も書かない。
+
 `docs/` は公開される。次は書かない。迷ったら `local/` に置く。
 
 - 個人情報、トークン・パスワード・webhook などの秘密、IP・ホスト名・個人のパス（`/Users/…`）
 - 非公開のサーバー構成の詳細、生ログ・会話の全文、大きな一時生成物
-- 個人の知識管理システム（Cogito など）の中身。リポジトリの作業に必要な知見だけを、公開できる形に書き直して残す
+- 個人的なメモの中身。リポジトリの作業に必要な知見だけを、公開できる形に書き直して残す
 
 この節と「記憶の残し方」の原則は、ユーザーの明示的な依頼なしに削らない。入口表や置き場所の追記は自由に行ってよい。
 
 ## ビルドと検証の基本
 
-- 整形: `/nix/var/nix/profiles/default/bin/nix fmt`（`gradle fmt` は使わない。CI は Nix の treefmt）
+- 整形: `/nix/var/nix/profiles/default/bin/nix fmt`（treefmt）。`docs/` は整形の対象外。CI はこれに加えて `./gradlew fmt`（Spotless の ktfmt）と `./gradlew lock` を実行し、差分が出ると失敗する（[ci-cd.md](Knowledge/ci-cd.md)）
 - ビルド: `/nix/var/nix/profiles/default/bin/nix develop --command gradle <task>`
-- `detekt 1.23.6 + Java 25` の `IllegalArgumentException: 25` は既知の環境問題。根拠がない限りコードの不具合と扱わない。
+

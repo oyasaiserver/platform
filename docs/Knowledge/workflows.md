@@ -23,9 +23,9 @@ Use when the task asks for a branch, commit, push, or pull request.
    ```bash
    git fetch origin --prune
    ```
-3. If on `master`, `main`, or another protected branch, create a feature branch.
+3. If on `master`, create a feature branch. PRs must target `master`; CI (`pr.yaml`) fails otherwise.
    ```bash
-   git switch -c codex/<topic>
+   git switch -c <type>/<topic>
    ```
 4. Make the requested changes. Do not include unrelated dirty files.
    Record what you learned in `docs/` as you go (see `docs/Home.md`
@@ -43,7 +43,7 @@ Use when the task asks for a branch, commit, push, or pull request.
 8. Before committing, check that reusable findings, decisions, and corrections
    from this task are in `docs/`. If nothing was worth keeping, say so in the
    report.
-9. Commit with a Conventional Commit title.
+9. Commit with a Conventional Commit title. The PR title is also checked by CI (see [ci-cd.md](ci-cd.md)).
 10. Push.
     ```bash
     git push -u origin HEAD
@@ -68,6 +68,8 @@ Notes on master protection (checked 2026-10-13):
 
 ## New Project Workflow
 
+Code-side steps for a new plugin (Gradle, server Nix files, registry) are in [architecture.md](architecture.md) section 6. This workflow covers the docs side.
+
 Use when adding a new project under `docs/Projects/`.
 
 1. Create `docs/Projects/<project>/PROJECT.md`.
@@ -78,6 +80,7 @@ Use when adding a new project under `docs/Projects/`.
    - `runtime_kind`
    - `minecraft_related`
 3. Add an `AI 作業入口` section: implementation SOT, key files, build/test/run entrypoints, related projects.
+4. For a plugin, also add `player.md` and `operator.md` (see `docs/Home.md` "置き場所"; model: `docs/Projects/oyasai-lwc/`).
 
 ## Plugin Edit Workflow
 
@@ -85,6 +88,7 @@ Use when editing a Minecraft plugin.
 
 1. Read `docs/Projects/<project>/PROJECT.md` for the plugin.
 2. Read the implementation under `plugins/<Plugin>/`.
+   If the change alters behavior, update `player.md` / `operator.md` / the PROJECT.md spec in the same PR.
 3. Treat `plugins/<Plugin>/src/` as the implementation SOT.
 4. Build the target plugin. This must compile Kotlin and produce the plugin jar.
    ```bash

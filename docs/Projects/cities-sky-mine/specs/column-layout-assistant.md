@@ -2,7 +2,6 @@
 title: "CitiesSkyMine Column Layout Assistant"
 category: specification
 status: draft
-owner: marzipan99
 source_of_truth: "docs/Projects/cities-sky-mine/specs/column-layout-assistant.md"
 related_paths:
   - docs/Projects/cities-sky-mine/PROJECT.md
@@ -10,7 +9,8 @@ related_paths:
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
-last_validated: "2026-06-10"
+last_validated: "2026-10-12"
+source: plugins/CitiesSkyMine/（コードから作成。ゲーム内での確認は未実施）
 agent_task: "Do not implement from this note without a follow-up request."
 ---
 
@@ -18,7 +18,7 @@ agent_task: "Do not implement from this note without a follow-up request."
 
 CitiesSkyMine に、WorldEdit selection の幅に対して柱の太さと柱間の空間を計算し、きれいに割り付けるための補助機能を追加する案。
 
-この文書は後日実装を検討するための仕様メモであり、現時点ではコード実装を行わない。
+この文書は当時の仕様案として残す。2026-10-12 のコード確認では、柱生成・候補表示・本数指定・2D配置は `ColumnLayoutCommand.kt` に実装済み。以下のコマンド案や未決定事項は当時の記録であり、現行の操作は [player.md](../player.md)、処理の仕様は [PROJECT.md](../PROJECT.md) を参照する。永続的なプレビューは実装されていない。
 
 ## 背景
 

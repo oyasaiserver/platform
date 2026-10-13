@@ -53,8 +53,8 @@ v2.4.0 | | 最終更新日 | 2026-03-07 |
 1. サーバーを停止する
 1. バックアップから対象プレイヤーディレクトリをコピーする
    ```bash
-   # UUID例: f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b
-   cp -r /backup/oyasaipets-players-20260305/f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b \
+   # UUID例: 00000000-0000-0000-0000-000000000001
+   cp -r /backup/oyasaipets-players-20260305/00000000-0000-0000-0000-000000000001 \
          plugins/OyasaiPets/players/
    ```
 1. サーバーを起動する
