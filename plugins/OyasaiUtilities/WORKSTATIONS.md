@@ -73,6 +73,12 @@ OyasaiUtilities のコマンドに切り替える。他プラグイン所有な�
   所有者指定には**受取人**の skull.others、他人への生成には実行者の skull.spawn.others を見る。
   主手が空なら副手の既存の頭も変更する。名前、64桁テクスチャハッシュ、180文字 Base64 を扱う。
   スキン解決は非同期で行い、アイテムの反映はサーバースレッドで行う。
+- 統合版（独自拡張・upstream にない）: 所有者に `.<Java側の名前>`（例: `.gamertag`）を指定し、
+  その統合版プレイヤーがオンラインのときだけ使える。Floodgate で本人を特定し、
+  `https://api.geysermc.org/v2/skin/<XUID>` の `texture_id` を64桁ハッシュとして既存の
+  テクスチャ経路に渡す。取得できなければ Java 側の同名プレイヤーへ落とさず、メッセージで止める。
+  XUID を外部 API に送るのはこのコマンド実行時だけ。Bedrock クライアントでは Geyser の
+  custom skull 事前登録がなければ従来どおり見えない。
 - 安全上の差分: hat remove / skull 生成でインベントリが満杯なら余りを足元に落とす。
   upstream は Inventories.addItem の戻り値（余り）を無視する。
   skull のスキン取得中に手の物が変わった場合や受取人がログアウトした場合は中止する。
