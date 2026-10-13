@@ -7,6 +7,7 @@ dependencies {
   implementation(libs.sqlite.jdbc)
   compileOnly(libs.vault.api)
   compileOnly(libs.luckperms.api)
+  compileOnly(libs.floodgate.api) { isTransitive = false }
   compileOnly("net.essentialsx:EssentialsX:2.21.2") { isTransitive = false }
   compileOnly(project(":plugins:OyasaiToken"))
 

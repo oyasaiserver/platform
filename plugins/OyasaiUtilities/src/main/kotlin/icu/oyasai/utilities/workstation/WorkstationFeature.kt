@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.profile.PlayerProfile
 
 class WorkstationFeature(private val plugin: Main) : TabExecutor, Listener {
   private val enderViews = mutableMapOf<UUID, Inventory>()
@@ -210,17 +211,24 @@ class WorkstationFeature(private val plugin: Main) : TabExecutor, Listener {
                   return
                 }
         else player
+    val bedrock =
+        args
+            .firstOrNull()
+            ?.takeIf { recipient.hasPermission("essentials.skull.others") }
+            ?.let { BedrockSkull.onlinePlayer(it) }
     val owner =
-        try {
-          WorkstationRules.skullOwner(
-              args.firstOrNull(),
-              player.name,
-              recipient.hasPermission("essentials.skull.others"),
-          )
-        } catch (e: IllegalArgumentException) {
-          player.sendMessage("§c${e.message}")
-          return
-        }
+        bedrock?.javaUsername
+            ?: try {
+              WorkstationRules.skullOwner(
+                  args.firstOrNull(),
+                  player.name,
+                  recipient.hasPermission("essentials.skull.others"),
+              )
+            } catch (e: IllegalArgumentException) {
+              player.sendMessage("§c${e.message}")
+              return
+            }
+    val bedrockXuid = bedrock?.xuid
     val inv = player.inventory
     val mainHand = inv.itemInMainHand.type != Material.AIR
     val hand = if (mainHand) inv.itemInMainHand else inv.itemInOffHand
@@ -250,18 +258,26 @@ class WorkstationFeature(private val plugin: Main) : TabExecutor, Listener {
           val shortOwner = if (WorkstationRules.isTexture(owner)) owner.take(7) else owner
           try {
             val profile =
-                if (WorkstationRules.isTexture(owner)) {
-                  Bukkit.createPlayerProfile(UUID.randomUUID()).also {
-                    it.setTextures(
-                        it.textures.apply {
-                          setSkin(URI("https://textures.minecraft.net/texture/$owner").toURL())
-                        }
-                    )
-                  }
-                } else Bukkit.createPlayerProfile(null, owner).update().join()
+                when {
+                  bedrockXuid != null ->
+                      textureProfile(
+                          BedrockSkull.textureId(bedrockXuid)
+                              ?: throw IllegalStateException("no stored Bedrock skin")
+                      )
+                  WorkstationRules.isTexture(owner) -> textureProfile(owner)
+                  else -> Bukkit.createPlayerProfile(null, owner).update().join()
+                }
             meta.setOwnerProfile(profile)
             if (!meta.hasOwner()) meta.setOwner(owner)
           } catch (_: Exception) {
+            // A failed Bedrock lookup must not fall back to a Java player with the same name.
+            if (bedrock != null) {
+              plugin.server.scheduler.runTask(
+                  plugin,
+                  Runnable { player.sendMessage("§c${owner} の統合版スキンを取得できませんでした。") },
+              )
+              return@Runnable
+            }
             meta.setOwner(owner)
           }
           meta.setDisplayName("§fSkull of $shortOwner")
@@ -294,6 +310,15 @@ class WorkstationFeature(private val plugin: Main) : TabExecutor, Listener {
         },
     )
   }
+
+  private fun textureProfile(hash: String): PlayerProfile =
+      Bukkit.createPlayerProfile(UUID.randomUUID()).also {
+        it.setTextures(
+            it.textures.apply {
+              setSkin(URI("https://textures.minecraft.net/texture/$hash").toURL())
+            }
+        )
+      }
 
   private fun give(player: Player, stack: ItemStack) {
     player.inventory.addItem(stack).values.forEach {
