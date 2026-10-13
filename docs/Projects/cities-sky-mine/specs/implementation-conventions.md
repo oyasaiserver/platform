@@ -291,7 +291,7 @@ Copy the built jar to the local test server:
 plugins/CitiesSkyMine/build/libs/CitiesSkyMine.jar → local/paperclip-tmp/plugins/CitiesSkyMine.jar
 ```
 
-The local test server runtime is documented in `docs/Knowledge/local-server.md`.
+The local test server runtime is documented in `Knowledge/local-server.md` in the private oyasaiserver/docs repository.
 
 ## 7. MessageUtil Usage
 

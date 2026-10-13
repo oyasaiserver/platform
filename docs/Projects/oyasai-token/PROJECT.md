@@ -16,7 +16,7 @@ last_validated: "2026-10-13"
 
 SQLite を使うトークン残高プラグインです。`TokenManager` 互換 API としても公開します。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-token/operator.md)
 
 ## AI 作業入口
 
@@ -84,7 +84,7 @@ SQLite を使うトークン残高プラグインです。`TokenManager` 互換 
 
 ### コマンド・イベント
 
-- `/token` のプレイヤー機能は残高確認、送金、top。管理操作は `add`、`addall`、`remove`、`set`、`reload`。`token.use` / `token.admin` の権限と既定値は [operator.md](operator.md) を参照。
+- `/token` のプレイヤー機能は残高確認、送金、top。管理操作は `add`、`addall`、`remove`、`set`、`reload`。`token.use` / `token.admin` の権限と既定値は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-token/operator.md) を参照。
 - `PlayerJoinEvent` で残高を読み（未登録なら初期残高の行を作り、名前が変わっていれば `name-update` を保存）、20 tick 後に通知が有効なら保留通知を取得します。
 - `TMTokenBalanceChangeEvent` は残高操作 job がキュー受付された時点で発火し、SQLite commit より前の場合があります。呼び出し元がメインスレッドなら同期的に、それ以外なら次 tick にメインスレッドで発火し、listener の例外はログに出して握りつぶします。`reason` は `add`・`remove`・`set` で、送金は `remove`（送り手）→ `add`（受け手）の2回です（自己送金も2回）。残高読取による初回アカウント作成と YAML import はこのイベントを発火しません。
 - `TMTokenSendEvent` は送金先がオンラインのときだけ、transfer 前に発火します。残高・上限の判定より前なので、キャンセルされなかった送金がその後残高不足で失敗することがあります。キャンセルされると transfer は開始しません。
@@ -111,7 +111,7 @@ SQLite を使うトークン残高プラグインです。`TokenManager` 互換 
 
 ### 標準通知
 
-- `notifications.yml` は既定無効です。通知対象の加算・減算・残高設定は commit 後にオンライン対象へ配信し、未配信分はログイン後に取得します。1件なら個別文面、複数件なら件数と合計増減の要約です。呼び出し元ごとの通知条件は [operator.md](operator.md) を参照。
+- `notifications.yml` は既定無効です。通知対象の加算・減算・残高設定は commit 後にオンライン対象へ配信し、未配信分はログイン後に取得します。1件なら個別文面、複数件なら件数と合計増減の要約です。呼び出し元ごとの通知条件は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-token/operator.md) を参照。
 - `NotificationSettings.kt` は保存された `balance_after` を表示し、配信時の台帳を読み直しません。要約は最後の保留通知の残高です。通知付き加算後に通知なし減算があれば、ログイン通知と現在残高が異なり得ます。
 - `OyasaiTokenPlugin.kt` はメッセージ送信後、別の非同期 DB タスクで `delivered_at` を更新します。更新前のクラッシュ、キュー拒否、DB エラーでは送信済み通知が次回ログイン時に再配信され得るため、一度だけの配信は保証しません。
 

@@ -17,7 +17,7 @@ last_validated: "2026-10-13"
 
 看板への投票と、投票グループ・結果GUIを提供する Paper プラグイン。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/social-votes/operator.md)
 
 ## AI 作業入口
 
@@ -36,7 +36,7 @@ last_validated: "2026-10-13"
 - `paper-plugin.yml` の名前は `SocialVotes`、メインクラスは `com.github.sahyuya.socialvotes.SocialVotes`、API バージョンは `1.21.5`。コマンドは `socialvotes`（別名 `sv`）、`svupdate`、`svtp` として記載されています。
 - プラグイン固有の Gradle 依存は Purpur API の `compileOnly` のみです。ルート Gradle が Kotlin JVM、Shadow、Java Library を適用し、プラグインの build に Shadow JAR を加えます。
 - `onEnable` は NamespacedKey `socialvotes:sv_sign_id` を用意し、`DataManager.load()` の後にコマンドとイベントを登録します。コマンド登録ではサーバー実装の `commandMap` フィールドをリフレクションで取得します。
-- `paper-plugin.yml` に他プラグインの依存指定はなく、プラグイン間の公開 API もありません。詳細な権限・操作範囲は [運営向け](operator.md) を参照してください。
+- `paper-plugin.yml` に他プラグインの依存指定はなく、プラグイン間の公開 API もありません。詳細な権限・操作範囲は [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/social-votes/operator.md) を参照してください。
 
 ### 主要な処理の流れ
 

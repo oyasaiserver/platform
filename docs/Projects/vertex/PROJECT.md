@@ -15,7 +15,7 @@ last_validated: "2026-10-12"
 
 サービスごとにコマンドを登録するプラグイン。現在は `SchematicsService` だけを持ち、schematic.cloud の配布 API からファイルをダウンロードして FastAsyncWorldEdit の保存先へ配置する。建築のロードや貼り付けは行わない。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/vertex/operator.md)
 
 ## AI 作業入口
 

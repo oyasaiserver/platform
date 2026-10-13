@@ -12,7 +12,7 @@ source: plugins/SocialLikes3/（コードから作成。ゲーム内での確認
 
 ## 現行コードとの差分（2026-10-12）
 
-以下は2026-07-01の設計案を残した記録です。現在の仕様は [PROJECT.md](PROJECT.md)、運用は [operator.md](operator.md) を参照してください。他プラグインの現在の移行状況はこの調査では未確認です。
+以下は2026-07-01の設計案を残した記録です。現在の仕様は [PROJECT.md](PROJECT.md)、運用は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md) を参照してください。他プラグインの現在の移行状況はこの調査では未確認です。
 
 - DB名は `SocialLikesShadow.db`。建築は既定YAML主保存でSQLiteをミラーし、完了マーカーがある場合に設定でSQLite主保存を選ぶ。起動時のYAML改名・DB削除によるフォールバック、自動ID移行はない。
 - 全件メモリキャッシュを維持し、DBは単一読込/書込executorと通常transactionを使う。Coroutinesによる設計ではない。

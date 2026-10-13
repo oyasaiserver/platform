@@ -16,7 +16,7 @@ last_validated: "2026-10-13"
 
 外製 SignShop の `sellers.yml` を取り込み、看板・リンクした箱やレバーで Vault 経済の取引をする自作プラグイン。取引は SQLite に記録し、結果が確かめられない取引があると店を止める。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-sign-shop/operator.md)
 
 ## AI 作業入口
 
@@ -78,4 +78,4 @@ last_validated: "2026-10-13"
 
 ## 運用上の注意
 
-運営向けの手順は [operator.md](operator.md) と [`tools/RUNBOOK.md`](../../../plugins/OyasaiSignShop/tools/RUNBOOK.md)。プラグインの挙動を変えたら player/operator も直す。
+運営向けの手順は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-sign-shop/operator.md) と [`tools/RUNBOOK.md`](../../../plugins/OyasaiSignShop/tools/RUNBOOK.md)。プラグインの挙動を変えたら player/operator も直す。

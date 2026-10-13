@@ -15,7 +15,7 @@ last_validated: "2026-10-13"
 
 ブロックの形・状態・素材をゲーム内で直接編集し、編集後の周辺更新を短時間抑えるプラグイン。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/direct-state/operator.md)
 
 ## AI 作業入口
 

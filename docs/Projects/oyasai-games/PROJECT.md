@@ -19,7 +19,7 @@ agent_task: null
 
 # OyasaiGames
 
-OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた Bukkit/Paper 系プラグインです。ユーザー向けの手順は [player.md](player.md)、権限・設定・運用時の復旧は [operator.md](operator.md) を参照してください。
+OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた Bukkit/Paper 系プラグインです。ユーザー向けの手順は [player.md](player.md)、権限・設定・運用時の復旧は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) を参照してください。
 
 ## AI 作業入口
 
@@ -47,7 +47,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - **HeadHunt:** 宝HEADの配置を登録・検証し、ブロックの TileState に宝UUIDを保存します。開始時に宝と参加チームを検証し、ゲーム中の発見状況をメモリで管理します。
 - **PvP・BedWars・TNTRun:** 参加前に PlayerStore が持ち物とプレイヤー状態を YAML に退避します。退出・死亡・再接続時に復元します。PvP/BedWars の地形記録と PvPEconomy の決済台帳は各モジュールで共有します。
 - **Slot:** 抽選前に料金と受取可能枠を確認し、決済段階をファイルへ保存してから賞品処理を進めます。起動時の再試行対象と、結果不明として止める段階は `SlotPayment.kt` が定義します。
-- **Weapons:** `weapons/` の YAML 定義を読み、武器・弾薬・装置状態をアイテム PDC やデータファイルに保持します。射撃、再装填、爆発などはイベントとスケジュール処理で実行します。有効な定義が0件なら起動失敗、再読込失敗後は武器処理が停止したままです。3武器のID別固定上書きは `WeaponObservedOverrides.kt` が定義し、`WeaponCombat.kt` が適用します。数値と運営上の注意は [operator.md](operator.md) の武器節を参照。
+- **Weapons:** `weapons/` の YAML 定義を読み、武器・弾薬・装置状態をアイテム PDC やデータファイルに保持します。射撃、再装填、爆発などはイベントとスケジュール処理で実行します。有効な定義が0件なら起動失敗、再読込失敗後は武器処理が停止したままです。3武器のID別固定上書きは `WeaponObservedOverrides.kt` が定義し、`WeaponCombat.kt` が適用します。数値と運営上の注意は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) の武器節を参照。
 - **肝試し:** 予約・役割・進行を管理し、SQLite にイベントポイント、参加者スナップショット、進行中状態を保存します。旧 Skript CSV から取り込むのは累計ポイントと名前のみです。
 
 ### データ形式と永続化
@@ -103,7 +103,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - TNTRun の床復元は記録したブロック状態を戻す方式で、TileState の復元を含みません。勝利時コマンド・通知は復旧時に再実行しない経路があります。
 - 肝試しは固定されたワールド・座標・チェスト構成に依存します。元の位置・状態効果・各属性の完全なスナップショットは保存しません。SQLite 操作は同期です。
 - Weapons は CrackShot 形式の設定を読みますが、すべての外部プラグイン機能・設定キーの互換を保証しません。武器効果の一部は YAML のコマンド設定から実行できます。
-- 機能の許可判定はコマンド入口・各操作に分かれており、コマンド受付権限だけで全 GUI・アイテム操作を閉じる統一ゲートではありません。必要な範囲は [operator.md](operator.md) に記載します。
+- 機能の許可判定はコマンド入口・各操作に分かれており、コマンド受付権限だけで全 GUI・アイテム操作を閉じる統一ゲートではありません。必要な範囲は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) に記載します。
 
 ## 判断の記録
 

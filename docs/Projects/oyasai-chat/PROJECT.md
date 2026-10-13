@@ -17,7 +17,7 @@ last_validated: "2026-10-13"
 
 Paper のチャンネルチャット、PM、日本語変換を扱い、必要に応じて Velocity 経由で Paper バックエンド間へ届けるプラグイン。Paper 用と Velocity 用の entrypoint を同じ JAR に含む。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-chat/operator.md)
 - 受信者別テキスト変換 API: [TEXT_TRANSFORM_API.md](TEXT_TRANSFORM_API.md)
 
 ## AI 作業入口

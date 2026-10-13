@@ -16,7 +16,7 @@ last_validated: "2026-10-13"
 
 ペットの購入、召喚、育成、収納、死亡後の復活、交配を提供するプラグインです。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-pets/operator.md)
 
 ## AI 作業入口
 
@@ -46,7 +46,7 @@ last_validated: "2026-10-13"
 4. <code>ActivePetRegistry</code> が召喚中エンティティをメモリ内で管理します。エンティティUUIDからエンティティ、ペットID、所有者を参照し、無効エンティティは検索時に遅延削除します。全ワールドの生物スキャンを使いません。
 5. JSON保存時の同期先は、アクティブレジストリに登録された同じ所有者のエンティティだけです。名前・レベル・スキル・統計・解放済みパーティクル・バリアントを戻しますが、全情報の同期ではなく、既存エッグも更新しません。通常収納・死亡・放棄では登録を解除します。譲渡は収納エッグを生成して所有者を変更し実体を削除しますが、その場でレジストリ解除はせず、後続検索の遅延清掃に依存します。
 
-プレイヤーコマンドには購入・一覧・収納・復活・履歴・位置・再取得・交配・改名・譲渡・放棄があります。管理側の実装コマンドは <code>version</code>、<code>reload</code>、<code>item</code>、<code>force_store</code>、<code>force_storeall</code>、<code>history</code>、<code>debug_egg</code>、<code>config</code> です。現行実装と使い方は [operator.md](operator.md) を参照してください。旧資料に記載されていた一部の管理コマンドは実装されていません。
+プレイヤーコマンドには購入・一覧・収納・復活・履歴・位置・再取得・交配・改名・譲渡・放棄があります。管理側の実装コマンドは <code>version</code>、<code>reload</code>、<code>item</code>、<code>force_store</code>、<code>force_storeall</code>、<code>history</code>、<code>debug_egg</code>、<code>config</code> です。現行実装と使い方は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-pets/operator.md) を参照してください。旧資料に記載されていた一部の管理コマンドは実装されていません。
 
 ### データ形式と永続化
 

@@ -17,7 +17,7 @@ last_validated: "2026-10-13"
 
 Vault の Economy API を実装し、Essentials の経済を SQLite の台帳へ置き換える自作プラグイン。`name: Vault`・`load: STARTUP` で既存の Vault を置き換えます。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/vault/operator.md)
 - 移行・切り戻しの手順: [RUNBOOK](../../../plugins/Vault/tools/RUNBOOK.md)
 - 設計の経緯: [DESIGN](../../../plugins/Vault/DESIGN.md)
 

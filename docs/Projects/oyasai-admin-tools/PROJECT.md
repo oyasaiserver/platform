@@ -25,7 +25,7 @@ last_validated: "2026-10-13"
 
 運営コマンド、ワールド境界、お知らせ・アンケート、プレイヤー履歴をまとめた Paper プラグイン。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-admin-tools/operator.md)
 - 運営コマンド内製化の判断・設計記録: [ESSENTIALS_STAFF.md](../../../plugins/OyasaiAdminTools/ESSENTIALS_STAFF.md)
 
 ## AI 作業入口
@@ -46,7 +46,7 @@ last_validated: "2026-10-13"
 - `plugin.yml` のプラグイン名は `OyasaiAdminTools`、`api-version` は `1.21`。起動時に既定 `config.yml` を保存し、`plugins/OyasaiAdminTools/admintools.db` を開く。
 - SQLite の初期化に失敗すると `AdminTools SQLite unavailable: ...` をログに出してプラグイン全体を無効化する。お知らせ・アンケート、ワールド境界の旧データ取込失敗は該当機能だけを利用不可にする。履歴 DB 初期化失敗時は `seen`・`whois`・`tpoffline` を登録せず、ほかのスタッフ機能の初期化は続ける。各スタッフ機能の初期化失敗もその機能だけを止める。
 - 停止時はスタッフ機能、履歴、タイマーを停止し、DB 書き込み executor の終了を待ってから接続を閉じる。
-- コマンドの入口は `/bulletin`（別名 `/bl`, `/anno`）、`/anke`、`/wborder`（`/wb`）、`/playermanager`（`/pm`, `/pmanager`）、`/kakutyo`、`/applylifeworldsettings` とスタッフ用7コマンド。既定値・権限・運用手順は [operator.md](operator.md) を参照。
+- コマンドの入口は `/bulletin`（別名 `/bl`, `/anno`）、`/anke`、`/wborder`（`/wb`）、`/playermanager`（`/pm`, `/pmanager`）、`/kakutyo`、`/applylifeworldsettings` とスタッフ用7コマンド。既定値・権限・運用手順は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-admin-tools/operator.md) を参照。
 
 ### 主な処理
 
@@ -112,7 +112,7 @@ last_validated: "2026-10-13"
 - 回答一覧は質問 ID ではなく順番で保存する。CSV は現在の質問一覧の index で旧回答を参照するため、質問削除・変更で列の意味が変わり、現在の質問数を超える旧回答は出力されない（`bulletin/survey/models/Survey.kt`、`bulletin/survey/gui/SurveyQuestionEditor.kt`、`bulletin/survey/SurveyExporter.kt`）。公開後の質問変更は新しいアンケート ID で行う。
 - 回答本・管理入力本の `addItem` 残余は処理せず、満杯でも付与メッセージを出す。記述式の署名処理は次の質問表示の後、次 tick に手持ち本を削除するため、連続記述式で新しい本が渡されない経路がある（`bulletin/survey/SurveyManager.kt`・`SurveyListener.kt`、`utils/BookInputHandler.kt`）。プレイヤーには空き枠確保後の `resume` と `text` を案内する。
 - 報酬は `%player%` を名前に置換してコンソール実行する。戻り値は検査せず、上限未到達なら一覧が空でも報酬回数を増やす（`bulletin/survey/SurveyManager.kt`）。
-- ID 作成時に数値・予約語との衝突を検査しない。`SurveySubCommand` はサブコマンドと整数回答を優先するため、接頭辞付きの ID を使う。経路ごとの予約語は [operator.md](operator.md) を参照。
+- ID 作成時に数値・予約語との衝突を検査しない。`SurveySubCommand` はサブコマンドと整数回答を優先するため、接頭辞付きの ID を使う。経路ごとの予約語は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-admin-tools/operator.md) を参照。
 - WorldBorder は独自判定で、バニラ境界を reset する。無効化時に元のバニラ境界を復元しない。境界半径入力に正数範囲の一貫した検査はないため、正の半径を設定する。
 - 範囲外補正のY座標は、飛行中なら現在の高さをワールド範囲内に丸め、飛行中でなければ補正先の最高ブロック上を使う。補正位置が得られない場合はワールドのスポーン位置へ移動する。
 - 境界補正はプレイヤーが乗る乗り物を停止・移動し、乗客を排出する。独立した一般エンティティの境界検査はない。`/wb set` の中心は、ワールド名の明示にかかわらず実行者が指定ワールドにいれば現在位置、それ以外はロード済みならスポーン位置、未ロードなら `(0, 0)`（`worldborder/WorldBorderManager.kt`、`commands/WorldBorderCommandExecutor.kt`）。
@@ -123,4 +123,4 @@ last_validated: "2026-10-13"
 ## 判断の記録
 
 - 2026-10-13: 外部レビューの各指摘をコードと照合し、対象制限・締切・空放送文の履歴・再有効化・通知内容・境界挙動を訂正。回答検証、GUI/入力本の権限、削除後のデータと質問順、報酬判定等の注意を3文書へ反映した。静的確認のみで、実機のイベント順序・外部コマンドの反映結果は未確認。
-- 2026-10-13: 旧 PROJECT の JSON 保存説明を現行実装に合わせて更新。通常の永続化先は `admintools.db` で、JSON/YAML は一回限りの互換取込元。運営コマンドの権限・Essentials 共存設計の詳細は `ESSENTIALS_STAFF.md` に残し、コードで確認できた挙動を本書と [operator.md](operator.md) に反映した。
+- 2026-10-13: 旧 PROJECT の JSON 保存説明を現行実装に合わせて更新。通常の永続化先は `admintools.db` で、JSON/YAML は一回限りの互換取込元。運営コマンドの権限・Essentials 共存設計の詳細は `ESSENTIALS_STAFF.md` に残し、コードで確認できた挙動を本書と [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-admin-tools/operator.md) に反映した。

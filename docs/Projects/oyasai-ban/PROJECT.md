@@ -15,7 +15,7 @@ last_validated: "2026-10-13"
 
 Velocity 全体で BAN を管理し、ログイン時に有効 BAN を判定するプラグイン。AdvancedBan からの移行機能を持つ。
 
-- 使い方: [プレイヤー向け](player.md) / [運営向け](operator.md)
+- 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-ban/operator.md)
 
 ## AI 作業入口
 
