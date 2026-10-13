@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key
+// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface SecretRotationDatadogApiKeyConfig extends cdktf.TerraformMetaAr
   /**
   * Whether secrets should be automatically rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#auto_rotation_enabled SecretRotationDatadogApiKey#auto_rotation_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#auto_rotation_enabled SecretRotationDatadogApiKey#auto_rotation_enabled}
   */
   readonly autoRotationEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the connection to use for the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#connection_id SecretRotationDatadogApiKey#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#connection_id SecretRotationDatadogApiKey#connection_id}
   */
   readonly connectionId: string;
   /**
   * The description of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#description SecretRotationDatadogApiKey#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#description SecretRotationDatadogApiKey#description}
   */
   readonly description?: string;
   /**
   * The slug of the project environment to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#environment SecretRotationDatadogApiKey#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#environment SecretRotationDatadogApiKey#environment}
   */
   readonly environment: string;
   /**
   * The name of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#name SecretRotationDatadogApiKey#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#name SecretRotationDatadogApiKey#name}
   */
   readonly name: string;
   /**
   * Parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#parameters SecretRotationDatadogApiKey#parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#parameters SecretRotationDatadogApiKey#parameters}
   */
   readonly parameters: SecretRotationDatadogApiKeyParameters;
   /**
   * The ID of the Infisical project to create the secret rotation in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#project_id SecretRotationDatadogApiKey#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#project_id SecretRotationDatadogApiKey#project_id}
   */
   readonly projectId: string;
   /**
   * At which UTC time the rotation should occur.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#rotate_at_utc SecretRotationDatadogApiKey#rotate_at_utc}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#rotate_at_utc SecretRotationDatadogApiKey#rotate_at_utc}
   */
   readonly rotateAtUtc?: SecretRotationDatadogApiKeyRotateAtUtc;
   /**
   * How many days to wait between each rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#rotation_interval SecretRotationDatadogApiKey#rotation_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#rotation_interval SecretRotationDatadogApiKey#rotation_interval}
   */
   readonly rotationInterval?: number;
   /**
   * The folder path to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#secret_path SecretRotationDatadogApiKey#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#secret_path SecretRotationDatadogApiKey#secret_path}
   */
   readonly secretPath: string;
   /**
   * Secret mappings to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#secrets_mapping SecretRotationDatadogApiKey#secrets_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#secrets_mapping SecretRotationDatadogApiKey#secrets_mapping}
   */
   readonly secretsMapping: SecretRotationDatadogApiKeySecretsMapping;
   /**
   * Temporary parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#temporary_parameters SecretRotationDatadogApiKey#temporary_parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#temporary_parameters SecretRotationDatadogApiKey#temporary_parameters}
   */
   readonly temporaryParameters?: SecretRotationDatadogApiKeyTemporaryParameters;
 }
@@ -84,7 +84,7 @@ export interface SecretRotationDatadogApiKeyParameters {
   /**
   * The name for the generated Datadog API keys.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#name SecretRotationDatadogApiKey#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#name SecretRotationDatadogApiKey#name}
   */
   readonly name: string;
 }
@@ -177,13 +177,13 @@ export interface SecretRotationDatadogApiKeyRotateAtUtc {
   /**
   * The hour at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#hours SecretRotationDatadogApiKey#hours}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#hours SecretRotationDatadogApiKey#hours}
   */
   readonly hours?: number;
   /**
   * The minute at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#minutes SecretRotationDatadogApiKey#minutes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#minutes SecretRotationDatadogApiKey#minutes}
   */
   readonly minutes?: number;
 }
@@ -308,13 +308,13 @@ export interface SecretRotationDatadogApiKeySecretsMapping {
   /**
   * The name of the secret that the rotated Datadog API key will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#api_key SecretRotationDatadogApiKey#api_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#api_key SecretRotationDatadogApiKey#api_key}
   */
   readonly apiKey: string;
   /**
   * The name of the secret that the Datadog API key ID will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#api_key_id SecretRotationDatadogApiKey#api_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#api_key_id SecretRotationDatadogApiKey#api_key_id}
   */
   readonly apiKeyId: string;
 }
@@ -490,7 +490,7 @@ export class SecretRotationDatadogApiKeyTemporaryParametersOutputReference exten
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key infisical_secret_rotation_datadog_api_key}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key infisical_secret_rotation_datadog_api_key}
 */
 export class SecretRotationDatadogApiKey extends cdktf.TerraformResource {
 
@@ -506,7 +506,7 @@ export class SecretRotationDatadogApiKey extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretRotationDatadogApiKey resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretRotationDatadogApiKey to import
-  * @param importFromId The id of the existing SecretRotationDatadogApiKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretRotationDatadogApiKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretRotationDatadogApiKey to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -518,7 +518,7 @@ export class SecretRotationDatadogApiKey extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/secret_rotation_datadog_api_key infisical_secret_rotation_datadog_api_key} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_rotation_datadog_api_key infisical_secret_rotation_datadog_api_key} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -529,7 +529,7 @@ export class SecretRotationDatadogApiKey extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_rotation_datadog_api_key',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.31'
+        providerVersion: '0.19.32'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

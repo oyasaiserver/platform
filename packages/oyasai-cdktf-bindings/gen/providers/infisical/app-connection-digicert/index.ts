@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert
+// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionDigicertConfig extends cdktf.TerraformMetaArgument
   /**
   * The credentials for the DigiCert App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert#credentials AppConnectionDigicert#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert#credentials AppConnectionDigicert#credentials}
   */
   readonly credentials: AppConnectionDigicertCredentials;
   /**
   * An optional description for the DigiCert App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert#description AppConnectionDigicert#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert#description AppConnectionDigicert#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with DigiCert. Possible values are: api-key
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert#method AppConnectionDigicert#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert#method AppConnectionDigicert#method}
   */
   readonly method: string;
   /**
   * The name of the DigiCert App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert#name AppConnectionDigicert#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert#name AppConnectionDigicert#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert#project_id AppConnectionDigicert#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert#project_id AppConnectionDigicert#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,13 +42,13 @@ export interface AppConnectionDigicertCredentials {
   /**
   * The DigiCert CertCentral API key used to authenticate requests. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/digicert
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert#api_key AppConnectionDigicert#api_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert#api_key AppConnectionDigicert#api_key}
   */
   readonly apiKey: string;
   /**
   * The DigiCert CertCentral region your account belongs to. Possible values are: us, eu
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert#region AppConnectionDigicert#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert#region AppConnectionDigicert#region}
   */
   readonly region: string;
 }
@@ -165,7 +165,7 @@ export class AppConnectionDigicertCredentialsOutputReference extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert infisical_app_connection_digicert}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert infisical_app_connection_digicert}
 */
 export class AppConnectionDigicert extends cdktf.TerraformResource {
 
@@ -181,7 +181,7 @@ export class AppConnectionDigicert extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionDigicert resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionDigicert to import
-  * @param importFromId The id of the existing AppConnectionDigicert that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionDigicert that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionDigicert to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -193,7 +193,7 @@ export class AppConnectionDigicert extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/app_connection_digicert infisical_app_connection_digicert} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/app_connection_digicert infisical_app_connection_digicert} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -204,7 +204,7 @@ export class AppConnectionDigicert extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_digicert',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.31'
+        providerVersion: '0.19.32'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

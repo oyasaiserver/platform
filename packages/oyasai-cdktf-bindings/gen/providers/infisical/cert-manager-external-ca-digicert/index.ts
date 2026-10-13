@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert
+// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface CertManagerExternalCaDigicertConfig extends cdktf.TerraformMeta
   /**
   * The ID of the DigiCert app connection used for certificate issuance
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#app_connection_id CertManagerExternalCaDigicert#app_connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#app_connection_id CertManagerExternalCaDigicert#app_connection_id}
   */
   readonly appConnectionId: string;
   /**
   * The name of the DigiCert CA
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#name CertManagerExternalCaDigicert#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#name CertManagerExternalCaDigicert#name}
   */
   readonly name: string;
   /**
   * The CertCentral organization ID that will be listed on issued certificates
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#organization_id CertManagerExternalCaDigicert#organization_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#organization_id CertManagerExternalCaDigicert#organization_id}
   */
   readonly organizationId: number;
   /**
   * The DigiCert product name ID used for issuance (e.g. ssl_plus, code_signing, code_signing_ev)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#product_name_id CertManagerExternalCaDigicert#product_name_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#product_name_id CertManagerExternalCaDigicert#product_name_id}
   */
   readonly productNameId: string;
   /**
   * Whether this CA issues SSL/TLS or code signing certificates. Supported values: ssl, code_signing. Defaults to 'ssl'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#purpose CertManagerExternalCaDigicert#purpose}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#purpose CertManagerExternalCaDigicert#purpose}
   */
   readonly purpose?: string;
   /**
   * The status of the CA. Supported values: active, disabled. Defaults to 'active'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#status CertManagerExternalCaDigicert#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#status CertManagerExternalCaDigicert#status}
   */
   readonly status?: string;
   /**
   * Contact info for the user who approves first-time code signing orders for the organization. Required when purpose is 'code_signing'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#verified_contact CertManagerExternalCaDigicert#verified_contact}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#verified_contact CertManagerExternalCaDigicert#verified_contact}
   */
   readonly verifiedContact?: CertManagerExternalCaDigicertVerifiedContact;
 }
@@ -54,31 +54,31 @@ export interface CertManagerExternalCaDigicertVerifiedContact {
   /**
   * The email address of the verified contact
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#email CertManagerExternalCaDigicert#email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#email CertManagerExternalCaDigicert#email}
   */
   readonly email: string;
   /**
   * The first name of the verified contact
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#first_name CertManagerExternalCaDigicert#first_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#first_name CertManagerExternalCaDigicert#first_name}
   */
   readonly firstName: string;
   /**
   * The job title of the verified contact
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#job_title CertManagerExternalCaDigicert#job_title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#job_title CertManagerExternalCaDigicert#job_title}
   */
   readonly jobTitle: string;
   /**
   * The last name of the verified contact
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#last_name CertManagerExternalCaDigicert#last_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#last_name CertManagerExternalCaDigicert#last_name}
   */
   readonly lastName: string;
   /**
   * The telephone number of the verified contact
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#telephone CertManagerExternalCaDigicert#telephone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#telephone CertManagerExternalCaDigicert#telephone}
   */
   readonly telephone: string;
 }
@@ -273,7 +273,7 @@ export class CertManagerExternalCaDigicertVerifiedContactOutputReference extends
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert infisical_cert_manager_external_ca_digicert}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert infisical_cert_manager_external_ca_digicert}
 */
 export class CertManagerExternalCaDigicert extends cdktf.TerraformResource {
 
@@ -289,7 +289,7 @@ export class CertManagerExternalCaDigicert extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerExternalCaDigicert resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerExternalCaDigicert to import
-  * @param importFromId The id of the existing CertManagerExternalCaDigicert that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerExternalCaDigicert that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerExternalCaDigicert to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -301,7 +301,7 @@ export class CertManagerExternalCaDigicert extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/resources/cert_manager_external_ca_digicert infisical_cert_manager_external_ca_digicert} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_external_ca_digicert infisical_cert_manager_external_ca_digicert} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -312,7 +312,7 @@ export class CertManagerExternalCaDigicert extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_external_ca_digicert',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.31'
+        providerVersion: '0.19.32'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

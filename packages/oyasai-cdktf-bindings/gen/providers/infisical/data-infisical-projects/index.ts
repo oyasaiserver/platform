@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/projects
+// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/data-sources/projects
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface DataInfisicalProjectsConfig extends cdktf.TerraformMetaArgument
   /**
   * The ID of the project to fetch. Exactly one of id or slug must be set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/projects#id DataInfisicalProjects#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/data-sources/projects#id DataInfisicalProjects#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -19,7 +19,7 @@ export interface DataInfisicalProjectsConfig extends cdktf.TerraformMetaArgument
   /**
   * The slug of the project to fetch. Exactly one of id or slug must be set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/projects#slug DataInfisicalProjects#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/data-sources/projects#slug DataInfisicalProjects#slug}
   */
   readonly slug?: string;
 }
@@ -108,7 +108,7 @@ export class DataInfisicalProjectsEnvironmentsMap extends cdktf.ComplexMap {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/projects infisical_projects}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/data-sources/projects infisical_projects}
 */
 export class DataInfisicalProjects extends cdktf.TerraformDataSource {
 
@@ -124,7 +124,7 @@ export class DataInfisicalProjects extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalProjects resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalProjects to import
-  * @param importFromId The id of the existing DataInfisicalProjects that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/projects#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalProjects that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/data-sources/projects#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalProjects to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -136,7 +136,7 @@ export class DataInfisicalProjects extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.31/docs/data-sources/projects infisical_projects} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/data-sources/projects infisical_projects} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -147,7 +147,7 @@ export class DataInfisicalProjects extends cdktf.TerraformDataSource {
       terraformResourceType: 'infisical_projects',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.31'
+        providerVersion: '0.19.32'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
