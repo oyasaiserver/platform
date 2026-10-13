@@ -57,6 +57,15 @@ Follow the repository-root `README.md` for current contribution, development,
 formatting, and build basics. If a future `CONTRIBUTING.md` exists, follow it
 over this workflow.
 
+Notes on master protection (checked 2026-10-13):
+
+- `master` takes changes only through a PR, and the ruleset allows squash merge only.
+- Required checks include `pr-title` (a Conventional Commit prefix such as `docs:`),
+  `nocommit`, the `nix-*` checks, and `merging-into-master` (the PR base must be `master`).
+- `docs/` is excluded from the mdformat step of `nix fmt`, so docs edits are not rewritten.
+- CODEOWNERS has no owner for `/docs`. A docs-only PR needs no code-owner review;
+  changes outside `docs/` fall under the default owner.
+
 ## New Project Workflow
 
 Use when adding a new project under `docs/Projects/`.
