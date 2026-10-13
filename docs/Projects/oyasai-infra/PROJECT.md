@@ -135,16 +135,17 @@ source:
 
 | 処理 | 場所 | 内容 |
 |---|---|---|
-| X のハッシュタグ投稿の通知（`oyasai-cron`） | `packages/oyasai-cron/src/main.rs`、master のみ | 1 時間ごとに外部の検索 API で対象ハッシュタグの投稿を取り、各投稿の URL を Discord の Webhook に流す。「Best-effort」とコメントにある |
+| X のハッシュタグ投稿の通知（`oyasai-cron`） | `packages/oyasai-cron/src/index.ts`、master のみ | 1 時間ごとに外部の検索 API で対象ハッシュタグの投稿を取り、各投稿の URL を Discord の Webhook に流す。「Best-effort」とコメントにある |
 | Minecraft のバックアップ | `platform-services.ts`（master のみ） | restic で定期的に環境の R2 バケットへ。対象・頻度・保持・除外は同ファイル |
 | DB のダンプ | `platform-services.ts`（master のみ） | MariaDB を定期的に R2 へ。間隔・保持は同ファイル |
 | Nix キャッシュの期限 | `common-internal.ts` | 180 日でオブジェクトを消す。期限はアップロード時刻基準で、`nix copy` は既存を飛ばすため、定期的に `nix copy --force` で年齢を戻すようコメントにある |
 
-`oyasai-cron` の注意（`main.rs`）:
+`oyasai-cron` の注意（`index.ts`、2026-10-13 に Rust から TypeScript へ書き換え）:
 
-- 環境変数が無い・投稿に `url` が無いと `unwrap` で panic する。検索 API の通信エラーや応答の JSON 解析失敗は `?` で main を抜ける。どちらも `restart: unless-stopped` で立ち上がり直す。
+- 環境変数が無いと起動時に例外で落ちる（`mustEnv`）。`restart: unless-stopped` で立ち上がり直す。
+- 1 回の実行中の失敗（検索 API の通信エラー・非 2xx・JSON 解析失敗）は例外でプロセスが落ちる。`url` の無い投稿は飛ばす。`restart: unless-stopped` で立ち上がり直す。
 - Discord への POST は応答のステータスを見ない。4xx/5xx でも成功扱いで進む。
-- 検索期間は「その回の開始時刻の 1 時間前から」。処理後に 1 時間 sleep するので、処理時間の分だけ取りこぼしうる。重複・取りこぼしの補正はない。
+- 検索期間は「その回の開始時刻の 1 時間前から」。起動直後に 1 回実行し、以後 1 時間ごとに実行するので、処理時間の分だけ取りこぼしうる。重複・取りこぼしの補正はない。
 
 ## 5. Web（`oyasai-web`）
 

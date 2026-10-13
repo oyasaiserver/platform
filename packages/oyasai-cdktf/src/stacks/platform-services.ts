@@ -406,7 +406,6 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         env: envs({
           // keep-sorted start
           DISCORD_WEBHOOK_URL: secrets.get("DISCORD_X_CRON_WEBHOOK_URL"),
-          RUST_LOG: "info",
           TWITTERAPIIO_API_KEY: secrets.get("TWITTERAPIIO_API_KEY"),
           // keep-sorted end
         }),

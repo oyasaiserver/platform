@@ -72,7 +72,7 @@ platform/
 | `nix/flake-parts/misc.nix` | `pkgs` を overlay（`nix/oyasai-overlay.nix`）付き・unfree 許可で import | `nix/flake-parts/misc.nix:1-11` |
 | `nix/flake-parts/constants.nix` | 共有定数（nix キャッシュの公開鍵） | `nix/flake-parts/constants.nix:1-12` |
 | `nix/flake-parts/codegen.nix` | gradle wrapper・gradle-plugins・cdktf bindings の生成物を作業ツリーへ配置 | `nix/flake-parts/codegen.nix:1-18` |
-| `nix/flake-parts/devshells.nix` | devshell（gradle、JDK 25、terraform、nodejs、Rust toolchain、infisical、just など） | `nix/flake-parts/devshells.nix:14-46` |
+| `nix/flake-parts/devshells.nix` | devshell（gradle、JDK 25、terraform、nodejs、infisical、just など） | `nix/flake-parts/devshells.nix:14-46` |
 | `nix/flake-parts/oyasai-scope.nix` | scope の derivation を `packages` として公開し、各パッケージの `oyasai-tests` を `checks` にする。`oyasai-cdktf` にイメージのタグを注入 | `nix/flake-parts/oyasai-scope.nix:17-44` |
 | `nix/flake-parts/docker.nix` | `docker` 出力を集約し `all-docker-tags`・`all-docker-derivations`・`all-docker-images` と `<name>-docker`（standalone 分）を作る | `nix/flake-parts/docker.nix:1-80` |
 | `nix/flake-parts/treefmt.nix`・`nix/treefmt.nix` | 整形ツールの設定（ktfmt、nixfmt、prettier、shfmt など）。`docs/*` と `*/gen/*` は対象外 | `nix/treefmt.nix:1-91` |
@@ -96,7 +96,7 @@ platform/
 | `oyasai-cdktf` | CDKTF の CLI ラッパー。`OYASAI_IMAGE_IDS`・`NIX_CACHE_PUBLIC_KEY`・`CDKTF_APP` を埋め込む | `packages/oyasai-cdktf/package.nix:1-35`、`packages/oyasai-cdktf/package.json:7` |
 | `oyasai-cdktf-bindings` | cdktf の provider 生成バインディングと、`cdktf` コマンド（cdktf-cli）の提供元。`gen/` は自動生成（中身は未読） | `packages/oyasai-cdktf-bindings/package.nix:1-61`、`packages/oyasai-cdktf-bindings/package.json:10-12` |
 | `oyasai-infra` | Terraform Cloud の workspace を一覧・作成・削除する `just` ラッパー | `packages/oyasai-infra/package.nix`、`packages/oyasai-infra/terraform_io.just` |
-| `oyasai-cron` | Rust 製の定期処理。Docker イメージあり。Discord・X 連携の設定を環境変数で受け取る（master のみ起動） | `packages/oyasai-cron/package.nix:1-30`、`packages/oyasai-cdktf/src/stacks/platform-services.ts:401-413` |
+| `oyasai-cron` | TypeScript（Node）製の定期処理。`oyasai-web` と同じ構成（`package-lock2nix`、Docker イメージあり）。Discord・X 連携の設定を環境変数で受け取る（master のみ起動） | `packages/oyasai-cron/package.nix:1-21`、`packages/oyasai-cdktf/src/stacks/platform-services.ts:401-413` |
 | `oyasai-web` | Node 製の Web。Docker イメージあり。`caddy` の reverse-proxy の転送先 | `packages/oyasai-web/package.nix:1-21`、`platform-services.ts:285-323` |
 | `oyasai-standalone-images` | 既製イメージ（alloy、caddy、mariadb、mc-backup、mysql-backup）を nvfetcher で固定し、Nix の Docker イメージにする | `packages/oyasai-standalone-images/package.nix:1-65`、`nvfetcher.toml` |
 | `oyasai-push-nix-images` | レジストリにまだ無いイメージだけビルドして `skopeo` で push（詳細は [ci-cd.md](ci-cd.md)） | `packages/oyasai-push-nix-images/oyasai-push-nix-images.sh:1-24` |
@@ -232,5 +232,5 @@ Kotlin で自前のプラグインを作る場合。
 - **版を上げるとき**: `26.2` は `packages/oyasai-minecraft-{main,lobby,axiom}.nix`、`lock.json`、`static/paper/26.2/`、`.github/workflows/update-plugins.yaml:43` にある。全部を揃える必要がある（推測。未実施）。
 - **`nix/nixos/oyasai-scope.nix`**: `flake.nix` からは読まれない。`nix/oyasai-scope.nix` が要求する `constants` を渡していないので、そのままでは評価できない可能性がある（未評価）。外部からの利用は未確認。
 - **codegen の生成物**（`gradle/wrapper`、`gradlew`、`packages/gradle-plugins/gen/`、`packages/oyasai-cdktf-bindings/gen/`）: 作業ツリーに存在し、`.gitignore:408` が `gen/` の下の jar を除外から外しているので、コミットする運用と読める（git では未確認）。
-- **未読**: `packages/oyasai-cdktf-bindings/gen/` の中身、`packages/oyasai-cdktf/assets/config.alloy`、`packages/oyasai-web/src/`・`packages/oyasai-cron/src/`、`gradle/libs.versions.toml`。
+- **未読**: `packages/oyasai-cdktf-bindings/gen/` の中身、`packages/oyasai-cdktf/assets/config.alloy`、`gradle/libs.versions.toml`。
 - **環境固有の値**: アドレスや各サービスの ID は公開資料へ転載しない（`docs/Home.md`「公開リポジトリとして守ること」）。
