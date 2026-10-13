@@ -1,8 +1,24 @@
+---
+date: 2026-10-12
+record_type: reference
+source: plugins/SocialLikes3/（コードから作成。ゲーム内での確認は未実施）
+---
+
 # SocialLikes3 SQLite 移行 + OyasaiToken 内製化 — 設計書
 
 - ターゲット: Minecraft 26.2
-- ステータス: 設計完了・実装前
+- ステータス: 当初設計の記録（現行仕様・移行手順ではない）
 - 作成日: 2026-07-01
+
+## 現行コードとの差分（2026-10-12）
+
+以下は2026-07-01の設計案を残した記録です。現在の仕様は [PROJECT.md](PROJECT.md)、運用は [operator.md](operator.md) を参照してください。他プラグインの現在の移行状況はこの調査では未確認です。
+
+- DB名は `SocialLikesShadow.db`。建築は既定YAML主保存でSQLiteをミラーし、完了マーカーがある場合に設定でSQLite主保存を選ぶ。起動時のYAML改名・DB削除によるフォールバック、自動ID移行はない。
+- 全件メモリキャッシュを維持し、DBは単一読込/書込executorと通常transactionを使う。Coroutinesによる設計ではない。
+- いいねはplayers整数IDへの参照で、建築はソフトデリートとイベント履歴・看板材質を持つ。旅行ガイド等の追加テーブルもある。
+- TokenManager互換APIを利用し、オフライン報酬確定に反射API、ガイド課金にOyasaiTokenServiceを使う。下記のAPI全面置換案とは異なる。
+- 下記の「確定方針」「実装順序」は当時の計画を意味し、現在の実装・運用結果を証明しない。
 
 ## 全体構成
 

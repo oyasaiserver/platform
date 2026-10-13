@@ -1,16 +1,25 @@
 ---
 title: "SocialLikes3 Dialog Text Graph Notes"
+source: plugins/SocialLikes3/（コードから作成。ゲーム内での確認は未実施）
 category: tool
 status: active
 owner: marzipan99
 source_of_truth: "plugins/SocialLikes3/src/main/kotlin/com/github/srain3/sociallikes/command/SLData.kt"
 related_paths:
   - plugins/SocialLikes3/src/main/kotlin/com/github/srain3/sociallikes/command/SLData.kt
-last_validated: "2026-08-06"
+last_validated: "2026-10-12"
 agent_task: null
 ---
 
 # SocialLikes3 Dialog Text Graph Notes
+
+## 現行コードと記録の読み方（2026-10-12）
+
+以下の成功・失敗・経緯は過去の描画調整の記録として保持しています。本作業でその実機結果を再確認したわけではありません。現在の使い方は [player.md](player.md)、設定は [operator.md](operator.md)、集計・描画の仕様は [PROJECT.md](PROJECT.md) を参照してください。
+
+現行 `SLData.kt` は通常グラフを LARGE・ASCII_LOW に固定します。`/sldata dialog week large low` の `large`・`low` は現在の引数解析では選択肢として機能せず、週・月・年だけを選びます。推奨コマンドは `/sldata week`。倍率は `sldata-dialog.yml` の large 設定を使います。下の通常サイズ・2倍表示を切り替える説明は当時の経緯です。
+
+フォントは `minecraft:uniform`、X軸の見えない穴埋めはNBSP、活動ヒートマップは `⬛` 固定の色分けです。半角・全角を含む全ラベルが5pxという意味ではありません。現在のグリフ幅計算はソースを正本にしてください。
 
 ## 結論
 
@@ -24,7 +33,7 @@ Paper Dialog API の `DialogBody.plainMessage(Component, width)` に、Minecraft
 - 2倍表示では棒幅と間隔だけでなく、下の日付ラベルにも個別補正を入れる。
 - リソースパックなしでは、ピクセル単位で完全制御できない。実機スクリーンショットで微調整する前提にする。
 
-現時点の推奨表示は `low` スタイル。
+当時の推奨表示は `low` スタイルでした。現行では通常経路に固定されています。
 
 ```mcfunction
 /sldata dialog week large low
@@ -36,18 +45,18 @@ Paper Dialog API の `DialogBody.plainMessage(Component, width)` に、Minecraft
 
 使っている Paper 側の機能は、動的に `Dialog` を作成してプレイヤーへ表示する API。Paper Docs では Dialog API は Experimental とされ、`Dialog#create`、`DialogBase.body(...)`、`DialogBody.plainMessage(...)`、`DialogType.multiAction(...)` などで構成する。
 
-SocialLikes3 側では次のように分けている。
+現行コードとの対応は次のとおり（過去の推奨グリッド比較も併記）。
 
 | 項目 | 現在の扱い |
 |---|---|
 | 描画媒体 | Paper Dialog API の plain message |
-| フォント | Minecraft 標準フォント |
+| フォント | `minecraft:uniform` |
 | グラフ本体セル | 5px 幅文字 |
 | 棒 | Unicode ブロック要素 `▁▂▃▄▅▆▇█` |
 | 推奨グリッド | `▁` |
 | 右軸 | グラフ右側、全角数字 |
 | 下軸日付 | `６月８日` 形式 |
-| 2倍表示 | 棒幅・間隔・行数を2倍 |
+| 2倍表示 | LARGE 固定。large 設定の倍率を使い、棒の数に応じて間隔を補正 |
 | プレイヤーヘッド | `DialogBody.item(ItemStack)` でグラフとは別 body として表示 |
 | 更新方法 | jar ビルド後、ローカル実験サーバーを再起動 |
 | 自動アーカイブ | 以前は `compileKotlin` 前に `SLData.kt` を docs 配下へコピーしていた。2026-10-12 時点の `plugins/SocialLikes3/` のビルド定義にこの処理はない |
