@@ -78,6 +78,7 @@ Use when adding a new project under `docs/Projects/`.
    - `runtime_kind`
    - `minecraft_related`
 3. Add an `AI 作業入口` section: implementation SOT, key files, build/test/run entrypoints, related projects.
+4. For a plugin, also add `player.md` and `operator.md` (see `docs/Home.md` "置き場所"; model: `docs/Projects/oyasai-lwc/`).
 
 ## Plugin Edit Workflow
 
@@ -85,6 +86,7 @@ Use when editing a Minecraft plugin.
 
 1. Read `docs/Projects/<project>/PROJECT.md` for the plugin.
 2. Read the implementation under `plugins/<Plugin>/`.
+   If the change alters behavior, update `player.md` / `operator.md` / the PROJECT.md spec in the same PR.
 3. Treat `plugins/<Plugin>/src/` as the implementation SOT.
 4. Build the target plugin. This must compile Kotlin and produce the plugin jar.
    ```bash
