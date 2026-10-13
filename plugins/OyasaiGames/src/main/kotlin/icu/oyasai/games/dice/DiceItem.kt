@@ -3,9 +3,13 @@ package icu.oyasai.games.dice
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.NamespacedKey
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -20,7 +24,36 @@ class DiceItem(private val plugin: Plugin) {
   fun isDice(item: ItemStack?): Boolean {
     if (item == null || item.type.isAir) return false
     val meta = item.itemMeta ?: return false
-    return meta.persistentDataContainer.has(diceKey, PersistentDataType.BYTE)
+
+    // 1. PDC (PersistentDataContainer) 判定
+    if (meta.persistentDataContainer.has(diceKey, PersistentDataType.BYTE)) return true
+    if (meta.persistentDataContainer.has(modeKey, PersistentDataType.STRING)) return true
+
+    // 2. 耐久力エンチャント判定（サイコロ素材かつ耐久力エンチャントが付与されている）
+    if (
+        meta.hasEnchant(Enchantment.UNBREAKING) && DiceType.entries.any { it.material == item.type }
+    )
+        return true
+
+    // 3. Lore判定（プレーンテキストで確実にチェック）
+    val loreList = meta.lore()
+    if (loreList != null && loreList.isNotEmpty()) {
+      val plain = PlainTextComponentSerializer.plainText()
+      for (line in loreList) {
+        val text = plain.serialize(line)
+        if (text.contains("投げて遊べる本格サイコロ") || text.contains("サイコロ")) return true
+      }
+    }
+
+    // 4. 表示名判定（プレーンテキストで確実にチェック）
+    val display = meta.displayName()
+    if (display != null) {
+      val plain = PlainTextComponentSerializer.plainText()
+      val text = plain.serialize(display)
+      if (text.contains("サイコロ") || text.contains("ダイス") || text.contains("コイントス")) return true
+    }
+
+    return false
   }
 
   fun getDiceMode(item: ItemStack?): DiceMode {
@@ -175,5 +208,18 @@ class DiceItem(private val plugin: Plugin) {
     meta.lore(lore)
     meta.addEnchant(Enchantment.UNBREAKING, 1, true)
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES)
+
+    // 地面を向いていてもブロック設置が誤爆しないよう、メインハンド所持時のブロック操作範囲（リーチ）を0に短縮
+    val reachKey = NamespacedKey(plugin, "dice_reach")
+    meta.removeAttributeModifier(Attribute.BLOCK_INTERACTION_RANGE)
+    meta.addAttributeModifier(
+        Attribute.BLOCK_INTERACTION_RANGE,
+        AttributeModifier(
+            reachKey,
+            -4.5,
+            AttributeModifier.Operation.ADD_NUMBER,
+            EquipmentSlotGroup.MAINHAND,
+        ),
+    )
   }
 }

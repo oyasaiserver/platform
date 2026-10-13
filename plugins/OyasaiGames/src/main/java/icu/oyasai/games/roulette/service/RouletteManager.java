@@ -43,11 +43,49 @@ public class RouletteManager {
     // 実行中タスクのトラッキング（安全なキャンセル・メモリ解放用）
     private final Map<UUID, BukkitTask> activeTasks = new ConcurrentHashMap<>();
 
+    // 他人のルーレット結果のチャット受信設定キー
+    private final org.bukkit.NamespacedKey chatReceiveKey;
+
     public RouletteManager(Plugin plugin, ConfigProvider configProvider, BlockClassifier classifier) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
         this.configProvider = configProvider;
         this.classifier = classifier;
+        this.chatReceiveKey = new org.bukkit.NamespacedKey(plugin, "roulette_chat_receive");
+    }
+
+    /**
+     * 他人のルーレット結果をチャットで受信するかどうか判定します（デフォルト: true）。
+     */
+    public boolean isChatReceiveEnabled(Player player) {
+        if (player == null) {
+            return true;
+        }
+        Byte value = player.getPersistentDataContainer().get(chatReceiveKey, org.bukkit.persistence.PersistentDataType.BYTE);
+        return value == null || value == 1;
+    }
+
+    /**
+     * 他人のルーレット結果のチャット受信設定を保存します。
+     */
+    public void setChatReceiveEnabled(Player player, boolean enabled) {
+        if (player == null) {
+            return;
+        }
+        player.getPersistentDataContainer().set(
+                chatReceiveKey,
+                org.bukkit.persistence.PersistentDataType.BYTE,
+                (byte) (enabled ? 1 : 0)
+        );
+    }
+
+    /**
+     * 他人のルーレット結果のチャット受信設定を反転切り替えします。
+     */
+    public boolean toggleChatReceive(Player player) {
+        boolean next = !isChatReceiveEnabled(player);
+        setChatReceiveEnabled(player, next);
+        return next;
     }
 
     /**

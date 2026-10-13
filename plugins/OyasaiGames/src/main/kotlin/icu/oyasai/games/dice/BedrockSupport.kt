@@ -6,32 +6,28 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 
-/** 統合版（Bedrock / Floodgate / GeyserMC）プレイヤーとの互換性をサポートするユーティリティ */
+/** 統合版（Bedrock / Floodgate / GeyserMC）プレイヤーの判定および表示制御ユーティリティ */
 object BedrockSupport {
   private val isFloodgatePresent: Boolean by lazy {
     Bukkit.getPluginManager().getPlugin("floodgate") != null ||
         Bukkit.getPluginManager().getPlugin("Floodgate") != null
   }
 
-  /** 指定したプレイヤーが統合版（Bedrock）からの接続かどうかを判定します */
   fun isBedrockPlayer(player: Player): Boolean {
     return isBedrockPlayer(player.uniqueId)
   }
 
-  /** 指定したUUIDが統合版（Bedrock）プレイヤーのものかどうかを判定します */
   fun isBedrockPlayer(uuid: UUID): Boolean {
     if (!isFloodgatePresent) return false
     return runCatching {
-          val api = org.geysermc.floodgate.api.FloodgateApi.getInstance()
-          api.isFloodgatePlayer(uuid)
+          val api = Class.forName("org.geysermc.floodgate.api.FloodgateApi")
+          val instance = api.getMethod("getInstance").invoke(null)
+          api.getMethod("isFloodgatePlayer", UUID::class.java).invoke(instance, uuid) as Boolean
         }
         .getOrElse { false }
   }
 
-  /**
-   * 統合版用エンティティ（ItemやArmorStand）を、Java版プレイヤーから非表示にします。
-   * これにより、Java版プレイヤー側でItemDisplay等と二重に重なって表示されるのを防ぎます。
-   */
+  /** 統合版用ドロップアイテムをJava版プレイヤーから非表示にします。 Java版プレイヤーには滑らかなItemDisplayが見えるため、ドロップアイテムと二重になるのを防ぎます。 */
   fun hideBedrockEntityFromJava(plugin: Plugin, entity: Entity) {
     val world = entity.world
     for (p in world.players) {
@@ -41,10 +37,30 @@ object BedrockSupport {
     }
   }
 
-  /** 新しく参加またはワールド間移動したJavaプレイヤーに対して、 既存の統合版用エンティティを非表示にします。 */
-  fun hideFromPlayerIfJava(plugin: Plugin, player: Player, entity: Entity) {
-    if (!isBedrockPlayer(player)) {
-      player.hideEntity(plugin, entity)
+  /**
+   * ホログラムの可視性をJava版・統合版で分離します。
+   * - Java版プレイヤー: javaHolo を表示し、bedrockHolo を非表示
+   * - 統合版プレイヤー: bedrockHolo を表示し、javaHolo を非表示
+   */
+  fun separateHologramVisibility(plugin: Plugin, javaHolo: Entity?, bedrockHolo: Entity?) {
+    val world = javaHolo?.world ?: bedrockHolo?.world ?: return
+    for (p in world.players) {
+      updatePlayerHologramVisibility(plugin, p, javaHolo, bedrockHolo)
+    }
+  }
+
+  fun updatePlayerHologramVisibility(
+      plugin: Plugin,
+      player: Player,
+      javaHolo: Entity?,
+      bedrockHolo: Entity?,
+  ) {
+    if (isBedrockPlayer(player)) {
+      if (javaHolo != null && javaHolo.isValid) player.hideEntity(plugin, javaHolo)
+      if (bedrockHolo != null && bedrockHolo.isValid) player.showEntity(plugin, bedrockHolo)
+    } else {
+      if (bedrockHolo != null && bedrockHolo.isValid) player.hideEntity(plugin, bedrockHolo)
+      if (javaHolo != null && javaHolo.isValid) player.showEntity(plugin, javaHolo)
     }
   }
 }
