@@ -49,6 +49,12 @@ let
                   end
                 ' tsconfig.json | sponge tsconfig.json
               '';
+              preInstall = orig.preInstall or "" + ''
+                if [[ -d node_modules/@typescript ]]; then
+                  chmod -R u+w node_modules
+                  rm -rf node_modules/@typescript
+                fi
+              '';
             }
           );
       };
