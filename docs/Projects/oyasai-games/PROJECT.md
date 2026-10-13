@@ -2,7 +2,6 @@
 title: "OyasaiGames — ゲーム・武器統合プラグイン"
 category: platform
 status: active
-owner: marzipan99
 source: plugins/OyasaiGames/（コードから作成。ゲーム内での確認は未実施）
 source_of_truth: "plugins/OyasaiGames/"
 related_paths:

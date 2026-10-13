@@ -25,7 +25,7 @@ Use when the task asks for a branch, commit, push, or pull request.
    ```
 3. If on `master`, create a feature branch. PRs must target `master`; CI (`pr.yaml`) fails otherwise.
    ```bash
-   git switch -c codex/<topic>
+   git switch -c <type>/<topic>
    ```
 4. Make the requested changes. Do not include unrelated dirty files.
    Record what you learned in `docs/` as you go (see `docs/Home.md`

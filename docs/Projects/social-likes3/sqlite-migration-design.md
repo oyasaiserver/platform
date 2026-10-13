@@ -102,7 +102,7 @@ tokenAPI.addTokens(player.uniqueId, 2)
 TokenManager の `data.yml` は以下の形式:
 ```yaml
 Players:
-  f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b: 958340
+  00000000-0000-0000-0000-000000000001: 100  # 例
 ```
 
 起動時に `plugins/TokenManager/data.yml` を検出したら全エントリを `token_balances` に INSERT し、ファイルを `data.yml.migrated` にリネーム。

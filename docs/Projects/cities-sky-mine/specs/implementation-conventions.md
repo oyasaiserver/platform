@@ -2,7 +2,6 @@
 title: "CitiesSkyMine Implementation Conventions"
 category: specification
 status: active
-owner: marzipan99
 source_of_truth: "docs/Projects/cities-sky-mine/specs/implementation-conventions.md"
 related_paths:
   - docs/Projects/cities-sky-mine/specs/command-conventions.md

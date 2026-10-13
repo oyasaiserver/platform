@@ -97,7 +97,7 @@ PR 環境のコンテナは、Actions のランナー自身の Docker（`unix://
 
 ラベル付きの PR では、opened・synchronize のときに 2 つの経路が同時に走り、同じスタック名を取り合う。`services` は後から来た方が先の方を取り消すが、どちらが後になるかは実行順次第。
 
-起動プロキシ（`start-proxy`）: `services` ジョブの最後で、ランナー上の `minecraft-main` コンテナのログを流しつつ、`bore-cli` で Minecraft のポート（25565）を公開の中継サービスへ転送する。step の `timeout-minutes` は 30 で、30 分で止まる。中継先の接続先はジョブのログに出る（未確認）。公開範囲を変える変更では、ここを先に見る。
+起動プロキシ（`start-proxy`）: `services` ジョブの最後で、ランナー上の `minecraft-main` コンテナのログを流しつつ、`bore-cli` で Minecraft の入口を公開の中継サービスへ転送する（時間の上限あり）。公開範囲を変える変更では、ここを先に見る。
 
 根拠: `.github/workflows/ci.yaml`（`deploy` ジョブ）、`deploy-label.yaml`、`deploy-platform.yaml`、`modify-platform-stack.yaml`、`packages/oyasai-infra/terraform_io.just`。
 
@@ -125,7 +125,7 @@ PR 環境のコンテナは、Actions のランナー自身の Docker（`unix://
 
 注意: `mc-monitor` は overlay で `pkgs` に入っているが（`nix/oyasai-overlay.nix`）、flake の `packages` は `nix/oyasai-scope.nix` のスコープから作られ、そこに `mc-monitor` の指定が見当たらない。`nix run .#mc-monitor` が解決できているかは未確認。空きなのにデプロイされないときは、まずこの step を見る。
 
-観測（2026-10-13、本番の実行ログ）: `check-players` は毎回 `does not provide attribute \'apps.x86_64-linux.mc-monitor\'` で失敗しているが、パイプの終了コードが拾われずジョブは success になる。空きサーバーへの自動デプロイは意図どおり動いていない可能性が高い（修正は別作業）。
+既知の問題（2026-10-13）: `nix run .#mc-monitor` は flake の出力として解決できず、`check-players` が失敗しても終了コードが拾われない。修正は別作業。
 
 根拠: `.github/workflows/auto-deploy-empty.yaml`、`nix/flake-parts/oyasai-scope.nix`、`nix/oyasai-scope.nix`、`nix/oyasai-overlay.nix`。
 
@@ -237,7 +237,7 @@ PR 環境のコンテナは、Actions のランナー自身の Docker（`unix://
 
 - `common-internal` スタック（リポジトリ設定・必須チェック）が実際に適用されているか、誰がどう適用するか。
 - 外部アクション `nocommit` と、外部 flake の `nix-flake-check-changed` の中身（整形の check を含むか）。
-- `nix run .#mc-monitor` は flake の出力として解決できない（2026-10-13 に `nix eval` と本番の実行ログで確認）。失敗が success 扱いになったとき、デプロイが走るのか止まるのかは未確認。
+- `nix run .#mc-monitor` は flake の出力として解決できない（2026-10-13 に `nix eval` で確認）。
 - `oyasai-plugin-registry` の引数 `26.2` の意味。自動更新の PR で必須チェックが走るか。
 - イメージタグが内容で決まるか（nixpkgs の既定に依存）。
 - Terraform Cloud の workspace 一覧のページ数の上限。対象が空のときの matrix の挙動。

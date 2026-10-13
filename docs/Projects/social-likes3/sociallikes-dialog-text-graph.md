@@ -3,7 +3,6 @@ title: "SocialLikes3 Dialog Text Graph Notes"
 source: plugins/SocialLikes3/（コードから作成。ゲーム内での確認は未実施）
 category: tool
 status: active
-owner: marzipan99
 source_of_truth: "plugins/SocialLikes3/src/main/kotlin/com/github/srain3/sociallikes/command/SLData.kt"
 related_paths:
   - plugins/SocialLikes3/src/main/kotlin/com/github/srain3/sociallikes/command/SLData.kt

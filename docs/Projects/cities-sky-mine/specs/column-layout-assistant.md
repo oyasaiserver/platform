@@ -2,7 +2,6 @@
 title: "CitiesSkyMine Column Layout Assistant"
 category: specification
 status: draft
-owner: marzipan99
 source_of_truth: "docs/Projects/cities-sky-mine/specs/column-layout-assistant.md"
 related_paths:
   - docs/Projects/cities-sky-mine/PROJECT.md

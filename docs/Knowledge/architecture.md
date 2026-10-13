@@ -159,7 +159,7 @@ platform/
 4. `src/index.ts:9-30` が `ENVIRONMENT` を必須で読み、次の 4 スタックを作る。スタック名がそのまま Terraform Cloud の workspace 名になる（`src/stacks/oyasai-terraform-stack.ts:26-32`）。workspace は `oyasai-infra` で作る・消す。
    - `common-infra`（`src/stacks/common-infra.ts`）: Cloudflare のドメインと Zone、Grafana Cloud のスタック・トークン・ダッシュボード、Infisical のプロジェクトと Machine Identity（GitHub OIDC 経由）。
    - `common-internal`（`src/stacks/common-internal.ts`）: nix キャッシュ用の R2 バケット（180 日で期限切れ）とそのカスタムドメイン、GitHub リポジトリの設定・ブランチ保護（必須チェック名を列挙）・Actions 変数。
-   - `platform-<env>-infra`（`src/stacks/platform-infra.ts`）: 環境ごとの R2 バケット、ルートの DNS レコード。`master` とそれ以外で配置リージョンと DNS 名が変わる。DNS レコードの向き先は環境によらず同じ固定アドレス（`:46-55`）。
+   - `platform-<env>-infra`（`src/stacks/platform-infra.ts`）: 環境ごとの R2 バケット、ルートの DNS レコード。`master` とそれ以外で配置リージョンと DNS 名が変わる。
    - `platform-<env>-services`（`src/stacks/platform-services.ts`）: Docker 上のコンテナ群。
 5. `platform-services.ts:77-94` が `OYASAI_IMAGE_IDS` の各キーから `docker.Image` を作る。`imageId(name)` で引けないと `Missing image in OYASAI_IMAGE_IDS` で失敗する。
 6. コンテナ（`platform-services.ts`）:
@@ -168,8 +168,8 @@ platform/
    - Docker ネットワークは `network`。サーバーのデータはホストのディレクトリを `/data` に割り当てる（`:96-106`）。
 7. backend と Docker の接続先:
    - `common-infra`・`common-internal`・`platform-<env>-infra` は環境によらず Terraform Cloud（`CloudBackend`）。
-   - `platform-<env>-services` だけが分かれる（`platform-services.ts:39-54`）。`master`（`oyasai-terraform-stack.ts:45` の `isMaster`）は Terraform Cloud と、TLS 付きで基盤のホストの Docker API。それ以外は `LocalBackend` と、ローカルの `docker.sock`。
-   - `master` がオンプレ、それ以外が GitHub Actions 上の検証用という読みは、コメント（`platform-infra.ts:40-41`、`platform-services.ts:180-184`）による。
+   - `platform-<env>-services` だけが分かれる（`platform-services.ts:39-54`）。`master`（`oyasai-terraform-stack.ts:45` の `isMaster`）は Terraform Cloud と、TLS 付きでリモートの Docker API。それ以外は `LocalBackend` と、ローカルの `docker.sock`。
+   - `master` が本番、それ以外が GitHub Actions 上の検証用。
 8. 秘密情報は Infisical の data source から読む（`src/secrets.ts:10-33` にキーの一覧）。RCON・Velocity 転送・Floodgate の鍵は random provider で生成する（`platform-services.ts:56-75`）。
 
 ### 3.6 デプロイ
@@ -181,7 +181,7 @@ CDKTF をいつ・どの順で実行するか（PR 環境、`master` への自�
 | 名前（Nix・コンテナ名） | Nix ファイル | プラットフォーム | 役割（コードの設定から） |
 |---|---|---|---|
 | `oyasai-velocity` | `packages/oyasai-velocity.nix` | velocity | 入口。`modern` 転送。`try` は `main` → `lobby`。Java と Bedrock のポートを公開 |
-| `oyasai-minecraft-main` | `packages/oyasai-minecraft-main.nix` | Purpur 26.2（registry では `paper`） | メインワールド。プラグインが多い。`online-mode = false`（認証は Velocity）、Velocity 連携を有効化 |
+| `oyasai-minecraft-main` | `packages/oyasai-minecraft-main.nix` | Purpur 26.2（registry では `paper`） | メインワールド。プラグインが多い。Velocity 連携を有効化 |
 | `oyasai-minecraft-lobby` | `packages/oyasai-minecraft-lobby.nix` | Purpur 26.2 | ロビー。void・フラット、ゲームルールを固定 |
 | `oyasai-minecraft-axiom` | `packages/oyasai-minecraft-axiom.nix` | Purpur 26.2 | creative、`white-list = true`。`try` には入らない（接続先の登録のみ） |
 
@@ -227,11 +227,10 @@ Kotlin で自前のプラグインを作る場合。
 
 ## 7. 未確認・注意
 
-- **転送用の秘密の読み方**: Velocity 転送の秘密は、CDKTF から Paper 側と Velocity 側へ別々の環境変数で渡される（`platform-services.ts:191`、`:274`）。`velocity.toml` にも `paper-global.yml` にも秘密の指定は無く、Paper・Velocity がその環境変数を読む経路はこのリポジトリのコードでは確認できなかった（未確認。Paper・Velocity 本体の仕様次第）。
 - **`CDKTF_APP`**: `package.nix:22` がこの環境変数を設定するが、`cdktf` CLI がこれを読むかは未確認。`packages/oyasai-cdktf/cdktf.json` の `app` は `exit 1` のプレースホルダ。
 - **Docker イメージのタグ**: どのイメージもタグを指定していない。`image.imageTag` の既定値（nixpkgs の `dockerTools` の仕様）は未確認。
 - **版を上げるとき**: `26.2` は `packages/oyasai-minecraft-{main,lobby,axiom}.nix`、`lock.json`、`static/paper/26.2/`、`.github/workflows/update-plugins.yaml:43` にある。全部を揃える必要がある（推測。未実施）。
 - **`nix/nixos/oyasai-scope.nix`**: `flake.nix` からは読まれない。`nix/oyasai-scope.nix` が要求する `constants` を渡していないので、そのままでは評価できない可能性がある（未評価）。外部からの利用は未確認。
 - **codegen の生成物**（`gradle/wrapper`、`gradlew`、`packages/gradle-plugins/gen/`、`packages/oyasai-cdktf-bindings/gen/`）: 作業ツリーに存在し、`.gitignore:408` が `gen/` の下の jar を除外から外しているので、コミットする運用と読める（git では未確認）。
 - **未読**: `packages/oyasai-cdktf-bindings/gen/` の中身、`packages/oyasai-cdktf/assets/config.alloy`、`packages/oyasai-web/src/`・`packages/oyasai-cron/src/`、`gradle/libs.versions.toml`。
-- **ホストと ID**: 基盤のホストアドレス、Cloudflare・Infisical・Grafana・Terraform Cloud の ID は `platform-infra.ts`・`common-infra.ts`・`cdktf.json`・`terraform_io.just` にある。公開リポジトリの方針（`docs/Home.md`「公開リポジトリとして守ること」）に従い、本ノートには書かない。
+- **環境固有の値**: アドレスや各サービスの ID は公開資料へ転載しない（`docs/Home.md`「公開リポジトリとして守ること」）。

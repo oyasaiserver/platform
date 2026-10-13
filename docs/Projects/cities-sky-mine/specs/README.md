@@ -2,7 +2,6 @@
 title: "CitiesSkyMine Specs"
 category: specification
 status: active
-owner: marzipan99
 source_of_truth: "docs/Projects/cities-sky-mine/specs/README.md"
 related_paths:
   - docs/Projects/cities-sky-mine/PROJECT.md

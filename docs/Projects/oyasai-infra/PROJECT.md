@@ -72,10 +72,10 @@ source:
 | 項目 | master | PR 環境 | 根拠 |
 |---|---|---|---|
 | services の state | TF Cloud | `LocalBackend` | `platform-services.ts` |
-| Docker の接続先 | infra スタックの IPv4 へ TLS 接続（証明書は秘密ストアから） | ランナーのローカル docker ソケット | `platform-services.ts` |
-| R2 のロケーション | 本番ホストに近い値 | ランナーに近い値 | `platform-infra.ts` |
+| Docker の接続先 | リモートの Docker へ TLS 接続 | ランナーのローカル docker ソケット | `platform-services.ts` |
+| R2 のロケーション | 環境ごとの値 | 環境ごとの値 | `platform-infra.ts` |
 | DNS の名前 | ルートドメイン | `<env>.` 付きのサブドメイン | `platform-infra.ts` |
-| メモリ・CPU | 大きめ、main は `cpuSet` で P コアに固定 | 小さめ | `platform-services.ts` |
+| メモリ・CPU | 大きめ | 小さめ | `platform-services.ts` |
 | Discord 連携のトークン | main に渡す | 渡さない | `platform-services.ts` |
 | バックアップ・DB ダンプ・`oyasai-cron` | あり | なし | `platform-services.ts` の `if (this.isMaster)` |
 
@@ -88,11 +88,11 @@ source:
 | `oyasai-minecraft-main` / `-lobby` / `-axiom` | 同名 | `mariadb` に依存。データはホスト側の環境別ディレクトリ（`baseHostPath`）にバインド |
 | `oyasai-velocity` | `oyasai-velocity` | Java・Bedrock の入口 |
 | `oyasai-web` / `caddy` | `oyasai-web` / `caddy` | §5 |
-| `minecraft-main-backup` / `minecraft-axiom-backup`（master のみ） | `mc-backup` | lobby と velocity はバックアップしない |
+| `minecraft-main-backup` / `minecraft-axiom-backup`（master のみ） | `mc-backup` | |
 | `mariadb-backup`（master のみ） | `mysql-backup` | `command: ["dump"]` |
 | `oyasai-cron`（master のみ） | `oyasai-cron` | §4 |
 
-ホストへ公開するポートは各コンテナの `ports({...})` にある。main は RCON のポートもホストへ公開している。
+ホストへ公開するポートは各コンテナの `ports({...})` にある。
 
 **共通**
 
@@ -120,7 +120,7 @@ source:
 3. `nix run .#oyasai-cdktf -- <deploy|destroy> <スタック ID> --ignore-missing-stack-dependencies --auto-approve`。
 4. destroy のときだけ、ワークスペースを削除する（`terraform_io::delete_workspace`、TF Cloud の `safe-delete`）。
 5. `nix run .#nix-copy-to-s3` で Nix キャッシュへ送る。
-6. `start-proxy` のときだけ、`docker logs -f minecraft-main` をバックグラウンドで流し、`bore-cli` でポート 25565（velocity の Java の入口）を公開の中継へ出す（step の上限 30 分）。**ログの対象名 `minecraft-main` は実際のコンテナ名 `oyasai-minecraft-main` と一致しない**ため、ログは流れないはず（バックグラウンドなので step は落ちない）。
+6. `start-proxy` のときだけ、`docker logs -f minecraft-main` をバックグラウンドで流し、`bore-cli` で velocity の入口を公開の中継へ出す（時間の上限あり）。**ログの対象名 `minecraft-main` は実際のコンテナ名 `oyasai-minecraft-main` と一致しない**ため、ログは流れないはず（バックグラウンドなので step は落ちない）。
 
 ### 手元からの操作
 
@@ -136,8 +136,8 @@ source:
 | 処理 | 場所 | 内容 |
 |---|---|---|
 | X のハッシュタグ投稿の通知（`oyasai-cron`） | `packages/oyasai-cron/src/main.rs`、master のみ | 1 時間ごとに外部の検索 API で対象ハッシュタグの投稿を取り、各投稿の URL を Discord の Webhook に流す。「Best-effort」とコメントにある |
-| Minecraft のバックアップ | `platform-services.ts`（master のみ） | main と axiom を restic で 6 時間ごとに環境の R2 バケットへ。保持は日 7・週 4・月 3。jar・ログ・bluemap などは除外（`EXCLUDES`） |
-| DB のダンプ | `platform-services.ts`（master のみ） | MariaDB を 360 分ごとに gzip で R2 へ。保持 14 日 |
+| Minecraft のバックアップ | `platform-services.ts`（master のみ） | restic で定期的に環境の R2 バケットへ。対象・頻度・保持・除外は同ファイル |
+| DB のダンプ | `platform-services.ts`（master のみ） | MariaDB を定期的に R2 へ。間隔・保持は同ファイル |
 | Nix キャッシュの期限 | `common-internal.ts` | 180 日でオブジェクトを消す。期限はアップロード時刻基準で、`nix copy` は既存を飛ばすため、定期的に `nix copy --force` で年齢を戻すようコメントにある |
 
 `oyasai-cron` の注意（`main.rs`）:
@@ -180,8 +180,8 @@ source:
 
 **やらない（やるなら、まず確認）**
 
-- **master のスタックを手元から destroy しない**。手元から流すと、動いているコンテナとバックアップ先の R2 バケットを消しうる。`platform-infra.ts` の R2 バケット、`common-internal.ts` の Nix キャッシュのバケットには `preventDestroy` がない。
-- **`common-*` の名前・スラッグを変えない**。Grafana のスタックは `deleteProtection: false`、「作り直しが要る変更がある」とコメントにある（`common-infra.ts`）。
+- **master のスタックを手元から destroy しない**。手元から流すと、動いているコンテナとバックアップ先の R2 バケットを消しうる。
+- **`common-*` の名前・スラッグを変えない**。「作り直しが要る変更がある」とコメントにある（`common-infra.ts`）。
 - **restic の暗号化に使う秘密を変えない**（`secrets.ts` のコメント「static, do not change」）。変えると既存のバックアップを読めなくなる。
 - ダッシュボードは `overwrite: true` で毎回上書きされる（`common-infra.ts`）。Grafana の画面で直した内容は次の適用で消える。
 - 保護されているもの: リポジトリと既定ブランチに `preventDestroy`（`common-internal.ts`）、Infisical の機械アイデンティティに削除保護（`common-infra.ts`）。外す変更は意図を明記する。
@@ -193,20 +193,18 @@ source:
 - Infisical への認証条件（`common-infra.ts`）を変えるときは、CI の全ワークフローが秘密を取り出せるかを PR 環境で確かめる。
 - `services` の state を失うと（TF Cloud のワークスペース削除など）、ランダム値（RCON パスワード、転送用シークレット、Floodgate 鍵）が作り直されて変わる。
 - MariaDB の接続情報はプラグイン側の設定にも同じ値が要る（`secrets.ts` のコメント）。変えるときはプラグイン側も合わせる。
-- ワークスペースは `global-remote-state: true` で作る（`terraform_io.just`）。外す前に、出力を参照しているスタックがないか確認する。
-- DNS の A レコードと master の Docker 接続先は、`platform-infra.ts` の固定の IPv4（`ipv4`）を共有する。ホスト移転時はここを変える。
-- 秘密は Terraform の state に値として入る（Terraform の一般的な性質）。state のアクセス制御は TF Cloud 側の設定で、この repo からは確認できない。
+- ワークスペースの作成オプション（`terraform_io.just`）を変える前に、出力を参照しているスタックがないか確認する。
+- ホスト移転時は `platform-infra.ts` の DNS と Docker 接続先の設定を見直す。
+- 秘密は Terraform の state に値として入る（Terraform の一般的な性質）。state の扱いに注意する。
 - 新しいコンテナ・環境変数は `envs({...})` で渡す（`platform-services.ts`）。秘密は `secretKeys` に名前を足してから `secrets.get(...)` で読む。CI で使う秘密は、別に各ワークフローの `secrets:` に足す。
 
 ## 10. 未確認
 
 - **PR 環境の services の破棄**: state は `LocalBackend`（ランナー上）で、破棄は別ランナーで走るため、destroy は空の state で動くはず。PR のコンテナは deploy したランナー上にあり、ジョブ終了でランナーと共に消えると考えられるが、実行して確かめていない。infra の destroy は services の成功に依存する（`destroy-platform.yaml` の `needs`）。
-- **PR の DNS**: PR のサブドメインも master と同じ固定 IPv4 を指す（`platform-infra.ts`）。PR のコンテナはランナー上で動くので、この名前で PR 環境に届くことはないはず。外からの確認経路は `start-proxy` の中継だけ。意図は未確認。
 - **`create_workspace` の既存時の挙動**: `--fail` が無いので、既存ワークスペースへの POST がエラー応答でも step は止まらない。応答の中身は未確認。
 - **`list_workspaces` のページ送り**: 1 回の GET だけで、ページ送りを扱っていない。ワークスペースが 1 ページに収まらないと掃除から漏れる可能性がある。TF Cloud API の既定のページサイズは未確認。
 - **`common-infra` / `common-internal` の適用**: どのワークフローからも流れない。誰が、どこから、どの順で適用するかは未確認。
 - **`secretKeys` のコメント**: CI 用の秘密を「GitHub provider で ActionSecrets として設定」とあるが、`common-internal.ts` に該当リソースはない（組織変数だけ）。古いコメントか未実装かは未確認。
 - **`--ignore-missing-stack-dependencies`**: 毎回付けている。何を省くかは確認していない。
-- **TLS とホスト側の設定**: Docker デーモンの証明書の発行・更新の手順、Caddy の証明書管理は、この repo にない。
 - **synth の実行結果**: 生成されるリソースの差分、`ENVIRONMENT` を変えた synth の結果は実行して確かめていない。
 - **`oyasai-cron` の動作**: テストはなく、実際の通知が届くかは未確認。

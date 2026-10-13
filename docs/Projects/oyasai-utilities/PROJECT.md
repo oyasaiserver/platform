@@ -2,7 +2,6 @@
 title: "OyasaiUtilities — 小物系ユーティリティ集"
 category: platform
 status: active
-owner: marzipan99
 source: "plugins/OyasaiUtilities/（コードから作成。ゲーム内での確認は未実施）"
 source_of_truth: "plugins/OyasaiUtilities/"
 related_paths:

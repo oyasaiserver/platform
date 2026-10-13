@@ -2,7 +2,6 @@
 title: "CitiesSkyMine Canvas Branch Management"
 category: specification
 status: draft
-owner: marzipan99
 source_of_truth: "docs/Projects/cities-sky-mine/specs/canvas-branch-management.md"
 related_paths:
   - docs/Projects/cities-sky-mine/PROJECT.md

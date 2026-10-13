@@ -134,4 +134,3 @@ WorldEdit/FAWE のセッション、選択、EditSession、ClipboardFormats、Cl
 - [仕様・規約入口](specs/README.md)、[コマンド規約](specs/command-conventions.md)、[実装規約](specs/implementation-conventions.md)、[過去の知見・設計判断](specs/best-practices.md)
 - [柱割り・間隔サジェストの設計案](specs/column-layout-assistant.md): 過去の案。柱生成・候補・本数指定・2Dは実装済みだが、案にある永続プレビューの処理はない。
 - [キャンバスのブランチ／マージ管理案](specs/canvas-branch-management.md): 未実装。repo・branch・merge コマンドは登録されていない。
-- 関連ツールのリンク（リンク先の内容・現行連携は未確認）: [PLATEAU Viewer](https://github.com/marzipan99/plateau-viewer)、[CityGML Converter](https://github.com/marzipan99/citygml-converter)

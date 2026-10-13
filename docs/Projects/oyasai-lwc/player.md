@@ -1,7 +1,7 @@
 ---
 date: 2026-10-12
 record_type: reference
-source: plugins/OyasaiLWC/（コードから作成。Codex がコードと照合してレビュー済み。ゲーム内での確認は未実施）
+source: plugins/OyasaiLWC/（コードから作成。コードと照合してレビュー済み。ゲーム内での確認は未実施）
 ---
 
 # OyasaiLWC の使い方（プレイヤー向け）
