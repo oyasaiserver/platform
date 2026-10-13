@@ -5,6 +5,7 @@ import icu.oyasai.utilities.backpack.BackpackFeature
 import icu.oyasai.utilities.creative_management.CreativeManagement
 import icu.oyasai.utilities.debugonbe.DebugOnBE
 import icu.oyasai.utilities.elevator.ElevatorListener
+import icu.oyasai.utilities.fart.FartFeature
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
 import icu.oyasai.utilities.hats.Hats
 import icu.oyasai.utilities.hologram.HologramFeature
@@ -112,6 +113,8 @@ class Main : JavaPlugin() {
     server.pluginManager.registerEvents(TeleportListener, this) // TPathのイベント登録
     server.pluginManager.registerEvents(Pita, this) // Pitaのイベント
     server.pluginManager.registerEvents(RedBullFeature, this) // RedBullのイベント
+    server.pluginManager.registerEvents(FartFeature, this) // おならモード(しゃがみ)のイベント
+    server.getPluginCommand("fart")?.setExecutor(FartFeature)
     server.pluginManager.registerEvents(skinFeature, this)
     server.getPluginCommand("skin")?.setExecutor(skinFeature)
     server.getPluginCommand("skin")?.tabCompleter = skinFeature
