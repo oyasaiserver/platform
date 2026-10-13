@@ -1,0 +1,5 @@
+.astro/
+.cache/
+dist/
+node_modules/
+src/content/docs/

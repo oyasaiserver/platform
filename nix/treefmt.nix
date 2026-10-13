@@ -30,6 +30,7 @@
       excludes = [
         "plugins/*"
         "docs/*"
+        "packages/oyasai-web/test/content/*"
       ];
     };
     nixfmt = {

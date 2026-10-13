@@ -102,6 +102,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       minecraftLobby: join(baseHostPath, "minecraft-lobby"),
       minecraftMain: join(baseHostPath, "minecraft-main"),
       velocity: join(baseHostPath, "velocity"),
+      web: join(baseHostPath, "web"),
       // keep-sorted end
     } as const;
 
@@ -288,11 +289,10 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       {
         image: imageId("oyasai-web"),
         name: "oyasai-web",
+        sysctls: { "net.ipv4.ip_unprivileged_port_start": "0" },
         restart: "unless-stopped",
         networksAdvanced: [network],
-        env: envs({
-          OYASAI_LISTEN_PORT: 80,
-        }),
+        volumes: [{ containerPath: "/data", hostPath: hostPaths.web }],
       },
     );
 
