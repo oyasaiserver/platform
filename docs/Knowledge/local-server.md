@@ -61,8 +61,11 @@ cd "$(git rev-parse --show-toplevel)"
 # 2. JAR をコピー
 cp plugins/SocialLikes3/build/libs/SocialLikes3.jar local/paperclip-tmp/plugins/
 
-# 3. サーバー再起動 (または PlugManX でリロード)
+# 3. サーバー再起動、または PlugManX でリロード（ゲーム内）
+#    /plugman reload SocialLikes3
 ```
+
+コンパイルだけを速く確かめるときは `gradle :plugins:<Plugin>:compileKotlin`。
 
 ## トラブルシューティング
 

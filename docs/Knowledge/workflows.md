@@ -23,7 +23,7 @@ Use when the task asks for a branch, commit, push, or pull request.
    ```bash
    git fetch origin --prune
    ```
-3. If on `master`, `main`, or another protected branch, create a feature branch.
+3. If on `master`, create a feature branch. PRs must target `master`; CI (`pr.yaml`) fails otherwise.
    ```bash
    git switch -c codex/<topic>
    ```
@@ -43,7 +43,7 @@ Use when the task asks for a branch, commit, push, or pull request.
 8. Before committing, check that reusable findings, decisions, and corrections
    from this task are in `docs/`. If nothing was worth keeping, say so in the
    report.
-9. Commit with a Conventional Commit title.
+9. Commit with a Conventional Commit title. The PR title is also checked by CI (see [ci-cd.md](ci-cd.md)).
 10. Push.
     ```bash
     git push -u origin HEAD

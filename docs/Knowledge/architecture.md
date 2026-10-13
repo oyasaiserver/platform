@@ -35,7 +35,7 @@ source:
 - **結論**: Gradle がプラグイン jar を作り、Nix がそれを Purpur・Velocity のサーバー（Docker イメージ）に組み立てる。イメージ名とタグは Nix の出力から CDKTF へ渡り、CDKTF が Docker コンテナを立てる。自前のプラグインを足すには `plugins/<Name>/` を作り、サーバーの Nix ファイルの `plugins` 一覧に小文字の名前を足す。CDKTF は触らない。
 - **未確認のこと**: 末尾「7. 未確認・注意」。特に、Paper・Velocity が転送用の秘密をどう読むか、`CDKTF_APP` を `cdktf` CLI が読むか。
 
-ワークフロー（CI・イメージの配布・デプロイ・プラグインの自動更新）は [ci-cd.md](ci-cd.md)、PR の手順は [workflows.md](workflows.md)、ビルドとローカル検証は [deploy.md](deploy.md)・[local-server.md](local-server.md)。ここでは繰り返さない。
+ワークフロー（CI・イメージの配布・デプロイ・プラグインの自動更新）は [ci-cd.md](ci-cd.md)、PR の手順は [workflows.md](workflows.md)、ビルドとローカル検証は [local-server.md](local-server.md)。ここでは繰り返さない。
 
 ## 1. 全体の構成
 
@@ -214,7 +214,7 @@ Kotlin で自前のプラグインを作る場合。
 | 3 | ビルド確認 | `nix develop --command gradle :plugins:<Name>:build`（[workflows.md](workflows.md) の Plugin Edit Workflow と同じ）。Nix では `nix build .#oyasai-plugins -L` | `build.gradle.kts:72-95`、`README.md:97-103` |
 | 4 | サーバーの一覧に足す | Paper なら `packages/oyasai-minecraft-{main,lobby,axiom}.nix` の `plugins` に小文字名（例 `OyasaiXyz` → `oyasaixyz`）。Velocity なら `packages/oyasai-velocity.nix`。一覧は `keep-sorted` で並べる | `packages/oyasai-plugins.nix:46-56` |
 | 5 | docs | `docs/Projects/<name>/PROJECT.md` と、プラグインなら `player.md`・`operator.md`（[workflows.md](workflows.md) の New Project Workflow） | `docs/Home.md:39-47` |
-| 6 | 整形 | `nix fmt`（`gradle fmt` は使わない） | `docs/Home.md:91` |
+| 6 | 整形 | `nix fmt`。CI は `./gradlew fmt`・`./gradlew lock` の差分も検査する | `docs/Home.md`「ビルドと検証の基本」、`.github/workflows/ci.yaml` |
 
 - **CDKTF は変更不要**。イメージ名はサーバーの derivation 名で決まり、jar が変わればタグが変わり、既存のコンテナがそのイメージを使う。
 - 外部プラグインなら、`registry.json` に取得元を足し、`lock` で `lock.json` を再生成する（全版を渡す。5 節）。取得元の無い jar は `static/<platform>/<version>/`（Velocity は `static/velocity/`）に置く。どちらもサーバーの Nix の一覧に ID を足す。

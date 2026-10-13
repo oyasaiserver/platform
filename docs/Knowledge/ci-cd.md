@@ -32,7 +32,7 @@ source:
 - 外部のもの（`nocommit` アクション、外部 flake の `nix-flake-check-changed`）の中身。
 - 実際の実行結果、Infisical や Terraform Cloud 側の設定。
 
-関連: PR の作り方は [workflows.md](workflows.md)、CI で起きた失敗の訂正は [mistakes.md](mistakes.md)。[deploy.md](deploy.md) はビルドとローカル検証環境の手順で、本番デプロイの手順はこのファイルに書く。
+関連: PR の作り方は [workflows.md](workflows.md)、CI で起きた失敗の訂正は [mistakes.md](mistakes.md)。
 
 ## ワークフロー一覧
 
@@ -205,7 +205,6 @@ PR 環境のコンテナは、Actions のランナー自身の Docker（`unix://
 | イメージが上がらない | `push-to-ghcr` の `oyasai-push-nix-images` step。レジストリへのログインと、同名タグの既存判定 |
 | キャッシュに載らない | `nix-copy-to-s3` の step（検査ジョブでは前段が落ちても走る） |
 | 自動更新の PR がマージされない | 必須チェックが起動・報告されているか（上の未確認点） |
-| detekt の `IllegalArgumentException: 25` | 既知の環境問題。[Home.md](../Home.md) を参照 |
 
 ## 未確認のこと（まとめ）
 

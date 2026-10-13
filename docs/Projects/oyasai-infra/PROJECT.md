@@ -42,7 +42,7 @@ source:
 | イメージの参照元 | `packages/oyasai-standalone-images/`、`nix/flake-parts/docker.nix`、`nix/flake-parts/oyasai-scope.nix` |
 | テスト | インフラのテストはない（`packages/oyasai-cdktf/` にテストなし） |
 | 整形 | `/nix/var/nix/profiles/default/bin/nix fmt`（[Home](../../Home.md) の「ビルドと検証の基本」） |
-| 関連 Knowledge | ワークフローの起動条件・PR 環境の作成と削除・イメージ配布・秘密の取り出し方は [ci-cd.md](../../Knowledge/ci-cd.md)。リポジトリ全体の流れは [architecture.md](../../Knowledge/architecture.md)。「本番反映の前」は [mistakes.md](../../Knowledge/mistakes.md)。[deploy.md](../../Knowledge/deploy.md) はプラグインのビルド手順でインフラの手順ではない |
+| 関連 Knowledge | ワークフローの起動条件・PR 環境の作成と削除・イメージ配布・秘密の取り出し方は [ci-cd.md](../../Knowledge/ci-cd.md)。リポジトリ全体の流れは [architecture.md](../../Knowledge/architecture.md)。「本番反映の前」は [mistakes.md](../../Knowledge/mistakes.md)。 |
 
 ## 1. 全体構成
 
