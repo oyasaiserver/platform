@@ -19,7 +19,10 @@ AI は作業しながらここを読み、**作業中に学んだことをここ
 
 | 作業 | 読むもの |
 |---|---|
+| 全体の構成を知る・新しいプラグインを足す | [architecture.md](Knowledge/architecture.md) |
 | プラグイン・ツールの編集 | `Projects/<name>/PROJECT.md`（一覧は `ls docs/Projects`）→ 実装 |
+| CI の失敗・自動デプロイ・PR 環境 | [ci-cd.md](Knowledge/ci-cd.md) |
+| インフラ（CDKTF）・イメージ・定期処理 | [oyasai-infra](Projects/oyasai-infra/PROJECT.md) |
 | ブランチ・コミット・PR | [workflows.md](Knowledge/workflows.md) |
 | CI 失敗・PR の範囲・本番反映の前 | [mistakes.md](Knowledge/mistakes.md) |
 | ローカルサーバーで試す | [local-server.md](Knowledge/local-server.md) |
