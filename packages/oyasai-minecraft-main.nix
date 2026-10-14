@@ -70,6 +70,7 @@ oyasaiPurpur rec {
     plugmanx
     sociallikes3
     socialvotes
+    spark
     vault
     vertex
     viaversion
