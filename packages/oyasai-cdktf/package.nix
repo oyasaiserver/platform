@@ -6,6 +6,8 @@
   oyasai-cdktf-bindings,
   constants,
   oyasaiImageIds ? null,
+  terraform_1_14,
+  oyasaiTerraformProviders,
 }:
 let
   oyasaiCdktf = package-lock2nix.mkNpmModule { src = ./.; };
@@ -26,7 +28,7 @@ writeShellApplication {
 
   runtimeInputs = [
     oyasai-cdktf-bindings
-    terraform
+    (terraform_1_14.withPlugins (_: oyasaiTerraformProviders))
   ];
 
   text = ''
