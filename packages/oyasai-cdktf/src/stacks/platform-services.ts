@@ -82,7 +82,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       name,
       new Image(this, this.t(`${name}-image`), {
         name: tag,
-        keepLocally: true,
+        keepLocally: false,
         lifecycle: { createBeforeDestroy: true },
       }),
     ]);
