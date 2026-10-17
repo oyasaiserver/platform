@@ -61,8 +61,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.0/builds/1256/downloads/velocity",
-      "hash": "sha256-FbK/jgJaRpSaArw/aClmf6oUk46Lbb8J/GOLoc/TquM="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.0/builds/1262/downloads/velocity",
+      "hash": "sha256-jTMaNivDXfvTCWtb9+8G4q+C74x9k5UR80eOv+L5Urw="
     }
   },
   "luckperms": {
