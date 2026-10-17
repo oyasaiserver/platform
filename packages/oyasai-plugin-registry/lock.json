@@ -85,6 +85,14 @@
       }
     }
   },
+  "spark": {
+    "paper": {
+      "26.2": {
+        "url": "https://ci.lucko.me/job/spark/544/artifact/spark-bukkit/build/libs/spark-1.10.192-bukkit.jar",
+        "hash": "sha256-1oDuTy8VncnwfHryRSf6ACJpxbRLkPiMhb0fbxMNVfY="
+      }
+    }
+  },
   "viaversion": {
     "paper": {
       "26.2": {
