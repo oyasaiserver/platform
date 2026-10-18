@@ -55,18 +55,27 @@ tasks.test { dependsOn(tasks.shadowJar) }
 // Only the public project references are bundled; operational documents live elsewhere.
 tasks.processResources {
   val docs = rootProject.file("docs/Projects")
+  val names =
+      docs
+          .listFiles()
+          .orEmpty()
+          .filter {
+            it.resolve("PROJECT.md")
+                .takeIf { file -> file.isFile }
+                ?.readLines()
+                ?.contains("project_kind: plugin") == true
+          }
+          .map { it.name }
+          .sorted()
   from(docs) {
-    include("*/PROJECT.md", "*/player.md")
+    include(names.flatMap { listOf("$it/PROJECT.md", "$it/player.md") })
     into("assistant-docs")
   }
+  doFirst {
+    // Copy tasks retain removed inputs; do not leave formerly bundled non-plugin references behind.
+    delete(destinationDir.resolve("assistant-docs"))
+  }
   doLast {
-    val names =
-        docs
-            .listFiles()
-            .orEmpty()
-            .filter { it.resolve("PROJECT.md").isFile || it.resolve("player.md").isFile }
-            .map { it.name }
-            .sorted()
     destinationDir.resolve("assistant-docs/index.txt").writeText(names.joinToString("\n") + "\n")
   }
 }

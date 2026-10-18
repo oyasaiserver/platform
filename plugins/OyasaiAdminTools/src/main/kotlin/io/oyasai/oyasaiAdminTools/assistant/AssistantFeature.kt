@@ -28,7 +28,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   private val rules = AssistantRules(settings?.getStringList("blacklist").orEmpty())
   private lateinit var allows: AssistantAllowStore
   private val docs = AssistantDocs()
-  private val maxCalls = (settings?.getInt("max-tool-calls", 8) ?: 8).coerceIn(1, 32)
+  private val maxCalls = (settings?.getInt("max-tool-calls", 12) ?: 12).coerceIn(1, 32)
   private val timeout = (settings?.getLong("timeout-seconds", 45) ?: 45).coerceIn(1, 180) * 1000
   private val cooldown = (settings?.getLong("cooldown-seconds", 10) ?: 10).coerceIn(0, 3600) * 1000
   private var agent: AssistantAgent? = null
@@ -139,6 +139,16 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                         if (pending.containsKey(id)) proposed = true
                         result
                       }
+                    }
+                )
+                tool(
+                    AssistantTool(
+                        "search_docs",
+                        "自作プラグインの公開資料を短いキーワードで検索し、関連する節だけ返す。外部プラグインの公式資料は含まない",
+                        listOf("query"),
+                    ) { args ->
+                      checkBudget(count, operator, "search_docs", args.toString())
+                      docs.search(args["query"].orEmpty())
                     }
                 )
                 tool(
