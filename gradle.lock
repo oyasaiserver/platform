@@ -23,6 +23,30 @@
       "hash": "sha256-u68PWtZrrMGi0rxWIs3PoiL6nIqQBrME9DCyULHt6vA="
     }
   },
+  "ai.koog:agents-test:1.3.0": {
+    "agents-test-1.3.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/agents-test/1.3.0/agents-test-1.3.0.module",
+      "hash": "sha256-4watKyhn+ZZFcG85OLFnXpY++U3G9zA7P/XoLcZ0yR0="
+    },
+    "agents-test-1.3.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/agents-test/1.3.0/agents-test-1.3.0.pom",
+      "hash": "sha256-E+sBAaCL9Gdsoly3CFzRlAkF3gtF34vP86Qes0rrhTk="
+    }
+  },
+  "ai.koog:agents-test-jvm:1.3.0": {
+    "agents-test-jvm-1.3.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/agents-test-jvm/1.3.0/agents-test-jvm-1.3.0.jar",
+      "hash": "sha256-xWAQxwdTXrAfL3z1k3jpm3GYayQpzLolKboUanUAOq4="
+    },
+    "agents-test-jvm-1.3.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/agents-test-jvm/1.3.0/agents-test-jvm-1.3.0.module",
+      "hash": "sha256-qDO22WK4378VBS4zSnIneATMQgWKwRQpv4hcYKJeM6c="
+    },
+    "agents-test-jvm-1.3.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/agents-test-jvm/1.3.0/agents-test-jvm-1.3.0.pom",
+      "hash": "sha256-e4NupZQwYTCdUE7BZ/nMCYWXTXUE0AxgCypS5M0sfVA="
+    }
+  },
   "ai.koog:agents-tools:1.3.0": {
     "agents-tools-1.3.0.module": {
       "url": "https://repo.maven.apache.org/maven2/ai/koog/agents-tools/1.3.0/agents-tools-1.3.0.module",
@@ -215,6 +239,16 @@
       "hash": "sha256-TEASNLojoOYbludF1S7VwVZTtLWT/XZBlv4pnjcgKu8="
     }
   },
+  "ai.koog:prompt-executor-openai-client:1.3.0": {
+    "prompt-executor-openai-client-1.3.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-executor-openai-client/1.3.0/prompt-executor-openai-client-1.3.0.module",
+      "hash": "sha256-TS8pRfINj8kMEBdblOezUc9gBLAUlhGQDz3uKvZAYBo="
+    },
+    "prompt-executor-openai-client-1.3.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-executor-openai-client/1.3.0/prompt-executor-openai-client-1.3.0.pom",
+      "hash": "sha256-EBYXxAYveurLio4lroeSl1QFAjsPdtS0PSqOUMttisw="
+    }
+  },
   "ai.koog:prompt-executor-openai-client-base:1.3.0": {
     "prompt-executor-openai-client-base-1.3.0.module": {
       "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-executor-openai-client-base/1.3.0/prompt-executor-openai-client-base-1.3.0.module",
@@ -237,6 +271,20 @@
     "prompt-executor-openai-client-base-jvm-1.3.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-executor-openai-client-base-jvm/1.3.0/prompt-executor-openai-client-base-jvm-1.3.0.pom",
       "hash": "sha256-9wE4L5KIIlWXArgPrTfx98Mm5HDn12x42iiT1R4ta6c="
+    }
+  },
+  "ai.koog:prompt-executor-openai-client-jvm:1.3.0": {
+    "prompt-executor-openai-client-jvm-1.3.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-executor-openai-client-jvm/1.3.0/prompt-executor-openai-client-jvm-1.3.0.jar",
+      "hash": "sha256-1hcnjnRBg1Uiw8sfvRpAP2HevgRJ1PRj1cvcw/AIE+4="
+    },
+    "prompt-executor-openai-client-jvm-1.3.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-executor-openai-client-jvm/1.3.0/prompt-executor-openai-client-jvm-1.3.0.module",
+      "hash": "sha256-3eJc3LmVUbJT3VMrgezCiq3rh61WHCBWa8hevf/YsIA="
+    },
+    "prompt-executor-openai-client-jvm-1.3.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-executor-openai-client-jvm/1.3.0/prompt-executor-openai-client-jvm-1.3.0.pom",
+      "hash": "sha256-//NByQs4kc0RtaNgeXwPXqQ7RjHmZfhFtn2ngyb668U="
     }
   },
   "ai.koog:prompt-executor-openrouter-client:1.3.0": {
@@ -383,6 +431,30 @@
       "hash": "sha256-EK+vd+xgt+saW2ZLv2nUN0mmUZbMV5OVUqW9h0eZ7cg="
     }
   },
+  "ai.koog:prompt-tokenizer:1.3.0": {
+    "prompt-tokenizer-1.3.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-tokenizer/1.3.0/prompt-tokenizer-1.3.0.module",
+      "hash": "sha256-tY2tpq8vliWBMs1UzxbSCa7z39Zx2YhszoONMlKblBI="
+    },
+    "prompt-tokenizer-1.3.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-tokenizer/1.3.0/prompt-tokenizer-1.3.0.pom",
+      "hash": "sha256-rhB3oFxWbcSjlZx55AOjpdFaC+u8nlxZAmdVO3wHElk="
+    }
+  },
+  "ai.koog:prompt-tokenizer-jvm:1.3.0": {
+    "prompt-tokenizer-jvm-1.3.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-tokenizer-jvm/1.3.0/prompt-tokenizer-jvm-1.3.0.jar",
+      "hash": "sha256-xZM7MhPBRRDJOTRgiyW9ETYcu55/TolgYYOhWRrVyoA="
+    },
+    "prompt-tokenizer-jvm-1.3.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-tokenizer-jvm/1.3.0/prompt-tokenizer-jvm-1.3.0.module",
+      "hash": "sha256-qvUrPDhr5wtVYa/z+wShrF3kuyfPwx48jK3u3KFcWRo="
+    },
+    "prompt-tokenizer-jvm-1.3.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ai/koog/prompt-tokenizer-jvm/1.3.0/prompt-tokenizer-jvm-1.3.0.pom",
+      "hash": "sha256-A5oMDQI/+3/eRdl450Cpqdg02FRGLjubffXuUUjZwnc="
+    }
+  },
   "ai.koog:serialization-core:1.3.0": {
     "serialization-core-1.3.0.module": {
       "url": "https://repo.maven.apache.org/maven2/ai/koog/serialization-core/1.3.0/serialization-core-1.3.0.module",
@@ -519,6 +591,32 @@
     "leafpile-1.0.0.pom": {
       "url": "https://repo.purpurmc.org/snapshots/ca/spottedleaf/leafpile/1.0.0/leafpile-1.0.0.pom",
       "hash": "sha256-zDXG1e33INnVqiNKNSDToIv8hvBopN+13ZoLtjngaNo="
+    }
+  },
+  "ch.qos.logback:logback-classic:1.5.13": {
+    "logback-classic-1.5.13.jar": {
+      "url": "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/1.5.13/logback-classic-1.5.13.jar",
+      "hash": "sha256-CO+DNgJLCUvkF/eV5oxsdEeSltgUFTMyejpNBt7iYe0="
+    },
+    "logback-classic-1.5.13.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/1.5.13/logback-classic-1.5.13.pom",
+      "hash": "sha256-w0NtwPSJ5Mm4hUBO48NRsDi/tCmFmteJbFY/xpBM5cw="
+    }
+  },
+  "ch.qos.logback:logback-core:1.5.13": {
+    "logback-core-1.5.13.jar": {
+      "url": "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-core/1.5.13/logback-core-1.5.13.jar",
+      "hash": "sha256-Iz/z7pJ1rPTgD0oRcntca4B+j0GMTCKuI4TNvzyBqhA="
+    },
+    "logback-core-1.5.13.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-core/1.5.13/logback-core-1.5.13.pom",
+      "hash": "sha256-wwNz7vPlBcho7n2t+5XSYjcFxkJevmBmvO3abvC8YUU="
+    }
+  },
+  "ch.qos.logback:logback-parent:1.5.13": {
+    "logback-parent-1.5.13.pom": {
+      "url": "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-parent/1.5.13/logback-parent-1.5.13.pom",
+      "hash": "sha256-Yf2ZyMF0UfX9cTAb35iptOyt97zzuTmFHKoVrGA5yeU="
     }
   },
   "club.minnced:discord-webhooks:0.8.4": {

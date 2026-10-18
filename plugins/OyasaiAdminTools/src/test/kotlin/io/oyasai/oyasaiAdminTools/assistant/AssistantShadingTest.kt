@@ -38,10 +38,21 @@ class AssistantShadingTest {
                   ) { _, _, _ ->
                     loader.loadClass("kotlin.Unit").getField("INSTANCE").get(null)
                   }
+              val progress =
+                  loader
+                      .loadClass("io.oyasai.oyasaiAdminTools.assistant.AssistantProgress")
+                      .getConstructor()
+                      .newInstance()
+              val strategy =
+                  progress.javaClass
+                      .getMethod("strategy", Int::class.javaPrimitiveType)
+                      .invoke(progress, 2)
               val factory =
                   loader.loadClass(prefix + "agents.core.agent.AIAgentFactoryKt").methods.single {
                     it.name == "AIAgent" &&
-                        it.parameterCount == 10 &&
+                        it.parameterCount == 11 &&
+                        it.parameterTypes[2].name ==
+                            prefix + "agents.core.agent.entity.AIAgentGraphStrategy" &&
                         it.parameterTypes[1].name == prefix + "prompt.llm.LLModel"
                   }
               val graph =
@@ -49,6 +60,7 @@ class AssistantShadingTest {
                       null,
                       field("executor"),
                       field("model"),
+                      strategy,
                       registry,
                       "offline test",
                       null,

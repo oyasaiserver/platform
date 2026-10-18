@@ -22,6 +22,7 @@ dependencies {
   implementation("ai.koog:prompt-executor-google-client:1.3.0-beta")
   implementation("ai.koog:prompt-executor-deepseek-client:1.3.0-beta")
   testImplementation(libs.purpur.api)
+  testImplementation("ai.koog:agents-test:1.3.0")
 }
 
 // Kotlin stdlib/reflection retain their names: relocating them breaks built-in type lookup.

@@ -91,6 +91,9 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     val operator = "${sender.name}($id)"
     audit(operator, "request", request)
     sender.sendMessage("調べています。実行が必要なら確認ボタンを表示します。")
+    val progress = AssistantProgress { tool, result ->
+      audit(operator, "tool-result:$tool", result.take(500))
+    }
     val count = AtomicInteger()
     var proposed = false
     val job =
@@ -137,7 +140,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                     }
                 )
               }
-              val answer = backend.run(request, maxCalls, tools, allowed)
+              val answer = backend.run(request, maxCalls, tools, allowed, progress)
+              audit(operator, "answer", answer)
               onMain { player(id).sendMessage(Component.text(answer.take(2000))) }
             }
           } catch (failure: Throwable) {
@@ -145,7 +149,12 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
             if (currentCoroutineContext().isActive && plugin.isEnabled) {
               onMain {
                 pending.remove(id)?.let { audit(operator, "cancel", "request failed") }
-                plugin.server.getPlayer(id)?.sendMessage("依頼を完了できませんでした。時間制限・接続・設定を確認してください。")
+                val answer =
+                    if (failure is TimeoutCancellationException) {
+                      progress.partial("時間制限に達しました（確認待ちの提案は取り消しました）")
+                    } else "依頼を完了できませんでした。接続・設定を確認してください。"
+                audit(operator, "answer", answer)
+                plugin.server.getPlayer(id)?.sendMessage(Component.text(answer.take(2000)))
               }
             }
           }
