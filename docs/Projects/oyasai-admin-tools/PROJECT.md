@@ -8,6 +8,7 @@ related_paths:
   - plugins/OyasaiAdminTools/src/main/kotlin/io/oyasai/oyasaiAdminTools/storage/
   - plugins/OyasaiAdminTools/src/main/kotlin/io/oyasai/oyasaiAdminTools/bulletin/
   - plugins/OyasaiAdminTools/src/main/kotlin/io/oyasai/oyasaiAdminTools/staff/
+  - plugins/OyasaiAdminTools/src/main/kotlin/io/oyasai/oyasaiAdminTools/assistant/
   - plugins/OyasaiAdminTools/src/main/resources/plugin.yml
   - plugins/OyasaiAdminTools/src/main/resources/config.yml
   - plugins/OyasaiAdminTools/src/test/kotlin/io/oyasai/oyasaiAdminTools/
@@ -55,6 +56,17 @@ last_validated: "2026-10-13"
 - **ワールド境界:** ワールド名ごとに中心・X/Z 半径・任意の形状上書きを保持する。独自の矩形／楕円判定を定期実行し、範囲外のプレイヤーを戻す。テレポート、エンダーパール、ポータルにもリスナーを持つ。
 - **スタッフ機能:** `StaffFeature` が権限確認、オンライン対象の検索、コマンド・イベント登録を共通化し、各機能が処理を実装する。Essentials が所有する同名コマンドと指定別名は置き換え、他プラグイン所有の名前は奪わない。Essentials が後から有効化された場合も再確認する。
 - **履歴:** join/quit 時に UUID、名前、epoch ミリ秒の時刻、IP、最終位置を記録する。位置はワールド UUID と名前、座標・yaw・pitch を保存する。停止時もオンラインプレイヤーを quit として記録する。
+
+### 運営アシスタント
+
+- 自然言語の依頼を受け、状況の照会とコマンドの提案を行う任意機能。既定は無効で、環境変数の認証情報がない場合も無効になる。初期化と終了の失敗は `Throwable` で隔離し、依存ライブラリのリンク不整合でも他機能を継続する。
+- エージェントの反復処理は Koog 1.3.0 の標準戦略を使用する。接続先は OpenRouter・Google・DeepSeek、モデルは `LLModel` の provider・id・Completion/Tools capabilities で指定する。OpenRouter の既定モデルIDは `deepseek/deepseek-v4.1-flash`。Google・DeepSeek の専用クライアントは同系列の `1.3.0-beta` を使用する。
+- コマンドを実行する機能はエージェントに公開しない。許可された提案をチャットの確認操作で実行し、クリックした本人の `Player.performCommand` を使う。表示には要約と実際のコマンドの両方を含める。本人一致、オンライン、権限、60秒の期限を確認し、実行・取り消しで同じ提案を一度だけ消費する。許可リストは語の境界で照合し、名前空間・制御文字を拒否する。昇格の備考に `GOOD` を含む提案は、大文字小文字を問わず拒否する。
+- 照会は DynamicProfile 所有の昇格条件・概要の2コマンドに固定し、設定はその範囲を狭めるために使う。対象はプレイヤー名1つのみで、履歴ページ・GUI・追加引数は渡さない。`Server.createCommandSender` はコンソール相当の権限を持つため、呼び出し前に運営本人の元コマンドの権限を確認し、所有プラグインの名前空間を指定して実行する。出力の取得は最大5秒、最後の出力から500msの無出力で打ち切る。完了通知のない外部コマンドなので、空・不完全な出力から条件達成と判断しないよう指示する。
+- 状況照会は運営の名前・ワールド・座標、最大48ブロックの視線先、周囲の見えるプレイヤー最大20人と距離を返す。チャットは収集しない。ワールドやプレイヤーの観測値を指示として扱わないようシステムプロンプトに明記する。
+- 通信と反復処理は非同期、プレイヤー参照・照会の開始・提案・確認後の実行はメインスレッドで行う。道具呼出し回数、依頼全体の時間、運営ごとの間隔を制限し、同時依頼と確認待ち中の新規依頼を拒否する。1依頼の提案は1件。終了時は通信・ジョブを閉じ、確認待ちの状態は永続化しない。
+- 依頼・照会・提案・実行・取り消しを運営名とUUID付きの1行ログへ記録する。外部サービスの例外本文は記録せず、認証情報の混入を避ける。Koog・Ktor・kotlinxと関連依存は専用パッケージへリロケートし、サービス定義を統合する。反射・サービス読込を壊す縮小は行わない。Kotlin stdlib/reflection は元の名前で同梱する。移動すると組み込み型の解決が壊れることを生成jarのテストで確認し、[Shadow公式の注意](https://gradleup.com/shadow/configuration/relocation/)にも従う。
+- 自動テストは許可リストと特例拒否、およびサーバーのライブラリなしで生成jarから3接続先の初期化・終了ができることを確認する。外部APIとの通信、チャットの表示、本人・他人による確認ボタンの操作は別途実機確認が必要。
 
 ### データ形式・永続化
 
@@ -121,6 +133,8 @@ last_validated: "2026-10-13"
 - プレイヤー履歴には IP と最終位置を保存する。DB と旧 userdata の読取権限・バックアップ取扱いが必要だが、自動バックアップや保存期間管理は実装されていない。
 
 ## 判断の記録
+
+- 2026-10-18: アシスタントは既定OFFの独立機能として追加。読み取りは既知の昇格照会2種類に固定し、設定で任意のコンソール操作を許可できない形にした。外部コマンドの非同期出力は待ち時間付きで取得し、実行の道具は持たせず、本人による一回限りの確認とプレイヤー権限で実行する。短い別名は追加せず、複数提案や会話履歴の保存も設けない。
 
 - 2026-10-13: 外部レビューの各指摘をコードと照合し、対象制限・締切・空放送文の履歴・再有効化・通知内容・境界挙動を訂正。回答検証、GUI/入力本の権限、削除後のデータと質問順、報酬判定等の注意を3文書へ反映した。静的確認のみで、実機のイベント順序・外部コマンドの反映結果は未確認。
 - 2026-10-13: 旧 PROJECT の JSON 保存説明を現行実装に合わせて更新。通常の永続化先は `admintools.db` で、JSON/YAML は一回限りの互換取込元。運営コマンドの権限・Essentials 共存設計の詳細は `ESSENTIALS_STAFF.md` に残し、コードで確認できた挙動を本書と [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-admin-tools/operator.md) に反映した。

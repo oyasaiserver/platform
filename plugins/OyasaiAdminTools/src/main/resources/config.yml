@@ -12,3 +12,23 @@ staff:
   sleep-ignores-vanished: true
   world-teleport-permissions: false
   socialspy-commands: [msg, w, r, mail, m, t, whisper, emsg, tell, er, reply, ereply, email, action, describe, eme, eaction, edescribe, etell, ewhisper, pm, message]
+
+assistant:
+  enabled: false
+  provider: openrouter
+  model: deepseek/deepseek-v4.1-flash
+  api-key-env: OYASAI_ASSISTANT_API_KEY
+  max-tool-calls: 8
+  timeout-seconds: 45
+  cooldown-seconds: 10
+  allowed-commands:
+    - syokaku iscandidate
+    - syokaku seeplayerinfo
+    - syokaku promote
+    - syokaku demote
+    - tp
+    - gamemode
+    - kick
+  read-only-commands:
+    - syokaku iscandidate
+    - syokaku seeplayerinfo
