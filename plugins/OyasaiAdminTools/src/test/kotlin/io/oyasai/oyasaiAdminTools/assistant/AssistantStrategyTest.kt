@@ -22,7 +22,7 @@ class AssistantStrategyTest {
         )
     var queries = 0
     val query =
-        AssistantTool("run_query", "offline", emptyList()) {
+        AssistantTool("run_command", "offline", emptyList()) {
           queries++
           "条件達成"
         }
@@ -50,7 +50,7 @@ class AssistantStrategyTest {
     try {
       assertEquals("条件達成を確認しました", agent.run("昇格して"))
       assertEquals(1, queries)
-      assertEquals(listOf("run_query", "finish"), observed)
+      assertEquals(listOf("run_command", "finish"), observed)
     } finally {
       agent.close()
       executor.close()

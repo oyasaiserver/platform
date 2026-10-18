@@ -121,7 +121,7 @@ class AssistantShadingTest {
                   List::class.java,
                   functionType,
               )
-              .newInstance("run_query", "offline test", listOf("command"), action)
+              .newInstance("run_command", "offline test", listOf("command"), action)
       val decoded =
           toolType
               .getMethod(

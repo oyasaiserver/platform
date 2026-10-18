@@ -1,42 +1,84 @@
 package io.oyasai.oyasaiAdminTools.assistant
 
 import java.util.Locale
+import org.bukkit.command.Command
+import org.bukkit.command.CommandMap
+import org.bukkit.command.FormattedCommandAlias
+import org.bukkit.command.PluginIdentifiableCommand
 
-internal object AssistantRules {
-  private val playerName = Regex("[A-Za-z0-9_]{1,16}")
-  val readCommands = setOf("syokaku iscandidate", "syokaku seeplayerinfo")
+internal class AssistantRules(additional: List<String> = emptyList()) {
+  private val blacklist = CORE_BLACKLIST + additional.map(::Regex)
 
-  fun normalize(command: String): String? {
-    if (command.length > 512 || command.any { it.isISOControl() || it == '§' }) return null
-    val value = command.trim().removePrefix("/").trim().replace(Regex(" +"), " ")
-    if (value.isEmpty() || !Regex("[a-zA-Z][a-zA-Z0-9_]*").matches(value.substringBefore(' ')))
-        return null
-    return value
-  }
+  fun isBlacklisted(command: String): Boolean = blacklist.any { it.containsMatchIn(command) }
 
-  fun allows(command: String, allowed: List<String>): Boolean {
-    val normalized = normalize(command) ?: return false
-    val words = normalized.split(' ')
-    if (
-        words.size >= 2 &&
-            words[0].equals("syokaku", true) &&
-            words[1].equals("promote", true) &&
-            words.drop(3).joinToString(" ").contains("GOOD", ignoreCase = true)
-    )
-        return false
-    val lower = normalized.lowercase(Locale.ROOT)
-    return allowed.any { entry ->
-      val prefix = normalize(entry)?.lowercase(Locale.ROOT) ?: return@any false
-      lower == prefix || lower.startsWith("$prefix ")
+  fun isAllowed(command: String, scopes: Collection<String>): Boolean =
+      !isBlacklisted(command) && scopes.any { command == it || command.startsWith("$it ") }
+
+  companion object {
+    val CORE_BLACKLIST =
+        listOf(
+                "^minecraft:stop\\b",
+                "^(bukkit|minecraft):reload\\b",
+                "^(spigot|paper|purpur|bukkit):restart\\b",
+                "^(spigot|paper|purpur):(spigot|paper|purpur) reload\\b",
+                "^plugmanx:(plugman|plm)\\b(?! (list|info|usage|lookup|help)( |$))",
+                "^minecraft:(op|deop)\\b",
+                "^luckperms:luckperms\\b(?! (?:info|listgroups|listtracks)(?: |$)| user \\S+ (?:info|permission (?:info|check)|parent info|meta info)(?: |$)| group \\S+ info(?: |$))",
+                "^dynamicprofile:syokaku (promote|demote) \\S+ good",
+                "^minecraft:execute\\b",
+                "^oyasaiadmintools:sudo\\b",
+                "^minecraft:(function|schedule|return)\\b",
+                "^fastasyncworldedit:(/?cs|/?\\.s|/?macro)\\b",
+                "^oyasaiadmintools:socialspy\\b",
+                "@[aer]\\b",
+                "^oyasaitoken:token addall\\b",
+                "^minecraft:whitelist (on|off|reload)\\b",
+                "^minecraft:save-off\\b",
+                "^coreprotect:(co|core|coreprotect) purge\\b",
+                "^coreprotect:(co|core|coreprotect) (rollback|rb|ro|restore|rs|re)\\b(?!.*(?:^| )u:\\S+)",
+                "^fastasyncworldedit:/?delchunks\\b",
+                "^fastasyncworldedit:/?(schematic|schem) (delete|d)\\b",
+                "^oyasaiadmintools:assistant\\b",
+            )
+            .map(::Regex)
+
+    fun scope(command: String): String {
+      val words = command.split(' ')
+      return words
+          .take(if (words.getOrNull(1)?.matches(Regex("[a-z]+")) == true) 2 else 1)
+          .joinToString(" ")
+    }
+
+    fun normalize(text: String, commands: CommandMap): NormalizedCommand? {
+      if (
+          text.length > 256 ||
+              text.any {
+                (it.isISOControl() && it != '\t') || it == '§' || it == '\u2028' || it == '\u2029'
+              }
+      )
+          return null
+      val words = text.trim().removePrefix("/").trim().lowercase(Locale.ROOT).split(Regex("\\s+"))
+      val command = commands.getCommand(words.first()) ?: return null
+      if (command is FormattedCommandAlias) return null
+      val name = command.name.lowercase(Locale.ROOT)
+      val owner =
+          if (command is PluginIdentifiableCommand) command.plugin.name.lowercase(Locale.ROOT)
+          else {
+            val owners =
+                commands.knownCommands.entries
+                    .filter { it.value === command && it.key.endsWith(":$name") }
+                    .map { it.key.substringBefore(':') }
+                    .distinct()
+            // Unidentified or ambiguous ownership must not create a reusable permission.
+            owners.singleOrNull() ?: return null
+          }
+      val label = "$owner:$name"
+      if (commands.getCommand(label) !== command) return null
+      val normalized = (listOf(label) + words.drop(1)).joinToString(" ")
+      if (normalized.length > 256) return null
+      return NormalizedCommand(normalized, command)
     }
   }
-
-  fun allowsQuery(command: String, allowed: List<String>): Boolean {
-    val normalized = normalize(command) ?: return false
-    val words = normalized.split(' ')
-    return words.size == 3 &&
-        playerName.matches(words[2]) &&
-        words.take(2).joinToString(" ").lowercase(Locale.ROOT) in readCommands &&
-        allows(normalized, allowed)
-  }
 }
+
+internal data class NormalizedCommand(val text: String, val registered: Command)

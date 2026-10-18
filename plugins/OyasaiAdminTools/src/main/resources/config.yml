@@ -21,14 +21,5 @@ assistant:
   max-tool-calls: 8
   timeout-seconds: 45
   cooldown-seconds: 10
-  allowed-commands:
-    - syokaku iscandidate
-    - syokaku seeplayerinfo
-    - syokaku promote
-    - syokaku demote
-    - tp
-    - gamemode
-    - kick
-  read-only-commands:
-    - syokaku iscandidate
-    - syokaku seeplayerinfo
+  # 正規化後のコマンドに追加で適用する正規表現。コードの禁止項目は解除できません。
+  blacklist: []

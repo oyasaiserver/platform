@@ -51,3 +51,22 @@ tasks.shadowJar {
 }
 
 tasks.test { dependsOn(tasks.shadowJar) }
+
+// Only the public project references are bundled; operational documents live elsewhere.
+tasks.processResources {
+  val docs = rootProject.file("docs/Projects")
+  from(docs) {
+    include("*/PROJECT.md", "*/player.md")
+    into("assistant-docs")
+  }
+  doLast {
+    val names =
+        docs
+            .listFiles()
+            .orEmpty()
+            .filter { it.resolve("PROJECT.md").isFile || it.resolve("player.md").isFile }
+            .map { it.name }
+            .sorted()
+    destinationDir.resolve("assistant-docs/index.txt").writeText(names.joinToString("\n") + "\n")
+  }
+}
