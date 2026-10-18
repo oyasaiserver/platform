@@ -7,7 +7,17 @@ dependencies {
   implementation(libs.discord.webhooks)
   implementation(libs.inventoryframework)
   implementation(libs.sqlite.jdbc)
-  implementation("ai.koog:koog-agents:1.3.0")
+  implementation("ai.koog:agents-core:1.3.0") {
+    // Remote debugging and unused providers are outside this agent's execution path.
+    exclude(group = "io.ktor", module = "ktor-server-sse")
+    exclude(group = "io.ktor", module = "ktor-server-cio")
+    exclude(group = "io.ktor", module = "ktor-client-cio")
+    exclude(group = "ai.koog", module = "prompt-executor-openai-client")
+    exclude(group = "ai.koog", module = "prompt-executor-anthropic-client")
+    exclude(group = "ai.koog", module = "prompt-executor-ollama-client")
+  }
+  implementation("ai.koog:http-client-ktor:1.3.0")
+  implementation("io.ktor:ktor-client-java:3.3.3")
   implementation("ai.koog:prompt-executor-openrouter-client:1.3.0")
   implementation("ai.koog:prompt-executor-google-client:1.3.0-beta")
   implementation("ai.koog:prompt-executor-deepseek-client:1.3.0-beta")
@@ -25,12 +35,7 @@ tasks.shadowJar {
           "okhttp3",
           "okio",
           "_COROUTINE",
-          "org.fusesource.jansi",
           "org.slf4j",
-          "io.opentelemetry",
-          "aws.smithy.kotlin",
-          "aws.sdk.kotlin",
-          "org.apache.hc",
           "com.typesafe.config",
           "org.jetbrains.annotations",
           "org.intellij.lang.annotations",

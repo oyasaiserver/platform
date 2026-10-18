@@ -16,10 +16,10 @@ import ai.koog.prompt.llm.LLMProvider
 import ai.koog.prompt.llm.LLModel
 import ai.koog.serialization.typeToken
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache5.Apache5
+import io.ktor.client.engine.java.Java
 
 internal class AssistantAgent(provider: String, modelId: String, apiKey: String) : AutoCloseable {
-  private val http = HttpClient(Apache5)
+  private val http = HttpClient(Java)
   private val factory = KtorKoogHttpClient.Factory(http)
   private val client =
       try {
