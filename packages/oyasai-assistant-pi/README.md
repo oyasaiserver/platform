@@ -54,3 +54,48 @@ The pinned namespace is deprecated in favor of `@earendil-works/*`. Evaluate
 that migration before production. The unused SDK archive extractor currently has
 an unpatched npm advisory; package/extension discovery and downloads are
 disabled.
+
+## Container backend
+
+Build on the Linux validation host with rootless Podman:
+
+```sh
+podman build -t localhost/oyasai-assistant-pi:prototype .
+```
+
+Select `assistant.backend: pi-container`, `assistant.pi-container.podman` and
+`assistant.pi-container.image`; `pi.docs` and `pi.model` are shared with `pi`.
+The plugin launches the fixed isolation flags in `AssistantPi.containerCommand`.
+Only the docs directory is mounted, read-only. No API key is passed to Podman or
+the container. The image contains a non-secret `stdio-no-auth` SDK marker
+because Pi requires a nonempty auth value even for its local custom provider.
+This marker cannot authenticate to any external service.
+
+Each request gets a fresh container and 64MiB workspace tmpfs. Startup is
+included in the request timeout; 90 seconds is recommended for the prototype.
+Enable-time startup probes are removed immediately. Cancellation and shutdown
+force-remove the specifically named container, including any forked shell
+children.
+
+The container sends `model` messages with id/callId and text-only OpenAI
+messages/tools. The host fixes endpoint/model/output budget and adds
+credentials; `model_result` returns non-streamed JSON. `usage` is informational;
+it never grants permission. Minecraft commands only use the existing two host
+tools. The whole container and every stdout message are untrusted.
+
+Manual checks, excluded from `npm test`:
+
+- Run `test/security-container.mjs` through stdin with the same confinement
+  flags and `--entrypoint=node ... --input-type=module` to assert isolation from
+  inside.
+- `test/compare-container.mjs <absolute-docs>` compares four questions per
+  backend with two tool calls per question. Create a new mode-600 file
+  containing `0`, set `OYASAI_COMPARISON_BUDGET` to its path, and load the API
+  key on the host only. The shared file caps actual OpenRouter HTTP sends at 20;
+  do not run comparisons concurrently. It uses a fake plugin that always returns
+  confirmation pending.
+
+Rollback selects `backend: pi` or `koog` and restarts the plugin/server. Neither
+shared command permissions nor documents are changed by a request. Before
+production, evaluate SDK dependency advisories, image update/scan procedures,
+concurrent workload limits, and answer quality with the normal tool budget.

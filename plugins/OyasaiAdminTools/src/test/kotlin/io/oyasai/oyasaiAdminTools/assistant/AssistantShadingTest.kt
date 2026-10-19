@@ -77,6 +77,11 @@ class AssistantShadingTest {
               )
             }
       }
+      (loader
+              .loadClass("io.oyasai.oyasaiAdminTools.assistant.AssistantModelRelay")
+              .getConstructor(String::class.java, String::class.java, Long::class.javaPrimitiveType)
+              .newInstance("offline-placeholder", "offline-test", 1000L) as AutoCloseable)
+          .close()
       java.util.jar.JarFile(jar).use { archive ->
         val entries = archive.entries().asSequence().map { it.name }.toList()
         for (prefix in

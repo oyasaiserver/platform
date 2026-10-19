@@ -67,6 +67,23 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                     timeout,
                     plugin.logger,
                 )
+            "pi-container" ->
+                AssistantPi(
+                    settings.getString("pi-container.podman", "/usr/bin/podman")!!,
+                    "",
+                    settings.getString(
+                        "pi.docs",
+                        plugin.dataFolder.resolve("assistant-docs").absolutePath,
+                    )!!,
+                    settings.getString("pi.model", "deepseek/deepseek-v4.1-flash")!!,
+                    key,
+                    timeout,
+                    plugin.logger,
+                    settings.getString(
+                        "pi-container.image",
+                        "localhost/oyasai-assistant-pi:prototype",
+                    )!!,
+                )
             else -> error("Unknown assistant backend")
           }
     }

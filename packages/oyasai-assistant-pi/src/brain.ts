@@ -2,6 +2,7 @@ import { type Model } from "@mariozechner/pi-ai";
 import {
   AuthStorage,
   createAgentSession,
+  createCodingTools,
   createExtensionRuntime,
   ModelRegistry,
   SessionManager,
@@ -17,6 +18,14 @@ export const TOOL_NAMES = [
   "run_command",
   "search_docs",
   "read_doc",
+];
+export const CONTAINER_TOOLS = [
+  "get_context",
+  "run_command",
+  "read",
+  "bash",
+  "write",
+  "edit",
 ];
 export const FALLBACK =
   "依頼を完了できませんでした。対象を絞ってもう一度依頼してください。";
@@ -49,16 +58,26 @@ export async function createBrain(
   modelId: string,
   key: string,
   tools: ToolDefinition[],
+  relay?: import("@mariozechner/pi-ai").StreamFunction,
 ) {
   const authStorage = AuthStorage.inMemory();
   authStorage.setRuntimeApiKey("openrouter", key);
   const registry = ModelRegistry.inMemory(authStorage);
+  if (relay) {
+    // Pi requires a nonempty auth value even for a local provider; this public marker is not a credential.
+    registry.registerProvider("stdio", {
+      api: "openai-completions",
+      apiKey: "stdio-no-auth",
+      authHeader: false,
+      streamSimple: relay,
+    });
+  }
   // The requested OpenRouter model can predate Pi's static model catalogue.
   const model: Model<"openai-completions"> = {
     id: modelId,
     name: modelId,
     api: "openai-completions",
-    provider: "openrouter",
+    provider: relay ? "stdio" : "openrouter",
     baseUrl: "https://openrouter.ai/api/v1",
     reasoning: false,
     input: ["text"],
@@ -70,9 +89,16 @@ export async function createBrain(
     model,
     authStorage,
     modelRegistry: registry,
-    tools: TOOL_NAMES,
+    tools: relay ? CONTAINER_TOOLS : TOOL_NAMES,
     customTools: tools,
-    resourceLoader: resources,
+    resourceLoader: relay
+      ? {
+          ...resources,
+          getSystemPrompt: () =>
+            SYSTEM +
+            "\nコンテナ内の資料は /docs にあります。search_docs/read_doc の代わりに bash の grep/find と read で必要な節だけ調べてください。bash/read/write/edit は資料調査・計算・下書き用です。書き込み先は /workspace だけ。Minecraft の操作は必ず run_command だけを使ってください。設定の質問は /docs/oyasai-admin-tools/operator.md の設定の節を優先してください。",
+        }
+      : resources,
     sessionManager: SessionManager.inMemory(),
     settingsManager: SettingsManager.inMemory({
       compaction: { enabled: false },
@@ -87,7 +113,7 @@ export async function createBrain(
       .getAllTools()
       .map((tool) => tool.name)
       .sort()
-      .join() !== [...TOOL_NAMES].sort().join()
+      .join() !== [...(relay ? CONTAINER_TOOLS : TOOL_NAMES)].sort().join()
   ) {
     session.dispose();
     throw new Error("Unexpected tool registry");
@@ -112,6 +138,7 @@ export async function runBrain(
   bridge: Bridge,
   trace: Trace,
   createSession = createBrain,
+  container = false,
 ) {
   let count = 0;
   let limited = false;
@@ -180,6 +207,24 @@ export async function runBrain(
       (args) => docs.read(args.path, args.heading),
     ),
   ];
+  if (container) {
+    tools.splice(2);
+    for (const builtin of createCodingTools(process.cwd())) {
+      tools.push(
+        tool(
+          builtin.name,
+          builtin.description,
+          builtin.parameters,
+          async (args, signal) => {
+            const result = await builtin.execute("local", args, signal);
+            return result.content
+              .map((c) => (c.type === "text" ? c.text : "画像は省略しました"))
+              .join("\n");
+          },
+        ),
+      );
+    }
+  }
   session = await createSession(model, key, tools);
   let rounds = 0;
   let summarized = false;
