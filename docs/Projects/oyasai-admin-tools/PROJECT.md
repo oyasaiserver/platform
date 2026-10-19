@@ -13,6 +13,7 @@ related_paths:
   - plugins/OyasaiAdminTools/src/main/resources/config.yml
   - plugins/OyasaiAdminTools/src/test/kotlin/io/oyasai/oyasaiAdminTools/
   - plugins/OyasaiAdminTools/ESSENTIALS_STAFF.md
+  - packages/oyasai-assistant-pi/
   - packages/oyasai-plugins.nix
   - packages/oyasai-plugin-registry/package.nix
   - packages/oyasai-minecraft-main.nix
@@ -60,15 +61,19 @@ last_validated: "2026-10-13"
 ### 運営アシスタント
 
 - 自然言語で状況照会・コマンド依頼・使い方の質問を受け付ける任意機能。既定OFFで、環境変数の認証情報がない場合も無効。`/assistant allow list` と `allow remove <番号>` は機能が無効でも権限を持つ送り主が使用できる。初期化・終了の失敗は独立機能として隔離する。
-- 反復はKoog 1.3.0のグラフDSLを使用。道具は `get_context`・`run_command(command, summary)`・`search_docs(query)`・`list_docs`・`read_doc(name, part)`・`finish(answer)`。毎回道具を必須にし、文章だけの途中経過では終了しない。`finish`も含む呼び出し回数・全体の時間・運営ごとの間隔を制限する。道具を呼ばない応答も最大 `max-tool-calls + 1` 回で終了し、回数上限では道具なしの追加要求を1回だけ行い、取得済みの情報を日本語で短くまとめる。失敗・空回答・時間切れ時には短い定型文を返し、生の道具結果を並べない。道具回数の既定は12（既存設定値は上書きしない）。
-- 接続先はOpenRouter・Google・DeepSeek。モデルは `LLModel` のprovider・id・Completion/Tools capabilitiesで指定する。既定IDは `deepseek/deepseek-v4.1-flash`。Google・DeepSeekの専用クライアントは同系列の `1.3.0-beta`。集約モジュールを使わず、agents-core・KtorのHTTPクライアント・3接続先の専用モジュールを同梱する。未使用のデバッグサーバー・OpenAI/Anthropic/Ollama専用クライアント・CIOを除き、HTTPはJDKエンジンを使う。既定シリアライザーのJacksonとOpenAI互換の基底クライアントは残す。
+- 既定バックエンドの反復はKoog 1.3.0のグラフDSLを使用。道具は `get_context`・`run_command(command, summary)`・`search_docs(query)`・`list_docs`・`read_doc(name, part)`・`finish(answer)`。毎回道具を必須にし、文章だけの途中経過では終了しない。`finish`も含む呼び出し回数・全体の時間・運営ごとの間隔を制限する。道具を呼ばない応答も最大 `max-tool-calls + 1` 回で終了し、回数上限では道具なしの追加要求を1回だけ行い、取得済みの情報を日本語で短くまとめる。失敗・空回答・時間切れ時には短い定型文を返し、生の道具結果を並べない。道具回数の既定は12（既存設定値は上書きしない）。
+- Koogの接続先はOpenRouter・Google・DeepSeek。モデルは `LLModel` のprovider・id・Completion/Tools capabilitiesで指定する。既定IDは `deepseek/deepseek-v4.1-flash`。Google・DeepSeekの専用クライアントは同系列の `1.3.0-beta`。集約モジュールを使わず、agents-core・KtorのHTTPクライアント・3接続先の専用モジュールを同梱する。未使用のデバッグサーバー・OpenAI/Anthropic/Ollama専用クライアント・CIOを除き、HTTPはJDKエンジンを使う。既定シリアライザーのJacksonとOpenAI互換の基底クライアントは残す。
+- 試作のPiバックエンドは `assistant.backend: pi` で選択する（既定 `koog`）。Node子プロセスと標準入出力のJSON行で通信し、ポートを開かない。`pi.node`・`pi.script`・`pi.docs`・`pi.model` を指定し、認証情報は子の環境へ渡す。起動時に子を開始し、停止・依頼の時間切れ・プロトコル異常で終了する。異常終了した依頼は失敗し、次の依頼で再起動する。子は1つで依頼を直列処理するため、待ち時間も既存の全体時間制限に含む。
+- Pi 0.73.1 SDKは `get_context`・`run_command`・`search_docs`・`read_doc` の名前を明示許可し、自作の道具だけを登録する。拡張・技能・テンプレート・AGENTSの自動探索を行わないResourceLoaderと、メモリ内の認証・設定・会話を渡す。組み込みのread/bash/write/edit等をモデルに公開せず、再読込・再有効化でも登録されないことをテストする。これは道具の制限でありOSのサンドボックスではない。
+- Piの資料は指定フォルダ直下の各プロジェクトの `PROJECT.md`・`player.md`・`operator.md` だけを起動時に読み取り専用のスナップショットへ取り込む。シンボリックリンク・任意パスを許可せず、1ファイル512KiB・合計10MiB・最大500ファイルに制限する。検索は最大3節の短い抜粋、読取は検索で得た資料名と見出しの完全一致で最大4000文字。公開資料と運営資料をコピーするスクリプトだけを公開し、運営資料はjar・Gitへ入れない。
+- Piでも実行は同じ `runCommand` と確認処理を通る。道具数は既存の設定値で制限し、上限後は道具を外した要求を一度だけ行う。SDKが1実行中の道具一覧を保持するため、要求境界でも道具を除く。無効な道具要求も含め応答回数を `max-tool-calls + 1` に制限し、全体時間を超えた子は終了する。最終回答はPiの通常の文章応答を使用し、途中経過だけで終わらない方針を指示する。
 - 判定は必ず正規化→固定の禁止項目と設定の追加禁止項目→共有許可リスト→未許可なら確認の順。旧 `allowed-commands`・`read-only-commands` は無視し、起動時に一度警告する。追加禁止の正規表現が不正なら機能の初期化に失敗させる。固定の禁止項目は設定で外せない。
 - 正規化は先頭の `/` を1つ除き、小文字化・空白の集約を行う。タブは空白へ集約し、それ以外の制御文字・改行・`§`・256文字超を拒否する。CommandMapで実際に解決したCommandの所有プラグインと `getName()` を使い、`<所有者>:<名前> <引数>` とする。バニラ・本体は登録済み名前空間から所有者を求める。未知・所有者が一意でない・正規名の登録と一致しないコマンド、`FormattedCommandAlias` を拒否する。引数も小文字化されるため、大文字小文字を区別する値には注意する。
 - 許可の範囲はコマンド名と、最初の引数が英字だけの語ならその語まで。それ以降の引数は何でも許可する。語の境界で照合するため `lookup` の許可で `lookupx` は動かない。運営全員で共有し、AdminDbの `assistant_allow` に固定番号・範囲・追加者名/UUID・時刻を保存する。初回に `dynamicprofile:syokaku iscandidate`・`getrank`・`seerequirements` を登録する。削除した初期値を再起動で復活させない。`seeplayerinfo` は初期値に含めない。
 - 固定禁止の正本は `assistant/AssistantRules.kt` の `CORE_BLACKLIST`。停止・reload/restart、照会以外のPlugManX、op/deop、限定した照会以外のLuckPerms、GOOD特例の昇降格、execute/sudo/function/schedule/return、CraftScript/マクロ、SocialSpy、`@a`/`@e`/`@r`、token addall、whitelist on/off/reload、save-off、CoreProtect purge/対象者指定のないrollback・restore、FAWEのチャンク/スキマティック削除、assistant自身を拒否する。CoreProtectの独立した `co`・`core`・`coreprotect` 登録、rollback/restoreの短縮形、FAWE削除の `d` も含める。
 - 許可済み・確認後とも、メインスレッドで運営本人の `Player.performCommand` を使う。コンソール相当の送り主は作らない。実行直前にも正規化・禁止・元コマンド権限・登録先の同一性を再確認する。コマンドの出力本文は本人の画面だけへ出し、AIには受付結果と「本文は未取得」を返す。受付成功を条件達成と解釈させず、昇格条件は本人の確認を求める。
 - 未許可の依頼は `[実行] [次から確認しない] [やめる]` を表示する。ホバーに共有許可へ追加する正規化済みの範囲と、引数が何でも対象になることを示す。クリック時に本人一致・オンライン・権限・60秒期限・禁止判定を再確認する。実行/取り消しで提案を一度だけ消費する。次からの許可はコマンド受付成功時に追加し、チャットとログで知らせる。1依頼で確認待ちにできるのは1件。時間切れと機能停止時に確認待ちを取り消し、永続化しない。
-- `get_context` は運営の名前・ワールド・座標と48ブロック以内の視線先・見えるプレイヤー最大20人を返す。チャットは収集しない。観測値や道具の出力を指示として扱わないよう明記する。公開の `docs/Projects/*/PROJECT.md`・`player.md` のうち `project_kind: plugin` の自作プラグイン資料だけをビルド時に `assistant-docs/` へ同梱する。`search_docs` は200文字以内のキーワードで見出し単位の節を検索し、全キーワードを含む節から最大3節・合計4000文字未満の抜粋を返す。必要なら一覧の名前と1からの分割番号で最大6000文字ずつ読む。FAWE・WorldGuard・LuckPerms・CoreProtect等の外部プラグインや資料にない話題は一般知識と明記して回答し、関係のない資料を読み歩かない。非公開の運用資料やファイルパスを指定して読む機能は持たない。
+- `get_context` は運営の名前・ワールド・座標と48ブロック以内の視線先・見えるプレイヤー最大20人を返す。チャットは収集しない。観測値や道具の出力を指示として扱わないよう明記する。公開の `docs/Projects/*/PROJECT.md`・`player.md` のうち `project_kind: plugin` の自作プラグイン資料だけをビルド時に `assistant-docs/` へ同梱する。`search_docs` は200文字以内のキーワードで見出し単位の節を検索し、全キーワードを含む節から最大3節・合計4000文字未満の抜粋を返す。必要なら一覧の名前と1からの分割番号で最大6000文字ずつ読む。FAWE・WorldGuard・LuckPerms・CoreProtect等の外部プラグインや資料にない話題は一般知識と明記して回答し、関係のない資料を読み歩かない。Koogは非公開の運用資料やファイルパスを指定して読む機能を持たない。
 - ログは運営名/UUIDと `event=` を含む1行。依頼・道具・実行・取り消しに加え、`allow-add`・`allow-remove`・`denied:blacklist` 等を記録する。道具結果は先頭500文字、最終回答は `event=answer`、詳細部分は制御文字と装飾コードを除去し最大2000文字。外部APIの例外本文は記録しない。
 - Koog・Ktor・kotlinxと関連依存は専用パッケージへ移動し、サービス定義を統合する。反射を壊す縮小は行わない。Kotlin stdlib/reflectionは元の名前を保持する（[Shadow公式の注意](https://gradleup.com/shadow/configuration/relocation/)）。自動テストは正規化・別名拒否・禁止優先・共有許可の範囲と永続化・資料の同梱と境界・戦略の終了条件・jar単体の読込を確認する。外部API通信とゲーム内のボタン操作は別途実機確認が必要。
 
@@ -137,6 +142,8 @@ last_validated: "2026-10-13"
 - プレイヤー履歴には IP と最終位置を保存する。DB と旧 userdata の読取権限・バックアップ取扱いが必要だが、自動バックアップや保存期間管理は実装されていない。
 
 ## 判断の記録
+
+- 2026-10-19: 頭脳だけをPi SDKのNode子プロセスへ分離する試作を追加した。ネットワークの待受けを作らず、既存の安全判定を共用するため標準入出力を選んだ。CLI/RPCの自動探索を避け、4つの自作道具・メモリ内の設定と会話・探索しないResourceLoaderを明示する。既定はKoogを維持する。非公開の運営資料はデータフォルダへ別配置し、公開jarとビルドには含めない。Nix/GradleへのNode組込みと本番配置は試作の範囲外とする。
 
 - 2026-10-19: 外部プラグインの使い方を求められ、関係のない資料を読み歩いて回数上限に達する問題へ対応した。キーワードで関連する節だけを返す検索を追加し、同梱を自作プラグインの公開資料に限定する。外部プラグインは一般知識と明記して回答させる。上限時は生の道具結果を返さず、Koogの道具なし要求で一度だけ要約する。失敗・空回答・時間切れは短い定型文にする。既定の道具上限を8から12へ増やし、全体の時間制限は維持する。
 

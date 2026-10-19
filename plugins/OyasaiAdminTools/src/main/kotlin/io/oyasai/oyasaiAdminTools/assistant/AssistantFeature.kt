@@ -1,6 +1,5 @@
 package io.oyasai.oyasaiAdminTools.assistant
 
-import ai.koog.agents.core.tools.ToolRegistry
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import java.time.Duration
 import java.util.UUID
@@ -31,7 +30,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   private val maxCalls = (settings?.getInt("max-tool-calls", 12) ?: 12).coerceIn(1, 32)
   private val timeout = (settings?.getLong("timeout-seconds", 45) ?: 45).coerceIn(1, 180) * 1000
   private val cooldown = (settings?.getLong("cooldown-seconds", 10) ?: 10).coerceIn(0, 3600) * 1000
-  private var agent: AssistantAgent? = null
+  private var agent: AssistantBackend? = null
 
   fun enable() {
     allows = AssistantAllowStore(plugin.db, rules)
@@ -46,13 +45,30 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     val key = System.getenv(settings?.getString("api-key-env") ?: "OYASAI_ASSISTANT_API_KEY")
     if (settings?.getBoolean("enabled", false) == true && !key.isNullOrBlank()) {
       agent =
-          AssistantAgent(
-              settings.getString("provider", "openrouter")!!.lowercase(java.util.Locale.ROOT),
-              settings.getString("model", "deepseek/deepseek-v4.1-flash")!!.also {
-                require(it.isNotBlank())
-              },
-              key,
-          )
+          when (settings.getString("backend", "koog")) {
+            "koog" ->
+                AssistantAgent(
+                    settings.getString("provider", "openrouter")!!.lowercase(java.util.Locale.ROOT),
+                    settings.getString("model", "deepseek/deepseek-v4.1-flash")!!.also {
+                      require(it.isNotBlank())
+                    },
+                    key,
+                )
+            "pi" ->
+                AssistantPi(
+                    settings.getString("pi.node", "node")!!,
+                    settings.getString("pi.script", "packages/oyasai-assistant-pi/dist/main.js")!!,
+                    settings.getString(
+                        "pi.docs",
+                        plugin.dataFolder.resolve("assistant-docs").absolutePath,
+                    )!!,
+                    settings.getString("pi.model", "deepseek/deepseek-v4.1-flash")!!,
+                    key,
+                    timeout,
+                    plugin.logger,
+                )
+            else -> error("Unknown assistant backend")
+          }
     }
     plugin.getCommand("assistant")!!.setExecutor(this)
     plugin.getCommand("assistant")!!.tabCompleter =
@@ -104,70 +120,76 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     val operator = "${sender.name}($id)"
     audit(operator, "request", request)
     sender.sendMessage("調べています。実行が必要なら確認ボタンを表示します。")
-    val progress = AssistantProgress { tool, result ->
-      audit(operator, "tool-result:$tool", result.take(500))
-    }
     val count = AtomicInteger()
+    val progress =
+        AssistantProgress(
+            onLocalTool = { tool, args -> checkBudget(count, operator, tool, args) },
+            onResult = { tool, result -> audit(operator, "tool-result:$tool", result.take(500)) },
+        )
     var proposed = false
     val job =
         scope.launch(start = CoroutineStart.LAZY) {
           try {
             withTimeout(timeout) {
-              val tools = ToolRegistry {
-                tool(
-                    AssistantTool("get_context", "運営の位置・視線の先のプレイヤー・近くのプレイヤーを調べる", emptyList()) {
-                      checkBudget(count, operator, "get_context", "")
-                      onMain { context(player(id)) }
+              val tools =
+                  buildMap<String, AssistantTool> {
+                    fun tool(value: AssistantTool) {
+                      put(value.name, value)
                     }
-                )
-                tool(
-                    AssistantTool(
-                        "run_command",
-                        "本人の権限でコマンドを依頼。未許可なら確認待ち。summaryは対象と作用の日本語要約",
-                        listOf("command", "summary"),
-                    ) { args ->
-                      checkBudget(count, operator, "run_command", args.toString())
-                      onMain {
-                        val result =
-                            runCommand(
-                                player(id),
-                                operator,
-                                args["command"].orEmpty(),
-                                args["summary"].orEmpty(),
-                                proposed,
-                            )
-                        if (pending.containsKey(id)) proposed = true
-                        result
-                      }
-                    }
-                )
-                tool(
-                    AssistantTool(
-                        "search_docs",
-                        "自作プラグインの公開資料を短いキーワードで検索し、関連する節だけ返す。外部プラグインの公式資料は含まない",
-                        listOf("query"),
-                    ) { args ->
-                      checkBudget(count, operator, "search_docs", args.toString())
-                      docs.search(args["query"].orEmpty())
-                    }
-                )
-                tool(
-                    AssistantTool("list_docs", "公開資料の名前一覧を取得する", emptyList()) {
-                      checkBudget(count, operator, "list_docs", "")
-                      docs.list()
-                    }
-                )
-                tool(
-                    AssistantTool(
-                        "read_doc",
-                        "公開資料を読む。nameはlist_docsの名前、partは1からの分割番号",
-                        listOf("name", "part"),
-                    ) { args ->
-                      checkBudget(count, operator, "read_doc", args.toString())
-                      docs.read(args["name"].orEmpty(), args["part"].orEmpty())
-                    }
-                )
-              }
+                    tool(
+                        AssistantTool("get_context", "運営の位置・視線の先のプレイヤー・近くのプレイヤーを調べる", emptyList()) {
+                          checkBudget(count, operator, "get_context", "")
+                          onMain { context(player(id)) }
+                        }
+                    )
+                    tool(
+                        AssistantTool(
+                            "run_command",
+                            "本人の権限でコマンドを依頼。未許可なら確認待ち。summaryは対象と作用の日本語要約",
+                            listOf("command", "summary"),
+                        ) { args ->
+                          checkBudget(count, operator, "run_command", args.toString())
+                          onMain {
+                            val result =
+                                runCommand(
+                                    player(id),
+                                    operator,
+                                    args["command"].orEmpty(),
+                                    args["summary"].orEmpty(),
+                                    proposed,
+                                )
+                            if (pending.containsKey(id)) proposed = true
+                            result
+                          }
+                        }
+                    )
+                    tool(
+                        AssistantTool(
+                            "search_docs",
+                            "自作プラグインの公開資料を短いキーワードで検索し、関連する節だけ返す。外部プラグインの公式資料は含まない",
+                            listOf("query"),
+                        ) { args ->
+                          checkBudget(count, operator, "search_docs", args.toString())
+                          docs.search(args["query"].orEmpty())
+                        }
+                    )
+                    tool(
+                        AssistantTool("list_docs", "公開資料の名前一覧を取得する", emptyList()) {
+                          checkBudget(count, operator, "list_docs", "")
+                          docs.list()
+                        }
+                    )
+                    tool(
+                        AssistantTool(
+                            "read_doc",
+                            "公開資料を読む。nameはlist_docsの名前、partは1からの分割番号",
+                            listOf("name", "part"),
+                        ) { args ->
+                          checkBudget(count, operator, "read_doc", args.toString())
+                          docs.read(args["name"].orEmpty(), args["part"].orEmpty())
+                        }
+                    )
+                  }
               val answer = backend.run(request, maxCalls, tools, progress)
               audit(operator, "answer", answer)
               onMain { player(id).sendMessage(Component.text(answer.take(2000))) }

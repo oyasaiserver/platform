@@ -1,0 +1,26 @@
+{
+  "name": "@oyasaiserver/assistant-pi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "test": "npm run build && node --test test/*.test.mjs"
+  },
+  "overrides": {
+    "basic-ftp": "6.2.3"
+  },
+  "dependencies": {
+    "@mariozechner/pi-ai": "0.73.1",
+    "@mariozechner/pi-coding-agent": "0.73.1",
+    "typebox": "1.1.24"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22.6"
+  }
+}

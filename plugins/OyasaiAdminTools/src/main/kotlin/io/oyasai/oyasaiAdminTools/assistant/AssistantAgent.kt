@@ -18,7 +18,8 @@ import ai.koog.serialization.typeToken
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.java.Java
 
-internal class AssistantAgent(provider: String, modelId: String, apiKey: String) : AutoCloseable {
+internal class AssistantAgent(provider: String, modelId: String, apiKey: String) :
+    AssistantBackend {
   private val http = HttpClient(Java)
   private val factory = KtorKoogHttpClient.Factory(http)
   private val client =
@@ -46,17 +47,21 @@ internal class AssistantAgent(provider: String, modelId: String, apiKey: String)
           capabilities = listOf(LLMCapability.Completion, LLMCapability.Tools),
       )
 
-  suspend fun run(
+  override suspend fun run(
       request: String,
       maxToolCalls: Int,
-      tools: ToolRegistry,
+      tools: Map<String, AssistantTool>,
       progress: AssistantProgress,
   ): String {
     val agent =
         AIAgent(
             promptExecutor = executor,
             llmModel = model,
-            toolRegistry = tools + ToolRegistry { tool(progress.finish) },
+            toolRegistry =
+                ToolRegistry {
+                  tools.values.forEach { tool(it) }
+                  tool(progress.finish)
+                },
             strategy = progress.strategy(maxToolCalls),
             maxIterations = maxToolCalls * 4 + 10,
             systemPrompt =

@@ -7,7 +7,14 @@ import ai.koog.prompt.message.Message
 import ai.koog.prompt.message.MessagePart
 import kotlin.coroutines.cancellation.CancellationException
 
-internal class AssistantProgress(private val onResult: (String, String) -> Unit = { _, _ -> }) {
+internal class AssistantProgress(
+    private val onLocalTool: (String, String) -> Unit = { _, _ -> },
+    private val onResult: (String, String) -> Unit = { _, _ -> },
+) {
+  fun localTool(name: String, args: String) = onLocalTool(name, args)
+
+  fun record(name: String, result: String) = onResult(name, result)
+
   private var answer: String? = null
   val finish =
       AssistantTool("finish", "調査・提案を終え、分かったことと確認待ちの内容を日本語で回答する", listOf("answer")) {
