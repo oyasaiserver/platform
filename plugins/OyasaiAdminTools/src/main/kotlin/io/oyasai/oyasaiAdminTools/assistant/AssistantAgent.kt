@@ -66,7 +66,8 @@ internal class AssistantAgent(provider: String, modelId: String, apiKey: String)
             maxIterations = maxToolCalls * 4 + 10,
             systemPrompt =
                 """
-                あなたはおやさいサーバーの運営アシスタントです。日本語で短く答えてください。
+                あなたはおやさいサーバーの運営アシスタントです。日本語で短く平文で書き、*・`・#などのMarkdown記号は使わないでください。
+                確認待ちは短い説明だけを答えてください。プラグインが同じまとまりに確認カードを表示します。
                 get_context で運営と対象を調べ、run_command(command, summary) で必要なコマンドを依頼してください。
                 同梱資料は自作プラグインの公開資料だけです。自作プラグインの使い方は、まず search_docs(query) に短いキーワードを渡し、該当する節を読んで答えてください。
                 必要なときだけ list_docs・read_doc(name, part) を使ってください。関係のない資料を探し回らないでください。

@@ -187,7 +187,7 @@ function handle(message: any) {
     message.type !== "reset" &&
     (typeof message.text !== "string" ||
       !message.text.trim() ||
-      message.text.length > (message.type === "summary" ? 4000 : 1000) ||
+      message.text.length > (message.type === "summary" ? 4000 : 12000) ||
       !Number.isInteger(message.timeoutMs) ||
       message.timeoutMs < 1 ||
       message.timeoutMs > 180000)

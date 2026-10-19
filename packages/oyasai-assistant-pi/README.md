@@ -14,7 +14,12 @@ OYASAI_ASSISTANT_API_KEY=... node dist/main.js /private/new-docs-directory deeps
 Supply the credential through your secret loader; do not put its value in shell
 history. The copy destination must be new, outside the public checkout (except
 its ignored `build/` directory). Copied documents are runtime data, never jar
-resources. Restart the child to refresh its document snapshot.
+resources. Restart the child to refresh its project-document snapshot.
+`copy-docs.mjs` also places `docs/AGENTS.md` and `docs/INDEX.md` at the runtime
+docs root. Edit those deployed files to change role, writing style, workflow and
+the quick index without rebuilding or restarting. They are read on each request,
+including retained sessions; no other AGENTS files are searched. Safety rules
+remain in code.
 
 The plugin config selects `assistant.backend: pi` and `assistant.pi` fields
 `node`, `script`, `docs`, `model`. Use absolute deployed paths. Default backend

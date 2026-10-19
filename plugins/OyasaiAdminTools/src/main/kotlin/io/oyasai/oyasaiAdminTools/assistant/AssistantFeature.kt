@@ -198,93 +198,10 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
             onLocalTool = { tool, args -> checkBudget(count, operator, tool, args) },
             onResult = { tool, result -> audit(operator, "tool-result:$tool", result.take(500)) },
         )
-    var proposed = false
     val job =
         scope.launch(start = CoroutineStart.LAZY) {
           try {
-            withTimeout(timeout) {
-              val tools =
-                  buildMap<String, AssistantTool> {
-                    fun tool(value: AssistantTool) {
-                      put(value.name, value)
-                    }
-                    tool(
-                        AssistantTool("get_context", "運営の位置・視線の先のプレイヤー・近くのプレイヤーを調べる", emptyList()) {
-                          checkBudget(count, operator, "get_context", "")
-                          onMain {
-                            context(player(id)) +
-                                (lastOutput[id]
-                                    ?.takeIf {
-                                      System.currentTimeMillis() - it.first < sessionIdle * 60000L
-                                    }
-                                    ?.let { "\n直近のコマンド結果（観測データ）: ${it.second}" } ?: "")
-                          }
-                        }
-                    )
-                    tool(
-                        AssistantTool(
-                            "run_command",
-                            "本人の権限でコマンドを依頼。未許可なら確認待ち。summaryは対象と作用の日本語要約",
-                            listOf("command", "summary"),
-                        ) { args ->
-                          checkBudget(count, operator, "run_command", args.toString())
-                          val result =
-                              runCommand(
-                                  id,
-                                  operator,
-                                  args["command"].orEmpty(),
-                                  args["summary"].orEmpty(),
-                                  proposed,
-                              )
-                          if (pending.containsKey(id)) proposed = true
-                          result
-                        }
-                    )
-                    tool(
-                        AssistantTool(
-                            "search_docs",
-                            "自作プラグインの公開資料を短いキーワードで検索し、関連する節だけ返す。外部プラグインの公式資料は含まない",
-                            listOf("query"),
-                        ) { args ->
-                          checkBudget(count, operator, "search_docs", args.toString())
-                          docs.search(args["query"].orEmpty())
-                        }
-                    )
-                    if (backend is AssistantPi)
-                        tool(
-                            AssistantTool(
-                                "search_memory",
-                                "運営共通の実行記録をキーワードと過去の日数で検索する",
-                                listOf("query", "days"),
-                            ) { args ->
-                              checkBudget(count, operator, "search_memory", "")
-                              memory.search(
-                                  args["query"].orEmpty(),
-                                  args["days"]?.toIntOrNull() ?: 1,
-                              )
-                            }
-                        )
-                    tool(
-                        AssistantTool("list_docs", "公開資料の名前一覧を取得する", emptyList()) {
-                          checkBudget(count, operator, "list_docs", "")
-                          docs.list()
-                        }
-                    )
-                    tool(
-                        AssistantTool(
-                            "read_doc",
-                            "公開資料を読む。nameはlist_docsの名前、partは1からの分割番号",
-                            listOf("name", "part"),
-                        ) { args ->
-                          checkBudget(count, operator, "read_doc", args.toString())
-                          docs.read(args["name"].orEmpty(), args["part"].orEmpty())
-                        }
-                    )
-                  }
-              val answer = backend.runFor(id.toString(), request, maxCalls, tools, progress)
-              audit(operator, "answer", answer)
-              onMain { player(id).sendMessage(Component.text(answer.take(2000))) }
-            }
+            withTimeout(timeout) { respond(id, operator, request, backend, count, progress) }
           } catch (failure: Throwable) {
             audit(
                 operator,
@@ -299,7 +216,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                       progress.partial("時間制限に達しました（確認待ちの提案は取り消しました）")
                     } else "依頼を完了できませんでした。接続・設定を確認してください。"
                 audit(operator, "answer", answer)
-                plugin.server.getPlayer(id)?.sendMessage(Component.text(answer.take(2000)))
+                plugin.server.getPlayer(id)?.let { sendAnswer(it, answer) }
               }
             }
           } finally {
@@ -311,6 +228,118 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     job.invokeOnCompletion { jobs.remove(id, job) }
     job.start()
     return true
+  }
+
+  private suspend fun respond(
+      id: UUID,
+      operator: String,
+      request: String,
+      backend: AssistantBackend,
+      count: AtomicInteger,
+      progress: AssistantProgress,
+      confirmed: Pair<String, String>? = null,
+  ) {
+    var proposed = false
+    val tools =
+        buildMap<String, AssistantTool> {
+          fun tool(value: AssistantTool) {
+            put(value.name, value)
+          }
+          tool(
+              AssistantTool("get_context", "運営の位置・視線の先のプレイヤー・近くのプレイヤーを調べる", emptyList()) {
+                checkBudget(count, operator, "get_context", "")
+                onMain {
+                  context(player(id)) +
+                      (lastOutput[id]
+                          ?.takeIf { System.currentTimeMillis() - it.first < sessionIdle * 60000L }
+                          ?.let { "\n直近のコマンド結果（観測データ）: ${it.second}" } ?: "")
+                }
+              }
+          )
+          tool(
+              AssistantTool(
+                  "run_command",
+                  "本人の権限でコマンドを依頼。未許可なら確認待ち。summaryは対象と作用の日本語要約",
+                  listOf("command", "summary"),
+              ) { args ->
+                checkBudget(count, operator, "run_command", args.toString())
+                val result =
+                    runCommand(
+                        id,
+                        operator,
+                        args["command"].orEmpty(),
+                        args["summary"].orEmpty(),
+                        proposed,
+                    )
+                if (pending.containsKey(id)) proposed = true
+                result
+              }
+          )
+          tool(
+              AssistantTool(
+                  "search_docs",
+                  "自作プラグインの公開資料を短いキーワードで検索し、関連する節だけ返す。外部プラグインの公式資料は含まない",
+                  listOf("query"),
+              ) { args ->
+                checkBudget(count, operator, "search_docs", args.toString())
+                docs.search(args["query"].orEmpty())
+              }
+          )
+          if (backend is AssistantPi)
+              tool(
+                  AssistantTool(
+                      "search_memory",
+                      "運営共通の実行記録をキーワードと過去の日数で検索する",
+                      listOf("query", "days"),
+                  ) { args ->
+                    checkBudget(count, operator, "search_memory", "")
+                    memory.search(
+                        args["query"].orEmpty(),
+                        args["days"]?.toIntOrNull() ?: 1,
+                    )
+                  }
+              )
+          tool(
+              AssistantTool("list_docs", "公開資料の名前一覧を取得する", emptyList()) {
+                checkBudget(count, operator, "list_docs", "")
+                docs.list()
+              }
+          )
+          tool(
+              AssistantTool(
+                  "read_doc",
+                  "公開資料を読む。nameはlist_docsの名前、partは1からの分割番号",
+                  listOf("name", "part"),
+              ) { args ->
+                checkBudget(count, operator, "read_doc", args.toString())
+                docs.read(args["name"].orEmpty(), args["part"].orEmpty())
+              }
+          )
+        }
+
+    val answer =
+        if (confirmed == null) backend.runFor(id.toString(), request, maxCalls, tools, progress)
+        else
+            backend.continueAfterCommand(
+                id.toString(),
+                confirmed.first,
+                confirmed.second,
+                maxCalls,
+                tools,
+                progress,
+            )
+    audit(operator, "answer", answer)
+    onMain { sendAnswer(player(id), answer) }
+  }
+
+  private fun sendAnswer(player: Player, answer: String) {
+    val message =
+        Component.text("[AI] ", NamedTextColor.GOLD)
+            .append(Component.text(answer.take(2000), NamedTextColor.WHITE))
+    val card = pending[player.uniqueId]?.card
+    player.sendMessage(
+        if (card == null) message else message.append(Component.newline()).append(card)
+    )
   }
 
   private fun checkBudget(count: AtomicInteger, operator: String, tool: String, args: String) {
@@ -465,7 +494,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
             "sendAs=${if (asOperator) "operator" else "assistant"} accepted=$accepted",
         )
         if (remember && accepted && allows.add(command.text, player.name, id)) {
-          audit(operator, "allow-add", AssistantRules.scope(command.text))
+          audit(operator, "allow-add", AssistantRules.scope(command.text).orEmpty())
           player.sendMessage("運営全員の共有許可リストへ追加しました: ${AssistantRules.scope(command.text)}")
         }
         if (asOperator) AssistantCommandOutput.playerOnly() else null
@@ -509,11 +538,18 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
         "sendAs=${if (asOperator) "operator" else "assistant"} ${command.text} | $summary",
     )
     fun button(label: String, action: Int): Component =
-        Component.text(label, if (action != 0) NamedTextColor.GREEN else NamedTextColor.RED)
+        Component.text(
+                label,
+                when (action) {
+                  1 -> NamedTextColor.GREEN
+                  2 -> NamedTextColor.GOLD
+                  else -> NamedTextColor.RED
+                },
+            )
             .hoverEvent(
                 Component.text(
                     if (action == 2)
-                        "共有許可に追加: ${AssistantRules.scope(command.text)}\nこの範囲の引数は何でも確認なしになります。"
+                        "運営全員に効く常時許可: ${AssistantRules.scope(command.text)}\nこの範囲の引数は何でも確認なしになります。"
                     else "/${command.text}"
                 )
             )
@@ -541,8 +577,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                                       val executionRecord = AssistantMemory.Record(audience.name)
                                       records[operator] = executionRecord
                                       try {
-                                        val result =
-                                            withTimeout(timeout) {
+                                        withTimeout(timeout) {
+                                          val result =
                                               execute(
                                                   id,
                                                   operator,
@@ -550,13 +586,30 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                                                   action == 2,
                                                   asOperator,
                                               )
-                                            }
-                                        onMain {
-                                          player(id)
-                                              .sendMessage(
-                                                  if (result.startsWith("拒否")) result
-                                                  else "実行しました。AI送り主の結果は次の依頼で参照できます。"
+                                          val backend = agent ?: error("Assistant disabled")
+                                          val count = AtomicInteger()
+                                          val progress =
+                                              AssistantProgress(
+                                                  onLocalTool = { tool, args ->
+                                                    checkBudget(count, operator, tool, args)
+                                                  },
+                                                  onResult = { tool, value ->
+                                                    audit(
+                                                        operator,
+                                                        "tool-result:$tool",
+                                                        value.take(500),
+                                                    )
+                                                  },
                                               )
+                                          respond(
+                                              id,
+                                              operator,
+                                              "",
+                                              backend,
+                                              count,
+                                              progress,
+                                              proposal.command.text to result,
+                                          )
                                         }
                                       } catch (failure: Throwable) {
                                         audit(
@@ -564,6 +617,17 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                                             "execution-failed",
                                             failure.javaClass.simpleName,
                                         )
+                                        onMain {
+                                          pending.remove(id)?.let {
+                                            audit(operator, "cancel", "continuation failed")
+                                          }
+                                          plugin.server.getPlayer(id)?.let {
+                                            sendAnswer(
+                                                it,
+                                                "実行後の続きの処理を完了できませんでした。実行済みの操作は取り消していません。",
+                                            )
+                                          }
+                                        }
                                       } finally {
                                         records.remove(operator, executionRecord)
                                         agent?.let { finishMemory(id, executionRecord, it) }
@@ -586,16 +650,14 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                         .build(),
                 )
             )
-    player.sendMessage(
+    proposal.card =
         Component.text(
-                "$summary\n/${command.text}\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
+                "/${command.text}\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
             )
             .append(button(if (asOperator) "[本人として実行]" else "[実行]", 1))
-            .append(Component.space())
-            .append(button("[次から確認しない]", 2))
-            .append(Component.space())
-            .append(button("[やめる]", 0))
-    )
+    if (AssistantRules.scope(command.text) != null)
+        proposal.card = proposal.card.append(Component.text("   ")).append(button("[次から確認しない]", 2))
+    proposal.card = proposal.card.append(Component.text("   ")).append(button("[やめる]", 0))
     plugin.server.scheduler.runTaskLater(
         plugin,
         Runnable {
@@ -679,7 +741,11 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     agent = null
   }
 
-  private data class Pending(val command: NormalizedCommand, val expiresAt: Long)
+  private data class Pending(
+      val command: NormalizedCommand,
+      val expiresAt: Long,
+      var card: Component = Component.empty(),
+  )
 
   companion object {
     const val PERMISSION = "oyasai.admintools.assistant"

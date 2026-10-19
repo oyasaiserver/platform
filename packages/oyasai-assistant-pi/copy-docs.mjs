@@ -44,4 +44,12 @@ for (const [root, names] of [
     }
   }
 }
+for (const name of ["AGENTS.md", "INDEX.md"]) {
+  copyFileSync(
+    join(import.meta.dirname, "docs", name),
+    join(destination, name),
+  );
+  chmodSync(join(destination, name), 0o600);
+  count++;
+}
 console.log(`Copied ${count} documents into a private data directory.`);

@@ -76,7 +76,7 @@ last_validated: "2026-10-13"
 - 判定は必ず正規化→固定の禁止項目と設定の追加禁止項目→共有許可リスト→未許可なら確認の順。旧 `allowed-commands`・`read-only-commands` は無視し、起動時に一度警告する。追加禁止の正規表現が不正なら機能の初期化に失敗させる。固定の禁止項目は設定で外せない。
 - 正規化は先頭の `/` を1つ除き、小文字化・空白の集約を行う。タブは空白へ集約し、それ以外の制御文字・改行・`§`・256文字超を拒否する。CommandMapで実際に解決したCommandの所有プラグインと `getName()` を使い、`<所有者>:<名前> <引数>` とする。バニラ・本体は登録済み名前空間から所有者を求め、複数なら `minecraft → bukkit → paper → spigot → purpur` の順で選ぶ。それ以外の名前空間同士のあいまいさは拒否する。未知・正規名の登録と一致しないコマンド、`FormattedCommandAlias` を拒否する。引数も小文字化されるため、大文字小文字を区別する値には注意する。
 - PaperのBrigadierラッパーは取得ごとに別オブジェクトとなり、名前空間付きのルートも複製されるため、公開フィールド `VanillaCommandWrapper.vanillaCommand` から登録ノードを確認する。バニラのAPIミラー `ShadowBrigNode` は公開の `getHandle()` で実体を参照し、引数一覧を提供しない不透明なノードは同等とみなさない。実行処理・権限条件・引数ノードが同じものだけを同一のコマンドとして扱い、別名のメタデータから正規名を求める。ルートのredirect/forkは拒否する。確認後の再照合には正規名の登録ノードの同一性を使い、ラッパーの作り直しと登録の差し替えを区別する。フィールドが取得できなければ従来の参照一致へ戻り、不明な登録は拒否する。本体系の禁止パターンは上記5名前空間すべてで適用する。
-- 許可の範囲はコマンド名と、最初の引数が英字だけの語ならその語まで。それ以降の引数は何でも許可する。語の境界で照合するため `lookup` の許可で `lookupx` は動かない。運営全員で共有し、AdminDbの `assistant_allow` に固定番号・範囲・追加者名/UUID・時刻を保存する。初回に `dynamicprofile:syokaku iscandidate`・`getrank`・`seerequirements` を登録する。削除した初期値を再起動で復活させない。`seeplayerinfo` は初期値に含めない。
+- 許可の範囲はコマンド名と、最初の引数が英字だけの語ならその語まで。引数がないかその条件を満たさないときは常時許可を登録せず、ボタンも表示しない。それ以降の引数は何でも許可する。語の境界で照合するため `lookup` の許可で `lookupx` は動かない。運営全員で共有し、AdminDbの `assistant_allow` に固定番号・範囲・追加者名/UUID・時刻を保存する。初回に `dynamicprofile:syokaku iscandidate`・`getrank`・`seerequirements` を登録する。削除した初期値を再起動で復活させない。`seeplayerinfo` は初期値に含めない。
 - 固定禁止の正本は `assistant/AssistantRules.kt` の `CORE_BLACKLIST`。停止・reload/restart、照会以外のPlugManX、op/deop、限定した照会以外のLuckPerms、GOOD特例の昇降格、execute/sudo/function/schedule/return、CraftScript/マクロ、SocialSpy、`@a`/`@e`/`@r`、token addall、whitelist on/off/reload、save-off、CoreProtect purge/対象者指定のないrollback・restore、FAWEのチャンク/スキマティック削除、assistant自身を拒否する。CoreProtectの独立した `co`・`core`・`coreprotect` 登録、rollback/restoreの短縮形、FAWE削除の `d` も含める。
 - 許可済み・確認後とも、通常は `Assistant(<運営名>)` という独自CommandSenderをメインスレッドでdispatchする。権限はオンラインの依頼者から毎回借り、isOpはfalse、コンソール/Playerではなく権限Attachmentも持たない。`sender-permissions` は空なら本人と同じ、設定すると列挙した権限だけに絞る。出力はAIへ返し、本人画面へは転送しない。`sender-wait-ms`（既定1500）・`sender-idle-ms`（300）で非同期出力を待つ。収集32Ki文字・AI返却8000文字まで。
 - `player-commands`（既定tp/teleport/gamemode/gm/gms/gmc/gmsp/gma/fly）は本人として実行する。それ以外のPlayer専用エラーはAIへ返し、別の「本人として実行」確認を出す。自動で再実行しない。全経路で実行直前の正規化・禁止・本人権限・登録同一性を再確認する。確認後の出力は次のget_contextでも参照できる。
@@ -150,6 +150,8 @@ last_validated: "2026-10-13"
 - プレイヤー履歴には IP と最終位置を保存する。DB と旧 userdata の読取権限・バックアップ取扱いが必要だが、自動バックアップや保存期間管理は実装されていない。
 
 ## 判断の記録
+
+- 2026-10-19: 確認後は同じ運営のPiセッションへ実行結果を観測データとして渡し、AIの続きを表示する。説明と確認カードは1つにまとめ、実行は緑・運営全員の常時許可は金で分ける。最初の引数が英字のサブコマンドと見なせない操作は常時許可ボタンを出さず、コマンド全体へ範囲を広げない。回答は指示文で短い平文とし、固定整形はしない。Piの役割・書き方・作業手順は資料直下のAGENTS.mdとINDEX.mdへ分離して毎依頼読み直し、安全の約束と探索しないResourceLoaderはコードに残す。追加の作業票・版照合・予防的な制御は設けない。
 
 - 2026-10-19: コンテナを起動時から待機させ、作業ファイルだけを毎回消す方針へ変更した。短い会話はUUID別のメモリ内セッション、長い記録は運営共通の追記Markdownに分ける。追加の要約APIを使うcompactionは選ばず、上限で古いセッションを作り直す。記録要約には監査から抽出した安全な事実だけを渡し、生のチャットやコマンド出力を永続化しない。曖昧な実行受付から成功を捏造しないよう、事実欄をAI要約と別に添える。
 

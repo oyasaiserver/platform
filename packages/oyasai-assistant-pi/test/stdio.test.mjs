@@ -26,7 +26,7 @@ test("limited pi stdio retains and resets only the chosen actor without network"
   const requests = [
     ["a", "pmzt を覚えて", "pmzt"],
     ["b", "誰でしたか", "unknown"],
-    ["a", "その人は", "pmzt"],
+    ["a", "確認後の実行結果（観測データ）: " + "結果".repeat(4000), "pmzt"],
     ["a", "reset", null],
     ["a", "誰でしたか", "unknown"],
   ];

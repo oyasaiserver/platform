@@ -69,13 +69,14 @@ internal class AssistantAllowStore(private val db: AdminDb, private val rules: A
 
   fun add(command: String, name: String, uuid: UUID): Boolean {
     require(!rules.isBlacklisted(command)) { "Blacklisted commands cannot be remembered" }
+    val scope = AssistantRules.scope(command) ?: return false
     return db.writeFeature { connection ->
       connection
           .prepareStatement(
               "INSERT OR IGNORE INTO assistant_allow(scope,added_by,added_uuid,added_at) VALUES (?,?,?,?)"
           )
           .use {
-            it.setString(1, AssistantRules.scope(command))
+            it.setString(1, scope)
             it.setString(2, name)
             it.setString(3, uuid.toString())
             it.setLong(4, System.currentTimeMillis())

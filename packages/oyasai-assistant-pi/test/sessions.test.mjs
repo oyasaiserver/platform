@@ -4,7 +4,7 @@ import { Sessions } from "../dist/sessions.js";
 import { createBrain, runBrain } from "../dist/brain.js";
 import { relayStream } from "../dist/relay.js";
 import { Docs } from "../dist/docs.js";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -40,12 +40,17 @@ test("retained Pi sessions keep prior actor context, refresh tool closures and r
   const root = mkdtempSync(join(tmpdir(), "pi-memory-"));
   const sessions = new Sessions();
   const traces = [];
+  const docs = new Docs(root);
+  let policy = "";
   try {
     for (const [actor, text] of [
       ["a", "pmzt の条件"],
       ["b", "別の人"],
       ["a", "その人を昇格して"],
     ]) {
+      policy = `STYLE_${actor}_${text}`;
+      writeFileSync(join(root, "AGENTS.md"), policy);
+      writeFileSync(join(root, "INDEX.md"), "CURRENT_INDEX");
       let round = 0;
       const result = await runBrain(
         text,
@@ -53,7 +58,7 @@ test("retained Pi sessions keep prior actor context, refresh tool closures and r
         5000,
         "fake",
         "",
-        new Docs(root),
+        docs,
         async () => "条件は未確認",
         (name) => traces.push(actor + name),
         (...args) =>
@@ -62,6 +67,8 @@ test("retained Pi sessions keep prior actor context, refresh tool closures and r
               ...args,
               relayStream(async (body) => {
                 assert.match(body.messages[0].content, /今回も.*観測データ/);
+                assert.ok(body.messages[0].content.includes(policy));
+                assert.ok(body.messages[0].content.includes("CURRENT_INDEX"));
                 const history = JSON.stringify(body.messages);
                 if (actor === "b") assert.ok(!history.includes("pmzt"));
                 if (

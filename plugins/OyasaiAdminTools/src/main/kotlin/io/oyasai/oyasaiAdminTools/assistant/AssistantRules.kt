@@ -68,11 +68,10 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
             )
             .map(::Regex)
 
-    fun scope(command: String): String {
+    fun scope(command: String): String? {
       val words = command.split(' ')
-      return words
-          .take(if (words.getOrNull(1)?.matches(Regex("[a-z]+")) == true) 2 else 1)
-          .joinToString(" ")
+      if (words.getOrNull(1)?.matches(Regex("[a-z]+")) != true) return null
+      return words.take(2).joinToString(" ")
     }
 
     fun normalize(text: String, commands: CommandMap): NormalizedCommand? {

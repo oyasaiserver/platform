@@ -220,8 +220,9 @@ class AssistantRulesTest {
         )
         .forEach { assertFalse(rules.isBlacklisted(it), it) }
     assertEquals("coreprotect:co lookup", AssistantRules.scope("coreprotect:co lookup u:steve"))
-    assertEquals("minecraft:list", AssistantRules.scope("minecraft:list"))
-    assertEquals("minecraft:tp", AssistantRules.scope("minecraft:tp 1 2 3"))
+    assertNull(AssistantRules.scope("minecraft:list"))
+    assertNull(AssistantRules.scope("minecraft:tp 1 2 3"))
+    assertNull(AssistantRules.scope("custom:cbmenu demo_car size 2"))
     assertTrue(
         rules.isAllowed("coreprotect:co lookup u:anyone r:100", listOf("coreprotect:co lookup"))
     )

@@ -13,9 +13,11 @@ import { join, relative, sep } from "node:path";
 // Snapshot only the three supported Markdown files; never offer an arbitrary filesystem tool.
 export class Docs {
   private files = new Map<string, string>();
+  private readonly root: string;
 
   constructor(directory: string) {
     const root = realpathSync(directory);
+    this.root = root;
     let total = 0;
     for (const project of readdirSync(root, { withFileTypes: true })) {
       if (!project.isDirectory() || !/^[a-z0-9-]+$/.test(project.name))
@@ -50,6 +52,19 @@ export class Docs {
         }
       }
     }
+  }
+
+  instructions(): string {
+    return ["AGENTS.md", "INDEX.md"]
+      .map((name) => {
+        try {
+          return `${name}:\n${readFileSync(join(this.root, name), "utf8")}`;
+        } catch (error: any) {
+          if (error.code === "ENOENT") return "";
+          throw error;
+        }
+      })
+      .join("\n");
   }
 
   search(query: string): string {
