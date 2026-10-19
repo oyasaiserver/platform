@@ -44,6 +44,18 @@ class DiceChargeManager(
 
     /** 慣性追跡の指数移動平均 最新値の重み */
     const val EMA_CURRENT_WEIGHT = 0.75
+
+    /** Java版の最大チャージ超過時の強制発射猶予tick */
+    const val OVERCHARGE_GRACE_TICKS = 4L
+
+    /** ダッシュ時の最低付与速度 */
+    const val SPRINT_MIN_SPEED = 0.28
+
+    /** アクションバーのゲージ分割数 */
+    const val ACTION_BAR_TOTAL_SEGMENTS = 10
+
+    /** ジャンプ上昇と判定するY軸速度閾値 */
+    const val JUMP_THRESHOLD_Y = 0.05
   }
 
   private class ChargeSession(
@@ -108,7 +120,7 @@ class DiceChargeManager(
       // チャージ開始（現在のプレイヤー速度も初期値として取得）
       val initialVelocity = player.velocity.clone()
       if (player.isSprinting) {
-        val sprintVector = player.location.direction.setY(0).normalize().multiply(0.28)
+        val sprintVector = player.location.direction.setY(0).normalize().multiply(SPRINT_MIN_SPEED)
         initialVelocity.add(sprintVector)
       }
       sessions[player.uniqueId] =
@@ -204,7 +216,8 @@ class DiceChargeManager(
             chargeTicks >= MAX_CHARGE_TICKS
           } else {
             // Java版: 長押しを離した（一定tick以上パケット途絶）または最大チャージ到達
-            idleTicks >= JAVA_RELEASE_IDLE_TICKS || chargeTicks >= (MAX_CHARGE_TICKS + 4)
+            idleTicks >= JAVA_RELEASE_IDLE_TICKS ||
+                chargeTicks >= (MAX_CHARGE_TICKS + OVERCHARGE_GRACE_TICKS)
           }
 
       if (shouldRelease) {
@@ -221,11 +234,11 @@ class DiceChargeManager(
     val inertia = trackedVelocity.clone()
     // ダッシュ中なのに追跡速度が小さすぎる場合、ダッシュ方向の最低速度を補正
     if (player.isSprinting && inertia.lengthSquared() < 0.04) {
-      val sprintDir = player.location.direction.setY(0).normalize().multiply(0.28)
+      val sprintDir = player.location.direction.setY(0).normalize().multiply(SPRINT_MIN_SPEED)
       inertia.add(sprintDir)
     }
     // ジャンプ中の上昇速度を加味
-    if (player.velocity.y > 0.05) {
+    if (player.velocity.y > JUMP_THRESHOLD_Y) {
       inertia.setY(player.velocity.y)
     }
     return inertia
@@ -258,7 +271,7 @@ class DiceChargeManager(
   }
 
   private fun displayActionBar(player: Player, ratio: Double, isBedrock: Boolean) {
-    val totalBars = 10
+    val totalBars = ACTION_BAR_TOTAL_SEGMENTS
     val filledBars = (ratio * totalBars).toInt()
     val percent = (ratio * 100).toInt()
 

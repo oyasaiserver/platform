@@ -3,8 +3,6 @@ package icu.oyasai.games.dice
 import java.util.UUID
 import kotlin.random.Random
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
 import org.bukkit.Material
@@ -435,8 +433,8 @@ class DiceInstance(
     val world = currentLocation.world ?: return
     val holoLoc = currentLocation.clone().add(0.0, HOLO_Y_OFFSET, 0.0)
 
-    val textJava = formatTextJava()
-    val textBedrock = formatTextBedrock()
+    val textJava = DiceDisplayFormatter.formatSingleDiceJava(mode, resultEye)
+    val textBedrock = DiceDisplayFormatter.formatSingleDiceBedrock(mode, resultEye)
 
     val displayJava =
         world.spawn(holoLoc, TextDisplay::class.java) { entity ->
@@ -496,160 +494,6 @@ class DiceInstance(
               AxisAngle4f(0f, 0f, 1f, 0f),
           )
     }
-  }
-
-  private fun formatTextJava(): Component {
-    return when (mode.maxEyes) {
-      2 -> formatD2TextJava(resultEye)
-      6 -> formatD6TextJava(resultEye)
-      20 -> formatD20TextJava(resultEye)
-      else -> formatPolyhedralTextJava(mode, resultEye)
-    }
-  }
-
-  private fun formatTextBedrock(): Component {
-    return when (mode.maxEyes) {
-      2 -> formatD2TextBedrock(resultEye)
-      6 -> formatD6TextBedrock(resultEye)
-      20 -> formatD20TextBedrock(resultEye)
-      else -> formatPolyhedralTextBedrock(mode, resultEye)
-    }
-  }
-
-  // --- Java版フォーマット（リソースパックのサイコロ🎲やコイン🪙を復元。Javaで豆腐になる⚀〜⚅は使用しない） ---
-  private fun formatD6TextJava(eye: Int): Component {
-    val color =
-        when (eye) {
-          1 -> NamedTextColor.RED
-          6 -> NamedTextColor.GOLD
-          else -> NamedTextColor.YELLOW
-        }
-
-    return Component.text("🎲 ", NamedTextColor.GOLD)
-        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text("$eye", color, TextDecoration.BOLD))
-        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text(" 🎲", NamedTextColor.GOLD))
-  }
-
-  private fun formatD2TextJava(eye: Int): Component {
-    val isHead = eye == 1
-    val label = if (isHead) "表 (1)" else "裏 (2)"
-    val color = if (isHead) NamedTextColor.GOLD else NamedTextColor.WHITE
-
-    return Component.text("🪙 ", NamedTextColor.GOLD)
-        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text("コイン: ", NamedTextColor.GRAY))
-        .append(Component.text(label, color, TextDecoration.BOLD))
-        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text(" 🪙", NamedTextColor.GOLD))
-  }
-
-  private fun formatD20TextJava(eye: Int): Component {
-    return when (eye) {
-      20 -> {
-        Component.text("⭐ ", NamedTextColor.GOLD)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text("D20: 20 (Critical!)", NamedTextColor.GOLD, TextDecoration.BOLD))
-            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" ⭐", NamedTextColor.GOLD))
-      }
-      1 -> {
-        Component.text("💀 ", NamedTextColor.RED)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text("D20: 1 (Fumble)", NamedTextColor.DARK_RED, TextDecoration.BOLD))
-            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" 💀", NamedTextColor.RED))
-      }
-      else -> {
-        Component.text("🎲 ", NamedTextColor.AQUA)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text("D20: ", NamedTextColor.GRAY))
-            .append(Component.text("$eye", NamedTextColor.YELLOW, TextDecoration.BOLD))
-            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" 🎲", NamedTextColor.AQUA))
-      }
-    }
-  }
-
-  private fun formatPolyhedralTextJava(mode: DiceMode, eye: Int): Component {
-    val tag = "D${mode.maxEyes}"
-    return Component.text("🎲 ", NamedTextColor.AQUA)
-        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text("$tag: ", NamedTextColor.GRAY))
-        .append(Component.text("$eye", NamedTextColor.YELLOW, TextDecoration.BOLD))
-        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text(" 🎲", NamedTextColor.AQUA))
-  }
-
-  // --- 統合版（Bedrock）フォーマット（🎲などの豆腐化絵文字を避け、Bedrock標準で描画可能な⚀〜⚅等を使用） ---
-  private fun formatD6TextBedrock(eye: Int): Component {
-    val (symbol, color) =
-        when (eye) {
-          1 -> "⚀" to NamedTextColor.RED
-          2 -> "⚁" to NamedTextColor.YELLOW
-          3 -> "⚂" to NamedTextColor.YELLOW
-          4 -> "⚃" to NamedTextColor.YELLOW
-          5 -> "⚄" to NamedTextColor.YELLOW
-          6 -> "⚅" to NamedTextColor.GOLD
-          else -> "⚀" to NamedTextColor.WHITE
-        }
-
-    return Component.text("$symbol ", NamedTextColor.GOLD)
-        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text("$eye", color, TextDecoration.BOLD))
-        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text(" $symbol", NamedTextColor.GOLD))
-  }
-
-  private fun formatD2TextBedrock(eye: Int): Component {
-    val isHead = eye == 1
-    val label = if (isHead) "表 (1)" else "裏 (2)"
-    val color = if (isHead) NamedTextColor.GOLD else NamedTextColor.WHITE
-
-    return Component.text("◆ ", NamedTextColor.GOLD)
-        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text("コイン: ", NamedTextColor.GRAY))
-        .append(Component.text(label, color, TextDecoration.BOLD))
-        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text(" ◆", NamedTextColor.GOLD))
-  }
-
-  private fun formatD20TextBedrock(eye: Int): Component {
-    return when (eye) {
-      20 -> {
-        Component.text("★ ", NamedTextColor.GOLD)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text("D20: 20 (Critical!)", NamedTextColor.GOLD, TextDecoration.BOLD))
-            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" ★", NamedTextColor.GOLD))
-      }
-      1 -> {
-        Component.text("✖ ", NamedTextColor.RED)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text("D20: 1 (Fumble)", NamedTextColor.DARK_RED, TextDecoration.BOLD))
-            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" ✖", NamedTextColor.RED))
-      }
-      else -> {
-        Component.text("⚅ ", NamedTextColor.AQUA)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text("D20: ", NamedTextColor.GRAY))
-            .append(Component.text("$eye", NamedTextColor.YELLOW, TextDecoration.BOLD))
-            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" ⚅", NamedTextColor.AQUA))
-      }
-    }
-  }
-
-  private fun formatPolyhedralTextBedrock(mode: DiceMode, eye: Int): Component {
-    val tag = "D${mode.maxEyes}"
-    return Component.text("⚅ ", NamedTextColor.AQUA)
-        .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text("$tag: ", NamedTextColor.GRAY))
-        .append(Component.text("$eye", NamedTextColor.YELLOW, TextDecoration.BOLD))
-        .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-        .append(Component.text(" ⚅", NamedTextColor.AQUA))
   }
 
   fun matchesEntity(entityId: Int): Boolean {
