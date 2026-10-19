@@ -6,6 +6,91 @@ import org.bukkit.command.*
 import org.bukkit.plugin.Plugin
 
 class AssistantRulesTest {
+  private fun serverCommand(name: String) =
+      object : Command(name) {
+        override fun execute(sender: CommandSender, label: String, args: Array<out String>) = true
+      }
+
+  private fun commands(known: () -> Map<String, Command>): CommandMap =
+      Proxy.newProxyInstance(CommandMap::class.java.classLoader, arrayOf(CommandMap::class.java)) {
+          _,
+          method,
+          args ->
+        when (method.name) {
+          "getCommand" -> known()[args!![0]]
+          "getKnownCommands" -> known()
+          else -> null
+        }
+      } as CommandMap
+
+  @Test
+  fun serverNamespacesHaveStablePriorityButOtherAmbiguityIsRejected() {
+    val owners = listOf("minecraft", "bukkit", "paper", "spigot", "purpur")
+    for (name in listOf("plugins", "version", "tps", "mspt")) {
+      val command = serverCommand(name)
+      owners.forEachIndexed { index, preferred ->
+        val known =
+            owners.drop(index).reversed().associate { "$it:$name" to command } +
+                mapOf(name to command, "other:$name" to command)
+        val commands = commands { known }
+        assertEquals("$preferred:$name", AssistantRules.normalize("/$name", commands)?.text)
+        assertEquals("$preferred:$name", AssistantRules.normalize("/purpur:$name", commands)?.text)
+        assertFalse(AssistantRules().isBlacklisted("$preferred:$name"))
+      }
+      assertNull(
+          AssistantRules.normalize(
+              name,
+              commands {
+                mapOf(name to command, "alpha:$name" to command, "beta:$name" to command)
+              },
+          )
+      )
+      assertNull(AssistantRules.normalize(name, commands { mapOf(name to command) }))
+      assertEquals(
+          "alpha:$name",
+          AssistantRules.normalize(
+                  name,
+                  commands { mapOf(name to command, "alpha:$name" to command) },
+              )
+              ?.text,
+      )
+    }
+  }
+
+  @Test
+  fun serverBlacklistWinsForEverySelectedNamespace() {
+    val owners = listOf("minecraft", "bukkit", "paper", "spigot", "purpur")
+    val rules = AssistantRules()
+    for (text in
+        listOf(
+            "stop",
+            "reload",
+            "restart",
+            "spigot reload",
+            "paper reload",
+            "purpur reload",
+            "op steve",
+            "deop steve",
+            "execute run list",
+            "function a",
+            "schedule function a 1t",
+            "return run stop",
+            "whitelist off",
+            "save-off",
+        )) {
+      val name = text.substringBefore(' ')
+      val command = serverCommand(name)
+      owners.forEachIndexed { index, preferred ->
+        val known =
+            owners.drop(index).reversed().associate { "$it:$name" to command } + (name to command)
+        val normalized = assertNotNull(AssistantRules.normalize("/$text", commands { known }))
+        assertEquals("$preferred:$text", normalized.text)
+        assertTrue(rules.isBlacklisted(normalized.text), normalized.text)
+        assertFalse(rules.isAllowed(normalized.text, listOf(normalized.text)), normalized.text)
+      }
+    }
+  }
+
   private fun command(name: String, owner: String): PluginCommand {
     val plugin =
         Proxy.newProxyInstance(Plugin::class.java.classLoader, arrayOf(Plugin::class.java)) {

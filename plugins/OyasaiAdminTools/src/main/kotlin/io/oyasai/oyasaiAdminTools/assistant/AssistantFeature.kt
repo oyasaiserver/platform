@@ -315,7 +315,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       remember: Boolean,
   ): String {
     val fresh = resolve(player, operator, command.text) ?: return "拒否: 実行前の再確認に失敗しました。"
-    if (fresh.text != command.text || fresh.registered !== command.registered)
+    if (fresh.text != command.text || fresh.registration !== command.registration)
         return "拒否: コマンドの登録が変更されました。"
     audit(operator, "execute", command.text)
     val accepted = player.performCommand(command.text)
