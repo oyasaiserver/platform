@@ -38,7 +38,7 @@ const fixture = () => {
   return root;
 };
 
-test("only four custom tools survive activation, reload and hostile local discovery", async () => {
+test("only the configured custom tools survive activation, reload and hostile local discovery", async () => {
   const dir = fixture();
   const previous = process.cwd();
   try {

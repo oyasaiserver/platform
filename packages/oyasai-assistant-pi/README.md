@@ -29,7 +29,8 @@ Child → plugin | `tool`: id, callId, name, string args (context/command only) 
 `trace`: id, name, args, result | | Child → plugin | `answer`: id, answer; or
 generic `error` |
 
-Only one request runs at a time; conversations are not retained. A failed or
+Only one request runs at a time. Conversations are retained per operator UUID,
+with idle and context limits; `reset` drops only that actor. A failed or
 cancelled request destroys the child, and the next request starts another.
 Standard output is reserved for protocol messages; stderr is discarded by the
 plugin to avoid recording provider errors containing credentials.
@@ -71,11 +72,12 @@ the container. The image contains a non-secret `stdio-no-auth` SDK marker
 because Pi requires a nonempty auth value even for its local custom provider.
 This marker cannot authenticate to any external service.
 
-Each request gets a fresh container and 64MiB workspace tmpfs. Startup is
+One container is warmed at enable time. Its 64MiB workspace tmpfs is cleared
+before and after each request, including leftover shell children. Startup is
 included in the request timeout; 90 seconds is recommended for the prototype.
-Enable-time startup probes are removed immediately. Cancellation and shutdown
-force-remove the specifically named container, including any forked shell
-children.
+The container stays warm until failure or plugin shutdown. Cancellation and
+shutdown force-remove the specifically named container, including any forked
+shell children.
 
 The container sends `model` messages with id/callId and text-only OpenAI
 messages/tools. The host fixes endpoint/model/output budget and adds
@@ -95,7 +97,23 @@ Manual checks, excluded from `npm test`:
   do not run comparisons concurrently. It uses a fake plugin that always returns
   confirmation pending.
 
-Rollback selects `backend: pi` or `koog` and restarts the plugin/server. Neither
-shared command permissions nor documents are changed by a request. Before
+Rollback selects `backend: pi` or `koog` and restarts the plugin/server. Shared
+command permissions and document mounts retain their existing controls. Before
 production, evaluate SDK dependency advisories, image update/scan procedures,
 concurrent workload limits, and answer quality with the normal tool budget.
+
+## Session and record protocol
+
+`request` also includes `actor` (operator UUID), `idleMinutes`, `maxMessages`,
+and `maxChars`. `reset` includes id/actor. `summary` includes
+id/actor/text/timeoutMs and performs exactly one tool-less provider request.
+Summary input is typed host audit facts, never raw chat, requests, or command
+output. The host appends the summary and independent facts to daily Markdown;
+`search_memory(query, days)` is a bounded host tool shared across operators.
+Koog has neither session retention nor these durable records. Container restart
+discards all short sessions.
+
+At the message/character bound, discard that actor's old session rather than
+spending another API call on compaction. At most 32 sessions are retained. The
+observation policy is reinforced at every provider boundary, including
+followups.

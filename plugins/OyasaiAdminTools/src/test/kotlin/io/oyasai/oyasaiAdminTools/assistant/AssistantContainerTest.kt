@@ -53,12 +53,16 @@ class AssistantContainerTest {
         #!/bin/sh
               if [ "${'$'}1" = rm ]; then exit 0; fi
               test -z "${'$'}OYASAI_ASSISTANT_API_KEY" || exit 1
-              echo '{"type":"ready","protocol":1,"tools":["get_context","run_command","read","bash","write","edit"]}'
+              echo '{"type":"ready","protocol":1,"tools":["get_context","run_command","read","bash","write","edit","search_memory"]}'
               IFS= read -r request || exit 0
               case "${'$'}request" in *'"text":"slow"'*) IFS= read -r hold; exit 0;; esac
               id=${'$'}(printf '%s' "${'$'}request" | sed -E 's/.*"id":"([^"]+)".*/\1/')
               echo "{\"type\":\"answer\",\"id\":\"${'$'}id\",\"answer\":\"完了\"}"
-              IFS= read -r hold
+              while IFS= read -r request; do
+                id=${'$'}(printf '%s' "${'$'}request" | sed -E 's/.*"id":"([^"]+)".*/\1/')
+                case "${'$'}request" in *'"text":"slow"'*) IFS= read -r hold; exit 0;; esac
+                echo "{\"type\":\"answer\",\"id\":\"${'$'}id\",\"answer\":\"完了\"}"
+              done
         """
             .trimIndent(),
     )
@@ -108,7 +112,7 @@ class AssistantContainerTest {
               }
             }
           }
-      assertEquals(4, pids.size) // Enable probe, two complete requests and one cancelled request.
+      assertEquals(1, pids.size) // Enable probe, two complete requests and one cancelled request.
       assertTrue(pids.none { ProcessHandle.of(it).map { p -> p.isAlive }.orElse(false) })
     } finally {
       Files.delete(executable)

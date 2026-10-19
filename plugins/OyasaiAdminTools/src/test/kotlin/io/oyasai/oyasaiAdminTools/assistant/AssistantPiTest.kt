@@ -11,7 +11,7 @@ import kotlinx.coroutines.withTimeout
 
 class AssistantPiTest {
   private val ready =
-      """echo '{"type":"ready","protocol":1,"tools":["get_context","run_command","search_docs","read_doc"]}'"""
+      """echo '{"type":"ready","protocol":1,"tools":["get_context","run_command","search_docs","read_doc","search_memory"]}'"""
   private val request =
       """IFS= read -r request
 id=${'$'}(printf '%s' "${'$'}request" | sed -E 's/.*"id":"([^"]+)".*/\1/')"""

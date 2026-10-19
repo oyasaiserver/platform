@@ -38,9 +38,24 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   private val senderWait = (settings?.getLong("sender-wait-ms", 1500) ?: 1500).coerceIn(100, 10000)
   private val senderQuiet = (settings?.getLong("sender-idle-ms", 300) ?: 300).coerceIn(50, 5000)
   private val executions = ConcurrentHashMap<UUID, Job>()
-  private val lastOutput = ConcurrentHashMap<UUID, String>()
+  private val memory = AssistantMemory(plugin.dataFolder.resolve("assistant-memory").toPath())
+  private val records = ConcurrentHashMap<String, AssistantMemory.Record>()
+  private val sessionIdle = (settings?.getInt("session-idle-minutes", 10) ?: 10).coerceIn(1, 1440)
+  private val sessionMessages =
+      (settings?.getInt("session-max-messages", 40) ?: 40).coerceIn(4, 200)
+  private val sessionChars =
+      (settings?.getInt("session-max-chars", 48000) ?: 48000).coerceIn(2000, 200000)
+  private val lastOutput = ConcurrentHashMap<UUID, Pair<Long, String>>()
 
   fun enable() {
+    scope.launch {
+      while (isActive) {
+        delay(60000)
+        lastOutput.entries.removeIf {
+          System.currentTimeMillis() - it.value.first >= sessionIdle * 60000L
+        }
+      }
+    }
     AssistantCommandSender.validate(senderPermissions)
     allows = AssistantAllowStore(plugin.db, rules)
     if (
@@ -75,6 +90,9 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                     key,
                     timeout,
                     plugin.logger,
+                    idleMinutes = sessionIdle,
+                    maxMessages = sessionMessages,
+                    maxChars = sessionChars,
                 )
             "pi-container" ->
                 AssistantPi(
@@ -92,6 +110,9 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                         "pi-container.image",
                         "localhost/oyasai-assistant-pi:prototype",
                     )!!,
+                    sessionIdle,
+                    sessionMessages,
+                    sessionChars,
                 )
             else -> error("Unknown assistant backend")
           }
@@ -127,6 +148,29 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       sender.sendMessage("ゲーム内のプレイヤーから依頼してください。")
       return true
     }
+    if (args.size == 1 && args[0].equals("reset", true)) {
+      if (backend !is AssistantPi) {
+        sender.sendMessage("このバックエンドは会話の記憶を持ちません。")
+        return true
+      }
+      val id = sender.uniqueId
+      val previousExecution = executions[id]
+      val reset =
+          scope.launch(start = CoroutineStart.LAZY) {
+            jobs[id]?.cancelAndJoin()
+            previousExecution?.cancelAndJoin()
+            onMain {
+              pending.remove(id)?.let { audit("${sender.name}($id)", "cancel", it.command.text) }
+              lastOutput.remove(id)
+            }
+            backend.reset(id.toString())
+            onMain { player(id).sendMessage("自分の短い記憶を消しました。共有の実行記録は残ります。") }
+          }
+      executions[id] = reset
+      reset.invokeOnCompletion { executions.remove(id, reset) }
+      reset.start()
+      return true
+    }
     val request = args.joinToString(" ")
     if (request.isBlank() || request.length > 1000) {
       sender.sendMessage("/assistant <依頼>（1000文字以内）")
@@ -144,6 +188,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     }
     lastRequest[id] = now
     val operator = "${sender.name}($id)"
+    val record = AssistantMemory.Record(sender.name, request)
+    records[operator] = record
     audit(operator, "request", request)
     sender.sendMessage("調べています。実行が必要なら確認ボタンを表示します。")
     val count = AtomicInteger()
@@ -167,7 +213,11 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                           checkBudget(count, operator, "get_context", "")
                           onMain {
                             context(player(id)) +
-                                (lastOutput[id]?.let { "\n直近のコマンド結果（観測データ）: $it" } ?: "")
+                                (lastOutput[id]
+                                    ?.takeIf {
+                                      System.currentTimeMillis() - it.first < sessionIdle * 60000L
+                                    }
+                                    ?.let { "\n直近のコマンド結果（観測データ）: ${it.second}" } ?: "")
                           }
                         }
                     )
@@ -200,6 +250,20 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                           docs.search(args["query"].orEmpty())
                         }
                     )
+                    if (backend is AssistantPi)
+                        tool(
+                            AssistantTool(
+                                "search_memory",
+                                "運営共通の実行記録をキーワードと過去の日数で検索する",
+                                listOf("query", "days"),
+                            ) { args ->
+                              checkBudget(count, operator, "search_memory", "")
+                              memory.search(
+                                  args["query"].orEmpty(),
+                                  args["days"]?.toIntOrNull() ?: 1,
+                              )
+                            }
+                        )
                     tool(
                         AssistantTool("list_docs", "公開資料の名前一覧を取得する", emptyList()) {
                           checkBudget(count, operator, "list_docs", "")
@@ -217,12 +281,16 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                         }
                     )
                   }
-              val answer = backend.run(request, maxCalls, tools, progress)
+              val answer = backend.runFor(id.toString(), request, maxCalls, tools, progress)
               audit(operator, "answer", answer)
               onMain { player(id).sendMessage(Component.text(answer.take(2000))) }
             }
           } catch (failure: Throwable) {
-            audit(operator, "failed", failure.javaClass.simpleName)
+            audit(
+                operator,
+                if (failure is CancellationException) "cancel" else "failed",
+                failure.javaClass.simpleName,
+            )
             if (currentCoroutineContext().isActive && plugin.isEnabled) {
               onMain {
                 pending.remove(id)?.let { audit(operator, "cancel", "request failed") }
@@ -234,6 +302,9 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                 plugin.server.getPlayer(id)?.sendMessage(Component.text(answer.take(2000)))
               }
             }
+          } finally {
+            records.remove(operator, record)
+            finishMemory(id, record, backend)
           }
         }
     jobs[id] = job
@@ -326,8 +397,12 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   ): String {
     val command =
         onMain { resolve(player(id), operator, text) } ?: return "拒否: 禁止項目・権限・コマンドの登録を確認してください。"
-    if (summary.isBlank() || summary.length > 500 || summary.any { it.isISOControl() || it == '§' })
-        return "拒否: 要約は500文字以内の1行にしてください。"
+    if (
+        summary.isBlank() || summary.length > 500 || summary.any { it.isISOControl() || it == '§' }
+    ) {
+      audit(operator, "denied:summary", command.text)
+      return "拒否: 要約は500文字以内の1行にしてください。"
+    }
     if (onMain { allows.allows(command.text) })
         return execute(
             id,
@@ -337,8 +412,10 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
             AssistantSenderChoice.operator(command.text, playerCommands),
         )
     return onMain {
-      if (proposed || pending.containsKey(id)) "拒否: 1依頼で確認待ちにできるのは1件だけです。"
-      else
+      if (proposed || pending.containsKey(id)) {
+        audit(operator, "denied:pending", command.text)
+        "拒否: 1依頼で確認待ちにできるのは1件だけです。"
+      } else
           propose(
               player(id),
               operator,
@@ -394,7 +471,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
         if (asOperator) AssistantCommandOutput.playerOnly() else null
       }
       val result = immediate ?: collector!!.collect()
-      lastOutput[id] = result.take(8000)
+      if (result.startsWith("拒否")) audit(operator, "denied:execution", command.text)
+      lastOutput[id] = System.currentTimeMillis() to result.take(8000)
       audit(operator, "sender-output", result.take(500))
       if (!asOperator && AssistantSenderChoice.playerRequired(result)) {
         return onMain {
@@ -460,6 +538,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                                 val execution =
                                     scope.launch(start = CoroutineStart.LAZY) {
                                       jobs[id]?.join()
+                                      val executionRecord = AssistantMemory.Record(audience.name)
+                                      records[operator] = executionRecord
                                       try {
                                         val result =
                                             withTimeout(timeout) {
@@ -484,6 +564,9 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                                             "execution-failed",
                                             failure.javaClass.simpleName,
                                         )
+                                      } finally {
+                                        records.remove(operator, executionRecord)
+                                        agent?.let { finishMemory(id, executionRecord, it) }
                                       }
                                     }
                                 executions[id] = execution
@@ -541,7 +624,43 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     )
   }
 
+  private suspend fun finishMemory(
+      id: UUID,
+      record: AssistantMemory.Record,
+      backend: AssistantBackend,
+  ) {
+    if (backend !is AssistantPi) return
+    val summary =
+        if (currentCoroutineContext().isActive && plugin.isEnabled)
+            runCatching {
+                  withTimeout(20000) { backend.summarize(id.toString(), record.facts().take(3500)) }
+                }
+                .getOrDefault("要約を取得できませんでした")
+        else "処理が中断されました"
+    try {
+      memory.append(record, summary)
+    } catch (failure: Exception) {
+      plugin.logger.warning("Assistant memory append failed: ${failure.javaClass.simpleName}")
+    }
+  }
+
   private fun audit(operator: String, event: String, detail: String) {
+    val record = records[operator]
+    record?.add(event, detail)
+    if (record == null && event == "cancel") {
+      val cancellation = AssistantMemory.Record(operator.substringBefore('('))
+      cancellation.add(event, detail)
+      val actor = operator.substringAfter('(').substringBefore(')')
+      agent?.let { backend ->
+        scope.launch {
+          finishMemory(
+              runCatching { UUID.fromString(actor) }.getOrDefault(UUID(0, 0)),
+              cancellation,
+              backend,
+          )
+        }
+      }
+    }
     plugin.logger.info(
         "Assistant operator=$operator event=$event ${detail.replace(Regex("[\\p{Cntrl}§]"), " ").take(2000)}"
     )
@@ -549,6 +668,12 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
 
   override fun close() {
     scope.cancel()
+    if (agent is AssistantPi)
+        pending.forEach { (id, proposal) ->
+          val record = AssistantMemory.Record(plugin.server.getPlayer(id)?.name ?: "operator")
+          record.add("cancel", proposal.command.text)
+          runCatching { memory.append(record, "プラグイン停止で確認待ちを取り消しました") }
+        }
     pending.clear()
     agent?.close()
     agent = null

@@ -53,7 +53,8 @@ internal class AssistantModelRelay(
   }
 
   companion object {
-    internal val TOOLS = setOf("get_context", "run_command", "read", "bash", "write", "edit")
+    internal val TOOLS =
+        setOf("get_context", "run_command", "read", "bash", "write", "edit", "search_memory")
 
     internal fun sanitize(body: JsonObject, model: String): JsonObject {
       require(body.toString().toByteArray(Charsets.UTF_8).size <= 524288)

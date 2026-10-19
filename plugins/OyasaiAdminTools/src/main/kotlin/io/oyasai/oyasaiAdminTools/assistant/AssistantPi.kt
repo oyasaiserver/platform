@@ -10,7 +10,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-// One child, serialized requests, fresh in-memory conversation for every request.
+// One warm child, serialized requests, conversations isolated by operator UUID.
 internal class AssistantPi(
     private val node: String,
     private val script: String,
@@ -20,6 +20,9 @@ internal class AssistantPi(
     private val timeoutMs: Long,
     private val logger: Logger,
     private val containerImage: String? = null,
+    private val idleMinutes: Int = 10,
+    private val maxMessages: Int = 40,
+    private val maxChars: Int = 48000,
 ) : AssistantBackend {
   private val mutex = Mutex()
   @Volatile private var closed = false
@@ -31,7 +34,7 @@ internal class AssistantPi(
   init {
     if (containerImage == null) start()
     else {
-      // Probe the image at enable time, then discard even the empty workspace.
+      // Warm the single container before the first operator request.
       val state = start()
       try {
         kotlinx.coroutines.runBlocking {
@@ -45,10 +48,10 @@ internal class AssistantPi(
         }
       } catch (failure: Throwable) {
         relay?.close()
-        throw failure
-      } finally {
         stop(state)
+        throw failure
       }
+      state.ready = true
     }
   }
 
@@ -113,6 +116,30 @@ internal class AssistantPi(
       maxToolCalls: Int,
       tools: Map<String, AssistantTool>,
       progress: AssistantProgress,
+  ): String = runFor("offline", request, maxToolCalls, tools, progress)
+
+  override suspend fun runFor(
+      actor: String,
+      request: String,
+      maxToolCalls: Int,
+      tools: Map<String, AssistantTool>,
+      progress: AssistantProgress,
+  ): String = exchange(actor, "request", request, maxToolCalls, tools, progress)
+
+  override suspend fun reset(actor: String) {
+    exchange(actor, "reset", "reset", 0, emptyMap(), AssistantProgress())
+  }
+
+  override suspend fun summarize(actor: String, facts: String): String =
+      exchange(actor, "summary", facts, 0, emptyMap(), AssistantProgress())
+
+  private suspend fun exchange(
+      actor: String,
+      kind: String,
+      request: String,
+      maxToolCalls: Int,
+      tools: Map<String, AssistantTool>,
+      progress: AssistantProgress,
   ): String =
       mutex.withLock {
         val state = start()
@@ -130,7 +157,11 @@ internal class AssistantPi(
           val id = UUID.randomUUID().toString()
           state.send(
               JsonObject().apply {
-                addProperty("type", "request")
+                addProperty("type", kind)
+                addProperty("actor", actor)
+                addProperty("idleMinutes", idleMinutes)
+                addProperty("maxMessages", maxMessages)
+                addProperty("maxChars", maxChars)
                 addProperty("id", id)
                 addProperty("text", request)
                 addProperty("maxToolCalls", maxToolCalls)
@@ -165,7 +196,7 @@ internal class AssistantPi(
               "tool" -> {
                 check(++toolCalls <= maxToolCalls)
                 val name = message["name"].asString
-                check(name in setOf("get_context", "run_command"))
+                check(name in setOf("get_context", "run_command", "search_memory"))
                 val callId = message["callId"].asString
                 check(callId.length <= 64 && seen.add(callId))
                 val args =
@@ -186,7 +217,7 @@ internal class AssistantPi(
               "trace" -> {
                 val name = message["name"].asString
                 check(name in (if (containerImage == null) NAMES else AssistantModelRelay.TOOLS))
-                if (name !in setOf("get_context", "run_command"))
+                if (name !in setOf("get_context", "run_command", "search_memory"))
                     progress.localTool(name, message["args"].toString())
                 progress.record(name, message["result"].asString)
               }
@@ -206,7 +237,7 @@ internal class AssistantPi(
         } finally {
           // A cancelled/dead request must never continue to propose commands or poison the next
           // one.
-          if (!complete || containerImage != null) stop(state)
+          if (!complete) stop(state)
         }
       }
 
@@ -305,7 +336,8 @@ internal class AssistantPi(
       )
     }
 
-    private val NAMES = setOf("get_context", "run_command", "search_docs", "read_doc")
+    private val NAMES =
+        setOf("get_context", "run_command", "search_docs", "read_doc", "search_memory")
 
     private fun readLine(reader: BufferedReader): String? {
       val line = StringBuilder()

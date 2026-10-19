@@ -35,6 +35,10 @@ const next = () => {
   requestStarted = performance.now();
   send({
     type: "request",
+    actor: "smoke",
+    idleMinutes: 10,
+    maxMessages: 40,
+    maxChars: 48000,
     id: `smoke-${index}`,
     text: questions[index],
     maxToolCalls: 12,
@@ -55,7 +59,13 @@ createInterface({ input: child.stdout }).on("line", (line) => {
     startupMs = Math.round(performance.now() - started);
     assert.deepEqual(
       message.tools.sort(),
-      ["get_context", "run_command", "search_docs", "read_doc"].sort(),
+      [
+        "get_context",
+        "run_command",
+        "search_docs",
+        "read_doc",
+        "search_memory",
+      ].sort(),
     );
     next();
   } else if (message.type === "tool") {

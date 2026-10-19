@@ -90,6 +90,10 @@ for (const backend of ["pi", "pi-container"])
           result.startupMs = Math.round(performance.now() - start);
           send({
             type: "request",
+            actor: "smoke",
+            idleMinutes: 10,
+            maxMessages: 40,
+            maxChars: 48000,
             id: `compare-${index}`,
             text: question,
             maxToolCalls: 2,
