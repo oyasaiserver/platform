@@ -25,6 +25,20 @@ class DiceGroup(
     val baseVelocity: Vector,
     val isBroadcast: Boolean = true,
 ) {
+  companion object {
+    /** 投擲完了（出目確定）後の自動回収待機時間（15秒 = 300 tick） */
+    const val AUTO_COLLECT_DELAY_TICKS = 15 * 20L
+
+    /** 投擲開始からの全体フェールセーフ回収時間（25秒 = 500 tick） */
+    const val GLOBAL_FAILSAFE_DELAY_TICKS = 25 * 20L
+
+    /** 周囲プレイヤーへのチャット通知最大半径（ブロック） */
+    const val BROADCAST_RADIUS = 30.0
+
+    /** 手動回収（右クリック）を許可するデフォルト距離の二乗（2.5ブロック = 6.25） */
+    const val DEFAULT_COLLECT_RADIUS_SQ = 6.25
+  }
+
   val dices = mutableListOf<DiceInstance>()
   private var totalHologramJava: TextDisplay? = null
   private var totalHologramBedrock: TextDisplay? = null
@@ -33,12 +47,12 @@ class DiceGroup(
   private var isFinished = false
 
   fun start() {
-    // 25秒後の全体フェールセーフ（万が一チャンクアンロード等の異常があっても確実に回収を保証）
+    // 全体フェールセーフ（万が一チャンクアンロード等の異常があっても確実に回収を保証）
     globalFailsafeTask =
         plugin.server.scheduler.runTaskLater(
             plugin,
             Runnable { collect(null) },
-            25 * 20L,
+            GLOBAL_FAILSAFE_DELAY_TICKS,
         )
 
     val count = mode.diceCount
@@ -165,14 +179,14 @@ class DiceGroup(
 
     sendMessage(player, message)
 
-    // 15秒後に自動回収（フェールセーフ）
+    // 投擲完了後の自動回収（フェールセーフ）
     autoCollectTask =
         plugin.server.scheduler.runTaskLater(
             plugin,
             Runnable {
               collect(null) // 自動回収
             },
-            15 * 20L,
+            AUTO_COLLECT_DELAY_TICKS,
         )
   }
 
@@ -253,9 +267,9 @@ class DiceGroup(
     val center = sourcePlayer?.location ?: origin
     val world = center.world ?: return
 
-    // 半径30ブロック以内のプレイヤーにメッセージを届ける
+    val maxDistSq = BROADCAST_RADIUS * BROADCAST_RADIUS
     for (p in world.players) {
-      if (p.location.distanceSquared(center) <= 30.0 * 30.0) {
+      if (p.location.distanceSquared(center) <= maxDistSq) {
         // 投げた本人、または他人のサイコロ結果のチャット受信を有効にしているプレイヤーにのみ送信
         if (p == sourcePlayer || diceManager.isChatReceiveEnabled(p)) {
           p.sendMessage(message)
@@ -270,7 +284,7 @@ class DiceGroup(
     return dices.any { it.matchesEntity(entityId) }
   }
 
-  fun isNear(targetLoc: Location, maxDistSq: Double = 6.25): Boolean {
+  fun isNear(targetLoc: Location, maxDistSq: Double = DEFAULT_COLLECT_RADIUS_SQ): Boolean {
     if (dices.isEmpty()) return false
     return dices.any { it.getDistanceSquared(targetLoc) <= maxDistSq }
   }

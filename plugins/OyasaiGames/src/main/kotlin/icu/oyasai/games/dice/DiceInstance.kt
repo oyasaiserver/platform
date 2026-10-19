@@ -36,9 +36,51 @@ class DiceInstance(
     private val onSettledCallback: (DiceInstance) -> Unit,
 ) {
   companion object {
+    /** サイコロの ItemDisplay 描画スケール */
     const val DICE_SCALE = 0.65f
+
+    /** サイコロの接地時におけるY軸中心オフセット */
     const val DICE_Y_OFFSET = 0.325f
+
+    /** 頭上ホログラムのY軸オフセット（サイコロ上面からの高さ） */
     const val HOLO_Y_OFFSET = 0.85
+
+    // --- 物理シミュレーション定数 ---
+    /** 毎tick加算される重力加速度 (ブロック/tick^2) */
+    const val GRAVITY_ACCELERATION = 0.04
+
+    /** 水平方向(X/Z)の毎tick空気抵抗減衰率 */
+    const val AIR_RESISTANCE_XZ = 0.985
+
+    /** 床面衝突時の垂直(Y)反発係数 */
+    const val FLOOR_BOUNCE_RESTITUTION = 0.42
+
+    /** 床面衝突時の水平(X/Z)摩擦減衰率 */
+    const val FLOOR_FRICTION_XZ = 0.75
+
+    /** 壁面衝突時の反発・速度減衰率 */
+    const val WALL_BOUNCE_RESTITUTION = 0.55
+
+    /** 床面での微小バウンドを0に収束させて速やかに静止させる速度閾値 */
+    const val BOUNCE_DAMPING_THRESHOLD = 0.035
+
+    /** 足元ブロック判定で下方を探索するYオフセット */
+    const val GROUND_CHECK_OFFSET_Y = 0.15
+
+    /** 足元衝突検知レイキャストの最大探索距離 */
+    const val GROUND_CHECK_RAY_DISTANCE = 0.25
+
+    /** 静止判定（停止カウンター加算）に入る速度の二乗閾値 */
+    const val REST_VELOCITY_SQ_THRESHOLD = 0.005
+
+    /** 静止確定（出目確定）に必要な連続接地静止tick数 */
+    const val REQUIRED_REST_TICKS = 4
+
+    /** 万が一斜面等で転がり続けた場合の強制停止タイムアウト（100tick = 5秒） */
+    const val PHYSICS_TIMEOUT_TICKS = 100
+
+    /** 回転アニメーションを適用する最低移動速度 */
+    const val MIN_ROTATION_SPEED = 0.02
   }
 
   var isSettled: Boolean = false
@@ -159,17 +201,17 @@ class DiceInstance(
                   return
                 }
 
-                // タイムアウト保護（5秒以上転がり続けた場合強制停止・確定）
-                if (tickCount > 100) {
+                // タイムアウト保護（一定時間以上転がり続けた場合強制停止・確定）
+                if (tickCount > PHYSICS_TIMEOUT_TICKS) {
                   settle()
                   cancel()
                   return
                 }
 
                 // 重力と空気抵抗
-                velocity.y -= 0.04
-                velocity.x *= 0.985
-                velocity.z *= 0.985
+                velocity.y -= GRAVITY_ACCELERATION
+                velocity.x *= AIR_RESISTANCE_XZ
+                velocity.z *= AIR_RESISTANCE_XZ
 
                 val speed = velocity.length()
                 if (speed > 0.001) {
@@ -194,13 +236,14 @@ class DiceInstance(
 
                     if (normal.y > 0.4) {
                       // 床面衝突: バウンド＆摩擦（微小反発は0に収束させて速やかに静止）
-                      val bounceY = -reflection.y * 0.42
-                      reflection.y = if (Math.abs(bounceY) < 0.035) 0.0 else bounceY
-                      reflection.x *= 0.75
-                      reflection.z *= 0.75
+                      val bounceY = -reflection.y * FLOOR_BOUNCE_RESTITUTION
+                      reflection.y =
+                          if (Math.abs(bounceY) < BOUNCE_DAMPING_THRESHOLD) 0.0 else bounceY
+                      reflection.x *= FLOOR_FRICTION_XZ
+                      reflection.z *= FLOOR_FRICTION_XZ
                     } else {
                       // 壁面衝突
-                      reflection.multiply(0.55)
+                      reflection.multiply(WALL_BOUNCE_RESTITUTION)
                     }
 
                     // 衝突音
@@ -216,7 +259,8 @@ class DiceInstance(
 
                 // 接地・足元衝突判定（PLAYER_HEAD, SLAB, ANVIL 等の非フルブロックも正確に判定）
                 val blockAtLoc = currentLocation.block
-                val blockBelow = currentLocation.clone().subtract(0.0, 0.15, 0.0).block
+                val blockBelow =
+                    currentLocation.clone().subtract(0.0, GROUND_CHECK_OFFSET_Y, 0.0).block
 
                 // 通り抜け不可ブロック判定 (isPassable == false: ヘッド、スラブ、金床、チェスト等を含む)
                 val isGroundBlock =
@@ -229,17 +273,17 @@ class DiceInstance(
                         (world.rayTraceBlocks(
                             currentLocation,
                             Vector(0.0, -1.0, 0.0),
-                            0.25,
+                            GROUND_CHECK_RAY_DISTANCE,
                             FluidCollisionMode.NEVER,
                             true,
                         ) != null)
 
                 val isOnGround = hasCollisionBelow
 
-                if (isOnGround && velocity.lengthSquared() < 0.005) {
+                if (isOnGround && velocity.lengthSquared() < REST_VELOCITY_SQ_THRESHOLD) {
                   velocity.zero()
                   restTickCount++
-                  if (restTickCount >= 4) {
+                  if (restTickCount >= REQUIRED_REST_TICKS) {
                     settle()
                     cancel()
                     return
@@ -249,7 +293,7 @@ class DiceInstance(
                 }
 
                 // 回転更新
-                if (speed > 0.02) {
+                if (speed > MIN_ROTATION_SPEED) {
                   rotYaw += (velocity.x * 60).toFloat()
                   rotPitch += (velocity.z * 60).toFloat()
                   rotRoll += (speed * 40).toFloat()
