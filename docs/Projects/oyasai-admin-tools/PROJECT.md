@@ -75,7 +75,8 @@ last_validated: "2026-10-13"
 - PaperのBrigadierラッパーは取得ごとに別オブジェクトとなり、名前空間付きのルートも複製されるため、公開フィールド `VanillaCommandWrapper.vanillaCommand` から登録ノードを確認する。バニラのAPIミラー `ShadowBrigNode` は公開の `getHandle()` で実体を参照し、引数一覧を提供しない不透明なノードは同等とみなさない。実行処理・権限条件・引数ノードが同じものだけを同一のコマンドとして扱い、別名のメタデータから正規名を求める。ルートのredirect/forkは拒否する。確認後の再照合には正規名の登録ノードの同一性を使い、ラッパーの作り直しと登録の差し替えを区別する。フィールドが取得できなければ従来の参照一致へ戻り、不明な登録は拒否する。本体系の禁止パターンは上記5名前空間すべてで適用する。
 - 許可の範囲はコマンド名と、最初の引数が英字だけの語ならその語まで。それ以降の引数は何でも許可する。語の境界で照合するため `lookup` の許可で `lookupx` は動かない。運営全員で共有し、AdminDbの `assistant_allow` に固定番号・範囲・追加者名/UUID・時刻を保存する。初回に `dynamicprofile:syokaku iscandidate`・`getrank`・`seerequirements` を登録する。削除した初期値を再起動で復活させない。`seeplayerinfo` は初期値に含めない。
 - 固定禁止の正本は `assistant/AssistantRules.kt` の `CORE_BLACKLIST`。停止・reload/restart、照会以外のPlugManX、op/deop、限定した照会以外のLuckPerms、GOOD特例の昇降格、execute/sudo/function/schedule/return、CraftScript/マクロ、SocialSpy、`@a`/`@e`/`@r`、token addall、whitelist on/off/reload、save-off、CoreProtect purge/対象者指定のないrollback・restore、FAWEのチャンク/スキマティック削除、assistant自身を拒否する。CoreProtectの独立した `co`・`core`・`coreprotect` 登録、rollback/restoreの短縮形、FAWE削除の `d` も含める。
-- 許可済み・確認後とも、メインスレッドで運営本人の `Player.performCommand` を使う。コンソール相当の送り主は作らない。実行直前にも正規化・禁止・元コマンド権限・登録先の同一性を再確認する。コマンドの出力本文は本人の画面だけへ出し、AIには受付結果と「本文は未取得」を返す。受付成功を条件達成と解釈させず、昇格条件は本人の確認を求める。
+- 許可済み・確認後とも、通常は `Assistant(<運営名>)` という独自CommandSenderをメインスレッドでdispatchする。権限はオンラインの依頼者から毎回借り、isOpはfalse、コンソール/Playerではなく権限Attachmentも持たない。`sender-permissions` は空なら本人と同じ、設定すると列挙した権限だけに絞る。出力はAIへ返し、本人画面へは転送しない。`sender-wait-ms`（既定1500）・`sender-idle-ms`（300）で非同期出力を待つ。収集32Ki文字・AI返却8000文字まで。
+- `player-commands`（既定tp/teleport/gamemode/gm/gms/gmc/gmsp/gma/fly）は本人として実行する。それ以外のPlayer専用エラーはAIへ返し、別の「本人として実行」確認を出す。自動で再実行しない。全経路で実行直前の正規化・禁止・本人権限・登録同一性を再確認する。確認後の出力は次のget_contextでも参照できる。
 - 未許可の依頼は `[実行] [次から確認しない] [やめる]` を表示する。ホバーに共有許可へ追加する正規化済みの範囲と、引数が何でも対象になることを示す。クリック時に本人一致・オンライン・権限・60秒期限・禁止判定を再確認する。実行/取り消しで提案を一度だけ消費する。次からの許可はコマンド受付成功時に追加し、チャットとログで知らせる。1依頼で確認待ちにできるのは1件。時間切れと機能停止時に確認待ちを取り消し、永続化しない。
 - `get_context` は運営の名前・ワールド・座標と48ブロック以内の視線先・見えるプレイヤー最大20人を返す。チャットは収集しない。観測値や道具の出力を指示として扱わないよう明記する。公開の `docs/Projects/*/PROJECT.md`・`player.md` のうち `project_kind: plugin` の自作プラグイン資料だけをビルド時に `assistant-docs/` へ同梱する。`search_docs` は200文字以内のキーワードで見出し単位の節を検索し、全キーワードを含む節から最大3節・合計4000文字未満の抜粋を返す。必要なら一覧の名前と1からの分割番号で最大6000文字ずつ読む。FAWE・WorldGuard・LuckPerms・CoreProtect等の外部プラグインや資料にない話題は一般知識と明記して回答し、関係のない資料を読み歩かない。Koogは非公開の運用資料やファイルパスを指定して読む機能を持たない。
 - ログは運営名/UUIDと `event=` を含む1行。依頼・道具・実行・取り消しに加え、`allow-add`・`allow-remove`・`denied:blacklist` 等を記録する。道具結果は先頭500文字、最終回答は `event=answer`、詳細部分は制御文字と装飾コードを除去し最大2000文字。外部APIの例外本文は記録しない。
@@ -146,6 +147,8 @@ last_validated: "2026-10-13"
 - プレイヤー履歴には IP と最終位置を保存する。DB と旧 userdata の読取権限・バックアップ取扱いが必要だが、自動バックアップや保存期間管理は実装されていない。
 
 ## 判断の記録
+
+- 2026-10-19: 本人と同じ権限を借りるAI専用送り主を採用し、出力を直接AIへ返す。コンソール相当のPaper送り主は使用しない。Paperのdispatchに必要なネイティブ橋渡しは、権限なし・Player実体なしのSourceStackとAI送り主自身をcaller/calleeにしたProxyを使う。サーバー内部API変更時は拒否し、コンソールへは代替しない。Player専用のバイトコード判定はやめ、設定一覧と実際のPlayer専用エラーを使い、本人としての再実行には改めて確認を要求する。出力待ちでメインスレッドを止めず、dispatchは一度だけ行う。
 
 - 2026-10-19: Piの組み込み道具を試すため、キーを持たずネットワークもないrootlessコンテナとstdioモデル中継を追加した。常駐方式の作業ファイル混入を避け、通常の起動が約1.1秒だったことから依頼ごとの破棄を選ぶ。初回起動は約13.8秒だったため45秒の既定は維持しつつ試作では90秒を推奨する。道具上限2回での4問比較では資料検索・回答品質の一律改善は見られず、既定を切り替える根拠とはしない。
 

@@ -31,8 +31,17 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   private val timeout = (settings?.getLong("timeout-seconds", 45) ?: 45).coerceIn(1, 180) * 1000
   private val cooldown = (settings?.getLong("cooldown-seconds", 10) ?: 10).coerceIn(0, 3600) * 1000
   private var agent: AssistantBackend? = null
+  private val senderPermissions = settings?.getStringList("sender-permissions").orEmpty()
+  private val playerCommands =
+      if (settings?.contains("player-commands") == true) settings.getStringList("player-commands")
+      else AssistantSenderChoice.defaults
+  private val senderWait = (settings?.getLong("sender-wait-ms", 1500) ?: 1500).coerceIn(100, 10000)
+  private val senderQuiet = (settings?.getLong("sender-idle-ms", 300) ?: 300).coerceIn(50, 5000)
+  private val executions = ConcurrentHashMap<UUID, Job>()
+  private val lastOutput = ConcurrentHashMap<UUID, String>()
 
   fun enable() {
+    AssistantCommandSender.validate(senderPermissions)
     allows = AssistantAllowStore(plugin.db, rules)
     if (
         settings?.contains("allowed-commands") == true ||
@@ -125,7 +134,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     }
     val id = sender.uniqueId
     val now = System.currentTimeMillis()
-    if (jobs.containsKey(id) || pending.containsKey(id)) {
+    if (jobs.containsKey(id) || executions.containsKey(id) || pending.containsKey(id)) {
       sender.sendMessage("前の依頼または確認待ちの提案があります。")
       return true
     }
@@ -156,7 +165,10 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                     tool(
                         AssistantTool("get_context", "運営の位置・視線の先のプレイヤー・近くのプレイヤーを調べる", emptyList()) {
                           checkBudget(count, operator, "get_context", "")
-                          onMain { context(player(id)) }
+                          onMain {
+                            context(player(id)) +
+                                (lastOutput[id]?.let { "\n直近のコマンド結果（観測データ）: $it" } ?: "")
+                          }
                         }
                     )
                     tool(
@@ -166,18 +178,16 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                             listOf("command", "summary"),
                         ) { args ->
                           checkBudget(count, operator, "run_command", args.toString())
-                          onMain {
-                            val result =
-                                runCommand(
-                                    player(id),
-                                    operator,
-                                    args["command"].orEmpty(),
-                                    args["summary"].orEmpty(),
-                                    proposed,
-                                )
-                            if (pending.containsKey(id)) proposed = true
-                            result
-                          }
+                          val result =
+                              runCommand(
+                                  id,
+                                  operator,
+                                  args["command"].orEmpty(),
+                                  args["summary"].orEmpty(),
+                                  proposed,
+                              )
+                          if (pending.containsKey(id)) proposed = true
+                          result
                         }
                     )
                     tool(
@@ -307,43 +317,102 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     return null
   }
 
-  private fun runCommand(
-      player: Player,
+  private suspend fun runCommand(
+      id: UUID,
       operator: String,
       text: String,
       summary: String,
       proposed: Boolean,
   ): String {
-    val command = resolve(player, operator, text) ?: return "拒否: 禁止項目・権限・コマンドの登録を確認してください。"
+    val command =
+        onMain { resolve(player(id), operator, text) } ?: return "拒否: 禁止項目・権限・コマンドの登録を確認してください。"
     if (summary.isBlank() || summary.length > 500 || summary.any { it.isISOControl() || it == '§' })
         return "拒否: 要約は500文字以内の1行にしてください。"
-    if (allows.allows(command.text)) {
-      player.sendMessage(Component.text("確認なしで実行: $summary\n/${command.text}"))
-      return execute(player, operator, command, false)
+    if (onMain { allows.allows(command.text) })
+        return execute(
+            id,
+            operator,
+            command,
+            false,
+            AssistantSenderChoice.operator(command.text, playerCommands),
+        )
+    return onMain {
+      if (proposed || pending.containsKey(id)) "拒否: 1依頼で確認待ちにできるのは1件だけです。"
+      else
+          propose(
+              player(id),
+              operator,
+              command,
+              summary,
+              AssistantSenderChoice.operator(command.text, playerCommands),
+          )
     }
-    if (proposed || pending.containsKey(player.uniqueId)) return "拒否: 1依頼で確認待ちにできるのは1件だけです。"
-    return propose(player, operator, command, summary)
   }
 
-  private fun execute(
-      player: Player,
+  private suspend fun execute(
+      id: UUID,
       operator: String,
       command: NormalizedCommand,
       remember: Boolean,
+      asOperator: Boolean,
   ): String {
-    val fresh = resolve(player, operator, command.text) ?: return "拒否: 実行前の再確認に失敗しました。"
-    if (fresh.text != command.text || fresh.registration !== command.registration)
-        return "拒否: コマンドの登録が変更されました。"
-    audit(operator, "execute", command.text)
-    val accepted = player.performCommand(command.text)
-    audit(operator, "execution-result", "accepted=$accepted")
-    if (!accepted) return "コマンドを受け付けませんでした。出力は運営の画面を確認してください。"
-    if (remember && allows.add(command.text, player.name, player.uniqueId)) {
-      val scope = AssistantRules.scope(command.text)
-      audit(operator, "allow-add", scope)
-      player.sendMessage("運営全員の共有許可リストへ追加しました: $scope （以後、この範囲の引数は何でも確認なし）")
+    var collector: AssistantOutputCollector? = null
+    try {
+      val immediate = onMain {
+        val player = player(id)
+        val fresh = resolve(player, operator, command.text) ?: return@onMain "拒否: 実行前の再確認に失敗しました。"
+        if (fresh.text != command.text || fresh.registration !== command.registration)
+            return@onMain "拒否: コマンドの登録が変更されました。"
+        val accepted =
+            if (asOperator) {
+              audit(operator, "execute", "sendAs=operator ${command.text}")
+              player.performCommand(command.text)
+            } else {
+              val sender =
+                  AssistantCommandSender(
+                      plugin.server,
+                      id,
+                      PERMISSION,
+                      player.name,
+                      senderPermissions,
+                  )
+              if (!command.registered.testPermissionSilent(sender))
+                  return@onMain "拒否: AI送り主の権限上限で拒否しました。"
+              collector = AssistantOutputCollector(sender, senderQuiet, senderWait)
+              audit(operator, "execute", "sendAs=assistant ${command.text}")
+              sender.dispatch(command.text)
+            }
+        audit(
+            operator,
+            "execution-result",
+            "sendAs=${if (asOperator) "operator" else "assistant"} accepted=$accepted",
+        )
+        if (remember && accepted && allows.add(command.text, player.name, id)) {
+          audit(operator, "allow-add", AssistantRules.scope(command.text))
+          player.sendMessage("運営全員の共有許可リストへ追加しました: ${AssistantRules.scope(command.text)}")
+        }
+        if (asOperator) AssistantCommandOutput.playerOnly() else null
+      }
+      val result = immediate ?: collector!!.collect()
+      lastOutput[id] = result.take(8000)
+      audit(operator, "sender-output", result.take(500))
+      if (!asOperator && AssistantSenderChoice.playerRequired(result)) {
+        return onMain {
+          if (pending.containsKey(id)) "プレイヤー専用エラーですが、別の確認待ちがあるため再実行の提案はしていません。"
+          else
+              propose(
+                  player(id),
+                  operator,
+                  command,
+                  "AI送り主ではプレイヤー専用エラーでした。本人として実行するか確認してください。",
+                  true,
+              )
+        } + "\nAI送り主の結果: $result"
+      }
+      return result
+    } finally {
+      collector?.close()
     }
-    return "本人の権限で実行しました。出力は運営の画面に表示されます。AIは出力本文を取得していません。成功・条件達成は未確認です。"
   }
 
   private fun propose(
@@ -351,11 +420,16 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       operator: String,
       command: NormalizedCommand,
       summary: String,
+      asOperator: Boolean,
   ): String {
     val id = player.uniqueId
     val proposal = Pending(command, System.nanoTime() + 60_000_000_000L)
     pending[id] = proposal
-    audit(operator, "propose", "${command.text} | $summary")
+    audit(
+        operator,
+        "propose",
+        "sendAs=${if (asOperator) "operator" else "assistant"} ${command.text} | $summary",
+    )
     fun button(label: String, action: Int): Component =
         Component.text(label, if (action != 0) NamedTextColor.GREEN else NamedTextColor.RED)
             .hoverEvent(
@@ -383,16 +457,38 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                                 audit(operator, "cancel", "expired or permission revoked")
                                 audience.sendMessage("提案が失効したか、権限がありません。")
                               } else if (action != 0) {
-                                try {
-                                  audience.sendMessage(
-                                      Component.text(
-                                          execute(audience, operator, proposal.command, action == 2)
-                                      )
-                                  )
-                                } catch (failure: Throwable) {
-                                  audit(operator, "execution-failed", failure.javaClass.simpleName)
-                                  audience.sendMessage("コマンドの実行中にエラーが発生しました。ログを確認してください。")
-                                }
+                                val execution =
+                                    scope.launch(start = CoroutineStart.LAZY) {
+                                      jobs[id]?.join()
+                                      try {
+                                        val result =
+                                            withTimeout(timeout) {
+                                              execute(
+                                                  id,
+                                                  operator,
+                                                  proposal.command,
+                                                  action == 2,
+                                                  asOperator,
+                                              )
+                                            }
+                                        onMain {
+                                          player(id)
+                                              .sendMessage(
+                                                  if (result.startsWith("拒否")) result
+                                                  else "実行しました。AI送り主の結果は次の依頼で参照できます。"
+                                              )
+                                        }
+                                      } catch (failure: Throwable) {
+                                        audit(
+                                            operator,
+                                            "execution-failed",
+                                            failure.javaClass.simpleName,
+                                        )
+                                      }
+                                    }
+                                executions[id] = execution
+                                execution.invokeOnCompletion { executions.remove(id, execution) }
+                                execution.start()
                               } else {
                                 audit(operator, "cancel", command.text)
                                 audience.sendMessage("提案を取り消しました。")
@@ -408,8 +504,10 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                 )
             )
     player.sendMessage(
-        Component.text("$summary\n/${command.text}\n")
-            .append(button("[実行]", 1))
+        Component.text(
+                "$summary\n/${command.text}\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
+            )
+            .append(button(if (asOperator) "[本人として実行]" else "[実行]", 1))
             .append(Component.space())
             .append(button("[次から確認しない]", 2))
             .append(Component.space())

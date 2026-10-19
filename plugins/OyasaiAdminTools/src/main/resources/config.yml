@@ -27,6 +27,10 @@ assistant:
   provider: openrouter
   model: deepseek/deepseek-v4.1-flash
   api-key-env: OYASAI_ASSISTANT_API_KEY
+  sender-permissions: []
+  player-commands: [tp, teleport, gamemode, gm, gms, gmc, gmsp, gma, fly]
+  sender-wait-ms: 1500
+  sender-idle-ms: 300
   max-tool-calls: 12
   timeout-seconds: 45
   cooldown-seconds: 10
