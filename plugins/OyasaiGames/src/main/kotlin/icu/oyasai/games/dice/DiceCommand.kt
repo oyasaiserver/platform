@@ -101,32 +101,7 @@ class DiceCommand(
   }
 
   private fun giveDice(player: Player, mode: DiceMode) {
-    if (diceManager.hasActiveDice(player)) {
-      player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 0.8f, 1.0f)
-      player.sendMessage(
-          Component.text("[おやさいサイコロ] 🎲 現在サイコロを投擲中です！拾うか回収（15秒）されるまでお待ちください。", NamedTextColor.RED)
-      )
-      return
-    }
-
-    if (diceItem.hasDice(player)) {
-      diceItem.sanitizePlayerDice(player)
-      for (item in player.inventory.contents) {
-        val dice = item ?: continue
-        if (diceItem.isDice(dice)) {
-          diceItem.updateDiceSettings(dice, newMode = mode)
-          player.playSound(player.location, Sound.UI_BUTTON_CLICK, 0.8f, 1.2f)
-          player.sendMessage(
-              Component.text("[おやさいサイコロ] 🎲 手持ちのサイコロのモードを ", NamedTextColor.GOLD)
-                  .append(Component.text(mode.displayName, NamedTextColor.GREEN))
-                  .append(Component.text(" に切り替えました！（サイコロは1人1個までです）", NamedTextColor.GOLD))
-          )
-          return
-        }
-      }
-    }
-
-    diceManager.giveDiceSafely(player, mode)
+    diceManager.giveOrUpdateDice(player, mode)
   }
 
   override fun onTabComplete(

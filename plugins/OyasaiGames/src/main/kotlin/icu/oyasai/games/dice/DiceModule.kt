@@ -35,8 +35,12 @@ class DiceModule(private val plugin: OyasaiGamesPlugin) {
   }
 
   fun disable() {
-    chargeManager.shutdown()
-    diceManager.shutdown()
+    if (::chargeManager.isInitialized) {
+      chargeManager.shutdown()
+    }
+    if (::diceManager.isInitialized) {
+      diceManager.shutdown()
+    }
     plugin.logger.info("おやさいサイコロ (DiceModule) を安全に停止しました。")
   }
 }

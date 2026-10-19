@@ -20,6 +20,12 @@ class DiceItem(private val plugin: Plugin) {
   val diceKey = NamespacedKey(plugin, "dice_item")
   val modeKey = NamespacedKey(plugin, "dice_mode")
   val broadcastKey = NamespacedKey(plugin, "dice_broadcast")
+  val reachKey = NamespacedKey(plugin, "dice_reach")
+
+  companion object {
+    /** 誤設置防止のためのブロック操作範囲（リーチ）短縮値 */
+    const val REACH_REDUCTION = -4.5
+  }
 
   fun isDice(item: ItemStack?): Boolean {
     if (item == null || item.type.isAir) return false
@@ -71,6 +77,7 @@ class DiceItem(private val plugin: Plugin) {
   }
 
   fun hasDice(player: Player): Boolean {
+    if (isDice(player.inventory.itemInOffHand)) return true
     for (item in player.inventory.contents) {
       if (isDice(item)) return true
     }
@@ -101,6 +108,26 @@ class DiceItem(private val plugin: Plugin) {
 
     if (modified) {
       player.inventory.contents = contents
+    }
+
+    // オフハンドの検証
+    val offHandItem = player.inventory.itemInOffHand
+    if (isDice(offHandItem)) {
+      if (!foundFirst) {
+        foundFirst = true
+        updateDiceSettings(offHandItem)
+        if (offHandItem.amount > 1) {
+          offHandItem.amount = 1
+          player.inventory.setItemInOffHand(offHandItem)
+          modified = true
+        }
+      } else {
+        player.inventory.setItemInOffHand(null)
+        modified = true
+      }
+    }
+
+    if (modified) {
       player.sendMessage(
           Component.text("[おやさいサイコロ] 🎲 サイコロは1人1個までのため、余分なサイコロを整理しました。", NamedTextColor.GRAY)
       )
@@ -210,13 +237,12 @@ class DiceItem(private val plugin: Plugin) {
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES)
 
     // 地面を向いていてもブロック設置が誤爆しないよう、メインハンド所持時のブロック操作範囲（リーチ）を0に短縮
-    val reachKey = NamespacedKey(plugin, "dice_reach")
     meta.removeAttributeModifier(Attribute.BLOCK_INTERACTION_RANGE)
     meta.addAttributeModifier(
         Attribute.BLOCK_INTERACTION_RANGE,
         AttributeModifier(
             reachKey,
-            -4.5,
+            REACH_REDUCTION,
             AttributeModifier.Operation.ADD_NUMBER,
             EquipmentSlotGroup.MAINHAND,
         ),
