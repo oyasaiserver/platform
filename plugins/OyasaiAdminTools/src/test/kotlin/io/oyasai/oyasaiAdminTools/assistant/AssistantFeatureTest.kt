@@ -379,10 +379,9 @@ class AssistantFeatureTest {
     Fixture().use { f ->
       f.send("run_commands", """{"commands":"plugins\nunknown","summary":"まとめる"}""")
       f.drainUntil { f.responses.isNotEmpty() }
-      assertContains(
-          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
-          "拒否",
-      )
+      val rejection = JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString
+      assertContains(rejection, "拒否")
+      assertContains(rejection, "2個目: コマンドの登録・正規化が無効")
       assertEquals(0, f.executed)
       assertTrue(f.messages.isEmpty())
       f.send("run_commands", """{"commands":"plugins\nplugins","summary":"まとめる"}""")

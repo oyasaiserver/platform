@@ -274,7 +274,12 @@ internal class AssistantFeature(
     } else sender.sendMessage("/assistant allow list | /assistant allow remove <番号>")
   }
 
-  private fun resolve(player: Player, operator: String, text: String): NormalizedCommand? {
+  private fun resolve(
+      player: Player,
+      operator: String,
+      text: String,
+      denied: (String) -> Unit = {},
+  ): NormalizedCommand? {
     val command = AssistantRules.normalize(text, plugin.server.commandMap)
     val reason =
         when {
@@ -291,6 +296,14 @@ internal class AssistantFeature(
           }
           else -> return command
         }
+    denied(
+        when (reason) {
+          "invalid" -> "コマンドの登録・正規化が無効です。"
+          "blacklist" -> "禁止項目です。"
+          "permission" -> "本人の権限がありません。"
+          else -> "固定の更新には上限内の空気だけのキュボイドが必要です。"
+        }
+    )
     audit(operator, "denied:$reason", command?.text ?: text)
     player.sendMessage("拒否: 禁止項目・権限・コマンドの登録を確認してください。")
     return null
@@ -364,11 +377,14 @@ internal class AssistantFeature(
         } catch (failure: IllegalArgumentException) {
           return failure.message.orEmpty()
         }
+    val rejections = mutableListOf<String>()
     val commands = onMain {
       val player = player(id)
-      lines.map { resolve(player, operator, it) }
+      lines.mapIndexed { index, line ->
+        resolve(player, operator, line) { reason -> rejections.add("${index + 1}個目: $reason") }
+      }
     }
-    if (commands.any { it == null }) return "拒否: 一括内に禁止項目・権限不足・無効なコマンドがあります。実行していません。"
+    if (commands.any { it == null }) return "拒否: " + rejections.joinToString("\n") + "\n実行していません。"
     val checked = commands.filterNotNull()
     val locked = onMain { locks.active(player(id)) }
     val auto = onMain { checked.all { automatic(player(id), it) } }
