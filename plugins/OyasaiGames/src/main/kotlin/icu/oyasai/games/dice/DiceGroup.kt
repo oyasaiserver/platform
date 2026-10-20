@@ -25,20 +25,53 @@ class DiceGroup(
     val baseVelocity: Vector,
     val isBroadcast: Boolean = true,
 ) {
+  companion object {
+    /** 投擲完了（出目確定）後の自動回収待機時間（15秒 = 300 tick） */
+    const val AUTO_COLLECT_DELAY_TICKS = 15 * 20L
+
+    /** 投擲開始からの全体フェールセーフ回収時間（25秒 = 500 tick） */
+    const val GLOBAL_FAILSAFE_DELAY_TICKS = 25 * 20L
+
+    /** 周囲プレイヤーへのチャット通知最大半径（ブロック） */
+    const val BROADCAST_RADIUS = 30.0
+
+    /** 手動回収（右クリック）を許可するデフォルト距離の二乗（2.5ブロック = 6.25） */
+    const val DEFAULT_COLLECT_RADIUS_SQ = 6.25
+
+    /** 複数ダイス投擲時の散布幅基準（ブロック） */
+    const val SPREAD_WIDTH_BASE = 0.55
+
+    /** ダイス個数増加に伴う散布幅加算係数 */
+    const val SPREAD_WIDTH_FACTOR_PER_DICE = 0.12
+
+    /** 複数ダイス投擲時の初速ばらつき係数 */
+    const val SPREAD_VELOCITY_RATIO = 0.25
+
+    /** 合計ホログラムのY軸オフセット（ダイス群の最上部からの高さ） */
+    const val TOTAL_HOLO_Y_OFFSET = 1.25
+
+    /** 回収時の誤爆防止クールダウンtick数 */
+    const val COLLECT_COOLDOWN_TICKS = 20
+
+    /** 回収後の誤設置防止時間（ミリ秒） */
+    const val COLLECT_PREVENT_MS = 2000L
+  }
+
   val dices = mutableListOf<DiceInstance>()
   private var totalHologramJava: TextDisplay? = null
   private var totalHologramBedrock: TextDisplay? = null
   private var autoCollectTask: BukkitTask? = null
   private var globalFailsafeTask: BukkitTask? = null
   private var isFinished = false
+  private var isCollected = false
 
   fun start() {
-    // 25秒後の全体フェールセーフ（万が一チャンクアンロード等の異常があっても確実に回収を保証）
+    // 全体フェールセーフ（万が一チャンクアンロード等の異常があっても確実に回収を保証）
     globalFailsafeTask =
         plugin.server.scheduler.runTaskLater(
             plugin,
             Runnable { collect(null) },
-            25 * 20L,
+            GLOBAL_FAILSAFE_DELAY_TICKS,
         )
 
     val count = mode.diceCount
@@ -50,9 +83,9 @@ class DiceGroup(
 
       for (i in 0 until count) {
         val spreadFactor = (i.toDouble() / (count - 1)) - 0.5
-        val spreadWidth = 0.55 * (1.0 + (count - 2) * 0.12)
+        val spreadWidth = SPREAD_WIDTH_BASE * (1.0 + (count - 2) * SPREAD_WIDTH_FACTOR_PER_DICE)
         val spreadOffset = rightDir.clone().multiply(spreadFactor * spreadWidth)
-        val velocityOffset = rightDir.clone().multiply(spreadFactor * 0.25)
+        val velocityOffset = rightDir.clone().multiply(spreadFactor * SPREAD_VELOCITY_RATIO)
         val jitter =
             Vector(
                 (Math.random() - 0.5) * 0.05,
@@ -165,14 +198,14 @@ class DiceGroup(
 
     sendMessage(player, message)
 
-    // 15秒後に自動回収（フェールセーフ）
+    // 投擲完了後の自動回収（フェールセーフ）
     autoCollectTask =
         plugin.server.scheduler.runTaskLater(
             plugin,
             Runnable {
               collect(null) // 自動回収
             },
-            15 * 20L,
+            AUTO_COLLECT_DELAY_TICKS,
         )
   }
 
@@ -191,28 +224,11 @@ class DiceGroup(
     avgX /= dices.size
     avgZ /= dices.size
 
-    val midLoc = Location(world, avgX, maxY + 1.25, avgZ)
+    val midLoc = Location(world, avgX, maxY + TOTAL_HOLO_Y_OFFSET, avgZ)
     val formula = dices.joinToString(" + ") { it.resultEye.toString() }
 
-    val textJava =
-        Component.text("🎲 ", NamedTextColor.GOLD)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text("合計: ", NamedTextColor.GRAY))
-            .append(Component.text("$sum", NamedTextColor.GREEN, TextDecoration.BOLD))
-            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" 🎲", NamedTextColor.GOLD))
-            .append(Component.newline())
-            .append(Component.text("( $formula )", NamedTextColor.GRAY))
-
-    val textBedrock =
-        Component.text("⚅ ", NamedTextColor.GOLD)
-            .append(Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text("合計: ", NamedTextColor.GRAY))
-            .append(Component.text("$sum", NamedTextColor.GREEN, TextDecoration.BOLD))
-            .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
-            .append(Component.text(" ⚅", NamedTextColor.GOLD))
-            .append(Component.newline())
-            .append(Component.text("( $formula )", NamedTextColor.GRAY))
+    val textJava = DiceDisplayFormatter.formatTotalTextJava(sum, formula)
+    val textBedrock = DiceDisplayFormatter.formatTotalTextBedrock(sum, formula)
 
     val holoJava =
         world.spawn(midLoc, TextDisplay::class.java) { entity ->
@@ -253,9 +269,9 @@ class DiceGroup(
     val center = sourcePlayer?.location ?: origin
     val world = center.world ?: return
 
-    // 半径30ブロック以内のプレイヤーにメッセージを届ける
+    val maxDistSq = BROADCAST_RADIUS * BROADCAST_RADIUS
     for (p in world.players) {
-      if (p.location.distanceSquared(center) <= 30.0 * 30.0) {
+      if (p.location.distanceSquared(center) <= maxDistSq) {
         // 投げた本人、または他人のサイコロ結果のチャット受信を有効にしているプレイヤーにのみ送信
         if (p == sourcePlayer || diceManager.isChatReceiveEnabled(p)) {
           p.sendMessage(message)
@@ -270,7 +286,7 @@ class DiceGroup(
     return dices.any { it.matchesEntity(entityId) }
   }
 
-  fun isNear(targetLoc: Location, maxDistSq: Double = 6.25): Boolean {
+  fun isNear(targetLoc: Location, maxDistSq: Double = DEFAULT_COLLECT_RADIUS_SQ): Boolean {
     if (dices.isEmpty()) return false
     return dices.any { it.getDistanceSquared(targetLoc) <= maxDistSq }
   }
@@ -298,10 +314,14 @@ class DiceGroup(
   }
 
   fun collect(collector: Player?): Boolean {
+    if (isCollected) return false
+
     if (collector != null && collector.uniqueId != ownerUuid) {
       collector.sendMessage(Component.text("このサイコロは他のプレイヤーのものです。", NamedTextColor.RED))
       return false
     }
+
+    isCollected = true
 
     globalFailsafeTask?.cancel()
     globalFailsafeTask = null
@@ -321,8 +341,8 @@ class DiceGroup(
     if (owner != null && owner.isOnline) {
       diceManager.returnDiceItem(owner, mode, isBroadcast)
       // 回収時の画面タップ連打による誤設置を防止するためクールダウンと設置遮断を設定
-      DiceType.entries.forEach { owner.setCooldown(it.material, 20) }
-      diceManager.chargeManager?.recordRecentAction(owner, 2000L)
+      DiceType.entries.forEach { owner.setCooldown(it.material, COLLECT_COOLDOWN_TICKS) }
+      diceManager.chargeManager?.recordRecentAction(owner, COLLECT_PREVENT_MS)
 
       if (collector != null) {
         owner.playSound(owner.location, Sound.ENTITY_ITEM_PICKUP, 0.7f, 1.2f)
@@ -337,6 +357,7 @@ class DiceGroup(
   }
 
   fun forceCleanup() {
+    isCollected = true
     globalFailsafeTask?.cancel()
     globalFailsafeTask = null
     autoCollectTask?.cancel()
