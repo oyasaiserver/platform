@@ -20,5 +20,7 @@ assistant:
   sender-wait-ms: 1500
   sender-idle-ms: 300
   max-tool-calls-per-minute: 30
+  selection-lock-max-blocks: 1000000
+  selection-lock-minutes: 10
   # 正規化後のコマンドに追加で適用する正規表現。コードの禁止項目は解除できません。
   blacklist: []

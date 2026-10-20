@@ -14,6 +14,9 @@ internal object AssistantProtocol {
           "get_context" to emptySet(),
           "get_selection" to emptySet(),
           "run_command" to setOf("command", "summary"),
+          "run_commands" to setOf("commands", "summary"),
+          "lock_selection" to emptySet(),
+          "unlock_selection" to emptySet(),
           "search_memory" to setOf("query", "days"),
           "record_memory" to setOf("summary"),
       )

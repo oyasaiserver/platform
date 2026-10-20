@@ -42,6 +42,40 @@ class AssistantFeatureTest {
     val id = UUID.randomUUID()
     var permitted = true
     var executed = 0
+    var synchronous = 0
+    var executeResult: (Int) -> Boolean = { true }
+    val messages = ConcurrentLinkedQueue<net.kyori.adventure.text.Component>()
+    var maskIntact = true
+    var emptySelection = true
+    var restored = 0
+    val locks =
+        AssistantSelectionLock(
+            1_000_000,
+            10,
+            {
+              object : AssistantSelectionLock.Mask {
+                override fun validate(player: Player, maxBlocks: Long) {
+                  require(emptySelection)
+                }
+
+                override fun lock(player: Player, maxBlocks: Long): String {
+                  validate(player, maxBlocks)
+                  return "fixed"
+                }
+
+                override fun intact(player: Player) = maskIntact
+
+                override fun execute(player: Player, command: String): Boolean {
+                  synchronous++
+                  return player.performCommand(command)
+                }
+
+                override fun restore() {
+                  restored++
+                }
+              }
+            },
+        )
     val config =
         YamlConfiguration().apply {
           set("assistant.enabled", true)
@@ -68,9 +102,12 @@ class AssistantFeatureTest {
               }
               "performCommand" -> {
                 executed++
-                true
+                executeResult(executed)
               }
-              "sendMessage" -> null
+              "sendMessage" -> {
+                (args[0] as? net.kyori.adventure.text.Component)?.let(messages::add)
+                null
+              }
               else -> error("Player.$name")
             }
           }
@@ -94,7 +131,25 @@ class AssistantFeatureTest {
             override fun execute(sender: CommandSender, label: String, args: Array<out String>) =
                 true
           }
-      val known = mapOf("plugins" to command, "bukkit:plugins" to command)
+      val known = mutableMapOf<String, Command>("plugins" to command, "bukkit:plugins" to command)
+      val fawe =
+          factory.fake<org.bukkit.plugin.Plugin> { name, _ ->
+            when (name) {
+              "getName" -> "FastAsyncWorldEdit"
+              else -> error(name)
+            }
+          }
+      class FaweCommand(name: String) :
+          Command(name), org.bukkit.command.PluginIdentifiableCommand {
+        override fun getPlugin() = fawe
+
+        override fun execute(sender: CommandSender, label: String, args: Array<out String>) = true
+      }
+      for (name in listOf("/set", "/gmask", "/mask", "/regen")) {
+        val registered = FaweCommand(name)
+        known[name] = registered
+        known["fastasyncworldedit:$name"] = registered
+      }
       val commands =
           factory.fake<CommandMap> { name, args ->
             when (name) {
@@ -158,7 +213,7 @@ class AssistantFeatureTest {
             )
           }
       field("logger", logger)
-      feature = AssistantFeature(plugin)
+      feature = AssistantFeature(plugin, locks)
       AssistantFeature::class
           .java
           .getDeclaredField("allows")
@@ -316,6 +371,203 @@ class AssistantFeatureTest {
           "拒否: 本人が実行しませんでした",
           JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
       )
+    }
+  }
+
+  @Test
+  fun batchRejectsAllBeforeAnyExecutionAndUsesOnlyOneConfirmation() {
+    Fixture().use { f ->
+      f.send("run_commands", """{"commands":"plugins\nunknown","summary":"まとめる"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "拒否",
+      )
+      assertEquals(0, f.executed)
+      assertTrue(f.messages.isEmpty())
+      f.send("run_commands", """{"commands":"plugins\nplugins","summary":"まとめる"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      val card =
+          net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+              .serialize(f.messages.single())
+      assertContains(card, "[実行]")
+      assertContains(card, "[やめる]")
+      assertFalse(card.contains("[次から確認しない]"))
+      assertFalse(card.contains("[入力欄へ]"))
+      f.decision().complete(1)
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(2, f.executed)
+      assertEquals(1, f.audit.count { "event=propose" in it })
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "minecraft_get_chat",
+      )
+    }
+  }
+
+  @Test
+  fun batchStopsOnFailurePermissionLossAndLockLoss() {
+    for (reason in listOf("failure", "permission", "lock")) Fixture().use { f ->
+      if (reason == "lock") f.locks.lock(f.player)
+      f.executeResult = {
+        if (reason == "permission") f.permitted = false
+        if (reason == "lock") f.maskIntact = false
+        reason != "failure"
+      }
+      f.send("run_commands", """{"commands":"plugins\nplugins\nplugins","summary":"まとめる"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      f.decision().complete(1)
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(1, f.executed, reason)
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "停止",
+      )
+    }
+  }
+
+  @Test
+  fun allowedBatchNeedsNoConfirmationAndKeepsAllTwentyResultsWithinProtocolLimit() {
+    Fixture().use { f ->
+      val command = "bukkit:plugins " + "x".repeat(241)
+      assertEquals(256, command.length)
+      val store = AssistantAllowStore(f.db, AssistantRules())
+      store.add(command, "operator", f.id)
+      f.send(
+          "run_commands",
+          com.google.gson
+              .Gson()
+              .toJson(
+                  mapOf("commands" to List(20) { command }.joinToString("\n"), "summary" to "まとめる")
+              ),
+      )
+      f.drainUntil { f.responses.isNotEmpty() }
+      val result = JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString
+      assertEquals(20, f.executed)
+      assertTrue(f.timers.isEmpty())
+      assertContains(result, "20. /$command")
+      assertContains(result, "全20個")
+      assertTrue(result.length <= 8000)
+    }
+  }
+
+  @Test
+  fun automaticBatchStopsWhenSharedAllowanceIsRemoved() {
+    Fixture().use { f ->
+      val store = AssistantAllowStore(f.db, AssistantRules())
+      store.add("bukkit:plugins", "operator", f.id)
+      val entry = store.list().single { it.scope == "=bukkit:plugins" }
+      f.executeResult = {
+        store.remove(entry.id)
+        true
+      }
+      f.send("run_commands", """{"commands":"plugins\nplugins","summary":"まとめる"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(1, f.executed)
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "停止",
+      )
+      assertTrue(f.timers.isEmpty())
+    }
+  }
+
+  @Test
+  fun lockedFaweEditsAreAutomaticButVanillaAndUnsafeFaweStillNeedConfirmation() {
+    Fixture().use { f ->
+      f.locks.lock(f.player)
+      f.send("run_commands", """{"commands":"//set stone\n//set glass","summary":"建築"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(2, f.executed)
+      assertEquals(2, f.synchronous)
+      assertTrue(f.timers.isEmpty())
+      f.responses.clear()
+      f.send("run_command", """{"command":"//regen","summary":"再生成"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      assertTrue(f.responses.isEmpty())
+      f.decision().complete(0)
+      f.drainUntil { f.responses.isNotEmpty() }
+      f.responses.clear()
+      f.timers.clear()
+      f.send("run_command", """{"command":"plugins","summary":"通常操作"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      f.decision().complete(0)
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(2, f.executed)
+    }
+  }
+
+  @Test
+  fun lockedMaskChangesRevalidateAndRefreshInsteadOfRemovingTheMask() {
+    Fixture().use { f ->
+      f.locks.lock(f.player)
+      f.emptySelection = false
+      f.send("run_commands", """{"commands":"//set stone\n//gmask","summary":"更新"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(0, f.executed)
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "拒否",
+      )
+      f.emptySelection = true
+      for (command in listOf("//gmask", "//mask stone", "//gmask #region")) {
+        f.send("run_command", """{"command":"$command","summary":"更新"}""")
+        f.drainUntil { f.responses.isNotEmpty() }
+        assertContains(
+            JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+            "fixed",
+        )
+        assertTrue(f.locks.active(f.player))
+      }
+      assertTrue(f.timers.isEmpty())
+      assertEquals(0, f.executed)
+    }
+  }
+
+  @Test
+  fun inputTransferConsumesProposalAndOnlyOffersSuggestCommandAfterValidation() {
+    Fixture().use { f ->
+      f.send("run_command", """{"command":"plugins","summary":"入力へ"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      assertContains(
+          net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+              .serialize(f.messages.single()),
+          "[入力欄へ]",
+      )
+      val decision = f.decision()
+      decision.complete(3)
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertFalse(decision.complete(1))
+      assertEquals(0, f.executed)
+      assertEquals(
+          net.kyori.adventure.text.event.ClickEvent.Action.SUGGEST_COMMAND,
+          f.messages.last().clickEvent()!!.action(),
+      )
+      assertEquals(
+          "/bukkit:plugins",
+          (f.messages.last().clickEvent()!!.payload()
+                  as net.kyori.adventure.text.event.ClickEvent.Payload.Text)
+              .value(),
+      )
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "minecraft_get_chat",
+      )
+    }
+  }
+
+  @Test
+  fun quittingRestoresSelectionMask() {
+    Fixture().use { f ->
+      f.locks.lock(f.player)
+      f.feature.onQuit(
+          org.bukkit.event.player.PlayerQuitEvent(
+              f.player,
+              net.kyori.adventure.text.Component.empty(),
+          )
+      )
+      assertEquals(1, f.restored)
+      assertFalse(f.locks.active(f.player))
     }
   }
 

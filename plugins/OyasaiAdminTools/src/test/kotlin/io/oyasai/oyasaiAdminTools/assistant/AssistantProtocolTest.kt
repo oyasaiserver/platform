@@ -11,6 +11,17 @@ class AssistantProtocolTest {
   @Test
   fun validatesUtf8SizeVersionIdToolAndStringArguments() {
     assertEquals("test", AssistantProtocol.decode(request()).id)
+    for (tool in listOf("lock_selection", "unlock_selection")) {
+      assertEquals(emptyMap(), AssistantProtocol.decode(request(tool)).args)
+      assertFails { AssistantProtocol.decode(request(tool, """{"extra":"bad"}""")) }
+    }
+    assertEquals(
+        "plugins\nplugins",
+        AssistantProtocol.decode(
+                request("run_commands", """{"commands":"plugins\nplugins","summary":"一覧"}""")
+            )
+            .args["commands"],
+    )
     assertEquals(emptyMap(), AssistantProtocol.decode(request("get_selection")).args)
     assertEquals(
         "7",

@@ -21,8 +21,14 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.messaging.PluginMessageListener
 
-internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
-    CommandExecutor, PluginMessageListener, Listener, AutoCloseable {
+internal class AssistantFeature(
+    private val plugin: OyasaiAdminTools,
+    private val locks: AssistantSelectionLock =
+        AssistantSelectionLock(
+            plugin.config.getLong("assistant.selection-lock-max-blocks", 1_000_000),
+            plugin.config.getLong("assistant.selection-lock-minutes", 10),
+        ),
+) : CommandExecutor, PluginMessageListener, Listener, AutoCloseable {
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
   private val jobs = ConcurrentHashMap<UUID, Job>()
   private val requestIds = mutableMapOf<UUID, String>()
@@ -41,6 +47,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   private val records = ConcurrentHashMap<String, AssistantMemory.Record>()
   private val lastOutput = ConcurrentHashMap<UUID, String>()
 
+  private var lockTimer: org.bukkit.scheduler.BukkitTask? = null
+
   fun enable() {
     AssistantCommandSender.validate(senderPermissions)
     allows = AssistantAllowStore(plugin.db, rules)
@@ -57,13 +65,30 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     plugin.server.messenger.registerIncomingPluginChannel(plugin, CHANNEL, this)
     plugin.server.messenger.registerOutgoingPluginChannel(plugin, CHANNEL)
     plugin.server.pluginManager.registerEvents(this, plugin)
+    lockTimer =
+        plugin.server.scheduler.runTaskTimer(
+            plugin,
+            Runnable {
+              try {
+                locks.tick(plugin.config.getBoolean("assistant.enabled", false))
+              } catch (failure: Throwable) {
+                plugin.logger.warning(
+                    "Assistant mask restoration failed: ${failure.javaClass.simpleName}"
+                )
+              }
+            },
+            20L,
+            20L,
+        )
   }
 
   override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
     if (channel != CHANNEL) return
     val id = player.uniqueId
     val operator = "${player.name}($id)"
-    if (!player.hasPermission(PERMISSION) || settings?.getBoolean("enabled", false) != true) {
+    if (
+        !player.hasPermission(PERMISSION) || !plugin.config.getBoolean("assistant.enabled", false)
+    ) {
       audit(operator, "denied:message", "disabled or permission")
       return
     }
@@ -95,6 +120,20 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                             (lastOutput[id]?.let { "\n直近のコマンド結果（観測データ）: ${it}" } ?: "")
                       }
                   "get_selection" -> onMain { AssistantSelection.read(player(id)) }
+                  "lock_selection" -> onMain { lockSelection(player(id), operator) }
+                  "unlock_selection" ->
+                      onMain {
+                        val result = locks.unlock(player(id).uniqueId)
+                        audit(operator, "selection-unlock", result)
+                        result
+                      }
+                  "run_commands" ->
+                      runCommands(
+                          id,
+                          operator,
+                          request.args.getValue("commands"),
+                          request.args.getValue("summary"),
+                      )
                   "run_command" ->
                       runCommand(
                           id,
@@ -149,6 +188,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
     val id = event.player.uniqueId
+    locks.unlock(id)
     requestIds.remove(id)?.let { reply(event.player, it, "拒否: 本人が実行しませんでした", false) }
     pending.remove(id)?.decision?.complete(0)
     jobs.remove(id)?.cancel()
@@ -180,7 +220,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   private fun player(id: UUID): Player {
     check(plugin.isEnabled)
     val player = plugin.server.getPlayer(id) ?: error("Operator offline")
-    check(settings?.getBoolean("enabled", false) == true) { "Assistant disabled" }
+    check(plugin.config.getBoolean("assistant.enabled", false)) { "Assistant disabled" }
     check(player.hasPermission(PERMISSION)) { "Operator permission revoked" }
     return player
   }
@@ -241,6 +281,14 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
           command == null -> "invalid"
           rules.isBlacklisted(command.text) -> "blacklist"
           !command.registered.testPermissionSilent(player) -> "permission"
+          locks.active(player) && AssistantBatch.maskChange(command.text) -> {
+            try {
+              locks.validate(player)
+              return command
+            } catch (_: Throwable) {
+              "selection-lock"
+            }
+          }
           else -> return command
         }
     audit(operator, "denied:$reason", command?.text ?: text)
@@ -262,22 +310,118 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       audit(operator, "denied:summary", command.text)
       return "拒否: 要約は500文字以内の1行にしてください。"
     }
-    if (onMain { allows.allows(command.text) })
-        return execute(
-            id,
-            operator,
-            command,
-            false,
-            AssistantSenderChoice.operator(command.text, playerCommands),
-        )
-    return propose(
-        id,
-        operator,
-        command,
-        summary,
-        AssistantSenderChoice.operator(command.text, playerCommands),
-    )
+    val locked = onMain { locks.active(player(id)) }
+    val automatic = onMain { automatic(player(id), command) }
+    val asOperator =
+        AssistantBatch.fawe(command.text) ||
+            AssistantSenderChoice.operator(command.text, playerCommands)
+    if (automatic) return execute(id, operator, command, false, asOperator, requireLock = locked)
+    val action = confirm(id, operator, listOf(command), summary, asOperator)
+    if (action == 0) return "拒否: 本人が実行しませんでした"
+    if (action == 3) return transfer(id, operator, command)
+    return execute(id, operator, command, action == 2, asOperator, requireLock = locked)
   }
+
+  private fun lockSelection(player: Player, operator: String): String =
+      try {
+        val command = resolve(player, operator, "//gmask #region")
+        if (
+            command == null ||
+                !AssistantBatch.fawe(command.text) ||
+                !AssistantBatch.maskChange(command.text)
+        )
+            return "拒否: FAWE のマスクのコマンドを実行できません。"
+        locks.lock(player).also {
+          audit(operator, "execute", "sendAs=operator ${command.text}")
+          audit(operator, "execution-result", "sendAs=operator accepted=true")
+          audit(operator, "selection-lock", it)
+        }
+      } catch (failure: Throwable) {
+        audit(operator, "denied:selection-lock", failure.javaClass.simpleName)
+        failure.message?.takeIf { it.startsWith("拒否:") } ?: "拒否: 空のキュボイド選択範囲と FAWE が必要です。"
+      }
+
+  private fun automatic(player: Player, command: NormalizedCommand): Boolean {
+    val locked = locks.active(player)
+    if (locked && AssistantBatch.maskChange(command.text)) return true
+    if (locked && AssistantBatch.fawe(command.text) && !AssistantBatch.maskedEdit(command.text))
+        return false
+    return allows.allows(command.text) || (locked && AssistantBatch.maskedEdit(command.text))
+  }
+
+  private suspend fun runCommands(
+      id: UUID,
+      operator: String,
+      text: String,
+      summary: String,
+  ): String {
+    if (summary.isBlank() || summary.length > 500 || summary.any { it.isISOControl() || it == '§' })
+        return "拒否: 要約は500文字以内の1行にしてください。"
+    val deadline = System.nanoTime() + 55_000_000_000L
+    val lines =
+        try {
+          AssistantBatch.parse(text)
+        } catch (failure: IllegalArgumentException) {
+          return failure.message.orEmpty()
+        }
+    val commands = onMain {
+      val player = player(id)
+      lines.map { resolve(player, operator, it) }
+    }
+    if (commands.any { it == null }) return "拒否: 一括内に禁止項目・権限不足・無効なコマンドがあります。実行していません。"
+    val checked = commands.filterNotNull()
+    val locked = onMain { locks.active(player(id)) }
+    val auto = onMain { checked.all { automatic(player(id), it) } }
+    if (!auto && confirm(id, operator, checked, summary, true, batch = true) == 0)
+        return "拒否: 本人が実行しませんでした"
+    val results = mutableListOf<String>()
+    for ((index, command) in checked.withIndex()) {
+      if (System.nanoTime() >= deadline)
+          return results.joinToString("\n") + "\n停止: ${index}個まで実行受付。道具の待ち時間内に返すため後続は実行していません。"
+      val result =
+          try {
+            execute(
+                id,
+                operator,
+                command,
+                false,
+                AssistantBatch.fawe(command.text) ||
+                    AssistantSenderChoice.operator(command.text, playerCommands),
+                requireLock = locked,
+                fallback = false,
+                requireAutomatic = auto,
+                deadline = deadline,
+            )
+          } catch (failure: Throwable) {
+            if (failure is CancellationException) throw failure
+            audit(operator, "execution-failed", command.text)
+            "失敗: 実行条件の再確認またはコマンドの実行に失敗しました。"
+          }
+      results.add("${index + 1}. /${command.text}\n${result.take(100)}")
+      if (
+          result.startsWith("拒否") ||
+              result.startsWith("失敗") ||
+              AssistantSenderChoice.playerRequired(result)
+      ) {
+        return results.joinToString("\n") + "\n停止: ${index + 1} 個目。後続は実行していません。"
+      }
+    }
+    return results.joinToString("\n") + "\n全${checked.size}個の実行受付が終わりました。成功・結果は各項目で確認してください。"
+  }
+
+  private suspend fun transfer(id: UUID, operator: String, command: NormalizedCommand): String =
+      onMain {
+        val player = player(id)
+        val fresh = resolve(player, operator, command.text)
+        if (fresh == null || fresh.registration !== command.registration)
+            return@onMain "拒否: 入力欄へ移す前の再確認に失敗しました。"
+        player.sendMessage(
+            Component.text("[クリックして入力欄へ]", NamedTextColor.AQUA)
+                .clickEvent(ClickEvent.suggestCommand("/${command.text}"))
+        )
+        audit(operator, "input-transfer", command.text)
+        "本人が入力欄への移動を選びました。入力用リンクを表示しました。送ったかどうかと結果は minecraft_get_chat で確かめてください。"
+      }
 
   private suspend fun execute(
       id: UUID,
@@ -285,18 +429,29 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       command: NormalizedCommand,
       remember: Boolean,
       asOperator: Boolean,
+      requireLock: Boolean = false,
+      fallback: Boolean = true,
+      requireAutomatic: Boolean = false,
+      deadline: Long = Long.MAX_VALUE,
   ): String {
     var collector: AssistantOutputCollector? = null
     try {
       val immediate = onMain {
         val player = player(id)
+        if (System.nanoTime() >= deadline) return@onMain "拒否: 一括操作の待ち時間を超えました。"
+        val locked = locks.active(player)
+        if (requireLock && !locked) return@onMain "拒否: 選択範囲の固定が解除されました。"
         val fresh = resolve(player, operator, command.text) ?: return@onMain "拒否: 実行前の再確認に失敗しました。"
         if (fresh.text != command.text || fresh.registration !== command.registration)
             return@onMain "拒否: コマンドの登録が変更されました。"
+        if (requireAutomatic && !automatic(player, fresh)) return@onMain "拒否: 確認なしで実行できる条件が変わりました。"
+        if (locked && AssistantBatch.maskChange(command.text))
+            return@onMain lockSelection(player, operator)
         val accepted =
             if (asOperator) {
               audit(operator, "execute", "sendAs=operator ${command.text}")
-              player.performCommand(command.text)
+              if (locked && AssistantBatch.fawe(command.text)) locks.execute(player, command.text)
+              else player.performCommand(command.text)
             } else {
               val sender =
                   AssistantCommandSender(
@@ -308,7 +463,15 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                   )
               if (!command.registered.testPermissionSilent(sender))
                   return@onMain "拒否: AI送り主の権限上限で拒否しました。"
-              collector = AssistantOutputCollector(sender, senderQuiet, senderWait)
+              collector =
+                  AssistantOutputCollector(
+                      sender,
+                      senderQuiet,
+                      minOf(
+                          senderWait,
+                          ((deadline - System.nanoTime()) / 1_000_000).coerceAtLeast(1),
+                      ),
+                  )
               audit(operator, "execute", "sendAs=assistant ${command.text}")
               sender.dispatch(command.text)
             }
@@ -321,14 +484,20 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
           audit(operator, "allow-add", AssistantRules.scope(command.text).orEmpty())
           player.sendMessage("運営全員の共有許可リストへ追加しました: ${AssistantRules.scope(command.text)}")
         }
-        if (asOperator) AssistantCommandOutput.playerOnly() else null
+        if (!accepted) "失敗: コマンドの実行が受け付けられませんでした。"
+        else if (asOperator) AssistantCommandOutput.playerOnly() else null
       }
       val result = immediate ?: collector!!.collect()
       if (result.startsWith("拒否")) audit(operator, "denied:execution", command.text)
       lastOutput[id] = result.take(8000)
       audit(operator, "sender-output", result.take(500))
       if (!asOperator && AssistantSenderChoice.playerRequired(result)) {
-        return propose(id, operator, command, "AI送り主ではプレイヤー専用エラーでした。本人として実行するか確認してください。", true)
+        if (!fallback) return "失敗: プレイヤー専用です。単独で本人実行を確認してください。"
+        val action =
+            confirm(id, operator, listOf(command), "AI送り主ではプレイヤー専用エラーでした。本人として実行するか確認してください。", true)
+        if (action == 0) return "拒否: 本人が実行しませんでした"
+        if (action == 3) return transfer(id, operator, command)
+        return execute(id, operator, command, action == 2, true, requireLock)
       }
 
       return result
@@ -337,15 +506,17 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     }
   }
 
-  private suspend fun propose(
+  private suspend fun confirm(
       id: UUID,
       operator: String,
-      command: NormalizedCommand,
+      commands: List<NormalizedCommand>,
       summary: String,
       asOperator: Boolean,
-  ): String {
+      batch: Boolean = false,
+  ): Int {
+    val command = commands.first()
     // Under dsh ACP's fixed 60s MCP call timeout, leaving room to run and collect output.
-    val proposal = Pending(command, System.nanoTime() + 45_000_000_000L)
+    val proposal = Pending(System.nanoTime() + 45_000_000_000L)
     onMain {
       val player = player(id)
       pending[id] = proposal
@@ -360,6 +531,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                   when (action) {
                     1 -> NamedTextColor.GREEN
                     2 -> NamedTextColor.GOLD
+                    3 -> NamedTextColor.AQUA
                     else -> NamedTextColor.RED
                   },
               )
@@ -384,7 +556,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                                     audience.isOnline &&
                                         audience.hasPermission(PERMISSION) &&
                                         System.nanoTime() < proposal.expiresAt &&
-                                        plugin.isEnabled
+                                        plugin.isEnabled &&
+                                        plugin.config.getBoolean("assistant.enabled", false)
                                 proposal.decision.complete(if (valid) action else 0)
                               },
                           )
@@ -398,12 +571,15 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
               )
       proposal.card =
           Component.text(
-                  "/${command.text}\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
+                  commands.joinToString("\n") { "/${it.text}" } +
+                      "\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
               )
-              .append(button(if (asOperator) "[本人として実行]" else "[実行]", 1))
-      if (AssistantRules.scope(command.text) != null)
+              .append(button("[実行]", 1))
+      if (!batch && AssistantRules.scope(command.text) != null)
           proposal.card =
               proposal.card.append(Component.text("   ")).append(button("[次から確認しない]", 2))
+      if (!batch)
+          proposal.card = proposal.card.append(Component.text("   ")).append(button("[入力欄へ]", 3))
       proposal.card = proposal.card.append(Component.text("   ")).append(button("[やめる]", 0))
       plugin.server.scheduler.runTaskLater(
           plugin,
@@ -412,17 +588,14 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
               audit(operator, "cancel", "expired: ${command.text}")
             }
           },
-          1200L,
+          900L,
       )
       player.sendMessage(Component.text(summary).append(Component.newline()).append(proposal.card))
     }
-    val action = withTimeoutOrNull(60_000) { proposal.decision.await() } ?: 0
+    val action = withTimeoutOrNull(45_000) { proposal.decision.await() } ?: 0
     onMain { if (pending[id] === proposal) pending.remove(id) }
-    if (action == 0) {
-      audit(operator, "cancel", command.text)
-      return "拒否: 本人が実行しませんでした"
-    }
-    return execute(id, operator, command, action == 2, asOperator)
+    if (action == 0) audit(operator, "cancel", commands.joinToString { it.text })
+    return action
   }
 
   private suspend fun <T> onMain(action: () -> T): T = suspendCancellableCoroutine { continuation ->
@@ -448,6 +621,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   }
 
   override fun close() {
+    lockTimer?.cancel()
+    locks.close()
     pending.forEach { (_, proposal) -> proposal.decision.complete(0) }
     requestIds.forEach { (id, requestId) ->
       plugin.server.getPlayer(id)?.let { reply(it, requestId, "拒否: 本人が実行しませんでした", false) }
@@ -462,7 +637,6 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
   }
 
   private data class Pending(
-      val command: NormalizedCommand,
       val expiresAt: Long,
       var card: Component = Component.empty(),
       val decision: CompletableDeferred<Int> = CompletableDeferred(),

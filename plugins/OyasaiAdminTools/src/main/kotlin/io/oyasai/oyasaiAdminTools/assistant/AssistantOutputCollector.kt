@@ -51,5 +51,5 @@ internal object AssistantCommandOutput {
             if (summary.dropped > 0 || summary.timedOut) "\n（取得上限までの結果です）" else ""
   }
 
-  fun playerOnly() = "本人として実行しました。結果は本人の画面に表示されます。AIは出力を取得していないため成功・条件達成は未確認です。"
+  fun playerOnly() = "本人として実行しました。結果は minecraft_get_chat で確かめてください。AIは出力を取得していないため成功・条件達成は未確認です。"
 }
