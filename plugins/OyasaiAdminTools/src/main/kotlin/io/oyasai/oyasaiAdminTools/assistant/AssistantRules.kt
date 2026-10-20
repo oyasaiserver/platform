@@ -144,12 +144,15 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
       // FAWE registers e.g. `//gmask` as a command named `gmask` whose `owner:gmask` key belongs to
       // another command (`/gmask`). Use the command's own first name that maps back to it; the
       // order is
-      // fixed, so every alias still normalizes to one text.
+      // fixed, so every alias still normalizes to one text; the typed label is the last resort.
       val label =
           if (node == null && command is PluginIdentifiableCommand)
-              (listOf(command.name) + command.aliases)
+              (listOf(command.name) + command.aliases + words.first().substringAfter(':'))
                   .map { "$owner:${it.lowercase(Locale.ROOT)}" }
-                  .firstOrNull { commands.getCommand(it) === command } ?: "$owner:$name"
+                  .firstOrNull { commands.getCommand(it) === command }
+                  ?: return reject(
+                      "identity:$owner name=${command.name} aliases=${command.aliases}"
+                  )
           else "$owner:$name"
       val canonical = commands.getCommand(label) ?: return reject("label:$label")
       if (node == null) {
