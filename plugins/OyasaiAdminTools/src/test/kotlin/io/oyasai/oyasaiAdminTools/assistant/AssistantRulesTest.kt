@@ -152,6 +152,25 @@ class AssistantRulesTest {
   }
 
   @Test
+  fun argumentlessScopesMatchExactlyAndLegacyScopesKeepTheirMeaning() {
+    val rules = AssistantRules()
+    val scope = assertNotNull(AssistantRules.scope("minecraft:list"))
+    assertTrue(rules.isAllowed("minecraft:list", listOf(scope)))
+    assertFalse(rules.isAllowed("minecraft:list uuids", listOf(scope)))
+    assertFalse(rules.isAllowed("minecraft:listx", listOf(scope)))
+    assertTrue(rules.isAllowed("minecraft:list uuids", listOf("minecraft:list")))
+    assertFalse(
+        rules.isAllowed(
+            "minecraft:stop",
+            listOf(assertNotNull(AssistantRules.scope("minecraft:stop"))),
+        )
+    )
+    assertFalse(
+        AssistantRules(listOf("^minecraft:list$")).isAllowed("minecraft:list", listOf(scope))
+    )
+  }
+
+  @Test
   fun blacklistAlwaysWinsAndScopesHaveWordBoundaries() {
     val rules = AssistantRules(listOf("^minecraft:kill\\b"))
     val denied =
@@ -220,7 +239,7 @@ class AssistantRulesTest {
         )
         .forEach { assertFalse(rules.isBlacklisted(it), it) }
     assertEquals("coreprotect:co lookup", AssistantRules.scope("coreprotect:co lookup u:steve"))
-    assertNull(AssistantRules.scope("minecraft:list"))
+    assertEquals("=minecraft:list", AssistantRules.scope("minecraft:list"))
     assertNull(AssistantRules.scope("minecraft:tp 1 2 3"))
     assertNull(AssistantRules.scope("custom:cbmenu demo_car size 2"))
     assertTrue(

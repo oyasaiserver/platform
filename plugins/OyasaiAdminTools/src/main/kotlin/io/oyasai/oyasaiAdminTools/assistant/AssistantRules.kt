@@ -13,7 +13,11 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
   fun isBlacklisted(command: String): Boolean = blacklist.any { it.containsMatchIn(command) }
 
   fun isAllowed(command: String, scopes: Collection<String>): Boolean =
-      !isBlacklisted(command) && scopes.any { command == it || command.startsWith("$it ") }
+      !isBlacklisted(command) &&
+          scopes.any {
+            if (it.startsWith("=")) command == it.drop(1)
+            else command == it || command.startsWith("$it ")
+          }
 
   companion object {
     private val SERVER_OWNERS = listOf("minecraft", "bukkit", "paper", "spigot", "purpur")
@@ -69,6 +73,8 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
             .map(::Regex)
 
     fun scope(command: String): String? {
+      // Exact scopes keep legacy single-word scopes' prefix semantics unchanged.
+      if (' ' !in command) return "=$command"
       val words = command.split(' ')
       if (words.getOrNull(1)?.matches(Regex("[a-z]+")) != true) return null
       return words.take(2).joinToString(" ")

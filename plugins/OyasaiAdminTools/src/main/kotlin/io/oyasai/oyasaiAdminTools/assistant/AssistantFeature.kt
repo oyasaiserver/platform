@@ -549,7 +549,9 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
             .hoverEvent(
                 Component.text(
                     if (action == 2)
-                        "運営全員に効く常時許可: ${AssistantRules.scope(command.text)}\nこの範囲の引数は何でも確認なしになります。"
+                        "運営全員に効く常時許可: ${AssistantRules.scope(command.text)}\n" +
+                            if (' ' !in command.text) "引数なしのときだけ確認なしになります。"
+                            else "この範囲の引数は何でも確認なしになります。"
                     else "/${command.text}"
                 )
             )

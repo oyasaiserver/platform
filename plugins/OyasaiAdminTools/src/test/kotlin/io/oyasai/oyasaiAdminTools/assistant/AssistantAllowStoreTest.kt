@@ -33,6 +33,7 @@ class AssistantAllowStoreTest {
       assertFailsWith<IllegalArgumentException> {
         store.add("coreprotect:co purge", "operator", uuid)
       }
+      assertTrue(store.add("minecraft:list", "operator", uuid))
       store.add("coreprotect:co", "operator", uuid)
       assertFalse(store.allows("coreprotect:co purge"))
       store.remove(store.list().first().id)
@@ -40,6 +41,9 @@ class AssistantAllowStoreTest {
     AdminDb(file, Logger.getLogger("assistant-test")).use { db ->
       db.open()
       val store = AssistantAllowStore(db, rules)
+      assertTrue(store.allows("minecraft:list"))
+      assertFalse(store.allows("minecraft:list uuids"))
+      assertFalse(store.add("minecraft:list", "operator", uuid))
       assertFalse(store.allows("dynamicprofile:syokaku iscandidate steve"))
       assertTrue(store.allows("dynamicprofile:syokaku getrank steve"))
       assertEquals("operator", store.list().first { it.scope == "coreprotect:co lookup" }.name)
