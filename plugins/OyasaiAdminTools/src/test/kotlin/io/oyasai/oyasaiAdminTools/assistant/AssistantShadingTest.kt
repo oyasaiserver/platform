@@ -18,6 +18,8 @@ class AssistantShadingTest {
             listOf(
                 "io/oyasai/oyasaiAdminTools/assistant/AssistantPi",
                 "io/ktor/",
+                "com/sk89q/worldedit/",
+                "com/fastasyncworldedit/",
                 "ai/koog/",
                 "com/fasterxml/jackson/",
                 "aws/",

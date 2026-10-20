@@ -11,6 +11,7 @@ class AssistantProtocolTest {
   @Test
   fun validatesUtf8SizeVersionIdToolAndStringArguments() {
     assertEquals("test", AssistantProtocol.decode(request()).id)
+    assertEquals(emptyMap(), AssistantProtocol.decode(request("get_selection")).args)
     assertEquals(
         "7",
         AssistantProtocol.decode(request("search_memory", """{"query":"tp","days":"7"}"""))
@@ -22,6 +23,7 @@ class AssistantProtocolTest {
             "{v:1}".toByteArray(),
             "{".toByteArray(),
             request("unknown"),
+            request("get_selection", """{"world":"other"}"""),
             request(id = "x".repeat(65)),
             request("search_memory", """{"query":"tp","days":7}"""),
             request("run_command", """{"command":"tp"}"""),

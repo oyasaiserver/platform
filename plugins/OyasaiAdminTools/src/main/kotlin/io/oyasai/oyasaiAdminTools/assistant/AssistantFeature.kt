@@ -94,6 +94,7 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
                         context(player(id)) +
                             (lastOutput[id]?.let { "\n直近のコマンド結果（観測データ）: ${it}" } ?: "")
                       }
+                  "get_selection" -> onMain { AssistantSelection.read(player(id)) }
                   "run_command" ->
                       runCommand(
                           id,

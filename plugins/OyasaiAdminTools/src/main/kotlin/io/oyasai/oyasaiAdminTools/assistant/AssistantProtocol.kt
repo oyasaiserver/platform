@@ -12,6 +12,7 @@ internal object AssistantProtocol {
   private val tools =
       mapOf(
           "get_context" to emptySet(),
+          "get_selection" to emptySet(),
           "run_command" to setOf("command", "summary"),
           "search_memory" to setOf("query", "days"),
           "record_memory" to setOf("summary"),

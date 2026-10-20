@@ -20,6 +20,7 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.plugin.PluginDescriptionFile
 import org.bukkit.plugin.PluginLogger
+import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.messaging.Messenger
 import org.bukkit.scheduler.BukkitScheduler
@@ -56,6 +57,7 @@ class AssistantFeatureTest {
       player =
           factory.fake<Player> { name, args ->
             when (name) {
+              "getServer" -> plugin.server
               "getUniqueId" -> id
               "getName" -> "operator"
               "hasPermission" -> permitted
@@ -102,10 +104,16 @@ class AssistantFeatureTest {
             }
           }
       val messenger = factory.fake<Messenger> { _, _ -> null }
+      val pluginManager =
+          factory.fake<PluginManager> { name, _ ->
+            check(name == "isPluginEnabled")
+            false
+          }
       val server =
           factory.fake<Server> { name, _ ->
             when (name) {
               "getScheduler" -> scheduler
+              "getPluginManager" -> pluginManager
               "getPlayer" -> player
               "getCommandMap" -> commands
               "getMessenger" -> messenger
@@ -208,6 +216,33 @@ class AssistantFeatureTest {
       assertEquals(2, f.audit.count { "denied:message" in it })
       assertTrue(f.responses.isEmpty())
       assertFalse(Files.exists(f.root.resolve("assistant-memory")))
+    }
+  }
+
+  @Test
+  fun selectionUsesSharedPermissionRateLimitAndAuditWithoutConfirmation() {
+    Fixture().use { f ->
+      f.permitted = false
+      f.send("get_selection")
+      assertTrue(f.responses.isEmpty())
+      assertTrue(f.audit.any { "denied:message" in it })
+      f.permitted = true
+      repeat(30) {
+        f.send("get_selection")
+        f.drainUntil { f.responses.isNotEmpty() }
+        assertContains(
+            JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+            "FAWE が使えません",
+        )
+      }
+      f.send("get_selection")
+      assertEquals(
+          "rate limit",
+          JsonParser.parseString(f.responses.remove()).asJsonObject["error"].asString,
+      )
+      assertEquals(30, f.audit.count { "tool:get_selection" in it })
+      assertTrue(f.timers.isEmpty())
+      assertEquals(0, f.executed)
     }
   }
 

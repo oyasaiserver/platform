@@ -1,5 +1,6 @@
 dependencies {
   compileOnly(libs.purpur.api)
+  compileOnly(libs.fawe.bukkit)
   compileOnly(libs.luckperms.api)
   compileOnly(project(":plugins:OyasaiToken"))
   implementation(libs.kotlin.stdlib)
@@ -9,6 +10,7 @@ dependencies {
   implementation(libs.sqlite.jdbc)
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
   testImplementation(libs.purpur.api)
+  testImplementation(libs.fawe.bukkit)
 }
 
 // Kotlin stdlib/reflection retain their names: relocating them breaks built-in type lookup.
