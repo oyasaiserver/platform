@@ -10,6 +10,16 @@ class TeleportRulesTest {
   private val location = SavedLocation("world-id", "world", 1.0, 64.0, 2.0)
 
   @Test
+  fun `position tp accepts an optional player and an optional yaw and pitch`() {
+    assertEquals(0, TeleportRules.positionOffset(3))
+    assertEquals(1, TeleportRules.positionOffset(4))
+    assertEquals(0, TeleportRules.positionOffset(5))
+    assertEquals(1, TeleportRules.positionOffset(6))
+    assertNull(TeleportRules.positionOffset(1))
+    assertNull(TeleportRules.positionOffset(2))
+  }
+
+  @Test
   fun `matching jail with duration updates sentence while no jail name releases`() {
     assertEquals(
         TeleportRules.JailAction.ENTER,

@@ -521,16 +521,17 @@ class TeleportFeature(private val plugin: Main) : Listener, CommandExecutor, Tab
   }
 
   private fun directTp(sender: CommandSender, args: Array<out String>) {
-    require(args.isNotEmpty()) { "/tp <player> | <from> <to> | [player] <x> <y> <z>" }
+    require(args.isNotEmpty()) { "/tp <player> | <from> <to> | [player] <x> <y> <z> [yaw pitch]" }
     val actor = sender as? Player
-    if (args.size == 3 || args.size == 4) {
+    val offset = TeleportRules.positionOffset(args.size)
+    if (offset != null) {
       permission(sender, "essentials.tp.position")
       val target =
-          if (args.size == 4) {
+          if (offset == 1) {
             permission(sender, "essentials.tp.others")
             online(sender, args[0])
           } else actor ?: throw IllegalArgumentException("対象を指定してください")
-      val offset = if (args.size == 4) 1 else 0
+      val rotated = args.size - offset == 5
       val base = target.location
       fun coord(token: String, relative: Double): Double {
         val value =
@@ -548,8 +549,10 @@ class TeleportFeature(private val plugin: Main) : Listener, CommandExecutor, Tab
               coord(args[offset], base.x),
               coord(args[offset + 1], base.y),
               coord(args[offset + 2], base.z),
-              base.yaw,
-              base.pitch,
+              if (rotated) coord(args[offset + 3], base.yaw.toDouble()).toFloat() else base.yaw,
+              if (rotated)
+                  coord(args[offset + 4], base.pitch.toDouble()).coerceIn(-90.0, 90.0).toFloat()
+              else base.pitch,
           ),
       )
       return

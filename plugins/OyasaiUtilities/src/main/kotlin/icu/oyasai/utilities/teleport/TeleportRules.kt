@@ -13,6 +13,19 @@ object TeleportRules {
     UPDATE,
   }
 
+  /**
+   * Index of x in a position tp `[player] x y z [yaw pitch]` (Essentials order), or null for player
+   * forms.
+   */
+  fun positionOffset(size: Int): Int? =
+      when (size) {
+        3,
+        5 -> 0
+        4,
+        6 -> 1
+        else -> null
+      }
+
   fun jailAction(
       jailed: Boolean,
       currentJail: String?,
