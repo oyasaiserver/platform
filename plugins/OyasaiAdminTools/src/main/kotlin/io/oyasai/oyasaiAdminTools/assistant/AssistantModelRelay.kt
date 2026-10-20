@@ -11,7 +11,7 @@ import io.ktor.http.*
 import io.ktor.utils.io.readAvailable
 import java.io.ByteArrayOutputStream
 
-// Treat the whole container, including its stdio peer, as untrusted.
+// Treat the external brain and every stdio message as untrusted.
 internal class AssistantModelRelay(
     private val key: String,
     private val model: String,

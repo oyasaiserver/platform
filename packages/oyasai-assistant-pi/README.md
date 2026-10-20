@@ -21,9 +21,24 @@ the quick index without rebuilding or restarting. They are read on each request,
 including retained sessions; no other AGENTS files are searched. Safety rules
 remain in code.
 
-The plugin config selects `assistant.backend: pi` and `assistant.pi` fields
-`node`, `script`, `docs`, `model`. Use absolute deployed paths. Default backend
-remains `koog`. Node and this package are deployed separately in this prototype.
+The plugin uses `assistant.brain.command`, a list of argv entries for an
+externally managed brain launcher. For example:
+
+```yaml
+assistant:
+  enabled: true
+  brain:
+    command: [/opt/assistant/launch-brain]
+  model: deepseek/deepseek-v4.1-flash
+```
+
+The default command is empty and the feature is OFF. The host also requires its
+API-key environment variable. The launcher must use the relay protocol described
+below (the package's `--container` mode); direct API-key mode remains a
+standalone package tool, not a plugin backend. No model or docs arguments are
+appended by the plugin. The launcher owns the brain environment and documents.
+The plugin keeps only HOME/PATH/XDG_RUNTIME_DIR/DBUS_SESSION_BUS_ADDRESS in the
+child's environment and never passes the API key.
 
 JSON lines protocol version 1:
 
@@ -69,20 +84,15 @@ Build on the Linux validation host with rootless Podman:
 podman build -t localhost/oyasai-assistant-pi:prototype .
 ```
 
-Select `assistant.backend: pi-container`, `assistant.pi-container.podman` and
-`assistant.pi-container.image`; `pi.docs` and `pi.model` are shared with `pi`.
-The plugin launches the fixed isolation flags in `AssistantPi.containerCommand`.
-Only the docs directory is mounted, read-only. No API key is passed to Podman or
-the container. The image contains a non-secret `stdio-no-auth` SDK marker
-because Pi requires a nonempty auth value even for its local custom provider.
-This marker cannot authenticate to any external service.
+The Containerfile is one way to package the external brain. The launcher owns
+Podman flags, images, document mounts and container cleanup. The plugin neither
+constructs container commands nor removes named containers. The image contains a
+non-secret `stdio-no-auth` SDK marker; it cannot authenticate externally.
 
-One container is warmed at enable time. Its 64MiB workspace tmpfs is cleared
-before and after each request, including leftover shell children. Startup is
-included in the request timeout; 90 seconds is recommended for the prototype.
-The container stays warm until failure or plugin shutdown. Cancellation and
-shutdown force-remove the specifically named container, including any forked
-shell children.
+The plugin warms one process at enable time and waits for its ready message. It
+reuses that process until failure, cancellation or shutdown, then stops only
+that process. Restart and queue time count toward request timeout. Any VM or
+container cleanup belongs to the external launcher.
 
 The container sends `model` messages with id/callId and text-only OpenAI
 messages/tools. The host fixes endpoint/model/output budget and adds
@@ -102,10 +112,10 @@ Manual checks, excluded from `npm test`:
   do not run comparisons concurrently. It uses a fake plugin that always returns
   confirmation pending.
 
-Rollback selects `backend: pi` or `koog` and restarts the plugin/server. Shared
-command permissions and document mounts retain their existing controls. Before
-production, evaluate SDK dependency advisories, image update/scan procedures,
-concurrent workload limits, and answer quality with the normal tool budget.
+The host fixes the endpoint to OpenRouter, the model to `assistant.model`, and
+the output budget to 2048 tokens. The brain cannot override these values. Legacy
+`backend`, `pi.*` and `pi-container.*` plugin settings are no longer used;
+migrate to `brain.command` before enabling the plugin.
 
 ## Session and record protocol
 
@@ -115,8 +125,7 @@ id/actor/text/timeoutMs and performs exactly one tool-less provider request.
 Summary input is typed host audit facts, never raw chat, requests, or command
 output. The host appends the summary and independent facts to daily Markdown;
 `search_memory(query, days)` is a bounded host tool shared across operators.
-Koog has neither session retention nor these durable records. Container restart
-discards all short sessions.
+Brain restart discards all short sessions.
 
 At the message/character bound, discard that actor's old session rather than
 spending another API call on compaction. At most 32 sessions are retained. The

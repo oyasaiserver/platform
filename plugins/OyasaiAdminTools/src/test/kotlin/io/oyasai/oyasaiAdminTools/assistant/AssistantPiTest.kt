@@ -11,14 +11,25 @@ import kotlinx.coroutines.withTimeout
 
 class AssistantPiTest {
   private val ready =
-      """echo '{"type":"ready","protocol":1,"tools":["get_context","run_command","search_docs","read_doc","search_memory"]}'"""
+      """echo '{"type":"ready","protocol":1,"tools":["get_context","run_command","read","bash","write","edit","search_memory"]}'"""
   private val request =
       """IFS= read -r request
 id=${'$'}(printf '%s' "${'$'}request" | sed -E 's/.*"id":"([^"]+)".*/\1/')"""
 
   private fun fixture(body: String, action: (AssistantPi, List<Long>) -> Unit) {
     val script = Files.createTempFile("assistant-pi-fixture", ".sh")
-    Files.writeString(script, "$ready\n$request\n$body\n")
+    Files.writeString(
+        script,
+        """
+      test "${'$'}1" = 'argument with spaces' || exit 1
+      test -z "${'$'}OYASAI_ASSISTANT_API_KEY" || exit 1
+      test -z "${'$'}JAVA_HOME" || exit 1
+      $ready
+      $request
+      $body
+      """
+            .trimIndent(),
+    )
     val pids = java.util.concurrent.CopyOnWriteArrayList<Long>()
     val logger =
         Logger.getAnonymousLogger().apply {
@@ -37,7 +48,13 @@ id=${'$'}(printf '%s' "${'$'}request" | sed -E 's/.*"id":"([^"]+)".*/\1/')"""
           )
         }
     val backend =
-        AssistantPi("/bin/sh", script.toString(), ".", "fake", "fake-test-key", 1000, logger)
+        AssistantPi(
+            listOf("/bin/sh", script.toString(), "argument with spaces"),
+            "fake-test-key",
+            "fake",
+            1000,
+            logger,
+        )
     try {
       action(backend, pids)
     } finally {
@@ -61,7 +78,7 @@ id=${'$'}(printf '%s' "${'$'}request" | sed -E 's/.*"id":"([^"]+)".*/\1/')"""
         runBlocking {
           var command = ""
           val tool =
-              AssistantTool("run_command", "fake", listOf("command", "summary")) {
+              AssistantTool("run_command") {
                 command = it.getValue("command")
                 "本人確認待ち"
               }

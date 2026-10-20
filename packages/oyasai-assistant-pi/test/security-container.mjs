@@ -8,8 +8,8 @@ assert.ok(
   !Object.keys(process.env).some((k) => /KEY|TOKEN|PASSWORD|SECRET/i.test(k)),
 );
 for (const path of [
-  "/home/kaihatsu",
-  "/paperclip-tmp",
+  "/home/server",
+  "/server",
   "/plugins",
   "/world",
   "/home/node/.oyasai-assistant-key",

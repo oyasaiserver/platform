@@ -12,14 +12,11 @@ import kotlinx.coroutines.sync.withLock
 
 // One warm child, serialized requests, conversations isolated by operator UUID.
 internal class AssistantPi(
-    private val node: String,
-    private val script: String,
-    private val docs: String,
-    private val model: String,
-    private val key: String,
+    private val command: List<String>,
+    key: String,
+    model: String,
     private val timeoutMs: Long,
     private val logger: Logger,
-    private val containerImage: String? = null,
     private val idleMinutes: Int = 10,
     private val maxMessages: Int = 40,
     private val maxChars: Int = 48000,
@@ -28,43 +25,39 @@ internal class AssistantPi(
   @Volatile private var closed = false
   private var child: Child? = null
 
-  private val relay =
-      if (containerImage != null) AssistantModelRelay(key, model, timeoutMs) else null
+  private val relay = AssistantModelRelay(key, model, timeoutMs)
 
   init {
-    if (containerImage == null) start()
-    else {
-      // Warm the single container before the first operator request.
-      val state = start()
-      try {
-        kotlinx.coroutines.runBlocking {
-          kotlinx.coroutines.withTimeout(timeoutMs) {
-            val ready = state.messages.receive()
-            check(ready["type"].asString == "ready" && ready["protocol"].asInt == 1)
-            check(
-                ready["tools"].asJsonArray.map { it.asString }.toSet() == AssistantModelRelay.TOOLS
-            )
-          }
+    require(command.isNotEmpty() && command.first().isNotBlank())
+    val state =
+        try {
+          start()
+        } catch (failure: Throwable) {
+          relay.close()
+          throw failure
         }
-      } catch (failure: Throwable) {
-        relay?.close()
-        stop(state)
-        throw failure
+    try {
+      kotlinx.coroutines.runBlocking {
+        kotlinx.coroutines.withTimeout(timeoutMs) { awaitReady(state) }
       }
-      state.ready = true
+    } catch (failure: Throwable) {
+      relay.close()
+      stop(state)
+      throw failure
     }
+  }
+
+  private suspend fun awaitReady(state: Child) {
+    val ready = state.messages.receive()
+    check(ready["type"].asString == "ready" && ready["protocol"].asInt == 1)
+    check(ready["tools"].asJsonArray.map { it.asString }.toSet() == AssistantModelRelay.TOOLS)
+    state.ready = true
   }
 
   @Synchronized
   private fun start(): Child {
     check(!closed) { "Pi backend closed" }
     child?.let { if (it.process.isAlive) return it else stop(it) }
-    val containerName =
-        if (containerImage != null) "oyasai-assistant-${UUID.randomUUID()}" else null
-    val command =
-        if (containerImage != null)
-            containerCommand(node, containerImage, docs, model, containerName!!)
-        else listOf(node, script, docs, model)
     val process =
         ProcessBuilder(command)
             .apply {
@@ -76,11 +69,10 @@ internal class AssistantPi(
                   }
               environment().clear()
               environment().putAll(inherited)
-              if (containerImage == null) environment()["OYASAI_ASSISTANT_API_KEY"] = key
               redirectError(ProcessBuilder.Redirect.DISCARD)
             }
             .start()
-    val state = Child(process, containerName)
+    val state = Child(process)
     child = state
     Thread(
             {
@@ -145,15 +137,7 @@ internal class AssistantPi(
         val state = start()
         var complete = false
         try {
-          if (!state.ready) {
-            val ready = state.messages.receive()
-            check(ready["type"].asString == "ready" && ready["protocol"].asInt == 1)
-            check(
-                ready["tools"].asJsonArray.map { it.asString }.toSet() ==
-                    (if (containerImage == null) NAMES else AssistantModelRelay.TOOLS)
-            )
-            state.ready = true
-          }
+          if (!state.ready) awaitReady(state)
           val id = UUID.randomUUID().toString()
           state.send(
               JsonObject().apply {
@@ -176,7 +160,7 @@ internal class AssistantPi(
             check(message["id"].asString == id)
             when (message["type"].asString) {
               "model" -> {
-                check(relay != null && ++modelCalls <= maxToolCalls + 1)
+                check(++modelCalls <= maxToolCalls + 1)
                 val callId = message["callId"].asString
                 check(callId.length <= 64 && seen.add(callId))
                 val result = relay.complete(message["body"].asJsonObject)
@@ -216,7 +200,7 @@ internal class AssistantPi(
               }
               "trace" -> {
                 val name = message["name"].asString
-                check(name in (if (containerImage == null) NAMES else AssistantModelRelay.TOOLS))
+                check(name in AssistantModelRelay.TOOLS)
                 if (name !in setOf("get_context", "run_command", "search_memory"))
                     progress.localTool(name, message["args"].toString())
                 progress.record(name, message["result"].asString)
@@ -248,26 +232,6 @@ internal class AssistantPi(
     state.process.destroy()
     if (!state.process.waitFor(2, TimeUnit.SECONDS)) state.process.destroyForcibly()
     state.process.outputStream.close()
-    state.containerName?.let {
-      // An agent may fork children or ignore stdin EOF; remove its named container on every exit.
-      val cleanup =
-          ProcessBuilder(node, "rm", "--force", "--ignore", "--time", "0", it)
-              .apply {
-                val inherited =
-                    environment().filterKeys { name ->
-                      name in setOf("HOME", "PATH", "XDG_RUNTIME_DIR", "DBUS_SESSION_BUS_ADDRESS")
-                    }
-                environment().clear()
-                environment().putAll(inherited)
-              }
-              .redirectOutput(ProcessBuilder.Redirect.DISCARD)
-              .redirectError(ProcessBuilder.Redirect.DISCARD)
-              .start()
-      val removed = cleanup.waitFor(5, TimeUnit.SECONDS)
-      if (!removed) cleanup.destroyForcibly()
-      check(removed && cleanup.exitValue() == 0) { "Pi container cleanup failed" }
-      logger.info("Assistant Pi container removed name=$it")
-    }
   }
 
   @Synchronized
@@ -276,11 +240,11 @@ internal class AssistantPi(
     try {
       child?.let { stop(it) }
     } finally {
-      relay?.close()
+      relay.close()
     }
   }
 
-  private class Child(val process: Process, val containerName: String?) {
+  private class Child(val process: Process) {
     val messages = Channel<JsonObject>(64)
     val writer = process.outputStream.bufferedWriter(Charsets.UTF_8)
     var ready = false
@@ -293,52 +257,6 @@ internal class AssistantPi(
   }
 
   companion object {
-    internal fun containerCommand(
-        podman: String,
-        image: String,
-        docs: String,
-        model: String,
-        name: String,
-    ): List<String> {
-      require(image.isNotBlank() && !image.startsWith("-"))
-      val root = java.nio.file.Path.of(docs).toRealPath()
-      require(
-          java.nio.file.Files.isDirectory(root) &&
-              ':' !in root.toString() &&
-              ',' !in root.toString()
-      )
-      return listOf(
-          podman,
-          "run",
-          "--rm",
-          "-i",
-          "--pull=never",
-          "--name",
-          name,
-          "--network=none",
-          "--ipc=none",
-          "--no-hosts",
-          "--cap-drop=ALL",
-          "--security-opt=no-new-privileges",
-          "--read-only",
-          "--read-only-tmpfs=false",
-          "--user=1000:1000",
-          "--userns=keep-id:uid=1000,gid=1000",
-          "--tmpfs=/workspace:rw,size=64m,mode=1777,noexec,nosuid,nodev",
-          "--env=TMPDIR=/workspace",
-          "--memory=512m",
-          "--cpus=1",
-          "--pids-limit=64",
-          "--volume=$root:/docs:ro",
-          image,
-          model,
-          "--container",
-      )
-    }
-
-    private val NAMES =
-        setOf("get_context", "run_command", "search_docs", "read_doc", "search_memory")
-
     private fun readLine(reader: BufferedReader): String? {
       val line = StringBuilder()
       while (true) {

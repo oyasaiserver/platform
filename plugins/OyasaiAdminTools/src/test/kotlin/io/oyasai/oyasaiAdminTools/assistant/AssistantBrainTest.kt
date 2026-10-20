@@ -4,54 +4,63 @@ import com.google.gson.JsonParser
 import java.nio.file.Files
 import kotlin.test.*
 
-class AssistantContainerTest {
+class AssistantBrainTest {
   @Test
-  fun launchOnlyMountsDocsAndNeverPassesCredentials() {
-    val docs = Files.createTempDirectory("container-docs")
-    try {
-      val command =
-          AssistantPi.containerCommand(
-              "/usr/bin/podman",
-              "localhost/test:fixed",
-              docs.toString(),
-              "fake",
-              "test-name",
+  fun defaultConfigurationLeavesBrainDisabled() {
+    val config =
+        org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+            java.io.File("src/main/resources/config.yml")
+        )
+    assertFalse(config.getBoolean("assistant.enabled"))
+    assertTrue(config.getStringList("assistant.brain.command").isEmpty())
+    assertFalse(config.contains("assistant.backend"))
+    assertFalse(config.contains("assistant.pi"))
+    assertFalse(config.contains("assistant.pi-container"))
+  }
+
+  @Test
+  fun incompatibleBrainIsStoppedAtEnable() {
+    val script = Files.createTempFile("assistant-invalid-brain", ".sh")
+    Files.writeString(
+        script,
+        "echo '{\"type\":\"ready\",\"protocol\":2,\"tools\":[]}'\nread hold\n",
+    )
+    val pids = java.util.concurrent.CopyOnWriteArrayList<Long>()
+    val logger =
+        java.util.logging.Logger.getAnonymousLogger().apply {
+          useParentHandlers = false
+          addHandler(
+              object : java.util.logging.Handler() {
+                override fun publish(record: java.util.logging.LogRecord) {
+                  if (record.message.contains("started pid="))
+                      pids.add(record.message.substringAfter("pid=").toLong())
+                }
+
+                override fun flush() {}
+
+                override fun close() {}
+              }
           )
-      for (flag in
-          listOf(
-              "--network=none",
-              "--cap-drop=ALL",
-              "--security-opt=no-new-privileges",
-              "--read-only",
-              "--user=1000:1000",
-              "--memory=512m",
-              "--cpus=1",
-              "--pids-limit=64",
-              "--pull=never",
-          )) assertContains(command, flag)
-      assertEquals(
-          listOf("--volume=${docs.toRealPath()}:/docs:ro"),
-          command.filter { it.startsWith("--volume=") },
-      )
-      assertEquals(listOf("--env=TMPDIR=/workspace"), command.filter { it.startsWith("--env=") })
-      assertEquals(1, command.count { it.startsWith("--tmpfs=") })
-      assertFalse(
-          command.any { it.contains("KEY") || it.contains("socket") || it.contains("--privileged") }
-      )
+        }
+    try {
+      assertFails {
+        AssistantPi(listOf("/bin/sh", script.toString()), "host-key", "model", 1000, logger)
+      }
+      assertEquals(1, pids.size)
+      assertTrue(pids.none { ProcessHandle.of(it).map { p -> p.isAlive }.orElse(false) })
     } finally {
-      Files.delete(docs)
+      Files.delete(script)
     }
   }
 
   @Test
-  fun containerRequestsAreFreshAndChildrenReceiveNoKey() {
-    val root = Files.createTempDirectory("assistant-container-fixture")
-    val executable = root.resolve("podman")
+  fun childWarmsAtEnableAndIsReusedUntilCancellation() {
+    val root = Files.createTempDirectory("assistant-brain-fixture")
+    val executable = root.resolve("brain")
     Files.writeString(
         executable,
         """
         #!/bin/sh
-              if [ "${'$'}1" = rm ]; then exit 0; fi
               test -z "${'$'}OYASAI_ASSISTANT_API_KEY" || exit 1
               echo '{"type":"ready","protocol":1,"tools":["get_context","run_command","read","bash","write","edit","search_memory"]}'
               IFS= read -r request || exit 0
@@ -86,14 +95,11 @@ class AssistantContainerTest {
         }
     try {
       AssistantPi(
-              executable.toString(),
-              "",
-              root.toString(),
-              "fake",
+              listOf(executable.toString()),
               "must-stay-in-host",
+              "fixed-model",
               1000,
               logger,
-              "localhost/fake",
           )
           .use { backend ->
             kotlinx.coroutines.runBlocking {

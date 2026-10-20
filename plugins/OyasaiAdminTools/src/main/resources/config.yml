@@ -14,17 +14,9 @@ staff:
   socialspy-commands: [msg, w, r, mail, m, t, whisper, emsg, tell, er, reply, ereply, email, action, describe, eme, eaction, edescribe, etell, ewhisper, pm, message]
 
 assistant:
-  backend: koog
-  pi:
-    node: node
-    script: packages/oyasai-assistant-pi/dist/main.js
-    docs: plugins/OyasaiAdminTools/assistant-docs
-    model: deepseek/deepseek-v4.1-flash
-  pi-container:
-    podman: /usr/bin/podman
-    image: localhost/oyasai-assistant-pi:prototype
+  brain:
+    command: []
   enabled: false
-  provider: openrouter
   model: deepseek/deepseek-v4.1-flash
   api-key-env: OYASAI_ASSISTANT_API_KEY
   session-idle-minutes: 10

@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 class AssistantContinuationTest {
   @Test
   fun confirmedOutputReturnsToSameActorWithToolsAndCanProposeNextStep() = runBlocking {
-    val tool = AssistantTool("run_command", "next", listOf("command")) { "次の確認待ち" }
+    val tool = AssistantTool("run_command") { "次の確認待ち" }
     val tools = mapOf(tool.name to tool)
     val progress = AssistantProgress()
     val backend =
