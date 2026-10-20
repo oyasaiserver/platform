@@ -80,20 +80,30 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
       return words.take(2).joinToString(" ")
     }
 
-    fun normalize(text: String, commands: CommandMap): NormalizedCommand? {
+    fun normalize(
+        text: String,
+        commands: CommandMap,
+        rejected: (String) -> Unit = {},
+    ): NormalizedCommand? {
+      // Each refusal names its step, so an unsupported registration shape can be diagnosed from the
+      // audit.
+      fun reject(step: String): NormalizedCommand? {
+        rejected(step)
+        return null
+      }
       if (
           text.length > 256 ||
               text.any {
                 (it.isISOControl() && it != '\t') || it == '§' || it == '\u2028' || it == '\u2029'
               }
       )
-          return null
+          return reject("text")
       val words = text.trim().removePrefix("/").trim().lowercase(Locale.ROOT).split(Regex("\\s+"))
-      val command = commands.getCommand(words.first()) ?: return null
-      if (command is FormattedCommandAlias) return null
+      val command = commands.getCommand(words.first()) ?: return reject("unknown")
+      if (command is FormattedCommandAlias) return reject("formatted-alias")
       val node = vanillaNode(command)
       if (node?.redirect != null || node?.redirectModifier != null || node?.isFork == true)
-          return null
+          return reject("redirect")
       val registrations =
           if (node == null && command is PluginIdentifiableCommand) emptyList()
           else
@@ -116,7 +126,7 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
                 .map { it.key.substringAfter(':') }
                 .filter { it !in aliases }
                 .distinct()
-                .singleOrNull() ?: return null
+                .singleOrNull() ?: return reject("name:${registrations.map { it.key }}")
           }
       val owner =
           if (command is PluginIdentifiableCommand) command.plugin.name.lowercase(Locale.ROOT)
@@ -127,15 +137,28 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
                     .map { it.key.substringBefore(':') }
                     .distinct()
             // Prefer a known server namespace; unrelated namespace ambiguity remains invalid.
-            SERVER_OWNERS.firstOrNull { it in owners } ?: owners.singleOrNull() ?: return null
+            SERVER_OWNERS.firstOrNull { it in owners }
+                ?: owners.singleOrNull()
+                ?: return reject("owner:$owners")
           }
-      val label = "$owner:$name"
-      val canonical = commands.getCommand(label) ?: return null
+      // FAWE registers e.g. `//gmask` as a command named `gmask` whose `owner:gmask` key belongs to
+      // another command (`/gmask`). Use the command's own first name that maps back to it; the
+      // order is
+      // fixed, so every alias still normalizes to one text.
+      val label =
+          if (node == null && command is PluginIdentifiableCommand)
+              (listOf(command.name) + command.aliases)
+                  .map { "$owner:${it.lowercase(Locale.ROOT)}" }
+                  .firstOrNull { commands.getCommand(it) === command } ?: "$owner:$name"
+          else "$owner:$name"
+      val canonical = commands.getCommand(label) ?: return reject("label:$label")
       if (node == null) {
-        if (canonical !== command) return null
-      } else if (vanillaNode(canonical)?.let { sameNodeCommand(node, it) } != true) return null
+        if (canonical !== command)
+            return reject("identity:$label ${command.javaClass.name} ${canonical.javaClass.name}")
+      } else if (vanillaNode(canonical)?.let { sameNodeCommand(node, it) } != true)
+          return reject("node:$label")
       val normalized = (listOf(label) + words.drop(1)).joinToString(" ")
-      if (normalized.length > 256) return null
+      if (normalized.length > 256) return reject("length")
       return NormalizedCommand(normalized, canonical, vanillaNode(canonical) ?: canonical)
     }
 

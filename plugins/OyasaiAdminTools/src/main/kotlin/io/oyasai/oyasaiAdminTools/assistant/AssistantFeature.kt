@@ -280,7 +280,8 @@ internal class AssistantFeature(
       text: String,
       denied: (String) -> Unit = {},
   ): NormalizedCommand? {
-    val command = AssistantRules.normalize(text, plugin.server.commandMap)
+    var step = ""
+    val command = AssistantRules.normalize(text, plugin.server.commandMap) { step = it }
     val reason =
         when {
           command == null -> "invalid"
@@ -304,8 +305,23 @@ internal class AssistantFeature(
           else -> "固定の更新には上限内の空気だけのキュボイドが必要です。"
         }
     )
-    audit(operator, "denied:$reason", command?.text ?: text)
-    player.sendMessage("拒否: 禁止項目・権限・コマンドの登録を確認してください。")
+    audit(
+        operator,
+        "denied:$reason",
+        (command?.text ?: text) + if (step.isEmpty()) "" else " | step=$step",
+    )
+    player.sendMessage(
+        "拒否: " +
+            when (reason) {
+              "invalid" -> "コマンドとして解釈できません"
+              "blacklist" -> "禁止項目です"
+              "permission" -> "あなたの権限では実行できません"
+              else -> "マスクの固定条件を満たしません"
+            } +
+            "（" +
+            (command?.text ?: text).take(120) +
+            "）"
+    )
     return null
   }
 

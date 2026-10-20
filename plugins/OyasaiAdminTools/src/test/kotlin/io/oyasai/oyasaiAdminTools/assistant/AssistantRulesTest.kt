@@ -107,6 +107,25 @@ class AssistantRulesTest {
   }
 
   @Test
+  fun faweDoubleSlashCommandsNormalizeThroughTheirOwnAlias() {
+    // FAWE: `//gmask` is a command named `gmask` (alias `/gmask`), while `owner:gmask` is `/gmask`.
+    val doubleSlash = command("gmask", "FastAsyncWorldEdit").apply { aliases = listOf("/gmask") }
+    val singleSlash = command("gmask", "FastAsyncWorldEdit")
+    val commands = commands {
+      mapOf(
+          "/gmask" to doubleSlash,
+          "fastasyncworldedit:/gmask" to doubleSlash,
+          "gmask" to singleSlash,
+          "fastasyncworldedit:gmask" to singleSlash,
+      )
+    }
+    val normalized = assertNotNull(AssistantRules.normalize("//gmask #region", commands))
+    assertEquals("fastasyncworldedit:/gmask #region", normalized.text)
+    assertSame(doubleSlash, normalized.registered)
+    assertEquals("fastasyncworldedit:gmask", AssistantRules.normalize("/gmask", commands)?.text)
+  }
+
+  @Test
   fun resolvesAliasesOwnersAndRejectsFormattedAliasesAndUnknownCommands() {
     val co = command("co", "CoreProtect")
     val vanilla =
