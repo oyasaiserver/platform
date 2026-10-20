@@ -343,7 +343,8 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       summary: String,
       asOperator: Boolean,
   ): String {
-    val proposal = Pending(command, System.nanoTime() + 60_000_000_000L)
+    // Under dsh ACP's fixed 60s MCP call timeout, leaving room to run and collect output.
+    val proposal = Pending(command, System.nanoTime() + 45_000_000_000L)
     onMain {
       val player = player(id)
       pending[id] = proposal
