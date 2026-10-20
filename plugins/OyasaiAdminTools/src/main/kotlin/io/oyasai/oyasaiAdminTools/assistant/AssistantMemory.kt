@@ -5,31 +5,18 @@ import java.nio.channels.FileChannel
 import java.nio.file.*
 import java.time.*
 
-/** Only typed audit facts reach the summarizer; raw requests, chat and tool output never do. */
+/** Shared append-only records; raw requests, chat and tool output are never audit facts. */
 internal class AssistantMemory(
     private val root: Path,
     private val clock: Clock = Clock.systemDefaultZone(),
 ) {
-  internal class Record(val operator: String, request: String = "") {
-    private val topic =
-        listOf(
-                "昇格",
-                "設定",
-                "使い方",
-                "FAWE",
-                "WorldGuard",
-                "LuckPerms",
-                "CoreProtect",
-                "OyasaiAdminTools",
-                "bulletin",
-            )
-            .filter { request.contains(it, ignoreCase = true) }
-            .joinToString(" ")
+  internal class Record(val operator: String) {
     private val events = mutableListOf<String>()
+    private val commands = mutableListOf<String>()
 
     @Synchronized
     fun add(event: String, detail: String) {
-      if (events.size >= 32) return
+      if (event == "execute") commands += safe(detail, 300)
       val kind =
           when {
             event == "execute" -> "実行"
@@ -76,14 +63,16 @@ internal class AssistantMemory(
 
     @Synchronized
     fun facts(): String =
-        (topic + " " + events.joinToString(" → ").ifBlank { "コマンド実行・提案なし（質問への回答）" }).trim()
+        (events.joinToString(" → ").ifBlank { "コマンド実行・提案なし（質問への回答）" } +
+                if (commands.isEmpty()) "" else " ｜コマンド: " + commands.joinToString(" → "))
+            .trim()
   }
 
   fun append(record: Record, summary: String) {
     val date = LocalDate.now(clock)
     val time = LocalTime.now(clock).toString().take(5)
     val name = record.operator.takeIf { it.matches(Regex("[A-Za-z0-9_]{1,16}")) } ?: "運営"
-    val text = "- $time $name：${safe(summary).ifBlank { "要約を取得できませんでした" }} ｜事実: ${record.facts()}\n"
+    val text = "- $time $name：${safe(summary, 2000).ifBlank { "要約なし" }} ｜事実: ${record.facts()}\n"
     synchronized(lock) {
       Files.createDirectories(root)
       check(!Files.isSymbolicLink(root))

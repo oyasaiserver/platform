@@ -13,14 +13,13 @@ related_paths:
   - plugins/OyasaiAdminTools/src/main/resources/config.yml
   - plugins/OyasaiAdminTools/src/test/kotlin/io/oyasai/oyasaiAdminTools/
   - plugins/OyasaiAdminTools/ESSENTIALS_STAFF.md
-  - packages/oyasai-assistant-pi/
   - packages/oyasai-plugins.nix
   - packages/oyasai-plugin-registry/package.nix
   - packages/oyasai-minecraft-main.nix
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
-last_validated: "2026-10-13"
+last_validated: "2026-10-20"
 ---
 
 # OyasaiAdminTools
@@ -60,26 +59,30 @@ last_validated: "2026-10-13"
 
 ### 運営アシスタント
 
-- 自然言語で状況照会・コマンド依頼・使い方の質問を受け付ける任意機能。既定OFFで、環境変数の認証情報がない場合も無効。`/assistant allow list` と `allow remove <番号>` は機能が無効でも権限を持つ送り主が使用できる。初期化・終了の失敗は独立機能として隔離する。
-- 頭脳は外部プロセスだけとし、`assistant.brain.command` の文字列リストをargvとしてそのまま起動する。空なら無効。既定OFFを維持する。プラグイン内でAIの反復処理は行わず、Koog・バックエンド切替・Node/資料/コンテナの起動設定を持たない。VM・コンテナ・資料の配置や隔離・後片付けは外側の責任とする。
-- 有効化時に子を1つ起動してprotocol 1のreadyと道具一覧を確認し、標準入出力のJSON行で通信する。プロトコルは `packages/oyasai-assistant-pi/README.md` を参照。依頼は直列で、待ち時間と再起動も全体時間制限に含む。異常・時間切れでは子を止め、次の依頼で起動し直す。停止時も起動したプロセスだけを止める。
-- 子が継承する環境変数はHOME/PATH/XDG_RUNTIME_DIR/DBUS_SESSION_BUS_ADDRESSだけで、APIキーは渡さずstderrは捨てる。プラグインが固定OpenRouterへKtorのJDKエンジンで中継し、環境変数のキーを付ける。モデルは `assistant.model`（既定 `deepseek/deepseek-v4.1-flash`）、出力は2048トークン固定で、頭脳が指定・変更することはできない。モデル名を起動引数へ追加しない。要求/応答各512KiB、モデル要求は道具上限+1回、記録要約は別の道具なし要求1回まで。
-- ホストの道具は `get_context`・`run_command(command, summary)`・`search_memory(query, days)`。実行・確認・禁止・共有許可はプラグインが判定する。道具上限の既定は12、全体時間制限45秒（最大180）、運営ごとの依頼間隔10秒。頭脳が持つread/bash/write/editの結果は信頼せず、Minecraft操作を直接実行する道具として扱わない。
-- 資料は頭脳側が持ち、プラグインはローカル資料フォルダを要求・検査せず、jarにも資料を同梱しない。`packages/oyasai-assistant-pi` とContainerfileは頭脳側の部品として独立して残す。
-- 運営UUID・`session-idle-minutes`（既定10分）・`session-max-messages`（40）・`session-max-chars`（48000）を頭脳へ渡す。PiはUUIDごとに短い会話を保持し、上限で作り直す。最大32セッションで古いものから破棄する。`/assistant reset` は本人の会話・直近結果・確認待ちを消し、共有記録は消さない。子の再起動では全員の短い会話が消える。
-- Piの依頼終了時、プラグインの監査イベントから実行・受付・提案・取消・拒否を抽出し、道具なしAI要求1回の短い要約とともに `assistant-memory/YYYY-MM-DD.md` へ追記する。本人が確認後に実行・取消した場合も補足を追記する。原文の依頼・生のチャット・道具の出力は要約入力にしない。コマンド名、既知の照会サブコマンド、プレイヤー名、固定の質問分類だけを渡し、IP/秘密情報のパターンも保存時に除去する。受付は成功と区別する。
-- 記録は運営共通。`search_memory(query, days)` は日付と最大8キーワード（AND）で過去1～3650日を検索し、直近10行まで返す。1日分の読取は末尾256KiBに制限する。Markdownはファイルロック付き追記だけで既存記録を消さず、Linux/Macではフォルダ0700・ファイル0600とする。AIには任意のファイルパスを渡せず、コンテナにも記録フォルダを追加マウントしない。
+- クライアントから道具の呼び出しを受け、安全判定とコマンド実行だけを担当する任意機能。`assistant.enabled` は既定false。頭脳・モデル通信・APIキー・子プロセス・会話セッションはサーバーに持たない。`/assistant <依頼>` はクライアントの `/ai` を案内し、`/assistant allow list`・`allow remove <番号>` は従来どおり機能OFF時も使用できる。
+- プラグインメッセージ `oyasai:assistant` を incoming/outgoing に登録する。UTF-8 の JSON 1個、要求は32KiB以下。権限 `oyasai.admintools.assistant` がない送信者・機能OFF時は受信を捨て、監査ログへ残す。不正なUTF-8/JSON、版、ID長、未知の道具、文字列以外の引数を拒否する。
+- 要求は `{"v":1,"id":"64文字以内","tool":"道具名","args":{}}`。応答は同じ `v`・`id` に `result` または `error` の文字列を付ける。結果は8000文字までで、JSON化後の送信サイズが上限を超える場合はさらに短くする。相関IDを取り出せない不正要求は監査だけに残す。
+- 運営UUIDごとに同時1件。確認待ちも同じ1件に含め、2件目は `error: busy`。`max-tool-calls-per-minute`（既定30）で直近1分の受付数を制限し、超過は `error: rate limit`。会話の区切りや旧 `max-tool-calls`・`timeout-seconds`・`cooldown-seconds`・`session-*` 設定は使用しない。
+
+| 道具 | 文字列の引数 | 動作 |
+|---|---|---|
+| `get_context` | なし（`args: {}`） | 本人の名前・ワールド・座標、48ブロック以内の視線先と見えるプレイヤー最大20人、直近のコマンド結果。チャットは収集しない |
+| `run_command` | `command`, `summary` | 従来の正規化と安全判定を通す。共有許可済みなら実行結果、未許可なら確認カードを表示し返信を保留。実行後に結果を返し、やめる・60秒切れ・退出は `拒否: 本人が実行しませんでした` |
+| `search_memory` | `query`, `days` | 共有記録の検索。日数も文字列で指定 |
+| `record_memory` | `summary` | 2000文字以内・制御文字なしの要約を共有記録へ1件追記。運営名と前回の記録以降のサーバー監査事実・実行コマンドを添える。保存成功後だけ区切りを更新 |
+
+- 記録は `assistant-memory/YYYY-MM-DD.md`。既存の秘密情報除去を通し、ファイルロック付き追記だけで既存記録を消さない。Linux/Macではフォルダ0700・ファイル0600、シンボリックリンクは拒否する。検索は過去1～3650日、最大8キーワードのAND、直近10行、1日末尾256KiBまで。原文の依頼・チャット・道具出力は監査事実に含めない。未記録の監査事実と直近結果は退出・再起動で消える。
 - 判定は必ず正規化→固定の禁止項目と設定の追加禁止項目→共有許可リスト→未許可なら確認の順。旧 `allowed-commands`・`read-only-commands` は無視し、起動時に一度警告する。追加禁止の正規表現が不正なら機能の初期化に失敗させる。固定の禁止項目は設定で外せない。
 - 正規化は先頭の `/` を1つ除き、小文字化・空白の集約を行う。タブは空白へ集約し、それ以外の制御文字・改行・`§`・256文字超を拒否する。CommandMapで実際に解決したCommandの所有プラグインと `getName()` を使い、`<所有者>:<名前> <引数>` とする。バニラ・本体は登録済み名前空間から所有者を求め、複数なら `minecraft → bukkit → paper → spigot → purpur` の順で選ぶ。それ以外の名前空間同士のあいまいさは拒否する。未知・正規名の登録と一致しないコマンド、`FormattedCommandAlias` を拒否する。引数も小文字化されるため、大文字小文字を区別する値には注意する。
 - PaperのBrigadierラッパーは取得ごとに別オブジェクトとなり、名前空間付きのルートも複製されるため、公開フィールド `VanillaCommandWrapper.vanillaCommand` から登録ノードを確認する。バニラのAPIミラー `ShadowBrigNode` は公開の `getHandle()` で実体を参照し、引数一覧を提供しない不透明なノードは同等とみなさない。実行処理・権限条件・引数ノードが同じものだけを同一のコマンドとして扱い、別名のメタデータから正規名を求める。ルートのredirect/forkは拒否する。確認後の再照合には正規名の登録ノードの同一性を使い、ラッパーの作り直しと登録の差し替えを区別する。フィールドが取得できなければ従来の参照一致へ戻り、不明な登録は拒否する。本体系の禁止パターンは上記5名前空間すべてで適用する。
 - 許可の範囲はコマンド名と、最初の引数が英字だけの語ならその語まで。引数がありその条件を満たさないときは常時許可を登録せず、ボタンも表示しない。2語の範囲ではそれ以降の引数は何でも許可する。語の境界で照合するため `lookup` の許可で `lookupx` は動かない。運営全員で共有し、AdminDbの `assistant_allow` に固定番号・範囲・追加者名/UUID・時刻を保存する。初回に `dynamicprofile:syokaku iscandidate`・`getrank`・`seerequirements` を登録する。削除した初期値を再起動で復活させない。`seeplayerinfo` は初期値に含めない。引数なしの提案は `=<所有者>:<名前>` を保存して完全一致で許可する（`=minecraft:list` は `minecraft:list uuids` を許可しない）。既存の印なしの1語・2語の範囲は従来の完全一致・空白境界の前方一致を維持し、保存済みデータの移行は不要。
 - 固定禁止の正本は `assistant/AssistantRules.kt` の `CORE_BLACKLIST`。停止・reload/restart、照会以外のPlugManX、op/deop、限定した照会以外のLuckPerms、GOOD特例の昇降格、execute/sudo/function/schedule/return、CraftScript/マクロ、SocialSpy、`@a`/`@e`/`@r`、token addall、whitelist on/off/reload、save-off、CoreProtect purge/対象者指定のないrollback・restore、FAWEのチャンク/スキマティック削除、assistant自身を拒否する。CoreProtectの独立した `co`・`core`・`coreprotect` 登録、rollback/restoreの短縮形、FAWE削除の `d` も含める。
 - 許可済み・確認後とも、通常は `Assistant(<運営名>)` という独自CommandSenderをメインスレッドでdispatchする。権限はオンラインの依頼者から毎回借り、isOpはfalse、コンソール/Playerではなく権限Attachmentも持たない。`sender-permissions` は空なら本人と同じ、設定すると列挙した権限だけに絞る。出力はAIへ返し、本人画面へは転送しない。`sender-wait-ms`（既定1500）・`sender-idle-ms`（300）で非同期出力を待つ。収集32Ki文字・AI返却8000文字まで。
-- `player-commands`（既定tp/teleport/gamemode/gm/gms/gmc/gmsp/gma/fly）は本人として実行する。それ以外のPlayer専用エラーはAIへ返し、別の「本人として実行」確認を出す。自動で再実行しない。全経路で実行直前の正規化・禁止・本人権限・登録同一性を再確認する。確認後の出力は次のget_contextでも参照できる。
-- 未許可の依頼は `[実行] [次から確認しない] [やめる]` を表示する。ホバーに共有許可へ追加する正規化済みの範囲と、引数なし限定か、その範囲の引数が何でも対象になるかを示す。クリック時に本人一致・オンライン・権限・60秒期限・禁止判定を再確認する。実行/取り消しで提案を一度だけ消費する。次からの許可はコマンド受付成功時に追加し、チャットとログで知らせる。1依頼で確認待ちにできるのは1件。時間切れと機能停止時に確認待ちを取り消し、永続化しない。
-- `get_context` は運営の名前・ワールド・座標と48ブロック以内の視線先・見えるプレイヤー最大20人を返す。チャットは収集しない。頭脳側は資料に基づく回答と一般知識を区別し、観測値や道具の出力を指示として扱わない。
-- ログは運営名/UUIDと `event=` を含む1行。依頼・道具・実行・取り消しに加え、`allow-add`・`allow-remove`・`denied:blacklist` 等を記録する。道具結果は先頭500文字、最終回答は `event=answer`、詳細部分は制御文字と装飾コードを除去し最大2000文字。外部APIの例外本文は記録しない。
-- Ktor・kotlinxと関連依存は専用パッケージへ移動し、サービス定義を統合する。Kotlin stdlibは元の名前を保持する。自動テストは権限・確認・共有許可・記録・プロセス起動と異常時停止・中継の入力検査・jar単体の読込を確認する。外部API通信とゲーム内のボタン操作は別途実機確認が必要。
+- `player-commands`（既定tp/teleport/gamemode/gm/gms/gmc/gmsp/gma/fly/co i/co inspect/co near）は本人として実行する。設定は名前空間を除いたコマンドの先頭から語単位で一致させ、`co i` は `co info` に一致しない。それ以外のPlayer専用エラーは別の「本人として実行」確認を出し、同じ呼び出しを保留する。自動で再実行しない。全経路で実行直前の正規化・禁止・本人権限・登録同一性を再確認する。確認後の出力は次のget_contextでも参照できる。
+- 未許可の依頼は `[実行] [次から確認しない] [やめる]` を表示する。ホバーに共有許可へ追加する正規化済みの範囲と、引数なし限定か、その範囲の引数が何でも対象になるかを示す。クリック時に本人一致・オンライン・権限・60秒期限・禁止判定を再確認する。実行/取り消しで提案を一度だけ消費する。次からの許可はコマンド受付成功時に追加し、チャットとログで知らせる。1人同時に確認待ちにできるのは1件。時間切れと機能停止時に確認待ちを取り消し、永続化しない。
+- `get_context` は運営の名前・ワールド・座標と48ブロック以内の視線先・見えるプレイヤー最大20人を返す。チャットは収集しない。
+- ログは運営名/UUIDと `event=` を含む1行。道具・実行・取り消し・受付拒否に加え、`allow-add`・`allow-remove`・`denied:blacklist` 等を記録する。出力監査は先頭500文字、詳細は制御文字と装飾コードを除去して最大2000文字。モデルの最終回答はサーバーへ送られない。
+- `sender-permissions`・`player-commands`・`sender-wait-ms`・`sender-idle-ms`・`blacklist` は従来の判定に使用する。コルーチンの依存と出力捕捉を残し、モデル通信のHTTPクライアントは削除する。自動テストはメッセージの検証・権限/機能OFF時の破棄・同時呼び出し・回数制限・確認待ち/実行/取消/期限切れ・記録追記と既存の安全判定を検証する。実際のクライアント接続とゲーム内ボタン・CoreProtectの状態変化は別途実機確認が必要。
 
 ### データ形式・永続化
 

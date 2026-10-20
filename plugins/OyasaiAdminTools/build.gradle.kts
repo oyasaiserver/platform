@@ -8,14 +8,12 @@ dependencies {
   implementation(libs.inventoryframework)
   implementation(libs.sqlite.jdbc)
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-  implementation("io.ktor:ktor-client-java:3.3.3")
   testImplementation(libs.purpur.api)
 }
 
 // Kotlin stdlib/reflection retain their names: relocating them breaks built-in type lookup.
 tasks.shadowJar {
   listOf(
-          "io.ktor",
           "kotlinx",
           "okhttp3",
           "okio",

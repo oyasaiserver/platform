@@ -6,21 +6,18 @@ import kotlin.test.*
 
 class AssistantShadingTest {
   @Test
-  fun relayLoadsFromJarWithoutServerLibrariesOrNetwork() {
+  fun jarDoesNotContainBrainOrHttpClient() {
     val jar = File("build/libs/OyasaiAdminTools.jar")
     assertTrue(jar.isFile)
     URLClassLoader(arrayOf(jar.toURI().toURL()), ClassLoader.getPlatformClassLoader()).use { loader
       ->
-      (loader
-              .loadClass("io.oyasai.oyasaiAdminTools.assistant.AssistantModelRelay")
-              .getConstructor(String::class.java, String::class.java, Long::class.javaPrimitiveType)
-              .newInstance("offline-placeholder", "offline-test", 1000L) as AutoCloseable)
-          .close()
       java.util.jar.JarFile(jar).use { archive ->
         val entries = archive.entries().asSequence().map { it.name }.toList()
         assertFalse(entries.any { it.startsWith("assistant-docs/") })
         for (prefix in
             listOf(
+                "io/oyasai/oyasaiAdminTools/assistant/AssistantPi",
+                "io/ktor/",
                 "ai/koog/",
                 "com/fasterxml/jackson/",
                 "aws/",

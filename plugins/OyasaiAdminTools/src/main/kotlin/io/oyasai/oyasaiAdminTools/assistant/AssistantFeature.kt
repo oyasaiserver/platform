@@ -4,7 +4,6 @@ import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import java.time.Duration
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.*
@@ -16,82 +15,147 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.HandlerList
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.plugin.messaging.PluginMessageListener
 
 internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
-    CommandExecutor, AutoCloseable {
+    CommandExecutor, PluginMessageListener, Listener, AutoCloseable {
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
   private val jobs = ConcurrentHashMap<UUID, Job>()
-  private val lastRequest = mutableMapOf<UUID, Long>()
+  private val requestIds = mutableMapOf<UUID, String>()
   private val pending = mutableMapOf<UUID, Pending>()
   private val settings = plugin.config.getConfigurationSection("assistant")
   private val rules = AssistantRules(settings?.getStringList("blacklist").orEmpty())
   private lateinit var allows: AssistantAllowStore
-  private val maxCalls = (settings?.getInt("max-tool-calls", 12) ?: 12).coerceIn(1, 32)
-  private val timeout = (settings?.getLong("timeout-seconds", 45) ?: 45).coerceIn(1, 180) * 1000
-  private val cooldown = (settings?.getLong("cooldown-seconds", 10) ?: 10).coerceIn(0, 3600) * 1000
-  private var agent: AssistantBackend? = null
+  private val calls = AssistantCalls(settings?.getInt("max-tool-calls-per-minute", 30) ?: 30)
   private val senderPermissions = settings?.getStringList("sender-permissions").orEmpty()
   private val playerCommands =
       if (settings?.contains("player-commands") == true) settings.getStringList("player-commands")
       else AssistantSenderChoice.defaults
   private val senderWait = (settings?.getLong("sender-wait-ms", 1500) ?: 1500).coerceIn(100, 10000)
   private val senderQuiet = (settings?.getLong("sender-idle-ms", 300) ?: 300).coerceIn(50, 5000)
-  private val executions = ConcurrentHashMap<UUID, Job>()
   private val memory = AssistantMemory(plugin.dataFolder.resolve("assistant-memory").toPath())
   private val records = ConcurrentHashMap<String, AssistantMemory.Record>()
-  private val sessionIdle = (settings?.getInt("session-idle-minutes", 10) ?: 10).coerceIn(1, 1440)
-  private val sessionMessages =
-      (settings?.getInt("session-max-messages", 40) ?: 40).coerceIn(4, 200)
-  private val sessionChars =
-      (settings?.getInt("session-max-chars", 48000) ?: 48000).coerceIn(2000, 200000)
-  private val lastOutput = ConcurrentHashMap<UUID, Pair<Long, String>>()
+  private val lastOutput = ConcurrentHashMap<UUID, String>()
 
   fun enable() {
-    scope.launch {
-      while (isActive) {
-        delay(60000)
-        lastOutput.entries.removeIf {
-          System.currentTimeMillis() - it.value.first >= sessionIdle * 60000L
-        }
-      }
-    }
     AssistantCommandSender.validate(senderPermissions)
     allows = AssistantAllowStore(plugin.db, rules)
     if (
         settings?.contains("allowed-commands") == true ||
             settings?.contains("read-only-commands") == true
-    ) {
-      plugin.logger.warning(
-          "Assistant: allowed-commands/read-only-commands are obsolete and ignored; use /assistant allow and blacklist."
-      )
-    }
-    val key = System.getenv(settings?.getString("api-key-env") ?: "OYASAI_ASSISTANT_API_KEY")
-    val command = settings?.getStringList("brain.command").orEmpty()
-    if (
-        settings?.getBoolean("enabled", false) == true &&
-            !key.isNullOrBlank() &&
-            command.isNotEmpty()
-    ) {
-      agent =
-          AssistantPi(
-              command,
-              key,
-              settings.getString("model", "deepseek/deepseek-v4.1-flash")!!.also {
-                require(it.isNotBlank())
-              },
-              timeout,
-              plugin.logger,
-              sessionIdle,
-              sessionMessages,
-              sessionChars,
-          )
-    }
+    )
+        plugin.logger.warning(
+            "Assistant: allowed-commands/read-only-commands are obsolete and ignored; use /assistant allow and blacklist."
+        )
     plugin.getCommand("assistant")!!.setExecutor(this)
     plugin.getCommand("assistant")!!.tabCompleter =
         org.bukkit.command.TabCompleter { _, _, _, _ -> emptyList() }
-    plugin.logger.info(
-        "Assistant ${if (agent == null) "disabled (configuration or missing key)" else "enabled"}"
-    )
+    plugin.server.messenger.registerIncomingPluginChannel(plugin, CHANNEL, this)
+    plugin.server.messenger.registerOutgoingPluginChannel(plugin, CHANNEL)
+    plugin.server.pluginManager.registerEvents(this, plugin)
+  }
+
+  override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
+    if (channel != CHANNEL) return
+    val id = player.uniqueId
+    val operator = "${player.name}($id)"
+    if (!player.hasPermission(PERMISSION) || settings?.getBoolean("enabled", false) != true) {
+      audit(operator, "denied:message", "disabled or permission")
+      return
+    }
+    val request =
+        try {
+          AssistantProtocol.decode(message)
+        } catch (failure: Exception) {
+          audit(operator, "denied:message", failure.message.orEmpty())
+          AssistantProtocol.requestId(message)?.let { reply(player, it, "invalid request", true) }
+          return
+        }
+    val rejection = calls.begin(id)
+    if (rejection != null) {
+      audit(operator, "denied:message", rejection)
+      reply(player, request.id, rejection, true)
+      return
+    }
+    requestIds[id] = request.id
+    val record = records.computeIfAbsent(operator) { AssistantMemory.Record(player.name) }
+    audit(operator, "tool:${request.tool}", request.args.toString())
+    val job =
+        scope.launch(start = CoroutineStart.LAZY) {
+          try {
+            val result =
+                when (request.tool) {
+                  "get_context" ->
+                      onMain {
+                        context(player(id)) +
+                            (lastOutput[id]?.let { "\n直近のコマンド結果（観測データ）: ${it}" } ?: "")
+                      }
+                  "run_command" ->
+                      runCommand(
+                          id,
+                          operator,
+                          request.args.getValue("command"),
+                          request.args.getValue("summary"),
+                      )
+                  "search_memory" ->
+                      memory.search(
+                          request.args.getValue("query"),
+                          request.args.getValue("days").toInt(),
+                      )
+                  "record_memory" -> {
+                    val summary = request.args.getValue("summary")
+                    require(summary.length <= 2000 && summary.none { it.isISOControl() })
+                    memory.append(record, summary)
+                    records.remove(operator, record)
+                    "記録しました。"
+                  }
+                  else -> error("Unknown tool")
+                }
+            onMain {
+              finishCall(id)
+              reply(player, request.id, result, false)
+            }
+          } catch (failure: CancellationException) {
+            throw failure
+          } catch (failure: Throwable) {
+            audit(operator, "failed", failure.javaClass.simpleName)
+            onMain {
+              finishCall(id)
+              reply(player, request.id, "道具の呼び出しに失敗しました。", true)
+            }
+          }
+        }
+    jobs[id] = job
+    job.start()
+  }
+
+  private fun finishCall(id: UUID) {
+    pending.remove(id)
+    calls.finish(id)
+    jobs.remove(id)
+    requestIds.remove(id)
+  }
+
+  private fun reply(player: Player, requestId: String, value: String, error: Boolean) {
+    if (player.isOnline && plugin.isEnabled)
+        player.sendPluginMessage(plugin, CHANNEL, AssistantProtocol.encode(requestId, value, error))
+  }
+
+  @EventHandler
+  fun onQuit(event: PlayerQuitEvent) {
+    val id = event.player.uniqueId
+    requestIds.remove(id)?.let { reply(event.player, it, "拒否: 本人が実行しませんでした", false) }
+    pending.remove(id)?.decision?.complete(0)
+    jobs.remove(id)?.cancel()
+    calls.finish(id)
+    // Never replay a disconnected operator's request on rejoin.
+    lastOutput.remove(id)
+    records.remove("${event.player.name}($id)")
+    audit("${event.player.name}($id)", "cancel", "offline")
   }
 
   override fun onCommand(
@@ -108,178 +172,14 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       manageAllows(sender, args.drop(1))
       return true
     }
-    val backend = agent
-    if (backend == null) {
-      sender.sendMessage("運営アシスタントは無効です。")
-      return true
-    }
-    if (sender !is Player) {
-      sender.sendMessage("ゲーム内のプレイヤーから依頼してください。")
-      return true
-    }
-    if (args.size == 1 && args[0].equals("reset", true)) {
-      val id = sender.uniqueId
-      val previousExecution = executions[id]
-      val reset =
-          scope.launch(start = CoroutineStart.LAZY) {
-            jobs[id]?.cancelAndJoin()
-            previousExecution?.cancelAndJoin()
-            onMain {
-              pending.remove(id)?.let { audit("${sender.name}($id)", "cancel", it.command.text) }
-              lastOutput.remove(id)
-            }
-            backend.reset(id.toString())
-            onMain { player(id).sendMessage("自分の短い記憶を消しました。共有の実行記録は残ります。") }
-          }
-      executions[id] = reset
-      reset.invokeOnCompletion { executions.remove(id, reset) }
-      reset.start()
-      return true
-    }
-    val request = args.joinToString(" ")
-    if (request.isBlank() || request.length > 1000) {
-      sender.sendMessage("/assistant <依頼>（1000文字以内）")
-      return true
-    }
-    val id = sender.uniqueId
-    val now = System.currentTimeMillis()
-    if (jobs.containsKey(id) || executions.containsKey(id) || pending.containsKey(id)) {
-      sender.sendMessage("前の依頼または確認待ちの提案があります。")
-      return true
-    }
-    if (now - (lastRequest[id] ?: 0) < cooldown) {
-      sender.sendMessage("少し待ってから依頼してください。")
-      return true
-    }
-    lastRequest[id] = now
-    val operator = "${sender.name}($id)"
-    val record = AssistantMemory.Record(sender.name, request)
-    records[operator] = record
-    audit(operator, "request", request)
-    sender.sendMessage("調べています。実行が必要なら確認ボタンを表示します。")
-    val count = AtomicInteger()
-    val progress =
-        AssistantProgress(
-            onLocalTool = { tool, args -> checkBudget(count, operator, tool, args) },
-            onResult = { tool, result -> audit(operator, "tool-result:$tool", result.take(500)) },
-        )
-    val job =
-        scope.launch(start = CoroutineStart.LAZY) {
-          try {
-            withTimeout(timeout) { respond(id, operator, request, backend, count, progress) }
-          } catch (failure: Throwable) {
-            audit(
-                operator,
-                if (failure is CancellationException) "cancel" else "failed",
-                failure.javaClass.simpleName,
-            )
-            if (currentCoroutineContext().isActive && plugin.isEnabled) {
-              onMain {
-                pending.remove(id)?.let { audit(operator, "cancel", "request failed") }
-                val answer =
-                    if (failure is TimeoutCancellationException) {
-                      progress.partial("時間制限に達しました（確認待ちの提案は取り消しました）")
-                    } else "依頼を完了できませんでした。接続・設定を確認してください。"
-                audit(operator, "answer", answer)
-                plugin.server.getPlayer(id)?.let { sendAnswer(it, answer) }
-              }
-            }
-          } finally {
-            records.remove(operator, record)
-            finishMemory(id, record, backend)
-          }
-        }
-    jobs[id] = job
-    job.invokeOnCompletion { jobs.remove(id, job) }
-    job.start()
+    sender.sendMessage("クライアントの AI Bridge の /ai を使ってください")
     return true
-  }
-
-  private suspend fun respond(
-      id: UUID,
-      operator: String,
-      request: String,
-      backend: AssistantBackend,
-      count: AtomicInteger,
-      progress: AssistantProgress,
-      confirmed: Pair<String, String>? = null,
-  ) {
-    var proposed = false
-    val tools =
-        buildMap<String, AssistantTool> {
-          fun tool(value: AssistantTool) {
-            put(value.name, value)
-          }
-          tool(
-              AssistantTool("get_context") {
-                checkBudget(count, operator, "get_context", "")
-                onMain {
-                  context(player(id)) +
-                      (lastOutput[id]
-                          ?.takeIf { System.currentTimeMillis() - it.first < sessionIdle * 60000L }
-                          ?.let { "\n直近のコマンド結果（観測データ）: ${it.second}" } ?: "")
-                }
-              }
-          )
-          tool(
-              AssistantTool("run_command") { args ->
-                checkBudget(count, operator, "run_command", args.toString())
-                val result =
-                    runCommand(
-                        id,
-                        operator,
-                        args["command"].orEmpty(),
-                        args["summary"].orEmpty(),
-                        proposed,
-                    )
-                if (pending.containsKey(id)) proposed = true
-                result
-              }
-          )
-          tool(
-              AssistantTool("search_memory") { args ->
-                checkBudget(count, operator, "search_memory", "")
-                memory.search(
-                    args["query"].orEmpty(),
-                    args["days"]?.toIntOrNull() ?: 1,
-                )
-              }
-          )
-        }
-
-    val answer =
-        if (confirmed == null) backend.runFor(id.toString(), request, maxCalls, tools, progress)
-        else
-            backend.continueAfterCommand(
-                id.toString(),
-                confirmed.first,
-                confirmed.second,
-                maxCalls,
-                tools,
-                progress,
-            )
-    audit(operator, "answer", answer)
-    onMain { sendAnswer(player(id), answer) }
-  }
-
-  private fun sendAnswer(player: Player, answer: String) {
-    val message =
-        Component.text("[AI] ", NamedTextColor.GOLD)
-            .append(Component.text(answer.take(2000), NamedTextColor.WHITE))
-    val card = pending[player.uniqueId]?.card
-    player.sendMessage(
-        if (card == null) message else message.append(Component.newline()).append(card)
-    )
-  }
-
-  private fun checkBudget(count: AtomicInteger, operator: String, tool: String, args: String) {
-    audit(operator, "tool:$tool", args)
-    check(count.incrementAndGet() <= maxCalls) { "Tool call limit exceeded" }
   }
 
   private fun player(id: UUID): Player {
     check(plugin.isEnabled)
     val player = plugin.server.getPlayer(id) ?: error("Operator offline")
+    check(settings?.getBoolean("enabled", false) == true) { "Assistant disabled" }
     check(player.hasPermission(PERMISSION)) { "Operator permission revoked" }
     return player
   }
@@ -352,7 +252,6 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       operator: String,
       text: String,
       summary: String,
-      proposed: Boolean,
   ): String {
     val command =
         onMain { resolve(player(id), operator, text) } ?: return "拒否: 禁止項目・権限・コマンドの登録を確認してください。"
@@ -370,19 +269,13 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
             false,
             AssistantSenderChoice.operator(command.text, playerCommands),
         )
-    return onMain {
-      if (proposed || pending.containsKey(id)) {
-        audit(operator, "denied:pending", command.text)
-        "拒否: 1依頼で確認待ちにできるのは1件だけです。"
-      } else
-          propose(
-              player(id),
-              operator,
-              command,
-              summary,
-              AssistantSenderChoice.operator(command.text, playerCommands),
-          )
-    }
+    return propose(
+        id,
+        operator,
+        command,
+        summary,
+        AssistantSenderChoice.operator(command.text, playerCommands),
+    )
   }
 
   private suspend fun execute(
@@ -431,176 +324,103 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
       }
       val result = immediate ?: collector!!.collect()
       if (result.startsWith("拒否")) audit(operator, "denied:execution", command.text)
-      lastOutput[id] = System.currentTimeMillis() to result.take(8000)
+      lastOutput[id] = result.take(8000)
       audit(operator, "sender-output", result.take(500))
       if (!asOperator && AssistantSenderChoice.playerRequired(result)) {
-        return onMain {
-          if (pending.containsKey(id)) "プレイヤー専用エラーですが、別の確認待ちがあるため再実行の提案はしていません。"
-          else
-              propose(
-                  player(id),
-                  operator,
-                  command,
-                  "AI送り主ではプレイヤー専用エラーでした。本人として実行するか確認してください。",
-                  true,
-              )
-        } + "\nAI送り主の結果: $result"
+        return propose(id, operator, command, "AI送り主ではプレイヤー専用エラーでした。本人として実行するか確認してください。", true)
       }
+
       return result
     } finally {
       collector?.close()
     }
   }
 
-  private fun propose(
-      player: Player,
+  private suspend fun propose(
+      id: UUID,
       operator: String,
       command: NormalizedCommand,
       summary: String,
       asOperator: Boolean,
   ): String {
-    val id = player.uniqueId
     val proposal = Pending(command, System.nanoTime() + 60_000_000_000L)
-    pending[id] = proposal
-    audit(
-        operator,
-        "propose",
-        "sendAs=${if (asOperator) "operator" else "assistant"} ${command.text} | $summary",
-    )
-    fun button(label: String, action: Int): Component =
-        Component.text(
-                label,
-                when (action) {
-                  1 -> NamedTextColor.GREEN
-                  2 -> NamedTextColor.GOLD
-                  else -> NamedTextColor.RED
-                },
-            )
-            .hoverEvent(
-                Component.text(
-                    if (action == 2)
-                        "運営全員に効く常時許可: ${AssistantRules.scope(command.text)}\n" +
-                            if (' ' !in command.text) "引数なしのときだけ確認なしになります。"
-                            else "この範囲の引数は何でも確認なしになります。"
-                    else "/${command.text}"
-                )
-            )
-            .clickEvent(
-                ClickEvent.callback(
-                    { audience ->
-                      if (audience is Player && audience.uniqueId == id && plugin.isEnabled) {
-                        plugin.server.scheduler.runTask(
-                            plugin,
-                            Runnable {
-                              if (pending[id] !== proposal) return@Runnable
-                              pending.remove(id)
-                              if (
-                                  !audience.isOnline ||
-                                      !audience.hasPermission(PERMISSION) ||
-                                      System.nanoTime() >= proposal.expiresAt ||
-                                      !plugin.isEnabled
-                              ) {
-                                audit(operator, "cancel", "expired or permission revoked")
-                                audience.sendMessage("提案が失効したか、権限がありません。")
-                              } else if (action != 0) {
-                                val execution =
-                                    scope.launch(start = CoroutineStart.LAZY) {
-                                      jobs[id]?.join()
-                                      val executionRecord = AssistantMemory.Record(audience.name)
-                                      records[operator] = executionRecord
-                                      try {
-                                        withTimeout(timeout) {
-                                          val result =
-                                              execute(
-                                                  id,
-                                                  operator,
-                                                  proposal.command,
-                                                  action == 2,
-                                                  asOperator,
-                                              )
-                                          val backend = agent ?: error("Assistant disabled")
-                                          val count = AtomicInteger()
-                                          val progress =
-                                              AssistantProgress(
-                                                  onLocalTool = { tool, args ->
-                                                    checkBudget(count, operator, tool, args)
-                                                  },
-                                                  onResult = { tool, value ->
-                                                    audit(
-                                                        operator,
-                                                        "tool-result:$tool",
-                                                        value.take(500),
-                                                    )
-                                                  },
-                                              )
-                                          respond(
-                                              id,
-                                              operator,
-                                              "",
-                                              backend,
-                                              count,
-                                              progress,
-                                              proposal.command.text to result,
-                                          )
-                                        }
-                                      } catch (failure: Throwable) {
-                                        audit(
-                                            operator,
-                                            "execution-failed",
-                                            failure.javaClass.simpleName,
-                                        )
-                                        onMain {
-                                          pending.remove(id)?.let {
-                                            audit(operator, "cancel", "continuation failed")
-                                          }
-                                          plugin.server.getPlayer(id)?.let {
-                                            sendAnswer(
-                                                it,
-                                                "実行後の続きの処理を完了できませんでした。実行済みの操作は取り消していません。",
-                                            )
-                                          }
-                                        }
-                                      } finally {
-                                        records.remove(operator, executionRecord)
-                                        agent?.let { finishMemory(id, executionRecord, it) }
-                                      }
-                                    }
-                                executions[id] = execution
-                                execution.invokeOnCompletion { executions.remove(id, execution) }
-                                execution.start()
-                              } else {
-                                audit(operator, "cancel", command.text)
-                                audience.sendMessage("提案を取り消しました。")
-                              }
-                            },
-                        )
-                      }
-                    },
-                    ClickCallback.Options.builder()
-                        .uses(ClickCallback.UNLIMITED_USES)
-                        .lifetime(Duration.ofSeconds(60))
-                        .build(),
-                )
-            )
-    proposal.card =
-        Component.text(
-                "/${command.text}\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
-            )
-            .append(button(if (asOperator) "[本人として実行]" else "[実行]", 1))
-    if (AssistantRules.scope(command.text) != null)
-        proposal.card = proposal.card.append(Component.text("   ")).append(button("[次から確認しない]", 2))
-    proposal.card = proposal.card.append(Component.text("   ")).append(button("[やめる]", 0))
-    plugin.server.scheduler.runTaskLater(
-        plugin,
-        Runnable {
-          if (pending[id] === proposal) {
-            pending.remove(id)
-            audit(operator, "cancel", "expired: ${command.text}")
-          }
-        },
-        1200L,
-    )
-    return "確認待ちです。運営本人が60秒以内に押したときだけ実行します。"
+    onMain {
+      val player = player(id)
+      pending[id] = proposal
+      audit(
+          operator,
+          "propose",
+          "sendAs=${if (asOperator) "operator" else "assistant"} ${command.text} | $summary",
+      )
+      fun button(label: String, action: Int): Component =
+          Component.text(
+                  label,
+                  when (action) {
+                    1 -> NamedTextColor.GREEN
+                    2 -> NamedTextColor.GOLD
+                    else -> NamedTextColor.RED
+                  },
+              )
+              .hoverEvent(
+                  Component.text(
+                      if (action == 2)
+                          "運営全員に効く常時許可: ${AssistantRules.scope(command.text)}\n" +
+                              if (' ' !in command.text) "引数なしのときだけ確認なしになります。"
+                              else "この範囲の引数は何でも確認なしになります。"
+                      else "/${command.text}"
+                  )
+              )
+              .clickEvent(
+                  ClickEvent.callback(
+                      { audience ->
+                        if (audience is Player && audience.uniqueId == id && plugin.isEnabled) {
+                          plugin.server.scheduler.runTask(
+                              plugin,
+                              Runnable {
+                                if (pending[id] !== proposal) return@Runnable
+                                val valid =
+                                    audience.isOnline &&
+                                        audience.hasPermission(PERMISSION) &&
+                                        System.nanoTime() < proposal.expiresAt &&
+                                        plugin.isEnabled
+                                proposal.decision.complete(if (valid) action else 0)
+                              },
+                          )
+                        }
+                      },
+                      ClickCallback.Options.builder()
+                          .uses(ClickCallback.UNLIMITED_USES)
+                          .lifetime(Duration.ofSeconds(60))
+                          .build(),
+                  )
+              )
+      proposal.card =
+          Component.text(
+                  "/${command.text}\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
+              )
+              .append(button(if (asOperator) "[本人として実行]" else "[実行]", 1))
+      if (AssistantRules.scope(command.text) != null)
+          proposal.card =
+              proposal.card.append(Component.text("   ")).append(button("[次から確認しない]", 2))
+      proposal.card = proposal.card.append(Component.text("   ")).append(button("[やめる]", 0))
+      plugin.server.scheduler.runTaskLater(
+          plugin,
+          Runnable {
+            if (pending[id] === proposal && proposal.decision.complete(0)) {
+              audit(operator, "cancel", "expired: ${command.text}")
+            }
+          },
+          1200L,
+      )
+      player.sendMessage(Component.text(summary).append(Component.newline()).append(proposal.card))
+    }
+    val action = withTimeoutOrNull(60_000) { proposal.decision.await() } ?: 0
+    onMain { if (pending[id] === proposal) pending.remove(id) }
+    if (action == 0) {
+      audit(operator, "cancel", command.text)
+      return "拒否: 本人が実行しませんでした"
+    }
+    return execute(id, operator, command, action == 2, asOperator)
   }
 
   private suspend fun <T> onMain(action: () -> T): T = suspendCancellableCoroutine { continuation ->
@@ -618,66 +438,36 @@ internal class AssistantFeature(private val plugin: OyasaiAdminTools) :
     )
   }
 
-  private suspend fun finishMemory(
-      id: UUID,
-      record: AssistantMemory.Record,
-      backend: AssistantBackend,
-  ) {
-    val summary =
-        if (currentCoroutineContext().isActive && plugin.isEnabled)
-            runCatching {
-                  withTimeout(20000) { backend.summarize(id.toString(), record.facts().take(3500)) }
-                }
-                .getOrDefault("要約を取得できませんでした")
-        else "処理が中断されました"
-    try {
-      memory.append(record, summary)
-    } catch (failure: Exception) {
-      plugin.logger.warning("Assistant memory append failed: ${failure.javaClass.simpleName}")
-    }
-  }
-
   private fun audit(operator: String, event: String, detail: String) {
-    val record = records[operator]
-    record?.add(event, detail)
-    if (record == null && event == "cancel") {
-      val cancellation = AssistantMemory.Record(operator.substringBefore('('))
-      cancellation.add(event, detail)
-      val actor = operator.substringAfter('(').substringBefore(')')
-      agent?.let { backend ->
-        scope.launch {
-          finishMemory(
-              runCatching { UUID.fromString(actor) }.getOrDefault(UUID(0, 0)),
-              cancellation,
-              backend,
-          )
-        }
-      }
-    }
+    records[operator]?.add(event, detail)
     plugin.logger.info(
         "Assistant operator=$operator event=$event ${detail.replace(Regex("[\\p{Cntrl}§]"), " ").take(2000)}"
     )
   }
 
   override fun close() {
-    scope.cancel()
-    pending.forEach { (id, proposal) ->
-      val record = AssistantMemory.Record(plugin.server.getPlayer(id)?.name ?: "operator")
-      record.add("cancel", proposal.command.text)
-      runCatching { memory.append(record, "プラグイン停止で確認待ちを取り消しました") }
+    pending.forEach { (_, proposal) -> proposal.decision.complete(0) }
+    requestIds.forEach { (id, requestId) ->
+      plugin.server.getPlayer(id)?.let { reply(it, requestId, "拒否: 本人が実行しませんでした", false) }
     }
+    scope.cancel()
     pending.clear()
-    agent?.close()
-    agent = null
+    requestIds.clear()
+    jobs.clear()
+    plugin.server.messenger.unregisterIncomingPluginChannel(plugin, CHANNEL, this)
+    plugin.server.messenger.unregisterOutgoingPluginChannel(plugin, CHANNEL)
+    HandlerList.unregisterAll(this)
   }
 
   private data class Pending(
       val command: NormalizedCommand,
       val expiresAt: Long,
       var card: Component = Component.empty(),
+      val decision: CompletableDeferred<Int> = CompletableDeferred(),
   )
 
   companion object {
+    const val CHANNEL = "oyasai:assistant"
     const val PERMISSION = "oyasai.admintools.assistant"
   }
 }

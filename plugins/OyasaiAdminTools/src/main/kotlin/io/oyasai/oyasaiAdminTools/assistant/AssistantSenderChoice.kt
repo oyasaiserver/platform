@@ -1,11 +1,28 @@
 package io.oyasai.oyasaiAdminTools.assistant
 
 internal object AssistantSenderChoice {
-  val defaults = listOf("tp", "teleport", "gamemode", "gm", "gms", "gmc", "gmsp", "gma", "fly")
+  val defaults =
+      listOf(
+          "tp",
+          "teleport",
+          "gamemode",
+          "gm",
+          "gms",
+          "gmc",
+          "gmsp",
+          "gma",
+          "fly",
+          "co i",
+          "co inspect",
+          "co near",
+      )
 
   fun operator(command: String, configured: List<String>): Boolean {
-    val name = command.substringBefore(' ').substringAfter(':')
-    return name in configured.map { it.lowercase(java.util.Locale.ROOT) }
+    val words = command.substringAfter(':').lowercase(java.util.Locale.ROOT).split(Regex("\\s+"))
+    return configured.any {
+      val prefix = it.trim().lowercase(java.util.Locale.ROOT).split(Regex("\\s+"))
+      prefix.first().isNotBlank() && words.take(prefix.size) == prefix
+    }
   }
 
   fun playerRequired(output: String): Boolean =
