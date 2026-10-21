@@ -33,7 +33,10 @@ class AssistantFeatureTest {
         action(method.name, args ?: emptyArray())
       } as T
 
-  private class Fixture : AutoCloseable {
+  private class Fixture(
+      autoApprove: List<Map<String, Any>> = emptyList(),
+      blacklist: List<String> = emptyList(),
+  ) : AutoCloseable {
     val root = Files.createTempDirectory("assistant-feature")
     val responses = ConcurrentLinkedQueue<String>()
     val audit = ConcurrentLinkedQueue<String>()
@@ -41,11 +44,14 @@ class AssistantFeatureTest {
     val timers = ConcurrentLinkedQueue<Runnable>()
     val id = UUID.randomUUID()
     var permitted = true
+    var commandPermitted = true
+    var worldName = "world"
     var executed = 0
     val executedCommands = mutableListOf<String>()
     var synchronous = 0
     var executeResult: (Int) -> Boolean = { true }
     val messages = ConcurrentLinkedQueue<net.kyori.adventure.text.Component>()
+    val textMessages = ConcurrentLinkedQueue<String>()
     var maskIntact = true
     var emptySelection = true
     var restored = 0
@@ -80,6 +86,8 @@ class AssistantFeatureTest {
     val config =
         YamlConfiguration().apply {
           set("assistant.enabled", true)
+          set("assistant.auto-approve", autoApprove)
+          set("assistant.blacklist", blacklist)
           set("assistant.player-commands", listOf("plugins"))
         }
     val db = AdminDb(root.resolve("test.db").toFile(), Logger.getAnonymousLogger()).apply { open() }
@@ -96,7 +104,12 @@ class AssistantFeatureTest {
               "getServer" -> plugin.server
               "getUniqueId" -> id
               "getName" -> "operator"
-              "hasPermission" -> permitted
+              "hasPermission" -> if (args[0] == "test.plugins") commandPermitted else permitted
+              "getWorld" ->
+                  factory.fake<org.bukkit.World> { method, _ ->
+                    check(method == "getName")
+                    worldName
+                  }
               "isOnline" -> true
               "sendPluginMessage" -> {
                 responses.add((args[2] as ByteArray).toString(Charsets.UTF_8))
@@ -109,6 +122,7 @@ class AssistantFeatureTest {
               }
               "sendMessage" -> {
                 (args[0] as? net.kyori.adventure.text.Component)?.let(messages::add)
+                (args[0] as? String)?.let(textMessages::add)
                 null
               }
               else -> error("Player.$name")
@@ -131,10 +145,21 @@ class AssistantFeatureTest {
           }
       val command =
           object : Command("plugins") {
+            init {
+              permission = "test.plugins"
+            }
+
             override fun execute(sender: CommandSender, label: String, args: Array<out String>) =
                 true
           }
       val known = mutableMapOf<String, Command>("plugins" to command, "bukkit:plugins" to command)
+      val stop =
+          object : Command("stop") {
+            override fun execute(sender: CommandSender, label: String, args: Array<out String>) =
+                true
+          }
+      known["stop"] = stop
+      known["bukkit:stop"] = stop
       fawe = FaweCommandFakes(known)
       fawe.register("gmask", listOf("/gmask"))
       fawe.register("mask", listOf("/mask"))
@@ -171,6 +196,11 @@ class AssistantFeatureTest {
           Unsafe::class.java.getDeclaredField("theUnsafe").apply { isAccessible = true }.get(null)
               as Unsafe
       plugin = unsafe.allocateInstance(OyasaiAdminTools::class.java) as OyasaiAdminTools
+      OyasaiAdminTools::class
+          .java
+          .getDeclaredField("db")
+          .apply { isAccessible = true }
+          .set(plugin, db)
       fun field(name: String, value: Any) {
         JavaPlugin::class
             .java
@@ -180,6 +210,8 @@ class AssistantFeatureTest {
       }
       field("server", server)
       field("dataFolder", root.toFile())
+      field("configFile", root.resolve("config.yml").toFile())
+      field("classLoader", OyasaiAdminTools::class.java.classLoader)
       field("newConfig", config)
       field("isEnabled", true)
       field(
@@ -208,6 +240,18 @@ class AssistantFeatureTest {
           .getDeclaredField("allows")
           .apply { isAccessible = true }
           .set(feature, AssistantAllowStore(db, AssistantRules()))
+    }
+
+    fun manage(vararg args: String) {
+      feature.onCommand(
+          player,
+          object : Command("assistant") {
+            override fun execute(sender: CommandSender, label: String, args: Array<out String>) =
+                true
+          },
+          "assistant",
+          args,
+      )
     }
 
     fun send(tool: String, args: String = "{}", id: String = "test") {
@@ -247,6 +291,205 @@ class AssistantFeatureTest {
       db.close()
       root.toFile().deleteRecursively()
     }
+  }
+
+  @Test
+  fun configuredApprovalExecutesOnlyMatchingArgumentsAndAuditsItsNumber() {
+    Fixture(listOf(mapOf("command" to "bukkit:plugins", "arguments" to "[0-9]+"))).use { f ->
+      f.send("run_command", """{"command":"plugins 123","summary":"確認"}""")
+      f.drainUntil { f.responses.isNotEmpty() || f.timers.isNotEmpty() }
+      assertEquals(1, f.executed)
+      assertTrue(f.timers.isEmpty())
+      assertTrue(f.audit.any { "event=execute " in it && "auto-approve:1" in it })
+      f.responses.clear()
+      f.send("run_command", """{"command":"plugins alice","summary":"確認"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      f.decision().complete(0)
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(1, f.executed)
+    }
+  }
+
+  @Test
+  fun blacklistAndCommandPermissionStillWinOverConfiguredApproval() {
+    for (blocked in listOf(true, false)) Fixture(
+            listOf(mapOf("command" to "bukkit:plugins", "arguments" to "[0-9]+")),
+            if (blocked) listOf("^bukkit:plugins") else emptyList(),
+        )
+        .use { f ->
+          f.commandPermitted = blocked
+          f.send("run_command", """{"command":"plugins 1","summary":"確認"}""")
+          f.drainUntil { f.responses.isNotEmpty() }
+          assertEquals(0, f.executed)
+          assertTrue(f.timers.isEmpty())
+          assertTrue(f.audit.any { "denied:${if (blocked) "blacklist" else "permission"}" in it })
+        }
+    Fixture(listOf(mapOf("command" to "bukkit:plugins", "arguments" to "[0-9]+"))).use { f ->
+      // A shared allowance cannot bypass command permission either.
+      AssistantAllowStore(f.db, AssistantRules()).add("bukkit:plugins", "operator", f.id)
+      f.commandPermitted = false
+      f.send("run_command", """{"command":"plugins","summary":"確認"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(0, f.executed)
+    }
+  }
+
+  @Test
+  fun configuredBatchExecutesAndAuditsEachItemWithoutConfirmation() {
+    Fixture(
+            listOf(mapOf("command" to "bukkit:plugins", "arguments" to "[0-9]+", "per-minute" to 2))
+        )
+        .use { f ->
+          f.send("run_commands", """{"commands":"plugins 1\nplugins 2","summary":"確認"}""")
+          f.drainUntil { f.responses.isNotEmpty() }
+          assertEquals(2, f.executed)
+          assertTrue(f.timers.isEmpty())
+          assertEquals(2, f.audit.count { "event=execute " in it && "auto-approve:1" in it })
+          assertContains(
+              JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+              "全2個",
+          )
+        }
+  }
+
+  @Test
+  fun automaticBatchRechecksRateWorldPermissionAndConfigBeforeEveryCommand() {
+    for (change in listOf("rate", "world", "permission", "reload")) Fixture(
+            listOf(
+                mapOf(
+                    "command" to "bukkit:plugins",
+                    "arguments" to "[0-9]+",
+                    "per-minute" to if (change == "rate") 1 else 10,
+                    "worlds" to listOf("world"),
+                )
+            )
+        )
+        .use { f ->
+          f.executeResult = {
+            when (change) {
+              "world" -> f.worldName = "other"
+              "permission" -> f.commandPermitted = false
+              "reload" -> {
+                f.config.set("assistant.auto-approve", emptyList<Any>())
+                f.plugin.saveConfig()
+                f.manage("reload")
+              }
+            }
+            true
+          }
+          f.send("run_commands", """{"commands":"plugins 1\nplugins 2","summary":"確認"}""")
+          f.drainUntil { f.responses.isNotEmpty() }
+          assertEquals(1, f.executed, change)
+          if (change == "reload") assertTrue(f.audit.any { "event=auto-approve-reload" in it })
+          assertTrue(f.timers.isEmpty(), change)
+          assertContains(
+              JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+              "停止",
+          )
+        }
+  }
+
+  @Test
+  fun sharedApprovalPrecedesConfiguredLimitsAndMixedBatchUsesOneCard() {
+    Fixture(
+            listOf(
+                mapOf("command" to "bukkit:plugins", "arguments" to "[0-9]+", "per-minute" to 1),
+                mapOf(
+                    "command" to "bukkit:plugins",
+                    "per-minute" to 1,
+                    "worlds" to listOf("other"),
+                ),
+            )
+        )
+        .use { f ->
+          f.send("run_commands", """{"commands":"plugins 1\nplugins alice","summary":"確認"}""")
+          f.drainUntil { f.timers.isNotEmpty() }
+          assertEquals(0, f.executed)
+          f.decision().complete(1)
+          f.drainUntil { f.responses.isNotEmpty() }
+          assertEquals(2, f.executed)
+          assertEquals(1, f.audit.count { "event=propose" in it })
+          assertFalse(f.audit.any { "event=execute " in it && "auto-approve:" in it })
+          f.responses.clear()
+          AssistantAllowStore(f.db, AssistantRules()).add("bukkit:plugins", "operator", f.id)
+          f.send("run_commands", """{"commands":"plugins\nplugins","summary":"確認"}""")
+          f.drainUntil { f.responses.isNotEmpty() }
+          assertEquals(4, f.executed)
+          assertEquals(2, f.audit.count { "event=execute " in it && "approval=shared" in it })
+        }
+  }
+
+  @Test
+  fun coreBlacklistWinsAndUnsafePatternOnlyFallsBackToConfirmation() {
+    Fixture(listOf(mapOf("command" to "bukkit:stop"))).use { f ->
+      f.send("run_command", """{"command":"stop","summary":"停止"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(0, f.executed)
+      assertTrue(f.timers.isEmpty())
+      assertTrue(f.audit.any { "denied:blacklist" in it })
+    }
+    Fixture(listOf(mapOf("command" to "bukkit:plugins", "arguments" to ".*"))).use { f ->
+      assertTrue(f.audit.any { "auto-approve:1 disabled" in it })
+      f.send("run_command", """{"command":"plugins anything","summary":"確認"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      assertEquals(0, f.executed)
+      f.decision().complete(0)
+      f.drainUntil { f.responses.isNotEmpty() }
+    }
+  }
+
+  @Test
+  fun listingDistinguishesSourcesAndReloadUpdatesRulesWithoutBypassingPermission() {
+    Fixture().use { f ->
+      f.config.set("assistant.auto-approve", listOf(mapOf("command" to "bukkit:plugins")))
+      f.plugin.saveConfig()
+      f.permitted = false
+      f.manage("reload")
+      f.permitted = true
+      f.manage("allow", "list")
+      assertFalse(f.textMessages.any { "[config] auto-approve:" in it })
+      f.manage("reload")
+      f.manage("allow", "list")
+      assertTrue(f.textMessages.any { "[shared]" in it })
+      assertTrue(f.textMessages.any { "[config] auto-approve:1: bukkit:plugins" in it })
+      f.send("run_command", """{"command":"plugins","summary":"確認"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(1, f.executed)
+      f.responses.clear()
+      f.plugin.config.set("assistant.blacklist", listOf("^bukkit:plugins"))
+      f.plugin.saveConfig()
+      f.manage("reload")
+      f.send("run_command", """{"command":"plugins","summary":"確認"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(1, f.executed)
+      assertTrue(f.audit.any { "denied:blacklist" in it })
+    }
+  }
+
+  @Test
+  fun invalidBlacklistReloadKeepsPreviousProhibitionsAndDisablesConfiguredApproval() {
+    for (invalid in listOf(listOf("["), "wrong type", "malformed YAML")) Fixture(
+            listOf(mapOf("command" to "bukkit:plugins", "arguments" to "[0-9]+")),
+            listOf("^bukkit:plugins blocked"),
+        )
+        .use { f ->
+          f.config.set("assistant.blacklist", invalid)
+          f.plugin.saveConfig()
+          if (invalid == "malformed YAML")
+              Files.writeString(f.root.resolve("config.yml"), "assistant: [")
+          f.manage("reload")
+          f.manage("allow", "list")
+          assertFalse(f.textMessages.any { "[config] auto-approve:" in it })
+          f.send("run_command", """{"command":"plugins blocked","summary":"確認"}""")
+          f.drainUntil { f.responses.isNotEmpty() }
+          assertTrue(f.audit.any { "denied:blacklist" in it })
+          f.responses.clear()
+          f.send("run_command", """{"command":"plugins 1","summary":"確認"}""")
+          f.drainUntil { f.timers.isNotEmpty() }
+          assertEquals(0, f.executed)
+          f.decision().complete(0)
+          f.drainUntil { f.responses.isNotEmpty() }
+        }
   }
 
   @Test

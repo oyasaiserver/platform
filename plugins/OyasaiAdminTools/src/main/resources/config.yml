@@ -17,6 +17,14 @@ assistant:
   enabled: false
   sender-permissions: []
   player-commands: [tp, teleport, gamemode, gm, gms, gmc, gmsp, gma, fly, "co i", "co inspect", "co near"]
+  # 正規化した owner:name と、空白で区切った引数の正規表現（全体一致）。省略は引数なし限定。
+  # 数値、固定語、(?:on|off) のような固定語の選択、単一の正の文字クラスだけを使用できます。
+  # .*・後方参照・先読み・入れ子の繰り返しは無効。最大512文字・32引数。
+  # per-minute（本人ごと・直近60秒）、worlds（本人の現在ワールド）は任意。
+  auto-approve:
+    - command: oyasaiutilities:tp
+      arguments: '[+-]?[0-9]+(?:\.[0-9]+)? [+-]?[0-9]+(?:\.[0-9]+)? [+-]?[0-9]+(?:\.[0-9]+)?'
+  # yaw/pitch付きの5引数形は、tp側の対応を確認してから追加してください。
   sender-wait-ms: 1500
   sender-idle-ms: 300
   max-tool-calls-per-minute: 30

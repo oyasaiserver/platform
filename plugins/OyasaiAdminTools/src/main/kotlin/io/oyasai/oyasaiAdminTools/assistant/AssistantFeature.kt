@@ -34,8 +34,9 @@ internal class AssistantFeature(
   private val requestIds = mutableMapOf<UUID, String>()
   private val pending = mutableMapOf<UUID, Pending>()
   private val settings = plugin.config.getConfigurationSection("assistant")
-  private val rules = AssistantRules(settings?.getStringList("blacklist").orEmpty())
+  private var rules = AssistantRules(settings?.getStringList("blacklist").orEmpty())
   private lateinit var allows: AssistantAllowStore
+  private var autoApprove = AssistantAutoApprove(settings, warn = { plugin.logger.warning(it) })
   private val calls = AssistantCalls(settings?.getInt("max-tool-calls-per-minute", 30) ?: 30)
   private val senderPermissions = settings?.getStringList("sender-permissions").orEmpty()
   private val playerCommands =
@@ -217,6 +218,43 @@ internal class AssistantFeature(
       sender.sendMessage("権限がありません。")
       return true
     }
+    if (args.contentEquals(arrayOf("reload"))) {
+      try {
+        // JavaPlugin.reloadConfig logs malformed YAML and falls back to defaults; preserve
+        // prohibitions.
+        org.bukkit.configuration.file
+            .YamlConfiguration()
+            .load(plugin.dataFolder.resolve("config.yml"))
+      } catch (_: Exception) {
+        autoApprove = AssistantAutoApprove(null, warn = {})
+        sender.sendMessage("設定ファイルを読めません。以前の禁止設定を維持し、設定による確認省略を停止しました。")
+        plugin.logger.warning(
+            "Assistant reload: unreadable config; configured auto-approve disabled"
+        )
+        return true
+      }
+      plugin.reloadConfig()
+      val updated = plugin.config.getConfigurationSection("assistant")
+      val updatedRules =
+          try {
+            val blacklist = updated?.get("blacklist")
+            require(blacklist == null || (blacklist is List<*> && blacklist.all { it is String }))
+            AssistantRules((blacklist as? List<*>)?.map { it as String }.orEmpty())
+          } catch (_: IllegalArgumentException) {
+            autoApprove = AssistantAutoApprove(null, warn = {})
+            sender.sendMessage("追加禁止の正規表現が無効です。以前の禁止設定を維持し、設定による確認省略を停止しました。")
+            plugin.logger.warning(
+                "Assistant reload: invalid blacklist; configured auto-approve disabled"
+            )
+            return true
+          }
+      rules = updatedRules
+      allows = AssistantAllowStore(plugin.db, rules)
+      autoApprove = AssistantAutoApprove(updated, warn = { plugin.logger.warning(it) })
+      sender.sendMessage("禁止・確認省略設定を再読み込みしました: ${autoApprove.entries.size}件")
+      audit(sender.name, "auto-approve-reload", "entries=${autoApprove.entries.size}")
+      return true
+    }
     if (args.firstOrNull()?.equals("allow", true) == true) {
       manageAllows(sender, args.drop(1))
       return true
@@ -269,7 +307,13 @@ internal class AssistantFeature(
       sender.sendMessage("共有許可リスト: ${entries.size}件")
       entries.forEach {
         sender.sendMessage(
-            "${it.id}: ${it.scope} — ${it.name} (${it.uuid}) / ${java.time.Instant.ofEpochMilli(it.addedAt)}"
+            "[shared] ${it.id}: ${it.scope} — ${it.name} (${it.uuid}) / ${java.time.Instant.ofEpochMilli(it.addedAt)}"
+        )
+      }
+      sender.sendMessage("設定による確認省略: ${autoApprove.entries.size}件")
+      autoApprove.entries.forEach {
+        sender.sendMessage(
+            "[config] auto-approve:${it.number}: ${it.command} arguments=${it.arguments.ifEmpty { "(引数なし)" }} per-minute=${it.perMinute ?: "無制限"} worlds=${it.worlds ?: "全ワールド"}"
         )
       }
     } else if (args.size == 2 && args[0] == "remove" && args[1].toLongOrNull() != null) {
@@ -348,11 +392,20 @@ internal class AssistantFeature(
       return "拒否: 要約は500文字以内の1行にしてください。"
     }
     val locked = onMain { locks.active(player(id)) }
-    val automatic = onMain { automatic(player(id), command) }
+    val automatic = onMain { automatic(player(id), command) != null }
     val asOperator =
         AssistantBatch.fawe(command.text) ||
             AssistantSenderChoice.operator(command.text, playerCommands)
-    if (automatic) return execute(id, operator, command, false, asOperator, requireLock = locked)
+    if (automatic)
+        return execute(
+            id,
+            operator,
+            command,
+            false,
+            asOperator,
+            requireLock = locked,
+            requireAutomatic = true,
+        )
     val action = confirm(id, operator, listOf(command), summary, asOperator)
     if (action == 0) return "拒否: 本人が実行しませんでした"
     if (action == 3) return transfer(id, operator, command)
@@ -378,12 +431,21 @@ internal class AssistantFeature(
         failure.message?.takeIf { it.startsWith("拒否:") } ?: "拒否: 空のキュボイド選択範囲と FAWE が必要です。"
       }
 
-  private fun automatic(player: Player, command: NormalizedCommand): Boolean {
+  private fun automatic(
+      player: Player,
+      command: NormalizedCommand,
+      consume: Boolean = false,
+  ): String? {
     val locked = locks.active(player)
-    if (locked && AssistantBatch.maskChange(command.text)) return true
+    if (locked && AssistantBatch.maskChange(command.text)) return "selection-lock"
     if (locked && AssistantBatch.fawe(command.text) && !AssistantBatch.maskedEdit(command.text))
-        return false
-    return allows.allows(command.text) || (locked && AssistantBatch.maskedEdit(command.text))
+        return null
+    if (allows.allows(command.text)) return "shared"
+    if (locked && AssistantBatch.maskedEdit(command.text)) return "selection-lock"
+    if (autoApprove.entries.isEmpty()) return null
+    return autoApprove.match(command.text, player.uniqueId, player.world.name, consume)?.let {
+      "auto-approve:${it.number}"
+    }
   }
 
   private suspend fun runCommands(
@@ -411,7 +473,7 @@ internal class AssistantFeature(
     if (commands.any { it == null }) return "拒否: " + rejections.joinToString("\n") + "\n実行していません。"
     val checked = commands.filterNotNull()
     val locked = onMain { locks.active(player(id)) }
-    val auto = onMain { checked.all { automatic(player(id), it) } }
+    val auto = onMain { checked.all { automatic(player(id), it) != null } }
     if (!auto && confirm(id, operator, checked, summary, true, batch = true) == 0)
         return "拒否: 本人が実行しませんでした"
     val results = mutableListOf<String>()
@@ -490,13 +552,18 @@ internal class AssistantFeature(
         )
             return@onMain "拒否: コマンドの登録が変更されました。"
         stage = "automatic-allowance"
-        if (requireAutomatic && !automatic(player, fresh)) return@onMain "拒否: 確認なしで実行できる条件が変わりました。"
+        val approval = if (requireAutomatic) automatic(player, fresh, consume = true) else null
+        if (requireAutomatic && approval == null) return@onMain "拒否: 確認なしで実行できる条件が変わりました。"
         stage = "mask-update"
         if (locked && AssistantBatch.maskChange(command.text))
             return@onMain lockSelection(player, operator)
         val accepted =
             if (asOperator) {
-              audit(operator, "execute", "sendAs=operator ${command.text}")
+              audit(
+                  operator,
+                  "execute",
+                  "sendAs=operator ${command.text} | approval=${approval ?: "confirmed"}",
+              )
               if (locked && AssistantBatch.fawe(command.text)) {
                 stage = "dispatch:operator:fawe-sync"
                 locks.execute(player, command.text)
@@ -524,7 +591,11 @@ internal class AssistantFeature(
                           ((deadline - System.nanoTime()) / 1_000_000).coerceAtLeast(1),
                       ),
                   )
-              audit(operator, "execute", "sendAs=assistant ${command.text}")
+              audit(
+                  operator,
+                  "execute",
+                  "sendAs=assistant ${command.text} | approval=${approval ?: "confirmed"}",
+              )
               stage = "dispatch:assistant:bukkit"
               sender.dispatch(command.text)
             }
