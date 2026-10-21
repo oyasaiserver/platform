@@ -3,12 +3,17 @@ version: "1.0-SNAPSHOT"
 main: io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 api-version: "1.21"
 softdepend:
+  - FastAsyncWorldEdit
   - TokenManager
   - Essentials
   - DynamicProfile
   - SocialLikes3
   - LuckPerms
 commands:
+  assistant:
+    description: 運営の依頼を調べ、確認してからコマンドを実行する
+    usage: /assistant <依頼>
+    permission: oyasai.admintools.assistant
   invsee:
     description: 運営用 invsee
     permission: essentials.invsee
@@ -63,6 +68,8 @@ commands:
     description: 最新のアンケートを開く (短縮用)
     permission: oyasai.survey
 permissions:
+  oyasai.admintools.assistant:
+    default: op
   oyasai.admintools.applylifeworldsettings:
     description: applylifeworldsettingsコマンドの使用権限
     default: op

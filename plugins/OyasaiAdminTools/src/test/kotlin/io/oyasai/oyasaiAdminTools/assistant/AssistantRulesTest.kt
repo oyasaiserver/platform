@@ -1,0 +1,326 @@
+package io.oyasai.oyasaiAdminTools.assistant
+
+import java.lang.reflect.Proxy
+import kotlin.test.*
+import org.bukkit.command.*
+import org.bukkit.plugin.Plugin
+
+class AssistantRulesTest {
+  private fun serverCommand(name: String) =
+      object : Command(name) {
+        override fun execute(sender: CommandSender, label: String, args: Array<out String>) = true
+      }
+
+  private fun commands(known: () -> Map<String, Command>): CommandMap =
+      Proxy.newProxyInstance(CommandMap::class.java.classLoader, arrayOf(CommandMap::class.java)) {
+          _,
+          method,
+          args ->
+        when (method.name) {
+          "getCommand" -> known()[args!![0]]
+          "getKnownCommands" -> known()
+          else -> null
+        }
+      } as CommandMap
+
+  @Test
+  fun serverNamespacesHaveStablePriorityButOtherAmbiguityIsRejected() {
+    val owners = listOf("minecraft", "bukkit", "paper", "spigot", "purpur")
+    for (name in listOf("plugins", "version", "tps", "mspt")) {
+      val command = serverCommand(name)
+      owners.forEachIndexed { index, preferred ->
+        val known =
+            owners.drop(index).reversed().associate { "$it:$name" to command } +
+                mapOf(name to command, "other:$name" to command)
+        val commands = commands { known }
+        assertEquals("$preferred:$name", AssistantRules.normalize("/$name", commands)?.text)
+        assertEquals("$preferred:$name", AssistantRules.normalize("/purpur:$name", commands)?.text)
+        assertFalse(AssistantRules().isBlacklisted("$preferred:$name"))
+      }
+      assertNull(
+          AssistantRules.normalize(
+              name,
+              commands {
+                mapOf(name to command, "alpha:$name" to command, "beta:$name" to command)
+              },
+          )
+      )
+      assertNull(AssistantRules.normalize(name, commands { mapOf(name to command) }))
+      assertEquals(
+          "alpha:$name",
+          AssistantRules.normalize(
+                  name,
+                  commands { mapOf(name to command, "alpha:$name" to command) },
+              )
+              ?.text,
+      )
+    }
+  }
+
+  @Test
+  fun serverBlacklistWinsForEverySelectedNamespace() {
+    val owners = listOf("minecraft", "bukkit", "paper", "spigot", "purpur")
+    val rules = AssistantRules()
+    for (text in
+        listOf(
+            "stop",
+            "reload",
+            "restart",
+            "spigot reload",
+            "paper reload",
+            "purpur reload",
+            "op steve",
+            "deop steve",
+            "execute run list",
+            "function a",
+            "schedule function a 1t",
+            "return run stop",
+            "whitelist off",
+            "save-off",
+        )) {
+      val name = text.substringBefore(' ')
+      val command = serverCommand(name)
+      owners.forEachIndexed { index, preferred ->
+        val known =
+            owners.drop(index).reversed().associate { "$it:$name" to command } + (name to command)
+        val normalized = assertNotNull(AssistantRules.normalize("/$text", commands { known }))
+        assertEquals("$preferred:$text", normalized.text)
+        assertTrue(rules.isBlacklisted(normalized.text), normalized.text)
+        assertFalse(rules.isAllowed(normalized.text, listOf(normalized.text)), normalized.text)
+      }
+    }
+  }
+
+  private fun command(name: String, owner: String): PluginCommand {
+    val plugin =
+        Proxy.newProxyInstance(Plugin::class.java.classLoader, arrayOf(Plugin::class.java)) {
+            _,
+            method,
+            _ ->
+          if (method.name == "getName") owner else null
+        } as Plugin
+    return PluginCommand::class
+        .java
+        .getDeclaredConstructor(String::class.java, Plugin::class.java)
+        .apply { isAccessible = true }
+        .newInstance(name, plugin)
+  }
+
+  @Test
+  fun faweRepeatedRegistrationNormalizesAliasesToTheNamespacedWrapper() {
+    val fawe = FaweCommandFakes()
+    for ((name, aliases, arguments) in
+        listOf(
+            Triple("gmask", listOf("/gmask"), " #region"),
+            Triple("/set", emptyList(), " stone"),
+            Triple("/distr", emptyList(), ""),
+        )) {
+      val canonical = fawe.register(name, aliases)
+      val commands = commands { fawe.known }
+      for (label in listOf(name) + aliases) {
+        for (input in listOf("/$label", "fastasyncworldedit:$label")) {
+          val normalized = assertNotNull(AssistantRules.normalize(input + arguments, commands))
+          assertEquals("fastasyncworldedit:$name$arguments", normalized.text)
+          assertSame(canonical, normalized.registered)
+          assertSame(canonical, commands.getCommand(normalized.text.substringBefore(' ')))
+          assertEquals(normalized.text, AssistantRules.normalize(normalized.text, commands)?.text)
+        }
+      }
+    }
+  }
+
+  @Test
+  fun faweExpressionsKeepOperatorsAndEnforceCanonicalLengthAndControlLimits() {
+    val fawe = FaweCommandFakes()
+    fawe.register("/generate")
+    val commands = commands { fawe.known }
+    val prefix = "fastasyncworldedit:/generate stone "
+    val expression = "sqrt(x^2+y^2)>=26 && sqrt(x^2+y^2)<27 || !(y>=0) && abs(z)<=1"
+    assertEquals(
+        prefix + expression,
+        AssistantRules.normalize("//generate stone $expression", commands)?.text,
+    )
+    val longest = prefix + "x".repeat(256 - prefix.length)
+    assertEquals(longest, AssistantRules.normalize(longest, commands)?.text)
+    val steps = mutableListOf<String>()
+    assertNull(
+        AssistantRules.normalize(
+            "//generate stone " + "x".repeat(257 - prefix.length),
+            commands,
+            steps::add,
+        )
+    )
+    assertEquals(listOf("length"), steps)
+    for (control in listOf("\n", "\r", "\u0000", "\u2028", "\u2029", "§")) assertNull(
+        AssistantRules.normalize("//generate stone y<0${control}x>0", commands)
+    )
+  }
+
+  @Test
+  fun singleAndDoubleSlashCommandsDoNotCollapseWhenTheyAreDifferent() {
+    val fawe = FaweCommandFakes()
+    fawe.register("gmask")
+    fawe.register("/gmask")
+    val commands = commands { fawe.known }
+    assertEquals("fastasyncworldedit:gmask", AssistantRules.normalize("/gmask", commands)?.text)
+    assertEquals("fastasyncworldedit:/gmask", AssistantRules.normalize("//gmask", commands)?.text)
+  }
+
+  @Test
+  fun faweCannotSubstituteAnotherDelegateOrExecutorWithTheSameName() {
+    val fawe = FaweCommandFakes()
+    fawe.register("gmask", listOf("/gmask"))
+    val commands = commands { fawe.known }
+    fawe.replaceDelegate("gmask")
+    assertNull(AssistantRules.normalize("//gmask", commands))
+    val other = FaweCommandFakes()
+    other.register("gmask", listOf("/gmask"))
+    fawe.known["fastasyncworldedit:gmask"] = other.known.getValue("fastasyncworldedit:gmask")
+    assertNull(AssistantRules.normalize("//gmask", commands))
+    fawe.known["fastasyncworldedit:gmask"] = command("gmask", "FastAsyncWorldEdit")
+    assertNull(AssistantRules.normalize("//gmask", commands))
+  }
+
+  @Test
+  fun resolvesAliasesOwnersAndRejectsFormattedAliasesAndUnknownCommands() {
+    val co = command("co", "CoreProtect")
+    val vanilla =
+        object : Command("list") {
+          override fun execute(sender: CommandSender, label: String, args: Array<out String>) = true
+        }
+    val known =
+        mapOf(
+            "coreprotect:co" to co,
+            "core" to co,
+            "co" to co,
+            "list" to vanilla,
+            "minecraft:list" to vanilla,
+            "danger" to FormattedCommandAlias("danger", arrayOf("minecraft:stop")),
+        )
+    val commands =
+        Proxy.newProxyInstance(
+            CommandMap::class.java.classLoader,
+            arrayOf(CommandMap::class.java),
+        ) { _, method, args ->
+          when (method.name) {
+            "getCommand" -> known[args!![0]]
+            "getKnownCommands" -> known
+            else -> null
+          }
+        } as CommandMap
+    assertEquals(
+        "coreprotect:co lookup u:steve",
+        AssistantRules.normalize(" /CORE \t  LOOKUP U:Steve ", commands)?.text,
+    )
+    assertSame(co, AssistantRules.normalize("coreprotect:co lookup", commands)?.registered)
+    assertEquals("minecraft:list", AssistantRules.normalize("/list", commands)?.text)
+    listOf(
+            "danger",
+            "missing",
+            "co\nlookup",
+            "co\rlookup",
+            "co §alookup",
+            "co\u0000lookup",
+            "co " + "x".repeat(254),
+        )
+        .forEach { assertNull(AssistantRules.normalize(it, commands), it) }
+  }
+
+  @Test
+  fun argumentlessScopesMatchExactlyAndLegacyScopesKeepTheirMeaning() {
+    val rules = AssistantRules()
+    val scope = assertNotNull(AssistantRules.scope("minecraft:list"))
+    assertTrue(rules.isAllowed("minecraft:list", listOf(scope)))
+    assertFalse(rules.isAllowed("minecraft:list uuids", listOf(scope)))
+    assertFalse(rules.isAllowed("minecraft:listx", listOf(scope)))
+    assertTrue(rules.isAllowed("minecraft:list uuids", listOf("minecraft:list")))
+    assertFalse(
+        rules.isAllowed(
+            "minecraft:stop",
+            listOf(assertNotNull(AssistantRules.scope("minecraft:stop"))),
+        )
+    )
+    assertFalse(
+        AssistantRules(listOf("^minecraft:list$")).isAllowed("minecraft:list", listOf(scope))
+    )
+  }
+
+  @Test
+  fun blacklistAlwaysWinsAndScopesHaveWordBoundaries() {
+    val rules = AssistantRules(listOf("^minecraft:kill\\b"))
+    val denied =
+        listOf(
+            "minecraft:stop",
+            "bukkit:reload",
+            "minecraft:reload",
+            "paper:restart",
+            "purpur:purpur reload",
+            "plugmanx:plugman unload test",
+            "plugmanx:plugman listx",
+            "minecraft:op steve",
+            "minecraft:deop steve",
+            "luckperms:luckperms user steve permission set test true",
+            "luckperms:luckperms group admin parent add owner",
+            "luckperms:luckperms editor",
+            "dynamicprofile:syokaku promote steve good:)",
+            "dynamicprofile:syokaku demote steve good",
+            "minecraft:execute as steve run list",
+            "oyasaiadmintools:sudo steve list",
+            "minecraft:function a",
+            "minecraft:schedule function a 1t",
+            "minecraft:return run stop",
+            "fastasyncworldedit:cs a",
+            "fastasyncworldedit:/cs a",
+            "fastasyncworldedit:.s a",
+            "fastasyncworldedit:/.s a",
+            "fastasyncworldedit:/macro a",
+            "oyasaiadmintools:socialspy",
+            "minecraft:tp @a steve",
+            "minecraft:kill @e[distance=..1]",
+            "minecraft:tp steve @r",
+            "oyasaitoken:token addall 1",
+            "minecraft:whitelist off",
+            "minecraft:save-off",
+            "coreprotect:co purge t:1d",
+            "coreprotect:core purge t:1d",
+            "coreprotect:coreprotect restore r:10",
+            "coreprotect:co rb r:10",
+            "coreprotect:co rollback u:",
+            "fastasyncworldedit:/delchunks",
+            "fastasyncworldedit:/schematic delete a",
+            "fastasyncworldedit:/schem d a",
+            "oyasaiadmintools:assistant allow list",
+            "minecraft:kill steve",
+        )
+    denied.forEach { text ->
+      assertTrue(rules.isBlacklisted(text), text)
+      assertFalse(rules.isAllowed(text, listOf(text, text.substringBefore(' '))), text)
+    }
+    listOf(
+            "plugmanx:plugman info test",
+            "plugmanx:plugman list",
+            "luckperms:luckperms info",
+            "luckperms:luckperms listgroups",
+            "luckperms:luckperms listtracks",
+            "luckperms:luckperms user steve info",
+            "luckperms:luckperms user steve permission info",
+            "luckperms:luckperms user steve permission check x",
+            "luckperms:luckperms user steve parent info",
+            "luckperms:luckperms user steve meta info",
+            "luckperms:luckperms group admin info",
+            "coreprotect:co rollback u:steve r:10",
+            "dynamicprofile:syokaku promote good_player",
+            "minecraft:list",
+        )
+        .forEach { assertFalse(rules.isBlacklisted(it), it) }
+    assertEquals("coreprotect:co lookup", AssistantRules.scope("coreprotect:co lookup u:steve"))
+    assertEquals("=minecraft:list", AssistantRules.scope("minecraft:list"))
+    assertNull(AssistantRules.scope("minecraft:tp 1 2 3"))
+    assertNull(AssistantRules.scope("custom:cbmenu demo_car size 2"))
+    assertTrue(
+        rules.isAllowed("coreprotect:co lookup u:anyone r:100", listOf("coreprotect:co lookup"))
+    )
+    assertFalse(rules.isAllowed("coreprotect:co lookupx u:steve", listOf("coreprotect:co lookup")))
+    assertFalse(rules.isAllowed("coreprotect:co rollback u:steve", listOf("coreprotect:co lookup")))
+  }
+}
