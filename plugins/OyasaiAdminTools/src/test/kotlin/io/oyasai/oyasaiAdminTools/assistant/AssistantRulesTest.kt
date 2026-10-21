@@ -107,22 +107,51 @@ class AssistantRulesTest {
   }
 
   @Test
-  fun faweDoubleSlashCommandsNormalizeThroughTheirOwnAlias() {
-    // FAWE: `//gmask` is a command named `gmask` (alias `/gmask`), while `owner:gmask` is `/gmask`.
-    val doubleSlash = command("gmask", "FastAsyncWorldEdit").apply { aliases = listOf("/gmask") }
-    val singleSlash = command("gmask", "FastAsyncWorldEdit")
-    val commands = commands {
-      mapOf(
-          "/gmask" to doubleSlash,
-          "fastasyncworldedit:/gmask" to doubleSlash,
-          "gmask" to singleSlash,
-          "fastasyncworldedit:gmask" to singleSlash,
-      )
+  fun faweRepeatedRegistrationNormalizesAliasesToTheNamespacedWrapper() {
+    val fawe = FaweCommandFakes()
+    for ((name, aliases, arguments) in
+        listOf(
+            Triple("gmask", listOf("/gmask"), " #region"),
+            Triple("/set", emptyList(), " stone"),
+            Triple("/distr", emptyList(), ""),
+        )) {
+      val canonical = fawe.register(name, aliases)
+      val commands = commands { fawe.known }
+      for (label in listOf(name) + aliases) {
+        for (input in listOf("/$label", "fastasyncworldedit:$label")) {
+          val normalized = assertNotNull(AssistantRules.normalize(input + arguments, commands))
+          assertEquals("fastasyncworldedit:$name$arguments", normalized.text)
+          assertSame(canonical, normalized.registered)
+          assertSame(canonical, commands.getCommand(normalized.text.substringBefore(' ')))
+          assertEquals(normalized.text, AssistantRules.normalize(normalized.text, commands)?.text)
+        }
+      }
     }
-    val normalized = assertNotNull(AssistantRules.normalize("//gmask #region", commands))
-    assertEquals("fastasyncworldedit:/gmask #region", normalized.text)
-    assertSame(doubleSlash, normalized.registered)
+  }
+
+  @Test
+  fun singleAndDoubleSlashCommandsDoNotCollapseWhenTheyAreDifferent() {
+    val fawe = FaweCommandFakes()
+    fawe.register("gmask")
+    fawe.register("/gmask")
+    val commands = commands { fawe.known }
     assertEquals("fastasyncworldedit:gmask", AssistantRules.normalize("/gmask", commands)?.text)
+    assertEquals("fastasyncworldedit:/gmask", AssistantRules.normalize("//gmask", commands)?.text)
+  }
+
+  @Test
+  fun faweCannotSubstituteAnotherDelegateOrExecutorWithTheSameName() {
+    val fawe = FaweCommandFakes()
+    fawe.register("gmask", listOf("/gmask"))
+    val commands = commands { fawe.known }
+    fawe.replaceDelegate("gmask")
+    assertNull(AssistantRules.normalize("//gmask", commands))
+    val other = FaweCommandFakes()
+    other.register("gmask", listOf("/gmask"))
+    fawe.known["fastasyncworldedit:gmask"] = other.known.getValue("fastasyncworldedit:gmask")
+    assertNull(AssistantRules.normalize("//gmask", commands))
+    fawe.known["fastasyncworldedit:gmask"] = command("gmask", "FastAsyncWorldEdit")
+    assertNull(AssistantRules.normalize("//gmask", commands))
   }
 
   @Test

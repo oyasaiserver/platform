@@ -445,7 +445,11 @@ internal class AssistantFeature(
       onMain {
         val player = player(id)
         val fresh = resolve(player, operator, command.text)
-        if (fresh == null || fresh.registration !== command.registration)
+        if (
+            fresh == null ||
+                fresh.registration !== command.registration ||
+                fresh.faweRegistration !== command.faweRegistration
+        )
             return@onMain "拒否: 入力欄へ移す前の再確認に失敗しました。"
         player.sendMessage(
             Component.text("[クリックして入力欄へ]", NamedTextColor.AQUA)
@@ -474,7 +478,11 @@ internal class AssistantFeature(
         val locked = locks.active(player)
         if (requireLock && !locked) return@onMain "拒否: 選択範囲の固定が解除されました。"
         val fresh = resolve(player, operator, command.text) ?: return@onMain "拒否: 実行前の再確認に失敗しました。"
-        if (fresh.text != command.text || fresh.registration !== command.registration)
+        if (
+            fresh.text != command.text ||
+                fresh.registration !== command.registration ||
+                fresh.faweRegistration !== command.faweRegistration
+        )
             return@onMain "拒否: コマンドの登録が変更されました。"
         if (requireAutomatic && !automatic(player, fresh)) return@onMain "拒否: 確認なしで実行できる条件が変わりました。"
         if (locked && AssistantBatch.maskChange(command.text))

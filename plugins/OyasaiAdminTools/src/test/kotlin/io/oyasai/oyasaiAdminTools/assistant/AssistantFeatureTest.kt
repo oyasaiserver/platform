@@ -42,6 +42,7 @@ class AssistantFeatureTest {
     val id = UUID.randomUUID()
     var permitted = true
     var executed = 0
+    val executedCommands = mutableListOf<String>()
     var synchronous = 0
     var executeResult: (Int) -> Boolean = { true }
     val messages = ConcurrentLinkedQueue<net.kyori.adventure.text.Component>()
@@ -84,6 +85,7 @@ class AssistantFeatureTest {
     val db = AdminDb(root.resolve("test.db").toFile(), Logger.getAnonymousLogger()).apply { open() }
     val plugin: OyasaiAdminTools
     val feature: AssistantFeature
+    val fawe: FaweCommandFakes
     val player: Player
 
     init {
@@ -102,6 +104,7 @@ class AssistantFeatureTest {
               }
               "performCommand" -> {
                 executed++
+                executedCommands.add(args[0] as String)
                 executeResult(executed)
               }
               "sendMessage" -> {
@@ -132,24 +135,10 @@ class AssistantFeatureTest {
                 true
           }
       val known = mutableMapOf<String, Command>("plugins" to command, "bukkit:plugins" to command)
-      val fawe =
-          factory.fake<org.bukkit.plugin.Plugin> { name, _ ->
-            when (name) {
-              "getName" -> "FastAsyncWorldEdit"
-              else -> error(name)
-            }
-          }
-      class FaweCommand(name: String) :
-          Command(name), org.bukkit.command.PluginIdentifiableCommand {
-        override fun getPlugin() = fawe
-
-        override fun execute(sender: CommandSender, label: String, args: Array<out String>) = true
-      }
-      for (name in listOf("/set", "/gmask", "/mask", "/regen")) {
-        val registered = FaweCommand(name)
-        known[name] = registered
-        known["fastasyncworldedit:$name"] = registered
-      }
+      fawe = FaweCommandFakes(known)
+      fawe.register("gmask", listOf("/gmask"))
+      fawe.register("mask", listOf("/mask"))
+      for (name in listOf("/set", "/distr", "/regen")) fawe.register(name)
       val commands =
           factory.fake<CommandMap> { name, args ->
             when (name) {
@@ -479,6 +468,10 @@ class AssistantFeatureTest {
       f.drainUntil { f.responses.isNotEmpty() }
       assertEquals(2, f.executed)
       assertEquals(2, f.synchronous)
+      assertEquals(
+          listOf("fastasyncworldedit:/set stone", "fastasyncworldedit:/set glass"),
+          f.executedCommands,
+      )
       assertTrue(f.timers.isEmpty())
       f.responses.clear()
       f.send("run_command", """{"command":"//regen","summary":"再生成"}""")
@@ -493,6 +486,55 @@ class AssistantFeatureTest {
       f.decision().complete(0)
       f.drainUntil { f.responses.isNotEmpty() }
       assertEquals(2, f.executed)
+    }
+  }
+
+  @Test
+  fun faweLockAndConfirmedBatchKeepCanonicalCommandsAndOperatorExecution() {
+    Fixture().use { f ->
+      f.send("lock_selection")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "fixed",
+      )
+      assertTrue(f.locks.active(f.player))
+      f.locks.unlock(f.id)
+      f.send(
+          "run_commands",
+          """{"commands":"//gmask #region\n//set stone\n//distr","summary":"編集"}""",
+      )
+      f.drainUntil { f.timers.isNotEmpty() }
+      assertEquals(0, f.executed)
+      f.decision().complete(1)
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(
+          listOf(
+              "fastasyncworldedit:gmask #region",
+              "fastasyncworldedit:/set stone",
+              "fastasyncworldedit:/distr",
+          ),
+          f.executedCommands,
+      )
+      assertEquals(0, f.synchronous)
+      assertTrue(f.audit.filter { "event=execute " in it }.all { "sendAs=operator" in it })
+    }
+  }
+
+  @Test
+  fun faweConfirmationRejectsWrapperOrPistonReplacementBeforeDispatchOrTransfer() {
+    for (action in listOf(1, 3)) for (replaceDelegate in listOf(false, true)) Fixture().use { f ->
+      f.send("run_command", """{"command":"//set stone","summary":"編集"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      if (replaceDelegate) f.fawe.replaceDelegate("/set")
+      else f.fawe.known["fastasyncworldedit:/set"] = f.fawe.wrapper("/set")
+      f.decision().complete(action)
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(0, f.executed)
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "拒否",
+      )
     }
   }
 

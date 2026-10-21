@@ -141,12 +141,16 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
                 ?: owners.singleOrNull()
                 ?: return reject("owner:$owners")
           }
-      // FAWE registers e.g. `//gmask` as a command named `gmask` whose `owner:gmask` key belongs to
-      // another command (`/gmask`). Use the command's own first name that maps back to it; the
-      // order is
-      // fixed, so every alias still normalizes to one text; the typed label is the last resort.
+      val fawe =
+          if (node == null && owner == "fastasyncworldedit")
+              runCatching { FaweCommandIdentity.resolve(command, words.first()) }.getOrNull()
+                  ?: return reject("fawe-registration")
+          else null
+      // FAWE re-registration replaces namespaced wrappers while bare keys keep the old wrapper.
+      // Compare the actual Piston command, never just the wrappers' names or aliases.
       val label =
-          if (node == null && command is PluginIdentifiableCommand)
+          if (fawe != null) "$owner:${fawe.first}"
+          else if (node == null && command is PluginIdentifiableCommand)
               (listOf(command.name) + command.aliases + words.first().substringAfter(':'))
                   .map { "$owner:${it.lowercase(Locale.ROOT)}" }
                   .firstOrNull { commands.getCommand(it) === command }
@@ -155,14 +159,27 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
                   )
           else "$owner:$name"
       val canonical = commands.getCommand(label) ?: return reject("label:$label")
-      if (node == null) {
+      if (fawe != null) {
+        if (
+            canonical !is PluginIdentifiableCommand ||
+                canonical.plugin !== (command as PluginIdentifiableCommand).plugin ||
+                runCatching { FaweCommandIdentity.resolve(canonical, label)?.second }
+                    .getOrNull() !== fawe.second
+        )
+            return reject("fawe-identity:$label")
+      } else if (node == null) {
         if (canonical !== command)
             return reject("identity:$label ${command.javaClass.name} ${canonical.javaClass.name}")
       } else if (vanillaNode(canonical)?.let { sameNodeCommand(node, it) } != true)
           return reject("node:$label")
       val normalized = (listOf(label) + words.drop(1)).joinToString(" ")
       if (normalized.length > 256) return reject("length")
-      return NormalizedCommand(normalized, canonical, vanillaNode(canonical) ?: canonical)
+      return NormalizedCommand(
+          normalized,
+          canonical,
+          vanillaNode(canonical) ?: canonical,
+          fawe?.second,
+      )
     }
 
     private fun vanillaNode(command: Command): CommandNode<*>? {
@@ -198,4 +215,5 @@ internal data class NormalizedCommand(
     val text: String,
     val registered: Command,
     val registration: Any = registered,
+    val faweRegistration: Any? = null,
 )
