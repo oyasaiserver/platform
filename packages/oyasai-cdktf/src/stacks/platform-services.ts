@@ -248,6 +248,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
           MEMORY: this.isMaster ? "8G" : "1G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
+          RCON_PASSWORD: randoms.rconPassword.result,
         }),
         volumes: [
           {
