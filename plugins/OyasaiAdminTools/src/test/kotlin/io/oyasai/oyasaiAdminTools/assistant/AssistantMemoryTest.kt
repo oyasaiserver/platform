@@ -15,7 +15,11 @@ class AssistantMemoryTest {
       val record = AssistantMemory.Record("operator")
       record.add("request", "生のチャット全文 SECRET")
       record.add("tool-result:get_context", "198.51.100.1 secret=private")
-      record.add("execute", "sendAs=assistant dynamicprofile:syokaku iscandidate pmzt")
+      record.add(
+          "execute",
+          "sendAs=assistant dynamicprofile:syokaku iscandidate pmzt | approval=shared",
+      )
+      assertContains(record.facts(), "実行 AI送り主 dynamicprofile:syokaku iscandidate pmzt")
       record.add("execution-result", "sendAs=assistant accepted=true")
       assertFalse(record.facts().contains("SECRET"))
       assertFalse(record.facts().contains("198.51.100"))
