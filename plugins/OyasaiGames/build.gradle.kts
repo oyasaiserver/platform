@@ -15,3 +15,9 @@ dependencies {
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().configureEach {
   from("LICENSE-TNTRUN.txt") { into("META-INF/licenses") }
 }
+
+// Do not embed build timestamps in distributions.
+tasks.withType<AbstractArchiveTask>().configureEach {
+  isPreserveFileTimestamps = false
+  isReproducibleFileOrder = true
+}
