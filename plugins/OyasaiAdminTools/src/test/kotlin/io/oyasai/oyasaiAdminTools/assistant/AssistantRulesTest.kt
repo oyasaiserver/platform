@@ -130,6 +130,33 @@ class AssistantRulesTest {
   }
 
   @Test
+  fun faweExpressionsKeepOperatorsAndEnforceCanonicalLengthAndControlLimits() {
+    val fawe = FaweCommandFakes()
+    fawe.register("/generate")
+    val commands = commands { fawe.known }
+    val prefix = "fastasyncworldedit:/generate stone "
+    val expression = "sqrt(x^2+y^2)>=26 && sqrt(x^2+y^2)<27 || !(y>=0) && abs(z)<=1"
+    assertEquals(
+        prefix + expression,
+        AssistantRules.normalize("//generate stone $expression", commands)?.text,
+    )
+    val longest = prefix + "x".repeat(256 - prefix.length)
+    assertEquals(longest, AssistantRules.normalize(longest, commands)?.text)
+    val steps = mutableListOf<String>()
+    assertNull(
+        AssistantRules.normalize(
+            "//generate stone " + "x".repeat(257 - prefix.length),
+            commands,
+            steps::add,
+        )
+    )
+    assertEquals(listOf("length"), steps)
+    for (control in listOf("\n", "\r", "\u0000", "\u2028", "\u2029", "§")) assertNull(
+        AssistantRules.normalize("//generate stone y<0${control}x>0", commands)
+    )
+  }
+
+  @Test
   fun singleAndDoubleSlashCommandsDoNotCollapseWhenTheyAreDifferent() {
     val fawe = FaweCommandFakes()
     fawe.register("gmask")

@@ -108,7 +108,15 @@ internal class AssistantFeature(
     }
     requestIds[id] = request.id
     val record = records.computeIfAbsent(operator) { AssistantMemory.Record(player.name) }
-    audit(operator, "tool:${request.tool}", request.args.toString())
+    audit(
+        operator,
+        "tool:${request.tool}",
+        request.args
+            .mapValues { (_, value) ->
+              "chars=${value.length} lines=${value.lineSequence().count()}"
+            }
+            .toString(),
+    )
     val job =
         scope.launch(start = CoroutineStart.LAZY) {
           try {
@@ -162,10 +170,10 @@ internal class AssistantFeature(
           } catch (failure: CancellationException) {
             throw failure
           } catch (failure: Throwable) {
-            audit(operator, "failed", failure.javaClass.simpleName)
+            audit(operator, "failed", AssistantFailure.describe(failure))
             onMain {
               finishCall(id)
-              reply(player, request.id, "道具の呼び出しに失敗しました。", true)
+              reply(player, request.id, "道具の呼び出しに失敗しました（${failure.javaClass.simpleName}）。", true)
             }
           }
         }
@@ -411,24 +419,18 @@ internal class AssistantFeature(
       if (System.nanoTime() >= deadline)
           return results.joinToString("\n") + "\n停止: ${index}個まで実行受付。道具の待ち時間内に返すため後続は実行していません。"
       val result =
-          try {
-            execute(
-                id,
-                operator,
-                command,
-                false,
-                AssistantBatch.fawe(command.text) ||
-                    AssistantSenderChoice.operator(command.text, playerCommands),
-                requireLock = locked,
-                fallback = false,
-                requireAutomatic = auto,
-                deadline = deadline,
-            )
-          } catch (failure: Throwable) {
-            if (failure is CancellationException) throw failure
-            audit(operator, "execution-failed", command.text)
-            "失敗: 実行条件の再確認またはコマンドの実行に失敗しました。"
-          }
+          execute(
+              id,
+              operator,
+              command,
+              false,
+              AssistantBatch.fawe(command.text) ||
+                  AssistantSenderChoice.operator(command.text, playerCommands),
+              requireLock = locked,
+              fallback = false,
+              requireAutomatic = auto,
+              deadline = deadline,
+          )
       results.add("${index + 1}. /${command.text}\n${result.take(100)}")
       if (
           result.startsWith("拒否") ||
@@ -471,12 +473,15 @@ internal class AssistantFeature(
       deadline: Long = Long.MAX_VALUE,
   ): String {
     var collector: AssistantOutputCollector? = null
+    var stage = "operator-state"
     try {
       val immediate = onMain {
         val player = player(id)
         if (System.nanoTime() >= deadline) return@onMain "拒否: 一括操作の待ち時間を超えました。"
+        stage = "selection-lock"
         val locked = locks.active(player)
         if (requireLock && !locked) return@onMain "拒否: 選択範囲の固定が解除されました。"
+        stage = "resolve"
         val fresh = resolve(player, operator, command.text) ?: return@onMain "拒否: 実行前の再確認に失敗しました。"
         if (
             fresh.text != command.text ||
@@ -484,14 +489,21 @@ internal class AssistantFeature(
                 fresh.faweRegistration !== command.faweRegistration
         )
             return@onMain "拒否: コマンドの登録が変更されました。"
+        stage = "automatic-allowance"
         if (requireAutomatic && !automatic(player, fresh)) return@onMain "拒否: 確認なしで実行できる条件が変わりました。"
+        stage = "mask-update"
         if (locked && AssistantBatch.maskChange(command.text))
             return@onMain lockSelection(player, operator)
         val accepted =
             if (asOperator) {
               audit(operator, "execute", "sendAs=operator ${command.text}")
-              if (locked && AssistantBatch.fawe(command.text)) locks.execute(player, command.text)
-              else player.performCommand(command.text)
+              if (locked && AssistantBatch.fawe(command.text)) {
+                stage = "dispatch:operator:fawe-sync"
+                locks.execute(player, command.text)
+              } else {
+                stage = "dispatch:operator:bukkit"
+                player.performCommand(command.text)
+              }
             } else {
               val sender =
                   AssistantCommandSender(
@@ -513,6 +525,7 @@ internal class AssistantFeature(
                       ),
                   )
               audit(operator, "execute", "sendAs=assistant ${command.text}")
+              stage = "dispatch:assistant:bukkit"
               sender.dispatch(command.text)
             }
         audit(
@@ -527,6 +540,7 @@ internal class AssistantFeature(
         if (!accepted) "失敗: コマンドの実行が受け付けられませんでした。"
         else if (asOperator) AssistantCommandOutput.playerOnly() else null
       }
+      stage = "collect-output"
       val result = immediate ?: collector!!.collect()
       if (result.startsWith("拒否")) audit(operator, "denied:execution", command.text)
       lastOutput[id] = result.take(8000)
@@ -540,6 +554,16 @@ internal class AssistantFeature(
         return execute(id, operator, command, action == 2, true, requireLock)
       }
 
+      return result
+    } catch (failure: Throwable) {
+      if (failure is CancellationException) throw failure
+      audit(
+          operator,
+          "execution-failed",
+          "command=${command.text.substringBefore(' ')} stage=$stage ${AssistantFailure.describe(failure)}",
+      )
+      val result = "失敗: $stage（${failure.javaClass.simpleName}）。後続は実行しません。"
+      lastOutput[id] = result
       return result
     } finally {
       collector?.close()

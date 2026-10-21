@@ -67,7 +67,9 @@ internal class FaweSelectionMask(private val player: Player) : AssistantSelectio
   override fun execute(player: Player, command: String): Boolean {
     // Match FAWE's synchronous handler, observing exceptions before it prints and consumes them.
     val platform = worldEdit.platformManager
-    val actor = platform.createProxyActor(BukkitAdapter.adapt(player))
+    // FAWE returns a player wrapper, not the concrete BukkitPlayer inferred from adapt().
+    val actor =
+        platform.createProxyActor<com.sk89q.worldedit.entity.Player>(BukkitAdapter.adapt(player))
     check(worldEdit.sessionManager.get(actor) === session) { "FAWE session changed" }
     Request.request().session = session
     Request.request().world = actor.world
@@ -75,13 +77,13 @@ internal class FaweSelectionMask(private val player: Player) : AssistantSelectio
     val event = CommandEvent(actor, arguments)
     val manager = platform.platformCommandManager
     val access = manager.initializeInjectedValues({ arguments }, actor, event, false)
-    var failed = false
+    var failed: Throwable? = null
     manager.handleCommandTask(
         {
           try {
             manager.parseCommand(arguments, access)
           } catch (failure: Throwable) {
-            failed = true
+            failed = failure
             throw failure
           }
         },
@@ -89,7 +91,8 @@ internal class FaweSelectionMask(private val player: Player) : AssistantSelectio
         session,
         event,
     )
-    return !failed && event.isCancelled
+    failed?.let { throw it }
+    return event.isCancelled
   }
 
   override fun restore() {

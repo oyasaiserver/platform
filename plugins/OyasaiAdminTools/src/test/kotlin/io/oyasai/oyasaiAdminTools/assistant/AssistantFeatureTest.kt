@@ -138,7 +138,7 @@ class AssistantFeatureTest {
       fawe = FaweCommandFakes(known)
       fawe.register("gmask", listOf("/gmask"))
       fawe.register("mask", listOf("/mask"))
-      for (name in listOf("/set", "/distr", "/regen")) fawe.register(name)
+      for (name in listOf("/set", "/distr", "/regen", "/generate")) fawe.register(name)
       val commands =
           factory.fake<CommandMap> { name, args ->
             when (name) {
@@ -562,6 +562,56 @@ class AssistantFeatureTest {
       }
       assertTrue(f.timers.isEmpty())
       assertEquals(0, f.executed)
+    }
+  }
+
+  @Test
+  fun commandExceptionsReportStageClassAndFramesWithoutExceptionMessages() {
+    for (batch in listOf(false, true)) Fixture().use { f ->
+      f.locks.lock(f.player)
+      f.executeResult = { throw ClassCastException("private-exception-input") }
+      f.send(
+          if (batch) "run_commands" else "run_command",
+          if (batch) """{"commands":"//generate stone y<0 && x>0\n//set glass","summary":"編集"}"""
+          else """{"command":"//generate stone y<0 && x>0","summary":"編集"}""",
+      )
+      f.drainUntil { f.responses.isNotEmpty() }
+      val response = JsonParser.parseString(f.responses.remove()).asJsonObject
+      val result = response["result"].asString
+      assertContains(result, "ClassCastException")
+      assertContains(result, "dispatch:operator:fawe-sync")
+      if (batch) assertContains(result, "停止: 1 個目")
+      assertEquals(1, f.executed)
+      val failure = f.audit.single { "event=execution-failed" in it }
+      assertContains(failure, "java.lang.ClassCastException")
+      assertContains(failure, "AssistantFeatureTest")
+      assertFalse(f.audit.any { "private-exception-input" in it })
+      assertFalse(result.contains("private-exception-input"))
+    }
+  }
+
+  @Test
+  fun batchPreservesNewlinesAndExpressionOperatorsThroughProtocolAndDispatch() {
+    Fixture().use { f ->
+      f.locks.lock(f.player)
+      val expression =
+          "//generate -r stone sqrt(x^2+y^2)>=26 && sqrt(x^2+y^2)<27 && y>=0 && abs(z)<=1"
+      f.send(
+          "run_commands",
+          com.google.gson
+              .Gson()
+              .toJson(mapOf("commands" to "$expression\r\n//set glass", "summary" to "編集")),
+      )
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertEquals(
+          listOf(
+              expression.replace("//generate", "fastasyncworldedit:/generate"),
+              "fastasyncworldedit:/set glass",
+          ),
+          f.executedCommands,
+      )
+      assertContains(f.audit.single { "event=tool:run_commands" in it }, "lines=2")
+      assertTrue(f.timers.isEmpty())
     }
   }
 
