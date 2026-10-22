@@ -61,8 +61,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.0/builds/1265/downloads/velocity",
-      "hash": "sha256-MvBLAjeMXHHKSWqItFtsYHd0+Z+LC5/r6wkUx+a3Orc="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.0/builds/1268/downloads/velocity",
+      "hash": "sha256-t2O289327df4b/WZxGYLAqTjGNJke3IdklwKaND5w+0="
     }
   },
   "luckperms": {
@@ -88,8 +88,8 @@
   "viaversion": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/vd9B8ESF/ViaVersion-5.12.2-SNAPSHOT.jar",
-        "hash": "sha256-tINPUxVc/KUkEyrb093goajbGEScYyk7QAfNa9NlWko="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/Vrr0MagS/ViaVersion-5.12.2-SNAPSHOT.jar",
+        "hash": "sha256-DLs5YHLky6TTr+gMP/j++s9zu1jTJDftpR9R13kaAqc="
       }
     }
   },
