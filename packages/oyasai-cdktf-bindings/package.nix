@@ -1,7 +1,8 @@
 {
+  inputs,
   writableTmpDirAsHomeHook,
   nodejs,
-  terraform,
+  terraform_1_14,
   stdenv,
   writeTextFile,
   lib,
@@ -26,6 +27,13 @@ let
         # an everlasting TODO: https://github.com/nix-community/nixpkgs-terraform-providers-bin/blob/4f8dfea41cd94403a6c768923b3ddcb15fd4c611/default.nix#L26
         lib.replaceString "registry.terraform.io/" "" provider.provider-source-address
       ) oyasaiTerraformProviders;
+
+      terraformModules = [
+        {
+          name = "cloudflare-nix-lru-cache";
+          source = inputs.terraform-cloudflare-nix-lru-cache;
+        }
+      ];
     };
   };
   gen = stdenv.mkDerivation {
@@ -34,7 +42,7 @@ let
     nativeBuildInputs = [
       final
       nodejs
-      terraform
+      (terraform_1_14.withPlugins (_: oyasaiTerraformProviders))
       # cdktf wants to write in homedir for cache
       writableTmpDirAsHomeHook
     ];
