@@ -1,5 +1,6 @@
 package icu.oyasai.utilities.sit
 
+import icu.oyasai.utilities.fart.FartFeature
 import io.papermc.paper.datacomponent.item.ResolvableProfile
 import java.io.File
 import java.util.UUID
@@ -456,7 +457,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
         block.type == Material.SNOW
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun onDismount(event: EntityDismountEvent) {
     val player = event.entity as? Player ?: return
     if (playerRides[player.uniqueId] == event.dismounted.uniqueId) {
@@ -504,6 +505,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   fun onSneak(event: PlayerToggleSneakEvent) {
     if (
         event.isSneaking &&
+            !FartFeature.staysOnHead(event.player) &&
             (playerRides.containsKey(event.player.uniqueId) ||
                 states[event.player.uniqueId]?.mode == Mode.CRAWL)
     )

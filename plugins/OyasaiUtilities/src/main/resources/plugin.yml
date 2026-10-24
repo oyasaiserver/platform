@@ -283,7 +283,7 @@ commands:
     permission: essentials.spawn
   fart:
     description: "しゃがむとおならの音と煙を出すモードを切り替える"
-    usage: /fart
+    usage: /fart [stay|fly]
 
 permissions:
   essentials.spawn:
