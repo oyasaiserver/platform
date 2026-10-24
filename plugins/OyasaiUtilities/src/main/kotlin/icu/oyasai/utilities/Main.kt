@@ -115,6 +115,7 @@ class Main : JavaPlugin() {
     server.pluginManager.registerEvents(RedBullFeature, this) // RedBullのイベント
     server.pluginManager.registerEvents(FartFeature, this) // おならモード(しゃがみ)のイベント
     server.getPluginCommand("fart")?.setExecutor(FartFeature)
+    server.getPluginCommand("fart")?.tabCompleter = FartFeature
     server.pluginManager.registerEvents(skinFeature, this)
     server.getPluginCommand("skin")?.setExecutor(skinFeature)
     server.getPluginCommand("skin")?.tabCompleter = skinFeature

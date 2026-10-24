@@ -5,12 +5,14 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 import kotlin.random.Random
+import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -20,12 +22,48 @@ import org.bukkit.event.entity.EntityDismountEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 
 // しゃがむとおならの音と硫黄色の煙を出すモード。/fart でプレイヤーごとに切り替える
-object FartFeature : Listener, CommandExecutor {
+object FartFeature : Listener, CommandExecutor, TabCompleter {
   enum class Mode {
     NORMAL,
     STAY,
     FLY,
   }
+
+  data class Parsed(val mode: Mode, val targetName: String?)
+
+  private const val OTHERS = "oyasaiutilities.fart.others"
+
+  fun parse(args: Array<out String>): Parsed? {
+    if (args.isEmpty()) return Parsed(Mode.NORMAL, null)
+    if (args.size > 2 || args.any { it.isBlank() }) return null
+    val mode =
+        when {
+          args[0].equals("stay", true) -> Mode.STAY
+          args[0].equals("fly", true) -> Mode.FLY
+          else -> return if (args.size == 1) Parsed(Mode.NORMAL, args[0]) else null
+        }
+    return Parsed(mode, args.getOrNull(1))
+  }
+
+  fun complete(args: Array<out String>, players: List<String>, others: Boolean): List<String> {
+    val candidates =
+        when {
+          args.size == 1 -> listOf("stay", "fly") + if (others) players else emptyList()
+          args.size == 2 &&
+              others &&
+              (args[0].equals("stay", true) || args[0].equals("fly", true)) -> players
+          else -> return emptyList()
+        }
+    return candidates.filter { it.startsWith(args.last(), ignoreCase = true) }
+  }
+
+  override fun onTabComplete(
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
+  ): List<String> =
+      complete(args, Bukkit.getOnlinePlayers().map { it.name }, sender.hasPermission(OTHERS))
 
   private const val LIFT = 0.3
   private const val MAX_UP = 0.6
@@ -67,27 +105,46 @@ object FartFeature : Listener, CommandExecutor {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    if (sender !is Player) {
-      sender.sendMessage("プレイヤーだけが使えます")
-      return true
-    }
-    val mode =
-        when {
-          args.isEmpty() -> Mode.NORMAL
-          args.size != 1 -> return false
-          args[0].equals("stay", true) -> Mode.STAY
-          args[0].equals("fly", true) -> Mode.FLY
-          else -> return false
+    val parsed = parse(args) ?: return false
+    val target =
+        if (parsed.targetName != null) {
+          if (!sender.hasPermission(OTHERS)) {
+            sender.sendMessage("権限がありません")
+            return true
+          }
+          Bukkit.getPlayerExact(parsed.targetName)
+              ?: run {
+                sender.sendMessage("プレイヤーが見つかりません: ${parsed.targetName}")
+                return true
+              }
+        } else {
+          sender as? Player
+              ?: run {
+                sender.sendMessage("プレイヤーだけが使えます")
+                return true
+              }
         }
-    val next = toggle(sender.uniqueId, mode)
-    sender.sendMessage(
+    val next = toggle(target.uniqueId, parsed.mode)
+    val message =
         when (next) {
           Mode.NORMAL -> "おならモード ON: しゃがむと出ます"
           Mode.STAY -> "おならモード ON(居座り): 頭に乗ってしゃがんでも降りずにおならだけ出ます。降りるには /fart で OFF"
           Mode.FLY -> "おならモード ON(飛行): しゃがみ連打で少しずつ浮きます。落下ダメージは受けません"
           null -> "おならモード OFF"
         }
-    )
+    if (parsed.targetName == null) {
+      sender.sendMessage(message)
+    } else {
+      val modeName =
+          when (next) {
+            Mode.NORMAL -> "通常"
+            Mode.STAY -> "居座り"
+            Mode.FLY -> "飛行"
+            null -> "OFF"
+          }
+      sender.sendMessage("${target.name} のおならモードを $modeName にしました")
+      if (target != sender) target.sendMessage(message)
+    }
     return true
   }
 

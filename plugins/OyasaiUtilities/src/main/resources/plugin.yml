@@ -283,9 +283,12 @@ commands:
     permission: essentials.spawn
   fart:
     description: "しゃがむとおならの音と煙を出すモードを切り替える"
-    usage: /fart [stay|fly]
+    usage: /fart [stay|fly] [player]
 
 permissions:
+  oyasaiutilities.fart.others:
+    description: "他のプレイヤーのおならモードを切り替える"
+    default: op
   essentials.spawn:
     default: op
   essentials.spawn.others:

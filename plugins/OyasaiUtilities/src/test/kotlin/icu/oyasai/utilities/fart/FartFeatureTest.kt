@@ -10,6 +10,48 @@ import kotlin.test.assertTrue
 
 class FartFeatureTest {
   @Test
+  fun parsesModesAndOptionalTargets() {
+    val cases =
+        listOf(
+            emptyList<String>() to FartFeature.Parsed(Mode.NORMAL, null),
+            listOf("stay") to FartFeature.Parsed(Mode.STAY, null),
+            listOf("fly") to FartFeature.Parsed(Mode.FLY, null),
+            listOf("StAy") to FartFeature.Parsed(Mode.STAY, null),
+            listOf("FLY") to FartFeature.Parsed(Mode.FLY, null),
+            listOf("marzipan99") to FartFeature.Parsed(Mode.NORMAL, "marzipan99"),
+            listOf("stay", "marzipan99") to FartFeature.Parsed(Mode.STAY, "marzipan99"),
+            listOf("fly", "marzipan99") to FartFeature.Parsed(Mode.FLY, "marzipan99"),
+        )
+    for ((args, expected) in cases) assertEquals(expected, FartFeature.parse(args.toTypedArray()))
+    for (args in
+        listOf(listOf("stay", "a", "b"), listOf("a", "b"), listOf(""), listOf("fly", ""))) {
+      assertNull(FartFeature.parse(args.toTypedArray()))
+    }
+  }
+
+  @Test
+  fun completesModesAndPermissionGatedPlayers() {
+    val players = listOf("marzipan99", "Steve")
+    fun complete(vararg args: String, others: Boolean = false) =
+        FartFeature.complete(args, players, others)
+    assertEquals(listOf("stay", "fly"), complete(""))
+    assertEquals(listOf("stay", "fly", "marzipan99", "Steve"), complete("", others = true))
+    assertEquals(listOf("stay"), complete("ST"))
+    assertEquals(listOf("fly"), complete("F"))
+    assertEquals(listOf("stay", "Steve"), complete("ST", others = true))
+    assertEquals(emptyList(), complete("ma"))
+    assertEquals(listOf("marzipan99"), complete("MA", others = true))
+    assertEquals(players, complete("stay", "", others = true))
+    assertEquals(listOf("marzipan99"), complete("FLY", "MA", others = true))
+    assertEquals(emptyList(), complete("stay", ""))
+    assertEquals(emptyList(), complete("fly", ""))
+    assertEquals(emptyList(), complete("other", "", others = true))
+    assertEquals(emptyList(), complete("stay", "missing", others = true))
+    assertEquals(emptyList(), complete("stay", "a", "", others = true))
+    assertEquals(emptyList(), complete(others = true))
+  }
+
+  @Test
   fun normalTogglesOffAndOn() {
     val id = UUID.randomUUID()
     assertFalse(FartFeature.isOn(id))
