@@ -32,7 +32,7 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 | プラグイン定義 | `src/main/resources/plugin.yml`（name `OyasaiUtilities`、version `0.1.0`、api-version `1.21`）。`paper-plugin.yml` はこのディレクトリに存在しない |
 | 関連資料 | [`README.md`](../../../plugins/OyasaiUtilities/README.md)、[`PLAYER_STATE.md`](../../../plugins/OyasaiUtilities/PLAYER_STATE.md)、[`TELEPORT.md`](../../../plugins/OyasaiUtilities/TELEPORT.md)、[`SQLITE_STORAGE.md`](../../../plugins/OyasaiUtilities/SQLITE_STORAGE.md)、[`WORKSTATIONS.md`](../../../plugins/OyasaiUtilities/WORKSTATIONS.md) |
 | 利用者向けガイド | [player.md](player.md)、[operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-utilities/operator.md) |
-| しゃがみイベントの共有 | `PlayerToggleSneakEvent` は Sit（乗り物・這いの解除）、Elevator（下り）、Fart（おなら）が使う。新しいしゃがみ機能では cancel せず、他の機能の処理を止めない |
+| しゃがみイベントの共有 | `PlayerToggleSneakEvent` は Sit（乗り物・這いの解除）、Elevator（下り）、Fart（おなら）が使う。`PlayerToggleSneakEvent` は cancel しない。Fart の居座り中は Sit が頭から降ろす処理を省略し、Fart が `EntityDismountEvent` を LOW で取消可能かつしゃがみ中の場合だけ取り消す。Sit は取り消された降車を処理しない |
 
 ## 技術仕様
 
@@ -45,7 +45,7 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 | 移動・ホーム・ワープ・入獄・スポーン | `teleport/`, `spawn/`, `tpath/`, `tpswitch/` | Essentials 互換のコマンド、移動安全、入獄、履歴、受付設定 |
 | プレイヤー状態 | `playerstate/` | ゲームモード、飛行、速度、時刻、回復、AFK、ニックネーム、死亡時処理 |
 | 作業台・頭 | `workstation/` | 作業台 GUI、エンダーチェスト、廃棄、帽子、プレイヤー頭（統合版の頭は `BedrockSkull.kt`。仕様は `WORKSTATIONS.md`） |
-| おなら | `fart/` | しゃがむとおならの音と硫黄色の煙を出すモードを切り替える（`/fart`）。状態はメモリのみ |
+| おなら | `fart/` | `/fart [stay\|fly]` で通常・居座り・飛行の排他モードを切り替える。しゃがみ開始で共通の音と硫黄色の煙。居座りはプレイヤーの頭からのスニーク降車を防ぎ、飛行は上向き速度を0.3加算（上限0.6）し落下距離をリセット、FLY 中の落下ダメージを取り消す。引数なしは ON なら全モード OFF、OFF なら通常。同じモード再指定も OFF。状態は UUID ごとのメモリのみ |
 | アイテム保管 | `backpack/`, `adminbp/` | 個人 SQLite バックパック、OP 向け YAML 管理バックパック |
 | 採掘 | `veinminer/`, `oresmelter/`, `ore_reappears/` | 連鎖採掘、自動精錬、鉱石の時間差再生成・経済連携 |
 | モード・アイテム制限 | `creative_management/`, `notnbt/` | ゲームモード別インベントリ、由来印、クリエイティブ由来アイテムの制限 |
