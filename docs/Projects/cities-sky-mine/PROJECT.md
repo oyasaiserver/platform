@@ -78,6 +78,10 @@ plugin.yml の名前は CitiesSkyMine、main は `icu.oyasai.citiesskymine.Main`
 
 走査前に選択範囲の総ブロック数を制限し、変更が必要なブロックだけを `CsmEditSession.run` の `EditSession.setBlock` で書き戻す。成功した書き込み数を通知し、0件は情報表示。取り消しは FAWE の `//undo`。物理更新を起こさないため外した状態は保たれるが、隣のブロックを後から置く・壊すとバニラが再計算して接続が戻ることがある。
 
+### Kotlin のリロケート
+
+shadowJar で `kotlin` を `icu.oyasai.citiesskymine.libs.kotlin` へ移している。移さないと、同じサーバーの別プラグインが同梱する Kotlin と `kotlin.jvm.functions.Function1` が食い違い、`CsmEditSession.run`（FAWE の編集を伴う全コマンド）が `LinkageError: loader constraint violation` で失敗することがある（検証サーバーで再現）。
+
 ### データ形式と永続化
 
 個人データは `player-data/<UUID>.yml` に遅延ロードしてキャッシュする。`set`・`setMany` でメモリ変更後すぐ同期保存し、停止時にも全キャッシュを保存する。保存例外は警告だけで呼び出し元へ返さず、変更も巻き戻さない。選択の保存では points の旧項目削除と他項目の更新で2回保存するため、原子的な更新ではない。
