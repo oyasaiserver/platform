@@ -4,6 +4,7 @@ limits:
   max-columns-csm: 100000
   max-blocks-window: 512
   max-blocks-slab-stairs: 200000
+  max-blocks-unconnect: 200000
   max-blocks-columns: 200000
   max-blocks-stack: 2000000
   max-blocks-crowd: 200000
@@ -102,6 +103,10 @@ access:
       - takumi
       - admin
     slabstairs:
+      - builder
+      - takumi
+      - admin
+    unconnect:
       - builder
       - takumi
       - admin
