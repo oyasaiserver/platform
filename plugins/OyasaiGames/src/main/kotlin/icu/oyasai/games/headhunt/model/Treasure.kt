@@ -2,7 +2,6 @@ package icu.oyasai.games.headhunt.model
 
 import java.util.UUID
 import org.bukkit.Location
-import org.bukkit.World
 
 data class Treasure(
     val id: UUID,
@@ -11,11 +10,6 @@ data class Treasure(
     val y: Int,
     val z: Int,
 ) {
-  fun toLocation(worldResolver: (String) -> World?): Location? {
-    val world = worldResolver(worldName) ?: return null
-    return Location(world, x.toDouble(), y.toDouble(), z.toDouble())
-  }
-
   companion object {
     fun fromLocation(
         id: UUID,

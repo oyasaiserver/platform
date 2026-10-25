@@ -151,7 +151,7 @@ constructor(
           }
           .joinToString(" ")
     }
-
-    private fun Throwable.unwrap(): Throwable = (this as? CompletionException)?.cause ?: this
   }
 }
+
+internal fun Throwable.unwrap(): Throwable = (this as? CompletionException)?.cause ?: this

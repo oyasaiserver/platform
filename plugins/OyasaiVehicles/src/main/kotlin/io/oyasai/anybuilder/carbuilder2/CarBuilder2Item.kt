@@ -25,7 +25,6 @@ object CarBuilder2Item {
   private val costRegex: Regex = Regex("Cost: -?[0-9]+")
   private val costLimitRegex: Regex = Regex("CostLimit: [0-9]+")
   private val vModeRegex: Regex = Regex("Mode: (Normal|Normal_Race|Pro|Pro\\+|Real)")
-  private val dModeRegex: Regex = Regex("駆動: (AWD|FR|FF)")
   private val statSpecs =
       listOf(
           BuilderItemSupport.VehicleStatSpec("最高速", topSpeedRegex, 68),

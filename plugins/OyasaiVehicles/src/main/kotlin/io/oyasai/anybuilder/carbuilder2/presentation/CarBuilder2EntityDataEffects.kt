@@ -2,6 +2,7 @@ package io.oyasai.anybuilder.carbuilder2.presentation
 
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityType
+import io.oyasai.anybuilder.common.playVehicleStepSounds
 import io.oyasai.toolbox.ControlKey
 import kotlin.math.abs
 import kotlin.math.max
@@ -240,18 +241,5 @@ fun CarBuilder2EntityData.soundTaskImpl(wasd: ControlKey?) {
   val speedPitchBase = min(this.vehicle.speed.z * 0.4, 0.5).toFloat()
   val speedVolumeBase = speedPitchBase * 0.4f
   val speedPitchRpm = min(this.vehicle.speed.z * 0.4, 1.0).toFloat()
-  world.playSound(
-      loc,
-      Sound.ENTITY_COW_STEP,
-      SoundCategory.PLAYERS,
-      0.15f + speedVolumeBase,
-      0.5f + speedPitchBase,
-  )
-  world.playSound(
-      loc,
-      Sound.ENTITY_HORSE_STEP_WOOD,
-      SoundCategory.PLAYERS,
-      0.375f + speedVolumeBase,
-      0.5f + speedPitchRpm,
-  )
+  playVehicleStepSounds(world, loc, speedVolumeBase, speedPitchBase, speedPitchRpm)
 }

@@ -42,10 +42,4 @@ object TeleportManager {
     back.computeIfAbsent(player.uniqueId) { ConcurrentLinkedDeque() }.addFirst(current)
     return f.removeFirst()
   }
-
-  fun clear(player: Player) {
-    back.remove(player.uniqueId)
-    forward.remove(player.uniqueId)
-    ignoreNext.remove(player.uniqueId)
-  }
 }

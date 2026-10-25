@@ -27,15 +27,6 @@ object ResultGUI {
     ID,
   }
 
-  private fun item(material: Material, name: String, lore: List<String> = listOf()): ItemStack {
-    val it = ItemStack(material)
-    val meta = it.itemMeta!!
-    meta.setDisplayName(name)
-    meta.lore = lore
-    it.itemMeta = meta
-    return it
-  }
-
   fun open(p: Player, sign: SVSign) {
     viewMap[p.uniqueId] = sign.id
     sortModeMap.putIfAbsent(p.uniqueId, SortMode.REGISTER)
@@ -57,7 +48,7 @@ object ResultGUI {
       for ((index, s) in signs.withIndex()) {
         inv.setItem(
             index,
-            item(
+            createGuiItem(
                 Material.OAK_SIGN,
                 "§a${s.name}",
                 listOf(
@@ -73,7 +64,7 @@ object ResultGUI {
     }
 
     // ---- 下段装飾（45～53） ----
-    val gray = item(Material.GRAY_STAINED_GLASS_PANE, " ")
+    val gray = createGuiItem(Material.GRAY_STAINED_GLASS_PANE, " ")
 
     for (i in 45..53) {
       inv.setItem(i, gray)
@@ -99,7 +90,7 @@ object ResultGUI {
     )
 
     // 戻る
-    inv.setItem(53, item(Material.BARRIER, "§c戻る"))
+    inv.setItem(53, createGuiItem(Material.BARRIER, "§c戻る"))
 
     p.openInventory(inv)
   }

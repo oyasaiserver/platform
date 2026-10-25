@@ -5,7 +5,7 @@ import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderSpawn
 import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseCache
 import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseData
 import io.oyasai.anybuilder.common.command.BuilderCommandRouter
-import io.oyasai.canRideAircraftBuilderOrAdmin
+import io.oyasai.canRideAircraftBuilder
 import io.oyasai.canUseAircraftBuilder
 import java.util.Locale
 import org.bukkit.Bukkit
@@ -93,7 +93,7 @@ private fun handleAircraftBuilderSingleArgumentCommand(
       sender = sender,
       name = name,
       data = data,
-      canSpawn = { it.canRideAircraftBuilderOrAdmin() },
+      canSpawn = { it.canRideAircraftBuilder() },
       deniedMessage = AircraftBuilder_PERMISSION_DENIED,
       spawnTrial = { player, baseData ->
         AircraftBuilderSpawn.spawn(
@@ -182,7 +182,7 @@ private fun handleAircraftBuilderSpawn(
   when (args.size) {
     2 -> {
       if (sender is Player) {
-        if (!sender.canRideAircraftBuilderOrAdmin()) {
+        if (!sender.canRideAircraftBuilder()) {
           sender.sendMessage(AircraftBuilder_PERMISSION_DENIED)
           return
         }
@@ -200,19 +200,12 @@ private fun handleAircraftBuilderSpawn(
     3 -> {
       val target = Bukkit.getPlayer(args[2])
       if (sender is Player) {
-        if (!sender.canRideAircraftBuilderOrAdmin()) {
+        if (!sender.canRideAircraftBuilder()) {
           sender.sendMessage(AircraftBuilder_PERMISSION_DENIED)
           return
         }
         if (target != null && target.isOnline) {
-          AircraftBuilderSpawn.spawn(
-              target.location,
-              ItemStack(Material.HOPPER_MINECART),
-              null,
-              target,
-              data,
-          )
-          target.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name")
+          spawnAircraftTrialForTarget(target, data, name)
           sender.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name to ${target.name}")
         } else {
           sender.sendMessage("[AircraftBuilder] Player ${args[2]} does not exist")
@@ -221,14 +214,7 @@ private fun handleAircraftBuilderSpawn(
       }
       if (sender is ConsoleCommandSender) {
         if (target != null && target.isOnline) {
-          AircraftBuilderSpawn.spawn(
-              target.location,
-              ItemStack(Material.HOPPER_MINECART),
-              null,
-              target,
-              data,
-          )
-          target.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name")
+          spawnAircraftTrialForTarget(target, data, name)
         } else {
           sender.sendMessage("[AircraftBuilder] Player ${args[2]} does not exist")
         }
@@ -264,4 +250,19 @@ private fun handleAircraftBuilderSpawn(
       return
     }
   }
+}
+
+private fun spawnAircraftTrialForTarget(
+    target: Player,
+    data: AircraftBuilderBaseData,
+    name: String,
+) {
+  AircraftBuilderSpawn.spawn(
+      target.location,
+      ItemStack(Material.HOPPER_MINECART),
+      null,
+      target,
+      data,
+  )
+  target.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name")
 }

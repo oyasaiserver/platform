@@ -18,12 +18,12 @@ import io.oyasai.oyasaitab.CrossServerTabEntry
 import io.oyasai.oyasaitab.CrossServerTabLogic
 import io.oyasai.oyasaitab.OYASAI_TAB_CHANNEL
 import io.oyasai.oyasaitab.OyasaiTabSnapshotCodec
+import io.oyasai.oyasaitab.TAB_SECTION_SERIALIZER
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.slf4j.Logger
 
 @Plugin(
@@ -42,12 +42,7 @@ constructor(
 ) {
   private val identifier = MinecraftChannelIdentifier.from(OYASAI_TAB_CHANNEL)
   // hex を落とさずに読み戻す。既定の legacySection() は hex を近い既定色へ丸める
-  private val legacy =
-      LegacyComponentSerializer.builder()
-          .character(LegacyComponentSerializer.SECTION_CHAR)
-          .hexColors()
-          .useUnusualXRepeatedCharacterHexFormat()
-          .build()
+  private val legacy = TAB_SECTION_SERIALIZER
   private val records = ConcurrentHashMap<UUID, CrossServerTabEntry>()
   private val membersByServer = ConcurrentHashMap<String, Set<UUID>>()
   private val managedByViewer = ConcurrentHashMap<UUID, MutableSet<UUID>>()

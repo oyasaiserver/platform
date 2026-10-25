@@ -15,10 +15,7 @@ class WorldEditHudCommand(private val plugin: Main) : CommandExecutor, TabComple
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!sender.hasPermission(WorldEditHudService.PERMISSION)) {
       MessageUtil.error(sender, "このHUDを使用する権限がありません。")
       return true

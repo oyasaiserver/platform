@@ -7,8 +7,6 @@ import io.oyasai.toolbox.OyasaiMenu
 import io.oyasai.toolbox.PaginatedOyasaiMenu
 import io.oyasai.vehicle.base.VehicleBalanceSettings
 import java.util.*
-import org.bukkit.Bukkit
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -27,7 +25,6 @@ object AircraftBuilderGUI {
   }
 
   fun listMenu(buySwitch: Boolean): PaginatedOyasaiMenu {
-    val line4 = if (buySwitch) "&7クリックすると&9マイルポイント&b100P&7で車両を購入する" else "&7クリックで無料の試乗車両をスポーンさせます"
     val systemUUID = UUID.nameUUIDFromBytes("System".toByteArray())
     return BuilderMenuSupport.buildVehicleListMenu(
         buySwitch = buySwitch,
@@ -35,38 +32,26 @@ object AircraftBuilderGUI {
         resolveRow = resolveRow@{ name ->
               val data = AircraftBuilderBaseCache.getBaseData(name) ?: return@resolveRow null
               val ownerUUID = data.config.getOwnerUUID() ?: systemUUID
-              BuilderMenuSupport.VehicleListRow(
+              BuilderMenuSupport.vehicleListRow(
                   ownerUUID,
                   name,
                   data.getBlock().material,
-                  listOf(
-                      "&aエンティティ数&7: &a${data.totalEntity()}",
-                      "&3作者&7: &b${Bukkit.getOfflinePlayer(ownerUUID).name ?: "Unknown"}",
-                      line4,
-                  ),
+                  data.totalEntity(),
+                  buySwitch,
               )
             },
-        onSelection = onSelection@{ player, name, buy ->
-              if (buy) {
-                if (player.inventory.firstEmpty() == -1) {
-                  player.playSound(player.location, Sound.ITEM_DYE_USE, 0.35f, 0.5f)
-                  player.sendMessage("[AircraftBuilder] インベントリに空きがありません")
-                  return@onSelection
-                }
-                val boughtItem =
-                    AircraftBuilderItem.buyItem(name, player.name) ?: return@onSelection
-                if (MileagePoint.payment(player.uniqueId, 100)) {
-                  player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.235f)
-                  player.inventory.addItem(boughtItem)
-                  player.sendMessage("[AircraftBuilder] $name を購入しました")
-                } else {
-                  player.playSound(player.location, Sound.ITEM_DYE_USE, 0.35f, 0.5f)
-                  player.sendMessage("[AircraftBuilder] ポイント不足です")
-                }
-              } else {
-                player.performCommand("acmenu $name spawn")
-              }
-            },
+        onSelection = { player, name, buy ->
+          BuilderMenuSupport.selectVehicle(
+              player,
+              name,
+              buy,
+              AircraftBuilderItem::buyItem,
+              "[AircraftBuilder] インベントリに空きがありません",
+              "[AircraftBuilder] $name を購入しました",
+              "[AircraftBuilder] ポイント不足です",
+              "acmenu $name spawn",
+          )
+        },
     )
   }
 
@@ -119,11 +104,7 @@ object AircraftBuilderGUI {
     BuilderMenuSupport.renderVehicleStatDigits(
         gui,
         AircraftBuilderItem.getCarVehicleIntList(item),
-        listOf(
-            BuilderMenuSupport.VehicleStatRow("&f最高速", "&7上限:180"),
-            BuilderMenuSupport.VehicleStatRow("&fパワー", "&7上限:1000"),
-            BuilderMenuSupport.VehicleStatRow("&fブレーキ", "&7上限:1000"),
-        ),
+        BuilderMenuSupport.commonStatRows,
     )
 
     val cost = AircraftBuilderItem.getCarVCCost(item) ?: 0

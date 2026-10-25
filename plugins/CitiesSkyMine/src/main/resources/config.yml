@@ -63,17 +63,14 @@ access:
   legacy-permissions-bypass: true
   roles:
     admin:
-      display-name: "アドミン"
       permission: "citiesskymine.role.admin"
       inherits:
         - takumi
     takumi:
-      display-name: "たくみ"
       permission: "citiesskymine.role.takumi"
       inherits:
         - builder
     builder:
-      display-name: "建築士"
       permission: "citiesskymine.role.builder"
       inherits: []
   commands:
@@ -192,4 +189,3 @@ sui:
   max-ping: 150 # -1 で無効
 
 prefix: "<gray>[<gold>CitiesSkyMine</gold>]</gray> "
-debug: false

@@ -3,18 +3,9 @@
 menu:
   default: root
 
-placeholders:
-  server-name: "OyasaiServer"
-
 # ============================
 # クールダウン設定
 # ============================
 cooldown:
   click-ms: 100
   command-ms: 300
-
-# ============================
-# 販売ホワイトリスト設定
-# ============================
-sell-whitelist:
-  enabled: true

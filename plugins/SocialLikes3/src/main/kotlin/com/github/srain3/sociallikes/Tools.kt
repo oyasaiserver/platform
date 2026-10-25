@@ -8,9 +8,6 @@ import java.io.File
 import java.lang.reflect.Method
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ExecutionException
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.set
 import me.realized.tokenmanager.api.TokenManager
@@ -97,44 +94,6 @@ object Tools {
           "Could not commit offline-like reward $amount for $uuid: ${exception.message}"
       )
       CompletableFuture.completedFuture(false)
-    }
-  }
-
-  fun awaitTokenCommit(
-      tokenCommitAdd: TokenCommitAdd,
-      uuid: UUID,
-      amount: Long,
-      timeoutMillis: Long,
-  ): Boolean {
-    return try {
-      val completion = tokenCommitAdd.method.invoke(tokenCommitAdd.tokenManager, uuid, amount)
-      (completion as? CompletableFuture<*>)?.get(timeoutMillis, TimeUnit.MILLISECONDS) == true
-    } catch (exception: TimeoutException) {
-      plugin.logger.warning(
-          "Timed out after ${timeoutMillis}ms waiting to commit offline-like reward $amount for $uuid; leaving it pending."
-      )
-      false
-    } catch (exception: InterruptedException) {
-      Thread.currentThread().interrupt()
-      plugin.logger.warning(
-          "Interrupted while waiting to commit offline-like reward $amount for $uuid."
-      )
-      false
-    } catch (exception: ExecutionException) {
-      plugin.logger.warning(
-          "Failed to commit offline-like reward $amount for $uuid: ${exception.cause?.message ?: exception.message}"
-      )
-      false
-    } catch (exception: ReflectiveOperationException) {
-      plugin.logger.warning(
-          "Could not invoke TokenManager addTokensWithCommit for offline-like reward $amount for $uuid: ${exception.message}"
-      )
-      false
-    } catch (exception: IllegalArgumentException) {
-      plugin.logger.warning(
-          "TokenManager addTokensWithCommit rejected offline-like reward $amount for $uuid: ${exception.message}"
-      )
-      false
     }
   }
 

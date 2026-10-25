@@ -47,10 +47,6 @@ class AircraftBuilderConfig(fileName: String) : CustomYaml(fileName) {
     set("Body.Size", size)
   }
 
-  fun setRotateBody(rotate: Double) {
-    set("Body.Rotate", rotate)
-  }
-
   fun setSeatOffset(index: Int, offset: Vector) {
     set("Seat.$index", offset)
   }

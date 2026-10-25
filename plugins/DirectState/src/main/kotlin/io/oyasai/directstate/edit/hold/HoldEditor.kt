@@ -1,6 +1,7 @@
 package io.oyasai.directstate.edit.hold
 
 import io.oyasai.directstate.Permissions
+import io.oyasai.directstate.edit.hand.HandGeometry.horizontalFaces
 import io.oyasai.directstate.edit.shape.SlabGesture
 import io.oyasai.directstate.edit.shape.StairGeometry
 import io.oyasai.directstate.edit.shape.WallGesture
@@ -26,7 +27,6 @@ internal class HoldEditor(
     private val applyEdit: (Player, Block, BlockData) -> Unit,
 ) {
   private val dragSessions = mutableMapOf<UUID, Drag>()
-  private val faces = listOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
   private val shapes =
       listOf(
           Stairs.Shape.STRAIGHT,
@@ -229,10 +229,11 @@ internal class HoldEditor(
           } else {
             val initial =
                 StairGeometry.states.first {
-                  it.facing == faces.indexOf(data.facing) && it.shape == shapes.indexOf(data.shape)
+                  it.facing == horizontalFaces.indexOf(data.facing) &&
+                      it.shape == shapes.indexOf(data.shape)
                 }
             val result = StairGeometry.resize(initial, steps, drag.hit.x, drag.hit.z)
-            data.facing = faces[result.facing]
+            data.facing = horizontalFaces[result.facing]
             data.shape = shapes[result.shape]
           }
     }
@@ -240,5 +241,5 @@ internal class HoldEditor(
   }
 
   /** ベクトルが最も強く向く水平面を返す。 */
-  private fun nearestFace(vector: Vector) = faces.maxBy { vector.dot(it.direction) }
+  private fun nearestFace(vector: Vector) = horizontalFaces.maxBy { vector.dot(it.direction) }
 }

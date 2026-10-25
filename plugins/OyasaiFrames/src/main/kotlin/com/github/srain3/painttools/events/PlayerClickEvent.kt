@@ -4,6 +4,7 @@ import com.github.srain3.painttools.tools.ToolBox
 import com.github.srain3.painttools.tools.configs.MapData
 import com.github.srain3.painttools.tools.configs.MapDataCash
 import com.github.srain3.painttools.tools.configs.MapIdList
+import com.github.srain3.painttools.tools.faceVec
 import java.awt.Color
 import java.util.*
 import kotlin.math.absoluteValue
@@ -92,16 +93,14 @@ object PlayerClickEvent : Listener {
               if (event !is RepeatStopEvent) {
                 if (!event.isCancelled) {
                   if (!MapIdList.checkLockID(id)) {
-                    for (i in 1..1) {
-                      object : BukkitRunnable() {
-                            override fun run() {
-                              val newEvent = RepeatStopEvent(event)
-                              newEvent.isCancelled = true
-                              Bukkit.getServer().pluginManager.callEvent(newEvent)
-                            }
+                    object : BukkitRunnable() {
+                          override fun run() {
+                            val newEvent = RepeatStopEvent(event)
+                            newEvent.isCancelled = true
+                            Bukkit.getServer().pluginManager.callEvent(newEvent)
                           }
-                          .runTaskLater(ToolBox.pl, i.toLong())
-                    }
+                        }
+                        .runTaskLater(ToolBox.pl, 1L)
                   }
                 }
               }
@@ -275,18 +274,6 @@ object PlayerClickEvent : Listener {
           """(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2}),(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2}),(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})"""
       )
   val htmlColorRegex = Regex("""#?[0-9a-fA-F]{6}""")
-
-  private fun faceVec(face: BlockFace): Vector {
-    return when (face) {
-      BlockFace.NORTH -> Vector(0.0, 0.0, -1.0)
-      BlockFace.SOUTH -> Vector(0.0, 0.0, 1.0)
-      BlockFace.WEST -> Vector(-1.0, 0.0, 0.0)
-      BlockFace.EAST -> Vector(1.0, 0.0, 0.0)
-      BlockFace.UP -> Vector(0.0, 1.0, 0.0)
-      BlockFace.DOWN -> Vector(0.0, -1.0, 0.0)
-      else -> Vector(0.0, 0.0, 0.0)
-    }
-  }
 
   private fun paint(
       sneak: Boolean,

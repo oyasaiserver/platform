@@ -2,10 +2,10 @@ package com.github.srain3.painttools.events
 
 import com.github.srain3.painttools.tools.ToolBox
 import com.github.srain3.painttools.tools.configs.MapIdList
+import com.github.srain3.painttools.tools.faceVec
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Rotation
-import org.bukkit.block.BlockFace
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -18,7 +18,6 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Vector
 
 /** アイテムフレームをクリックした時のイベント */
 object ClickFrameMapEvent : Listener {
@@ -56,18 +55,6 @@ object ClickFrameMapEvent : Listener {
             frame.facing.oppositeFace,
         )
     Bukkit.getServer().pluginManager.callEvent(e)
-  }
-
-  private fun faceVec(face: BlockFace): Vector {
-    return when (face) {
-      BlockFace.NORTH -> Vector(0.0, 0.0, -1.0)
-      BlockFace.SOUTH -> Vector(0.0, 0.0, 1.0)
-      BlockFace.WEST -> Vector(-1.0, 0.0, 0.0)
-      BlockFace.EAST -> Vector(1.0, 0.0, 0.0)
-      BlockFace.UP -> Vector(0.0, 1.0, 0.0)
-      BlockFace.DOWN -> Vector(0.0, -1.0, 0.0)
-      else -> Vector(0.0, 0.0, 0.0)
-    }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)

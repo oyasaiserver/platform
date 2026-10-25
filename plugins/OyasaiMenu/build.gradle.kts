@@ -4,6 +4,5 @@ dependencies {
   compileOnly(libs.luckperms.api)
   compileOnly(project(":plugins:OyasaiToken"))
   compileOnly(project(":plugins:DynamicProfile"))
-  implementation(libs.sqlite.jdbc)
   testImplementation(libs.purpur.api)
 }

@@ -17,14 +17,6 @@ data class ShapePlacementData(
     states.getOrPut(stateKey) { mutableListOf() }.add(placement)
   }
 
-  /** 指定状態の配置リストをクリアする */
-  fun clearState(stateKey: String) {
-    states[stateKey]?.clear()
-  }
-
   /** 指定状態の配置リストを取得する (なければ空リスト) */
   fun getState(stateKey: String): List<ArmorStandPlacement> = states[stateKey] ?: emptyList()
-
-  /** 設定済みの状態キー一覧を返す */
-  fun definedStateKeys(): Set<String> = states.keys
 }

@@ -4,7 +4,6 @@ import io.oyasai.worldgen.config.OwgConfig
 import io.oyasai.worldgen.config.OwgWorldConfig
 import io.oyasai.worldgen.config.OwgWorldKind
 import io.oyasai.worldgen.gen.VoidGenerator
-import io.oyasai.worldgen.height.HeightProvider
 import io.oyasai.worldgen.height.HeightSpec
 import io.oyasai.worldgen.height.NmsHeightProvider
 import java.nio.file.Files
@@ -31,7 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class WorldLifecycle(
     private val plugin: JavaPlugin,
-    private val heightProvider: HeightProvider,
+    private val heightProvider: NmsHeightProvider,
     initialConfig: OwgConfig,
     private val normalWorlds: NormalWorlds? = null,
 ) : Listener {
@@ -131,7 +130,7 @@ class WorldLifecycle(
   fun runCheck(sender: CommandSender): Boolean {
     return try {
       reloadConfiguration()
-      val supported = (heightProvider as? NmsHeightProvider)?.isSupportedServer() ?: true
+      val supported = heightProvider.isSupportedServer()
       if (!supported) {
         startupInspectionPassed = false
         sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 のみです")
@@ -643,14 +642,11 @@ class WorldLifecycle(
     }
   }
 
-  private fun isSupportedServer(): Boolean =
-      (heightProvider as? NmsHeightProvider)?.isSupportedServer() ?: true
+  private fun isSupportedServer(): Boolean = heightProvider.isSupportedServer()
 
-  private fun appliedVersion(): String =
-      (heightProvider as? NmsHeightProvider)?.appliedVersion() ?: heightProvider.name
+  private fun appliedVersion(): String = heightProvider.appliedVersion()
 
-  private fun runtimeVersion(): String =
-      (heightProvider as? NmsHeightProvider)?.runtimeVersion() ?: heightProvider.name
+  private fun runtimeVersion(): String = heightProvider.runtimeVersion()
 
   companion object {
     private const val SELF_TEST_WORLD = "owg_selftest"

@@ -50,25 +50,6 @@ object PromotionNotifier {
     SendEmbedMessage.sendPromotionNotification(targetUUID, targetName, promoterName, record)
   }
 
-  fun notifyDiscord(notification: PromotionNotification) {
-    notifyDiscord(
-        notification.targetUUID,
-        notification.targetName,
-        notification.promoterName,
-        notification.record,
-    )
-  }
-
-  fun notifyServer(notification: PromotionNotification) {
-    notifyServer(
-        notification.targetName,
-        notification.newRankName,
-        notification.promoterName,
-        notification.record,
-        notification.special,
-    )
-  }
-
   fun notifyAll(notification: PromotionNotification) {
     notifyAll(
         notification.targetUUID,

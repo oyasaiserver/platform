@@ -93,22 +93,11 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       return
     }
 
-    var earned = 0.0
-    var count = 0
-    var skipped = 0
-    val soldSlots = mutableListOf<Int>()
-
-    player.inventory.contents.forEachIndexed { i, stack ->
-      if (stack == null || stack.type.isAir) return@forEachIndexed
-      val price = plugin.sellEngine.getSellPrice(stack)
-      if (price != null && price > 0) {
-        earned += price * stack.amount
-        count += stack.amount
-        soldSlots += i
-      } else {
-        skipped++
-      }
-    }
+    val items =
+        player.inventory.contents
+            .mapIndexedNotNull { i, stack -> stack?.takeIf { !it.type.isAir }?.let { i to it } }
+            .toMap()
+    val (earned, count, skipped, soldSlots) = plugin.sellEngine.summarizeSale(items)
 
     if (count == 0) {
       player.sendMessage(

@@ -1,7 +1,6 @@
 package io.oyasai.vertex.services.schematics
 
 import io.oyasai.vertex.Vertex
-import io.oyasai.vertex.services.Service
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URI
@@ -118,8 +117,4 @@ object OyasaiSchematics : Command("oyasai-schematics") {
     }
     return true
   }
-}
-
-object SchematicsService : Service() {
-  override val commands = listOf<Command>(OyasaiSchematics)
 }

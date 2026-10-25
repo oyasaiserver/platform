@@ -33,10 +33,7 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.SLAB_STAIRS)) return true
 
     when (args.getOrNull(0)?.lowercase()) {
@@ -107,11 +104,12 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
           return
         }
 
-    if (faweUndoRecorded) {
-      MessageUtil.info(player, "FAWE の //undo でこの生成を取り消せます。")
-    } else {
-      MessageUtil.warn(player, "生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-    }
+    MessageUtil.undoResult(
+        player,
+        faweUndoRecorded,
+        "FAWE の //undo でこの生成を取り消せます。",
+        "生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+    )
 
     val slopeText =
         if (plan.verticalBlocks == 0) {

@@ -147,21 +147,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
 
-    var earned = 0.0
-    var count = 0
-    var unsellable = 0
-    val soldSlots = mutableListOf<Int>()
-
-    items.forEach { (slot, stack) ->
-      val price = getSellPrice(stack)
-      if (price != null && price > 0) {
-        earned += price * stack.amount
-        count += stack.amount
-        soldSlots += slot
-      } else {
-        unsellable++
-      }
-    }
+    val (earned, count, unsellable, soldSlots) = summarizeSale(items)
 
     if (count == 0) {
       player.sendMessage(
@@ -193,6 +179,31 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   // ============================
   // ユーティリティ
   // ============================
+
+  internal data class SaleSummary(
+      val earned: Double,
+      val count: Int,
+      val unsellable: Int,
+      val soldSlots: List<Int>,
+  )
+
+  internal fun summarizeSale(items: Map<Int, ItemStack>): SaleSummary {
+    var earned = 0.0
+    var count = 0
+    var unsellable = 0
+    val soldSlots = mutableListOf<Int>()
+    items.forEach { (slot, stack) ->
+      val price = getSellPrice(stack)
+      if (price != null && price > 0) {
+        earned += price * stack.amount
+        count += stack.amount
+        soldSlots += slot
+      } else {
+        unsellable++
+      }
+    }
+    return SaleSummary(earned, count, unsellable, soldSlots)
+  }
 
   private fun getInputItems(inv: Inventory): Map<Int, ItemStack> =
       (0..44).mapNotNull { i -> inv.getItem(i)?.takeIf { !it.type.isAir }?.let { i to it } }.toMap()

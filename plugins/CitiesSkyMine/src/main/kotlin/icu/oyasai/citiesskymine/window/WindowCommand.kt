@@ -30,10 +30,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.WINDOW)) return true
 
     if (args.getOrNull(0)?.equals("undo", ignoreCase = true) == true) {
@@ -158,11 +155,12 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         sender,
         "窓を生成しました: ${width}x$height / frame=${materials.frame.key.key} / glass=${materials.glass.key.key} / backing=${materials.backing.key.key} / fill=${filledBlocks.size}",
     )
-    if (faweUndoRecorded) {
-      MessageUtil.info(sender, "FAWE の //undo でこの窓生成を取り消せます。")
-    } else {
-      MessageUtil.warn(sender, "窓生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-    }
+    MessageUtil.undoResult(
+        sender,
+        faweUndoRecorded,
+        "FAWE の //undo でこの窓生成を取り消せます。",
+        "窓生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+    )
     if (selectionApplied) {
       MessageUtil.info(sender, "横方向 stack 用に窓範囲を選択しました。")
     }

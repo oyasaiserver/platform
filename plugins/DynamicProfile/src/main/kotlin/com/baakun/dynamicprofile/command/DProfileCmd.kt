@@ -5,7 +5,6 @@ import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.baakun.dynamicprofile.profile.MyProfile
 import com.baakun.dynamicprofile.profile.OtherProfile
 import com.baakun.dynamicprofile.profile.playerSelect.PlayerSelect
-import com.baakun.dynamicprofile.profile.playerSelect.RunType
 import com.baakun.dynamicprofile.util.Tools
 import com.baakun.dynamicprofile.util.Tools.addText
 import com.baakun.dynamicprofile.util.Tools.allFlag
@@ -23,7 +22,6 @@ import org.bukkit.inventory.ItemStack
 
 /** /dprofileコマンドの処理 */
 object DProfileCmd : CommandExecutor {
-  private val required = Tools.plugin.config.getInt("Required", 100000)
 
   override fun onCommand(
       sender: CommandSender,
@@ -106,7 +104,7 @@ object DProfileCmd : CommandExecutor {
         )
         .guiRun {
           viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
-          PlayerSelect.display(viewer, RunType.OPEN_PROFILE)
+          PlayerSelect.display(viewer)
         }
     inv.setItem(53, selectPlayer)
   }

@@ -7,7 +7,7 @@ import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseData
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseDataType
 import io.oyasai.anybuilder.common.command.BuilderCommandRouter
-import io.oyasai.canRideCarBuilder2OrAdmin
+import io.oyasai.canRideCarBuilder2
 import io.oyasai.canUseCarBuilder2
 import io.oyasai.toolbox.Tools
 import java.util.Locale
@@ -126,7 +126,7 @@ private fun handleCarBuilder2SingleArgumentCommand(
       sender = sender,
       name = name,
       data = data,
-      canSpawn = { it.canRideCarBuilder2OrAdmin() },
+      canSpawn = { it.canRideCarBuilder2() },
       deniedMessage = CarBuilder2_PERMISSION_DENIED,
       spawnTrial = { player, baseData ->
         CarBuilder2Spawn.spawn(
@@ -196,7 +196,7 @@ private fun handleCarBuilder2Spawn(
 ) {
   if (data == null) return
   if (sender is Player) {
-    if (!sender.canRideCarBuilder2OrAdmin()) {
+    if (!sender.canRideCarBuilder2()) {
       sender.sendMessage(CarBuilder2_PERMISSION_DENIED)
       return
     }
