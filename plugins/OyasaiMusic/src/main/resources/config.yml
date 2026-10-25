@@ -38,8 +38,6 @@ bedrock:
   chord-limit: 3
   # Transfer/Geyser連携用のBedrock向け.mcpack設定。
   # pack-idはJava版ZIPと.mcpackで共有するパックUUID。URL/SHA-1は将来の配布確認用。
-  mcpack-url: ""
-  mcpack-sha1: ""
   pack-id: "8be1eaab-ca07-4f47-9957-40d29505e320"
   # trueでBedrockのallow時および保存済みALLOWの復元時に状態退避＋転送要求を送信する。
   # 直接Paper環境で誤Transferしないよう既定はfalse。Velocity側に対応.mcpackを配置してから有効化すること。

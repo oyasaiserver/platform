@@ -3,28 +3,12 @@ package com.github.sahyuya.oyasaiMusic.gui
 import com.github.sahyuya.oyasaiMusic.model.Song
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
-
-private val sectionLegacySerializer = LegacyComponentSerializer.legacySection()
-
-/**
- * 保存された`&`書式をMinecraft標準の`§`書式へ変換して表示する。 色だけでなく`&l`等の装飾もAdventure
- * Componentへ反映し、無指定部分には[defaultColor]を使う。
- */
-fun formattedLegacyText(
-    text: String,
-    defaultColor: TextColor = NamedTextColor.WHITE,
-): Component =
-    Component.text("", defaultColor)
-        .decoration(TextDecoration.ITALIC, false)
-        .append(sectionLegacySerializer.deserialize(text.replace('&', '§')))
 
 /** 楽曲題名は装飾コードとして解釈せず素通しで表示する。`&`/`§`を含む題名（`R&B`等）が 色・装飾化けや消失を起こさないようにする。色指定がない部分は白、イタリックは無効。 */
 fun formattedSongTitle(title: String): Component =

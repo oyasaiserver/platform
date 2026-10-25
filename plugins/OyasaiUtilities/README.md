@@ -76,3 +76,7 @@
 ・サバイバルのドロップアイテムはクリエでは拾えない。(`cm.bypass`(OP)はスルーする)
 ・クリエで置いた機能がある(アイテム増殖に繋がりそうな)ブロックは、クリエの人しか弄れなくなる。(`cm.bypass`(OP)はスルーする)
 ・逆にサバイバルのブロックは、クリエでは弄れない。(`cm.bypass`(OP)はスルーする) ・インベントリもゲームモード別に切り替わる。
+
+## Items
+
+運営が登録した特殊アイテムを、`/items`（一覧 GUI）か `/items get <ID>` で受け取れる台帳。取得ルールは free・once・staff。運営は `/items register|update|remove|info|reset`（`oyasaiutilities.items.manage`）。保存は共通 SQLite。持ち主の追跡はしない。

@@ -2,7 +2,6 @@ package com.github.sahyuya.oyasaiMusic.db
 
 import com.github.sahyuya.oyasaiMusic.model.Playlist
 import com.github.sahyuya.oyasaiMusic.model.Song
-import com.github.sahyuya.oyasaiMusic.model.SongStatus
 import com.github.sahyuya.oyasaiMusic.util.UuidUtil
 import java.sql.ResultSet
 import java.sql.Statement
@@ -160,7 +159,7 @@ class PlaylistRepository(private val db: DatabaseManager) {
               ps.setLong(1, playlistId)
               ps.executeQuery().use { rs ->
                 val list = mutableListOf<Song>()
-                while (rs.next()) list += rs.toSongRow()
+                while (rs.next()) list += rs.toSong()
                 list
               }
             }
@@ -173,27 +172,5 @@ class PlaylistRepository(private val db: DatabaseManager) {
           name = getString("name"),
           createdAt = getLong("created_at"),
           songCount = getLong("song_count"),
-      )
-
-  private fun ResultSet.toSongRow(): Song =
-      Song(
-          id = getLong("id"),
-          authorUuid = UuidUtil.fromBytes(getBytes("author_uuid")),
-          title = getString("title"),
-          createdAt = getLong("created_at"),
-          bpm = getInt("bpm"),
-          recordMaterial = getString("record_material"),
-          price = getInt("price"),
-          referenceUrl = getString("reference_url"),
-          status = SongStatus.fromCode(getInt("status")),
-          likes = getLong("likes"),
-          views = getLong("views"),
-          fileName = getString("file_name"),
-          supportsPositional = getInt("supports_positional") != 0,
-          published = getInt("published") != 0,
-          limitedPublication = getInt("limited_publication") != 0,
-          collectible = getInt("collectible") != 0,
-          recordIdentity = getString("record_identity") ?: "",
-          reviewRequestedAt = getLong("review_requested_at").let { if (wasNull()) null else it },
       )
 }

@@ -46,6 +46,7 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 | プレイヤー状態 | `playerstate/` | ゲームモード、飛行、速度、時刻、回復、AFK、ニックネーム、死亡時処理 |
 | 作業台・頭 | `workstation/` | 作業台 GUI、エンダーチェスト、廃棄、帽子、プレイヤー頭（統合版の頭は `BedrockSkull.kt`。仕様は `WORKSTATIONS.md`） |
 | おなら | `fart/` | `/fart [stay\|fly] [player]` で通常・居座り・飛行の排他モードを切り替える。しゃがみ開始で共通の音と硫黄色の煙。居座りはプレイヤーの頭からのスニーク降車を防ぎ、飛行は上向き速度を0.3加算（上限0.6）し落下距離をリセット、FLY 中の落下ダメージを取り消す。引数なしは ON なら全モード OFF、OFF なら通常。同じモード再指定も OFF。状態は UUID ごとのメモリのみ。名前のみ指定は対象の通常モードを切り替える。名前指定（自分自身も含む）は `oyasaiutilities.fart.others`（既定 OP）が必要でオンラインの完全一致のみ。コンソールは名前指定時のみ可。実行者に結果、別の対象にもモードを通知。タブ補完は stay・fly と、権限がある場合のみ対象名を前方一致で提示 |
+| アイテム台帳 | `items/` | `/items` で、運営が登録した特殊アイテムを一覧 GUI（45件/ページ）または `/items get <ID>` で受け取る。登録は手に持った ItemStack を `serializeAsBytes` で保存（個数も保存）。取得ルールは free（誰でも何度でも）・once（1人1回）・staff（運営のみ。一覧と補完に出さない）。`oyasaiutilities.items.manage` を持つ人は登録・更新・削除・情報・受取済みの取消ができ、どのルールのアイテムも受け取れる。削除は論理削除でIDは再利用しない。受け取りは `items_log` に残すが、「今誰が持っているか」は追跡しない。持ち物が満杯なら足元に落とす。保存は共通 SQLite の `items_catalog`・`items_log`（機能名 `items`、版1）、読み込み時にメモリへ載せ、書き込みは共通 DB の専用スレッド |
 | アイテム保管 | `backpack/`, `adminbp/` | 個人 SQLite バックパック、OP 向け YAML 管理バックパック |
 | 採掘 | `veinminer/`, `oresmelter/`, `ore_reappears/` | 連鎖採掘、自動精錬、鉱石の時間差再生成・経済連携 |
 | モード・アイテム制限 | `creative_management/`, `notnbt/` | ゲームモード別インベントリ、由来印、クリエイティブ由来アイテムの制限 |
@@ -53,9 +54,9 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 | 旧 Skript 移植機能 | `skriptport/`, `pita/`, `getuuid/` | 案内、飛行速度・reach・scale、暗視、慣性停止、UUID 表示、短縮コマンド |
 | スキン・参加時処理 | `skin/`, `redbull/`, `joincommands/` | Mojang スキン、期限付き飛行、設定済み参加コマンド |
 | Schematics | `schematic/SchematicFeature.kt`, `schematic/SchematicStore.kt` | schematic.cloud の共有 ID から FAWE の保存先へダウンロード |
-| 共通保存基盤 | `storage/UtilitiesDatabase.kt`, `YamlConfig.kt` | PlayerState / Teleport 共通 SQLite、YAML 読込・保存 |
+| 共通保存基盤 | `storage/UtilitiesDatabase.kt`, `YamlConfig.kt` | PlayerState / Teleport / Items 共通 SQLite、YAML 読込・保存 |
 
-`onEnable` は共通 DB を先に開き、Workstation・PlayerState・Teleport は個別の try/catch で失敗時に後始末して続行する。Spawn は Teleport が有効な場合にだけ有効化する。Guidance は保存初期化を内部で処理するが、他機能の全てが個別例外隔離されているわけではない。停止時は各 Feature の後始末後、`finally` で共通 DB を閉じる。
+`onEnable` は共通 DB を先に開き、Workstation・Items・PlayerState・Teleport は個別の try/catch で失敗時に後始末して続行する。Spawn は Teleport が有効な場合にだけ有効化する。Guidance は保存初期化を内部で処理するが、他機能の全てが個別例外隔離されているわけではない。停止時は各 Feature の後始末後、`finally` で共通 DB を閉じる。
 
 ### 主要な処理の流れ
 
