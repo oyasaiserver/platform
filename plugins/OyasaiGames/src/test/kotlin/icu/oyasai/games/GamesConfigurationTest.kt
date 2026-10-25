@@ -50,7 +50,7 @@ class GamesConfigurationTest {
                     "SlotMachine",
                     "CrackShot",
                     "pvparena",
-                    "Vault",
+                    "OyasaiEconomy",
                     "BedWars",
                     "SBA",
                     "TNTRun_reloaded",

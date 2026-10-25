@@ -78,9 +78,9 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 ### イベントと外部 API
 
 - `plugin.yml` は Bukkit/Paper のプラグイン記述子です。`api-version` は `1.21` です。
-- `build.gradle.kts` のコンパイル時依存は Purpur API、Vault API、FAWE Bukkit API、Floodgate API。実装に Kotlin 標準ライブラリと SQLite JDBC を同梱します。テストには Purpur API と Vault API を使います。
-- `plugin.yml` の softdepend は Vault、SlotMachine、CrackShot、pvparena、WorldEdit、FastAsyncWorldEdit、BedWars、ScreamingBedWars、SBA、TNTRun_reloaded、Multiverse-Core、floodgate です。
-- Vault は Slot の経済決済、PvP/BedWars/TNTRun の有効化された支払い・報酬で使います。WorldEdit/FAWE は PvP schematic の貼り戻し、Floodgate は Dice の Bedrock クライアント判定に使います。
+- `build.gradle.kts` のコンパイル時依存は Purpur API、FAWE Bukkit API、Floodgate API。実装に Kotlin 標準ライブラリと SQLite JDBC を同梱します。テストには Purpur API と OyasaiEconomy API を使います。
+- `plugin.yml` の softdepend は OyasaiEconomy、SlotMachine、CrackShot、pvparena、WorldEdit、FastAsyncWorldEdit、BedWars、ScreamingBedWars、SBA、TNTRun_reloaded、Multiverse-Core、floodgate です。
+- OyasaiEconomy は Slot の経済決済、PvP/BedWars/TNTRun の有効化された支払い・報酬で使います。WorldEdit/FAWE は PvP schematic の貼り戻し、Floodgate は Dice の Bedrock クライアント判定に使います。
 - SlotMachine、CrackShot、BedWars/ScreamingBedWars、TNTRun_reloaded は同名機能との競合時に内蔵機能を停止します。PvP は起動時に有効な PvPArena を検出して停止します。後から有効になったプラグインを監視するかどうかは機能ごとに異なります。
 - 肝試しは Bukkit のコマンドディスパッチで vanilla の team・scoreboard・attribute・effect と外部コマンドを実行します。必要な外部コマンドの提供元・成功はコードから確認できません。
 - `LICENSE-TNTRUN.txt` は GNU GPL v3 のライセンス文書です。Shadow JAR の `META-INF/licenses/` に同梱されます。これは TNTRun_reloaded 由来の挙動を含む配布物向けのライセンス同梱を示し、ここではプラグイン全体のライセンス範囲を断定しません。
@@ -98,7 +98,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - HeadHunt のゲーム進行はメモリだけです。宝登録の保存に失敗しても、先に行ったメモリ・ブロック変更を完全には戻しません。
 - Dice の投擲中状態は永続化されません。停止・クラッシュと投擲が重なる場合の返却は保証されません。
 - Slot は料金・賞品・コマンド実行の段階を記録しますが、外部コマンドの副作用を巻き戻せません。結果が不明な決済段階を自動で再実行しない場合があります。
-- PvP/BedWars/TNTRun のプレイヤー復元・経済・地形処理は複数ファイルと外部 API をまたぎ、Vault とローカルファイルを単一トランザクションにはできません。結果不明の経済処理は自動再送しない設計です。
+- PvP/BedWars/TNTRun のプレイヤー復元・経済・地形処理は複数ファイルと外部 API をまたぎ、OyasaiEconomy とローカルファイルを単一トランザクションにはできません。結果不明の経済処理は自動再送しない設計です。
 - PvP/BedWars の地形復元は記録した BlockData と対象設定の容器内容が中心です。TileState の任意データや他プラグインが直接加えた変更を含む完全なワールド巻き戻しではありません。
 - TNTRun の床復元は記録したブロック状態を戻す方式で、TileState の復元を含みません。勝利時コマンド・通知は復旧時に再実行しない経路があります。
 - 肝試しは固定されたワールド・座標・チェスト構成に依存します。元の位置・状態効果・各属性の完全なスナップショットは保存しません。SQLite 操作は同期です。
@@ -109,3 +109,9 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 
 - 2026-10-13: 文書レビューの指摘を関連コードで照合し、無効時のコマンド登録、TNTRun の設定・パーティー・ジャンプ所持上限、復元失敗時のキック、再読込と武器の固定上書きを訂正した。プレイヤー向けの賭け直しは結果だけを案内する。
 - 2026-10-13: 再読込時の返金・復元は成功を保証しない。PvP は charged だけを返金対象とし、開始時に consumed になった参加費は返金しない（`PvpEconomy.settle`）。Slot は抽選中に再設定を延期する。肝試し・Toys の初期化例外と負のルーレット間隔について、プラグイン内の制御は確認したがサーバー側の最終挙動は未確認として残す。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。
+
+金額設定と支払い記録は整数型だけを受け付ける。PvPの経済モジュールはEconomy/EconomyRefund、設定はmodules.economy、BedWarsの経済設定はeconomy。比例配当が整数にならない試合は、全員へ元金を返し端数を丸めない。PvPの保存結果が不明な取引は自動再送しない。

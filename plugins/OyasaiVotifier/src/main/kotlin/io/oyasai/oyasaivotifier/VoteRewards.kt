@@ -1,13 +1,9 @@
 package io.oyasai.oyasaivotifier
 
 import com.vexsoftware.votifier.model.Vote
-import io.oyasai.oyasaitoken.api.Delivery
-import io.oyasai.oyasaitoken.api.OyasaiTokenService
-import io.oyasai.oyasaitoken.api.TokenRequest
-import io.oyasai.oyasaitoken.api.TokenResult
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.io.File
 import kotlin.random.Random
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.YamlConfiguration
@@ -56,30 +52,22 @@ internal class VoteRewards(
   fun progress(): Int = progress
 
   private fun deliver(player: OfflinePlayer, vote: Vote, reward: Reward, votes: Int) {
-    if (reward.money > 0) {
-      val response = economy()?.depositPlayer(player, reward.money)
-      if (response == null || !response.transactionSuccess())
-          plugin.logger.warning("Could not grant vote money to ${player.name}")
-    }
-    if (reward.tokens > 0) grantTokens(player, reward.tokens)
+    if (reward.money > 0) grant(player, "yen", reward.money)
+    if (reward.tokens > 0) grant(player, "token", reward.tokens)
     reward.commands.forEach { command ->
       command(player.name, vote, votes, command)?.let(::runCommand)
     }
   }
 
-  private fun grantTokens(player: OfflinePlayer, amount: Long) {
-    val token =
-        Bukkit.getServicesManager().getRegistration(OyasaiTokenService::class.java)?.provider
-    if (token == null) {
-      plugin.logger.warning(
-          "Could not grant vote tokens to ${player.name}: OyasaiTokenService is unavailable"
-      )
+  private fun grant(player: OfflinePlayer, currency: String, amount: Long) {
+    val provider = economy()
+    if (provider == null) {
+      plugin.logger.warning("経済APIを利用できません: ${player.uniqueId}")
       return
     }
-    token.grant(TokenRequest(player.uniqueId, amount, player.name, Delivery.Silent)).thenAccept {
-        result ->
-      if (result !is TokenResult.Success)
-          plugin.logger.warning("Could not grant vote tokens to ${player.name}: $result")
+    provider.deposit(currency, player.uniqueId, amount).completion.thenAccept { result ->
+      if (result !is io.oyasai.economy.api.EconomyResult.Success)
+          plugin.logger.warning("投票報酬を保存できません: ${player.uniqueId} $currency $result")
     }
   }
 
@@ -121,8 +109,8 @@ internal class VoteRewards(
         .replace("%votes%", votes.toString())
   }
 
-  private fun economy(): Economy? =
-      Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
+  private fun economy(): OyasaiEconomyApi? =
+      Bukkit.getServicesManager().getRegistration(OyasaiEconomyApi::class.java)?.provider
 
   private fun save() {
     state.set("votes", progress)

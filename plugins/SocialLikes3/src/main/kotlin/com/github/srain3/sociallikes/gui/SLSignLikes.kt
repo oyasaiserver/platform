@@ -303,9 +303,9 @@ object SLSignLikes {
         ) { event: InventoryClickEvent ->
           event.whoClicked.closeInventory()
           val tm =
-              Tools.getTokenManager()
+              Tools.economy()
                   ?: run {
-                    Tools.plugin.logger.warning("TokenManager null!!!!")
+                    Tools.plugin.logger.warning("OyasaiEconomy が利用できません")
                     event.whoClicked.sendMessage(
                         Tools.socialLikesLOGO + "&c内部エラーが発生しました、申し訳ございません。".color()
                     )
@@ -315,15 +315,18 @@ object SLSignLikes {
                     return@GuiItem
                   }
           val player = event.whoClicked as Player
-          val bal = tm.getTokens(player)
-          if (bal.isEmpty) {
+          val bal = tm.balance("token", player.uniqueId)
+          if (bal == null) {
             return@GuiItem
           } else {
-            if (bal.asLong < 10) {
+            if (bal < 10) {
               player.sendMessage(Tools.socialLikesLOGO + "&eポイント不足です!".color())
               return@GuiItem
             } else {
-              tm.removeTokens(player, 10)
+              if (!tm.withdraw("token", player.uniqueId, 10).accepted) {
+                player.sendMessage("ポイントを消費できませんでした。")
+                return@GuiItem
+              }
               player.sendMessage(Tools.socialLikesLOGO + "&e10p消費しました!".color())
             }
           }

@@ -6,7 +6,7 @@ source_of_truth: "plugins/DynamicProfile/"
 related_paths:
   - packages/oyasai-minecraft-main.nix
   - plugins/SocialLikes3/
-  - plugins/OyasaiToken/
+  - plugins/OyasaiEconomy/
   - plugins/OyasaiMenu/
 project_kind: plugin
 runtime_kind: paper-plugin
@@ -98,19 +98,19 @@ SQLite は `plugins/DynamicProfile/dynamicprofile.db` です。接続時に WAL�
 
 ### 外部 API・依存
 
-`plugin.yml` は `Votifier`、`Vault`、`TokenManager` を必須依存、`SocialLikes3`、`LuckPerms` を softdepend と宣言します。ビルドは Purpur API、NuVotifier API、Vault API、LuckPerms API、OyasaiToken、SocialLikes3 を compileOnly で参照し、Gson、Discord Webhooks、SQLite JDBC、Kotlin stdlib を同梱依存として宣言します。
+`plugin.yml` は `Votifier`、`OyasaiEconomy` を必須依存、`SocialLikes3`、`LuckPerms` を softdepend と宣言します。ビルドは Purpur API、NuVotifier API、LuckPerms API、OyasaiEconomy、SocialLikes3 を compileOnly で参照し、Gson、Discord Webhooks、SQLite JDBC、Kotlin stdlib を同梱依存として宣言します。
 
 - Votifier の投票イベント、SocialLikes3 の建築 ID・所有者・いいね情報を統計やおすすめに使います。
-- Vault Economy API と TokenManager API を残高表示・報酬に使います。ポイント送金は外部コマンド `/token send`、Vault Permission と LuckPerms はグループ・ランク照会に使います。
+- OyasaiEconomy Economy API と OyasaiEconomy API を残高表示・報酬に使います。ポイント送金は外部コマンド `/token pay`、LuckPerms API と LuckPerms はグループ・ランク照会に使います。
 - 昇降格通知は設定された Discord webhook へ送信します。ランク名を `ranks.json` から解決できない場合は通知を送らず警告ログを出します。
 - OyasaiMenu は `Tools.validatedTitle` と `Calculator.getLevel` を呼びます。無効な選択称号を検出すると `validatedTitle` は選択を解除して保存を要求します。
-- 外部コマンド `/pay`、`/token send`、`/tpa`、`milepoint add` も実行します。コマンドの存在・権限・成功は連携先側の責任です。
+- 外部コマンド `/eco pay`、`/token pay`、`/tpa`、`milepoint add` も実行します。コマンドの存在・権限・成功は連携先側の責任です。
 
 ### テストが保証する範囲
 
 - `ProfileDatabaseTest` は合成 JSON と一時 SQLite で、全項目と昇格履歴の往復、欠損項目の初期値、元 JSON の保持、初回だけの取込、壊れた JSON / 履歴の個別失敗、空取込の完了印、保存スナップショット、別スレッド writer、close 待機、プロフィールと履歴のトランザクション、SQL 失敗時の取込再試行を検証します。
 - `PromotionMigrationTest` は旧ランクファイルと webhook 設定のコピー、DP 側の既存値優先、元ファイル保持を検証します。
-- Paper サーバー、コマンド、permission 判定、GUI、イベント登録、LuckPerms / Vault / TokenManager / SocialLikes3 / Discord の実連携はこのテストでは保証しません。
+- Paper サーバー、コマンド、permission 判定、GUI、イベント登録、LuckPerms / OyasaiEconomy / SocialLikes3 / Discord の実連携はこのテストでは保証しません。
 
 ### 既知の制限
 
@@ -130,3 +130,9 @@ SQLite は `plugins/DynamicProfile/dynamicprofile.db` です。接続時に WAL�
 - 2026-10-13: 外部レビューの指摘を各処理の現行コードで照合し、期間切替の未保存分消失、履歴表示の UUID 解析、報酬・日数・紹介・保存の制限を3文書に反映しました。ゲーム内・実連携の検証は未実施です。
 
 プロフィール DB 化、旧 JSON 取込、昇格履歴の分割保存、移行時の旧設定保持の経緯と検証項目は、既存の [DynamicProfile README](../../../plugins/DynamicProfile/README.md) に残っています。挙動の正本は常にこのディレクトリの現行コードです。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。
+
+グループ・ランク照会はLuckPerms APIを直接使う。所持金・ポイントの表示もLongを保ち、送金ボタンは新しいpayコマンドを呼ぶ。

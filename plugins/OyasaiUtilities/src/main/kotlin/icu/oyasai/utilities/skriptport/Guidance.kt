@@ -199,7 +199,7 @@ class Guidance(private val plugin: Main) : CommandExecutor, Listener {
       return
     }
     val name = pairNames[player.uniqueId] ?: "<none>"
-    console("token add $name 10")
+    console("oyasaieconomy:token give $name 10")
     store.complete(player.uniqueId, signId, guide, name, System.currentTimeMillis())
     player.sendMessage("§a${signId}エリアの案内完了！ありがとうございました！")
     plugin.server

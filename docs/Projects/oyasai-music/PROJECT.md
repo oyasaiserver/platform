@@ -5,7 +5,7 @@ source: plugins/OyasaiMusic/（コードから作成。ゲーム内での確認�
 source_of_truth: "plugins/OyasaiMusic/"
 related_paths:
   - packages/oyasai-plugins.nix
-  - plugins/OyasaiToken/
+  - plugins/OyasaiEconomy/
   - gradle/libs.versions.toml
 project_kind: plugin
 runtime_kind: paper-plugin
@@ -36,9 +36,9 @@ last_validated: "2026-10-13"
 
 ### 構成と依存
 
-- Paperの入口は `OyasaiMusic`、Velocityは `OyasaiMusicVelocity`。plugin.ymlはFAWEをdepend、Vault・TokenManager・OyasaiUtilities・Floodgateをsoftdependとする。Geyser APIはVelocity側で使う。
-- `build.gradle.kts` はPurpur開発バンドルを使い、Kotlin stdlib・SQLite JDBCを同梱しrelocateする。SQLiteはminimizeの除外対象。OyasaiToken、Vault、FAWE、Velocity、GeyserはcompileOnly。Gsonはサーバー環境のものを使う。
-- 依存カタログはPurpur `26.2.build.2622-stable`、FAWE `2.15.3`、Velocity `4.1.2-SNAPSHOT`、Geyser `2.11.2-SNAPSHOT`、SQLite JDBC `3.53.4.0`、Vault API `1.7.1`。実行環境での組合せは未検証。
+- Paperの入口は `OyasaiMusic`、Velocityは `OyasaiMusicVelocity`。plugin.ymlはFAWEをdepend、OyasaiEconomy・OyasaiUtilities・Floodgateをsoftdependとする。Geyser APIはVelocity側で使う。
+- `build.gradle.kts` はPurpur開発バンドルを使い、Kotlin stdlib・SQLite JDBCを同梱しrelocateする。SQLiteはminimizeの除外対象。OyasaiEconomy、FAWE、Velocity、GeyserはcompileOnly。Gsonはサーバー環境のものを使う。
+- 依存カタログはPurpur `26.2.build.2622-stable`、FAWE `2.15.3`、Velocity `4.1.2-SNAPSHOT`、Geyser `2.11.2-SNAPSHOT`、SQLite JDBC `3.53.4.0`、OyasaiEconomy API。実行環境での組合せは未検証。
 - ディレクトリ名とKotlin packageが一致しない部分がある。`audio/playback/` と `audio/recording/` はpackage `audio`、`gui/core/` と `gui/screen/` はpackage `gui`。
 
 ### 起動・停止・再読み込み
@@ -69,9 +69,9 @@ reloadは設定・パック・カタログ・通知するサーバー能力・�
 - `SongRepository` は削除された最小の正の欠番IDを同トランザクションで再利用。新しい `record_identity` はUUIDで別曲への参照を防ぐ。旧identityなしのアイテム・装填データはこの保証の対象外。
 - 公開切替は通常／限定のどちらでもreleasedから下書きへ戻る。初回の通常公開時刻をDBに記録し、初回だけ `oyasaimusic.notify` 所持者へ新曲通知する。リポストは通常公開のみ・10PのAPI消費成功後に通知する。
 - 審査申請はreleased・未申請の行だけを仮OKへ更新。取消は仮OK・申請ありだけを下書きへ戻し申請時刻を消す。運営の判定変更はstatusだけを変える。収益化条件は `referenceUrl != null` または仮OK／永続OKで、URL内容の妥当性は検証しない。
-- いいねはUNIQUE(user, song)を使い、初回だけ統計・作者ポイントを同トランザクションで加算。送信者へのVault即時入金とその障害時退避は別処理。
+- いいねはUNIQUE(user, song)を使い、初回だけ統計・作者ポイントを同トランザクションで加算。送信者へのOyasaiEconomy即時入金とその障害時退避は別処理。
 - 個人再生の80%到達通知は1セッション1回。環境BGM・審査は除外。`ViewCountService` はAFK metadataを同期で確認し、直近1時間／24時間の上限・履歴・視聴数・収益化対象のポイントをDBトランザクションで処理する。自分の曲・非公開曲の視聴を排除する条件はない。
-- 購入は最新の曲・identityを再取得して判定し、同期でVault所持金検査と引落、アイテム配布。余りは地面へ落とす。販売履歴・作者還元は後から非同期保存で、DB失敗による返金はない。受取はtakePending → 外部送金 → 失敗分restorePending。外部APIとSQLiteを一括確定せず、強制終了への再実行保証はない。
+- 購入は最新の曲・identityを再取得して判定し、同期でOyasaiEconomy所持金検査と引落、アイテム配布。余りは地面へ落とす。販売履歴・作者還元は後から非同期保存で、DB失敗による返金はない。受取はtakePending → 外部送金 → 失敗分restorePending。外部APIとSQLiteを一括確定せず、強制終了への再実行保証はない。
 
 ### 再生とGUI
 
@@ -123,7 +123,7 @@ DBの構成・移行・バックアップ対象は [operator.md](https://github.
 - `bedrock_transfer`／`bedrock_pack_status`／`pack_control` はproxyとの専用経路。現在のプレイヤー・対象ID・pack IDを照合し、クライアントからのproxy操作／status偽装を受け付けない。Velocityの通常OMMT中継は現在の `main` 接続に限定し、曲の解析・保存を行わない。
 - Java版のALLOWは保存値と現在接続のSUCCESSを分離。未知の設定はDENY。`OmmtPlaybackClientRegistry.matchesBank` はmanifest報告がある場合に現在世代・OYPB v2対応・期待hashの非ゼロ・SHA-256一致を検査する。報告がない場合はOYPB v2の4能力とbank対応能力ビットだけで受け入れる。`OyasaiResourcePackService.requestIfNeeded` はこのtrueでSUCCESSにしJava版パック要求を省略するため、SUCCESSは常にhash照合済みとは限らない。パック要求経路は読込callbackで適用を判断し、任意パック要求はrequired=false。600tickで待機終了。拡張bankの範囲は−4800〜7200セント、通常域0〜2400以外にF#アンカー−36／−12／36／60を使用する。モデルの許容域−5400〜7300の全域がbankで再生されるわけではない。
 - Geyserの登録状態は端末受諾完了を観測しない。最終確認はGeyser側classloaderのCumulusを反射で生成。XUID許可保存・再接続・旧設定移行は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-music/operator.md) の該当節を参照。
-- 経済はVaultとOyasaiTokenService、AFKはOyasaiUtilities metadata、ヘッドはPaperキャッシュ→PlayerDB。Toastは26.2のCraftBukkit／NMS進捗packetを直接送り、サーバー進捗データへ保存しない。バージョン変更時はこの依存も確認する。
+- 経済はOyasaiEconomyとOyasaiEconomyApi、AFKはOyasaiUtilities metadata、ヘッドはPaperキャッシュ→PlayerDB。Toastは26.2のCraftBukkit／NMS進捗packetを直接送り、サーバー進捗データへ保存しない。バージョン変更時はこの依存も確認する。
 
 ### テストが保証する範囲・既知の制限
 
@@ -142,3 +142,7 @@ DBの構成・移行・バックアップ対象は [operator.md](https://github.
 - 2026-10-12: 全Kotlinソース・登録定義・既定設定・ビルド・READMEを照合。カタログ全1968イベントと同梱5効果音のバイナリも解析した。ゲーム内確認は未実施。利用者別の説明はこの3文書を入口とする。
 - 2026-10-12: READMEの旧通知名 `oyasaimusic.newsong.notify`、ポイントのコマンド送信、設定可能な視聴完了率、reloadで再生を再構築しない旨を、現行の権限・API・80%固定・エンジン停止へ訂正した。README自体は今回の変更対象外。
 - 2026-10-12: このフォルダには既存資料・付属仕様はなかった。READMEが参照する `docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md` とpack builderは、このチェックアウトで実体が見つからないため有効なリンクとして転載しない。旧設計書名へのソースコメントだけでは仕様確定の根拠にしない。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。

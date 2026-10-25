@@ -1,11 +1,13 @@
 package icu.oyasai.games.pvp
 
+import io.oyasai.economy.api.EconomyOperation
+import io.oyasai.economy.api.EconomyResult
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.io.File
 import java.lang.reflect.Proxy
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 import kotlin.test.*
-import net.milkbowl.vault.economy.Economy
-import net.milkbowl.vault.economy.EconomyResponse
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -17,14 +19,14 @@ class PvpEconomyTest {
     lateinit var bank: PvpEconomy
     var calls = 0
     val economy = provider { method, _ ->
-      if (method == "depositPlayer") {
+      if (method == "deposit") {
         calls++
-        assertFails { bank.pay(id, 2.0) }
-        assertFails { bank.payOnce("nested-event", id, 2.0) }
+        assertFails { bank.pay(id, 2L) }
+        assertFails { bank.payOnce("nested-event", id, 2L) }
       }
     }
-    bank = PvpEconomy(folder, economy) { offline() }
-    bank.pay(id, 5.0)
+    bank = PvpEconomy(folder, economy)
+    bank.pay(id, 5L)
     bank.retry()
     assertEquals(1, calls)
     val y = YamlConfiguration().also { it.load(File(folder, "payments.yml")) }
@@ -33,14 +35,14 @@ class PvpEconomyTest {
 
   @Test
   fun `stable reward key prevents double payment across result replay`(@TempDir folder: File) {
-    val deposits = mutableListOf<Double>()
-    val economy = provider { method, amount -> if (method == "depositPlayer") deposits.add(amount) }
+    val deposits = mutableListOf<Long>()
+    val economy = provider { method, amount -> if (method == "deposit") deposits.add(amount) }
     val key = UUID.randomUUID().toString()
-    val bank = PvpEconomy(folder, economy) { offline() }
-    bank.pay(id, 12.0, key)
-    PvpEconomy(folder, economy) { offline() }.pay(id, 12.0, key)
+    val bank = PvpEconomy(folder, economy)
+    bank.pay(id, 12L, key)
+    PvpEconomy(folder, economy).pay(id, 12L, key)
     bank.retry()
-    assertEquals(listOf(12.0), deposits)
+    assertEquals(listOf(12L), deposits)
   }
 
   private val id = UUID.randomUUID()
@@ -69,56 +71,57 @@ class PvpEconomyTest {
         }
       } as OfflinePlayer
 
-  private fun provider(action: (String, Double) -> Unit): Economy =
-      Proxy.newProxyInstance(Economy::class.java.classLoader, arrayOf(Economy::class.java)) {
-          _,
-          method,
-          args ->
-        if (method.name in setOf("withdrawPlayer", "depositPlayer")) {
-          action(method.name, args!![1] as Double)
-          EconomyResponse(args[1] as Double, 1000.0, EconomyResponse.ResponseType.SUCCESS, "")
+  private fun provider(action: (String, Long) -> Unit): OyasaiEconomyApi =
+      Proxy.newProxyInstance(
+          OyasaiEconomyApi::class.java.classLoader,
+          arrayOf(OyasaiEconomyApi::class.java),
+      ) { _, method, args ->
+        if (method.name in setOf("withdraw", "deposit")) {
+          action(method.name, args!![2] as Long)
+          EconomyOperation(
+              true,
+              CompletableFuture.completedFuture(EconomyResult.Success(1000, args[2] as Long)),
+          )
         } else null
-      } as Economy
+      } as OyasaiEconomyApi
 
   @Test
   fun `settlement and refunds are idempotent after process restart`(@TempDir folder: File) {
-    val deposits = mutableListOf<Double>()
-    val economy = provider { method, amount -> if (method == "depositPlayer") deposits.add(amount) }
-    val bank = PvpEconomy(folder, economy) { offline() }
-    val key = bank.charge(player(), 25.0)
-    bank.settle(key, 35.0)
+    val deposits = mutableListOf<Long>()
+    val economy = provider { method, amount -> if (method == "deposit") deposits.add(amount) }
+    val bank = PvpEconomy(folder, economy)
+    val key = bank.charge(player(), 25L)
+    bank.settle(key, 35L)
     bank.refund(key)
-    bank.settle(key, 35.0)
-    PvpEconomy(folder, economy) { offline() }.retry()
-    assertEquals(listOf(35.0), deposits)
+    bank.settle(key, 35L)
+    PvpEconomy(folder, economy).retry()
+    assertEquals(listOf(35L), deposits)
   }
 
   @Test
   fun `restart refunds an unfinished bet once and keeps consumed fees`(@TempDir folder: File) {
-    val deposits = mutableListOf<Double>()
-    val economy = provider { method, amount -> if (method == "depositPlayer") deposits.add(amount) }
-    val bank = PvpEconomy(folder, economy) { offline() }
-    bank.charge(player(), 25.0)
-    bank.consume(bank.charge(player(), 3.0))
-    PvpEconomy(folder, economy) { offline() }.retry()
-    PvpEconomy(folder, economy) { offline() }.retry()
-    assertEquals(listOf(25.0), deposits)
+    val deposits = mutableListOf<Long>()
+    val economy = provider { method, amount -> if (method == "deposit") deposits.add(amount) }
+    val bank = PvpEconomy(folder, economy)
+    bank.charge(player(), 25L)
+    bank.consume(bank.charge(player(), 3L))
+    PvpEconomy(folder, economy).retry()
+    PvpEconomy(folder, economy).retry()
+    assertEquals(listOf(25L), deposits)
   }
 
   @Test
   fun `uncertain transaction is never replayed automatically`(@TempDir folder: File) {
-    val crash = provider { method, _ -> if (method == "depositPlayer") error("simulated crash") }
-    val bank = PvpEconomy(folder, crash) { offline() }
-    val key = bank.charge(player(), 25.0)
-    assertFails { bank.settle(key, 30.0) }
-    val deposits = mutableListOf<Double>()
+    val crash = provider { method, _ -> if (method == "deposit") error("simulated crash") }
+    val bank = PvpEconomy(folder, crash)
+    val key = bank.charge(player(), 25L)
+    assertFails { bank.settle(key, 30L) }
+    val deposits = mutableListOf<Long>()
     val recovered =
         PvpEconomy(
             folder,
-            provider { method, amount -> if (method == "depositPlayer") deposits.add(amount) },
-        ) {
-          offline()
-        }
+            provider { method, amount -> if (method == "deposit") deposits.add(amount) },
+        )
     recovered.retry()
     assertTrue(deposits.isEmpty())
     val y = YamlConfiguration().also { it.load(File(folder, "payments.yml")) }
@@ -130,43 +133,38 @@ class PvpEconomyTest {
     val bank =
         PvpEconomy(
             folder,
-            provider { method, _ -> if (method == "withdrawPlayer") error("simulated crash") },
-        ) {
-          offline()
-        }
-    assertFails { bank.charge(player(), 25.0) }
+            provider { method, _ -> if (method == "withdraw") error("simulated crash") },
+        )
+    assertFails { bank.charge(player(), 25L) }
     val calls = mutableListOf<String>()
-    PvpEconomy(folder, provider { method, _ -> calls.add(method) }) { offline() }.retry()
+    PvpEconomy(folder, provider { method, _ -> calls.add(method) }).retry()
     assertTrue(calls.isEmpty())
-    assertFailsWith<IllegalArgumentException> { bank.charge(player(), Double.NaN) }
+    assertFailsWith<IllegalArgumentException> { bank.charge(player(), -1) }
   }
 
   @Test
   fun `the same reward event is paid only once after caller retries and restart`(
       @TempDir folder: File
   ) {
-    val calls = mutableListOf<Double>()
-    val bank = provider { method, amount -> if (method == "depositPlayer") calls.add(amount) }
-    val payments = PvpEconomy(folder, bank) { offline() }
-    payments.payOnce("fictional-match:win", id, 20.0)
-    payments.payOnce("fictional-match:win", id, 20.0)
-    PvpEconomy(folder, bank) { offline() }.payOnce("fictional-match:win", id, 20.0)
-    assertEquals(listOf(20.0), calls)
-    assertFails { payments.payOnce("fictional-match:win", id, 30.0) }
+    val calls = mutableListOf<Long>()
+    val bank = provider { method, amount -> if (method == "deposit") calls.add(amount) }
+    val payments = PvpEconomy(folder, bank)
+    payments.payOnce("fictional-match:win", id, 20L)
+    payments.payOnce("fictional-match:win", id, 20L)
+    PvpEconomy(folder, bank).payOnce("fictional-match:win", id, 20L)
+    assertEquals(listOf(20L), calls)
+    assertFails { payments.payOnce("fictional-match:win", id, 30L) }
   }
 
   @Test
   fun `uncertain reward events remain blocked when explicitly submitted again`(
       @TempDir folder: File
   ) {
-    val crash =
-        PvpEconomy(folder, provider { _, _ -> error("simulated unknown Vault response") }) {
-          offline()
-        }
-    assertFails { crash.payOnce("fictional-kill", id, 5.0) }
-    val calls = mutableListOf<Double>()
-    val recovered = PvpEconomy(folder, provider { _, amount -> calls.add(amount) }) { offline() }
-    recovered.payOnce("fictional-kill", id, 5.0)
+    val crash = PvpEconomy(folder, provider { _, _ -> error("simulated unknown Vault response") })
+    assertFails { crash.payOnce("fictional-kill", id, 5L) }
+    val calls = mutableListOf<Long>()
+    val recovered = PvpEconomy(folder, provider { _, amount -> calls.add(amount) })
+    recovered.payOnce("fictional-kill", id, 5L)
     recovered.retry()
     assertTrue(calls.isEmpty())
   }

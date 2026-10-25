@@ -24,13 +24,11 @@ import com.baakun.dynamicprofile.promotion.PromotionMigration
 import com.baakun.dynamicprofile.promotion.commands.SyokakuCommandExecutor
 import com.baakun.dynamicprofile.promotion.commands.SyokakuManagerCommandExecutor
 import com.baakun.dynamicprofile.storage.ProfileDatabase
-import com.baakun.dynamicprofile.util.Tools.plugin
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import net.luckperms.api.LuckPerms
-import net.milkbowl.vault.permission.Permission
 import org.apache.commons.lang3.tuple.MutablePair
 import org.bukkit.Bukkit
 import org.bukkit.Statistic
@@ -52,17 +50,6 @@ class DynamicProfile : JavaPlugin() {
     val provider: RegisteredServiceProvider<LuckPerms>? =
         Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
     val playTimes = Collections.synchronizedMap(mutableMapOf<Player, BukkitRunnable>())
-    var perms: Permission? = null
-
-    private fun setupPermissions(): Boolean {
-      val rsp = plugin.server.servicesManager.getRegistration(Permission::class.java)
-      perms = rsp?.provider
-      return perms != null
-    }
-
-    fun getPermissions(): Permission? {
-      return perms
-    }
   }
 
   @Volatile
@@ -101,9 +88,8 @@ class DynamicProfile : JavaPlugin() {
     PromotionMigration.copyLegacyFiles(dataFolder)
     reloadConfig()
     NumberBanner.createBanner()
-    setupPermissions()
 
-    if (perms == null) {
+    if (provider == null) {
       logger.warning("LuckPerms is not found.")
     }
     loader.submit {

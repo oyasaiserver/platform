@@ -2,7 +2,7 @@ package io.oyasai.oyasaitab
 
 import com.baakun.dynamicprofile.model.Calculator
 import com.github.srain3.sociallikes.datas.Data
-import io.oyasai.oyasaitoken.api.OyasaiTokenApi
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.nio.charset.StandardCharsets
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -13,7 +13,6 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.luckperms.api.LuckPerms
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -55,8 +54,7 @@ private interface OyasaiTabRuntime {
               "SocialLikes3".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
               "DynamicProfile".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
               "LuckPerms".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
-              "TokenManager".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
-              "Vault".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
+              "OyasaiEconomy".takeIf { Bukkit.getPluginManager().getPlugin(it) == null },
           )
       if (missingPlugins.isNotEmpty()) {
         plugin.logger.info(
@@ -66,17 +64,15 @@ private interface OyasaiTabRuntime {
       }
 
       val scoreboard = Bukkit.getScoreboardManager().mainScoreboard
-      val economy = Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
-      val tokenApi =
-          Bukkit.getServicesManager().getRegistration(OyasaiTokenApi::class.java)?.provider
+      val economy =
+          Bukkit.getServicesManager().getRegistration(OyasaiEconomyApi::class.java)?.provider
       val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
       val missingServices =
           listOfNotNull(
-              "Vault Economy".takeIf { economy == null },
-              "OyasaiTokenApi".takeIf { tokenApi == null },
+              "OyasaiEconomy".takeIf { economy == null },
               "LuckPerms API".takeIf { luckPerms == null },
           )
-      if (economy == null || tokenApi == null || luckPerms == null) {
+      if (economy == null || luckPerms == null) {
         plugin.logger.info(
             "OyasaiTab display disabled: missing services ${missingServices.joinToString()}; cross-server snapshots stay enabled."
         )
@@ -87,7 +83,6 @@ private interface OyasaiTabRuntime {
           plugin = plugin,
           scoreboard = scoreboard,
           economy = economy,
-          tokenApi = tokenApi,
           luckPerms = luckPerms,
           config = config,
           isAfk = OyasaiUtilitiesAfkLookup::isAfk,
@@ -99,8 +94,7 @@ private interface OyasaiTabRuntime {
 private class FullOyasaiTabRuntime(
     private val plugin: JavaPlugin,
     private val scoreboard: Scoreboard,
-    private val economy: Economy,
-    private val tokenApi: OyasaiTokenApi,
+    private val economy: OyasaiEconomyApi,
     private val luckPerms: LuckPerms,
     private val config: OyasaiTabConfig,
     private val isAfk: (Player) -> Boolean,
@@ -207,8 +201,8 @@ private class FullOyasaiTabRuntime(
         groupColor = config.groupColors[group].orEmpty(),
         suffix = TablistFormatter.normalizeSuffix(user?.cachedData?.metaData?.suffix.orEmpty()),
         likes = Data.userLikesInt[player.uniqueId] ?: 0,
-        money = economy.getBalance(player),
-        tokens = tokenApi.getBalance(player.uniqueId),
+        money = (economy.balance("yen", player.uniqueId) ?: 0L),
+        tokens = (economy.balance("token", player.uniqueId) ?: 0L),
         afk = isAfk(player),
         level = "Lv.${Calculator.getLevel(player)}",
     )
@@ -374,7 +368,7 @@ private data class PlayerProfile(
     val groupColor: String,
     val suffix: String,
     val likes: Int,
-    val money: Double,
+    val money: Long,
     val tokens: Long,
     val afk: Boolean,
     val level: String,
@@ -417,7 +411,7 @@ private fun org.bukkit.configuration.file.FileConfiguration.lowercaseStringMap(
 
 object TablistFormatter {
   private val symbols = DecimalFormatSymbols(Locale.US)
-  private val moneyFormat = DecimalFormat("#,##0.##", symbols)
+  private val moneyFormat = DecimalFormat("#,##0", symbols)
   private val tpsFormat = DecimalFormat("#.##", symbols)
   private val tokenFormat = DecimalFormat("#,##0", symbols)
   private val miniMessage = MiniMessage.miniMessage()
@@ -441,7 +435,7 @@ object TablistFormatter {
       if (afk) "&7$playerName &o[AFK]" else playerName
 
   fun footerLegacy(
-      money: Double,
+      money: Long,
       tokens: Long,
       online: Int,
       tps: String,

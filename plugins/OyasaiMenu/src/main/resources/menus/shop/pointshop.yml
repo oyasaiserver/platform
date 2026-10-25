@@ -188,7 +188,7 @@ point1:
       cost: 98
       message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - "eco give %player% 100000"
+        - "oyasaieconomy:eco give %player% 100000"
 
     "14":
       icon: COOKED_BEEF

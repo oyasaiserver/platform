@@ -20,7 +20,7 @@ import org.bukkit.enchantments.Enchantment
 class ShopLoader(private val plugin: OyasaiMenu) {
 
   private val categories: MutableMap<String, ShopCategory> = mutableMapOf()
-  private val sellPriceMap: MutableMap<Material, Double> = mutableMapOf()
+  private val sellPriceMap: MutableMap<Material, Long> = mutableMapOf()
 
   private data class CustomItemDef(
       val material: Material,
@@ -124,7 +124,7 @@ class ShopLoader(private val plugin: OyasaiMenu) {
 
   fun getAllCategories(): Map<String, ShopCategory> = categories.toMap()
 
-  fun getSellPrice(material: Material): Double? = sellPriceMap[material]
+  fun getSellPrice(material: Material): Long? = sellPriceMap[material]
 
   fun reload() = loadAll()
 
@@ -140,8 +140,8 @@ class ShopLoader(private val plugin: OyasaiMenu) {
   fun addItem(
       categoryId: String,
       materialLine: String,
-      buyPrice: Double,
-      sellPrice: Double,
+      buyPrice: Long,
+      sellPrice: Long,
   ): File? {
     val file = shopsFile()
     val yaml = YamlConfiguration.loadConfiguration(file)
@@ -255,9 +255,9 @@ class ShopLoader(private val plugin: OyasaiMenu) {
       return null
     }
     val key = parts[0].removePrefix("\$")
-    val buyPrice = parts[1].toDoubleOrNull() ?: return null
-    val sellPrice = parts[2].toDoubleOrNull() ?: return null
-    if (!buyPrice.isFinite() || !sellPrice.isFinite() || buyPrice < 0 || sellPrice < 0) {
+    val buyPrice = parts[1].toLongOrNull() ?: return null
+    val sellPrice = parts[2].toLongOrNull() ?: return null
+    if (buyPrice < 0 || sellPrice < 0) {
       plugin.logger.warning("無効なショップ価格 ($catId): '$line'")
       return null
     }
@@ -286,9 +286,9 @@ class ShopLoader(private val plugin: OyasaiMenu) {
       plugin.logger.warning("フォーマットエラー ($catId): '$line'")
       return null
     }
-    val buyPrice = parts[1].toDoubleOrNull() ?: return null
-    val sellPrice = parts[2].toDoubleOrNull() ?: return null
-    if (!buyPrice.isFinite() || !sellPrice.isFinite() || buyPrice < 0 || sellPrice < 0) {
+    val buyPrice = parts[1].toLongOrNull() ?: return null
+    val sellPrice = parts[2].toLongOrNull() ?: return null
+    if (buyPrice < 0 || sellPrice < 0) {
       plugin.logger.warning("無効なショップ価格 ($catId): '$line'")
       return null
     }

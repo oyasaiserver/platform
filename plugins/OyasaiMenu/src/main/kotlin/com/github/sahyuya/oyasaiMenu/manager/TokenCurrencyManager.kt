@@ -1,49 +1,27 @@
 package com.github.sahyuya.oyasaiMenu.manager
 
 import com.github.sahyuya.oyasaiMenu.OyasaiMenu
-import me.realized.tokenmanager.api.TokenManager
+import io.oyasai.economy.api.OyasaiEconomyApi
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 object TokenCurrencyManager {
-  private var plugin: OyasaiMenu? = null
+  private val manager
+    get() = Bukkit.getServicesManager().load(OyasaiEconomyApi::class.java)
 
-  fun init(p: OyasaiMenu) {
-    plugin = p
-    if (isAvailable) p.logger.info("TokenManager を検出しました。ポイントショップが有効です。")
-    else p.logger.warning("TokenManager が見つかりません。ポイントショップは無効です。")
+  fun init(plugin: OyasaiMenu) {
+    if (!isAvailable) plugin.logger.warning("OyasaiEconomy が見つかりません。")
   }
 
-  private val manager: TokenManager?
-    get() =
-        Bukkit.getPluginManager()
-            .takeIf { it.isPluginEnabled("TokenManager") }
-            ?.getPlugin("TokenManager") as? TokenManager
-
-  val isAvailable: Boolean
+  val isAvailable
     get() = manager != null
 
-  fun getTokens(player: Player): Long =
-      runCatching { manager?.getTokens(player)?.orElse(0L) ?: 0L }
-          .onFailure { plugin?.logger?.warning("TokenManager: getTokens() に失敗: ${it.message}") }
-          .getOrDefault(0L)
+  fun getTokens(player: Player): Long = manager?.balance("token", player.uniqueId) ?: 0L
 
-  /** @return 成功なら null、失敗なら &c 付きエラーメッセージ */
   fun removeTokens(player: Player, amount: Long): String? {
     if (amount < 0) return "&cポイント価格が無効です。"
-    if (amount == 0L) return null
-    val tm = manager ?: return "&cTokenManager が見つかりません。"
-    val current = getTokens(player)
-    if (current < amount) return "&cポイントが不足しています。(所持: ${format(current)}P / 必要: ${format(amount)}P)"
-    return if (
-        runCatching { tm.removeTokens(player, amount) }
-            .onFailure {
-              plugin?.logger?.warning("TokenManager: removeTokens() に失敗: ${it.message}")
-            }
-            .getOrDefault(false)
-    )
-        null
-    else "&cポイント引き落とし処理に失敗しました。"
+    return if (manager?.withdraw("token", player.uniqueId, amount)?.accepted == true) null
+    else "&cポイント不足、または引き落としに失敗しました。"
   }
 
   fun format(amount: Long): String = String.format("%,d", amount)

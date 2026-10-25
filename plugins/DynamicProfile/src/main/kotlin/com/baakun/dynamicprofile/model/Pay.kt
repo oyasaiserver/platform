@@ -82,7 +82,7 @@ object Pay {
     for (i in 0..chars.lastIndex) {
       val nb = NumberBanner.getBannerChar(chars[i]) ?: break
       nb.addText("&e${amount}", mutableListOf("&fクリックで送金します")).allFlag().guiRun {
-        from.performCommand("pay $to $amount")
+        from.performCommand("oyasaieconomy:eco pay $to $amount")
         from.closeInventory()
         Bukkit.getLogger().info("${from.name} to dProfile sendCommand: /pay $to $amount")
       }
@@ -146,9 +146,10 @@ object Pay {
     for (i in 0..chars.lastIndex) {
       val nb = NumberBanner.getBannerChar(chars[i]) ?: break
       nb.addText("&e${amount}", mutableListOf("&fクリックで送ります")).allFlag().guiRun {
-        from.performCommand("token send $to $amount")
+        from.performCommand("oyasaieconomy:token pay $to $amount")
         from.closeInventory()
-        Bukkit.getLogger().info("${from.name} to dProfile sendCommand: /token send $to $amount")
+        Bukkit.getLogger()
+            .info("${from.name} to dProfile sendCommand: /oyasaieconomy:token pay $to $amount")
       }
       gui.setItem(17 - chars.lastIndex + i, nb)
     }

@@ -93,7 +93,7 @@ last_validated: "2026-10-20"
 - FAWE の `DynamicPluginCommand` は再登録で通常キーに旧ラッパー、名前空間付きキーに新ラッパーが残る。`FaweCommandIdentity` は実行元が所有する `WorldEditPlugin` 自身であり、正規の `BukkitCommandInspector` が指す Piston コマンドが参照一致することを確認して、Piston の本名による `fastasyncworldedit:<名前>` へ揃える。`gmask` と `/gmask` が同じ Piston コマンドの別名なら両方とも `fastasyncworldedit:gmask`、別コマンドなら区別する。`/set`・`/distr` の本名の先頭 `/` は保持する。正規文字列から取得した Bukkit ラッパーと内部コマンドの両方を実行直前・入力欄への移動前に参照照合する。内部登録の取得失敗・未知の実行元・異なるコマンドへの置換は拒否する。名前や所有者名だけで別ラッパーを同一扱いしない。
 - PaperのBrigadierラッパーは取得ごとに別オブジェクトとなり、名前空間付きのルートも複製されるため、公開フィールド `VanillaCommandWrapper.vanillaCommand` から登録ノードを確認する。バニラのAPIミラー `ShadowBrigNode` は公開の `getHandle()` で実体を参照し、引数一覧を提供しない不透明なノードは同等とみなさない。実行処理・権限条件・引数ノードが同じものだけを同一のコマンドとして扱い、別名のメタデータから正規名を求める。ルートのredirect/forkは拒否する。確認後の再照合には正規名の登録ノードの同一性を使い、ラッパーの作り直しと登録の差し替えを区別する。フィールドが取得できなければ従来の参照一致へ戻り、不明な登録は拒否する。本体系の禁止パターンは上記5名前空間すべてで適用する。
 - 許可の範囲はコマンド名と、最初の引数が英字だけの語ならその語まで。引数がありその条件を満たさないときは常時許可を登録せず、ボタンも表示しない。2語の範囲ではそれ以降の引数は何でも許可する。語の境界で照合するため `lookup` の許可で `lookupx` は動かない。運営全員で共有し、AdminDbの `assistant_allow` に固定番号・範囲・追加者名/UUID・時刻を保存する。初回に `dynamicprofile:syokaku iscandidate`・`getrank`・`seerequirements` を登録する。削除した初期値を再起動で復活させない。`seeplayerinfo` は初期値に含めない。引数なしの提案は `=<所有者>:<名前>` を保存して完全一致で許可する（`=minecraft:list` は `minecraft:list uuids` を許可しない）。既存の印なしの1語・2語の範囲は従来の完全一致・空白境界の前方一致を維持し、保存済みデータの移行は不要。
-- 固定禁止の正本は `assistant/AssistantRules.kt` の `CORE_BLACKLIST`。停止・reload/restart、照会以外のPlugManX、op/deop、限定した照会以外のLuckPerms、GOOD特例の昇降格、execute/sudo/function/schedule/return、CraftScript/マクロ、SocialSpy、`@a`/`@e`/`@r`、token addall、whitelist on/off/reload、save-off、CoreProtect purge/対象者指定のないrollback・restore、FAWEのチャンク/スキマティック削除、assistant自身を拒否する。CoreProtectの独立した `co`・`core`・`coreprotect` 登録、rollback/restoreの短縮形、FAWE削除の `d` も含める。
+- 固定禁止の正本は `assistant/AssistantRules.kt` の `CORE_BLACKLIST`。停止・reload/restart、照会以外のPlugManX、op/deop、限定した照会以外のLuckPerms、GOOD特例の昇降格、execute/sudo/function/schedule/return、CraftScript/マクロ、SocialSpy、`@a`/`@e`/`@r`、token giveall、whitelist on/off/reload、save-off、CoreProtect purge/対象者指定のないrollback・restore、FAWEのチャンク/スキマティック削除、assistant自身を拒否する。CoreProtectの独立した `co`・`core`・`coreprotect` 登録、rollback/restoreの短縮形、FAWE削除の `d` も含める。
 - 許可済み・確認後とも、通常は `Assistant(<運営名>)` という独自CommandSenderをメインスレッドでdispatchする。権限はオンラインの依頼者から毎回借り、isOpはfalse、コンソール/Playerではなく権限Attachmentも持たない。`sender-permissions` は空なら本人と同じ、設定すると列挙した権限だけに絞る。出力はAIへ返し、本人画面へは転送しない。`sender-wait-ms`（既定1500）・`sender-idle-ms`（300）で非同期出力を待つ。収集32Ki文字・AI返却8000文字まで。
 - `player-commands`（既定tp/teleport/gamemode/gm/gms/gmc/gmsp/gma/fly/co i/co inspect/co near）は本人として実行する。設定は名前空間を除いたコマンドの先頭から語単位で一致させ、`co i` は `co info` に一致しない。それ以外のPlayer専用エラーは別の「本人として実行」確認を出し、同じ呼び出しを保留する。自動で再実行しない。全経路で実行直前の正規化・禁止・本人権限・登録同一性を再確認する。確認後の出力は次のget_contextでも参照できる。
 - 未許可の依頼は `[実行] [次から確認しない] [やめる]` を表示する。ホバーに共有許可へ追加する正規化済みの範囲と、引数なし限定か、その範囲の引数が何でも対象になるかを示す。クリック時に本人一致・オンライン・権限・45秒期限（ハーネス側の道具の待ち時間60秒より短く）・禁止判定を再確認する。実行/取り消しで提案を一度だけ消費する。次からの許可はコマンド受付成功時に追加し、チャットとログで知らせる。1人同時に確認待ちにできるのは1件。時間切れと機能停止時に確認待ちを取り消し、永続化しない。
@@ -131,8 +131,8 @@ last_validated: "2026-10-20"
 
 ### 外部 API・依存と連携
 
-- Gradle 依存は Purpur API、LuckPerms API、OyasaiToken API（compileOnly）、Kotlin stdlib、Gson、Discord Webhooks、InventoryFramework、SQLite JDBC。`plugin.yml` の softdepend は TokenManager、Essentials、DynamicProfile、SocialLikes3、LuckPerms。
-- 実コードで API を使う連携は、TokenManager の残高確認・消費、LuckPerms のロード済みグループ一覧、Essentials の権限・userdata と SocialSpy 実行時状態。Essentials の SocialSpy 互換処理は reflection で holder の状態を一時抑止し、YAML を保存する setter は呼ばない。Essentials 内部構造の変更時は再確認が必要。
+- Gradle 依存は Purpur API、LuckPerms API、OyasaiEconomy API（compileOnly）、Kotlin stdlib、Gson、Discord Webhooks、InventoryFramework、SQLite JDBC。`plugin.yml` の softdepend は OyasaiEconomy、Essentials、DynamicProfile、SocialLikes3、LuckPerms。
+- 実コードで API を使う連携は、OyasaiEconomy の残高確認・消費、LuckPerms のロード済みグループ一覧、Essentials の権限・userdata と SocialSpy 実行時状態。Essentials の SocialSpy 互換処理は reflection で holder の状態を一時抑止し、YAML を保存する setter は呼ばない。Essentials 内部構造の変更時は再確認が必要。
 - `/applylifeworldsettings` は Multiverse の `mv`、WorldGuard の `rg`、`mv gamerule` をコンソールコマンドとして多数実行する。これらの API 依存や実行結果の検証はなく、最後に成功メッセージを送る。コマンドの導入・対象ワールドの状態は運営側で確認する。
 - `DynamicProfile` と `SocialLikes3` は `softdepend` に記載されているが、プラグインコードからの API 呼び出しはない。SocialSpy は設定されたコマンド入力ラベルを監視する。
 - 内製 WorldBorder は Bukkit のバニラ境界を使わない。起動時にロード済み全ワールド、ワールド読込時に該当ワールドの `WorldBorder.reset()` を呼ぶ。
@@ -195,3 +195,7 @@ last_validated: "2026-10-20"
 
 - 2026-10-13: 外部レビューの各指摘をコードと照合し、対象制限・締切・空放送文の履歴・再有効化・通知内容・境界挙動を訂正。回答検証、GUI/入力本の権限、削除後のデータと質問順、報酬判定等の注意を3文書へ反映した。静的確認のみで、実機のイベント順序・外部コマンドの反映結果は未確認。
 - 2026-10-13: 旧 PROJECT の JSON 保存説明を現行実装に合わせて更新。通常の永続化先は `admintools.db` で、JSON/YAML は一回限りの互換取込元。運営コマンドの権限・Essentials 共存設計の詳細は `ESSENTIALS_STAFF.md` に残し、コードで確認できた挙動を本書と [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-admin-tools/operator.md) に反映した。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。
