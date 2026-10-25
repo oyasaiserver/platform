@@ -71,12 +71,34 @@ jobs:
             terraform_io::create_workspace \
             ${{ inputs.stack }}
       - name: ${{ inputs.operation }}
+        shell: bash
+        env:
+          OPERATION: ${{ inputs.operation }}
+          STACK: ${{ inputs.stack }}
         run: |
-          nix run .#oyasai-cdktf -- \
-            ${{ inputs.operation }} \
-            ${{ inputs.stack }} \
-            --ignore-missing-stack-dependencies \
-            --auto-approve
+          # Docker API への接続が一時的に timeout しただけで、旧コンテナを止めた
+          # まま deploy が中断することがあった。その場合に限り再実行する。
+          # Terraform は途中まで進んだ状態から続きを apply する。
+          max=1
+          [[ "$OPERATION" == deploy ]] && max=3
+          for attempt in $(seq "$max"); do
+            log="$RUNNER_TEMP/$OPERATION-$attempt.log"
+            set +e
+            nix run .#oyasai-cdktf -- \
+              "$OPERATION" \
+              "$STACK" \
+              --ignore-missing-stack-dependencies \
+              --auto-approve 2>&1 | tee "$log"
+            rc=${PIPESTATUS[0]}
+            set -e
+            (( rc == 0 )) && exit 0
+            grep -Eq 'dial tcp [^ ]+:2376: i/o timeout' "$log" || exit "$rc"
+            # state を保存できなかった場合は、Docker と state がずれているので再実行しない
+            grep -Eqi 'Failed to save state|Failed to persist state|Error acquiring the state lock|errored\.tfstate' "$log" && exit "$rc"
+            (( attempt < max )) || exit "$rc"
+            echo "::warning::Docker API timeout (attempt $attempt/$max), retrying in 30s"
+            sleep 30
+          done
       - name: Delete TF Workspace
         if: inputs.operation == 'destroy'
         run: |
