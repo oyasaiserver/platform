@@ -179,20 +179,6 @@ object OyasaiMidiImportFile {
     return result
   }
 
-  /** Pure metadata-validation seam; avoids bootstrapping Bukkit registries in codec tests. */
-  internal fun readCustomSoundsForTesting(
-      metadata: String,
-      version: Int,
-      noteCount: Int,
-      soundResolver: (String, Int) -> ResolvedSound?,
-  ): Map<Int, ResolvedSound> =
-      readCustomSounds(
-          JsonParser.parseString(metadata).asJsonObject,
-          version,
-          noteCount,
-          soundResolver,
-      )
-
   private fun resolveCatalogSound(rawSound: String, pattern: Int): ResolvedSound? =
       VanillaSoundCatalog.find(rawSound)?.selectionForPattern(pattern)?.let {
         ResolvedSound("minecraft:${it.eventKey}", it.seed)
