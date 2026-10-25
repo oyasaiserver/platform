@@ -278,7 +278,7 @@ class AssistantRulesTest {
             "minecraft:tp @a steve",
             "minecraft:kill @e[distance=..1]",
             "minecraft:tp steve @r",
-            "oyasaitoken:token addall 1",
+            "oyasaieconomy:token giveall 1",
             "minecraft:whitelist off",
             "minecraft:save-off",
             "coreprotect:co purge t:1d",

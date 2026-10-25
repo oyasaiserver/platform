@@ -1,7 +1,5 @@
 package io.oyasai.signshop
 
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.Base64
 import java.util.UUID
 import org.bukkit.configuration.ConfigurationSection
@@ -13,14 +11,8 @@ internal val KINDS = listOf("Buy", "Sell", "iBuy", "iSell", "Device")
 
 internal fun priceYen(raw: String): Long? {
   val value = raw.trim().removePrefix("¥").removePrefix("￥").removePrefix("$").trim()
-  if (!Regex("(?:0|[1-9]\\d*|[1-9]\\d{0,2}(?:,\\d{3})+)(?:\\.\\d+)?").matches(value)) return null
-  return try {
-    val decimal = BigDecimal(value.replace(",", ""))
-    val rounded = decimal.setScale(0, RoundingMode.HALF_UP).longValueExact()
-    if (rounded > 10_000_000_000_000L || (decimal.signum() > 0 && rounded == 0L)) null else rounded
-  } catch (_: Exception) {
-    null
-  }
+  if (!Regex("(?:0|[1-9]\\d*|[1-9]\\d{0,2}(?:,\\d{3})+)").matches(value)) return null
+  return value.replace(",", "").toLongOrNull()?.takeIf { it <= 10_000_000_000_000L }
 }
 
 internal fun kind(raw: String): String? =

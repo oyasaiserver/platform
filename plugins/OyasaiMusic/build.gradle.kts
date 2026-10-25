@@ -1,13 +1,13 @@
 plugins { alias(libs.plugins.paperweight.userdev) }
 
 dependencies {
-  compileOnly(project(":plugins:OyasaiToken"))
+  compileOnly(project(":plugins:OyasaiEconomy"))
+  testImplementation(project(":plugins:OyasaiEconomy"))
   paperweightDevelopmentBundle(libs.purpur.dev.bundle)
 
   implementation(libs.kotlin.stdlib)
   implementation(libs.sqlite.jdbc)
 
-  compileOnly(libs.vault.api)
   compileOnly(libs.fawe.bukkit)
   compileOnly(libs.velocity.api) { exclude(group = "net.kyori") }
   compileOnly(libs.geyser.api)
@@ -25,3 +25,5 @@ tasks {
     filesNotMatching(listOf("**/*.bin", "**/sound-catalog.json")) { expand(properties) }
   }
 }
+
+tasks.test { dependsOn(":plugins:OyasaiEconomy:shadowJar") }

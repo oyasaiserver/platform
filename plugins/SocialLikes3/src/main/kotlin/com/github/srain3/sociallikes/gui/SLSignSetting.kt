@@ -6,7 +6,7 @@ import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.addText
 import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
-import com.github.srain3.sociallikes.Tools.getTokenManager
+import com.github.srain3.sociallikes.Tools.economy
 import com.github.srain3.sociallikes.Tools.plugin
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
@@ -15,8 +15,8 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.util.UUID
-import me.realized.tokenmanager.api.TokenManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextColor
@@ -174,14 +174,17 @@ object SLSignSetting {
                   )
           ) {
             val player = it.whoClicked as Player
-            val token: TokenManager? = getTokenManager()
-            if (token != null && token.getTokens(player) != null) {
+            val token: OyasaiEconomyApi? = economy()
+            if (token != null) {
               val cost = if (Tools.canUseCreative(player)) sltpSignCostCreative else sltpSignCost
-              if (token.getTokens(player).asLong < cost) {
+              if ((token.balance("token", player.uniqueId) ?: 0L) < cost) {
                 player.sendMessage("${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${cost}pt必要です。")
               } else {
                 val sltpSignItem = createCommandSignItem(sign.type, slData, player.uniqueId)
-                token.removeTokens(player, cost)
+                if (!token.withdraw("token", player.uniqueId, cost).accepted) {
+                  player.sendMessage("ポイントを消費できませんでした。")
+                  return@GuiItem
+                }
                 player.inventory.addItem(sltpSignItem).values.forEach {
                   player.world.dropItemNaturally(player.location, it)
                 }

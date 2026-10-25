@@ -30,6 +30,12 @@
 
 外製 EssentialsSpawn の置き換え。`/spawn [player]` でスポーン地点へ移動（他人指定は `oyasaiutilities.spawn.others`）。地点は `Spawn/config.yml` の1か所で、無ければ起動時に `Essentials/spawn.yml` の `spawns.default` を取り込む。死亡時の復活先（牢屋・`respawn-at-home`）と初参加時のキット・移動・歓迎文は Essentials の設定に従う。Essentials が無いときは無効。
 
+## Schematics (by shunueda)
+
+`/oyasai-schematics load <ID または URL>` で schematic.cloud の共有 ID から `.schem` をダウンロードし、`plugins/FastAsyncWorldEdit/schematics/` に置く。権限は `oyasaiutilities.schematics.load`（既定 OP）。FastAsyncWorldEdit（FAWE）が必要。
+
+ロードは自動で行わない。成功メッセージをクリックして `/schematic load <ID>.schem` をコピーし、自分で実行してロードする。ダウンロードは32 MiBまで。
+
 ## NotNBT (by Srain3)
 
 クリエインベントリから保存されたホットバー経由でサバイバルへアイテムを渡す行為を防ぐ機能`アイテム内のNBTタグ{item:}か{items:}`に反応してNBTタグを消す

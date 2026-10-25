@@ -60,25 +60,32 @@ object DProfileCmd : CommandExecutor {
     thread { // Threadを使わないと、サーバーが固まる可能性があると表示され処理が止まる
       var standGlassPane = ItemStack(Material.LIME_STAINED_GLASS_PANE)
       standGlassPane.addText(" ", mutableListOf()).allFlag()
-      DynamicProfile.perms?.let { perms ->
-        if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.chukyu"))
+      DynamicProfile.provider?.provider?.let { perms ->
+        val user = perms.userManager.loadUser(Bukkit.getOfflinePlayer(target).uniqueId).join()
+        val permissions =
+            user.cachedData.getPermissionData(
+                perms.contextManager.getQueryOptions(user).orElseGet {
+                  perms.contextManager.staticQueryOptions
+                }
+            )
+        if (permissions.checkPermission("group.chukyu").asBoolean())
             standGlassPane =
                 ItemStack(Material.GREEN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
-        if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.jokyu"))
+        if (permissions.checkPermission("group.jokyu").asBoolean())
             standGlassPane =
                 ItemStack(Material.CYAN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
-        if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.builder"))
+        if (permissions.checkPermission("group.builder").asBoolean())
             standGlassPane =
                 ItemStack(Material.PURPLE_STAINED_GLASS_PANE)
                     .addText(" ", mutableListOf())
                     .allFlag()
-        if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.takumi"))
+        if (permissions.checkPermission("group.takumi").asBoolean())
             standGlassPane =
                 ItemStack(Material.RED_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
-        if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.blue"))
+        if (permissions.checkPermission("group.blue").asBoolean())
             standGlassPane =
                 ItemStack(Material.BLUE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
-        if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.white"))
+        if (permissions.checkPermission("group.white").asBoolean())
             standGlassPane =
                 ItemStack(Material.WHITE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
       }

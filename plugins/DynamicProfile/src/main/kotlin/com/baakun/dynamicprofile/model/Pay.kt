@@ -30,11 +30,11 @@ object Pay {
 
   /** プレイヤーからプレイヤーへ/payする為のGUIを返す */
   fun getPayAmountGUI(from: Player, to: String): Inventory =
-      createAmountGUI(from, to, "送金額を決める 送信先: ${to}", 100, "pay", "&fクリックで送金します")
+      createAmountGUI(from, to, "送金額を決める 送信先: ${to}", 100, "oyasaieconomy:eco pay", "&fクリックで送金します")
 
   /** プレイヤーからプレイヤーへ/payする為のGUIを返す */
   fun getTokenAmountGUI(from: Player, to: String): Inventory =
-      createAmountGUI(from, to, "送るポイントを決める 送信先: ${to}", 10, "token send", "&fクリックで送ります")
+      createAmountGUI(from, to, "送るポイントを決める 送信先: ${to}", 10, "oyasaieconomy:token pay", "&fクリックで送ります")
 
   private fun createAmountGUI(
       from: Player,

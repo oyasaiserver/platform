@@ -6,7 +6,7 @@ dependencies {
   paperweightDevelopmentBundle(libs.purpur.dev.bundle)
   compileOnly(libs.discordsrv)
   compileOnly(libs.luckperms.api)
-  compileOnly(project(":plugins:OyasaiToken"))
+  compileOnly(project(":plugins:OyasaiEconomy"))
   // Paper provides Adventure at runtime. FAWE's compile-time Adventure 5.x must not override
   // Paper's 4.x API, otherwise builder return types are linked against incompatible descriptors.
   compileOnly(libs.fawe.bukkit) { exclude(group = "net.kyori") }
@@ -18,4 +18,7 @@ dependencies {
   implementation(libs.sqlite.jdbc)
 
   testImplementation(libs.purpur.api)
+  testImplementation(project(":plugins:OyasaiEconomy"))
 }
+
+tasks.test { dependsOn(":plugins:OyasaiEconomy:shadowJar") }

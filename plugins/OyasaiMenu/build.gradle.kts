@@ -1,8 +1,10 @@
 dependencies {
   compileOnly(libs.purpur.api)
-  compileOnly(libs.vault.api)
   compileOnly(libs.luckperms.api)
-  compileOnly(project(":plugins:OyasaiToken"))
+  compileOnly(project(":plugins:OyasaiEconomy"))
   compileOnly(project(":plugins:DynamicProfile"))
   testImplementation(libs.purpur.api)
+  testImplementation(project(":plugins:OyasaiEconomy"))
 }
+
+tasks.test { dependsOn(":plugins:OyasaiEconomy:shadowJar") }

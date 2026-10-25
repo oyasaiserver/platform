@@ -41,9 +41,9 @@ last_validated: "2026-10-13"
 
 `SocialLikes : JavaPlugin` を `plugin.yml` で登録（名前SocialLikes3、version 0.5.3、api-version 1.20）。これは実際に対応検証したMinecraftバージョンの証明ではない。Purpur開発bundleを使い、Paper Dialog API、CraftBukkit/NMSの書見台・進捗パケットに直接依存する。
 
-ビルドはPurpur、DiscordSRV、LuckPerms、OyasaiToken、FAWEをcompileOnly、Kotlin stdlib・InventoryFramework・Javacord・Exposed core/jdbc・SQLite JDBCをimplementationに指定。FAWE由来のAdventureを除外してPaperとのバイナリ不一致を避ける。ルート `build.gradle.kts` がShadowJarの名前を `SocialLikes3.jar` にし、通常jarを無効化する。プラグイン固有ビルド定義は統計文言mdをresourcesへ追加する。旧設計にあるCoroutinesとライブラリrelocateは現行の固有定義にない。
+ビルドはPurpur、DiscordSRV、LuckPerms、OyasaiEconomy、FAWEをcompileOnly、Kotlin stdlib・InventoryFramework・Javacord・Exposed core/jdbc・SQLite JDBCをimplementationに指定。FAWE由来のAdventureを除外してPaperとのバイナリ不一致を避ける。ルート `build.gradle.kts` がShadowJarの名前を `SocialLikes3.jar` にし、通常jarを無効化する。プラグイン固有ビルド定義は統計文言mdをresourcesへ追加する。旧設計にあるCoroutinesとライブラリrelocateは現行の固有定義にない。
 
-メインはobject単位のコマンド・イベント・画面を登録する。設定、画面、権限、外部サービスの起動条件は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md) が一覧。旧設計の「OyasaiTokenAPIへ全置換」「全件キャッシュ廃止」は現行実装と異なる。
+メインはobject単位のコマンド・イベント・画面を登録する。設定、画面、権限、外部サービスの起動条件は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md) が一覧。
 
 ### 起動と主要な処理の流れ
 
@@ -107,7 +107,7 @@ SQLiteは `SocialLikesShadow.db`、WAL、busy_timeout=5000、foreign_keys=ON、s
 
 進捗は現在有効な掲載IDと現在いいね済みIDの集合比較。未ロードチャンクは有効候補とし、実際の案内でチャンクをロードして看板と登録IDを照合する。通常SLロゴはID照合、旧SLロゴは文字色IDを照合しない。公開判定は現役建築が1件以上で、全看板の存在検査はしない。案内失敗・存在しない候補を飛ばす処理、未発見案内の待機、完成記録の詳細は使い方を参照。完成演出は新しいいいねから呼ばれ、主保存完了を待たない。
 
-ガイド課金はOyasaiTokenServiceの非同期charge/grantを利用。追加枠・宣伝の同一ユーザー並行操作は集合で拒否する。DB保存や公開状態・価格が変化した場合は返金するが、異なるDBを跨ぐ原子性はない。建築宣伝の従来TokenManager経路とは別。
+ガイド課金はOyasaiEconomyApiのwithdraw/depositのcompletionを利用する。追加枠・宣伝の同一ユーザー並行操作は集合で拒否する。DB保存や公開状態・価格が変わった場合は返金するが、異なるDBを跨ぐ原子性はない。
 
 統計は原則 `Data.getSLDataAll()` と `PublicityHistory` のメモリから計算し、SQLiteは主に名前解決に使用。`/sllucky` の抽選とOPのフォント週次試作はSQLiteを読む。したがって同期失敗中には件数や抽選対象が一致しない場合がある。
 
@@ -119,7 +119,7 @@ SQLiteは `SocialLikesShadow.db`、WAL、busy_timeout=5000、foreign_keys=ON、s
 
 ### 外部APIと保護範囲
 
-TokenManager互換API・反射でのaddTokensWithCommit、OyasaiTokenService、コンソール `eco give`、LuckPerms、WorldEdit、Javacord、PlayerDB、floodgateの反射APIを使う。DiscordSRVはsoftdependとビルド指定があるが、本体にDiscordSRV APIを使う処理はない。Discordの反応をいいねへ取り込まない。
+OyasaiEconomyApi、LuckPerms、WorldEdit、Javacord、PlayerDB、floodgateの反射APIを使う。経済APIの反射探索や旧APIへのフォールバックは行わない。
 
 保護は看板と一部の支えの破壊・爆発・ピストン。建築や土地全体の保護ではなく、キャンセル済みイベントの処理もある。移動の所有者検査なし、supportの分岐不足、SLTPの判定まで到達しない早期returnの範囲は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/social-likes3/operator.md) を参照。
 
@@ -164,3 +164,9 @@ TokenManager互換API・反射でのaddTokensWithCommit、OyasaiTokenService、�
 - 2026-10-12（コード照合）: 当初のSQLite設計は履歴として保持し、主保存の正本は `Data.kt`・`SLDatabase.kt` とする。自動移行、DB名、Coroutines、全件キャッシュ廃止、Token API置換の当初案を現行仕様へ流用しない。
 - 2026-10-12（コード照合）: 権限ノードの宣言より `isOp`・所有者・group検査を読む。特にslupdate、旧dialog reload、rankup第2引数、保存前の成功表示は、既存のコマンド説明だけでは分からない。
 - Dialog表示の過去の比較・判断は [描画記録](sociallikes-dialog-text-graph.md) に保持。現在は通常経路が2倍・low系固定で、旧large/low引数による切替は行わない。実機の見た目と統合版互換は未確認。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。
+
+オフラインいいね報酬はcompletionの成功を待って保留額を消す。ガイド課金・返金も同じcompletionを使う。

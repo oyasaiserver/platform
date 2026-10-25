@@ -5,6 +5,7 @@ package me.marzipan.OyasaiPets
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import io.oyasai.economy.api.OyasaiEconomyApi
 import io.papermc.paper.entity.LookAnchor
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
@@ -16,7 +17,6 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Logger
 import kotlin.random.Random
-import me.realized.tm.api.TMAPI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
@@ -106,14 +106,14 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     logger.info("Features: Breeding GUI v3, Variant Randomization, Config Auto-generation")
     logger.info("========================================")
 
-    // TokenManager プラグインの存在確認
-    val tmPlugin = server.pluginManager.getPlugin("TokenManager")
+    // OyasaiEconomyApi プラグインの存在確認
+    val tmPlugin = server.pluginManager.getPlugin("OyasaiEconomy")
     if (tmPlugin == null || !tmPlugin.isEnabled) {
-      logger.severe("TokenManager not found! This plugin requires TokenManager to work.")
+      logger.severe("OyasaiEconomy not found! This plugin requires OyasaiEconomy to work.")
       server.pluginManager.disablePlugin(this)
       return
     }
-    logger.info("TokenManager found - Economy system enabled")
+    logger.info("OyasaiEconomy found - Economy system enabled")
 
     // Keys Init
     BigWolfKeys.initialize(this)
@@ -401,7 +401,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
             queryService::handlePetHistory,
         )
 
-    logger.info("BigWolfPlugin enabled with TokenManager integration")
+    logger.info("BigWolfPlugin enabled with OyasaiEconomyApi integration")
   }
 
   override fun onDisable() {
@@ -8214,7 +8214,11 @@ class BreedingSystem(
     if (newEntity == null) {
       player.sendMessage(Component.text("この場所ではペットを生成できません。", RED))
       // ポイント返却
-      @Suppress("DEPRECATION") TMAPI.addTokens(player.uniqueId, cost)
+      @Suppress("DEPRECATION")
+      (Bukkit.getServicesManager()
+          .load(OyasaiEconomyApi::class.java)
+          ?.deposit("token", player.uniqueId, cost.toLong())
+          ?.accepted == true)
       return
     }
 
@@ -8690,7 +8694,7 @@ class ChildAISystem(private val plugin: JavaPlugin) {
 /**
  * 経済システム
  *
- * TokenManager (TMAPI) との連携を通じて、プレイヤーのポイント残高の取得、 ポイントの消費を管理します。
+ * OyasaiEconomyApi (OyasaiEconomy) との連携を通じて、プレイヤーのポイント残高の取得、 ポイントの消費を管理します。
  */
 class EconomySystem(private val logger: Logger) {
 
@@ -8702,7 +8706,9 @@ class EconomySystem(private val logger: Logger) {
    */
   fun getPlayerTokens(player: Player): Long {
     return try {
-      TMAPI.getTokens(player.uniqueId)
+      (Bukkit.getServicesManager()
+          .load(OyasaiEconomyApi::class.java)
+          ?.balance("token", player.uniqueId) ?: 0L)
     } catch (e: Exception) {
       logger.warning("Failed to get tokens for ${player.name}: ${e.message}")
       0L
@@ -8720,7 +8726,10 @@ class EconomySystem(private val logger: Logger) {
   fun refundTokens(player: Player, amount: Int) {
     if (amount <= 0) return
     try {
-      TMAPI.addTokens(player.uniqueId, amount)
+      (Bukkit.getServicesManager()
+          .load(OyasaiEconomyApi::class.java)
+          ?.deposit("token", player.uniqueId, amount.toLong())
+          ?.accepted == true)
     } catch (e: Exception) {
       logger.warning("Failed to refund tokens to ${player.name}: ${e.message}")
     }
@@ -8732,7 +8741,9 @@ class EconomySystem(private val logger: Logger) {
 
     val currentTokens =
         try {
-          TMAPI.getTokens(player.uniqueId)
+          (Bukkit.getServicesManager()
+              .load(OyasaiEconomyApi::class.java)
+              ?.balance("token", player.uniqueId) ?: 0L)
         } catch (e: Exception) {
           logger.warning("Failed to get tokens for ${player.name}: ${e.message}")
           player.sendMessage(Component.text("ポイント情報の取得に失敗しました。", RED))
@@ -8747,10 +8758,17 @@ class EconomySystem(private val logger: Logger) {
     }
 
     return try {
-      if (!TMAPI.removeTokens(player.uniqueId, amount)) {
+      if (
+          !(Bukkit.getServicesManager()
+              .load(OyasaiEconomyApi::class.java)
+              ?.withdraw("token", player.uniqueId, amount.toLong())
+              ?.accepted == true)
+      ) {
         val latestTokens =
             try {
-              TMAPI.getTokens(player.uniqueId)
+              (Bukkit.getServicesManager()
+                  .load(OyasaiEconomyApi::class.java)
+                  ?.balance("token", player.uniqueId) ?: 0L)
             } catch (e: Exception) {
               logger.warning("Failed to re-check tokens for ${player.name}: ${e.message}")
               null

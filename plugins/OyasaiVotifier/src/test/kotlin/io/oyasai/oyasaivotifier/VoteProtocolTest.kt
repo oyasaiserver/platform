@@ -134,10 +134,10 @@ class VoteProtocolTest {
           1,
           true,
           mapOf("default" to "secret"),
-          RewardTable(listOf(WeightedReward(1, Reward(0.0, 0, emptyList())))),
+          RewardTable(listOf(WeightedReward(1, Reward(0, 0, emptyList())))),
           PartyReward(
               1,
-              RewardTable(listOf(WeightedReward(1, Reward(0.0, 0, emptyList())))),
+              RewardTable(listOf(WeightedReward(1, Reward(0, 0, emptyList())))),
               emptyList(),
           ),
           VoteMessages("", "", "", "", emptyList()),

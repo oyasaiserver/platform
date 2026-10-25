@@ -4,13 +4,11 @@ import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.discord.SLDiscord
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.io.File
-import java.lang.reflect.Method
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.set
-import me.realized.tokenmanager.api.TokenManager
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -24,7 +22,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
 
 object Tools {
-  private val warnedTokenCommitFallback = AtomicBoolean(false)
   /** JavaPluginクラス(Main) */
   val plugin by lazy { getPlugin(SocialLikes::class.java) }
   /** (SocialLikes)←これの判定用 */
@@ -34,74 +31,19 @@ object Tools {
   /** LuckPermsクラス(API) */
   val lp by lazy { LuckPermsProvider.get() }
 
-  /** TokenManagerを返す、無ければnull */
-  fun getTokenManager(): TokenManager? {
-    Bukkit.getServer().servicesManager.getRegistration(TokenManager::class.java)?.provider?.let {
-      return it
-    }
+  fun economy(): OyasaiEconomyApi? = Bukkit.getServicesManager().load(OyasaiEconomyApi::class.java)
 
-    return Bukkit.getServer().pluginManager.getPlugin("TokenManager") as? TokenManager
-  }
-
-  fun addTokens(player: Player, amount: Long): Boolean {
-    val tokenManager = getTokenManager()
-    if (tokenManager == null) {
-      plugin.logger.warning(
-          "TokenManager is not available. Failed to add $amount tokens to ${player.name}."
-      )
-      return false
-    }
-    return tokenManager.addTokens(player, amount)
-  }
-
-  /**
-   * Looks up the additive API without linking SocialLikes3 against OyasaiToken. This keeps a
-   * third-party TokenManager binary-compatible and lets the caller preserve the legacy path.
-   */
-  fun findAddTokensWithCommit(tokenManager: TokenManager): TokenCommitAdd? {
-    val method =
-        runCatching {
-              tokenManager.javaClass.getMethod(
-                  "addTokensWithCommit",
-                  UUID::class.java,
-                  java.lang.Long.TYPE,
-              )
-            }
-            .getOrNull() ?: return null
-    if (!CompletableFuture::class.java.isAssignableFrom(method.returnType)) return null
-    return TokenCommitAdd(tokenManager, method)
-  }
-
-  fun warnTokenCommitFallback() {
-    if (warnedTokenCommitFallback.compareAndSet(false, true)) {
-      plugin.logger.warning(
-          "TokenManager does not provide addTokensWithCommit(UUID, long); falling back to queue acceptance before clearing offline-like rewards."
-      )
-    }
-  }
+  fun addTokens(player: Player, amount: Long): Boolean =
+      economy()?.deposit("token", player.uniqueId, amount)?.accepted == true
 
   internal fun tokenCommit(
-      tokenCommitAdd: TokenCommitAdd,
+      provider: OyasaiEconomyApi,
       uuid: UUID,
       amount: Long,
-  ): CompletableFuture<Boolean> {
-    return try {
-      val completion = tokenCommitAdd.method.invoke(tokenCommitAdd.tokenManager, uuid, amount)
-      (completion as? CompletableFuture<*>)?.thenApply { it == true }
-          ?: CompletableFuture.completedFuture(false)
-    } catch (exception: Exception) {
-      plugin.logger.warning(
-          "Could not commit offline-like reward $amount for $uuid: ${exception.message}"
-      )
-      CompletableFuture.completedFuture(false)
-    }
-  }
-
-  class TokenCommitAdd
-  internal constructor(
-      internal val tokenManager: TokenManager,
-      internal val method: Method,
-  )
+  ): CompletableFuture<Boolean> =
+      provider.deposit("token", uuid, amount).completion.thenApply {
+        it is io.oyasai.economy.api.EconomyResult.Success
+      }
 
   fun canUseCreative(player: Player): Boolean {
     val nodes =

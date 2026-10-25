@@ -1,5 +1,6 @@
 package icu.oyasai.games.pvp
 
+import icu.oyasai.games.wholeMoney
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -189,6 +190,19 @@ internal data class ArenaConfig(
   companion object {
     fun load(file: File): ArenaConfig {
       val y = YamlConfiguration().also { it.load(file) }
+      require(
+          y.getStringList("mods").none { it.equals("Vault", true) || it.equals("Vaultre", true) } &&
+              !y.contains("modules.vault")
+      ) {
+        "経済設定をEconomy/EconomyRefundとmodules.economyへ変更し、金額を整数で指定してください"
+      }
+      listOf("conditions.entryFee", "bet.minAmount", "bet.maxAmount", "bet.winFactor").forEach { key
+        ->
+        if (y.contains("modules.economy.$key")) y.wholeMoney("modules.economy.$key")
+      }
+      y.getConfigurationSection("modules.economy.reward")?.getKeys(false)?.forEach {
+        y.wholeMoney("modules.economy.reward.$it")
+      }
       val spawns = y.getConfigurationSection("spawns") ?: error("Missing spawns")
       val regions = y.getConfigurationSection("arenaregion")
       val config =

@@ -5,8 +5,13 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
-softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
+softdepend: [OyasaiEconomy, LuckPerms, floodgate, Essentials, FastAsyncWorldEdit]
 commands:
+  oyasai-schematics:
+    description: "schematic.cloud の共有 ID から schematic をダウンロードして FAWE の保存先へ置く"
+    usage: "/<command> load <共有ID または URL>"
+    permission: oyasaiutilities.schematics.load
+    permission-message: "§cこのコマンドを使用する権限がありません。"
   home:
     usage: /<command>
     permission: essentials.home
@@ -286,6 +291,9 @@ commands:
     usage: /fart [stay|fly] [player]
 
 permissions:
+  oyasaiutilities.schematics.load:
+    description: "schematic.cloud の共有 ID から schematic をダウンロードする"
+    default: op
   oyasaiutilities.fart.others:
     description: "他のプレイヤーのおならモードを切り替える"
     default: op

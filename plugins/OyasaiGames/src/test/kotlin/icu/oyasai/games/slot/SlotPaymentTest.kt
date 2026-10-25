@@ -15,13 +15,13 @@ class SlotPaymentTest {
     var withdrawals = 0
     var deposits = 0
     assertTrue(
-        payment.charge(25.0) {
+        payment.charge(25L) {
           withdrawals++
           true
         }
     )
     assertFailsWith<IllegalStateException> {
-      payment.charge(25.0) {
+      payment.charge(25L) {
         withdrawals++
         true
       }
@@ -41,7 +41,7 @@ class SlotPaymentTest {
     assertEquals(1, withdrawals)
     assertEquals(1, deposits)
     assertFalse(SlotPayment(file()).blocked)
-    assertTrue(payment.charge(25.0) { true })
+    assertTrue(payment.charge(25L) { true })
     payment.delivering()
     payment.complete()
     assertFalse(
@@ -56,28 +56,28 @@ class SlotPaymentTest {
   @Test
   fun `declined charge and free spins never move money`() {
     val payment = SlotPayment(file())
-    assertFalse(payment.charge(25.0) { false })
+    assertFalse(payment.charge(25L) { false })
     assertFalse(payment.blocked)
     assertFalse(payment.refund { error("refund must not run") })
-    assertTrue(payment.charge(0.0) { error("withdraw must not run") })
+    assertTrue(payment.charge(0L) { error("withdraw must not run") })
     assertTrue(payment.refund { error("deposit must not run") })
   }
 
   @Test
   fun `ambiguous withdraw deposit and reward phases survive restart and cannot repeat`() {
     val payment = SlotPayment(file())
-    assertFailsWith<IllegalStateException> { payment.charge(25.0) { error("provider threw") } }
+    assertFailsWith<IllegalStateException> { payment.charge(25L) { error("provider threw") } }
     val loaded = SlotPayment(file())
     assertEquals("CHARGING", loaded.phase)
     assertTrue(loaded.blocked)
     assertFalse(loaded.refund { error("unknown charge cannot auto refund") })
-    assertFailsWith<IllegalStateException> { loaded.charge(25.0) { true } }
+    assertFailsWith<IllegalStateException> { loaded.charge(25L) { true } }
   }
 
   @Test
   fun `refund failure remains retryable but exception is ambiguous`() {
     val payment = SlotPayment(file())
-    payment.charge(25.0) { true }
+    payment.charge(25L) { true }
     assertFalse(payment.refund { false })
     assertEquals("REFUND_FAILED", SlotPayment(file()).phase)
     assertFailsWith<IllegalStateException> { payment.refund { error("provider threw") } }
@@ -89,7 +89,7 @@ class SlotPaymentTest {
   @Test
   fun `paid and delivering phases survive restart and cannot charge again`() {
     val payment = SlotPayment(file())
-    payment.charge(25.0) { true }
+    payment.charge(25L) { true }
     assertEquals("PAID", SlotPayment(file()).phase)
     payment.delivering()
     val loaded = SlotPayment(file())
@@ -104,6 +104,6 @@ class SlotPaymentTest {
     val paymentFile = directory.resolve("blocked/record.yml").toFile()
     paymentFile.parentFile.writeText("not a directory")
     val payment = SlotPayment(paymentFile)
-    assertFails { payment.charge(25.0) { error("withdraw must not run") } }
+    assertFails { payment.charge(25L) { error("withdraw must not run") } }
   }
 }

@@ -11,11 +11,10 @@ import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.leaderBoard.LBStats
 import com.baakun.dynamicprofile.profile.playerTitle.Title
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import me.realized.tokenmanager.api.TokenManager
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -130,26 +129,6 @@ object Tools {
     return headItem
   }
 
-  /** Vaultプラグイン(お金関係の操作PL)を使うための変数 */
-  val econ: Economy? by lazy { getVault() }
-
-  /** Vaultを取得する。失敗するとnullを返す */
-  private fun getVault(): Economy? {
-    if (Bukkit.getServer().pluginManager.getPlugin("Vault") == null) return null
-    val rsp = Bukkit.getServer().servicesManager.getRegistration(Economy::class.java) ?: return null
-    return rsp.provider
-  }
-
-  /** TokenManagerプラグイン(ポイント関係の操作PL)を使うための変数 */
-  val token: TokenManager? by lazy { getTokenManager() }
-
-  /** TokenManagerを取得する。失敗するとnullを返す */
-  private fun getTokenManager(): TokenManager? {
-    val tokenAPI = Bukkit.getServer().pluginManager.getPlugin("TokenManager") ?: return null
-    return if (tokenAPI is TokenManager) {
-      tokenAPI
-    } else {
-      null
-    }
-  }
+  val econ: OyasaiEconomyApi?
+    get() = Bukkit.getServicesManager().load(OyasaiEconomyApi::class.java)
 }

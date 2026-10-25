@@ -6,8 +6,7 @@ description: GUIベースの統合フロントエンドメニュープラグイ�
 softdepend:
   - LuckPerms
   - DynamicProfile
-  - TokenManager
-  - Vault
+  - OyasaiEconomy
 
 commands:
   getmenu:
