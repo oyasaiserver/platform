@@ -70,7 +70,6 @@ oyasaiPurpur rec {
     plugmanx
     sociallikes3
     socialvotes
-    vertex
     viaversion
     worldguard
     # keep-sorted end

@@ -52,6 +52,7 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 | 表示・装飾 | `hats/`, `hologram/`, `debugonbe/`, `timerbar/`, `elevator/` | パーティクル帽子、TextDisplay、プレイヤー向け仮表示、タイマー、床式エレベーター |
 | 旧 Skript 移植機能 | `skriptport/`, `pita/`, `getuuid/` | 案内、飛行速度・reach・scale、暗視、慣性停止、UUID 表示、短縮コマンド |
 | スキン・参加時処理 | `skin/`, `redbull/`, `joincommands/` | Mojang スキン、期限付き飛行、設定済み参加コマンド |
+| Schematics | `schematic/SchematicFeature.kt`, `schematic/SchematicStore.kt` | schematic.cloud の共有 ID から FAWE の保存先へダウンロード |
 | 共通保存基盤 | `storage/UtilitiesDatabase.kt`, `YamlConfig.kt` | PlayerState / Teleport 共通 SQLite、YAML 読込・保存 |
 
 `onEnable` は共通 DB を先に開き、Workstation・PlayerState・Teleport は個別の try/catch で失敗時に後始末して続行する。Spawn は Teleport が有効な場合にだけ有効化する。Guidance は保存初期化を内部で処理するが、他機能の全てが個別例外隔離されているわけではない。停止時は各 Feature の後始末後、`finally` で共通 DB を閉じる。
@@ -64,6 +65,25 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 - PlayerState は Bukkit イベントとコマンドの両方で状態を更新する。Essentials が有効な場合のみ互換 bridge を作り、通常名/別名を置き換える際も Essentials・バニラ以外が所有する同名コマンドは奪わない。
 - DebugOnBE は対象ブロックをメインスレッドで走査し、プレイヤーごとのパケット表示を作る。ワールドのブロック状態を置き換えない。Veinminer は隣接鉱石を読み込み済みチャンク内で探索し、各ブロックを `Player.breakBlock` で破壊する。
 - PlayerSit・ホログラム・帽子・Red Bull などはそれぞれ専用 listener / scheduler を持つ。機能間で一括トランザクションや一括設定再読込は提供しない。
+
+### Schematics
+
+`SchematicFeature.enable()` は `plugin.yml` で宣言した `oyasai-schematics` を `plugin.getCommand(...)` で取得し、executor を設定する。初期化例外は機能内で SEVERE ログに記録し、他の機能の起動を続ける。
+
+1. `/oyasai-schematics load <共有ID または URL>` を受け付ける。権限 `oyasaiutilities.schematics.load`（既定 OP）は Bukkit がコマンド受付時に検査し、拒否時は「このコマンドを使用する権限がありません。」と表示する。コンソールも利用でき、追加引数は無視する。`load` の大文字・小文字は区別せず、引数なし・未知のサブコマンド・ID なしは `false` を返して使い方を表示する。
+2. `SchematicStore.idOf` は第2引数の最後の `/` より後を ID とする。URL 自体の構文・配布元は検証せず、末尾が `/` なら空 ID、クエリ文字列などは ID の一部になる。ID の有効文字・URI エンコード・保存先の正規化による検査はない。
+3. 非同期タスクで `plugins/FastAsyncWorldEdit/schematics/` を作り、固定の `https://api.schematic.cloud/download/<ID>` へ `HttpURLConnection` で接続する。入力 URL 自体へのアクセスではない。HTTP 200 だけを受け付け、接続10秒・読み取り30秒のタイムアウトを設定する。Content-Length と実際の受信量を32 MiBに制限し、Content-Length が不明でも受信量を検査する。
+4. ストリーム処理開始前に60秒後の期限を設定する。`SchematicStore.save` は保存先の `download-*.part` へ8192バイトずつ書き、各 read の直前に期限を検査する。接続・レスポンス待ちはこの期限に含まず、ブロック中の read を期限時点で中断しないため、全処理が厳密に60秒以内に終わる保証はない。
+5. 完了後、`Files.move` の `REPLACE_EXISTING` と `ATOMIC_MOVE` で `<ID>.schem` へ移動する。原子的移動が非対応の場合の代替処理はない。`ATOMIC_MOVE` での既存ファイル置換は実装依存で、環境によっては失敗する。HTTP 接続は `finally` で切断し、一時ファイルも `finally` で削除する。最終ファイルへ移動する前の失敗では、既存の同名ファイルを変更しない。
+6. 結果はメインスレッドで通知する。成功時は「[oyasai-schematics] ダウンロード成功。このメッセージをクリックしてコマンドをコピー、実行してロードできます。」に `/schematic load <ID>.schem` のコピー操作を付ける。失敗時は「[oyasai-schematics] ダウンロードに失敗しました: 理由」と warning ログを出す。サイズ超過は `IllegalArgumentException`（「サイズ上限は 32 MiB です」）、期限超過は `IllegalStateException`（「ダウンロードがタイムアウトしました」）、HTTP エラーは「HTTP ステータス番号」となる。
+
+保存先は全利用者・全ワールドで共通。レスポンスをそのまま保存するため、Content-Type・schematic 形式・内部のブロック数・配置範囲は検査しない。ロック・重複排除・バックアップはなく、同時取得では成功通知後にも別の結果へ置き換わり得る。移動後の一時ファイル削除で例外が起きると保存済みでも失敗扱いとなる。削除自体の失敗やプロセス終了では `.part` が残り得るが、起動時の回収処理はない。専用設定・DB・履歴・移行処理はない。
+
+受付・進捗の通知はなく、再実行のたびに別の非同期タスクを登録する。実行中の権限再検査、同時数・実行間隔の制限、ログアウトによる取消、停止時の通信取消・完了待ち・保存の巻き戻しは行わない。非同期処理終了時にプラグインが無効なら、結果通知と失敗ログの同期タスクを登録しない。
+
+FastAsyncWorldEdit は `softdepend`。クラスを直接利用せず、保存先とコピー用コマンドで連携する。FAWE の存在・有効状態や `/schematic load` の権限は検査しない。ロード・貼り付けやワールドの変更はこの機能では行わない。外部 API の稼働・ID の仕様、原子的移動の対応状況、停止時の実動作、ゲーム内表示と FAWE でのロードは未確認。
+
+`schematic/SchematicStoreTest.kt` は ID 抽出、正常保存、一時ファイルの削除、サイズ超過時の既存ファイル保護、期限超過をネットワークなしで検査する。
 
 ### データ形式と永続化
 
@@ -110,7 +130,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 
 ### テストが保証する範囲
 
-`src/test/` のテストコードから確認できる範囲は、純粋なルール・設定パーサー・保存層の振る舞いである。22個のテストファイルは主に次を検査する。
+`src/test/` のテストコードから確認できる範囲は、純粋なルール・設定パーサー・保存層の振る舞いである。主に次を検査する。
 
 - 共通 SQLite の機能別 migration、rollback、WAL 設定、非同期書込・flush・close、失敗報告。
 - Teleport のエイリアス・権限名、ホーム上限、jail 期間と制限、TPA 期限・重複、テレポート安全判定、旧 userdata / Warps / Jail / Kits の移行、Essentials 不在時の型ロード。
@@ -119,6 +139,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 - Workstation のエイリアス・頭生成・hat 制限、Veinminer の素材グループ・数値フォールバック、Elevator の5ペア・距離・空間条件。
 - Hologram の旧設定読込・シリアライズ・テキスト整形、JoinCommands の定義解析、Skin の Mojang 応答解析・キャッシュ期限、Guidance の CSV / SQLite / メニュー文言。
 - Spawn の復活地点選択。
+- Schematics の ID 抽出・保存・サイズ上限・期限と失敗時の一時ファイル削除・既存ファイル保護。
 
 これらはイベント順、Paper 上の GUI 表示、Essentials / OyasaiEconomy / LuckPerms / OyasaiEconomy / Floodgate の実接続、実ワールドでの安全性、クライアント表示、実データ移行後の運用を保証しない。この資料の更新時にテストは実行していない。
 
