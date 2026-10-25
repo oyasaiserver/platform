@@ -18,6 +18,7 @@ import icu.oyasai.citiesskymine.schematic.SchematicCommand
 import icu.oyasai.citiesskymine.selection.SelectionCommand
 import icu.oyasai.citiesskymine.slabstairs.SlabStairsCommand
 import icu.oyasai.citiesskymine.stack.StackCommand
+import icu.oyasai.citiesskymine.unconnect.UnconnectCommand
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.window.WindowCommand
 import org.bukkit.command.Command
@@ -33,6 +34,7 @@ class CitiesSkyMineCommand(
     private val payloadCommand: PayloadCommand,
     private val windowCommand: WindowCommand,
     private val slabStairsCommand: SlabStairsCommand,
+    private val unconnectCommand: UnconnectCommand,
     private val columnLayoutCommand: ColumnLayoutCommand,
     private val stackCommand: StackCommand,
     private val crowdCommand: CrowdCommand,
@@ -128,6 +130,10 @@ class CitiesSkyMineCommand(
         if (!requireAccess(sender, CommandKey.SLAB_STAIRS)) return true
         slabStairsCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
+      "unconnect" -> {
+        if (!requireAccess(sender, CommandKey.UNCONNECT)) return true
+        unconnectCommand.onCommand(sender, command, "$label unconnect", args.drop(1).toTypedArray())
+      }
       "columns" -> {
         if (!requireAccess(sender, CommandKey.COLUMNS)) return true
         columnLayoutCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
@@ -214,6 +220,7 @@ class CitiesSkyMineCommand(
       "load64" -> payloadCommand.onTabComplete(sender, command, alias, args)
       "window" -> windowCommand.onTabComplete(sender, command, alias, childArgs)
       "slabstairs" -> slabStairsCommand.onTabComplete(sender, command, alias, childArgs)
+      "unconnect" -> unconnectCommand.onTabComplete(sender, command, "$alias unconnect", childArgs)
       "columns" -> columnLayoutCommand.onTabComplete(sender, command, alias, childArgs)
       "stack",
       "ns" -> stackCommand.onTabComplete(sender, command, alias, childArgs)
@@ -263,6 +270,7 @@ class CitiesSkyMineCommand(
         "/csm crowd [key=value ...] [mode=block|mannequin] | /csm crowd remove",
         "選択範囲に群衆を生成・マネキンを削除",
     )
+    MessageUtil.helpEntry(sender, "/csm unconnect", "選択範囲の接続を全部外す。取り消しは //undo")
     MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
     MessageUtil.helpEntry(sender, "/csm settings", "個人設定GUIを開く")
     MessageUtil.helpEntry(sender, "/csm config access <...>", "config.yml の権限設定を編集")
@@ -282,7 +290,7 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
         sender,
-        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.crowd, /.sel, /.settings, /.config, /.cloud, /.bez, /.ds, /.brp, /.sc</gray>",
+        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.unconnect, /.col, /.ns, /.crowd, /.sel, /.settings, /.config, /.cloud, /.bez, /.ds, /.brp, /.sc</gray>",
     )
     MessageUtil.send(sender, "<gray>Command help: /csm help <command> or /.help <command></gray>")
   }
@@ -290,6 +298,7 @@ class CitiesSkyMineCommand(
   private fun showHelpTopic(sender: CommandSender, topic: String?) {
     when (topic?.lowercase()) {
       null -> showHelp(sender)
+      "unconnect" -> unconnectCommand.sendHelp(sender, "/csm unconnect")
       "cloud" -> cloudCommand.sendHelp(sender, "/csm cloud")
       "bezier" -> bezierCommand.sendHelp(sender, "/csm bezier")
       "window" ->
@@ -367,6 +376,7 @@ class CitiesSkyMineCommand(
             "load64",
             "window",
             "slabstairs",
+            "unconnect",
             "columns",
             "stack",
             "crowd",

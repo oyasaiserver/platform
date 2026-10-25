@@ -20,6 +20,7 @@ class CommandRegistrationTest {
             ".pl",
             ".win",
             ".ss",
+            ".unconnect",
             ".col",
             ".ns",
             ".crowd",
