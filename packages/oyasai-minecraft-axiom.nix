@@ -36,6 +36,7 @@ oyasaiPurpur rec {
     oyasaitab
     oyasaiworldgenerator
     plugmanx
+    spark
     vault
     viaversion
     worldguard

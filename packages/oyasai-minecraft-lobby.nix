@@ -78,6 +78,7 @@ oyasaiPurpur rec {
     oyasaichat
     oyasaitab
     plugmanx
+    spark
     vertex
     viaversion
     # keep-sorted end
