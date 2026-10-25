@@ -1,6 +1,5 @@
 package io.oyasai.economy
 
-import java.io.File
 import java.math.BigInteger
 import java.sql.Connection
 import java.sql.DriverManager
@@ -17,9 +16,7 @@ internal class EconomyDatabase(
     path: String,
     policies: List<CurrencyPolicy>,
     queueSize: Int = 4096,
-    legacyPlugins: File? = null,
     startWorker: Boolean = true,
-    legacyImportOptions: LegacyImportOptions = LegacyImportOptions(),
     private val onFailure: (Throwable) -> Unit = {},
     private val onNotifications: (List<PendingNotification>) -> Unit = {},
 ) : AutoCloseable {
@@ -40,21 +37,11 @@ internal class EconomyDatabase(
           .associate { it.id to CurrencyLedger(it, persist = ::enqueue, lock = memoryLock) }
           .toMutableMap()
   private val worker = Thread(::work, "OyasaiEconomy-DB-Writer").apply { isDaemon = false }
-  val migrationReports: List<MigrationReport>
 
   init {
     try {
       schema()
       check(queryLong("SELECT COUNT(*) FROM accounts WHERE balance < 0") == 0L) { "負残高の口座があります" }
-      migrationReports =
-          if (legacyPlugins != null && meta("legacy_databases_imported_at") == null)
-              importLegacyDatabases(
-                  connection,
-                  legacyPlugins,
-                  legacyImportOptions,
-                  policies = policies,
-              )
-          else emptyList()
       check(invariant()) { "残高と履歴の合計が一致しません" }
       reloadLedgers()
       nextId =

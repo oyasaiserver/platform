@@ -4,7 +4,6 @@ record_type: project
 source_of_truth:
   - plugins/OyasaiEconomy/src/
 related_paths:
-  - plugins/OyasaiEconomy/tools/
   - plugins/OyasaiEconomy/build.gradle.kts
 ---
 
@@ -26,7 +25,7 @@ related_paths:
 
 金額は `Long`。残高は0以上で通貨の上限まで。加算・減算・送金はオーバーフローを検査する。送金は自分宛てを拒否し、相手のオンライン状態では制限しない。APIの0の入出金・送金と、残高が変わらない設定は成功し、履歴・イベント・通知を作らない。未知口座や無効通貨への0操作は拒否する。
 
-履歴の理由は `initial`、`transfer`、`admin_give`、`admin_take`、`admin_set`、`admin_reset`、`api_deposit`、`api_withdraw`。名前更新は履歴を作らない。旧履歴の理由は取り込み時に保存する。
+履歴の理由は `initial`、`transfer`、`admin_give`、`admin_take`、`admin_set`、`admin_reset`、`api_deposit`、`api_withdraw`。名前更新は履歴を作らない。旧DBから移した履歴は元の理由のまま残る。
 
 ## 公開API
 
@@ -54,15 +53,13 @@ TABへ `%economy_<id>_balance%` と `%economy_<id>_balance_commas%` を登録す
 
 ## 保存
 
-保存先は `plugins/OyasaiEconomy/economy.db`。`accounts` の主キーは `(currency, uuid)`、`transactions` は通貨と送金共通の `transfer_id` を持つ。`notification_outbox` は通貨・送り主を持ち、`schema_meta` が取り込みと書き込みの進捗を記録する。DB制約は通貨名に依存せず、残高の整数・非負を保証する。上限は台帳が守る。
+保存先は `plugins/OyasaiEconomy/economy.db`。`accounts` の主キーは `(currency, uuid)`、`transactions` は通貨と送金共通の `transfer_id` を持つ。`notification_outbox` は通貨・送り主を持ち、`schema_meta` が書き込みの進捗を記録する。DB制約は通貨名に依存せず、残高の整数・非負を保証する。上限は台帳が守る。
 
 API操作はメモリと有界FIFOキューだけを触る。専用ワーカーがSQLiteへまとめ書きし、停止時は受付済み操作を書き切る。起動時は各口座の残高と履歴差分の合計、外部キーを検査し、不一致なら起動しない。
 
-## 旧形式の読み込み
+## 旧データの移行
 
-`LegacyDatabaseImport.kt` と `tools/` が旧入力形式を扱う。元ファイルとWAL/SHMを複製して読み、元ファイルは書き換えない。取り込み先が空でなければ拒否する。形式別の表名・旧通貨ID・旧初期値はこの読み込み部分だけに置く。
-
-初期25の未記録、UUIDと額・理由を明示した補正、完全一致の名前による口座除外を扱い、未知の不一致・未使用補正・曖昧な除外は全体をロールバックする。負残高があれば件数とUUIDを示して停止し、0への変更や除外で回避しない。片方にしか口座がないUUIDには他の通貨の口座を設定の初期値で補完し、`initial` 行を作る。旧形式の変換道具の詳細な切替手順は内部運用資料で管理する。
+プラグインは旧 `Vault` / `OyasaiToken` のDBを読まない。旧データは、停止中に人がSQLで新しい `economy.db` へ移す。移した結果は起動時の検査（残高と履歴の合計、外部キー、0以上・上限以内）を通らなければ起動しない。参加時に、まだ口座のない通貨の口座を初期値で作る。
 
 ## コマンドと権限の契約
 
@@ -70,4 +67,4 @@ API操作はメモリと有界FIFOキューだけを触る。専用ワーカー�
 
 ## 検証
 
-通貨IDをパラメータ化し、既定2通貨と追加通貨へ同じ操作・拒否条件を与える。SQLiteの制約・履歴照合・キュー満杯・drain・旧DB取り込み・補正・負残高拒否・口座補完も検査する。Bukkitを置き換える統合テストではAPI、コマンド、権限、イベント取消、giveall確認、オフライン通知を検査する。実サーバーの表示やクラスローダーは、このテストだけでは保証しない。
+通貨IDをパラメータ化し、既定2通貨と追加通貨へ同じ操作・拒否条件を与える。SQLiteの制約・履歴照合・キュー満杯・drainも検査する。Bukkitを置き換える統合テストではAPI、コマンド、権限、イベント取消、giveall確認、オフライン通知を検査する。実サーバーの表示やクラスローダーは、このテストだけでは保証しない。

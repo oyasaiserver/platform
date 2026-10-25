@@ -1,8 +1,4 @@
 admin-notifications: false
-# Migration policies are optional paths relative to this plugin's data folder.
-legacy-import:
-  exclusions: ""
-  corrections: ""
 currencies:
   yen:
     enabled: true

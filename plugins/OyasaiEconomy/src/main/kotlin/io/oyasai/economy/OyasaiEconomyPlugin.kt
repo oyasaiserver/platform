@@ -29,34 +29,16 @@ class OyasaiEconomyPlugin : JavaPlugin(), OyasaiEconomyApi, Listener {
       saveDefaultConfig()
       val policies = CurrencyPolicy.load(config)
       adminNotifications = config.getBoolean("admin-notifications", false)
-      fun policyFile(key: String) =
-          config
-              .getString("legacy-import.$key")
-              ?.takeIf { it.isNotBlank() }
-              ?.let { File(dataFolder, it) }
       database =
           EconomyDatabase(
               File(dataFolder, "economy.db").path,
               policies,
-              legacyPlugins = dataFolder.parentFile,
-              legacyImportOptions =
-                  LegacyImportOptions.fromFiles(
-                      policyFile("exclusions"),
-                      policyFile("corrections"),
-                  ),
               onFailure = { logger.severe("経済データの保存に失敗しました。操作を停止します: ${it.message}") },
               onNotifications = { pending ->
                 if (isEnabled)
                     server.scheduler.runTask(this, Runnable { pending.forEach(::deliver) })
               },
           )
-      database.migrationReports.forEach { logger.info("旧DB取り込み: $it") }
-      if (database.migrationReports.isNotEmpty())
-          database.ledgers.forEach { (id, ledger) ->
-            logger.info(
-                "補完後 $id: ${ledger.size()} 口座、合計 ${ledger.snapshot().values.fold(java.math.BigInteger.ZERO) { sum, r -> sum + r.balance.toBigInteger() }}"
-            )
-          }
       registerCommandsAndPermissions()
       server.servicesManager.register(
           OyasaiEconomyApi::class.java,
