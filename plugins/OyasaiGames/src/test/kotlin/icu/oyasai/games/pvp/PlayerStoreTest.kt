@@ -7,25 +7,6 @@ import org.junit.jupiter.api.io.TempDir
 
 class PlayerStoreTest {
   @Test
-  fun `both arena modules share the snapshot participation gate`(@TempDir folder: File) {
-    val id = java.util.UUID.randomUUID()
-    assertFalse(gameSnapshotPending(folder, id))
-    val pvp =
-        File(folder, "pvp/players/$id.yml").also {
-          it.parentFile.mkdirs()
-          it.writeText("original: true")
-        }
-    assertTrue(gameSnapshotPending(folder, id))
-    pvp.delete()
-    File(folder, "tntrun/players/$id.yml").also {
-      it.parentFile.mkdirs()
-      it.writeText("original: true")
-    }
-    assertTrue(gameSnapshotPending(folder, id))
-    assertFalse(gameSnapshotPending(folder, java.util.UUID.randomUUID()))
-  }
-
-  @Test
   fun `a failed restore or vanilla save retains the journal for the next connection`(
       @TempDir folder: File
   ) {

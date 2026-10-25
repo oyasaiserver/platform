@@ -6,7 +6,7 @@ import com.github.srain3.painttools.tools.configs.MapData
 import com.github.srain3.painttools.tools.configs.MapIdList
 import com.github.srain3.painttools.tools.configs.MapIdList.checkID
 import com.github.srain3.painttools.tools.configs.MapIdList.saveID
-import kotlin.math.PI
+import com.github.srain3.painttools.tools.frameLookVector
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.ShulkerBox
@@ -24,7 +24,6 @@ import org.bukkit.map.MapCanvas
 import org.bukkit.map.MapRenderer
 import org.bukkit.map.MapView
 import org.bukkit.persistence.PersistentDataType
-import org.bukkit.util.Vector
 
 /** コマンド「/painttools」を処理する */
 object PaintToolsCmd : CommandExecutor {
@@ -288,9 +287,7 @@ object PaintToolsCmd : CommandExecutor {
 
   /** undo処理 */
   private fun undoCommand(sender: Player, num: Int) {
-    val vec = Vector(0.0, 0.0, 1.0)
-    vec.rotateAroundX(PI / 180 * sender.eyeLocation.pitch)
-    vec.rotateAroundY(PI / 180 * -sender.eyeLocation.yaw)
+    val vec = frameLookVector(sender.eyeLocation)
 
     val entity =
         sender.world

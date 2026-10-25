@@ -1,12 +1,12 @@
 package io.oyasai.directstate.edit
 
+import io.oyasai.directstate.edit.hand.HandGeometry.horizontalFaces
 import io.oyasai.directstate.integration.BlockEntityAccess
 import io.oyasai.directstate.update.UpdateMode
 import java.util.UUID
 import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.block.Block
-import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockState
 import org.bukkit.block.data.BlockData
 import org.bukkit.block.data.type.Fence
@@ -33,7 +33,6 @@ internal class BlockEditService(
   private var tickCount = 0L
   // 同じプレイヤーが同じ座標へ続けて行った変更を、一件のログにまとめるための保留表。
   private val pendingEdits = mutableMapOf<EditKey, PendingEdit>()
-  private val faces = listOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
 
   /** プレイヤーとワールド座標を合わせた、保留ログの重複しないキー。 */
   private data class EditKey(val player: UUID, val world: UUID, val x: Int, val y: Int, val z: Int)
@@ -143,7 +142,7 @@ internal class BlockEditService(
         is Stairs -> "階段: ${data.shape.name.lowercase()} / ${data.half.name.lowercase()}"
         is Wall ->
             "壁: ${data.isUp} " +
-                faces.joinToString(" ") {
+                horizontalFaces.joinToString(" ") {
                   "${it.name.lowercase()}=${data.getHeight(it).name.lowercase()}"
                 }
         is Fence -> "フェンス: " + data.faces.joinToString { it.name.lowercase() }

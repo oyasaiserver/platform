@@ -3,8 +3,8 @@ package com.baakun.dynamicprofile.command
 import com.baakun.dynamicprofile.DynamicProfile.Companion.UUIDMap
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allUser
 import com.baakun.dynamicprofile.command.LBType.*
+import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.model.Calculator.getExp
-import com.baakun.dynamicprofile.model.Calculator.getLeve
 import com.baakun.dynamicprofile.util.Tools.getIndexes
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.getWeeklyLB
@@ -113,7 +113,7 @@ object LeaderBoardCommand : CommandExecutor {
                             LIKE->"${data.like}回"
                             CHAT->"${data.chat}回"
                             MOVE->"${data.move}メートル"
-                            LEVEL->"Lv.${Bukkit.getOfflinePlayer(sorted.get(i)).getLeve()}"
+                            LEVEL->"Lv.${Calculator.getLevel(Bukkit.getOfflinePlayer(sorted.get(i)))}"
                             PLAYTIME->getStats(sorted.get(i)).getPlayTime()
                         }}, $name"
           )
@@ -129,7 +129,7 @@ object LeaderBoardCommand : CommandExecutor {
                             LIKE->"${data.like}回"
                             CHAT->"${data.chat}回"
                             MOVE->"${data.move}メートル"
-                            LEVEL->"Lv.${p0.getLeve()}"
+                            LEVEL->"Lv.${Calculator.getLevel(p0)}"
                             PLAYTIME-> getStats(p0.uniqueId).getPlayTime()
                         }}, ${p0.name}"
           )

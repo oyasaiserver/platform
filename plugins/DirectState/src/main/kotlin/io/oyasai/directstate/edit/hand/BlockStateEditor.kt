@@ -115,9 +115,6 @@ internal object BlockStateEditor {
           rule<Observer>("observer", { it.material.name == "OBSERVER" }, ::editObserver),
       )
 
-  internal val geometryRuleIds
-    get() = geometryRules.map { it.id }
-
   /** falseならクリックを消費せず、Minecraft本来の操作へ譲る。 */
   fun supports(data: BlockData): Boolean {
     val name = data.material.name

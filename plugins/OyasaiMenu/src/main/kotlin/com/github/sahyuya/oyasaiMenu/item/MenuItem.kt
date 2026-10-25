@@ -1,9 +1,11 @@
 package com.github.sahyuya.oyasaiMenu.item
 
-import java.io.File
 import java.util.UUID
-import java.util.logging.Level
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -28,36 +30,13 @@ class MenuItem(
       !template.type.isAir && held.isSimilar(template)
     },
     private val copyItem: (ItemStack) -> ItemStack = { it.clone() },
+    private val item: ItemStack = MenuBook.create(),
 ) : CommandExecutor, Listener {
-  private val store = ItemTemplateStore(File(plugin.dataFolder, "command-items.db"))
-  internal var item: ItemStack? = null
   private val activatedTicks = mutableMapOf<UUID, Int>()
-  private var ready = false
 
   fun enable() {
-    listOf("savemenuitem", "getmenu").forEach {
-      requireNotNull((plugin as JavaPlugin).getCommand(it)).setExecutor(this)
-    }
-    // 保存の失敗はこの機能だけを無効にし、他の機能の有効化を妨げない。
-    try {
-      store.open()
-      item = store.load("menu")?.let { ItemStack.deserializeBytes(it) }
-      ready = true
-      plugin.server.pluginManager.registerEvents(this, plugin)
-    } catch (failure: Exception) {
-      plugin.logger.log(
-          Level.SEVERE,
-          "Command item storage failed to start; command items are unavailable.",
-          failure,
-      )
-      disable()
-    }
-  }
-
-  fun disable() {
-    ready = false
-    runCatching { store.close() }
-        .onFailure { plugin.logger.log(Level.SEVERE, "Failed to close command item storage.", it) }
+    requireNotNull((plugin as JavaPlugin).getCommand("getmenu")).setExecutor(this)
+    plugin.server.pluginManager.registerEvents(this, plugin)
   }
 
   override fun onCommand(
@@ -71,24 +50,8 @@ class MenuItem(
       return true
     }
     if (args.isNotEmpty()) return false
-    if (!ready) {
-      sender.sendMessage("§cアイテム保存機能は現在利用できません。")
-      return true
-    }
-    if (command.name == "savemenuitem") {
-      val saved = sender.inventory.itemInMainHand.clone()
-      try {
-        store.save("menu", saved.serializeAsBytes())
-        item = saved
-        sender.sendMessage(" §8► §eMenu item has been saved！")
-      } catch (failure: Exception) {
-        plugin.logger.log(Level.SEVERE, "Failed to save menu command item.", failure)
-        sender.sendMessage("§cアイテムの保存に失敗しました。")
-      }
-    } else {
-      item?.let { giveItem(sender, it.asOne()) }
-      sender.sendMessage(" §8► §aYou have received menu item!")
-    }
+    giveItem(sender, copyItem(item))
+    sender.sendMessage(" §8► §aYou have received menu item!")
     return true
   }
 
@@ -98,7 +61,7 @@ class MenuItem(
   }
 
   internal fun giveOnFirstJoin(player: Player) {
-    if (!player.hasPlayedBefore()) item?.let { giveItem(player, copyItem(it)) }
+    if (!player.hasPlayedBefore()) giveItem(player, copyItem(item))
   }
 
   @EventHandler
@@ -123,7 +86,7 @@ class MenuItem(
   }
 
   internal fun activate(player: Player): Boolean {
-    val template = item ?: return false
+    val template = item
     val held = player.inventory.itemInMainHand
     if (!matches(held, template)) return false
     // Skript と同様、両手・エンティティの重複イベントでも1 tickに1回だけ実行する。
@@ -144,7 +107,7 @@ class MenuItem(
       contents: Array<out ItemStack?>,
       sendMessage: (String) -> Unit,
   ): Boolean {
-    val template = item ?: return false
+    val template = item
     if (!contents.any { it != null && matches(it, template) }) return false
     sendMessage(" §8► §cYou can not use the menu item in crafting!")
     return true
@@ -155,4 +118,23 @@ class MenuItem(
       player.world.dropItemNaturally(player.location, it)
     }
   }
+}
+
+internal object MenuBook {
+  val name: Component = Component.text("menu本", NamedTextColor.GREEN, TextDecoration.BOLD)
+  val lore: List<Component> =
+      listOf(
+          Component.text("右クリックで", NamedTextColor.GOLD, TextDecoration.BOLD)
+              .append(Component.text("/menu", NamedTextColor.BLUE, TextDecoration.BOLD))
+              .append(Component.text("代わりに!", NamedTextColor.GOLD, TextDecoration.BOLD))
+      )
+
+  fun create(): ItemStack =
+      ItemStack(Material.BOOK, 1).apply {
+        itemMeta =
+            itemMeta.apply {
+              displayName(MenuBook.name)
+              lore(MenuBook.lore)
+            }
+      }
 }

@@ -1,8 +1,9 @@
 package io.oyasai.vehicle.air
 
 import io.oyasai.toolbox.ControlKey
-import io.oyasai.vehicle.base.AirVehicle
+import io.oyasai.vehicle.base.BaseVehicle
 import kotlin.math.abs
+import org.bukkit.entity.ArmorStand
 import org.bukkit.util.Vector
 
 data class AircraftVehicle(
@@ -10,11 +11,32 @@ data class AircraftVehicle(
     val power: Int,
     val brake: Int,
     val slip: Float,
-) : AirVehicle(speedLimit, power, brake) {
+) : BaseVehicle(speedLimit, power, brake) {
+
+  fun handling(wasd: ControlKey?): Float {
+    var handlingStrength: Float =
+        HANDLING_MULTIPLIER * 0.1F.coerceAtLeast(5.5F - this.speed.z.toFloat() * 1.5F)
+    if (handlingStrength >= HANDLING_MAX) handlingStrength = HANDLING_MAX
+
+    return when (wasd) {
+      ControlKey.A,
+      ControlKey.WA,
+      ControlKey.SA -> -handlingStrength
+      ControlKey.D,
+      ControlKey.WD,
+      ControlKey.SD -> handlingStrength
+      else -> 0.0F
+    }
+  }
+
+  fun down(mainArmorStand: ArmorStand): Double {
+    val descentValue = GRAVITY_DESCENT * (1.0 - Math.min(this.speed.z / 0.75, 1.0))
+    return calculateDescent(mainArmorStand, descentValue)
+  }
 
   var slipAngle: Float = 0.0f
 
-  override fun controlSpeed(wasd: ControlKey?): Vector {
+  fun controlSpeed(wasd: ControlKey?): Vector {
     var addSpeed = 0.0
     val per: Double = this.speed.z / this.speedLimit
     when (wasd) {
@@ -36,8 +58,7 @@ data class AircraftVehicle(
       ControlKey.SD -> {
         addSpeed =
             if (this.speed.z > 0.0) -this.brake / 15000.0
-            else if (this.speed.z <= 0.01) -this.brake / 15000.0
-            else if (this.speed.z < 0.0) this.brake / 15000.0 else 0.0
+            else if (this.speed.z <= 0.01) -this.brake / 15000.0 else 0.0
       }
       else -> {
         this.speed.multiply(0.9975)
@@ -55,7 +76,7 @@ data class AircraftVehicle(
     return this.speed.clone()
   }
 
-  override fun slip(first: ControlKey?): Float {
+  fun slip(first: ControlKey?): Float {
     when (first) {
       ControlKey.W -> {
         this.slipAngle *= 0.975F.coerceAtMost(this.slip / 100.0F + 0.9F)

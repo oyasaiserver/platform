@@ -44,22 +44,8 @@ class SignShopPlugin : JavaPlugin(), Listener {
   private val active = mutableSetOf<Shop>()
   private val activeBoxes = mutableSetOf<Point>()
   private var dbHealthy = true
-  private var migrationFailed = false
-
-  override fun onLoad() {
-    try {
-      migrateLegacyData(dataFolder, logger::info)
-    } catch (error: Exception) {
-      migrationFailed = true
-      logger.log(Level.SEVERE, "旧 SignShop のデータをコピーできません。起動を中止します", error)
-    }
-  }
 
   override fun onEnable() {
-    if (migrationFailed) {
-      Bukkit.getPluginManager().disablePlugin(this)
-      return
-    }
     if (
         Bukkit.getPluginManager().plugins.any {
           it !== this &&

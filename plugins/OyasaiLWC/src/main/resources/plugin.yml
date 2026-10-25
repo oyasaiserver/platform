@@ -25,26 +25,6 @@ commands:
   chopper:
     description: HOPPER フラグを変更する
     permission: lwc.protect
-  lwc: {description: 廃止済み}
-  cadmin: {description: 廃止済み}
-  cpublic: {description: 廃止済み}
-  cpassword: {description: 廃止済み}
-  cdonation: {description: 廃止済み}
-  csupply: {description: 廃止済み}
-  cunlock: {description: 廃止済み}
-  cremoveall: {description: 廃止済み}
-  climits: {description: 廃止済み}
-  credstone: {description: 廃止済み}
-  cmagnet: {description: 廃止済み}
-  cdroptransfer: {description: 廃止済み}
-  cpersist: {description: 廃止済み}
-  cnolock: {description: 廃止済み}
-  cnospam: {description: 廃止済み}
-  cexempt: {description: 廃止済み}
-  cautoclose: {description: 廃止済み}
-  callowexplosions: {description: 廃止済み}
-  ctnt: {description: 廃止済み}
-  cdefault: {description: 廃止済み}
 permissions:
   lwc.protect:
     description: 保護コマンドの使用

@@ -4,6 +4,7 @@ import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.profile.MyProfile
+import com.baakun.dynamicprofile.profile.OtherProfile
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitles
 import com.baakun.dynamicprofile.util.Tools
@@ -20,10 +21,10 @@ import org.bukkit.inventory.ItemStack
 
 object PlayerSelect {
   /** GUIを開く */
-  fun display(player: Player, type: RunType) {
+  fun display(player: Player) {
     var page = 0
     val inventory = GuiInventory.createInventory(6, "プレイヤー選択")
-    heads(player, page, inventory, type)
+    heads(player, page, inventory)
 
     // 最大ページ数を計算
     val playerSize = Bukkit.getOnlinePlayers().size
@@ -52,7 +53,7 @@ object PlayerSelect {
                 1F,
             )
             page += 1
-            heads(player, page, inventory, type)
+            heads(player, page, inventory)
           }
         }
         .allFlag()
@@ -67,7 +68,7 @@ object PlayerSelect {
                 1F,
             )
             page -= 1
-            heads(player, page, inventory, type)
+            heads(player, page, inventory)
           }
         }
         .allFlag()
@@ -94,7 +95,7 @@ object PlayerSelect {
   }
 
   /** プレイヤーヘッドを配置 */
-  private fun heads(player: Player, page: Int, inventory: Inventory, type: RunType) {
+  private fun heads(player: Player, page: Int, inventory: Inventory) {
     val players = mutableListOf<Player>()
     players.addAll(Bukkit.getOnlinePlayers().toList())
     players.sortByDescending { Calculator.getLevel(it) }
@@ -139,7 +140,11 @@ object PlayerSelect {
                   0.75F,
                   1F,
               )
-              PlayerSelectRun.run(player, currentPlayer, type)
+              if (currentPlayer == player) {
+                MyProfile.display(player)
+              } else {
+                OtherProfile.display(player, currentPlayer.name)
+              }
             }
             .allFlag()
 
@@ -147,40 +152,5 @@ object PlayerSelect {
       }
       slot++
     }
-    //        for(i in 0..44){
-    //            if(i+(page*45) == players.size){
-    //                break
-    //            }else{
-    //                val currentPlayer = players.get(i+(page*45))
-    //                val statsData = getStats(currentPlayer.uniqueId)
-    //                val head = Tools.getPlayerHead(currentPlayer.uniqueId)
-    //
-    //                var title = "&f"+currentPlayer.name+"
-    // &7Lv.${Calculator.getLevel(currentPlayer)}"
-    //                if (statsData.title!=null){
-    //                    if(TitleUtils.getTitles(currentPlayer.uniqueId).map { it.title
-    // }.contains(statsData.title)){
-    //                        title = "&7[${statsData.title}&7] " + title
-    //                    } else{
-    //                        statsData.title = null
-    //                    }
-    //                }
-    //
-    //                head.addText(
-    //                    title,
-    //                    mutableListOf(
-    //                        "&a総プレイ時間: &7${statsData.getPlayTime()}",
-    //                        "&a初ログイン; &7${statsData.getFirstPlayed()}"
-    //                    )
-    //                ).guiRun{
-    //                    player.playSound(player.eyeLocation,org.bukkit.Sound.UI_BUTTON_CLICK,
-    // SoundCategory.MASTER,0.75F,1F)
-    //                    PlayerSelectRun.run(player, currentPlayer, type)
-    //                }.allFlag()
-    //
-    //                inventory.setItem(i, head)
-    //            }
-    //        }
-
   }
 }

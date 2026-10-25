@@ -48,8 +48,6 @@ internal constructor(
     }
   }
 
-  fun hasTransformer(surface: ChatTextSurface): Boolean = transformers.hasTransformer(surface)
-
   fun clear(playerId: UUID) {
     ordered.clear(playerId)
   }

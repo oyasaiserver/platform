@@ -123,19 +123,8 @@ class Portals(private val plugin: JavaPlugin) : Listener {
 
   fun initialize() {
     if (!file.exists()) {
-      val legacy = File(plugin.server.pluginsFolder, "Multiverse-Portals/portals.yml")
-      if (legacy.isFile) {
-        val imported = parsePortals(legacy)
-        yaml = loadNormalYaml(legacy)
-        entries.putAll(imported.portals)
-        save()
-        plugin.logger.info(
-            "[OWG][portals] Imported ${entries.size}; skipped=${imported.skipped}; unsupported-actions=${imported.unsupportedActions}"
-        )
-      } else {
-        save()
-        plugin.logger.info("[OWG][portals] No legacy file; created empty registry")
-      }
+      save()
+      plugin.logger.info("[OWG][portals] Created empty registry")
     }
     val loaded = parsePortals(file)
     yaml = loadNormalYaml(file)

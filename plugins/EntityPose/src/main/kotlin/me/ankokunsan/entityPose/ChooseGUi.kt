@@ -116,7 +116,7 @@ object ChooseGUi {
     inv.setItem(10, horItem)
     inv.setItem(11, allItem)
 
-    val filler = getFiller1()
+    val filler = getFiller()
     (0 until inv.size).forEach { i -> if (inv.getItem(i) == null) inv.setItem(i, filler) }
     player.openInventory(inv)
   }
@@ -143,9 +143,9 @@ object ChooseGUi {
             itemMeta = meta
           }
       inv.setItem(index, item)
-      val filler = getFiller1()
-      (0 until inv.size).forEach { i -> if (inv.getItem(i) == null) inv.setItem(i, filler) }
     }
+    val filler = getFiller()
+    (0 until inv.size).forEach { i -> if (inv.getItem(i) == null) inv.setItem(i, filler) }
 
     player.openInventory(inv)
     player.playSound(player, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)
@@ -172,7 +172,7 @@ object ChooseGUi {
           }
       inv.setItem(index, item)
     }
-    val filler = getFiller1()
+    val filler = getFiller()
     (0 until inv.size).forEach { i -> if (inv.getItem(i) == null) inv.setItem(i, filler) }
 
     player.openInventory(inv)
@@ -268,7 +268,7 @@ object ChooseGUi {
     invs.setItem(7, scaleItem2)
     invs.setItem(8, lockitem)
 
-    val filler = getFiller1()
+    val filler = getFiller()
     for (i in 0 until invs.size) {
       if (invs.getItem(i) == null) invs.setItem(i, filler)
     }
@@ -377,7 +377,7 @@ object ChooseGUi {
     invs.setItem(6, scaleItem1)
     invs.setItem(7, scaleItem2)
     invs.setItem(8, lockitem)
-    val filler = getFiller1()
+    val filler = getFiller()
     for (i in 0 until invs.size) {
       if (invs.getItem(i) == null) invs.setItem(i, filler)
     }
@@ -414,15 +414,5 @@ object ChooseGUi {
       invs.setItem(index, item)
     }
     player.openInventory(invs)
-  }
-
-  private fun getFiller1(): ItemStack {
-    return ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE).apply {
-      itemMeta =
-          itemMeta?.apply {
-            setDisplayName(" ")
-            persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "FILLER")
-          }
-    }
   }
 }

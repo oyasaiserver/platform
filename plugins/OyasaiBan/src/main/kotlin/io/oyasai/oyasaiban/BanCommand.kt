@@ -142,8 +142,10 @@ class BanCommand(
           if (outcome == null) return@whenComplete
           val (uuid, record) = outcome
           if (record == null)
-              source.reply(legacy.deserialize("§a有効なBANはありません。 UUID: ").append(uuid.copyable()))
-          else source.reply(record.details())
+              source.sendMessage(
+                  legacy.deserialize("§a有効なBANはありません。 UUID: ").append(uuid.copyable())
+              )
+          else source.sendMessage(record.details())
         }
   }
 
@@ -161,7 +163,7 @@ class BanCommand(
           if (error != null) return@whenComplete failed(source, "履歴確認", error)
           if (outcome == null) return@whenComplete
           val (uuid, records) = outcome
-          source.reply(
+          source.sendMessage(
               legacy
                   .deserialize("§6${args[0]} のBAN履歴: ${records.size}件 §7(")
                   .append(uuid.copyable())
@@ -188,7 +190,7 @@ class BanCommand(
       if (page > pages) return@whenComplete source.reply("§cページ範囲は 1〜$pages です。")
       source.reply("§6BAN一覧 §f$page/$pages §7(${records.size}件)")
       records.drop((page - 1) * PAGE_SIZE).take(PAGE_SIZE).forEach { record ->
-        source.reply(
+        source.sendMessage(
             legacy
                 .deserialize("§e${record.name} ")
                 .append(record.uuid.copyable())
@@ -215,8 +217,6 @@ class BanCommand(
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").withZone(ZoneId.of("Asia/Tokyo"))
 
     private fun CommandSource.reply(message: String) = sendMessage(legacy.deserialize(message))
-
-    private fun CommandSource.reply(message: Component) = sendMessage(message)
 
     // マウスを乗せると案内が出て、クリックでクリップボードにコピーされる。
     private fun UUID.copyable(): Component =

@@ -29,9 +29,7 @@ import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import net.luckperms.api.LuckPerms
-import org.apache.commons.lang3.tuple.MutablePair
 import org.bukkit.Bukkit
-import org.bukkit.Statistic
 import org.bukkit.entity.Player
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.java.JavaPlugin
@@ -42,14 +40,13 @@ class DynamicProfile : JavaPlugin() {
 
   companion object {
     var UUIDMap: MutableMap<UUID, LBStats> = Collections.synchronizedMap(mutableMapOf())
-    val totalPlayTimes = MutablePair(0L, Collections.synchronizedList(mutableListOf<UUID>()))
     var allTitles: MutableMap<Int, Title> = mutableMapOf()
     val allUser = Collections.synchronizedList(mutableListOf<UUID>())
     val allStats = Collections.synchronizedMap(mutableMapOf<UUID, Stats>())
     val failedUser = Collections.synchronizedList(mutableListOf<UUID>())
+    val playTimes = Collections.synchronizedMap(mutableMapOf<Player, BukkitRunnable>())
     val provider: RegisteredServiceProvider<LuckPerms>? =
         Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
-    val playTimes = Collections.synchronizedMap(mutableMapOf<Player, BukkitRunnable>())
   }
 
   @Volatile
@@ -78,12 +75,6 @@ class DynamicProfile : JavaPlugin() {
   }
 
   override fun onEnable() {
-    totalPlayTimes.left = System.currentTimeMillis()
-    totalPlayTimes.right.addAll(
-        allUser.sortedByDescending {
-          Bukkit.getOfflinePlayer(it).getStatistic(Statistic.PLAY_ONE_MINUTE)
-        }
-    )
     saveDefaultConfig()
     PromotionMigration.copyLegacyFiles(dataFolder)
     reloadConfig()

@@ -9,7 +9,6 @@ import io.oyasai.toolbox.Tools.allHide
 import io.oyasai.toolbox.Tools.color
 import io.oyasai.vehicle.base.VehicleBalanceSettings
 import java.util.*
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -30,7 +29,6 @@ object CarBuilder2GUI {
   }
 
   fun listMenu(buySwitch: Boolean): PaginatedOyasaiMenu {
-    val line4 = if (buySwitch) "&7クリックすると&9マイルポイント&b100P&7で車両を購入する" else "&7クリックで無料の試乗車両をスポーンさせます"
     val systemUUID = UUID.nameUUIDFromBytes("System".toByteArray())
     return BuilderMenuSupport.buildVehicleListMenu(
         buySwitch = buySwitch,
@@ -38,37 +36,26 @@ object CarBuilder2GUI {
         resolveRow = resolveRow@{ name ->
               val data = CarBuilder2BaseCache.getBaseData(name) ?: return@resolveRow null
               val ownerUUID = data.config.getOwnerUUID() ?: systemUUID
-              BuilderMenuSupport.VehicleListRow(
+              BuilderMenuSupport.vehicleListRow(
                   ownerUUID,
                   name,
                   data.getBlock().material,
-                  listOf(
-                      "&aエンティティ数&7: &a${data.totalEntity()}",
-                      "&3作者&7: &b${Bukkit.getOfflinePlayer(ownerUUID).name ?: "Unknown"}",
-                      line4,
-                  ),
+                  data.totalEntity(),
+                  buySwitch,
               )
             },
-        onSelection = onSelection@{ player, name, buy ->
-              if (buy) {
-                if (player.inventory.firstEmpty() == -1) {
-                  player.playSound(player.location, Sound.ITEM_DYE_USE, 0.35f, 0.5f)
-                  player.sendMessage("[CarBuilder2] インベントリを開けてください!")
-                  return@onSelection
-                }
-                val boughtItem = CarBuilder2Item.buyCarItem(name, player.name) ?: return@onSelection
-                if (MileagePoint.payment(player.uniqueId, 100)) {
-                  player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.235f)
-                  player.inventory.addItem(boughtItem)
-                  player.sendMessage("[CarBuilder2] ${name}を購入しました!")
-                } else {
-                  player.playSound(player.location, Sound.ITEM_DYE_USE, 0.35f, 0.5f)
-                  player.sendMessage("[CarBuilder2] ポイント不足です!")
-                }
-              } else {
-                player.performCommand("cbmenu $name spawn")
-              }
-            },
+        onSelection = { player, name, buy ->
+          BuilderMenuSupport.selectVehicle(
+              player,
+              name,
+              buy,
+              CarBuilder2Item::buyCarItem,
+              "[CarBuilder2] インベントリを開けてください!",
+              "[CarBuilder2] ${name}を購入しました!",
+              "[CarBuilder2] ポイント不足です!",
+              "cbmenu $name spawn",
+          )
+        },
     )
   }
 
@@ -157,13 +144,11 @@ object CarBuilder2GUI {
     BuilderMenuSupport.renderVehicleStatDigits(
         gui,
         CarBuilder2Item.getCarVehicleIntList(item),
-        listOf(
-            BuilderMenuSupport.VehicleStatRow("&f最高速", "&7上限:180"),
-            BuilderMenuSupport.VehicleStatRow("&fパワー", "&7上限:1000"),
-            BuilderMenuSupport.VehicleStatRow("&fブレーキ", "&7上限:1000"),
-            BuilderMenuSupport.VehicleStatRow("&fギア数", "&7上限:100"),
-            BuilderMenuSupport.VehicleStatRow("&fタイヤ", "&7上限:200"),
-        ),
+        BuilderMenuSupport.commonStatRows +
+            listOf(
+                BuilderMenuSupport.VehicleStatRow("&fギア数", "&7上限:100"),
+                BuilderMenuSupport.VehicleStatRow("&fタイヤ", "&7上限:200"),
+            ),
     )
 
     val cost = CarBuilder2Item.getCarVCCost(item) ?: 0

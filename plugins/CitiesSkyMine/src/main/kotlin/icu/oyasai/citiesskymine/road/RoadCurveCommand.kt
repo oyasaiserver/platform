@@ -231,11 +231,13 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
                   MessageUtil.success(player, "[RC] 白線スムージング完了: ${affectedBlocks} ブロック")
                   if (result.undoRecorded) {
                     MessageUtil.info(player, "FAWE の //undo でこの白線スムージングを取り消せます。")
-                  } else if (!result.changed) {
-                    MessageUtil.info(player, "変更対象はありませんでした。")
-                  } else {
-                    MessageUtil.warn(player, "白線スムージングは完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-                  }
+                  } else
+                      MessageUtil.undoResult(
+                          player,
+                          !result.changed,
+                          "変更対象はありませんでした。",
+                          "白線スムージングは完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+                      )
                 },
             )
           } catch (e: IllegalArgumentException) {

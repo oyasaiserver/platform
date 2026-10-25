@@ -2,6 +2,7 @@ package io.oyasai.anybuilder.aircraftbuilder.presentation
 
 import io.oyasai.VehicleMenuCommand
 import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
+import io.oyasai.anybuilder.common.playVehicleStepSounds
 import io.oyasai.toolbox.ControlKey
 import io.oyasai.toolbox.Tools
 import org.bukkit.Sound
@@ -68,20 +69,7 @@ fun AircraftBuilderEntityData.soundTaskImpl(wasd: ControlKey?) {
       this.gasDouble.toFloat() * 0.45f,
       0.5f + this.gasDouble.toFloat(),
   )
-  world.playSound(
-      loc,
-      Sound.ENTITY_COW_STEP,
-      SoundCategory.PLAYERS,
-      0.15f + speedVolumeBase,
-      0.5f + speedPitchBase,
-  )
-  world.playSound(
-      loc,
-      Sound.ENTITY_HORSE_STEP_WOOD,
-      SoundCategory.PLAYERS,
-      0.375f + speedVolumeBase,
-      0.5f + speedPitchRpm,
-  )
+  playVehicleStepSounds(world, loc, speedVolumeBase, speedPitchBase, speedPitchRpm)
 }
 
 fun AircraftBuilderEntityData.updateBarImpl() {

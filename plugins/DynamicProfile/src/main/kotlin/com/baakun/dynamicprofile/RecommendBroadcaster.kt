@@ -105,9 +105,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
               else -> {
                 cache.clear()
-                val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
-                if (retryUncached.isEmpty()) return
-                retryUncached.random()
+                targetPlayers.random()
               }
             }
         cache.add(player.uniqueId)
@@ -136,9 +134,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               uncached.isNotEmpty() -> uncached.random()
               else -> {
                 buildingCache.clear()
-                val retryUncached = allRecommends.filter { (_, id) -> id !in buildingCache }
-                if (retryUncached.isEmpty()) return
-                retryUncached.random()
+                allRecommends.random()
               }
             }
         buildingCache.add(selected)
@@ -152,9 +148,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
               else -> {
                 cache.clear()
-                val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
-                if (retryUncached.isEmpty()) return
-                retryUncached.random()
+                targetPlayers.random()
               }
             }
         val buildingCache =
@@ -168,9 +162,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               uncachedBuildings.isNotEmpty() -> uncachedBuildings.random()
               else -> {
                 buildingCache.clear()
-                val retryUncached = recommendIds.filter { it !in buildingCache }
-                if (retryUncached.isEmpty()) return
-                retryUncached.random()
+                recommendIds.random()
               }
             }
         cache.add(player.uniqueId)

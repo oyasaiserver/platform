@@ -2,8 +2,6 @@ package io.oyasai.oyasaivotifier
 
 import com.vexsoftware.votifier.model.Vote
 import com.vexsoftware.votifier.model.VotifierEvent
-import java.io.File
-import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicLong
 import java.util.logging.Level
 import org.bukkit.Bukkit
@@ -12,7 +10,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 
 class OyasaiVotifierPlugin : JavaPlugin() {
-  private var legacyDataReady = false
   private var configModel: VotifierConfig? = null
   private var rewards: VoteRewards? = null
   private var server: VoteServer? = null
@@ -20,14 +17,8 @@ class OyasaiVotifierPlugin : JavaPlugin() {
   private val v1Votes = AtomicLong()
   private val v2Votes = AtomicLong()
 
-  override fun onLoad() {
-    migrateLegacyData(dataFolder, logger::info)
-    legacyDataReady = true
-  }
-
   override fun onEnable() {
     try {
-      check(legacyDataReady) { "Legacy data copy did not complete; refusing to read vote data" }
       saveDefaultConfig()
       val loadedConfig = VotifierConfig.load(this)
       val keys = VoteKeys.loadOrCreate(dataFolder.resolve("rsa"))
@@ -130,21 +121,4 @@ class OyasaiVotifierPlugin : JavaPlugin() {
         }
         else -> false
       }
-}
-
-/** Copy before configuration or keys are opened; retain the legacy folder for rollback. */
-internal fun migrateLegacyData(dataFolder: File, log: (String) -> Unit = {}) {
-  val legacy = dataFolder.parentFile?.resolve("Votifier") ?: return
-  if (dataFolder.exists() || !legacy.isDirectory) return
-
-  // Publish only a complete copy, so a failed copy can be retried on the next startup.
-  val staging =
-      Files.createTempDirectory(dataFolder.parentFile.toPath(), ".oyasaivotifier-copy-").toFile()
-  try {
-    legacy.copyRecursively(staging, overwrite = false) { _, error -> throw error }
-    Files.move(staging.toPath(), dataFolder.toPath())
-  } finally {
-    staging.deleteRecursively()
-  }
-  log("Copied legacy Votifier data to OyasaiVotifier; retained the legacy folder")
 }

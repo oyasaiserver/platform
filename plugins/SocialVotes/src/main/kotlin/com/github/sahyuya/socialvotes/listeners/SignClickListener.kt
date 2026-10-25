@@ -27,8 +27,7 @@ class SignClickListener : Listener {
     val p = e.player
     val block = e.clickedBlock ?: return
     val dm = SocialVotes.dataManager
-    val clicked = e.clickedBlock ?: return
-    val state = clicked.state as? Sign
+    val state = block.state as? Sign
 
     if (state == null) {
       cancelAllModesIfActive(p)

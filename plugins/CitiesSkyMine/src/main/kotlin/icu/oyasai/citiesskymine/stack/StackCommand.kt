@@ -25,10 +25,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.STACK)) return true
 
     if (args.isEmpty() || args[0].equals("help", ignoreCase = true)) {
@@ -73,11 +70,12 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         sender,
         "選択範囲を複製しました: ${copied.blocks} blocks / ${parsed.times} times / offset=${offset.x},${offset.y},${offset.z} / facing=${offset.facing.name.lowercase()}",
     )
-    if (copied.undoRecorded) {
-      MessageUtil.info(sender, "FAWE の //undo でこの複製を取り消せます。")
-    } else {
-      MessageUtil.warn(sender, "複製は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-    }
+    MessageUtil.undoResult(
+        sender,
+        copied.undoRecorded,
+        "FAWE の //undo でこの複製を取り消せます。",
+        "複製は完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+    )
     return true
   }
 
