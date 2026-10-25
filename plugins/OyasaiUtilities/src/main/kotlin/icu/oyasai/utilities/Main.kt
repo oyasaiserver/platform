@@ -18,6 +18,7 @@ import icu.oyasai.utilities.pita.Pita
 import icu.oyasai.utilities.playerstate.PlayerStateFeature
 import icu.oyasai.utilities.redbull.RedBullCommand
 import icu.oyasai.utilities.redbull.RedBullFeature
+import icu.oyasai.utilities.schematic.SchematicFeature
 import icu.oyasai.utilities.sit.SitFeature
 import icu.oyasai.utilities.skin.SkinFeature
 import icu.oyasai.utilities.skriptport.CommandAliases
@@ -88,6 +89,7 @@ class Main : JavaPlugin() {
     guidance.enable()
     NonOpUtilities(this).enable()
     Scale(this).enable()
+    SchematicFeature(this).enable()
     CommandAliases(this).enable()
     tpSwitchFeature = TpSwitchFeature(this)
     tpSwitchFeature.enable()

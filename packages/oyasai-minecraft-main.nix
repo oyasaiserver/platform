@@ -71,7 +71,6 @@ oyasaiPurpur rec {
     sociallikes3
     socialvotes
     vault
-    vertex
     viaversion
     worldguard
     # keep-sorted end
