@@ -35,11 +35,4 @@ data class NoteEvent(
     }
     require(customSound != null || customSoundSeed == null) { "customSoundSeedにはcustomSoundが必要です" }
   }
-
-  /** 音量・定位を上書きしたコピーを返す（看板による上書き記録用）。 */
-  fun withOverride(volume: Int? = null, pan: Int? = null): NoteEvent =
-      copy(
-          volume = volume?.coerceIn(0, 100) ?: this.volume,
-          pan = pan?.coerceIn(-100, 100) ?: this.pan,
-      )
 }
