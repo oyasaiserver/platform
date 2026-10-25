@@ -1,7 +1,6 @@
 package icu.oyasai.games.pvp
 
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.Locale
 
 internal enum class Goal(val teams: Boolean, val kills: Boolean) {
@@ -38,19 +37,14 @@ internal fun resolveName(input: String, names: Collection<String>): String? {
 internal fun resolveBetArena(input: String, targets: Map<String, Collection<String>>): String? =
     targets.filterValues { resolveName(input, it) != null }.keys.singleOrNull()
 
-internal fun betPayout(
-    amount: Double,
-    winningTotal: Double,
-    total: Double,
-    factor: Double,
-): Double {
-  require(listOf(amount, winningTotal, total, factor).all { it.isFinite() && it >= 0 })
+internal fun betPayout(amount: Long, winningTotal: Long, total: Long, factor: Long): Long {
+  require(listOf(amount, winningTotal, total, factor).all { it >= 0 })
   require(winningTotal > 0 && amount <= winningTotal && winningTotal <= total)
   return BigDecimal.valueOf(amount)
       .multiply(BigDecimal.valueOf(total))
       .multiply(BigDecimal.valueOf(factor))
-      .divide(BigDecimal.valueOf(winningTotal), 2, RoundingMode.HALF_UP)
-      .toDouble()
+      .divide(BigDecimal.valueOf(winningTotal))
+      .longValueExact()
 }
 
 internal fun autoClass(value: String, team: String): String {

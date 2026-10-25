@@ -38,28 +38,27 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 ### 構成
 
 - **1 つの jar に 2 つのエントリポイント**を持つ。Paper 側は `io.oyasai.oyasaitab.OyasaiTabPlugin`（`plugin.yml`）、Velocity 側は `io.oyasai.oyasaitab.velocity.OyasaiVelocityPlugin`（`velocity-plugin.json` と `@Plugin` 注釈）。
-- Paper 側の `plugin.yml` は `api-version: "26.2"`、`softdepend` に SocialLikes3・OyasaiToken・TokenManager・Vault・LuckPerms・OyasaiUtilities・DynamicProfile を宣言する。`depend` はないので、どれが欠けても読み込みは止まらない。
-- ビルド依存は Purpur API、LuckPerms API、Vault API、Velocity API（`net.kyori` を除外）、DynamicProfile・OyasaiToken・SocialLikes3 のプロジェクト依存（すべて compileOnly）、Kotlin stdlib（implementation）。ShadowJar をルートの Gradle 設定で使う。
+- Paper 側の `plugin.yml` は `api-version: "26.2"`、`softdepend` に SocialLikes3・OyasaiEconomy・OyasaiEconomy・LuckPerms・OyasaiUtilities・DynamicProfile を宣言する。`depend` はないので、どれが欠けても読み込みは止まらない。
+- ビルド依存は Purpur API、LuckPerms API、Velocity API（`net.kyori` を除外）、DynamicProfile・OyasaiEconomy・SocialLikes3 のプロジェクト依存（すべて compileOnly）、Kotlin stdlib（implementation）。ShadowJar をルートの Gradle 設定で使う。
 - 別プラグインの API は**実行時にだけ**使う。サービスの取得（`ServicesManager`）が失敗すると、表示を止めて送信だけ続ける（後述の起動の分岐）。
 
 ### 起動の分岐（`OyasaiTabRuntime.create`）
 
 1. 設定を読む（`OyasaiTabConfig.load`）。
-2. 5 つのプラグイン名（SocialLikes3、DynamicProfile、LuckPerms、`TokenManager`、Vault）を `PluginManager.getPlugin` で確かめる。欠けていれば `SnapshotOnlyOyasaiTabRuntime`。
-3. サービスを取る（Vault の `Economy`、`OyasaiTokenApi`、LuckPerms の `LuckPerms`）。一つでも欠ければ `SnapshotOnlyOyasaiTabRuntime`。
+2. 4 つのプラグイン名（SocialLikes3、DynamicProfile、LuckPerms、OyasaiEconomy）を `PluginManager.getPlugin` で確かめる。欠けていれば `SnapshotOnlyOyasaiTabRuntime`。
+3. サービスを取る（OyasaiEconomy の `OyasaiEconomyApi` と LuckPerms の `LuckPerms`）。一つでも欠ければ `SnapshotOnlyOyasaiTabRuntime`。
 4. 揃えば `FullOyasaiTabRuntime`。AFK の判定は `OyasaiUtilitiesAfkLookup.isAfk` を渡す。
 
-注意: 手順 2 の `TokenManager` は OyasaiToken の plugin 名（`OyasaiToken`）と一致しない（`OyasaiTabPlugin.kt:58`）。OyasaiToken は `provides: [TokenManager]` を宣言しているが、`getPlugin` が `provides` の名前で引けるかは Paper 本体の実装しだいで、Javadoc にも書かれていない。未確認。起動ログの `missing plugins` で判断する。
 
 - 判定は `onEnable` の1回だけ。`getPlugin` は無効化されたプラグインも返すので、依存プラグインが有効化に失敗していても `FullOyasaiTabRuntime` になり得る（そのときの静的参照の挙動は未確認）。
-- nix 構成では `oyasai-minecraft-lobby`・`-axiom` に SocialLikes3・DynamicProfile・OyasaiToken が入っていないため、この2つは送信専用になる（コードの読み）。
+- nix 構成では `oyasai-minecraft-lobby`・`-axiom` に SocialLikes3・DynamicProfile・OyasaiEconomy が入っていないため、この2つは送信専用になる（コードの読み）。
 
 ### 主要な処理の流れ
 
 **Paper 側（`FullOyasaiTabRuntime`）**
 
 - 起動時に `network.start()`、ping の objective を用意、自分が作った空のチームを掃除、イベントを登録し、すぐ1回と、以後 20 tick ごとに `updateAll()` を動かす。
-- `updateAll()`: 全オンラインプレイヤーの `PlayerProfile`（グループ、色、称号、Likes、所持金、トークン、AFK、レベル）を作る。並び順（`TabOrder.calculate`）を求め、各プレイヤーにヘッダー・フッター、タブ名（前回と違うときだけ設定）、並び順（`setPlayerListOrder`）、名前タグ、ping を設定する。最後に別サーバー向けの名前を `network.send` で送る。例外を捕まえていないので、1 人の取得（Vault・OyasaiToken・DynamicProfile など）で例外が出るとその回は全員分の更新と送信が止まる。
+- `updateAll()`: 全オンラインプレイヤーの `PlayerProfile`（グループ、色、称号、Likes、所持金、トークン、AFK、レベル）を作る。並び順（`TabOrder.calculate`）を求め、各プレイヤーにヘッダー・フッター、タブ名（前回と違うときだけ設定）、並び順（`setPlayerListOrder`）、名前タグ、ping を設定する。最後に別サーバー向けの名前を `network.send` で送る。例外を捕まえていないので、1 人の取得（OyasaiEconomy・DynamicProfile など）で例外が出るとその回は全員分の更新と送信が止まる。
 - グループは LuckPerms の `primaryGroup` を小文字にしたもの。ユーザーが読み込まれていなければ空文字（色なし・順位最後・`default` の名前タグ・称号なし）。
 - 名前タグ（`updateNameTag`）: 接頭辞と後置きの組から、チーム名を `nametag.team-prefix` ＋ CRC32（`group|prefix|suffix`）の base36 6 文字で作る。既存のチームに別のプラグインが入っているプレイヤーは触らない（`currentTeam != null && !ownsTeam`）。値が変わったときだけチームを更新する。
 - ping（`updatePing`）: `oyasaitab_ping` の objective（表示名 `TAB`、`PLAYER_LIST` スロット）のスコアを ping に合わせる。退出時にスコアを消す（`onQuit`）。
@@ -118,8 +117,7 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 | SocialLikes3 | `Data.userLikesInt`（個人の Likes）、`Data.userLikesInt.values.sum()`（合計）、`Data.getBuildingInt()`（SLIDs） | 静的参照 |
 | DynamicProfile | `Calculator.getLevel(player)`（`Lv.` の値） | 静的参照 |
 | LuckPerms | `userManager.getUser`、主グループ、`cachedData.metaData.suffix` | `ServicesManager` |
-| Vault | `Economy.getBalance(player)` | `ServicesManager` |
-| OyasaiToken | `OyasaiTokenApi.getBalance(uuid)` | `ServicesManager` |
+| OyasaiEconomy | `OyasaiEconomyApi.balance(currency, uuid)` で円とトークンを取得 | `ServicesManager` |
 | OyasaiUtilities | メタデータ `oyasaiutilities-afk`（所有プラグインが有効なときだけ真を読む） | Bukkit メタデータ |
 | Velocity | チャンネル `oyasaitab:main`（送信・受信） | Bukkit / Velocity の plugin messaging |
 | Purpur API | Bukkit の各 API、Adventure、MiniMessage | 直接参照 |
@@ -139,7 +137,6 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 
 ### 既知の制限
 
-- **`TokenManager` の判定**（上の「起動の分岐」）。実機で未確認。
 - **人数の上限:** 送信側は 1000 人を超えると書き出しで例外（`require`）。受信側は復号で拒否。`send` は `updateAll()` の最後なので、自サーバーの表示は更新されてから例外になる。
 - **自分のチームの判定は接頭辞だけ:** `ownsTeam` は `team-prefix` で始まるかを見る。他のプラグインが同じ接頭辞のチームを作ると、停止時に外される。`team-prefix` を変えると古いチームは残る。
 - **Velocity の設定読み込み:** YAML パーサーではなく、`delayed-reapply-ms:` で始まる行を探して `toLongOrNull` するだけ（引用符付きは読めず 200）。
@@ -158,3 +155,7 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 - Paper・Velocity とも、hex 色を `useUnusualXRepeatedCharacterHexFormat()` で書き出し、読み戻す。既定の legacy の変換は hex を近い既定色に丸めるため（`OyasaiTabPlugin.kt`、`OyasaiVelocityPlugin.kt`、`TablistFormatter`）。
 - 送信名は Likes のバッジを含めず、プロキシが所属サーバー名を前に付ける（`OyasaiTabProtocol.kt`、`TablistFormatter.playerNameNoBadgeLegacy`）。
 - 表示側が無効なときは、名前を素のまま送る（`SnapshotOnlyOyasaiTabRuntime`）。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。

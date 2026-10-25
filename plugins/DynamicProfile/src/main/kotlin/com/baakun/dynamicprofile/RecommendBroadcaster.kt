@@ -41,7 +41,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
 
     val perm =
         plugin.server.servicesManager
-            .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
+            .getRegistration(net.luckperms.api.LuckPerms::class.java)
             ?.provider
 
     val (targetPlayers, cache) = // targetPlayers: おススメ設定済み　かつ　枠に合致するプレイヤーのリスト
@@ -49,9 +49,24 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
           0 -> { // 特別枠
             val filtered =
                 onlinePlayers.filter { player ->
-                  (perm?.playerInGroup(player, "spdonator") == true ||
-                      perm?.playerInGroup(player, "donator") == true) &&
-                      getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+                  (perm?.userManager?.getUser(player.uniqueId)?.let { user ->
+                    user
+                        .getInheritedGroups(
+                            perm.contextManager.getQueryOptions(user).orElseGet {
+                              perm.contextManager.staticQueryOptions
+                            }
+                        )
+                        .any { it.name == "spdonator" }
+                  } == true ||
+                      perm?.userManager?.getUser(player.uniqueId)?.let { user ->
+                        user
+                            .getInheritedGroups(
+                                perm.contextManager.getQueryOptions(user).orElseGet {
+                                  perm.contextManager.staticQueryOptions
+                                }
+                            )
+                            .any { it.name == "donator" }
+                      } == true) && getStats(player.uniqueId).recommends.values.any { it != EMPTY }
                 }
             if (filtered.isEmpty()) { // 通常枠Fallback
               val normalFiltered =

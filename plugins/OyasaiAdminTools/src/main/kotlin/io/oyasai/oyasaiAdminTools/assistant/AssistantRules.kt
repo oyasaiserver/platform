@@ -61,7 +61,7 @@ internal class AssistantRules(additional: List<String> = emptyList()) {
                 "^fastasyncworldedit:(/?cs|/?\\.s|/?macro)\\b",
                 "^oyasaiadmintools:socialspy\\b",
                 "@[aer]\\b",
-                "^oyasaitoken:token addall\\b",
+                "^oyasaieconomy:token giveall\\b",
                 "^$SERVER_OWNER:whitelist (on|off|reload)\\b",
                 "^$SERVER_OWNER:save-off\\b",
                 "^coreprotect:(co|core|coreprotect) purge\\b",

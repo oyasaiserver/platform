@@ -67,13 +67,13 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
         }
         val matName = args[2].uppercase()
         val buyPrice =
-            args[3].toDoubleOrNull()
+            args[3].toLongOrNull()
                 ?: run {
                   player.sendMessage(c("&c買値が不正です。"))
                   return
                 }
         val sellPrice =
-            args[4].toDoubleOrNull()
+            args[4].toLongOrNull()
                 ?: run {
                   player.sendMessage(c("&c売値が不正です。"))
                   return
@@ -133,7 +133,7 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
           player.sendMessage(c("&c使い方: /menuedit whitelist add hand <売値>"))
           return
         }
-        val sellPrice = args.getOrNull(2)?.toDoubleOrNull()
+        val sellPrice = args.getOrNull(2)?.toLongOrNull()
         if (sellPrice == null || sellPrice <= 0) {
           player.sendMessage(c("&c売値に正の数値を指定してください。"))
           return

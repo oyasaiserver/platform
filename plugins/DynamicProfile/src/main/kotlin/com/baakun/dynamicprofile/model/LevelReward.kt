@@ -9,7 +9,6 @@ import com.baakun.dynamicprofile.util.Tools.color
 import com.baakun.dynamicprofile.util.Tools.econ
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.plugin
-import com.baakun.dynamicprofile.util.Tools.token
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.*
@@ -45,7 +44,7 @@ object LevelReward {
               val fields = item.itemMeta.displayName.split(",")
               val level = fields[0].toInt()
               when (item.type) {
-                Material.IRON_INGOT -> require(fields[1].toDouble().isFinite())
+                Material.IRON_INGOT -> require(fields[1].toLong() >= 0)
                 Material.GOLD_INGOT,
                 Material.COAL -> fields[1].toInt()
                 else -> Unit
@@ -62,13 +61,16 @@ object LevelReward {
             Material.IRON_INGOT -> {
               val text = reward.lores
               text.add(
-                  econ?.format(item.itemMeta.displayName.split(",").get(1).toDouble()).toString()
+                  econ
+                      ?.format("yen", item.itemMeta.displayName.split(",").get(1).toLong())
+                      .toString()
               )
 
               reward.runnables.add {
-                econ?.depositPlayer(
-                    Bukkit.getOfflinePlayer(player.uniqueId),
-                    item.itemMeta.displayName.split(",").get(1).toDouble(),
+                econ?.deposit(
+                    "yen",
+                    (Bukkit.getOfflinePlayer(player.uniqueId)).uniqueId,
+                    item.itemMeta.displayName.split(",").get(1).toLong(),
                 )
               }
             }
@@ -77,7 +79,11 @@ object LevelReward {
               text.add("Pt." + item.itemMeta.displayName.split(",").get(1).toInt().toString())
 
               reward.runnables.add {
-                token?.addTokens(player, item.itemMeta.displayName.split(",").get(1).toLong())
+                econ?.deposit(
+                    "token",
+                    player.uniqueId,
+                    item.itemMeta.displayName.split(",").get(1).toLong(),
+                )
               }
             }
             Material.COAL -> {

@@ -2,7 +2,7 @@ dependencies {
   compileOnly(libs.purpur.api)
   compileOnly(libs.fawe.bukkit)
   compileOnly(libs.luckperms.api)
-  compileOnly(project(":plugins:OyasaiToken"))
+  compileOnly(project(":plugins:OyasaiEconomy"))
   implementation(libs.kotlin.stdlib)
   implementation(libs.gson)
   implementation(libs.discord.webhooks)
@@ -10,6 +10,7 @@ dependencies {
   implementation(libs.sqlite.jdbc)
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
   testImplementation(libs.purpur.api)
+  testImplementation(project(":plugins:OyasaiEconomy"))
   testImplementation(libs.fawe.bukkit)
 }
 
@@ -35,3 +36,5 @@ tasks.shadowJar {
 }
 
 tasks.test { dependsOn(tasks.shadowJar) }
+
+tasks.test { dependsOn(":plugins:OyasaiEconomy:shadowJar") }

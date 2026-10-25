@@ -5,12 +5,12 @@ import kotlin.test.*
 class BedWarsRulesTest {
   @Test
   fun `final kill reward is suppressed while other configured rewards are preserved`() {
-    assertEquals(0.0, bedWarsRewardAmount("final-kill", 13.0))
-    assertEquals(0.0, bedWarsRewardAmount("final-kill", 0.0))
-    assertEquals(7.0, bedWarsRewardAmount("kill", 7.0))
-    assertEquals(31.0, bedWarsRewardAmount("win", 31.0))
-    assertEquals(11.0, bedWarsRewardAmount("bed-destroy", 11.0))
-    assertEquals(0.0, bedWarsRewardAmount("kill", 0.0))
+    assertEquals(0L, bedWarsRewardAmount("final-kill", 13L))
+    assertEquals(0L, bedWarsRewardAmount("final-kill", 0L))
+    assertEquals(7L, bedWarsRewardAmount("kill", 7L))
+    assertEquals(31L, bedWarsRewardAmount("win", 31L))
+    assertEquals(11L, bedWarsRewardAmount("bed-destroy", 11L))
+    assertEquals(0L, bedWarsRewardAmount("kill", 0L))
   }
 
   @Test
