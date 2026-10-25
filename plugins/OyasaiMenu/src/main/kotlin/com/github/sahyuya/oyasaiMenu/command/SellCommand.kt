@@ -93,7 +93,7 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       return
     }
 
-    var earned = 0.0
+    var earned = 0L
     var count = 0
     var skipped = 0
     val soldSlots = mutableListOf<Int>()

@@ -37,6 +37,19 @@ class PvpConfigTest {
           .trimIndent()
 
   @Test
+  fun `economy settings require integers and reject retired module names`(@TempDir folder: File) {
+    val file = File(folder, "arena.yml")
+    file.writeText(
+        fixture + "\nmods: [Economy]\nmodules: {economy: {conditions: {entryFee: 10}}}\n"
+    )
+    assertEquals(10, ArenaConfig.load(file).yaml.getLong("modules.economy.conditions.entryFee"))
+    file.writeText(file.readText().replace("entryFee: 10", "entryFee: 1.5"))
+    assertFailsWith<IllegalArgumentException> { ArenaConfig.load(file) }
+    file.writeText(fixture + "\nmods: [Vault]\n")
+    assertFailsWith<IllegalArgumentException> { ArenaConfig.load(file) }
+  }
+
+  @Test
   fun `ordered spawning cycles only through the selected team fight points`() {
     val y = YamlConfiguration().also { it.loadFromString(fixture) }
     val first = Point("arena", 1.0, 2.0, 3.0)

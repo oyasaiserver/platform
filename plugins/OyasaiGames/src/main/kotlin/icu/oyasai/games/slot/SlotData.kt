@@ -1,5 +1,6 @@
 package icu.oyasai.games.slot
 
+import icu.oyasai.games.wholeMoney
 import java.io.File
 import java.util.UUID
 import java.util.logging.Logger
@@ -25,8 +26,8 @@ internal data class SlotMachine(
   val name: String
     get() = yaml.getString("slotMachineName") ?: id.toString()
 
-  val price: Double
-    get() = yaml.getDouble("pullPrice")
+  val price: Long
+    get() = yaml.wholeMoney("pullPrice")
 
   val visual: String
     get() = yaml.getString("visualType")!!
@@ -115,7 +116,7 @@ internal fun loadSlotMachine(file: File, logger: Logger): SlotMachine {
   }
   require(yaml.getString("priceType") == "MONEY") { "priceType" }
   require(yaml.getString("playMode") == "LIMITED_PLAYER") { "playMode" }
-  require(yaml.getDouble("pullPrice", Double.NaN).let { it.isFinite() && it >= 0 }) { "pullPrice" }
+  require(yaml.wholeMoney("pullPrice").let { it >= 0 }) { "pullPrice" }
   winChance(yaml.getDouble("chanceToWin", Double.NaN), 0, 0, 0.0, 0.0)
   for (key in listOf("cooldown", "secondsBeforePrize", "timesUsed")) require(
       yaml.isInt(key) || yaml.isLong(key)

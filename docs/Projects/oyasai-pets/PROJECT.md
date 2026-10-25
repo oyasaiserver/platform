@@ -5,7 +5,7 @@ source: plugins/OyasaiPets/（コードから作成。ゲーム内での確認�
 source_of_truth: "plugins/OyasaiPets/"
 related_paths:
   - packages/oyasai-minecraft-main.nix
-  - plugins/OyasaiToken/
+  - plugins/OyasaiEconomy/
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
@@ -35,12 +35,12 @@ last_validated: "2026-10-13"
 
 - <code>OyasaiPetsUnified.kt</code> にプラグインの起動・停止、コマンド、データ管理、レジストリ、各System・Service・GUI・Listenerをまとめています。セクションコメントで論理ファイル名と役割を示す構成です。
 - <code>BigWolfConfig.kt</code> は共通設定の既定値、読み込み、コマンド向け一覧・取得・更新を管理します。種別ごとの能力・移動値は <code>PetRegistry</code> が設定から読み込みます。
-- <code>plugin.yml</code> はプラグイン名 <code>OyasaiPets</code>、APIバージョン <code>1.21</code>、必須依存 <code>TokenManager</code>、コマンド <code>bigwolf</code> とOP限定の <code>bigwolfop</code> を宣言します。別名や公開権限ノードの宣言はありません。
-- GradleではPurpur APIとOyasaiTokenをコンパイル専用依存、Kotlin stdlibを実装依存にしています。実行時にTokenManagerプラグインが必要です。
+- <code>plugin.yml</code> はプラグイン名 <code>OyasaiPets</code>、APIバージョン <code>1.21</code>、必須依存 <code>OyasaiEconomy</code>、コマンド <code>bigwolf</code> とOP限定の <code>bigwolfop</code> を宣言します。別名や公開権限ノードの宣言はありません。
+- GradleではPurpur APIとOyasaiEconomyをコンパイル専用依存、Kotlin stdlibを実装依存にしています。実行時にOyasaiEconomyプラグインが必要です。
 
 ### 起動からペット操作まで
 
-1. 起動時にTokenManagerの存在と有効状態を調べます。満たさない場合は <code>TokenManager not found! This plugin requires TokenManager to work.</code> を記録して本プラグインを無効化します。
+1. 起動時にOyasaiEconomyの存在と有効状態を調べます。満たさない場合は <code>OyasaiEconomy not found! This plugin requires OyasaiEconomy to work.</code> を記録して本プラグインを無効化します。
 2. PersistentDataContainerキーとペットデータ管理を初期化し、共通値・ペット種別値の不足分を補完して設定を保存します。各System、Service、Listenerを登録します。
 3. 購入、復活、収納エッグの使用、交配などでペットを生成します。ペットIDと所有者IDを設定してから <code>onPetSpawned</code> を呼び、非定型ペットの独自行動AI・追従管理が参照するレジストリへ登録します。
 4. <code>ActivePetRegistry</code> が召喚中エンティティをメモリ内で管理します。エンティティUUIDからエンティティ、ペットID、所有者を参照し、無効エンティティは検索時に遅延削除します。全ワールドの生物スキャンを使いません。
@@ -69,16 +69,16 @@ last_validated: "2026-10-13"
 
 ### 同期・非同期とイベント
 
-- コマンド処理、Bukkitイベント、JSON読書き、TokenManager API呼び出しは呼び出し元のBukkitスレッド上で実行されます。JSON処理やTokenManager連携を非同期化するコードは確認できません。
+- コマンド処理、Bukkitイベント、JSON読書き、OyasaiEconomy API呼び出しは呼び出し元のBukkitスレッド上で実行されます。JSON処理やOyasaiEconomy連携を非同期化するコードは確認できません。
 - Bukkitのスケジューラーを使い、ペット追従、非定型ペットの独自行動AI、騎乗操作、スキル・効果の時間制御を行います。追従は5秒ごとに距離を確認し、同じワールドで20ブロックを超えた場合に飼い主付近へ移動します。
 - 主なListenerはプレイヤー・エンティティの操作、GUIのクリックと終了、死亡、退出、騎乗・降車、釣り、アイテム落下、テレポート、ダメージ、ショップ対象エンティティとの操作を扱います。
 - 騎乗中の飛行ペット制御では、AIを単純に停止するのではなく移動・飛行属性を制御し、降車時に元の値を戻す処理があります。
 
 ### 外部API・依存
 
-- TokenManagerを実行時必須依存とし、残高の取得、ポイント消費、返却に <code>TMAPI</code> を呼びます。消費APIのfalseは失敗として扱い、購入・操作を中止します。残高取得失敗・消費例外・消費拒否は別のプレイヤーメッセージになります。
-- TokenManagerへの返金処理が例外になった場合はログに記録します。呼び出し元の処理が返金の成否を確認できない箇所があるため、成功を断定できません。
-- ビルドはPurpur API、Kotlin stdlib、OyasaiTokenのGradleプロジェクトを参照します。plugin.ymlでの実行時依存宣言はTokenManagerのみです。
+- OyasaiEconomyApi を ServicesManager から取得し、通貨ID `token` で残高確認・消費・返金を行う。受付がfalseなら購入を中止する。
+- OyasaiEconomyへの返金処理が例外になった場合はログに記録します。呼び出し元の処理が返金の成否を確認できない箇所があるため、成功を断定できません。
+- ビルドはPurpur API、Kotlin stdlib、OyasaiEconomyのGradleプロジェクトを参照します。plugin.ymlでの実行時依存宣言はOyasaiEconomyのみです。
 - 外部の保護プラグインを照会する連携コードや、他プラグイン向けのOyasaiPets公開APIは確認できません。ショップ用の印を持つエンティティとの操作を処理するコードはありますが、現行コマンドにショップ作成・削除処理はありません。
 
 ### テストが保証する範囲
@@ -108,3 +108,7 @@ last_validated: "2026-10-13"
 - 2026-03-08 の既存記録を現行コードと照合: PUFFERFISHは現在の公式ペット一覧に含まれない。アルマジロは生成時と騎乗中に丸まり状態を解除する。空中で降車したオウムには降下タスクを設定し、着地時などに終了する。
 - ActivePetRegistryは召喚中エンティティを直接保持し、全ワールド走査の代わりに使う。起動時に既存エンティティを再構成する仕組みは別途存在しないため、レジストリの設計とクラッシュ後の復旧範囲を混同しない。
 - 飛行ペットの騎乗制御について、AI停止だけで説明する古い記述は現行ソースと一致しない。搭乗時に移動・飛行属性を制御し、降車時に復元する処理を正とする。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。

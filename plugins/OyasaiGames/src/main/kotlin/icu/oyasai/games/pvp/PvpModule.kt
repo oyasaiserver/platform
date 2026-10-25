@@ -1,6 +1,7 @@
 package icu.oyasai.games.pvp
 
 import icu.oyasai.games.OyasaiGamesPlugin
+import icu.oyasai.games.wholeMoney
 import java.io.File
 import java.util.UUID
 import java.util.logging.Level
@@ -49,7 +50,7 @@ internal class Participant(
   var lastHit = 0L
 }
 
-internal data class Bet(val target: String, val amount: Double, val charge: String)
+internal data class Bet(val target: String, val amount: Long, val charge: String)
 
 internal class ArenaMatch(val config: ArenaConfig, folder: File) {
   var rules =
@@ -112,10 +113,10 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     }
     importLegacy(folder, File(plugin.dataFolder.parentFile, "pvparena"), plugin.logger)
     folder.mkdirs()
-    if (plugin.server.pluginManager.isPluginEnabled("Vault")) {
+    if (plugin.server.pluginManager.isPluginEnabled("OyasaiEconomy")) {
       val provider =
           Bukkit.getServicesManager()
-              .getRegistration(net.milkbowl.vault.economy.Economy::class.java)
+              .getRegistration(io.oyasai.economy.api.OyasaiEconomyApi::class.java)
               ?.provider
       if (provider != null) economy = PvpEconomy(folder, provider).also { it.retry() }
     }
@@ -196,8 +197,8 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
                 "BattlefieldJoin",
                 "BetterGears",
                 "BetterClasses",
-                "Vault",
-                "Vaultre",
+                "OyasaiEconomy",
+                "EconomyRefund",
                 "ChestFiller",
                 "AfterMatch",
                 "Announcements",
@@ -298,7 +299,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
                       target,
                       arenas.values
                           .filter {
-                            it.phase == "running" && it.config.bool("modules.vault.bet.enabled")
+                            it.phase == "running" && it.config.bool("modules.economy.bet.enabled")
                           }
                           .associate { it.config.name to betTargets(it).keys },
                   )
@@ -339,7 +340,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
             player,
             arena,
             args.getOrNull(1) ?: error("対象を指定してください"),
-            args.getOrNull(2)?.toDoubleOrNull() ?: error("金額を指定してください"),
+            args.getOrNull(2)?.toLongOrNull() ?: error("金額を指定してください"),
         )
       }
       else -> {
@@ -413,15 +414,17 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
         else c.spawn(team, if (arena.phase == "running" || direct) "fight" else "lounge")
     val target = location.location()
     val fee =
-        if (!spectator && (c.has("Vault") || c.has("Vaultre")))
-            c.number("modules.vault.conditions.entryFee")
-        else 0.0
+        if (!spectator && (c.has("Economy") || c.has("EconomyRefund")))
+            c.yaml.wholeMoney("modules.economy.conditions.entryFee")
+        else 0L
     if (
         fee > 0 ||
-            (c.has("Vault") || c.has("Vaultre")) &&
-                listOf("kill", "win", "death").any { c.number("modules.vault.reward.$it") > 0 }
+            (c.has("Economy") || c.has("EconomyRefund")) &&
+                listOf("kill", "win", "death").any {
+                  c.yaml.wholeMoney("modules.economy.reward.$it") > 0
+                }
     )
-        check(economy != null) { "Vault economy が必要です" }
+        check(economy != null) { "OyasaiEconomy economy が必要です" }
     // Validate kits before touching the original inventory.
     val auto = c.text("ready.autoClass", "none")
     val kit = resolveName(autoClass(auto, team), c.classes)
@@ -782,16 +785,16 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   private fun reward(p: Participant, type: String) {
     val arena = p.arena
     val c = arena.config
-    if (!c.has("Vault") && !c.has("Vaultre")) return
+    if (!c.has("Economy") && !c.has("EconomyRefund")) return
     if (
         type == "win" &&
             (arena.members.values.count {
               arena.rules.fighters.containsKey(it.player.uniqueId.toString())
-            } < c.int("modules.vault.conditions.minPlayers", 2) ||
-                arena.elapsed < c.int("modules.vault.conditions.minPlayTime"))
+            } < c.int("modules.economy.conditions.minPlayers", 2) ||
+                arena.elapsed < c.int("modules.economy.conditions.minPlayTime"))
     )
         return
-    economy?.pay(p.player.uniqueId, c.number("modules.vault.reward.$type"))
+    economy?.pay(p.player.uniqueId, c.yaml.wholeMoney("modules.economy.reward.$type"))
   }
 
   private fun finish(arena: ArenaMatch, winners: Set<String>) {
@@ -814,21 +817,29 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
         reward(p, "win")
       }
     }
-    val total = arena.bets.values.sumOf { it.amount }
-    val winningTotal = arena.bets.values.filter { it.target in winners }.sumOf { it.amount }
-    for ((id, entry) in arena.bets) {
-      val payout =
-          if (winners.isEmpty()) entry.amount
-          else if (entry.target in winners && winningTotal > 0)
-              betPayout(
-                  entry.amount,
-                  winningTotal,
-                  total,
-                  arena.config.number("modules.vault.bet.winFactor", 1.0),
-              )
-          else 0.0
-      economy?.settle(entry.charge, payout)
-    }
+    val total = arena.bets.values.fold(0L) { sum, entry -> Math.addExact(sum, entry.amount) }
+    val winningTotal =
+        arena.bets.values
+            .filter { it.target in winners }
+            .fold(0L) { sum, entry -> Math.addExact(sum, entry.amount) }
+    val payouts =
+        try {
+          arena.bets.mapValues { (_, entry) ->
+            if (winners.isEmpty()) entry.amount
+            else if (entry.target in winners && winningTotal > 0)
+                betPayout(
+                    entry.amount,
+                    winningTotal,
+                    total,
+                    arena.config.yaml.wholeMoney("modules.economy.bet.winFactor", 1),
+                )
+            else 0L
+          }
+        } catch (_: ArithmeticException) {
+          plugin.logger.warning("PvPの配当が整数にならないため、すべての賭けの元金を返却します。")
+          arena.bets.mapValues { it.value.amount }
+        }
+    for ((id, entry) in arena.bets) economy?.settle(entry.charge, payouts.getValue(id))
     arena.bets.clear()
   }
 
@@ -842,22 +853,22 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
               }
               .toMap()
 
-  private fun bet(player: Player, arena: ArenaMatch, input: String, amount: Double) {
+  private fun bet(player: Player, arena: ArenaMatch, input: String, amount: Long) {
     val c = arena.config
-    check(c.has("Vault") || c.has("Vaultre"))
-    check(c.bool("modules.vault.bet.enabled")) { "賭けは無効です" }
-    check(arena.phase == "running" && arena.elapsed <= c.int("modules.vault.bet.time", 60)) {
+    check(c.has("Economy") || c.has("EconomyRefund"))
+    check(c.bool("modules.economy.bet.enabled")) { "賭けは無効です" }
+    check(arena.phase == "running" && arena.elapsed <= c.int("modules.economy.bet.time", 60)) {
       "賭け受付時間外です"
     }
     check(arena.rules.fighters[player.uniqueId.toString()] == null) { "参加者は賭けられません" }
-    require(amount.isFinite() && amount > 0 && amount >= c.number("modules.vault.bet.minAmount")) {
+    require(amount > 0 && amount >= c.yaml.wholeMoney("modules.economy.bet.minAmount")) {
       "金額が不正です"
     }
-    val max = c.number("modules.vault.bet.maxAmount")
-    require(max == 0.0 || amount <= max) { "賭け上限を超えています" }
+    val max = c.yaml.wholeMoney("modules.economy.bet.maxAmount")
+    require(max == 0L || amount <= max) { "賭け上限を超えています" }
     val names = betTargets(arena)
     val target = resolveName(input, names.keys)?.let { names[it] } ?: error("賭け対象が不正です")
-    val economy = economy ?: error("Vault が必要です")
+    val economy = economy ?: error("OyasaiEconomy が必要です")
     economy.requireProvider()
     val previous = arena.bets[player.uniqueId]
     val charge = economy.charge(player, amount) ?: error("Invalid charge")
@@ -1468,17 +1479,17 @@ internal fun supportedKey(key: String): Boolean =
             "modules.worldedit.autoload",
             "modules.worldedit.regions",
             "modules.worldedit.replaceair",
-            "modules.vault.conditions.entryFee",
-            "modules.vault.conditions.minPlayers",
-            "modules.vault.conditions.minPlayTime",
-            "modules.vault.bet.enabled",
-            "modules.vault.bet.time",
-            "modules.vault.bet.minAmount",
-            "modules.vault.bet.maxAmount",
-            "modules.vault.bet.winFactor",
-            "modules.vault.reward.death",
-            "modules.vault.reward.kill",
-            "modules.vault.reward.win",
+            "modules.economy.conditions.entryFee",
+            "modules.economy.conditions.minPlayers",
+            "modules.economy.conditions.minPlayTime",
+            "modules.economy.bet.enabled",
+            "modules.economy.bet.time",
+            "modules.economy.bet.minAmount",
+            "modules.economy.bet.maxAmount",
+            "modules.economy.bet.winFactor",
+            "modules.economy.reward.death",
+            "modules.economy.reward.kill",
+            "modules.economy.reward.win",
             "modules.announcements.start",
             "modules.announcements.join",
             "modules.announcements.winner",

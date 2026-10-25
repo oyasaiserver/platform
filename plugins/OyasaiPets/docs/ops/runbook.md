@@ -22,9 +22,9 @@ v2.4.0 | | 最終更新日 | 2026-03-07 |
 **手順:**
 
 1. `logs/latest.log` を開き `[OyasaiPets]` または `BigWolf` で検索する
-1. `TokenManager not found!` が出ている場合:
-   - TokenManager プラグインが `plugins/` に存在するか確認する
-   - TokenManager が先に有効化されているか確認する（`depend` 宣言があるため自動的に順序制御されるが、TokenManager
+1. `OyasaiEconomy not found!` が出ている場合:
+   - OyasaiEconomy プラグインが `plugins/` に存在するか確認する
+   - OyasaiEconomy が先に有効化されているか確認する（`depend` 宣言があるため自動的に順序制御されるが、OyasaiEconomy
      自体が壊れている場合は別途対処）
 1. `ClassNotFoundException` 等が出ている場合:
    - JAR ファイルが破損している可能性がある → 再ビルドまたは再配布

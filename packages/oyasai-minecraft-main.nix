@@ -54,6 +54,7 @@ oyasaiPurpur rec {
     luckperms
     oyasaiadmintools
     oyasaichat
+    oyasaieconomy
     oyasaiframes
     oyasaigames
     oyasailwc
@@ -62,7 +63,6 @@ oyasaiPurpur rec {
     oyasaipets
     oyasaisignshop
     oyasaitab
-    oyasaitoken
     oyasaiutilities
     oyasaivehicles
     oyasaivotifier
@@ -70,7 +70,6 @@ oyasaiPurpur rec {
     plugmanx
     sociallikes3
     socialvotes
-    vault
     viaversion
     worldguard
     # keep-sorted end

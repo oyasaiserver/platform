@@ -122,10 +122,9 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 | Purpur development bundle / Paper API | Paperweight userdev の開発 API。`plugin.yml` の api-version は `1.21` |
 | SQLite JDBC | `implementation`。共通・個別 SQLite ストアで利用 |
 | EssentialsX 2.21.2 | `compileOnly`、plugin.yml softdepend。PlayerState / Teleport の bridge と旧 YAML 移行、名前空間・コマンド互換に使う |
-| Vault | `compileOnly`、softdepend。OreReappears と Red Bull の経済連携 |
+| OyasaiEconomy | `compileOnly`、softdepend。OreReappears と Red Bull の経済連携 |
 | LuckPerms | `compileOnly`、softdepend。PlayerSit の primary group、Guidance の案内者 group、Red Bull の期限付き権限 |
 | Floodgate | plugin.yml softdepend。Skin の統合版プレイヤー識別。導入済み API を利用できない場合は `/skin` を拒否 |
-| OyasaiToken（TokenManager 互換 API） | Gradle `compileOnly(project(":plugins:OyasaiToken"))`、plugin.yml softdepend は `TokenManager`。Red Bull は `me.realized.tokenmanager.api.TokenManager` を import し、`getPlugin("TokenManager")` をこの型に cast して残高取得・消費。同じリポジトリの OyasaiToken がこの interface を実装し、`provides: [TokenManager]` で公開（`redbull/RedBullFeature.kt`, `plugins/OyasaiToken/src/main/resources/plugin.yml`） |
 
 機能内のコードパスは、特記しなければ `src/main/kotlin/icu/oyasai/utilities/` からの相対パス。旧取り込み元の `plugins/TPswitch/config.yml`・`plugins/Skript/guide_data.csv`・`plugins/Essentials/spawn.yml`・`plugins/Essentials/config.yml` は、OyasaiUtilities の dataFolder ではなくその親（サーバーの `plugins/`）を基準にする。
 
@@ -142,7 +141,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 - Spawn の復活地点選択。
 - Schematics の ID 抽出・保存・サイズ上限・期限と失敗時の一時ファイル削除・既存ファイル保護。
 
-これらはイベント順、Paper 上の GUI 表示、Essentials / Vault / LuckPerms / TokenManager / Floodgate の実接続、実ワールドでの安全性、クライアント表示、実データ移行後の運用を保証しない。この資料の更新時にテストは実行していない。
+これらはイベント順、Paper 上の GUI 表示、Essentials / OyasaiEconomy / LuckPerms / OyasaiEconomy / Floodgate の実接続、実ワールドでの安全性、クライアント表示、実データ移行後の運用を保証しない。この資料の更新時にテストは実行していない。
 
 ### 既知の制限・確認できていないこと
 
@@ -160,7 +159,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 - OreReappears の待機鉱石はメモリだけに保持される。異常終了後の復元はない。CreativeManagement はイベント経路を限定して処理し、全ての外部プラグイン・ホッパー経路を封鎖するものではない。
 - DebugOnBE の表示状態・粒子・ブロック表示は実サーバー・Java/統合版クライアントで確認していない。画面表示用データの不足する形状は置換対象にならない。
 - Skin は同じ名前の取得だけをまとめ、キャッシュは6時間（境界時刻を含む）。Floodgate は reflection で識別し、API が使えなければ安全側に全員を拒否する（`skin/SkinFeature.kt`, `skin/SkinStore.kt`）。scale の0や小さな負数のクライアント表示は未確認。
-- Skin の複数コマンド要求順、LuckPerms / 経済 / TokenManager の外部保存結果、メッセージのゲーム内表示は未検証。コード上で戻り値・例外を確認しない外部操作がある。
+- Skin の複数コマンド要求順、LuckPerms / 経済 / OyasaiEconomy の外部保存結果、メッセージのゲーム内表示は未検証。コード上で戻り値・例外を確認しない外部操作がある。
 - `plugin.yml`・全ソース・設定リソース・テストコードを読んだが、ゲーム内起動・操作・データ移行・障害注入は未実施。実サーバーの有効な権限付与や非公開設定も確認していない。
 
 ## 統合版（Bedrock）の頭（`/skull`）
@@ -186,4 +185,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 
 ## 判断の記録
 
-- 2026-10-13: 文書レビューの指摘を現行コードで照合。TokenManager は OyasaiToken の互換 API、旧取り込み元は dataFolder の親を基準とする。TPswitch 障害・容器制限・速度種別には分岐と免除があるため、無条件の断定を避けて記載した。利用者への影響は player/operator、イベント・未対応経路の詳細は本書へ置く。ゲーム内操作・外部 API 接続・障害再現は未実施。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。

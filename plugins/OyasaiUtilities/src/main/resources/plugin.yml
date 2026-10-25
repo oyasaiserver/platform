@@ -5,7 +5,7 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
-softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials, FastAsyncWorldEdit]
+softdepend: [OyasaiEconomy, LuckPerms, floodgate, Essentials, FastAsyncWorldEdit]
 commands:
   oyasai-schematics:
     description: "schematic.cloud の共有 ID から schematic をダウンロードして FAWE の保存先へ置く"

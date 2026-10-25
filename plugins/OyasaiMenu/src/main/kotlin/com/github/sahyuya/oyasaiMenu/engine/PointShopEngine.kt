@@ -34,7 +34,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
 
   fun openShop(player: Player, categoryId: String, page: Int = 0) {
     if (!TokenCurrencyManager.isAvailable) {
-      player.sendMessage(c("&cポイントショップには TokenManager が必要です。"))
+      player.sendMessage(c("&cポイントショップには OyasaiEconomy が必要です。"))
       return
     }
     val category =
@@ -53,7 +53,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       category: PointShopCategory,
       state: PlayerPointShopState,
   ): Inventory {
-    val tokens = TokenCurrencyManager.getTokens(player)
+    val tokens = (TokenCurrencyManager.getTokens(player) ?: 0L)
     val balanceText =
         if (EconomyManager.isAvailable) EconomyManager.format(EconomyManager.getBalance(player))
         else "---"
@@ -176,7 +176,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       49 -> {}
       50 -> changePage(player, state, category, state.page + 1)
       53 -> {
-        val newTokens = TokenCurrencyManager.getTokens(player)
+        val newTokens = (TokenCurrencyManager.getTokens(player) ?: 0L)
         val balanceText =
             if (EconomyManager.isAvailable) EconomyManager.format(EconomyManager.getBalance(player))
             else "---"
@@ -210,7 +210,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
             .replace("%price%", item.cost.toString())
             .replace(
                 "%tokens%",
-                TokenCurrencyManager.format(TokenCurrencyManager.getTokens(player)),
+                TokenCurrencyManager.format((TokenCurrencyManager.getTokens(player) ?: 0L)),
             )
     player.sendMessage(c(msg))
     player.playSound(player.location, org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
@@ -245,7 +245,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
             cmd.replace("%player%", player.name).replace("%price%", item.cost.toString()),
         )
       }
-      val newTokens = TokenCurrencyManager.getTokens(player)
+      val newTokens = (TokenCurrencyManager.getTokens(player) ?: 0L)
       val balanceText =
           if (EconomyManager.isAvailable) EconomyManager.format(EconomyManager.getBalance(player))
           else "---"

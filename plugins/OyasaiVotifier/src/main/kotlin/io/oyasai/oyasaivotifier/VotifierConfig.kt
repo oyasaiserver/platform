@@ -64,12 +64,17 @@ data class VotifierConfig(
             getMapList(path).mapIndexed { index, values ->
               fun number(name: String): Number =
                   values[name] as? Number ?: error("$path[$index].$name must be a number")
+              fun whole(name: String): Long {
+                val value = values[name]
+                require(value is Int || value is Long) { "$path[$index].$name は整数で指定してください" }
+                return (value as Number).toLong().also { require(it >= 0) }
+              }
               WeightedReward(
                   weight = number("weight").toInt().also { require(it > 0) },
                   reward =
                       Reward(
-                          money = number("money").toDouble().also { require(it >= 0) },
-                          tokens = number("tokens").toLong().also { require(it >= 0) },
+                          money = whole("money"),
+                          tokens = whole("tokens"),
                           commands =
                               (values["commands"] as? List<*>)?.map { command ->
                                 command as? String
@@ -82,7 +87,7 @@ data class VotifierConfig(
   }
 }
 
-data class Reward(val money: Double, val tokens: Long, val commands: List<String>)
+data class Reward(val money: Long, val tokens: Long, val commands: List<String>)
 
 data class WeightedReward(val weight: Int, val reward: Reward)
 

@@ -4,8 +4,8 @@ import java.util.Locale
 import kotlin.math.floor
 
 // Keep reading final-kill configuration, but do not pay it to match observed legacy behaviour.
-internal fun bedWarsRewardAmount(type: String, configured: Double): Double =
-    if (type == "final-kill") 0.0 else configured
+internal fun bedWarsRewardAmount(type: String, configured: Long): Long =
+    if (type == "final-kill") 0L else configured
 
 internal data class BwFighter(
     val id: String,

@@ -1,14 +1,14 @@
 # OyasaiVotifier
 
-`Votifier` の Bukkit API と NuVotifier v1/v2 の受信を維持しつつ、zVoteParty の文字列コマンド報酬を Vault と OyasaiToken の型付き API に置き換えるプラグインです。
+`Votifier` の Bukkit API と NuVotifier v1/v2 の受信を維持しつつ、zVoteParty の文字列コマンド報酬を OyasaiEconomy の型付き API に置き換えるプラグインです。
 
 ## 本番移行
 
 1. Bukkit のプラグイン名は `OyasaiVotifier`、データフォルダは `plugins/OyasaiVotifier/`。`provides: [Votifier]` で旧名への依存を維持する。初回ロード時、新フォルダが無く旧 `plugins/Votifier/` がある場合だけ、設定を読む前に中身をすべてコピーする。`config.yml`（`host`、`port`、`tokens.default` およびサービス別トークン）、`rsa/public.key`、`rsa/private.key`、`party-progress.yml` とその他のファイル・サブフォルダも対象で、旧フォルダは残す。新フォルダが既にあれば補完・上書きしない。鍵とトークンの読み方は変えず、リポジトリへ追加しない。
 2. `rewards.individual` と `rewards.party.rewards` は、`weight`、`money`、`tokens`、`commands` の重み付き抽選表である。各抽選は独立し、weight は合計100でなくてもよい。表が欠ける・空の場合は起動を拒否する。
-3. 同梱 `config.yml` は本番 zVoteParty の値をそのまま例示している。個別は 50% ¥30,000 + 15P、40% ¥20,000 + 10P、10% ¥50,000 + 20P（各 tier でオンライン全員へ順に 3P/2P/5P）、Party は 60 票でオンライン各人が 50% ¥10,000 + 20P / 50% ¥5,000 + 10P を抽選する。旧 `tokenaddall` は現在の `token addall` として `commands` に残している。
+3. 同梱 `config.yml` は投票報酬の既定例を示している。個別は 50% ¥30,000 + 15P、40% ¥20,000 + 10P、10% ¥50,000 + 20P（各 tier でオンライン全員へ順に 3P/2P/5P）、Party は 60 票でオンライン各人が 50% ¥10,000 + 20P / 50% ¥5,000 + 10P を抽選する。旧 `tokenaddall` は現在の `oyasaieconomy:token giveall` として `commands` に残している。
 4. 旧 zVoteParty の個別 `needToBeOnline: false` と同様、個別の金額・個人ポイントはオフラインプレイヤーにも付与を試みる。Party は閾値到達時のオンラインプレイヤーだけが対象である。
-5. `eco give` は `money`、`token add %player%` は `tokens` に移す。`tellraw` と `token addall` はコンソールコマンドとして `commands` に残す。
+5. `eco give` は `money`、`oyasaieconomy:token give %player%` は `tokens` に移す。`tellraw` と `oyasaieconomy:token giveall` はコンソールコマンドとして `commands` に残す。
 6. zVoteParty の進捗を維持したい場合は、切替直前に残り投票数を確認し、`party-progress.yml` の `votes` に設定する。確認不能なら Party カウントは 0 から開始する。
 7. 旧 `Votifier` と `zVoteParty` を同時にロードしない。`/testvote <player>`、`/votifierstats`、実際の v1/v2 投票サイトのテストで確認してから旧 JAR を退避する。
 
