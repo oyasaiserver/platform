@@ -95,15 +95,11 @@ class PvpRulesTest {
   }
 
   @Test
-  fun `bets use the pooled payout formula rounded to cents and reject non finite money`() {
-    assertEquals(42.0, betPayout(10.0, 20.0, 60.0, 1.4))
-    assertEquals(3.33, betPayout(1.0, 3.0, 10.0, 1.0))
-    for (value in listOf(Double.NaN, Double.POSITIVE_INFINITY, -1.0)) assertFailsWith<
-        IllegalArgumentException
-    > {
-      betPayout(value, 3.0, 10.0, 1.0)
-    }
-    assertFailsWith<IllegalArgumentException> { betPayout(1.0, 0.0, 10.0, 1.0) }
+  fun `bets use exact whole units and reject fractional payouts`() {
+    assertEquals(60L, betPayout(10, 20, 60, 2))
+    assertFailsWith<ArithmeticException> { betPayout(1, 3, 10, 1) }
+    assertFailsWith<IllegalArgumentException> { betPayout(-1, 3, 10, 1) }
+    assertFailsWith<IllegalArgumentException> { betPayout(1, 0, 10, 1) }
   }
 
   @Test

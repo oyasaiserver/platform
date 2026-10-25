@@ -951,7 +951,7 @@ tools:
     - $pickaxe_plus1 1200000 0
     - $pickaxe_plus2 1800000 0
     - $pickaxe_plus3 2500000 0
-    - bread 1.7 0
+    - bread 2 0
     - cooked_beef 4 0
     - carrot 3 0
     - golden_carrot 20 0

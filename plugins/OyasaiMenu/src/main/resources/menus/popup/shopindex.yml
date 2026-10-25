@@ -54,7 +54,7 @@ items:
     icon: NETHER_STAR
     name: "&6★ ポイントショップ"
     lore:
-      - "&7TokenManager ポイントで購入"
+      - "&7トークンで購入"
       - ""
       - "&eクリックで開く"
     actions:

@@ -31,7 +31,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
     if (!EconomyManager.isAvailable) {
-      player.sendMessage(c("&cショップには Vault と経済プラグインが必要です。"))
+      player.sendMessage(c("&cショップには OyasaiEconomy が必要です。"))
       return
     }
     player.openInventory(buildSellInventory())
@@ -42,7 +42,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   // 売却価格の統一取得
   // ============================
 
-  fun getSellPrice(item: ItemStack): Double? {
+  fun getSellPrice(item: ItemStack): Long? {
     if (item.type.isAir) return null
     val isCustom = plugin.sellWhitelistManager.hasCustomContent(item)
     return if (!isCustom) {
@@ -147,7 +147,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
 
-    var earned = 0.0
+    var earned = 0L
     var count = 0
     var unsellable = 0
     val soldSlots = mutableListOf<Int>()

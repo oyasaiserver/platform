@@ -1,0 +1,30 @@
+admin-notifications: false
+# Migration policies are optional paths relative to this plugin's data folder.
+legacy-import:
+  exclusions: ""
+  corrections: ""
+currencies:
+  yen:
+    enabled: true
+    display-name: 円
+    prefix: "¥"
+    suffix: ""
+    initial: 10240
+    maximum: 10000000000000
+    transfer-minimum: 1
+    transfer-maximum: 10000000000000
+    root: eco
+    shortcuts:
+      balance: [balance, bal, money]
+      pay: [pay]
+      top: [balancetop, baltop]
+  token:
+    enabled: true
+    display-name: トークン
+    prefix: ""
+    suffix: トークン
+    initial: 25
+    maximum: 9223372036854775807
+    transfer-minimum: 1
+    transfer-maximum: 9223372036854775807
+    root: token

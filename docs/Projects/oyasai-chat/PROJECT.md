@@ -36,7 +36,7 @@ Paper のチャンネルチャット、PM、日本語変換を扱い、必要に
 ### 構成と設定の読み込み
 
 - Paper descriptor は `plugin.yml`、Velocity descriptor は `velocity-plugin.json`。それぞれの実行環境が対応する entrypoint を読み込む。
-- Gradle module の implementation dependency は SQLite JDBC、Gson、Kotlin stdlib。Purpur API、DiscordSRV、Velocity API、Vault API、LuckPerms API は compileOnly。Essentials は compile-time dependency にせず、mute 連携で reflection を使う。
+- Gradle module の implementation dependency は SQLite JDBC、Gson、Kotlin stdlib。Purpur API、DiscordSRV、Velocity API、LuckPerms API は compileOnly。Essentials は compile-time dependency にせず、mute 連携で reflection を使う。
 - Paper の初回起動では resource の `config.yml` を plugin data folder に作る。既存設定は起動時に既定値で上書きしない。Velocity は `velocity-config.yml` resource から plugin data の `config.yml` を用意する。
 - Paper の runtime は `PaperConfigLoader` が設定を読み、チャンネル default の個数、network group の参照、サウンド値、日本語変換 format などを検証して構築する。不正なら Paper plugin の有効化を止める。Velocity は group/backend、channel/group、login message format を検証する。
 - 同梱 Paper 設定にも `login-messages` があるが、PaperConfigLoader は読まない。接続・移動通知の実設定は Velocity の plugin data `config.yml`。
@@ -66,7 +66,7 @@ Paper のチャンネルチャット、PM、日本語変換を扱い、必要に
 - `/ch` / `/join` はチャンネルを参加・選択し、`/leave` は一時的に参加を外す。利用可能な auto-join channel は状態正規化で再追加するため、次の一覧表示・chat 処理・再ログインなどで参加に戻る（`paper/state/PlayerStateNormalization.kt`）。最後の参加可能 channel は外せない。`/chwho` は同一 Paper の参加者を列挙する。
 - `/msg <player>` は会話 mode、`/msg <player> <message>` は一度だけ PM。`/r` は最後の PM 相手へ返信する。remote PM の名前/UUID 解決と返信状態は Velocity 経由。会話 mode、返信先、pending message はプロセス内メモリで、再起動・切断を越えて永続化しない。Paper reload 中のオンライン PM 状態は引き継ぐ。
 - OyasaiChat は descriptor の primary command と channel shortcut のラベルを取得し、競合する command map の登録を退避する。disable 時に退避した登録を復元する。runtime の衝突検査は `ch/join/leave/chwho/chlist/setchannel/msg/r/japanize/oyasaichat` とその aliases だけ。`lang` と `mute` は対象外で、shortcut が通常コマンドのラベル取得へ影響する（`paper/runtime/PaperRuntime.kt`、`paper/OyasaiChatPlugin.kt`）。
-- `ChatFormatter` は MiniMessage format と AsyncChatEvent 時点の送信者表示 snapshot を使う。URL は短い表示にし、送信者のリンク可否と許可 domain 条件を満たした場合にクリック可能にする。Vault prefix/suffix provider がなければ空にする。
+- `ChatFormatter` は MiniMessage format と AsyncChatEvent 時点の送信者表示 snapshot を使う。URL は短い表示にし、送信者のリンク可否と許可 domain 条件を満たした場合にクリック可能にする。LuckPermsのキャッシュ済みメタデータ がなければ空にする。
 - `DiscordSRV` の設定 mapping がある公開 channel を Paper が受信・送信する。Paper の汎用 GameChat event は二重送信防止のため cancel する。Discord 添付 URL はローカル表示に加える。backend 間 envelope は本文だけで、添付・nickname・role color 等は転送しない。添付だけの投稿は remote で添付を表示できない（`paper/integration/DiscordIntegration.kt`、`paper/chat/ChatService.kt`）。Discord から Minecraft への転送は online Paper player を Plugin Message carrier として必要とする。carrier がいない間は network へ送らず local 表示と警告になる。OyasaiChat 側に inbound-backend 設定はない。PM を Discord へ送る処理はない。
 - Paper Services Manager で受信者別テキスト変換 API を公開する。transformer は priority 降順、同 priority は登録順。呼び出しの同期例外・null Stage は次の transformer へ進む。最初の非 null Stage だけを採用し、非同期失敗・null 結果・PassThrough は元の本文へ戻す。次の transformer は試さず、変換を重ねない（`paper/transform/RecipientTextTransformerRegistry.kt`、`paper/transform/RecipientTextDispatcher.kt`）。非同期完了後、同じ Player instance が online の場合に表示する。API 契約は [TEXT_TRANSFORM_API.md](TEXT_TRANSFORM_API.md)。
 
@@ -110,7 +110,7 @@ Paper のチャンネルチャット、PM、日本語変換を扱い、必要に
 |---|---|
 | Velocity | backend 間 chat、remote PM、presence、login/move/quit message |
 | DiscordSRV | optional。Paper channel mapping による public chat。未導入・初期化失敗時は無効 |
-| Vault Chat | optional。prefix/suffix provider。未導入なら空表示 |
+| LuckPerms | optional。prefix/suffix provider。未導入なら空表示 |
 | LuckPerms | optional。LunaChat import の名前 UUID 解決 |
 | Essentials | optional。mute 設定・旧 userdata の初回移行、/mute 共存 |
 | SQLite JDBC / Gson | runtime implementation dependency |
@@ -128,7 +128,7 @@ Paper のチャンネルチャット、PM、日本語変換を扱い、必要に
 | `OrderingTest` | sender/recipient FIFO、容量、失敗、遅い future の順序 |
 | `paper/mute/MuteTest` | 期間規則、command root、期限境界、Essentials 一回取り込み、壊れた YAML、schema migration rollback |
 
-テストは固定応答や mock を使う単体テスト。Paper/Velocity の起動、実コマンドと permission 登録、DiscordSRV/Vault/Essentials の実環境、Google 接続、backend 間実配送、ゲーム内表示は保証しない。本作業でテスト・build・ゲーム内確認は実行していない。
+テストは固定応答や mock を使う単体テスト。Paper/Velocity の起動、実コマンドと permission 登録、DiscordSRV/LuckPerms/Essentials の実環境、Google 接続、backend 間実配送、ゲーム内表示は保証しない。本作業でテスト・build・ゲーム内確認は実行していない。
 
 ## 判断の記録
 
@@ -141,3 +141,7 @@ Paper のチャンネルチャット、PM、日本語変換を扱い、必要に
 - PM 受信可否は player state の値。受信者が自分で切り替える OyasaiChat command はない。Discord への PM 送信もない。
 - 外部変換・判定サービスは実行時に失敗し得る。実 service との互換性は unit test で保証しない。
 - 既存設計・運用資料として [TEXT_TRANSFORM_API.md](TEXT_TRANSFORM_API.md) を維持する。Nix package と registry の関連 path は frontmatter の `related_paths` を参照。
+
+## 2026-10-25 接頭辞と接尾辞
+
+`LuckPermsSupport.kt` がLuckPermsのUserと現在のQueryOptionsからCachedMetaDataを取り、prefix/suffixをMiniMessageで表示する。LuckPerms APIはcompileOnly、plugin.ymlはLuckPermsをsoftdependとする。経済APIは使わない。

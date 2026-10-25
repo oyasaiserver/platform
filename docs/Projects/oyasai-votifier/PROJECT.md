@@ -26,9 +26,9 @@ NuVotifier v1/v2 互換の投票受付と、個人・投票パーティ報酬を
 | 主要コード | `OyasaiVotifierPlugin.kt`（起動・コマンド・旧フォルダのコピー）、`VoteServer.kt`（v1/v2受付・RSA 鍵）、`VotifierConfig.kt`（設定の検証・報酬表・メッセージ）、`VoteRewards.kt`（報酬・通知・パーティ進捗） |
 | 互換 API | `com/vexsoftware/votifier/model/` の `Vote`（Kotlin）・`VotifierEvent`（Java）。NuVotifier 2.7.2 の公開面に合わせた独自実装 |
 | 移行メモ | `plugins/OyasaiVotifier/README.md`（zVoteParty の報酬の移し方） |
-| テスト | `src/test/kotlin/io/oyasai/oyasaivotifier/`。`VoteProtocolTest` は v1 の RSA 往復・v1/v2 の実ソケット受付・challenge 不一致と短すぎるパケットの拒否・65535 バイト境界・HMAC。`VotifierConfigTest` は旧形式設定で同梱既定へフォールバックすること・重み抽選の範囲・プレースホルダー token の拒否・メッセージ描画。`VoteMessagesTest` は進捗表示とパーティ後のリセット・不正な名前の拒否。`LegacyDataMigrationTest` は旧フォルダコピーの成功・スキップ・失敗後の再試行。`VoteRewards.deliver`（Vault・OyasaiToken・コマンド実行）、コマンド、`VoteKeys` のファイル読み書き、v1 無効時、未知 service にはテストがない |
+| テスト | `src/test/kotlin/io/oyasai/oyasaivotifier/`。`VoteProtocolTest` は v1 の RSA 往復・v1/v2 の実ソケット受付・challenge 不一致と短すぎるパケットの拒否・65535 バイト境界・HMAC。`VotifierConfigTest` は旧形式設定で同梱既定へフォールバックすること・重み抽選の範囲・プレースホルダー token の拒否・メッセージ描画。`VoteMessagesTest` は進捗表示とパーティ後のリセット・不正な名前の拒否。`LegacyDataMigrationTest` は旧フォルダコピーの成功・スキップ・失敗後の再試行。`VoteRewards.deliver`（OyasaiEconomy・コマンド実行）、コマンド、`VoteKeys` のファイル読み書き、v1 無効時、未知 service にはテストがない |
 | ビルド | `nix develop --command gradle :plugins:OyasaiVotifier:build` |
-| 依存 | ビルド: Purpur API・Vault API・Gson（compileOnly）・`:plugins:OyasaiToken`（compileOnly）・Kotlin stdlib。実行時: `depend: [Vault, TokenManager]`（TokenManager は OyasaiToken の `provides`） |
+| 依存 | ビルド: Purpur API・OyasaiEconomy API・Gson（compileOnly）・`:plugins:OyasaiEconomy`（compileOnly）・Kotlin stdlib。実行時: `depend: [OyasaiEconomy, OyasaiEconomy]`（OyasaiEconomy は OyasaiEconomy の `provides`） |
 | 利用側 | DynamicProfile が `depend: [Votifier]` で `VotifierEvent` を受け取る |
 | Nix package | `packages/oyasai-plugins.nix` が検出し `oyasaivotifier` を公開、`packages/oyasai-minecraft-main.nix` が含める |
 
@@ -55,7 +55,7 @@ NuVotifier v1/v2 互換の投票受付と、個人・投票パーティ報酬を
 - 受付スレッドで v1/v2 カウンタ（`AtomicLong`、メモリのみ）を増やし、メインスレッドで `VotifierEvent` を発行してから `rewards.deliver` を直接1回呼ぶ。自分のイベントは購読しない（二重付与防止）。`VotifierEvent` は Cancellable ではない。listener が `Vote` を書き換えると、その後の報酬処理は書き換え後の値を使う。
 - `/testvote` も同じ `receive` を通るので、カウンタ・イベント・報酬・パーティ進捗すべてに効く。service 既定 `testvote`、address `127.0.0.1`、UUID なし。username はコマンドでは検証しない。
 - `deliver`: username が不正なら警告して何もしない（進捗も増えない）。対象は `playerUuid` があれば `getOfflinePlayer(UUID)`、なければ `getOfflinePlayer(name)`。個人報酬の `%votes%` は**加算前の進捗**。その後 `recordPartyVote` で進捗を加算し、到達なら0にして `party-progress.yml` を保存、通知（chat は `broadcastMessage`、action bar はオンライン全員、お礼は `getPlayerExact(username)`）。到達時はパーティ通知 → オンライン全員が各自 `party.rewards.pick` → `rewards.party.commands` の順。パーティ側の `%votes%` は `votesNeeded`。
-- 付与: `money > 0` で Vault `depositPlayer`（Economy 未登録・失敗は警告のみ）。`tokens > 0` で `OyasaiTokenService.grant(..., Delivery.Silent)`（非同期、失敗は警告のみ）。コマンドはコンソールで `dispatchCommand`、先頭 `/` を除去、空白のみは飛ばす。`player.name` が null または不正名なら飛ばす。`%service%` を含むコマンドは service 名が `[A-Za-z0-9_-]{1,64}` でなければ飛ばす。`rewards.party.commands` は `%player%` を含むと飛ばす（警告文の `commands-per-player` は実在しないキー名で、実際は `rewards.party.rewards[].commands`）。
+- 円・トークンとも OyasaiEconomyApi.deposit に通貨IDを渡し、通知を抑止して保存完了を待つ。失敗は警告する。未知口座への報酬は拒否される。設定コマンドはコンソールから実行する。
 - `party-progress.yml` の保存は同期。保存で例外が出ると、個人報酬は渡し済み・メモリの進捗は更新済みのまま、通知とパーティ処理が行われない。
 - `votes-needed` を現在の進捗以下に変えると、次の投票で `recorded >= votesNeeded` となり到達扱い。
 
@@ -72,4 +72,8 @@ NuVotifier v1/v2 互換の投票受付と、個人・投票パーティ報酬を
 
 - 同梱 `config.yml` は本番 zVoteParty の報酬表と投票サイトへの案内コマンドを含む。公開文書には報酬値や運用 URL を転記せず、ファイルへ案内する。秘密 token は設定ファイルにコミットしない（プレースホルダーで起動を拒否させる）。
 - 同梱 `config.yml` のコメントは「空文字にすると通知を無効化できる」としているが、chat 通知とお礼は prefix が非空だと prefix だけが送られる（コードから判断。ゲーム内未確認）。
-- 実サーバーでの投票サイトからの受付、Vault・OyasaiToken への付与結果、一度も参加していないプレイヤー（名前のみ・UUID のみ）への付与の挙動は未確認。
+- 実サーバーでの投票サイトからの受付、OyasaiEconomy への付与結果、一度も参加していないプレイヤー（名前のみ・UUID のみ）への付与の挙動は未確認。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。

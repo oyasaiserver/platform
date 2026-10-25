@@ -185,7 +185,7 @@ CDKTF をいつ・どの順で実行するか（PR 環境、`master` への自�
 | `oyasai-minecraft-lobby` | `packages/oyasai-minecraft-lobby.nix` | Purpur 26.2 | ロビー。void・フラット、ゲームルールを固定 |
 | `oyasai-minecraft-axiom` | `packages/oyasai-minecraft-axiom.nix` | Purpur 26.2 | creative、`white-list = true`。`try` には入らない（接続先の登録のみ） |
 
-- 各 Purpur サーバーのプラグインは `forPlatform "paper" "26.2"`（外部）と自前の小文字名（`oyasai-plugins` の passthru）が混ざる。`vault`・`vertex`・`directstate` なども自前（`plugins/Vault/` など）。
+- 各 Purpur サーバーのプラグインは `forPlatform "paper" "26.2"`（外部）と自前の小文字名（`oyasai-plugins` の passthru）が混ざる。`oyasaieconomy`・`vertex`・`directstate` なども自前（`plugins/OyasaiEconomy/` など）。
 - Velocity のプラグインは `forPlatform "velocity"`（版の引数なし）。自前の `oyasaiban`・`oyasaichat`・`oyasaimusic`・`oyasaitab` もここに入る。`OyasaiChat` などは同じ jar に `plugin.yml` と `velocity-plugin.json` の両方を持ち、Paper と Velocity の両方で使われる。
 
 ## 5. 外部プラグイン（registry）

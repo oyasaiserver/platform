@@ -2,7 +2,7 @@ name: OyasaiPets
 version: ${version}
 main: me.marzipan.OyasaiPets.BigWolfPlugin
 api-version: 1.21
-depend: [TokenManager]
+depend: [OyasaiEconomy]
 
 commands:
   bigwolf:

@@ -163,10 +163,9 @@ items:
 - 商品売却はショップの sell price とホワイトリストを使います。`SellEngine.getSellPrice` はカスタム名、BookMeta のタイトルまたはページ、カスタムモデルデータの有無でホワイトリストへ分岐し、それ以外は素材単位です。署名前の本と羽根ペンもページがあれば対象です。通常ショップ GUI では、素材一致と getSellPrice が null でないことに加え、通常エンチャントの map が商品行と完全一致する必要があります。`/sell` 系は商品行とのエンチャント一致を求めません。ショップの商品行の表示名・loreとの一致は比較しません。
 - 容器の中身・任意の PDC はカスタム品判定条件ではなく、中身入りシュルカーボックスも素材価格で売れる場合があります。売却成功時はアイテムと中身を失います。ホワイトリストの照合も任意の PDC・容器の中身・本の本文を比較しません。本はタイトル・著者（前後空白除去）・ページ数を比較し、カスタム名はプレーンテキストで比較するため色・装飾を区別しません。比較の正本は `manager/SellWhitelistManager.kt` の hasCustomContent / matchesComponents です。
 - エンチャント付き商品の購入は Shift 操作でも1個固定ですが、通常売却は選択数量、Shift 売却は一致する所持分すべてです。エンチャント商品の表示数量・売却 lore が1個でも、売却処理の数量とは限りません（`engine/ShopEngine.kt`）。
-- ホワイトリスト価格には有限値検査がありません。照合で NaN を取得すると `/sell hand` は Vault の入金へ渡し、`/sell all`・売却 GUI はそのアイテムを除外します。正の Infinity は3経路とも入金へ渡します。Vault provider の応答は未確認です。
 - 通常売却用の price map は Material ごとに1件です。ショップ読込時に後から処理された売却可能な同素材行が map の価格を上書きします。`/sell hand`、`/sell all`、売却 GUI はこの値を使います。通常ショップ GUI の売却は選択した商品行の sell price を使います。
 - 売却 GUI は上段0〜44を入力枠、45〜53を操作枠として使います。売却に失敗したときは入力アイテムを消費しません。未売却品は閉じるとプレイヤーへ戻し、入りきらない分は地面に落とします。InventoryDragEvent は操作枠へのドラッグだけキャンセルします。
-- ポイントショップはカテゴリ内キーを数値順に並べ、1ページ45件で表示します。費用が1未満の項目は警告して読み飛ばします。同梱の point1 のキー15・16は cost 0 なので表示されません。購入時に TokenManager からポイントを引き落とし、その後 YAML の commands をコンソールから実行します。コマンド失敗による返金はありません。
+- ポイントショップはカテゴリ内キーを数値順に並べ、1ページ45件で表示します。費用が1未満の項目は警告して読み飛ばします。同梱の point1 のキー15・16は cost 0 なので表示されません。購入時に OyasaiEconomy からポイントを引き落とし、その後 YAML の commands をコンソールから実行します。コマンド失敗による返金はありません。
 
 ### データ形式と永続化
 
@@ -184,7 +183,7 @@ items:
 
 ### 同期・非同期処理
 
-- Bukkit のコマンド・イベント、YAML 読み込み、Vault/TokenManager 呼び出し、SQLite 読み書きは非同期 executor に移していません。通常は呼び出し元のメインスレッド上で処理します。
+- Bukkit のコマンド・イベント、YAML 読み込み、OyasaiEconomy/OyasaiEconomy 呼び出し、SQLite 読み書きは非同期 executor に移していません。通常は呼び出し元のメインスレッド上で処理します。
 - ActionEngine の画面遷移は1 tick後に予約します。Popup のアクションも通常1 tick後に実行し、close・suggest_command・op_player_cmd を含む場合は画面を閉じてさらに1 tick後に実行します。close-on-purchase のポイント商品も画面を閉じて次 tick にコマンドを実行します。
 - GUI click cooldown は通常メニュー・Popup・通常ショップ・ポイントショップ・管理画面で共有する System.currentTimeMillis() の UUID ごとのメモリ map で管理します。別画面へ移った直後も無言で無視され得ます。売却 GUI はこの確認を呼びません。初期値は100msです。sell コマンド cooldown は別 map で300ms、/sell hand と /sell all だけに使います。ログアウト時に両方の記録を消します。
 - メニューアイテムの SQLite 接続は起動時に開き、停止時に閉じます。sqlite.jdbc は implementation 依存で、JDBC 接続は同期です。保存失敗時に GUI 等の他機能を止めないよう初期化例外を局所的に捕捉します。
@@ -197,10 +196,10 @@ items:
 
 ### 外部 API・依存
 
-- plugin.yml は api-version 1.21、softdepend LuckPerms / DynamicProfile / TokenManager / Vault です。
-- build.gradle.kts は Purpur API、Vault API、LuckPerms API、OyasaiToken と DynamicProfile project を compileOnly、SQLite JDBC を implementation とします。テストは Purpur API を使用します。
-- EconomyManager は Bukkit ServicesManager から Vault Economy provider を取得します。未検出なら通常ショップと売却を止めます。
-- TokenCurrencyManager はプラグイン名 TokenManager を検索して API を呼びます。未検出ならポイントショップを止め、残高取得失敗は警告して0を返します。
+- plugin.yml は api-version 1.21、softdepend LuckPerms / DynamicProfile / OyasaiEconomy です。
+- build.gradle.kts は Purpur API、LuckPerms API、OyasaiEconomy と DynamicProfile project を compileOnly、SQLite JDBC を implementation とします。テストは Purpur API を使用します。
+- EconomyManager は Bukkit ServicesManager から OyasaiEconomy Economy provider を取得します。未検出なら通常ショップと売却を止めます。
+- TokenCurrencyManager は ServicesManager から共通APIを取得する。未検出ならポイントショップを止める。
 - PlayerAccess は LuckPerms API が使えるときに通常メニューの権限・lpgroup 条件を評価し、取得失敗時は Bukkit hasPermission に戻ります。Popup の required_permission は Player.hasPermission を直接使用します。
 - DynamicProfile の Calculator と validatedTitle からレベル・タイトルを取得します。プラグイン無効または処理例外では --- を返します。
 - YAML に定義された player_cmd / console_cmd 等は Bukkit に渡します。外部コマンドの存在、成功、権限結果は確認しません。PlaceholderAPI の連携は実装されていません。
@@ -211,7 +210,7 @@ items:
 
 `MenuItemTest` は Bukkit object を proxy し、初回参加者だけに配ること、レシピ contents に一致アイテムがあると指定文言でキャンセルすること、1 tick 内の複数 activation を1回にすること、次 tick で再実行すること、テンプレート不一致では起動しないことを確認します。activation テストの item matcher はテストから注入され、本番の ItemStack.isSimilar や実イベント dispatch を検証していません。
 
-GUI 配置、コマンド権限、YAML の異常系、Economy/TokenManager/LuckPerms/DynamicProfile API、入金失敗時の実動作、drag、SQLite 破損・書込失敗、Paper 上の統合動作はテスト範囲外です。
+GUI 配置、コマンド権限、YAML の異常系、Economy/OyasaiEconomy/LuckPerms/DynamicProfile API、入金失敗時の実動作、drag、SQLite 破損・書込失敗、Paper 上の統合動作はテスト範囲外です。
 
 この資料作成時点ではビルド・テストを実行していません。上記はテストコードから読める検証範囲です。
 
@@ -226,4 +225,9 @@ GUI 配置、コマンド権限、YAML の異常系、Economy/TokenManager/LuckP
 
 ## 判断の記録
 
-- 2026-10-13: player.md・operator.md・本書の外部レビューを `plugins/OyasaiMenu/` のコードと照合し、売却時のデータ喪失・照合限界、数量と NaN の経路差、保存失敗の差、GUI の表示とクリックの定義差、設定契約を訂正・追記した。プレイヤー向けは操作と注意に絞り、権限・検査位置は運営向けへ記載した。コード照合のみで、ゲーム内動作・Vault provider の非有限値応答・保存失敗の実動作は未確認。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。
+
+ショップ価格・売却価格は整数。既定のパン購入価格は2円。小数を整数へ変換する処理はなく、設定や入力で小数を拒否する。

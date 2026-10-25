@@ -4,7 +4,7 @@ main: io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 api-version: "1.21"
 softdepend:
   - FastAsyncWorldEdit
-  - TokenManager
+  - OyasaiEconomy
   - Essentials
   - DynamicProfile
   - SocialLikes3
