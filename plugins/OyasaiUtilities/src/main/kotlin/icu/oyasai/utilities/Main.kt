@@ -9,6 +9,7 @@ import icu.oyasai.utilities.fart.FartFeature
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
 import icu.oyasai.utilities.hats.Hats
 import icu.oyasai.utilities.hologram.HologramFeature
+import icu.oyasai.utilities.items.ItemsFeature
 import icu.oyasai.utilities.joincommands.JoinCommands
 import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
@@ -52,6 +53,7 @@ class Main : JavaPlugin() {
   private lateinit var sitFeature: SitFeature
   private var playerStateFeature: PlayerStateFeature? = null
   private var workstationFeature: WorkstationFeature? = null
+  private var itemsFeature: ItemsFeature? = null
   private lateinit var guidance: Guidance
 
   var database: UtilitiesDatabase? = null
@@ -83,6 +85,14 @@ class Main : JavaPlugin() {
     } catch (e: Exception) {
       runCatching { playerState.disable() }.onFailure { e.addSuppressed(it) }
       logger.log(Level.SEVERE, "PlayerState: failed to enable; continuing other features", e)
+    }
+    val items = ItemsFeature(this)
+    try {
+      items.enable()
+      itemsFeature = items
+    } catch (e: Exception) {
+      runCatching { items.disable() }.onFailure { e.addSuppressed(it) }
+      logger.log(Level.SEVERE, "Items: failed to enable; continuing other features", e)
     }
     guidance = Guidance(this)
     guidance.enable()
@@ -154,6 +164,7 @@ class Main : JavaPlugin() {
       teleportFeature?.disable()
       playerStateFeature?.disable()
       workstationFeature?.disable()
+      itemsFeature?.disable()
       if (::guidance.isInitialized) guidance.disable()
       if (::tpSwitchFeature.isInitialized) tpSwitchFeature.disable()
       if (::sitFeature.isInitialized) sitFeature.disable()

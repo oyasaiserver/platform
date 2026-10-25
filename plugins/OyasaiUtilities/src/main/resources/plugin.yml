@@ -284,8 +284,19 @@ commands:
   fart:
     description: "しゃがむとおならの音と煙を出すモードを切り替える"
     usage: /fart [stay|fly] [player]
+  items:
+    description: "特殊アイテムの台帳。登録されたアイテムを受け取る"
+    usage: /items [get <ID>]
+    permission: oyasaiutilities.items.use
+    permission-message: "§cこのコマンドを使用する権限がありません。"
 
 permissions:
+  oyasaiutilities.items.use:
+    description: "アイテム台帳から受け取る"
+    default: true
+  oyasaiutilities.items.manage:
+    description: "アイテム台帳へ登録・変更・削除し、どのルールのアイテムも受け取る"
+    default: op
   oyasaiutilities.fart.others:
     description: "他のプレイヤーのおならモードを切り替える"
     default: op
