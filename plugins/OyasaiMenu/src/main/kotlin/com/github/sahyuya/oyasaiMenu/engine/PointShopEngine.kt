@@ -100,7 +100,8 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
             }
             .toMutableList()
     lore += comp("")
-    if (tokens >= item.cost)
+    if (item.cost == 0L) lore += comp("&e左クリック &7→ &a購入")
+    else if (tokens >= item.cost)
         lore += comp("&e左クリック &7→ &a購入 &7(&3${TokenCurrencyManager.format(item.cost)}&fP&7)")
     else {
       lore += comp("&cポイントが不足しています")
@@ -198,22 +199,11 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       state: PlayerPointShopState,
       category: PointShopCategory,
   ) {
-    val err = TokenCurrencyManager.removeTokens(player, item.cost)
+    val err = if (item.cost > 0) TokenCurrencyManager.removeTokens(player, item.cost) else null
     if (err != null) {
       player.sendMessage(c(err))
       return
     }
-
-    val msg =
-        item.message
-            .replace("%player%", player.name)
-            .replace("%price%", item.cost.toString())
-            .replace(
-                "%tokens%",
-                TokenCurrencyManager.format((TokenCurrencyManager.getTokens(player) ?: 0L)),
-            )
-    player.sendMessage(c(msg))
-    player.playSound(player.location, org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
 
     if (item.closeOnPurchase) {
       Bukkit.getScheduler()
@@ -224,27 +214,14 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
                 Bukkit.getScheduler()
                     .runTaskLater(
                         plugin,
-                        Runnable {
-                          item.commands.forEach { cmd ->
-                            Bukkit.dispatchCommand(
-                                Bukkit.getConsoleSender(),
-                                cmd.replace("%player%", player.name)
-                                    .replace("%price%", item.cost.toString()),
-                            )
-                          }
-                        },
+                        Runnable { executePurchaseCommands(player, item) },
                         1L,
                     )
               },
               1L,
           )
     } else {
-      item.commands.forEach { cmd ->
-        Bukkit.dispatchCommand(
-            Bukkit.getConsoleSender(),
-            cmd.replace("%player%", player.name).replace("%price%", item.cost.toString()),
-        )
-      }
+      executePurchaseCommands(player, item)
       val newTokens = (TokenCurrencyManager.getTokens(player) ?: 0L)
       val balanceText =
           if (EconomyManager.isAvailable) EconomyManager.format(EconomyManager.getBalance(player))
@@ -255,6 +232,46 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       }
       buildBottomBar(inv, category, state, newTokens, balanceText)
     }
+  }
+
+  private fun executePurchaseCommands(player: Player, item: PointShopItem) {
+    val failed =
+        dispatchPointShopCommands(item.commands) { cmd ->
+          Bukkit.dispatchCommand(
+              Bukkit.getConsoleSender(),
+              cmd.replace("%player%", player.name).replace("%price%", item.cost.toString()),
+          )
+        }
+    if (failed != null) {
+      plugin.logger.warning(
+          "ポイントショップ商品 ${item.key}: コマンド${failed + 1}の実行失敗 (購入者: ${player.uniqueId})"
+      )
+      val error =
+          when {
+            failed > 0 -> "&c商品の一部を実行できませんでした。返金は行っていません。運営へ連絡してください。"
+            item.cost == 0L -> "&c商品を実行できませんでした。運営へ連絡してください。"
+            TokenCurrencyManager.refundTokens(player, item.cost) ->
+                "&c商品を実行できなかったためポイントを返金しました。運営へ連絡してください。"
+            else -> {
+              plugin.logger.warning(
+                  "ポイントショップ商品 ${item.key}: ${item.cost}P の返金失敗 (購入者: ${player.uniqueId})"
+              )
+              "&c商品を実行できず、ポイントの返金にも失敗しました。運営へ連絡してください。"
+            }
+          }
+      player.sendMessage(c(error))
+      return
+    }
+    val msg =
+        item.message
+            .replace("%player%", player.name)
+            .replace("%price%", item.cost.toString())
+            .replace(
+                "%tokens%",
+                TokenCurrencyManager.format((TokenCurrencyManager.getTokens(player) ?: 0L)),
+            )
+    if (msg.isNotEmpty()) player.sendMessage(c(msg))
+    player.playSound(player.location, org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
   }
 
   private fun changePage(
@@ -281,4 +298,12 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
 
     override fun getInventory(): Inventory = holderInventory
   }
+}
+
+internal fun dispatchPointShopCommands(
+    commands: List<String>,
+    dispatch: (String) -> Boolean,
+): Int? {
+  commands.forEachIndexed { index, command -> if (!dispatch(command)) return index }
+  return null
 }
