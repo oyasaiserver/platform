@@ -12,7 +12,7 @@ type Props = {
 };
 
 export class PlatformInfra extends OyasaiPlatformTerraformStack {
-  public readonly ipv4 = "182.166.151.3";
+  public readonly ipv4 = "218.228.161.128";
 
   public readonly r2Bucket: R2Bucket;
   public readonly rootDnsRecord: DnsRecord;
