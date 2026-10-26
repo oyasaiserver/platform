@@ -32,7 +32,7 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 | プラグイン定義 | `src/main/resources/plugin.yml`（name `OyasaiUtilities`、version `0.1.0`、api-version `1.21`）。`paper-plugin.yml` はこのディレクトリに存在しない |
 | 関連資料 | [`README.md`](../../../plugins/OyasaiUtilities/README.md)、[`PLAYER_STATE.md`](../../../plugins/OyasaiUtilities/PLAYER_STATE.md)、[`TELEPORT.md`](../../../plugins/OyasaiUtilities/TELEPORT.md)、[`SQLITE_STORAGE.md`](../../../plugins/OyasaiUtilities/SQLITE_STORAGE.md)、[`WORKSTATIONS.md`](../../../plugins/OyasaiUtilities/WORKSTATIONS.md) |
 | 利用者向けガイド | [player.md](player.md)、[operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-utilities/operator.md) |
-| しゃがみイベントの共有 | `PlayerToggleSneakEvent` は Sit（乗り物・這いの解除）、Elevator（下り）、Fart（おなら）が使う。`PlayerToggleSneakEvent` は cancel しない。Fart の居座り中は Sit が頭から降ろす処理を省略し、Fart が `EntityDismountEvent` を LOW で取消可能かつしゃがみ中の場合だけ取り消す。Sit は取り消された降車を処理しない |
+| しゃがみイベントの共有 | `PlayerToggleSneakEvent` は Sit（乗り物・這いの解除）、Elevator（下り）、Fart（おなら）が使う。`PlayerToggleSneakEvent` は cancel しない。Fart の居座り中は Sit が頭から降ろす処理を省略し、Fart が `EntityDismountEvent` を LOW で取消可能かつしゃがみ中の場合だけ取り消す。降車対象は `event.dismounted` で判定する（イベント発火時には `player.vehicle` が既に null）。Sit は取り消された降車を処理しない |
 
 ## 技術仕様
 
@@ -137,6 +137,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 - Teleport のエイリアス・権限名、ホーム上限、jail 期間と制限、TPA 期限・重複、テレポート安全判定、旧 userdata / Warps / Jail / Kits の移行、Essentials 不在時の型ロード。
 - PlayerState のエイリアスと権限、ゲームモード・死亡保持・速度・時刻・ニックネーム規則、旧データの一度限りの移行。
 - Backpack の SQLite データ版とサイズ権限、Sit の rank / 乗車 graph / SQLite migration、TPswitch の受付と旧 YAML 取込。
+- Fart のモード切替・引数・補完・飛行速度と降車取消。`FartFeatureTest` は `player.vehicle == null` の降車イベントを再現し、居座り・プレイヤーの頭・しゃがみ中・取消可能の組み合わせだけを取り消すことを検査する。
 - Workstation のエイリアス・頭生成・hat 制限、Veinminer の素材グループ・数値フォールバック、Elevator の5ペア・距離・空間条件。
 - Hologram の旧設定読込・シリアライズ・テキスト整形、JoinCommands の定義解析、Skin の Mojang 応答解析・キャッシュ期限、Guidance の CSV / SQLite / メニュー文言。
 - Spawn の復活地点選択。
