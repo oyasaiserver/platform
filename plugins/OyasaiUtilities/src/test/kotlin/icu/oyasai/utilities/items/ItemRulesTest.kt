@@ -4,12 +4,21 @@ import kotlin.test.*
 
 class ItemRulesTest {
   @Test
-  fun `ids are short half-width names`() {
-    assertTrue(ItemRules.isValidId("golden-carrot_2"))
-    for (bad in listOf("", "Upper", "全角", "a b", "x".repeat(33))) assertFalse(
-        ItemRules.isValidId(bad),
-        bad,
-    )
+  fun `numbers must be positive integers`() {
+    assertEquals(1, ItemRules.parseNumber("1"))
+    assertEquals(Int.MAX_VALUE, ItemRules.parseNumber(Int.MAX_VALUE.toString()))
+    for (bad in listOf(null, "", "0", "-1", "1.5", "one", "1 2", " 1 ", "2147483648")) {
+      assertNull(ItemRules.parseNumber(bad), bad)
+    }
+  }
+
+  @Test
+  fun `name search requires every word ignoring case`() {
+    assertTrue(ItemRules.matchesName("Golden Magic Carrot", "  CARROT   gold\t"))
+    assertFalse(ItemRules.matchesName("Golden Magic Carrot", "gold apple"))
+    assertFalse(ItemRules.matchesName("Golden Magic Carrot", " \t\n"))
+    assertFalse(ItemRules.matchesName("カタカナ", "かたかな"))
+    assertFalse(ItemRules.matchesName("ＡＢＣ", "ABC"))
   }
 
   @Test
