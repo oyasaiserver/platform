@@ -57,6 +57,12 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
     val staff = sender.hasPermission(MANAGE)
     when (args.firstOrNull()?.lowercase()) {
       null -> (sender as? Player)?.let { openGui(it, 0, null) } ?: sender.sendMessage(PLAYER_ONLY)
+      "help" -> {
+        sender.sendMessage("§6アイテム台帳のヘルプ")
+        sender.sendMessage(usage(staff))
+        sender.sendMessage("§7番号は登録順で、一覧の No. に表示されます。")
+        if (staff) sender.sendMessage("§7ルール: free=誰でも何度でも、once=1人1回、staff=運営のみ")
+      }
       "get" -> get(sender, args)
       "search" -> search(sender, args)
       "register",
@@ -70,7 +76,9 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
   }
 
   private fun usage(staff: Boolean): String = buildString {
-    append("§e/items §7— 一覧を開く\n§e/items search <名前> §7— 名前で探す\n§e/items get <番号> §7— 受け取る")
+    append(
+        "§e/items §7— 一覧を開く\n§e/items help §7— このヘルプ\n§e/items search <名前> §7— 名前で探す\n§e/items get <番号> §7— 受け取る"
+    )
     if (staff) {
       append("\n§e/items register [free|once|staff] [説明] §7— 手に持ったものを登録（番号は自動）")
       append("\n§e/items update <番号> [free|once|staff] §7— 手に持ったもので置き換え")
@@ -295,7 +303,7 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
     val options =
         when (args.size) {
           1 ->
-              listOf("get", "search") +
+              listOf("help", "get", "search") +
                   if (staff) listOf("register", "update", "remove", "info", "reset")
                   else emptyList()
           2 ->

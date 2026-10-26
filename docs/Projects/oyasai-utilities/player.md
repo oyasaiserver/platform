@@ -238,6 +238,7 @@ Thief! は走っている間、Rocket Trail は滑空中、Tornado は飛行中�
 | やりたいこと | コマンド |
 |---|---|
 | 一覧を開く | `/items` |
+| ヘルプを見る | `/items help` |
 | 名前で探す | `/items search 名前` |
 | 番号を指定して受け取る | `/items get 番号` |
 
