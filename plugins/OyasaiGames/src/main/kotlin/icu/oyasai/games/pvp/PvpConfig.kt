@@ -2,6 +2,7 @@ package icu.oyasai.games.pvp
 
 import icu.oyasai.games.wholeMoney
 import java.io.File
+import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.logging.Logger
@@ -142,6 +143,17 @@ internal data class ArenaConfig(
     val regions: List<Region>,
 ) {
   val mods = yaml.getStringList("mods").toSet()
+  val betWinFactor: BigDecimal =
+      when (val value = yaml.get("modules.economy.bet.winFactor")) {
+        null -> BigDecimal.ONE
+        is Int,
+        is Long -> BigDecimal.valueOf((value as Number).toLong())
+        is Double -> {
+          require(value.isFinite()) { "modules.economy.bet.winFactor は有限の数で指定してください" }
+          BigDecimal(value.toString())
+        }
+        else -> throw IllegalArgumentException("modules.economy.bet.winFactor は数値で指定してください")
+      }.also { require(it.signum() >= 0) { "modules.economy.bet.winFactor は0以上で指定してください" } }
 
   fun has(mod: String) = mods.any { it.equals(mod, true) }
 
@@ -196,8 +208,7 @@ internal data class ArenaConfig(
       ) {
         "経済設定をEconomy/EconomyRefundとmodules.economyへ変更し、金額を整数で指定してください"
       }
-      listOf("conditions.entryFee", "bet.minAmount", "bet.maxAmount", "bet.winFactor").forEach { key
-        ->
+      listOf("conditions.entryFee", "bet.minAmount", "bet.maxAmount").forEach { key ->
         if (y.contains("modules.economy.$key")) y.wholeMoney("modules.economy.$key")
       }
       y.getConfigurationSection("modules.economy.reward")?.getKeys(false)?.forEach {

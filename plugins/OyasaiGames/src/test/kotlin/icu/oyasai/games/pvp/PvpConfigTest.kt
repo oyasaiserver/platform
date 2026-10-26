@@ -1,6 +1,7 @@
 package icu.oyasai.games.pvp
 
 import java.io.File
+import java.math.BigDecimal
 import java.util.logging.Logger
 import kotlin.test.*
 import org.bukkit.configuration.file.YamlConfiguration
@@ -47,6 +48,38 @@ class PvpConfigTest {
     assertFailsWith<IllegalArgumentException> { ArenaConfig.load(file) }
     file.writeText(fixture + "\nmods: [Vault]\n")
     assertFailsWith<IllegalArgumentException> { ArenaConfig.load(file) }
+  }
+
+  @Test
+  fun `bet factor accepts nonnegative YAML numbers and defaults to one`(@TempDir folder: File) {
+    val file = File(folder, "arena.yml")
+    for (value in listOf("1.4", "2", "2147483648", "0")) {
+      file.writeText(fixture + "\nmodules: {economy: {bet: {winFactor: $value}}}\n")
+      assertEquals(BigDecimal(value), ArenaConfig.load(file).betWinFactor, value)
+    }
+    file.writeText(fixture)
+    assertEquals(BigDecimal.ONE, ArenaConfig.load(file).betWinFactor)
+  }
+
+  @Test
+  fun `bet factor rejects negative nonfinite and nonnumeric YAML values`(@TempDir folder: File) {
+    val file = File(folder, "arena.yml")
+    for (value in
+        listOf("-1", "-1.4", ".NaN", ".inf", "-.inf", "NaN", "Infinity", "'1.4'", "true")) {
+      file.writeText(fixture + "\nmodules: {economy: {bet: {winFactor: $value}}}\n")
+      assertFailsWith<IllegalArgumentException>(value) { ArenaConfig.load(file) }
+    }
+  }
+
+  @Test
+  fun `other economy amounts still require integer types`(@TempDir folder: File) {
+    val file = File(folder, "arena.yml")
+    for (key in listOf("conditions.entryFee", "bet.minAmount", "bet.maxAmount", "reward.win")) {
+      val yaml = YamlConfiguration().also { it.loadFromString(fixture) }
+      yaml.set("modules.economy.$key", 1.4)
+      file.writeText(yaml.saveToString())
+      assertFailsWith<IllegalArgumentException>(key) { ArenaConfig.load(file) }
+    }
   }
 
   @Test
