@@ -11,9 +11,14 @@ enum class ClaimRule(val key: String, val label: String) {
 }
 
 object ItemRules {
-  private val idPattern = Regex("[a-z0-9_-]{1,32}")
+  /** 番号は登録順の連番（1から）。 */
+  fun parseNumber(text: String?): Int? = text?.toIntOrNull()?.takeIf { it > 0 }
 
-  fun isValidId(id: String): Boolean = idPattern.matches(id)
+  /** 空白で区切った語がすべて名前に含まれるか。大文字小文字は区別しない。 */
+  fun matchesName(name: String, query: String): Boolean {
+    val words = query.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
+    return words.isNotEmpty() && words.all { name.contains(it, ignoreCase = true) }
+  }
 
   /** 運営のみのアイテムは、一覧と補完に出さない。 */
   fun visibleTo(rule: ClaimRule, staff: Boolean): Boolean = staff || rule != ClaimRule.STAFF

@@ -18,7 +18,11 @@ WAL・synchronous=FULL・busy_timeout=5000（BackpackStore と同じ）を設定
 非同期保存のエラーはログと停止時のエラーで報告する。
 利用機能が停止時の保存を渡した後、Main が全書き込みの完了を待って接続を閉じる。
 
-この基盤を使うのは `playerstate`（版1）、`teleport`（版1）、`items`（版1。表 `items_catalog`・`items_log`）。
+この基盤を使うのは `playerstate`（版1）、`teleport`（版1）、`items`（版2。表 `items_catalog`・`items_log`）。
 `flush()` はそれ以前の保存を完了させ、保存失敗があれば例外にする。
 段階3では、旧 Essentials の入獄状態を解除する前の耐久性確認に使う。
 バックパック・座る・案内・テレポート受け入れの既存DBと他機能のYAMLは別途移行する。
+
+Items の版1は変更せず、版2で文字列IDを作成日時順（同じなら旧ID順）の1からの連番へ移す。
+`items_catalog.id`・`items_log.item_id` は整数になり、取得記録を対応する番号へ付け替える。
+旧IDの文字列は残さない。削除済みの行も移し、次の番号は全行の最大番号+1とする。

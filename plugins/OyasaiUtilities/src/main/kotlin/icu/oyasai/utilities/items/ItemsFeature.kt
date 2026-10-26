@@ -21,11 +21,12 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 
-/** 特殊アイテムの台帳。登録したアイテムを、ルールに従って何度でも受け取れる。 */
+/** 特殊アイテムの台帳。登録したアイテムを、ルールに従って何度でも受け取れる。番号は登録順。 */
 class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
   private lateinit var store: ItemStore
 
-  private class ItemsGui(val ids: List<String>, val page: Int, val pages: Int) : InventoryHolder {
+  private class ItemsGui(val ids: List<Int>, val page: Int, val pages: Int, val query: String?) :
+      InventoryHolder {
     lateinit var inv: Inventory
 
     override fun getInventory(): Inventory = inv
@@ -55,8 +56,9 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
   ): Boolean {
     val staff = sender.hasPermission(MANAGE)
     when (args.firstOrNull()?.lowercase()) {
-      null -> (sender as? Player)?.let { openGui(it, 0) } ?: sender.sendMessage(PLAYER_ONLY)
+      null -> (sender as? Player)?.let { openGui(it, 0, null) } ?: sender.sendMessage(PLAYER_ONLY)
       "get" -> get(sender, args)
+      "search" -> search(sender, args)
       "register",
       "update",
       "remove",
@@ -68,27 +70,34 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
   }
 
   private fun usage(staff: Boolean): String = buildString {
-    append("§e/items §7— 一覧を開く\n§e/items get <ID> §7— 受け取る")
+    append("§e/items §7— 一覧を開く\n§e/items search <名前> §7— 名前で探す\n§e/items get <番号> §7— 受け取る")
     if (staff) {
-      append("\n§e/items register <ID> [free|once|staff] [説明] §7— 手に持ったものを登録")
-      append("\n§e/items update <ID> [free|once|staff] §7— 手に持ったもので置き換え")
-      append("\n§e/items remove <ID> §7— 一覧から外す（IDは再利用不可）")
-      append("\n§e/items info <ID> §7— 詳細")
-      append("\n§e/items reset <ID> <プレイヤー> §7— 「1人1回」の受取済みを消す")
+      append("\n§e/items register [free|once|staff] [説明] §7— 手に持ったものを登録（番号は自動）")
+      append("\n§e/items update <番号> [free|once|staff] §7— 手に持ったもので置き換え")
+      append("\n§e/items remove <番号> §7— 一覧から外す（番号は再利用されない）")
+      append("\n§e/items info <番号> §7— 詳細")
+      append("\n§e/items reset <番号> <プレイヤー> §7— 「1人1回」の受取済みを消す")
     }
   }
 
   private fun get(sender: CommandSender, args: Array<String>) {
     val player = sender as? Player ?: return sender.sendMessage(PLAYER_ONLY)
-    val id = args.getOrNull(1)?.lowercase() ?: return player.sendMessage(usage(false))
+    val id = ItemRules.parseNumber(args.getOrNull(1)) ?: return player.sendMessage(usage(false))
     claim(player, id)
   }
 
-  private fun claim(player: Player, id: String) {
+  private fun search(sender: CommandSender, args: Array<String>) {
+    val player = sender as? Player ?: return sender.sendMessage(PLAYER_ONLY)
+    val query = args.drop(1).joinToString(" ").trim()
+    if (query.isEmpty()) return player.sendMessage(usage(false))
+    openGui(player, 0, query)
+  }
+
+  private fun claim(player: Player, id: Int) {
     val staff = player.hasPermission(MANAGE)
     val entry = store.get(id)
     if (entry == null || !ItemRules.visibleTo(entry.rule, staff)) {
-      player.sendMessage("§cそのIDのアイテムは登録されていません。")
+      player.sendMessage(UNKNOWN)
       return
     }
     ItemRules.denial(entry.rule, staff, store.hasClaimed(id, player.uniqueId))?.let {
@@ -98,7 +107,7 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
     val item =
         runCatching { ItemStack.deserializeBytes(entry.bytes) }
             .getOrElse {
-              plugin.logger.log(Level.SEVERE, "Items: cannot read stored item '$id'", it)
+              plugin.logger.log(Level.SEVERE, "Items: cannot read stored item No.$id", it)
               player.sendMessage("§cアイテムを読み込めませんでした。運営に伝えてください。")
               return
             }
@@ -111,19 +120,19 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
 
   private fun admin(sender: CommandSender, args: Array<String>) {
     val sub = args[0].lowercase()
-    val id = args.getOrNull(1)?.lowercase() ?: return sender.sendMessage(usage(true))
+    if (sub == "register") return register(sender, args)
+    val id = ItemRules.parseNumber(args.getOrNull(1)) ?: return sender.sendMessage(usage(true))
     when (sub) {
-      "register" -> register(sender, id, args)
       "update" -> update(sender, id, args)
       "remove" -> {
         val entry = store.get(id) ?: return sender.sendMessage(UNKNOWN)
         store.put(entry.copy(enabled = false))
-        sender.sendMessage("§a「$id」を一覧から外しました。取得履歴は残り、IDは再利用できません。")
+        sender.sendMessage("§aNo.$id「${entry.name}」を一覧から外しました。取得履歴は残り、番号は再利用されません。")
       }
       "info" -> {
         val entry = store.get(id) ?: return sender.sendMessage(UNKNOWN)
         sender.sendMessage(
-            "§e${entry.id} §7名前: §f${entry.name} §7ルール: §f${entry.rule.label} " +
+            "§eNo.${entry.id} §7名前: §f${entry.name} §7ルール: §f${entry.rule.label} " +
                 "§7受け取った人数: §f${store.claimCount(id)} §7個数: §f${decode(entry)?.amount ?: "?"}" +
                 (if (entry.description.isBlank()) "" else "\n§7説明: §f${entry.description}")
         )
@@ -141,19 +150,18 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
     }
   }
 
-  private fun register(sender: CommandSender, id: String, args: Array<String>) {
+  private fun register(sender: CommandSender, args: Array<String>) {
     val player = sender as? Player ?: return sender.sendMessage(PLAYER_ONLY)
-    if (!ItemRules.isValidId(id)) return player.sendMessage("§cIDは半角の英小文字・数字・_・- で32文字までです。")
-    if (store.exists(id)) return player.sendMessage("§cそのIDはすでに使われています。置き換えるときは /items update。")
     val rule =
-        args.getOrNull(2)?.let { ClaimRule.parse(it) ?: return player.sendMessage(usage(true)) }
+        args.getOrNull(1)?.let { ClaimRule.parse(it) ?: return player.sendMessage(usage(true)) }
             ?: ClaimRule.FREE
     val hand = heldItem(player) ?: return
+    val id = store.nextId()
     store.put(
         CatalogEntry(
             id,
             plainName(hand),
-            args.drop(3).joinToString(" "),
+            args.drop(2).joinToString(" "),
             hand.serializeAsBytes(),
             rule,
             player.uniqueId,
@@ -161,10 +169,10 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
             true,
         )
     )
-    player.sendMessage("§a「${plainName(hand)}」を $id として登録しました（${rule.label}）。")
+    player.sendMessage("§a「${plainName(hand)}」を No.$id として登録しました（${rule.label}）。")
   }
 
-  private fun update(sender: CommandSender, id: String, args: Array<String>) {
+  private fun update(sender: CommandSender, id: Int, args: Array<String>) {
     val player = sender as? Player ?: return sender.sendMessage(PLAYER_ONLY)
     val entry = store.get(id) ?: return player.sendMessage(UNKNOWN)
     val rule =
@@ -172,7 +180,7 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
             ?: entry.rule
     val hand = heldItem(player) ?: return
     store.put(entry.copy(name = plainName(hand), bytes = hand.serializeAsBytes(), rule = rule))
-    player.sendMessage("§a$id を手に持ったアイテムで置き換えました（${rule.label}）。")
+    player.sendMessage("§aNo.$id を手に持ったアイテムで置き換えました（${rule.label}）。")
   }
 
   private fun heldItem(player: Player): ItemStack? =
@@ -188,15 +196,23 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
   private fun decode(entry: CatalogEntry): ItemStack? =
       runCatching { ItemStack.deserializeBytes(entry.bytes) }.getOrNull()
 
-  private fun openGui(player: Player, page: Int) {
+  private fun openGui(player: Player, page: Int, query: String?) {
     val staff = player.hasPermission(MANAGE)
-    val visible = store.all().filter { ItemRules.visibleTo(it.rule, staff) }
-    if (visible.isEmpty()) return player.sendMessage("§eまだ登録されたアイテムはありません。")
+    val visible =
+        store
+            .all()
+            .filter { ItemRules.visibleTo(it.rule, staff) }
+            .filter { query == null || ItemRules.matchesName(it.name, query) }
+    if (visible.isEmpty())
+        return player.sendMessage(
+            if (query == null) "§eまだ登録されたアイテムはありません。" else "§e「$query」に合う名前のアイテムはありません。"
+        )
     val pages = (visible.size + PAGE_SIZE - 1) / PAGE_SIZE
     val current = page.coerceIn(0, pages - 1)
     val slice = visible.drop(current * PAGE_SIZE).take(PAGE_SIZE)
-    val holder = ItemsGui(slice.map { it.id }, current, pages)
-    holder.inv = Bukkit.createInventory(holder, 54, Component.text("アイテム台帳 ${current + 1}/$pages"))
+    val holder = ItemsGui(slice.map { it.id }, current, pages, query)
+    val title = if (query == null) "アイテム台帳" else "アイテム台帳「$query」"
+    holder.inv = Bukkit.createInventory(holder, 54, Component.text("$title ${current + 1}/$pages"))
     slice.forEachIndexed { slot, entry -> holder.inv.setItem(slot, display(entry)) }
     if (current > 0) holder.inv.setItem(PREVIOUS_SLOT, button("前のページ"))
     if (current < pages - 1) holder.inv.setItem(NEXT_SLOT, button("次のページ"))
@@ -206,12 +222,12 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
   private fun display(entry: CatalogEntry): ItemStack {
     val item = decode(entry) ?: ItemStack(Material.BARRIER)
     val lines = buildList {
-      add(note("ID: ${entry.id}", NamedTextColor.GRAY))
+      add(note("No.${entry.id}", NamedTextColor.YELLOW))
       add(note(entry.rule.label, NamedTextColor.AQUA))
       if (entry.description.isNotBlank()) add(note(entry.description, NamedTextColor.WHITE))
-      add(note("クリックで受け取る", NamedTextColor.YELLOW))
+      add(note("クリックで受け取る", NamedTextColor.GRAY))
     }
-    item.editMeta { meta -> meta.lore((meta.lore() ?: emptyList()) + lines) }
+    item.editMeta { meta -> meta.lore(lines + (meta.lore() ?: emptyList())) }
     return item
   }
 
@@ -232,10 +248,16 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
     when (event.slot) {
       PREVIOUS_SLOT ->
           if (holder.page > 0)
-              plugin.server.scheduler.runTask(plugin, Runnable { openGui(player, holder.page - 1) })
+              plugin.server.scheduler.runTask(
+                  plugin,
+                  Runnable { openGui(player, holder.page - 1, holder.query) },
+              )
       NEXT_SLOT ->
           if (holder.page < holder.pages - 1)
-              plugin.server.scheduler.runTask(plugin, Runnable { openGui(player, holder.page + 1) })
+              plugin.server.scheduler.runTask(
+                  plugin,
+                  Runnable { openGui(player, holder.page + 1, holder.query) },
+              )
       else -> holder.ids.getOrNull(event.slot)?.let { claim(player, it) }
     }
   }
@@ -252,28 +274,28 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
       args: Array<String>,
   ): MutableList<String> {
     val staff = sender.hasPermission(MANAGE)
-    val visibleIds = store.all().filter { ItemRules.visibleTo(it.rule, staff) }.map { it.id }
+    val ids = store.all().filter { ItemRules.visibleTo(it.rule, staff) }.map { it.id.toString() }
+    val rules = ClaimRule.entries.map { it.key }
+    val sub = args[0].lowercase()
     val options =
         when (args.size) {
           1 ->
-              listOf("get") +
+              listOf("get", "search") +
                   if (staff) listOf("register", "update", "remove", "info", "reset")
                   else emptyList()
           2 ->
-              when (args[0].lowercase()) {
-                "get" -> visibleIds
-                "update",
-                "remove",
-                "info",
-                "reset" -> if (staff) visibleIds else emptyList()
+              when {
+                sub == "get" -> ids
+                !staff -> emptyList()
+                sub == "register" -> rules
+                sub in listOf("update", "remove", "info", "reset") -> ids
                 else -> emptyList()
               }
           3 ->
               when {
                 !staff -> emptyList()
-                args[0].lowercase() in listOf("register", "update") ->
-                    ClaimRule.entries.map { it.key }
-                args[0].lowercase() == "reset" -> Bukkit.getOnlinePlayers().map { it.name }
+                sub == "update" -> rules
+                sub == "reset" -> Bukkit.getOnlinePlayers().map { it.name }
                 else -> emptyList()
               }
           else -> emptyList()
@@ -287,6 +309,6 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
     const val PREVIOUS_SLOT = 45
     const val NEXT_SLOT = 53
     const val PLAYER_ONLY = "このコマンドはプレイヤー専用です。"
-    const val UNKNOWN = "§cそのIDのアイテムは登録されていません。"
+    const val UNKNOWN = "§cその番号のアイテムは登録されていません。"
   }
 }
