@@ -75,7 +75,7 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
       append("\n§e/items register [free|once|staff] [説明] §7— 手に持ったものを登録（番号は自動）")
       append("\n§e/items update <番号> [free|once|staff] §7— 手に持ったもので置き換え")
       append("\n§e/items remove <番号> §7— 一覧から外す（番号は再利用されない）")
-      append("\n§e/items info <番号> §7— 詳細")
+      append("\n§e/items info [番号] §7— 詳細（番号なしは手に持ったものを探す）")
       append("\n§e/items reset <番号> <プレイヤー> §7— 「1人1回」の受取済みを消す")
     }
   }
@@ -121,6 +121,7 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
   private fun admin(sender: CommandSender, args: Array<String>) {
     val sub = args[0].lowercase()
     if (sub == "register") return register(sender, args)
+    if (sub == "info" && args.size == 1) return infoHeldItem(sender)
     val id = ItemRules.parseNumber(args.getOrNull(1)) ?: return sender.sendMessage(usage(true))
     when (sub) {
       "update" -> update(sender, id, args)
@@ -131,11 +132,7 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
       }
       "info" -> {
         val entry = store.get(id) ?: return sender.sendMessage(UNKNOWN)
-        sender.sendMessage(
-            "§eNo.${entry.id} §7名前: §f${entry.name} §7ルール: §f${entry.rule.label} " +
-                "§7受け取った人数: §f${store.claimCount(id)} §7個数: §f${decode(entry)?.amount ?: "?"}" +
-                (if (entry.description.isBlank()) "" else "\n§7説明: §f${entry.description}")
-        )
+        showInfo(sender, entry)
       }
       "reset" -> {
         store.get(id) ?: return sender.sendMessage(UNKNOWN)
@@ -148,6 +145,24 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
         )
       }
     }
+  }
+
+  private fun infoHeldItem(sender: CommandSender) {
+    val player = sender as? Player ?: return sender.sendMessage(usage(true))
+    val hand = player.inventory.itemInMainHand
+    if (hand.type.isAir) return player.sendMessage("§c調べたいアイテムを手に持ってください。")
+    val matches = store.allIncludingRemoved().filter { decode(it)?.isSimilar(hand) == true }
+    if (matches.isEmpty()) return player.sendMessage("§e手に持っているアイテムは台帳に登録されていません。")
+    matches.forEach { showInfo(player, it) }
+  }
+
+  private fun showInfo(sender: CommandSender, entry: CatalogEntry) {
+    val removed = if (entry.enabled) "" else "（削除済み）"
+    sender.sendMessage(
+        "§eNo.${entry.id}$removed §7名前: §f${entry.name}$removed §7ルール: §f${entry.rule.label} " +
+            "§7受け取った人数: §f${store.claimCount(entry.id)} §7個数: §f${decode(entry)?.amount ?: "?"}" +
+            (if (entry.description.isBlank()) "" else "\n§7説明: §f${entry.description}")
+    )
   }
 
   private fun register(sender: CommandSender, args: Array<String>) {

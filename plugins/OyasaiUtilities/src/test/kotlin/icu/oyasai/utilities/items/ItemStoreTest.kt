@@ -52,6 +52,25 @@ class ItemStoreTest {
   }
 
   @Test
+  fun `all including removed keeps active and removed entries in number order`() =
+      withFile { file ->
+        UtilitiesDatabase(file).use { db ->
+          val store = ItemStore(db)
+          store.put(entry(2).copy(enabled = false))
+          store.put(entry(1))
+          assertEquals(listOf(1, 2), store.allIncludingRemoved().map { it.id })
+        }
+        reopen(file) { store ->
+          val entries = store.allIncludingRemoved()
+          assertEquals(listOf(1, 2), entries.map { it.id })
+          assertEquals(listOf(true, false), entries.map { it.enabled })
+          assertEquals(listOf(1), store.all().map { it.id })
+          assertEquals("名前2", entries[1].name)
+          assertContentEquals(byteArrayOf(1, 2, 3), entries[1].bytes)
+        }
+      }
+
+  @Test
   fun `update keeps creator and date`() = withFile { file ->
     UtilitiesDatabase(file).use { db ->
       val store = ItemStore(db)

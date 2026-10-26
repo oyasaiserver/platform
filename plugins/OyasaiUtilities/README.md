@@ -79,4 +79,4 @@
 
 ## Items
 
-運営が登録した特殊アイテムを、`/items`（一覧 GUI）、`/items search <名前>`（空白区切りの全語を含む名前、大文字小文字を区別しない）か `/items get <番号>` で受け取れる台帳。番号は1から登録順に自動採番し、削除後も再利用しない。一覧の説明の先頭に `No.<番号>` を表示し、検索結果のページ送りも絞り込みを保つ。取得ルールは free・once・staff。運営は `/items register [free|once|staff] [説明]`（番号の入力は不要）と `/items update <番号> [ルール]`・`remove <番号>`・`info <番号>`・`reset <番号> <プレイヤー>`（`oyasaiutilities.items.manage`）。保存は共通 SQLite。持ち主の追跡はしない。
+運営が登録した特殊アイテムを、`/items`（一覧 GUI）、`/items search <名前>`（空白区切りの全語を含む名前、大文字小文字を区別しない）か `/items get <番号>` で受け取れる台帳。番号は1から登録順に自動採番し、削除後も再利用しない。一覧の説明の先頭に `No.<番号>` を表示し、検索結果のページ送りも絞り込みを保つ。取得ルールは free・once・staff。運営は `/items register [free|once|staff] [説明]`（番号の入力は不要）と `/items update <番号> [ルール]`・`remove <番号>`・`info [番号]`・`reset <番号> <プレイヤー>`（`oyasaiutilities.items.manage`）。`/items info` はメインハンドと同じアイテムを個数を無視して探し、削除済みを含む全一致の詳細を表示する。削除済みは番号と名前に明記する。コンソールでは番号が必須。保存は共通 SQLite。持ち主の追跡はしない。

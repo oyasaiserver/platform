@@ -144,6 +144,8 @@ class ItemStore(private val database: UtilitiesDatabase) {
 
   fun all(): List<CatalogEntry> = entries.values.filter { it.enabled }
 
+  fun allIncludingRemoved(): List<CatalogEntry> = entries.values.toList()
+
   fun put(entry: CatalogEntry) {
     entries[entry.id] = entry
     database.write { connection ->
