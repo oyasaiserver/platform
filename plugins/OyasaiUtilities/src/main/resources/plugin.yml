@@ -291,7 +291,7 @@ commands:
     usage: /fart [stay|fly] [player]
   items:
     description: "特殊アイテムの台帳。登録されたアイテムを受け取る"
-    usage: /items [help | search <名前> | get <番号> | register [free|once|staff] [説明] | update <番号> [free|once|staff] | remove <番号> | info [番号] | reset <番号> <プレイヤー>]
+    usage: /items [help | search <名前> | get <番号> | register [free|once|staff] [説明] | update <番号> [free|once|staff] | remove <番号> | restore <番号> | info [番号] | reset <番号> <プレイヤー>]
     permission: oyasaiutilities.items.use
     permission-message: "§cこのコマンドを使用する権限がありません。"
 

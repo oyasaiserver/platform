@@ -68,6 +68,7 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
       "register",
       "update",
       "remove",
+      "restore",
       "info",
       "reset" -> if (staff) admin(sender, args) else sender.sendMessage("§cこのコマンドを使う権限がありません。")
       else -> sender.sendMessage(usage(staff))
@@ -83,6 +84,7 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
       append("\n§e/items register [free|once|staff] [説明] §7— 手に持ったものを登録（番号は自動）")
       append("\n§e/items update <番号> [free|once|staff] §7— 手に持ったもので置き換え")
       append("\n§e/items remove <番号> §7— 一覧から外す（番号は再利用されない）")
+      append("\n§e/items restore <番号> §7— 削除済みの登録を一覧に戻す")
       append("\n§e/items info [番号] §7— 詳細（番号なしは手に持ったものを探す）")
       append("\n§e/items reset <番号> <プレイヤー> §7— 「1人1回」の受取済みを消す")
     }
@@ -138,6 +140,14 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
         store.put(entry.copy(enabled = false))
         sender.sendMessage("§aNo.$id「${entry.name}」を一覧から外しました。取得履歴は残り、番号は再利用されません。")
       }
+      "restore" -> {
+        val entry =
+            store.allIncludingRemoved().firstOrNull { it.id == id }
+                ?: return sender.sendMessage(UNKNOWN)
+        if (entry.enabled) return sender.sendMessage("§eNo.$id はすでに一覧にあります。")
+        store.put(entry.copy(enabled = true))
+        sender.sendMessage("§aNo.$id「${entry.name}」を一覧に戻しました。")
+      }
       "info" -> {
         val entry = store.get(id) ?: return sender.sendMessage(UNKNOWN)
         showInfo(sender, entry)
@@ -159,10 +169,13 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
     val player = sender as? Player ?: return sender.sendMessage(usage(true))
     val hand = player.inventory.itemInMainHand
     if (hand.type.isAir) return player.sendMessage("§c調べたいアイテムを手に持ってください。")
-    val matches = store.allIncludingRemoved().filter { decode(it)?.isSimilar(hand) == true }
+    val matches = matchingEntries(hand)
     if (matches.isEmpty()) return player.sendMessage("§e手に持っているアイテムは台帳に登録されていません。")
     matches.forEach { showInfo(player, it) }
   }
+
+  private fun matchingEntries(item: ItemStack): List<CatalogEntry> =
+      store.allIncludingRemoved().filter { decode(it)?.isSimilar(item) == true }
 
   private fun showInfo(sender: CommandSender, entry: CatalogEntry) {
     val removed = if (entry.enabled) "" else "（削除済み）"
@@ -179,6 +192,18 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
         args.getOrNull(1)?.let { ClaimRule.parse(it) ?: return player.sendMessage(usage(true)) }
             ?: ClaimRule.FREE
     val hand = heldItem(player) ?: return
+    val matches = matchingEntries(hand)
+    if (matches.isNotEmpty()) {
+      matches.forEach { entry ->
+        player.sendMessage(
+            if (entry.enabled)
+                "§cこのアイテムはすでに No.${entry.id}「${entry.name}」として登録されています。置き換えるときは /items update ${entry.id}。"
+            else
+                "§cこのアイテムは No.${entry.id}「${entry.name}」として登録されていましたが、削除済みです。戻すときは /items restore ${entry.id}。"
+        )
+      }
+      return
+    }
     val id = store.nextId()
     store.put(
         CatalogEntry(
@@ -304,12 +329,14 @@ class ItemsFeature(private val plugin: Main) : Listener, TabExecutor {
         when (args.size) {
           1 ->
               listOf("help", "get", "search") +
-                  if (staff) listOf("register", "update", "remove", "info", "reset")
+                  if (staff) listOf("register", "update", "remove", "restore", "info", "reset")
                   else emptyList()
           2 ->
               when {
                 sub == "get" -> ids
                 !staff -> emptyList()
+                sub == "restore" ->
+                    store.allIncludingRemoved().filter { !it.enabled }.map { it.id.toString() }
                 sub == "register" -> rules
                 sub in listOf("update", "remove", "info", "reset") -> ids
                 else -> emptyList()

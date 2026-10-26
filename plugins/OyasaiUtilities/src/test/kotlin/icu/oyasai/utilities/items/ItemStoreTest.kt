@@ -52,6 +52,50 @@ class ItemStoreTest {
   }
 
   @Test
+  fun `restore preserves entry and claims after reopening`() = withFile { file ->
+    val original = entry(1, ClaimRule.ONCE)
+    val player = UUID.randomUUID()
+    UtilitiesDatabase(file).use { db ->
+      val store = ItemStore(db)
+      store.put(original)
+      store.recordClaim(1, player, 1234L)
+      store.put(original.copy(enabled = false))
+    }
+    reopen(file) { store ->
+      assertNull(store.get(1))
+      store.put(store.allIncludingRemoved().single().copy(enabled = true))
+    }
+    reopen(file) { store ->
+      val restored = assertNotNull(store.get(1))
+      assertTrue(restored.enabled)
+      assertEquals(original.id, restored.id)
+      assertEquals(original.name, restored.name)
+      assertEquals(original.description, restored.description)
+      assertEquals(original.rule, restored.rule)
+      assertEquals(original.creator, restored.creator)
+      assertEquals(original.createdAt, restored.createdAt)
+      assertContentEquals(original.bytes, restored.bytes)
+      assertEquals(listOf(1), store.all().map { it.id })
+      assertEquals(2, store.nextId())
+      assertTrue(store.hasClaimed(1, player))
+      assertEquals(1, store.claimCount(1))
+    }
+    UtilitiesDatabase(file).use { db ->
+      db.read { connection ->
+        connection.createStatement().use { statement ->
+          statement.executeQuery("SELECT item_id, player_uuid, at FROM items_log").use { rows ->
+            assertTrue(rows.next())
+            assertEquals(1, rows.getInt("item_id"))
+            assertEquals(player.toString(), rows.getString("player_uuid"))
+            assertEquals(1234L, rows.getLong("at"))
+            assertFalse(rows.next())
+          }
+        }
+      }
+    }
+  }
+
+  @Test
   fun `all including removed keeps active and removed entries in number order`() =
       withFile { file ->
         UtilitiesDatabase(file).use { db ->
