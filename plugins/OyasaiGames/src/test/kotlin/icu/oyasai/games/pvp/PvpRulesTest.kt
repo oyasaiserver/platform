@@ -1,6 +1,7 @@
 package icu.oyasai.games.pvp
 
 import java.io.File
+import java.math.BigDecimal
 import kotlin.test.*
 import org.junit.jupiter.api.io.TempDir
 
@@ -95,11 +96,30 @@ class PvpRulesTest {
   }
 
   @Test
-  fun `bets use exact whole units and reject fractional payouts`() {
-    assertEquals(60L, betPayout(10, 20, 60, 2))
-    assertFailsWith<ArithmeticException> { betPayout(1, 3, 10, 1) }
-    assertFailsWith<IllegalArgumentException> { betPayout(-1, 3, 10, 1) }
-    assertFailsWith<IllegalArgumentException> { betPayout(1, 0, 10, 1) }
+  fun `bets round half up only after multiplying by the decimal factor`() {
+    assertEquals(60L, betPayout(10, 20, 60, BigDecimal("2")))
+    assertEquals(30L, betPayout(10, 20, 60, BigDecimal.ONE))
+    assertEquals(3L, betPayout(1, 3, 10, BigDecimal.ONE))
+    assertEquals(2L, betPayout(1, 2, 3, BigDecimal.ONE))
+    assertEquals(2L, betPayout(1, 2, 3, BigDecimal("1.4")))
+    assertEquals(3L, betPayout(1, 3, 7, BigDecimal("1.4")))
+    assertEquals(4L, betPayout(1, 2, 5, BigDecimal("1.4")))
+    assertEquals(0L, betPayout(10, 20, 60, BigDecimal.ZERO))
+    assertEquals(
+        Long.MAX_VALUE,
+        betPayout(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, BigDecimal.ONE),
+    )
+  }
+
+  @Test
+  fun `bets reject overflow and invalid inputs`() {
+    assertFailsWith<ArithmeticException> { betPayout(1, 1, Long.MAX_VALUE, BigDecimal("1.4")) }
+    assertFailsWith<IllegalArgumentException> { betPayout(-1, 3, 10, BigDecimal.ONE) }
+    assertFailsWith<IllegalArgumentException> { betPayout(1, 0, 10, BigDecimal.ONE) }
+    assertFailsWith<IllegalArgumentException> { betPayout(1, 3, 10, BigDecimal("-1")) }
+    assertFailsWith<IllegalArgumentException> { betPayout(4, 3, 10, BigDecimal.ONE) }
+    assertFailsWith<IllegalArgumentException> { betPayout(1, 3, 2, BigDecimal.ONE) }
+    assertFailsWith<IllegalArgumentException> { betPayout(0, 1, -1, BigDecimal.ONE) }
   }
 
   @Test

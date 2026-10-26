@@ -197,7 +197,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
                 "BattlefieldJoin",
                 "BetterGears",
                 "BetterClasses",
-                "OyasaiEconomy",
+                "Economy",
                 "EconomyRefund",
                 "ChestFiller",
                 "AfterMatch",
@@ -831,12 +831,12 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
                     entry.amount,
                     winningTotal,
                     total,
-                    arena.config.yaml.wholeMoney("modules.economy.bet.winFactor", 1),
+                    arena.config.betWinFactor,
                 )
             else 0L
           }
         } catch (_: ArithmeticException) {
-          plugin.logger.warning("PvPの配当が整数にならないため、すべての賭けの元金を返却します。")
+          plugin.logger.warning("PvPの配当がLongの範囲を超えたため、すべての賭けの元金を返却します。")
           arena.bets.mapValues { it.value.amount }
         }
     for ((id, entry) in arena.bets) economy?.settle(entry.charge, payouts.getValue(id))
