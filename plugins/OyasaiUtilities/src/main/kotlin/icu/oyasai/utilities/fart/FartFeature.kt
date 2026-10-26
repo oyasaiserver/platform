@@ -13,6 +13,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -82,14 +83,17 @@ object FartFeature : Listener, CommandExecutor, TabCompleter {
 
   fun isOn(id: UUID): Boolean = id in modes
 
-  fun staysOnHead(p: Player): Boolean = modes[p.uniqueId] == Mode.STAY && p.vehicle is Player
+  fun staysOnHead(p: Player, vehicle: Entity? = p.vehicle): Boolean =
+      modes[p.uniqueId] == Mode.STAY && vehicle is Player
 
   fun lifted(vy: Double): Double = min(vy + LIFT, MAX_UP)
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   fun onDismount(event: EntityDismountEvent) {
     val player = event.entity as? Player ?: return
-    if (staysOnHead(player) && player.isSneaking && event.isCancellable) event.isCancelled = true
+    // 降車イベントの発火時には player.vehicle が既に null になっている。
+    if (staysOnHead(player, event.dismounted) && player.isSneaking && event.isCancellable)
+        event.isCancelled = true
   }
 
   @EventHandler(ignoreCancelled = true)

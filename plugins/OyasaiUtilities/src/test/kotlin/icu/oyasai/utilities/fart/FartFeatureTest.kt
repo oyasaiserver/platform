@@ -1,14 +1,87 @@
 package icu.oyasai.utilities.fart
 
 import icu.oyasai.utilities.fart.FartFeature.Mode
+import java.lang.reflect.Proxy
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.bukkit.entity.Entity
+import org.bukkit.entity.Player
+import org.bukkit.event.entity.EntityDismountEvent
 
 class FartFeatureTest {
+  private inline fun <reified T : Entity> entity(
+      id: UUID = UUID.randomUUID(),
+      sneaking: Boolean = false,
+      vehicle: Entity? = null,
+  ): T =
+      Proxy.newProxyInstance(T::class.java.classLoader, arrayOf(T::class.java)) { _, method, _ ->
+        when (method.name) {
+          "getUniqueId" -> id
+          "isSneaking" -> sneaking
+          "getVehicle" -> vehicle
+          else -> error("Unexpected entity call: ${method.name}")
+        }
+      } as T
+
+  @Test
+  fun stayCancelsHeadDismountAfterVehicleIsCleared() {
+    val carrier = entity<Player>()
+    val rider = entity<Player>(sneaking = true)
+    FartFeature.toggle(rider.uniqueId, Mode.STAY)
+    try {
+      assertNull(rider.vehicle)
+      val event = EntityDismountEvent(rider, carrier)
+      FartFeature.onDismount(event)
+      assertTrue(event.isCancelled)
+    } finally {
+      FartFeature.toggle(rider.uniqueId)
+    }
+  }
+
+  @Test
+  fun stayLeavesOtherDismountsAlone() {
+    for (mode in listOf(null, Mode.NORMAL, Mode.STAY, Mode.FLY)) {
+      for (head in listOf(false, true)) {
+        for (sneaking in listOf(false, true)) {
+          for (cancellable in listOf(false, true)) {
+            val rider = entity<Player>(sneaking = sneaking)
+            val carrier = if (head) entity<Player>() else entity<Entity>()
+            if (mode != null) FartFeature.toggle(rider.uniqueId, mode)
+            try {
+              val event = EntityDismountEvent(rider, carrier, cancellable)
+              FartFeature.onDismount(event)
+              assertEquals(
+                  mode == Mode.STAY && head && sneaking && cancellable,
+                  event.isCancelled,
+                  "mode=$mode head=$head sneaking=$sneaking cancellable=$cancellable",
+              )
+            } finally {
+              if (FartFeature.isOn(rider.uniqueId)) FartFeature.toggle(rider.uniqueId)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @Test
+  fun stayStillChecksTheCurrentVehicleOutsideDismount() {
+    val carrier = entity<Player>()
+    val id = UUID.randomUUID()
+    FartFeature.toggle(id, Mode.STAY)
+    try {
+      assertTrue(FartFeature.staysOnHead(entity<Player>(id, vehicle = carrier)))
+      assertFalse(FartFeature.staysOnHead(entity<Player>(id)))
+      assertFalse(FartFeature.staysOnHead(entity<Player>(id, vehicle = entity<Entity>())))
+    } finally {
+      FartFeature.toggle(id)
+    }
+  }
+
   @Test
   fun parsesModesAndOptionalTargets() {
     val cases =
