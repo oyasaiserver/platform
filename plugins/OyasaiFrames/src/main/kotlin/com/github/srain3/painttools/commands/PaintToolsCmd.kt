@@ -48,6 +48,7 @@ object PaintToolsCmd : CommandExecutor {
                 val id = getID()
                 it.inventory.addItem(createMap(mapView, id))
                 saveID(id)
+                return true
               }
             }
           }
@@ -143,6 +144,7 @@ object PaintToolsCmd : CommandExecutor {
                 sender.sendMessage(
                     ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました")
                 )
+                return true
               }
             }
           }

@@ -167,7 +167,7 @@ items:
 - 売却 GUI は上段0〜44を入力枠、45〜53を操作枠として使います。売却に失敗したときは入力アイテムを消費しません。未売却品は閉じるとプレイヤーへ戻し、入りきらない分は地面に落とします。InventoryDragEvent は操作枠へのドラッグだけキャンセルします。
 - ポイントショップはカテゴリ内キーを数値順に並べ、1ページ45件で表示します。`cost` は必須の0以上の整数で、省略・負値・整数以外は警告して読み飛ばします。`enabled` は既定 true で、false の商品は読み込みません。cost 0 はポイントを引かず、ポイント価格・不足の表示や購入ヒントの「(0P)」を出しません。コマンド側で円などを課金する商品にも使えます。購入時に正の cost だけ OyasaiEconomy から引き落とし、その後 YAML の commands をコンソールから順に実行します。最初に false が返った時点で中断し、最初のコマンドなら引いたポイントを返金します。2つ目以降は部分付与の可能性があるため返金しません。どちらも警告ログと運営への連絡案内を出し、返金自体に失敗した場合もその旨を通知します。close-on-purchase も同じ判定です。戻り値 true は商品の付与成功を保証しません。
 
-- PaintTools の `painttools canvas <player>` と `painttools dye <player>` はコンソールから付与・画面表示を行いますが、現在の OyasaiFrames の実装は処理後も false を返します（`com/github/srain3/painttools/commands/PaintToolsCmd.kt`）。同梱商品12では最初の canvas 処理後に返金・中断となり、後続の染料・額縁・権限付与は実行されません。コマンド側の成功時戻り値の修正が必要です。
+- PaintTools の `painttools canvas <player>` と `painttools dye <player>` はコンソールからオンラインプレイヤーへの付与・画面表示を終えると true、対象不在なら false を返します（`com/github/srain3/painttools/commands/PaintToolsCmd.kt`）。同梱商品12は canvas → dye → give → lp×3 の順に実行し、各コマンドが true を返せば最後まで進みます。
 
 ### データ形式と永続化
 
