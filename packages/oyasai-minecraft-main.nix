@@ -68,6 +68,8 @@ oyasaiPurpur rec {
     oyasaivotifier
     oyasaiworldgenerator
     plugmanx
+    skbee
+    skript
     sociallikes3
     socialvotes
     viaversion

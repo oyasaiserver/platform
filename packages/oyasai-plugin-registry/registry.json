@@ -67,6 +67,18 @@
       "type": "modrinth"
     }
   },
+  "skbee": {
+    "paper": {
+      "slug": "skbee",
+      "type": "modrinth"
+    }
+  },
+  "skript": {
+    "paper": {
+      "slug": "skript",
+      "type": "modrinth"
+    }
+  },
   "viaversion": {
     "paper": {
       "slug": "viaversion",
