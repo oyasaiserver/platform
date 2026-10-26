@@ -85,6 +85,22 @@
       }
     }
   },
+  "skbee": {
+    "paper": {
+      "26.2": {
+        "url": "https://cdn.modrinth.com/data/a0tlbHZO/versions/FUHfTDWo/SkBee-3.26.0.jar",
+        "hash": "sha256-aMC8WphHj/4WrQjheb3zglu7TvzExov+gTReKLee1KI="
+      }
+    }
+  },
+  "skript": {
+    "paper": {
+      "26.2": {
+        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/md6XoYzV/Skript-2.17.1.jar",
+        "hash": "sha256-7ZHgH0ysVeE0lXfTa91tU2/loCKRrrvc/lSyc1BcIAA="
+      }
+    }
+  },
   "viaversion": {
     "paper": {
       "26.2": {
