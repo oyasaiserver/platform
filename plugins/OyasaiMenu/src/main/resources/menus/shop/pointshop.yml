@@ -4,7 +4,9 @@
 #   icon:              表示マテリアル名 (大文字)
 #   name:              表示名 (%player% 使用可)
 #   lore:              説明文 (%tokens%, %price%, %balance% 使用可)
-#   cost:              必要ポイント数 (整数)
+#   cost:              必須。必要ポイント数 (0以上の整数)
+#                      0 はポイントを引かない。コマンドが別の課金をする場合に使う
+#   enabled:           false の商品は読み込まない (デフォルト: true)
 #   message:           購入時メッセージ (%price%, %tokens%, %player% 使用可)
 #   commands:          購入時実行コマンドリスト (%player%, %price% 使用可)
 #   close-on-purchase: true にすると購入後にGUIを閉じる (デフォルト: false)
@@ -26,7 +28,7 @@ point1:
       cost: 30
       message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% glass[custom_name="%player%の酸素ボンベ",lore=[{text:"headで被ってお使い下さい"}],enchantments={aqua_affinity:1,respiration:10}] 1'
+        - 'minecraft:give %player% glass[custom_name="%player%の酸素ボンベ",lore=[{text:"水中呼吸 CCLV",color:"gray",italic:false},{text:"水中採掘",color:"gray",italic:false},{text:"headで被ってお使い下さい"}],enchantments={aqua_affinity:1,respiration:255},tooltip_display={hidden_components:["enchantments"]}] 1'
 
     "1":
       icon: ELYTRA
@@ -146,7 +148,7 @@ point1:
       cost: 20
       message: "&bTM &8» &3%price%&fP&7使用しました・・・！"
       commands:
-        - "buyfly %player%"
+        - "lp user %player% permission settemp essentials.fly true 1d"
 
     "11":
       icon: GRASS_BLOCK
@@ -156,10 +158,12 @@ point1:
         - ""
         - "&d所持:&3%tokens%&fP"
         - "&a価格:&3%price%&fP"
-      cost: 4300
+      cost: 3643
       message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - "buycr %player%"
+        - "lp user %player% permission set essentials.gamemode true"
+        - "lp user %player% permission set essentials.gamemode.survival true"
+        - "lp user %player% permission set essentials.gamemode.creative true"
 
     "12":
       icon: MAP
@@ -174,9 +178,12 @@ point1:
       cost: 10
       message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - "getpt %player%"
+        - "painttools canvas %player%"
+        - "painttools dye %player%"
         - "give %player% item_frame 1"
-        - "buycanvas %player%"
+        - "lp user %player% permission set painttools.canvas.use true"
+        - "lp user %player% permission set painttools.command.painttools.canvas true"
+        - "lp user %player% permission set painttools.command.painttools.dye true"
       close-on-purchase: true # シュルカーボックスを開くためGUIを閉じる
 
     "13":
@@ -214,7 +221,7 @@ point1:
         - "&7(上級者以上は消費しません)"
         - ""
         - "&d所持:&6%balance%"
-        - "&a価格:&3231&f円"
+        - "&a価格:&3213&f円"
       cost: 0
       commands:
         - "buyredbull %player%"
@@ -229,7 +236,7 @@ point1:
         - "&7(上級者以上は消費しません)"
         - ""
         - "&d所持:&6%balance%"
-        - "&a価格:&32480&f円"
+        - "&a価格:&32,480&f円"
       cost: 0
       commands:
         - "buyredbullset %player%"

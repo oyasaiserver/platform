@@ -26,7 +26,7 @@ YAML で定義したメニュー、Popup、通常ショップ、ポイントシ�
 |---|---|
 | 実装の正本 | `plugins/OyasaiMenu/` |
 | 主要コード | `src/main/kotlin/com/github/sahyuya/oyasaiMenu/OyasaiMenu.kt`、`command/`、`engine/`、`loader/`、`manager/`、`item/` |
-| テスト | `src/test/kotlin/com/github/sahyuya/oyasaiMenu/item/`。`ItemTemplateStoreTest` は SQLite の保存・再オープン・同名行の上書き、`MenuItemTest` は初回参加者への付与、レシピクラフトのキャンセル文言、同じ tick の二重起動抑止、次 tick での起動、テンプレート不一致を確認します。GUI、権限、ローダー、経済・ポイント連携、Paper イベント実動作、保存失敗は保証しません。この資料作成時点ではテスト未実行です。 |
+| テスト | `src/test/kotlin/com/github/sahyuya/oyasaiMenu/item/`。`MenuItemTest` は初回参加者への付与、レシピクラフトのキャンセル文言、同じ tick の二重起動抑止、次 tick での起動、テンプレート不一致を確認します。`loader/PointShopLoaderTest` は cost の0・正値・負値・省略・不正型と enabled、`engine/PointShopCommandsTest` は失敗位置と後続中断を確認します。GUI、権限、経済・ポイント連携、Paper イベント実動作、保存失敗は保証しません。2026-10-26 に OyasaiMenu の build と全9テストの成功を確認しました。 |
 | ビルド | `nix develop --command gradle :plugins:OyasaiMenu:build`。成果物は `plugins/OyasaiMenu/build/libs/OyasaiMenu.jar`。ルート Gradle の build は shadowJar に依存します。 |
 | Nix package | `packages/oyasai-plugins.nix` が `plugins/OyasaiMenu/` から `oyasaimenu` 属性を公開します。`packages/oyasai-minecraft-main.nix` のプラグイン一覧から参照されています。 |
 
@@ -165,7 +165,9 @@ items:
 - エンチャント付き商品の購入は Shift 操作でも1個固定ですが、通常売却は選択数量、Shift 売却は一致する所持分すべてです。エンチャント商品の表示数量・売却 lore が1個でも、売却処理の数量とは限りません（`engine/ShopEngine.kt`）。
 - 通常売却用の price map は Material ごとに1件です。ショップ読込時に後から処理された売却可能な同素材行が map の価格を上書きします。`/sell hand`、`/sell all`、売却 GUI はこの値を使います。通常ショップ GUI の売却は選択した商品行の sell price を使います。
 - 売却 GUI は上段0〜44を入力枠、45〜53を操作枠として使います。売却に失敗したときは入力アイテムを消費しません。未売却品は閉じるとプレイヤーへ戻し、入りきらない分は地面に落とします。InventoryDragEvent は操作枠へのドラッグだけキャンセルします。
-- ポイントショップはカテゴリ内キーを数値順に並べ、1ページ45件で表示します。費用が1未満の項目は警告して読み飛ばします。同梱の point1 のキー15・16は cost 0 なので表示されません。購入時に OyasaiEconomy からポイントを引き落とし、その後 YAML の commands をコンソールから実行します。コマンド失敗による返金はありません。
+- ポイントショップはカテゴリ内キーを数値順に並べ、1ページ45件で表示します。`cost` は必須の0以上の整数で、省略・負値・整数以外は警告して読み飛ばします。`enabled` は既定 true で、false の商品は読み込みません。cost 0 はポイントを引かず、ポイント価格・不足の表示や購入ヒントの「(0P)」を出しません。コマンド側で円などを課金する商品にも使えます。購入時に正の cost だけ OyasaiEconomy から引き落とし、その後 YAML の commands をコンソールから順に実行します。最初に false が返った時点で中断し、最初のコマンドなら引いたポイントを返金します。2つ目以降は部分付与の可能性があるため返金しません。どちらも警告ログと運営への連絡案内を出し、返金自体に失敗した場合もその旨を通知します。close-on-purchase も同じ判定です。戻り値 true は商品の付与成功を保証しません。
+
+- PaintTools の `painttools canvas <player>` と `painttools dye <player>` はコンソールからオンラインプレイヤーへの付与・画面表示を終えると true、対象不在なら false を返します（`com/github/srain3/painttools/commands/PaintToolsCmd.kt`）。同梱商品12は canvas → dye → give → lp×3 の順に実行し、各コマンドが true を返せば最後まで進みます。
 
 ### データ形式と永続化
 
@@ -174,7 +176,7 @@ items:
 | 設定 | データフォルダの `config.yml` | 同梱時は menu.default=root、server-name=OyasaiServer、click-ms=100、command-ms=300、sell-whitelist.enabled=true。server-name と sell-whitelist.enabled は現在参照されません。 |
 | GUI 定義 | `menus/root.yml`、`menus/popup/*.yml` | 不足時に一部の標準リソースを作成します。既存ファイルは上書きしません。 |
 | 通常ショップ | `menus/shop/shops.yml`、`menus/shop/custom_items.yml` | 商品価格とカスタム商品設定。in-game 編集で保存失敗してもコマンド側が成功表示する場合があります。 |
-| ポイントショップ | `menus/shop/pointshop.yml` | 費用 < 1 の商品は読み飛ばします。`message` は購入者へ送る文字列、`commands` はコンソールコマンドです。 |
+| ポイントショップ | `menus/shop/pointshop.yml` | `cost` は必須で0以上の整数。0はポイント引き落としなし。`enabled: false` は読み込み対象外（既定 true）。`message` は購入者へ送る文字列、`commands` はコンソールコマンドです。 |
 | お知らせ | `announcements.yml` | announcements の先頭要素だけを読みます。空・解析失敗時は現在の値を消しません。 |
 | 売却ホワイトリスト | `sell-whitelist.yml` | entries に ID、表示名、素材、売値、Base64 の ItemStack bytes を保存します。比較時は amount を1、damageを0、loreを空に正規化します。保存エラー時にメモリ状態を戻しません。 |
 | 配布用アイテム | `command-items.db` | SQLite。`command_items(name TEXT PRIMARY KEY, item BLOB NOT NULL)` に name=menu の行を保存します。テーブルがなければ作成します。 |

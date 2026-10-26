@@ -24,5 +24,8 @@ object TokenCurrencyManager {
     else "&cポイント不足、または引き落としに失敗しました。"
   }
 
+  fun refundTokens(player: Player, amount: Long): Boolean =
+      amount > 0 && manager?.deposit("token", player.uniqueId, amount)?.accepted == true
+
   fun format(amount: Long): String = String.format("%,d", amount)
 }

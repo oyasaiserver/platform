@@ -61,6 +61,7 @@ last_validated: "2026-10-13"
 
 #### PaintTools と染料アイテム
 
+- コンソールの `painttools canvas <player>`・`painttools dye <player>` は、オンラインの対象への処理完了後に true、対象不在なら false を返します。プレイヤー実行時の戻り値は変わりません。
 - PaintTools はキャンバス ID を地図アイテムの PDC に格納し、額縁上の合成 PlayerInteractEvent を通じて描画します。16色の染料、紙、羽根、イカスミ、砂糖を描画道具として扱います。
 - 描画内容・Undo・ロックはキャンバス ID 単位で共有します。同じ ID の地図を複数額縁に置いた場合も同じデータを変更します。通常描画は額縁の変更可否とキャンバスロックを確認しますが、<code>PaintToolsCmd.kt</code> の Undo は入口・描画権限と登録 ID だけを確認し、額縁所有者・キャンバスロックは確認しません。lock / unlock も所有者・OP 判定を行いません。
 - しゃがみ左クリックは接続範囲に限定せず、キャンバス全体の同色を置換します。染料・紙・羽根・イカスミ・砂糖に対応し、羽根の <code>1,1,1</code> / <code>#010101</code> は透明色です（<code>PlayerClickEvent.kt</code>）。
