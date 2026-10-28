@@ -8,6 +8,7 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.World
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -269,27 +270,27 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
   }
 
   /**
-   * エンジンのうなりと履帯の音。重い車種ほど低く、速いほど高く大きくする。 ponytail: バニラの音の流用。音色は実機で聞いて差し替える（resource pack
-   * を使えば実車の録音も鳴らせる）。
+   * エンジン音。OyasaiVehicles の CarBuilder2 の標準のエンジン音（soundTaskImpl の既定と
+   * playVehicleStepSounds）と同じ音・同じ式で毎 tick 鳴らす。 車の回転数ゲージの代わりに、最高速に対する速さの割合を回転数とし、止まると 0.1 までゆっくり下げる。
    */
   private fun engineSound(tank: Tank) {
-    val ratio = minOf(1.0, kotlin.math.abs(tank.speed) / TankRules.maxSpeed(tank.spec)).toFloat()
-    val base = (0.75 - tank.spec.tonnes / 200.0).toFloat()
+    val ratio = minOf(1.0, kotlin.math.abs(tank.speed) / TankRules.maxSpeed(tank.spec))
+    tank.rpm = if (ratio > 0.1) ratio else maxOf(tank.rpm * 0.975, 0.1)
+    val speed = kotlin.math.abs(tank.speed)
+    val rpm = tank.rpm.toFloat()
     val at = Location(tank.world, tank.x, tank.y + 1.0, tank.z)
-    if (tickCount % 4 == 0)
-        tank.world.playSound(
-            at,
-            Sound.ENTITY_WARDEN_AMBIENT,
-            0.5f + ratio * 0.5f,
-            base + ratio * 0.35f,
-        )
-    if (ratio > 0.05f && tickCount % 5 == 0)
-        tank.world.playSound(
-            at,
-            Sound.ENTITY_IRON_GOLEM_STEP,
-            0.3f + ratio * 0.4f,
-            0.5f + ratio * 0.5f,
-        )
+    fun play(sound: Sound, volume: Float, pitch: Float) =
+        tank.world.playSound(at, sound, SoundCategory.PLAYERS, volume, pitch)
+    val roadNoise = minOf(speed * 0.66, 2.0).toFloat()
+    play(Sound.ENTITY_WARDEN_AMBIENT, roadNoise * 0.25f, 0.5f + roadNoise * 0.18f)
+    play(Sound.ENTITY_COW_STEP, rpm * 1.3f + 0.2f, 0.5f + rpm * 1.5f)
+    val pitchBase = minOf(speed * 0.4, 0.5).toFloat()
+    play(Sound.ENTITY_COW_STEP, 0.15f + pitchBase * 0.4f, 0.5f + pitchBase)
+    play(
+        Sound.ENTITY_HORSE_STEP_WOOD,
+        0.375f + pitchBase * 0.4f,
+        0.5f + minOf(speed * 0.4, 1.0).toFloat(),
+    )
   }
 
   private fun hud(player: Player, tank: Tank) {

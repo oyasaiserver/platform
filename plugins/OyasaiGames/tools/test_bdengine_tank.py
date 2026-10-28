@@ -32,6 +32,9 @@ def main():
     assert [round(v, 2) for v in model["pivot"]] == [0.0, 1.5, 0.0], model["pivot"]
     assert round(model["gunLength"], 2) == 3.0, model["gunLength"]
     assert round(model["gunRoot"][2], 2) == 1.5, model["gunRoot"]
+    # 番号での上書き: 後部の細い棒（4 番）を砲塔にする。
+    forced = tool.convert(sample(), "-x", 6.0, {"TURRET": [4]})
+    assert forced["parts"][4]["group"] == "TURRET"
     # 縮尺: 全長 12m を指定すると 2 倍。
     assert tool.convert(sample(), "-x", 12.0)["scale"] == 2.0
     print("ok")

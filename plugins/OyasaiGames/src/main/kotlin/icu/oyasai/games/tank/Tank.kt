@@ -60,6 +60,9 @@ internal class Tank(
   var ammo = spec.ammo
 
   /** 機銃を撃ち続ける最後の tick（右クリックを押している間は約 4 tick ごとに延びる）と、発射数の端数。 */
+  /** エンジン音の回転数（0.1〜1）。 */
+  var rpm = 0.1
+
   var mgUntil = 0
   var mgCarry = 0.0
 

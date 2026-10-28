@@ -9,6 +9,7 @@
 - 各部品を形から 車体（HULL）・砲塔（TURRET）・砲身（BARREL）に分け、砲塔の回転中心・砲身の付け根・砲身長・座席の高さを求める。
   分け方は推定なので、--preview の色分け図（車体 灰、砲塔 青、砲身 赤）で確かめる。
   砲塔の範囲は、車体の上面から 0.3 m 以上上にある部品（天板・キューポラなど）の広がりで決める。天板が砲塔全体を覆っている前提。
+  外れた部品は --list で番号（ファイル内の順、0 から）を調べ、--turret / --hull / --barrel に番号をカンマ区切りで渡して直す。
 
 出力した JSON をサーバーの plugins/OyasaiGames/tank-models/<車種>.json に置くと、その車種の見た目になる。
 モデルの著作物はリポジトリに入れない（サーバーにだけ置く）。
@@ -154,12 +155,26 @@ def classify(parts):
     }
 
 
-def convert(text, front, length):
+def convert(text, front, length, overrides=None, listing=False):
     parts = parse(text)
     orient = ORIENT[front]
     for p in parts:
         p["m"] = mul(orient, p["m"])
     groups, g = classify(parts)
+    for group, indices in (overrides or {}).items():
+        for i in indices:
+            groups[i] = group
+    if listing:
+        # 上面より上の部品（砲塔・砲身の候補）を、砲塔の中心からの位置で出す。前が +z、右が -x。
+        cx, cz = g["center"]
+        for i, p in enumerate(parts):
+            lo, hi = bounds(corners(p["m"], p["kind"]))
+            if lo[1] >= g["deck"] - 0.05:
+                print(
+                    f"{i:4d} {groups[i]:6s} y {lo[1] - g['deck']:+.2f}..{hi[1] - g['deck']:+.2f} "
+                    f"x {lo[0] - cx:+.2f}..{hi[0] - cx:+.2f} z {lo[2] - cz:+.2f}..{hi[2] - cz:+.2f} "
+                    f"{p.get('block') or p.get('item')}"
+                )
     hull_lo, hull_hi = g["hull"]
     s = length / (hull_hi[2] - hull_lo[2])
     # 車体の前後左右の中心を原点、地面（最も低い所）を y=0 にして実寸へ拡大する。
@@ -273,9 +288,16 @@ def main():
     parser.add_argument("--front", choices=sorted(ORIENT), required=True)
     parser.add_argument("--length", type=float, required=True)
     parser.add_argument("--preview")
+    parser.add_argument("--list", action="store_true", help="上面より上の部品の番号・分類・位置を出す")
+    for group in ("turret", "hull", "barrel"):
+        parser.add_argument("--" + group, default="", help="この分類にする部品の番号（カンマ区切り）")
     args = parser.parse_args()
+    overrides = {
+        group.upper(): [int(i) for i in getattr(args, group).split(",") if i.strip()]
+        for group in ("turret", "hull", "barrel")
+    }
     with open(args.source, encoding="utf-8") as f:
-        model = convert(f.read(), args.front, args.length)
+        model = convert(f.read(), args.front, args.length, overrides, args.list)
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump(model, f, separators=(",", ":"))
     if args.preview:
