@@ -4,7 +4,6 @@ import io.papermc.paper.entity.TeleportFlag
 import kotlin.math.cos
 import kotlin.math.sin
 import org.bukkit.Location
-import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.BlockDisplay
@@ -17,15 +16,6 @@ import org.bukkit.util.Transformation
 import org.bukkit.util.Vector
 import org.joml.Quaternionf
 import org.joml.Vector3f
-
-/** 見た目の 1 パーツ。HULL は車体の原点、TURRET と BARREL は砲塔の回転中心からの相対位置で置く。 */
-private enum class Group {
-  HULL,
-  TURRET,
-  BARREL,
-}
-
-private class Part(val group: Group, val center: Vector3f, val size: Vector3f, val block: Material)
 
 /** 砲弾が車体の箱に当たった位置。distance は射線上の距離、face は当たった面。 */
 class TankHit(val distance: Double, val face: ArmorFace, val localDir: Vector)
@@ -40,60 +30,12 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
     private const val INTERPOLATION = 2
   }
 
-  // 形は諸元の全長・全幅・全高から割合で作る。 ponytail: 車種ごとの細かい形（傾斜、キューポラ、防盾）はまだない。
-  private val hullHeight = (spec.height * 0.55).toFloat()
-  private val trackHeight = (spec.height * 0.32).toFloat()
-  private val trackWidth = (spec.width * 0.2).toFloat()
-  private val turretHeight = (spec.height - hullHeight - 0.15).toFloat()
-  private val turretLength = (spec.length * 0.4).toFloat()
-  private val pivot = Vector3f(0f, hullHeight, (spec.length * 0.03).toFloat())
-  private val muzzleLength = (turretLength / 2 + spec.gunLength).toFloat()
-  private val seatY = hullHeight.toDouble()
+  private val model = TankModels.create(spec)
+  private val pivot = model.pivot
+  private val seatY = model.seatY
 
   /** 衝突は軸に平行な正方形で近似する。 ponytail: 細長い車体が斜めのとき壁に少しめり込む。 */
   private val collisionHalf = (spec.width + spec.length) / 4.0
-
-  private val parts: List<Part> = run {
-    val hullColor =
-        if (spec.key == "heavy") Material.YELLOW_TERRACOTTA else Material.GREEN_TERRACOTTA
-    val dark = Material.GRAY_CONCRETE
-    val w = spec.width.toFloat()
-    val l = spec.length.toFloat()
-    val bodyBottom = trackHeight * 0.6f
-    val barrel = (spec.caliberMm / 1000.0 * 2.2).toFloat()
-    listOf(
-        Part(
-            Group.HULL,
-            Vector3f(0f, (bodyBottom + hullHeight) / 2, 0f),
-            Vector3f(w, hullHeight - bodyBottom, l * 0.95f),
-            hullColor,
-        ),
-        Part(
-            Group.HULL,
-            Vector3f(-(w - trackWidth) / 2, trackHeight / 2, 0f),
-            Vector3f(trackWidth, trackHeight, l),
-            Material.BLACK_CONCRETE,
-        ),
-        Part(
-            Group.HULL,
-            Vector3f((w - trackWidth) / 2, trackHeight / 2, 0f),
-            Vector3f(trackWidth, trackHeight, l),
-            Material.BLACK_CONCRETE,
-        ),
-        Part(
-            Group.TURRET,
-            Vector3f(0f, turretHeight / 2, 0f),
-            Vector3f(w * 0.6f, turretHeight, turretLength),
-            hullColor,
-        ),
-        Part(
-            Group.BARREL,
-            Vector3f(0f, turretHeight * 0.45f, turretLength / 2 + spec.gunLength.toFloat() / 2),
-            Vector3f(barrel, barrel, spec.gunLength.toFloat()),
-            dark,
-        ),
-    )
-  }
 
   var x = spawn.x
   var y = spawn.y
@@ -117,7 +59,7 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
   private val seat: ItemDisplay =
       world.spawn(Location(world, x, y + seatY, z), ItemDisplay::class.java) { prepare(it) }
   private val displays: List<Pair<Part, BlockDisplay>> =
-      parts.map { part ->
+      model.parts.map { part ->
         part to
             world.spawn(Location(world, x, y, z), BlockDisplay::class.java) {
               it.block = part.block.createBlockData()
@@ -218,10 +160,20 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
             Group.TURRET -> rotation(turretYaw, 0.0)
             Group.BARREL -> rotation(turretYaw, gunPitch)
           }
-      // 表示の原点はブロックの角。中心を基準にした位置へずらしてから回す。
-      val local = Vector3f(part.center).sub(Vector3f(part.size).mul(0.5f)).rotate(rot)
-      val translation = if (part.group == Group.HULL) local else local.add(pivotWorld)
-      val next = Transformation(translation, rot, Vector3f(part.size), Quaternionf())
+      val origin =
+          when (part.group) {
+            Group.HULL -> Vector3f()
+            Group.TURRET -> Vector3f(pivotWorld)
+            Group.BARREL -> Vector3f(model.gunRoot).rotate(rotation(turretYaw, 0.0)).add(pivotWorld)
+          }
+      val combined = Quaternionf(rot).mul(part.rotation)
+      // 表示の原点はブロックの角なので、パーツの中心から半寸法を回転して引く。
+      val translation =
+          Vector3f(part.center)
+              .rotate(rot)
+              .add(origin)
+              .sub(Vector3f(part.size).mul(0.5f).rotate(combined))
+      val next = Transformation(translation, combined, Vector3f(part.size), Quaternionf())
       // interpolationDelay は値が同じでも毎回クライアントへ送られ、補間をやり直させる。
       // 毎 tick 送ると止まっている間も直前の向きとの間で揺れ続けるので、変わった tick だけ送る。
       if (next != display.transformation) {
@@ -242,19 +194,23 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
     return Vector(-sin(yaw) * cos(pitch), -sin(pitch), cos(yaw) * cos(pitch))
   }
 
-  /** 砲塔の回転中心から砲身方向へ [forward] m、右へ [right] m の位置（同軸機銃は砲の右）。 */
+  /** 砲身の付け根から砲身方向へ [forward] m、右へ [right] m の位置（同軸機銃は砲の右）。 */
   fun gunPoint(forward: Double, right: Double = 0.0): Vector {
-    val center = Vector3f(pivot).rotate(rotation(hullYaw, 0.0))
+    val center =
+        Vector3f(pivot)
+            .rotate(rotation(hullYaw, 0.0))
+            .add(Vector3f(model.gunRoot).rotate(rotation(turretYaw, 0.0)))
     val yaw = Math.toRadians(turretYaw)
     val rightDir = Vector(-cos(yaw), 0.0, -sin(yaw))
-    return Vector(x + center.x, y + center.y + turretHeight * 0.45, z + center.z)
+    return Vector(x + center.x, y + center.y, z + center.z)
         .add(gunDirection().multiply(forward))
         .add(rightDir.multiply(right))
   }
 
-  fun muzzle(): Vector = gunPoint(muzzleLength.toDouble())
+  fun muzzle(): Vector = gunPoint(model.gunLength.toDouble())
 
-  fun coaxialMuzzle(): Vector = gunPoint(turretLength / 2.0 + 0.2, 0.35)
+  fun coaxialMuzzle(): Vector =
+      gunPoint(model.coaxRoot.z.toDouble() - model.gunRoot.z, -model.coaxRoot.x.toDouble())
 
   /** 射線（ワールド座標）が車体の箱に当たるか。箱は車体の向きに合わせて回す（前が local +z）。 */
   fun hitTest(start: Vector, dir: Vector, maxDistance: Double): TankHit? {

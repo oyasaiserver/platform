@@ -45,7 +45,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - **ルーレット:** GUI で抽選条件を選択し、材料候補を分類してランダム抽選します。結果は Bukkit スケジューラーで順次表示します。選択内容、実行中タスク、完了後の待ち時間はメモリ上にあります。
 - **Dice:** アイテムに種類・個数と公開/非公開の真偽値を保持します。公開チャットの通知範囲は同ワールドの周囲30ブロック固定です。チャージ操作後に表示エンティティを動かし、停止・回収・時間切れで所有者へ返却します。結果は物理的な出目からではなく、停止時に乱数で決めます。
 - **HeadHunt:** 宝HEADの配置を登録・検証し、ブロックの TileState に宝UUIDを保存します。開始時に宝と参加チームを検証し、ゲーム中の発見状況をメモリで管理します。
-- **Tank（試作）:** `tank/`。第二次大戦の実車 3 種（`light` M24 チャーフィー、`medium` M4A3(75)W シャーマン、`heavy` ティーガーI）を、1 ブロック = 1 m・1 秒 = 20 tick で再現する。諸元は `TankRules.SPECS`。見た目は諸元の全長・全幅・全高から作る BlockDisplay 5 枚（車体・履帯 2・砲塔・砲身）と、運転手が乗る透明な ItemDisplay。毎 tick `Tank.tick` が運転手の `currentInput`（WASD）から速度（最高速・出力重量比の加速）と車体の向きを更新し、砲塔は視線へ実車の旋回速度で向かい、砲身は俯仰の範囲で視線に追従する。表示の補間は `teleportDuration`・`interpolationDuration`（2 tick）。左クリックで主砲（実車の装填時間・搭載弾数）。砲弾は実際の弾速で飛び、重力 9.81 m/s² で落ち、1 tick ごとに `rayTraceBlocks` と、車体の向きに合わせて回した箱（`Tank.hitTest`）で当たりを判定する。当たった面（正面・側面・背面・上面）の装甲を、正面の傾斜と入射角で実質の厚さにし、距離で減る貫通力と比べて貫通・非貫通・跳弾（法線から 70 度超）を決める。貫通したときだけ耐久（100）が減る。右クリック長押しで同軸機銃（実車の毎分発射数、射程 400、即着）。生き物に当たるとダメージ 4、戦車には効かず止まる。右クリックは手に物を持たないとサーバーへ届かないため、乗っている間はホットバーの空き枠に操縦用の棒（PDC `tank_control`）を置いて持たせ、降りると取り除く。持ち替え・落とす・動かすは止め、参加時に残りを取り除く。運転手が座席から外れる（Shift・退出・死亡）と戦車を消す。表示は `isPersistent=false` で、停止時と `/tank clear` でも消す。
+- **Tank（試作）:** `tank/`。第二次大戦の実車 3 種（`light` M24 チャーフィー、`medium` M4A3(75)W シャーマン、`heavy` ティーガーI）を、1 ブロック = 1 m・1 秒 = 20 tick で再現する。諸元は `TankRules.SPECS`。見た目は車種別の BlockDisplay（40 枚以内）で、傾斜装甲・履帯・転輪・砲塔・砲身などを表し、運転手は透明な ItemDisplay に乗る。毎 tick `Tank.tick` が運転手の `currentInput`（WASD）から速度（最高速・出力重量比の加速）と車体の向きを更新し、砲塔は視線へ実車の旋回速度で向かい、砲身は俯仰の範囲で視線に追従する。表示の補間は `teleportDuration`・`interpolationDuration`（2 tick）。左クリックで主砲（実車の装填時間・搭載弾数）。砲弾は実際の弾速で飛び、重力 9.81 m/s² で落ち、1 tick ごとに `rayTraceBlocks` と、車体の向きに合わせて回した箱（`Tank.hitTest`）で当たりを判定する。当たった面（正面・側面・背面・上面）の装甲を、正面の傾斜と入射角で実質の厚さにし、距離で減る貫通力と比べて貫通・非貫通・跳弾（法線から 70 度超）を決める。貫通したときだけ耐久（100）が減る。右クリック長押しで同軸機銃（実車の毎分発射数、射程 400、即着）。生き物に当たるとダメージ 4、戦車には効かず止まる。右クリックは手に物を持たないとサーバーへ届かないため、乗っている間はホットバーの空き枠に操縦用の棒（PDC `tank_control`）を置いて持たせ、降りると取り除く。持ち替え・落とす・動かすは止め、参加時に残りを取り除く。運転手が座席から外れる（Shift・退出・死亡）と戦車を消す。表示は `isPersistent=false` で、停止時と `/tank clear` でも消す。
 - **PvP・BedWars・TNTRun:** 参加前に PlayerStore が持ち物とプレイヤー状態を YAML に退避します。退出・死亡・再接続時に復元します。PvP/BedWars の地形記録と PvPEconomy の決済台帳は各モジュールで共有します。
 - **Slot:** 抽選前に料金と受取可能枠を確認し、決済段階をファイルへ保存してから賞品処理を進めます。起動時の再試行対象と、結果不明として止める段階は `SlotPayment.kt` が定義します。
 - **Weapons:** `weapons/` の YAML 定義を読み、武器・弾薬・装置状態をアイテム PDC やデータファイルに保持します。射撃、再装填、爆発などはイベントとスケジュール処理で実行します。有効な定義が0件なら起動失敗、再読込失敗後は武器処理が停止したままです。3武器のID別固定上書きは `WeaponObservedOverrides.kt` が定義し、`WeaponCombat.kt` が適用します。数値と運営上の注意は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) の武器節を参照。
@@ -106,7 +106,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - Weapons は CrackShot 形式の設定を読みますが、すべての外部プラグイン機能・設定キーの互換を保証しません。武器効果の一部は YAML のコマンド設定から実行できます。
 - 機能の許可判定はコマンド入口・各操作に分かれており、コマンド受付権限だけで全 GUI・アイテム操作を閉じる統一ゲートではありません。必要な範囲は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) に記載します。
 
-- Tank は試作です。チーム・試合・報酬・アリーナ・持ち物の退避はなく、耐久（100）と貫通時の減り（75mm 34、88mm 50）、機銃のダメージ、加速の係数、後退速度（前進の 1/4）、車体の旋回速度はゲーム上の値または推定です。形は全長・全幅・全高の割合で作り、傾斜・キューポラ・防盾はありません。当たり判定は砲塔を含めた 1 つの箱で、砲塔・防盾・下部の装甲を区別しません。地形との衝突は軸に平行な正方形で近似します。統合版の操作と、何台まで同時に動かせるかは未確認です。`/games reload` では切り替わらず、有効化は再起動が必要です。
+- Tank は試作です。チーム・試合・報酬・アリーナ・持ち物の退避はなく、耐久（100）と貫通時の減り（75mm 34、88mm 50）、機銃のダメージ、加速の係数、後退速度（前進の 1/4）、車体の旋回速度はゲーム上の値または推定です。形は少数のブロックで実車を近似したもので、細部や曲面は再現していません。当たり判定は砲塔を含めた 1 つの箱で、砲塔・防盾・下部の装甲を区別しません。地形との衝突は軸に平行な正方形で近似します。統合版の操作と、何台まで同時に動かせるかは未確認です。`/games reload` では切り替わらず、有効化は再起動が必要です。
 
 #### 戦車の諸元と出典（2026-10-28 調査）
 
@@ -120,6 +120,8 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 | 装甲（正面・側面・背面・上面） | 25（60 度、推定）・25・19・13（推定） | 63.5（47 度）・38.1・38.1・19（推定） | 100・80・80・25 |
 | 砲塔旋回・俯仰 | 24 度/秒（推定）・+15/-10（推定） | 24 度/秒・+25/-10 | 19 度/秒（2000 rpm）・+15/-8（推定） |
 | 機銃 | M1919A4 450 発/分 | M1919A4 450 発/分 | MG 34 850 発/分 |
+
+足回りの参考: [The Tank Museum: Tiger Wheels](https://tankmuseum.org/article/tiger-wheels/)（ティーガーの挟み込み式転輪）、[AFV Weapons Profile: M4 Medium Sherman](https://ciar.org/ttk/mbt/afv_weapons_profile_pack/afv_weapons_profile_29__m4_medium_sherman.pdf)（シャーマンのサスペンション）。
 
 出典: Wikipedia の [M24 Chaffee](https://en.wikipedia.org/wiki/M24_Chaffee)、[M4 Sherman](https://en.wikipedia.org/wiki/M4_Sherman)、[Tiger I](https://en.wikipedia.org/wiki/Tiger_I)、[75 mm gun M2–M6](https://en.wikipedia.org/wiki/75_mm_gun_M2%E2%80%93M6)（M61 APC の 90 度・RHA の推定値、毎分 20 発）、[8.8 cm KwK 36](https://en.wikipedia.org/wiki/8.8_cm_KwK_36)（PzGr. 39、毎分 10 発）、[M1919](https://en.wikipedia.org/wiki/M1919_Browning_machine_gun)。シャーマンの装甲と砲塔旋回は [armedconflicts.com](https://www.armedconflicts.com/-t6347)・[AFV Database](https://afvdatabase.com/usa/m4sherman.html)。MG 34 の発射速度は [War Thunder Wiki](https://wiki.warthunder.com/MG34_(7.92_mm)) の幅（400〜900）の上寄りで、ゲームの資料。ティーガーの最高速は初期型の値（後に約 38 km/h に制限）。
 
