@@ -2,6 +2,7 @@ package icu.oyasai.games.tank
 
 import icu.oyasai.games.OyasaiGamesPlugin
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import org.bukkit.Color
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
 import org.bukkit.Material
@@ -10,6 +11,7 @@ import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.World
+import org.bukkit.block.Block
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -53,6 +55,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
   private var task: BukkitTask? = null
   private var tickCount = 0
   private val legacy = LegacyComponentSerializer.legacySection()
+  private val tracer = Particle.DustOptions(Color.fromRGB(255, 150, 40), 1.3f)
   private val controlKey = NamespacedKey(plugin, "tank_control")
 
   fun enable() {
@@ -385,22 +388,90 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     if (block != null) best = block.hitPosition.distance(shell.pos)
     val target = nearestTank(world, shell.pos, dir, best, shell.shooter)
     if (target != null) best = target.second.distance
+    trail(world, shell.pos, dir, best)
     if (target != null || block != null) {
-      val at = shell.pos.clone().add(dir.multiply(best))
-      world.spawnParticle(Particle.EXPLOSION, at.toLocation(world), 1)
-      world.playSound(at.toLocation(world), Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 1.0f)
-      target?.let { (tank, hit) -> hit(tank, hit, shell, shell.travelled + best) }
+      val at = shell.pos.clone().add(dir.clone().multiply(best))
+      val pierced = target?.let { (tank, hit) -> hit(tank, hit, shell, shell.travelled + best) }
+      impact(
+          world,
+          at,
+          shell.shooter.spec.caliberMm,
+          if (target == null) block?.hitBlock else null,
+          pierced == true,
+      )
       return false
     }
     shell.pos.add(shell.vel)
     shell.travelled += length
     shell.vel.y -= TankRules.GRAVITY
-    world.spawnParticle(Particle.SMOKE, shell.pos.toLocation(world), 2, 0.0, 0.0, 0.0, 0.0)
     return --shell.life > 0
   }
 
-  /** 当たった面の装甲を、傾斜と入射角で実質の厚さにして貫通力と比べる。 */
-  private fun hit(target: Tank, hit: TankHit, shell: Shell, distance: Double) {
+  /** 曳光弾のような橙色の光点を 1 m ごと、白い煙を 2 m ごとに、その tick に飛んだ線分に沿って出す。遠くからも見えるよう強制表示。 */
+  private fun trail(world: World, from: Vector, dir: Vector, length: Double) {
+    var d = 0.0
+    while (d < length) {
+      val at = from.clone().add(dir.clone().multiply(d)).toLocation(world)
+      world.spawnParticle(Particle.DUST, at, 1, 0.0, 0.0, 0.0, 0.0, tracer, true)
+      if (d.toInt() % 2 == 0)
+          world.spawnParticle(Particle.SMOKE, at, 1, 0.02, 0.02, 0.02, 0.0, null, true)
+      d += 1.0
+    }
+  }
+
+  /** 着弾の爆発。口径に比例した大きさで、地形なら破片、貫通なら火花を足す。 */
+  private fun impact(world: World, at: Vector, caliberMm: Double, block: Block?, pierced: Boolean) {
+    val loc = at.toLocation(world)
+    val size = caliberMm / 75.0
+    fun count(n: Int) = maxOf(1, (n * size).toInt())
+    val spread = 0.5 * size
+    world.spawnParticle(
+        Particle.EXPLOSION,
+        loc,
+        count(3),
+        spread,
+        spread * 0.6,
+        spread,
+        0.0,
+        null,
+        true,
+    )
+    world.spawnParticle(Particle.FLAME, loc, count(25), 0.3, 0.3, 0.3, 0.12, null, true)
+    world.spawnParticle(
+        Particle.LARGE_SMOKE,
+        loc,
+        count(20),
+        spread,
+        spread,
+        spread,
+        0.05,
+        null,
+        true,
+    )
+    if (block != null)
+        world.spawnParticle(
+            Particle.BLOCK,
+            loc,
+            count(40),
+            0.4,
+            0.2,
+            0.4,
+            0.3,
+            block.blockData,
+            true,
+        )
+    if (pierced) world.spawnParticle(Particle.LAVA, loc, count(8), 0.2, 0.2, 0.2, 0.0, null, true)
+    world.playSound(
+        loc,
+        Sound.ENTITY_GENERIC_EXPLODE,
+        SoundCategory.PLAYERS,
+        4.0f,
+        (1.1 - 0.2 * size).toFloat(),
+    )
+  }
+
+  /** 当たった面の装甲を、傾斜と入射角で実質の厚さにして貫通力と比べる。貫通したら true。 */
+  private fun hit(target: Tank, hit: TankHit, shell: Shell, distance: Double): Boolean {
     val armor = target.spec.armor
     val cos =
         TankRules.impactCos(
@@ -429,5 +500,6 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     shell.shooter.driver?.sendMessage(message)
     target.driver?.sendMessage(message)
     if (target.hp <= 0.0) explode(target)
+    return cos >= TankRules.RICOCHET_COS && penetration >= effective
   }
 }
