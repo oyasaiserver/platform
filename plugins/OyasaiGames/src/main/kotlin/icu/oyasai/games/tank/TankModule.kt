@@ -4,6 +4,8 @@ import icu.oyasai.games.OyasaiGamesPlugin
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.World
@@ -11,18 +13,29 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerItemHeldEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.util.Vector
 
 /**
- * 戦車バトルの試作。`/tank spawn` で自分が乗る戦車、`/tank dummy` で動かない標的を出す。
- * 左右クリックで主砲を撃つ。降りる（Shift）と戦車は消える。試合・チーム・報酬はまだない。
+ * 戦車バトルの試作。`/tank spawn [light|medium|heavy]` で自分が乗る戦車、`/tank dummy [種類]` で動かない標的を出す。
+ * 左クリックで主砲、右クリック（押し続け）で同軸機銃。降りる（Shift）と戦車は消える。試合・チーム・報酬はまだない。
+ *
+ * 右クリックは手に何か持っていないとサーバーへ届かないので、乗っている間はホットバーの空き枠に操縦用のアイテムを置いて持たせる。 降りる・消えると取り除き、
+ * 落とす・持ち替える・動かすことはできない。クラッシュで残っても参加時に取り除く。
  */
 class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecutor, TabCompleter {
   private class Shell(
@@ -30,13 +43,16 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       var vel: Vector,
       val shooter: Tank,
       val world: World,
+      var travelled: Double = 0.0,
       var life: Int = TankRules.SHELL_LIFE_TICKS,
   )
 
   private val tanks = mutableListOf<Tank>()
   private val shells = mutableListOf<Shell>()
   private var task: BukkitTask? = null
+  private var tickCount = 0
   private val legacy = LegacyComponentSerializer.legacySection()
+  private val controlKey = NamespacedKey(plugin, "tank_control")
 
   fun enable() {
     val command = plugin.getCommand("tank") ?: error("tank command is missing")
@@ -60,14 +76,20 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       args: Array<out String>,
   ): Boolean {
     val player = sender as? Player ?: return true.also { sender.sendMessage("プレイヤーのみ使えます。") }
-    when (args.firstOrNull()?.lowercase()) {
-      "spawn" -> spawn(player, driven = true)
-      "dummy" -> spawn(player, driven = false)
-      "clear" -> {
-        tanks.toList().forEach(::destroy)
-        player.sendMessage("戦車をすべて片付けました。")
-      }
-      else -> player.sendMessage("/tank spawn（乗る） | /tank dummy（標的） | /tank clear")
+    val action = args.firstOrNull()?.lowercase()
+    if (action == "clear") {
+      tanks.toList().forEach(::destroy)
+      player.sendMessage("戦車をすべて片付けました。")
+      return true
+    }
+    val spec = TankRules.spec(args.getOrNull(1)?.lowercase())
+    when {
+      action != "spawn" && action != "dummy" ->
+          player.sendMessage(
+              "/tank spawn [light|medium|heavy]（乗る） | /tank dummy [種類]（標的） | /tank clear"
+          )
+      spec == null -> player.sendMessage("種類は light（小型）・medium（中型）・heavy（大型）です。")
+      else -> spawn(player, action == "spawn", spec)
     }
     return true
   }
@@ -78,29 +100,68 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       alias: String,
       args: Array<out String>,
   ): List<String> =
-      if (args.size == 1) listOf("spawn", "dummy", "clear").filter { it.startsWith(args[0]) }
-      else emptyList()
+      when (args.size) {
+        1 -> listOf("spawn", "dummy", "clear").filter { it.startsWith(args[0]) }
+        2 -> TankRules.SPECS.map { it.key }.filter { it.startsWith(args[1]) }
+        else -> emptyList()
+      }
 
-  private fun spawn(player: Player, driven: Boolean) {
+  private fun spawn(player: Player, driven: Boolean, spec: TankSpec) {
     if (driven && tanks.any { it.driver == player }) {
       player.sendMessage("すでに戦車に乗っています。")
       return
     }
-    val look = player.location.direction.setY(0).normalize().multiply(if (driven) 0.0 else 8.0)
-    val at = player.location.clone().add(look)
+    val controlSlot = if (driven) freeHotbarSlot(player) else null
+    if (driven && controlSlot == null) {
+      player.sendMessage("ホットバーに空きを 1 つ作ってから乗ってください（操縦用のアイテムを置きます）。")
+      return
+    }
+    val look = player.location.direction.setY(0).normalize()
+    val at = player.location.clone().add(look.multiply(if (driven) 0.0 else spec.length + 6.0))
     at.yaw = if (driven) player.location.yaw else player.location.yaw + 180f
-    val tank = Tank(player.world, at, if (driven) player else null)
+    val tank = Tank(player.world, at, if (driven) player else null, spec)
     if (!tank.mount()) {
       tank.remove()
       player.sendMessage("戦車に乗れませんでした。")
       return
     }
     tanks += tank
-    if (driven) player.sendMessage("左右クリックで発砲、Shift で降ります。W/S で前後、A/D で旋回、視線が砲塔の向きです。")
+    if (controlSlot != null) {
+      player.inventory.setItem(controlSlot, controlItem())
+      player.inventory.heldItemSlot = controlSlot
+      player.sendMessage(
+          "${spec.label}: ${spec.model}（${spec.gunName}、最高 ${spec.maxSpeedKmh.toInt()} km/h）。" +
+              "左クリックで主砲、右クリック長押しで機銃、W/S で前後、A/D で旋回、視線の方へ砲塔が回ります。Shift で降ります。"
+      )
+    }
+  }
+
+  private fun freeHotbarSlot(player: Player): Int? {
+    val held = player.inventory.heldItemSlot
+    if (player.inventory.getItem(held)?.type?.isAir != false) return held
+    return (0..8).firstOrNull { player.inventory.getItem(it)?.type?.isAir != false }
+  }
+
+  private fun controlItem(): ItemStack =
+      ItemStack(Material.STICK).apply {
+        editMeta {
+          it.displayName(legacy.deserialize("§6戦車の操縦（左: 主砲 / 右: 機銃）"))
+          it.persistentDataContainer.set(controlKey, PersistentDataType.BYTE, 1)
+        }
+      }
+
+  private fun isControl(item: ItemStack?): Boolean =
+      item?.persistentDataContainer?.has(controlKey) == true
+
+  private fun removeControl(player: Player) {
+    for (slot in 0 until player.inventory.size) {
+      if (isControl(player.inventory.getItem(slot))) player.inventory.setItem(slot, null)
+    }
   }
 
   private fun destroy(tank: Tank) {
     tanks.remove(tank)
+    tank.driver?.let(::removeControl)
     tank.remove()
   }
 
@@ -111,31 +172,78 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     destroy(tank)
   }
 
+  private fun driving(player: Player): Tank? = tanks.firstOrNull { it.driver == player }
+
   @EventHandler
   fun onClick(event: PlayerInteractEvent) {
-    val tank = tanks.firstOrNull { it.driver == event.player } ?: return
+    val tank = driving(event.player) ?: return
     // 運転中はブロックの破壊・設置・アイテム使用をさせない。
     event.isCancelled = true
-    if (event.hand != EquipmentSlot.HAND || event.action == Action.PHYSICAL) return
-    fire(tank)
+    if (event.hand != EquipmentSlot.HAND) return
+    when (event.action) {
+      Action.LEFT_CLICK_AIR,
+      Action.LEFT_CLICK_BLOCK -> fire(tank)
+      Action.RIGHT_CLICK_AIR,
+      Action.RIGHT_CLICK_BLOCK -> tank.mgUntil = tickCount + 6
+      else -> Unit
+    }
+  }
+
+  @EventHandler
+  fun onHeld(event: PlayerItemHeldEvent) {
+    if (driving(event.player) != null) event.isCancelled = true
+  }
+
+  @EventHandler
+  fun onDrop(event: PlayerDropItemEvent) {
+    if (isControl(event.itemDrop.itemStack)) event.isCancelled = true
+  }
+
+  @EventHandler
+  fun onSwap(event: PlayerSwapHandItemsEvent) {
+    if (driving(event.player) != null) event.isCancelled = true
+  }
+
+  @EventHandler
+  fun onInventory(event: InventoryClickEvent) {
+    if (isControl(event.currentItem) || isControl(event.cursor)) event.isCancelled = true
+    if (
+        event.hotbarButton >= 0 && isControl(event.whoClicked.inventory.getItem(event.hotbarButton))
+    )
+        event.isCancelled = true
+  }
+
+  @EventHandler
+  fun onJoin(event: PlayerJoinEvent) {
+    removeControl(event.player)
   }
 
   private fun fire(tank: Tank) {
     if (tank.reload > 0) return
-    tank.reload = TankRules.RELOAD_TICKS
-    val (origin, dir) = tank.muzzle()
-    shells += Shell(origin, dir.multiply(TankRules.SHELL_SPEED), tank, tank.world)
-    tank.world.playSound(origin.toLocation(tank.world), Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1.4f)
-    tank.world.spawnParticle(Particle.FLAME, origin.toLocation(tank.world), 10, 0.1, 0.1, 0.1, 0.05)
+    if (tank.ammo <= 0) {
+      tank.driver?.sendActionBar(legacy.deserialize("§c主砲の弾がありません"))
+      return
+    }
+    tank.reload = (tank.spec.reloadSeconds * 20).toInt()
+    tank.ammo--
+    val origin = tank.muzzle()
+    val dir = tank.gunDirection()
+    shells += Shell(origin, dir.multiply(tank.spec.muzzleVelocity / 20.0), tank, tank.world)
+    val at = origin.toLocation(tank.world)
+    tank.world.playSound(at, Sound.ENTITY_GENERIC_EXPLODE, 3.0f, 1.3f)
+    tank.world.spawnParticle(Particle.FLAME, at, 12, 0.15, 0.15, 0.15, 0.05)
+    tank.world.spawnParticle(Particle.LARGE_SMOKE, at, 8, 0.2, 0.2, 0.2, 0.02)
   }
 
   private fun tick() {
+    tickCount++
     for (tank in tanks.toList()) {
       if (!tank.isSeated()) {
         destroy(tank)
         continue
       }
       tank.tick()
+      if (tank.mgUntil >= tickCount) machineGun(tank)
       tank.driver?.let { hud(it, tank) }
     }
     val iterator = shells.iterator()
@@ -145,11 +253,78 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
   }
 
   private fun hud(player: Player, tank: Tank) {
-    val loaded = TankRules.RELOAD_TICKS - tank.reload
-    val bar = "■".repeat(loaded * 10 / TankRules.RELOAD_TICKS).padEnd(10, '□')
+    val total = (tank.spec.reloadSeconds * 20).toInt()
+    val bar = "■".repeat((total - tank.reload) * 10 / total).padEnd(10, '□')
     player.sendActionBar(
-        legacy.deserialize("§aHP ${tank.hp.toInt()}/${TankRules.MAX_HP.toInt()} §7| §e装填 $bar")
+        legacy.deserialize(
+            "§a${tank.spec.model} 耐久 ${tank.hp.toInt()} §7| §e主砲 $bar 残 ${tank.ammo} §7| §f${(tank.speed * 72).toInt()} km/h"
+        )
     )
+  }
+
+  /** 射線上で最も近い戦車（[except] を除く）。 */
+  private fun nearestTank(
+      world: World,
+      start: Vector,
+      dir: Vector,
+      maxDistance: Double,
+      except: Tank?,
+  ): Pair<Tank, TankHit>? =
+      tanks
+          .filter { it !== except && it.world == world }
+          .mapNotNull { tank -> tank.hitTest(start, dir, maxDistance)?.let { tank to it } }
+          .minByOrNull { it.second.distance }
+
+  /** 同軸機銃。毎分の発射数どおりに 1 tick あたりの弾数を出し、弾は即着（ヒットスキャン）。 */
+  private fun machineGun(tank: Tank) {
+    val driver = tank.driver ?: return
+    tank.mgCarry += tank.spec.mgRoundsPerMinute / 1200.0
+    while (tank.mgCarry >= 1.0) {
+      tank.mgCarry -= 1.0
+      val start = tank.coaxialMuzzle()
+      val dir = tank.gunDirection()
+      val hit =
+          tank.world.rayTrace(
+              start.toLocation(tank.world),
+              dir,
+              TankRules.MG_RANGE,
+              FluidCollisionMode.NEVER,
+              true,
+              0.1,
+          ) {
+            it is LivingEntity && it != driver
+          }
+      var distance = hit?.hitPosition?.distance(start) ?: TankRules.MG_RANGE
+      val armored = nearestTank(tank.world, start, dir, distance, tank)
+      if (armored != null) distance = armored.second.distance
+      else (hit?.hitEntity as? LivingEntity)?.damage(TankRules.MG_DAMAGE, driver)
+      val end = start.clone().add(dir.clone().multiply(distance))
+      val step = maxOf(1.5, distance / 20.0)
+      var d = 1.0
+      while (d < distance) {
+        tank.world.spawnParticle(
+            Particle.CRIT,
+            start.clone().add(dir.clone().multiply(d)).toLocation(tank.world),
+            1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        )
+        d += step
+      }
+      if (hit != null || armored != null)
+          tank.world.spawnParticle(
+              Particle.SMALL_FLAME,
+              end.toLocation(tank.world),
+              2,
+              0.05,
+              0.05,
+              0.05,
+              0.01,
+          )
+      tank.world.playSound(start.toLocation(tank.world), Sound.BLOCK_NOTE_BLOCK_SNARE, 1.5f, 0.6f)
+    }
   }
 
   /** 砲弾を 1 tick 進める。当たった・寿命が尽きたら false。 */
@@ -158,7 +333,6 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     val length = shell.vel.length()
     val dir = shell.vel.clone().normalize()
     var best = length
-    var target: Tank? = null
     val block =
         world.rayTraceBlocks(
             shell.pos.toLocation(world),
@@ -168,32 +342,50 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
             true,
         )
     if (block != null) best = block.hitPosition.distance(shell.pos)
-    for (tank in tanks) {
-      if (tank === shell.shooter || tank.world != world) continue
-      val hit = tank.box().rayTrace(shell.pos, dir, best) ?: continue
-      best = hit.hitPosition.distance(shell.pos)
-      target = tank
-    }
+    val target = nearestTank(world, shell.pos, dir, best, shell.shooter)
+    if (target != null) best = target.second.distance
     if (target != null || block != null) {
       val at = shell.pos.clone().add(dir.multiply(best))
       world.spawnParticle(Particle.EXPLOSION, at.toLocation(world), 1)
-      world.playSound(at.toLocation(world), Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1.0f)
-      target?.let { hit(it, shell) }
+      world.playSound(at.toLocation(world), Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 1.0f)
+      target?.let { (tank, hit) -> hit(tank, hit, shell, shell.travelled + best) }
       return false
     }
     shell.pos.add(shell.vel)
-    shell.vel.y -= TankRules.SHELL_GRAVITY
-    world.spawnParticle(Particle.SMOKE, shell.pos.toLocation(world), 1, 0.0, 0.0, 0.0, 0.0)
+    shell.travelled += length
+    shell.vel.y -= TankRules.GRAVITY
+    world.spawnParticle(Particle.SMOKE, shell.pos.toLocation(world), 2, 0.0, 0.0, 0.0, 0.0)
     return --shell.life > 0
   }
 
-  private fun hit(target: Tank, shell: Shell) {
-    val multiplier = TankRules.armorMultiplier(shell.vel.x, shell.vel.z, target.hullYaw)
-    val damage = TankRules.SHELL_DAMAGE * multiplier
-    target.hp -= damage
-    val side = if (multiplier < 1.0) "正面" else if (multiplier > 1.0) "背面" else "側面"
-    val message = legacy.deserialize("§e${side}に命中 -${damage.toInt()}")
-    shell.shooter.driver?.sendActionBar(message)
+  /** 当たった面の装甲を、傾斜と入射角で実質の厚さにして貫通力と比べる。 */
+  private fun hit(target: Tank, hit: TankHit, shell: Shell, distance: Double) {
+    val armor = target.spec.armor
+    val cos =
+        TankRules.impactCos(
+            hit.localDir.x,
+            hit.localDir.y,
+            hit.localDir.z,
+            TankRules.normal(armor, hit.face),
+        )
+    val plate = TankRules.thickness(armor, hit.face)
+    val effective = plate / maxOf(cos, 1.0e-3)
+    val penetration = TankRules.penetration(shell.shooter.spec, distance)
+    val result =
+        when {
+          cos < TankRules.RICOCHET_COS -> "§7跳弾"
+          penetration >= effective -> {
+            target.hp -= shell.shooter.spec.damage
+            "§c貫通 -${shell.shooter.spec.damage.toInt()}"
+          }
+          else -> "§7非貫通"
+        }
+    val message =
+        legacy.deserialize(
+            "$result §f${hit.face.label} ${plate.toInt()}mm（実質 ${effective.toInt()}mm）/ 貫通力 ${penetration.toInt()}mm・${distance.toInt()}m"
+        )
+    // アクションバーは毎 tick の表示で上書きされるので、命中結果はチャットへ出す。
+    shell.shooter.driver?.sendMessage(message)
     target.driver?.sendMessage(message)
     if (target.hp <= 0.0) explode(target)
   }
