@@ -279,14 +279,6 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
         VELOCITY_FORWARDING_SECRET: randoms.velocityForwardingSecret.result,
         MEMORY: this.isMaster ? "4G" : "2G",
-        // Geyser 2.12.0 wrote transport: raknet into the volume's config, and
-        // 2.12.1 keeps it because the schema version did not change. Override
-        // it here so the running server is NetherNet-only regardless of the
-        // stale file, and advertise the public domain instead of the
-        // container's own addresses or a STUN-discovered port.
-        GEYSER_BEDROCK_SIGNALING_ADVERTISE_ADDRESSES:
-          platformInfra.rootDnsRecord.name,
-        GEYSER_BEDROCK_TRANSPORT: "nethernet",
       }),
       volumes: [
         {
