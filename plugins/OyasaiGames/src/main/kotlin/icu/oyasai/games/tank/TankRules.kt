@@ -152,6 +152,35 @@ object TankRules {
               armor = Armor(front = 100.0, frontSlope = 0.0, side = 80.0, rear = 80.0, top = 25.0),
               damage = 50.0,
           ),
+          TankSpec(
+              key = "pz3",
+              label = "中型（独）",
+              model = "III号戦車 N型",
+              length = 5.56,
+              width = 2.9,
+              height = 2.5,
+              gunLength = 1.76,
+              tonnes = 23.0,
+              horsepower = 296.0, // 300 PS
+              maxSpeedKmh = 40.0,
+              hullTurnDegPerSec = 20.0,
+              turretTraverseDegPerSec = 15.0, // 推定
+              gunName = "7.5cm KwK 37 L/24",
+              caliberMm = 75.0,
+              muzzleVelocity = 385.0,
+              // Pzgr. 39/1（垂直板への計算値）。成形炸薬弾 Gr.38 Hl/B なら距離によらず 87mm だが、ほかの車種に合わせ徹甲弾にする。
+              pen100m = 54.0,
+              pen1000m = 46.0,
+              reloadSeconds = 4.5, // 毎分 12〜15 発
+              ammo = 64, // 推定
+              gunElevation = 20.0, // 推定
+              gunDepression = 10.0, // 推定
+              mgName = "MG 34",
+              mgRoundsPerMinute = 850.0,
+              // J〜M 型の車体（正面 50mm ＋ 20mm の増加装甲）。傾斜は推定。
+              armor = Armor(front = 70.0, frontSlope = 9.0, side = 30.0, rear = 50.0, top = 16.0),
+              damage = 34.0,
+          ),
       )
 
   fun spec(key: String?): TankSpec? = SPECS.firstOrNull { it.key == (key ?: "medium") }

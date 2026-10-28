@@ -86,9 +86,12 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     when {
       action != "spawn" && action != "dummy" ->
           player.sendMessage(
-              "/tank spawn [light|medium|heavy]（乗る） | /tank dummy [種類]（標的） | /tank clear"
+              "/tank spawn [${TankRules.SPECS.joinToString("|") { it.key }}]（乗る） | /tank dummy [種類]（標的） | /tank clear"
           )
-      spec == null -> player.sendMessage("種類は light（小型）・medium（中型）・heavy（大型）です。")
+      spec == null ->
+          player.sendMessage(
+              "種類は ${TankRules.SPECS.joinToString("・") { "${it.key}（${it.label}: ${it.model}）" }} です。"
+          )
       else -> spawn(player, action == "spawn", spec)
     }
     return true
@@ -119,7 +122,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     val look = player.location.direction.setY(0).normalize()
     val at = player.location.clone().add(look.multiply(if (driven) 0.0 else spec.length + 6.0))
     at.yaw = if (driven) player.location.yaw else player.location.yaw + 180f
-    val tank = Tank(player.world, at, if (driven) player else null, spec)
+    val tank = Tank(player.world, at, if (driven) player else null, spec, model(spec))
     if (!tank.mount()) {
       tank.remove()
       player.sendMessage("戦車に乗れませんでした。")
@@ -133,6 +136,18 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
           "${spec.label}: ${spec.model}（${spec.gunName}、最高 ${spec.maxSpeedKmh.toInt()} km/h）。" +
               "左クリックで主砲、右クリック長押しで機銃、W/S で前後、A/D で旋回、視線の方へ砲塔が回ります。Shift で降ります。"
       )
+    }
+  }
+
+  /** サーバーの tank-models/<車種>.json があればその見た目、なければ組み込みの簡易モデル。読めなければ簡易モデルにして記録する。 */
+  private fun model(spec: TankSpec): TankModel {
+    val file = plugin.dataFolder.resolve("tank-models/${spec.key}.json")
+    if (!file.isFile) return TankModels.create(spec)
+    return try {
+      TankModels.load(file)
+    } catch (exception: Exception) {
+      plugin.logger.warning("戦車のモデル ${file.name} を読めませんでした (${exception.message})。簡易モデルを使います。")
+      TankModels.create(spec)
     }
   }
 

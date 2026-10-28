@@ -3,6 +3,7 @@ package icu.oyasai.games.tank
 import io.papermc.paper.entity.TeleportFlag
 import kotlin.math.cos
 import kotlin.math.sin
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.block.BlockFace
@@ -12,8 +13,8 @@ import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.util.BoundingBox
-import org.bukkit.util.Transformation
 import org.bukkit.util.Vector
+import org.joml.Matrix4f
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -21,16 +22,22 @@ import org.joml.Vector3f
 class TankHit(val distance: Double, val face: ArmorFace, val localDir: Vector)
 
 /**
- * 戦車 1 台。バニラのブロック表示（BlockDisplay）だけで見た目を作り、運転手は透明な ItemDisplay（[seat]）に乗せる。 大きさは [spec] の実寸（1 ブロック
- * = 1 m）。車体の位置と向きは毎 tick 自前で計算して表示を動かす（クライアント側の補間は teleportDuration と
- * interpolationDuration）。[driver] が null のときは動かない標的。
+ * 戦車 1 台。バニラの表示エンティティ（BlockDisplay・ItemDisplay）だけで見た目を作る。透明な ItemDisplay（[seat]）を土台にして、
+ * 運転手と見た目の表示をすべてその乗客にする（BDEngine と同じ作り）。動かすのは土台だけで、乗客はクライアント側で付いてくる。 大きさは [spec] の実寸（1 ブロック = 1
+ * m）。向きは毎 tick 自前で計算して各表示の変換行列にする（補間は teleportDuration と interpolationDuration）。 [driver] が null
+ * のときは動かない標的。
  */
-class Tank(val world: World, spawn: Location, val driver: Player?, val spec: TankSpec) {
+internal class Tank(
+    val world: World,
+    spawn: Location,
+    val driver: Player?,
+    val spec: TankSpec,
+    private val model: TankModel,
+) {
   companion object {
     private const val INTERPOLATION = 2
   }
 
-  private val model = TankModels.create(spec)
   private val pivot = model.pivot
   private val seatY = model.seatY
 
@@ -58,15 +65,26 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
 
   private val seat: ItemDisplay =
       world.spawn(Location(world, x, y + seatY, z), ItemDisplay::class.java) { prepare(it) }
-  private val displays: List<Pair<Part, BlockDisplay>> =
+  private val displays: List<Pair<ModelPart, Display>> =
       model.parts.map { part ->
-        part to
-            world.spawn(Location(world, x, y, z), BlockDisplay::class.java) {
-              it.block = part.block.createBlockData()
-              it.viewRange = 2.0f
-              prepare(it)
-            }
+        val at = Location(world, x, y + seatY, z)
+        val display =
+            if (part.block != null)
+                world.spawn(at, BlockDisplay::class.java) {
+                  it.block = Bukkit.createBlockData(part.block)
+                  prepare(it)
+                }
+            else
+                world.spawn(at, ItemDisplay::class.java) {
+                  it.setItemStack(part.item)
+                  prepare(it)
+                }
+        seat.addPassenger(display)
+        part to display
       }
+
+  /** 各表示へ最後に送った変換。変わった tick だけ送る（下の render のコメント）。 */
+  private val sent = arrayOfNulls<Matrix4f>(model.parts.size)
 
   init {
     render()
@@ -74,6 +92,7 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
 
   private fun prepare(display: Display) {
     display.isPersistent = false
+    display.viewRange = 2.0f
     display.teleportDuration = INTERPOLATION
     display.interpolationDuration = INTERPOLATION
     display.interpolationDelay = 0
@@ -137,50 +156,46 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
   private fun rotation(yaw: Double, pitch: Double): Quaternionf =
       Quaternionf().rotationYXZ(Math.toRadians(-yaw).toFloat(), Math.toRadians(pitch).toFloat(), 0f)
 
-  /** 最後に表示へ送った位置。止まっている間は teleport しない（乗員の位置同期で画面が揺れる）。 */
+  /** 最後に土台を送った位置。止まっている間は teleport しない（乗員の位置同期で画面が揺れる）。 */
   private var sentX = Double.NaN
   private var sentY = Double.NaN
   private var sentZ = Double.NaN
 
   private fun render() {
     val hullRot = rotation(hullYaw, 0.0)
-    val pivotWorld = Vector3f(pivot).rotate(hullRot)
-    val moved = x != sentX || y != sentY || z != sentZ
-    if (moved) {
+    val turretRot = rotation(turretYaw, 0.0)
+    val pivotWorld = Vector3f(model.pivot).rotate(hullRot)
+    val gunRootWorld = Vector3f(model.gunRoot).rotate(turretRot).add(pivotWorld)
+    // 表示は土台（座席の高さ）に乗っているので、車体の原点は土台から seatY 下。
+    val down = (-seatY).toFloat()
+    val groups =
+        mapOf(
+            Group.HULL to Matrix4f().translation(0f, down, 0f).rotate(hullRot),
+            Group.TURRET to
+                Matrix4f()
+                    .translation(pivotWorld.x, pivotWorld.y + down, pivotWorld.z)
+                    .rotate(turretRot),
+            Group.BARREL to
+                Matrix4f()
+                    .translation(gunRootWorld.x, gunRootWorld.y + down, gunRootWorld.z)
+                    .rotate(rotation(turretYaw, gunPitch)),
+        )
+    if (x != sentX || y != sentY || z != sentZ) {
       seat.teleport(
           Location(world, x, y + seatY, z),
           PlayerTeleportEvent.TeleportCause.PLUGIN,
           TeleportFlag.EntityState.RETAIN_PASSENGERS,
       )
     }
-    for ((part, display) in displays) {
-      val rot =
-          when (part.group) {
-            Group.HULL -> hullRot
-            Group.TURRET -> rotation(turretYaw, 0.0)
-            Group.BARREL -> rotation(turretYaw, gunPitch)
-          }
-      val origin =
-          when (part.group) {
-            Group.HULL -> Vector3f()
-            Group.TURRET -> Vector3f(pivotWorld)
-            Group.BARREL -> Vector3f(model.gunRoot).rotate(rotation(turretYaw, 0.0)).add(pivotWorld)
-          }
-      val combined = Quaternionf(rot).mul(part.rotation)
-      // 表示の原点はブロックの角なので、パーツの中心から半寸法を回転して引く。
-      val translation =
-          Vector3f(part.center)
-              .rotate(rot)
-              .add(origin)
-              .sub(Vector3f(part.size).mul(0.5f).rotate(combined))
-      val next = Transformation(translation, combined, Vector3f(part.size), Quaternionf())
+    displays.forEachIndexed { index, (part, display) ->
+      val next = Matrix4f(groups.getValue(part.group)).mul(part.local)
       // interpolationDelay は値が同じでも毎回クライアントへ送られ、補間をやり直させる。
       // 毎 tick 送ると止まっている間も直前の向きとの間で揺れ続けるので、変わった tick だけ送る。
-      if (next != display.transformation) {
-        display.transformation = next
+      if (next != sent[index]) {
+        display.setTransformationMatrix(next)
         display.interpolationDelay = 0
+        sent[index] = next
       }
-      if (moved) display.teleport(Location(world, x, y, z))
     }
     sentX = x
     sentY = y

@@ -17,9 +17,9 @@ class TankModelsTest {
                 listOf(-1f, 1f).flatMap { x ->
                   listOf(-1f, 1f).flatMap { y ->
                     listOf(-1f, 1f).map { z ->
-                      Vector3f(x * part.size.x / 2, y * part.size.y / 2, z * part.size.z / 2)
-                          .rotate(part.rotation)
-                          .add(part.center)
+                      // 変換は原点が角の 1 ブロックに掛かるので、0〜1 の角を移す。
+                      part.local
+                          .transformPosition(Vector3f((x + 1) / 2, (y + 1) / 2, (z + 1) / 2))
                           .add(if (part.group == Group.TURRET) model.pivot else Vector3f())
                     }
                   }
