@@ -194,8 +194,13 @@ class Tank(val world: World, spawn: Location, val driver: Player?) {
       // 表示の原点はブロックの角。中心を基準にした位置へずらしてから回す。
       val local = Vector3f(part.center).sub(Vector3f(part.size).mul(0.5f)).rotate(rot)
       val translation = if (part.group == Group.HULL) local else local.add(pivot)
-      display.transformation = Transformation(translation, rot, Vector3f(part.size), Quaternionf())
-      display.interpolationDelay = 0
+      val next = Transformation(translation, rot, Vector3f(part.size), Quaternionf())
+      // interpolationDelay は値が同じでも毎回クライアントへ送られ、補間をやり直させる。
+      // 毎 tick 送ると止まっている間も直前の向きとの間で揺れ続けるので、変わった tick だけ送る。
+      if (next != display.transformation) {
+        display.transformation = next
+        display.interpolationDelay = 0
+      }
       if (moved) display.teleport(Location(world, x, y, z))
     }
     sentX = x
