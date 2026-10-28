@@ -99,7 +99,11 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
   var y = spawn.y
   var z = spawn.z
   var hullYaw = TankRules.wrapYaw(spawn.yaw.toDouble())
-  var turretYaw = hullYaw
+  /** 砲塔の向き（車体に対する角度）。砲塔は車体に載っているので、車体が回ると一緒に回る。 */
+  var turretRelative = 0.0
+  val turretYaw: Double
+    get() = TankRules.wrapYaw(hullYaw + turretRelative)
+
   var gunPitch = 0.0
   var speed = 0.0
   var hp = TankRules.MAX_HP
@@ -145,7 +149,9 @@ class Tank(val world: World, spawn: Location, val driver: Player?, val spec: Tan
       val input = driver.currentInput
       speed = TankRules.nextSpeed(spec, speed, input.isForward, input.isBackward)
       hullYaw = TankRules.nextYaw(spec, hullYaw, input.isLeft, input.isRight)
-      turretYaw = TankRules.traverse(spec, turretYaw, driver.location.yaw.toDouble())
+      // 車体が回った後で、視線との差を車体に対する角度で詰める（第二次大戦の戦車に砲の安定化装置はない）。
+      val aim = TankRules.wrapYaw(driver.location.yaw.toDouble() - hullYaw)
+      turretRelative = TankRules.traverse(spec, turretRelative, aim)
       gunPitch = TankRules.clampGunPitch(spec, driver.location.pitch.toDouble())
     }
     move()
