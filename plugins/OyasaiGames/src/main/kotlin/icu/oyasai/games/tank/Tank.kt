@@ -168,14 +168,22 @@ class Tank(val world: World, spawn: Location, val driver: Player?) {
   private fun rotation(yaw: Double, pitch: Double): Quaternionf =
       Quaternionf().rotationYXZ(Math.toRadians(-yaw).toFloat(), Math.toRadians(pitch).toFloat(), 0f)
 
+  /** 最後に表示へ送った位置。止まっている間は teleport しない（乗員の位置同期で画面が揺れる）。 */
+  private var sentX = Double.NaN
+  private var sentY = Double.NaN
+  private var sentZ = Double.NaN
+
   private fun render() {
     val hullRot = rotation(hullYaw, 0.0)
     val pivot = Vector3f(PIVOT).rotate(hullRot)
-    seat.teleport(
-        Location(world, x, y + SEAT_Y, z),
-        PlayerTeleportEvent.TeleportCause.PLUGIN,
-        TeleportFlag.EntityState.RETAIN_PASSENGERS,
-    )
+    val moved = x != sentX || y != sentY || z != sentZ
+    if (moved) {
+      seat.teleport(
+          Location(world, x, y + SEAT_Y, z),
+          PlayerTeleportEvent.TeleportCause.PLUGIN,
+          TeleportFlag.EntityState.RETAIN_PASSENGERS,
+      )
+    }
     for ((part, display) in parts) {
       val rot =
           when (part.group) {
@@ -188,8 +196,11 @@ class Tank(val world: World, spawn: Location, val driver: Player?) {
       val translation = if (part.group == Group.HULL) local else local.add(pivot)
       display.transformation = Transformation(translation, rot, Vector3f(part.size), Quaternionf())
       display.interpolationDelay = 0
-      display.teleport(Location(world, x, y, z))
+      if (moved) display.teleport(Location(world, x, y, z))
     }
+    sentX = x
+    sentY = y
+    sentZ = z
   }
 
   /** 砲口の位置と砲弾の向き。 */
