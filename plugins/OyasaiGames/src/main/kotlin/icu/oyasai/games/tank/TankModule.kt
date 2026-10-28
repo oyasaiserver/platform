@@ -243,6 +243,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
         continue
       }
       tank.tick()
+      engineSound(tank)
       if (tank.mgUntil >= tickCount) machineGun(tank)
       tank.driver?.let { hud(it, tank) }
     }
@@ -250,6 +251,30 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     while (iterator.hasNext()) {
       if (!stepShell(iterator.next())) iterator.remove()
     }
+  }
+
+  /**
+   * エンジンのうなりと履帯の音。重い車種ほど低く、速いほど高く大きくする。 ponytail: バニラの音の流用。音色は実機で聞いて差し替える（resource pack
+   * を使えば実車の録音も鳴らせる）。
+   */
+  private fun engineSound(tank: Tank) {
+    val ratio = minOf(1.0, kotlin.math.abs(tank.speed) / TankRules.maxSpeed(tank.spec)).toFloat()
+    val base = (0.75 - tank.spec.tonnes / 200.0).toFloat()
+    val at = Location(tank.world, tank.x, tank.y + 1.0, tank.z)
+    if (tickCount % 4 == 0)
+        tank.world.playSound(
+            at,
+            Sound.ENTITY_WARDEN_AMBIENT,
+            0.5f + ratio * 0.5f,
+            base + ratio * 0.35f,
+        )
+    if (ratio > 0.05f && tickCount % 5 == 0)
+        tank.world.playSound(
+            at,
+            Sound.ENTITY_IRON_GOLEM_STEP,
+            0.3f + ratio * 0.4f,
+            0.5f + ratio * 0.5f,
+        )
   }
 
   private fun hud(player: Player, tank: Tank) {
