@@ -13,12 +13,16 @@
   name,
   velocityConfig,
   plugins ? [ ],
+  geyserConfig ? null,
 }:
 
 let
   package = velocityServers.velocity.override { jre_headless = jre; };
 
   velocityToml = (formats.toml { }).generate "velocity.toml" velocityConfig;
+
+  geyserYaml =
+    if geyserConfig == null then null else (formats.yaml { }).generate "config.yml" geyserConfig;
 
   result = writeShellApplication {
     inherit name;
@@ -39,6 +43,11 @@ let
         mkdir -p plugins/floodgate
         <<<"''${FLOODGATE_KEY_PEM_B64}" base64 -d  >plugins/floodgate/key.pem
       fi
+
+      ${lib.optionalString (geyserYaml != null) ''
+        mkdir -p plugins/Geyser-Velocity
+        cp --no-preserve=ownership,mode ${geyserYaml} plugins/Geyser-Velocity/config.yml
+      ''}
 
       mkdir -p logs/dumps
 

@@ -180,7 +180,7 @@ CDKTF をいつ・どの順で実行するか（PR 環境、`master` への自�
 
 | 名前（Nix・コンテナ名） | Nix ファイル | プラットフォーム | 役割（コードの設定から） |
 |---|---|---|---|
-| `oyasai-velocity` | `packages/oyasai-velocity.nix` | velocity | 入口。`modern` 転送。`try` は `main` → `lobby`。Java と Bedrock のポートを公開 |
+| `oyasai-velocity` | `packages/oyasai-velocity.nix` | velocity | 入口。`modern` 転送。`try` は `main` → `lobby`。Java と Bedrock のポートを公開。Geyser（NetherNet のみ、Bedrock 26.60 以降）の設定は同じファイルの `geyserConfig` で、`config-version` 以外はすべて Geyser の既定値（NetherNet・19132）。signaling は HTTP（初回のみ信頼プロンプト） |
 | `oyasai-minecraft-main` | `packages/oyasai-minecraft-main.nix` | Purpur 26.2（registry では `paper`） | メインワールド。プラグインが多い。Velocity 連携を有効化 |
 | `oyasai-minecraft-lobby` | `packages/oyasai-minecraft-lobby.nix` | Purpur 26.2 | ロビー。void・フラット、ゲームルールを固定 |
 | `oyasai-minecraft-axiom` | `packages/oyasai-minecraft-axiom.nix` | Purpur 26.2 | creative、`white-list = true`。`try` には入らない（接続先の登録のみ） |

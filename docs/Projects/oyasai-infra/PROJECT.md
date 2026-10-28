@@ -86,7 +86,7 @@ source:
 | `alloy` | `alloy` | docker ソケットを読み、全コンテナのログを Grafana Cloud の Loki へ。設定は `packages/oyasai-cdktf/assets/config.alloy` |
 | `mariadb` | `mariadb` | 同じホストディレクトリをデータと `docker-entrypoint-initdb.d` の両方にマウントしている |
 | `oyasai-minecraft-main` / `-lobby` / `-axiom` | 同名 | `mariadb` に依存。データはホスト側の環境別ディレクトリ（`baseHostPath`）にバインド |
-| `oyasai-velocity` | `oyasai-velocity` | Java・Bedrock の入口 |
+| `oyasai-velocity` | `oyasai-velocity` | Java・Bedrock の入口。Geyser は NetherNet のみ（Bedrock 26.60 以降だけが参加できる）。signaling は HTTP（統合版クライアントに初回のみ信頼プロンプトが出る）。設定は `packages/oyasai-velocity.nix` の `geyserConfig` で、`config-version` 以外はすべて Geyser の既定値（NetherNet・19132） |
 | `oyasai-web` / `caddy` | `oyasai-web` / `caddy` | §5 |
 | `minecraft-main-backup` / `minecraft-axiom-backup`（master のみ） | `mc-backup` | |
 | `mariadb-backup`（master のみ） | `mysql-backup` | `command: ["dump"]` |

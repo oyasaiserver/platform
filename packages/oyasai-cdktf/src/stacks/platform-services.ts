@@ -267,13 +267,20 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       stdinOpen: true,
       networksAdvanced: [network],
       ports: ports({
-        tcp: [25565], // Java
-        udp: [19132], // Bedrock
+        tcp: [
+          25565, // Java
+          19132, // Bedrock NetherNet signaling (HTTP)
+        ],
+        udp: [
+          19132, // Bedrock NetherNet WebRTC gameplay
+        ],
       }),
       env: envs({
         FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
         VELOCITY_FORWARDING_SECRET: randoms.velocityForwardingSecret.result,
         MEMORY: this.isMaster ? "4G" : "2G",
+        GEYSER_BEDROCK_SIGNALING_ADVERTISE_ADDRESSES:
+          platformInfra.rootDnsRecord.name,
       }),
       volumes: [
         {
