@@ -35,8 +35,8 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 
 ### 構成と起動
 
-- Java はプラグイン本体、共通メニュー、ルーレットを実装します。Kotlin は BedWars、Dice、HeadHunt、肝試し、PvP、Slot、TNTRun、Toys、Weapons の機能を実装します。
-- 起動時に `config.yml` を保存・読み込み、機能を初期化します。`games.headhunt.enabled`・`games.slot.enabled`・`games.weapons.enabled`・`games.pvp.enabled`・`games.tntrun.enabled`・`games.roulette.enabled` は同梱既定で有効、`games.bedwars.enabled` は無効です。Dice・肝試し・Toys には同様の有効化スイッチがありません。
+- Java はプラグイン本体、共通メニュー、ルーレットを実装します。Kotlin は BedWars、Dice、HeadHunt、肝試し、PvP、Slot、Tank、TNTRun、Toys、Weapons の機能を実装します。
+- 起動時に `config.yml` を保存・読み込み、機能を初期化します。`games.headhunt.enabled`・`games.slot.enabled`・`games.weapons.enabled`・`games.pvp.enabled`・`games.tntrun.enabled`・`games.roulette.enabled` は同梱既定で有効、`games.bedwars.enabled` と `games.tank.enabled` は無効です。Dice・肝試し・Toys には同様の有効化スイッチがありません。
 - 初期化順は `OyasaiGamesPlugin.onEnable` が正本です。各機能は外部プラグインとの競合や依存を個別に確認します。肝試し・Toys の初期化には個別の try/catch がなく、SQLite 接続・対象 Skript CSV の解析などの例外が onEnable へ伝播すると起動処理が途中で失敗します。後続の Dice・ハブ登録は実行されず、初期化済み機能の最終状態はサーバー側依存で未確認です。
 - `/games reload` はルート設定を読み直します。Slot と Weapons を再設定し、PvP・BedWars・TNTRun を停止して再初期化し、ルーレット設定と候補を再読込します。HeadHunt・Dice・肝試し・Toys は再初期化しません。起動時に無効だったルーレットを再有効化する用途にも使えません。
 
@@ -45,6 +45,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - **ルーレット:** GUI で抽選条件を選択し、材料候補を分類してランダム抽選します。結果は Bukkit スケジューラーで順次表示します。選択内容、実行中タスク、完了後の待ち時間はメモリ上にあります。
 - **Dice:** アイテムに種類・個数と公開/非公開の真偽値を保持します。公開チャットの通知範囲は同ワールドの周囲30ブロック固定です。チャージ操作後に表示エンティティを動かし、停止・回収・時間切れで所有者へ返却します。結果は物理的な出目からではなく、停止時に乱数で決めます。
 - **HeadHunt:** 宝HEADの配置を登録・検証し、ブロックの TileState に宝UUIDを保存します。開始時に宝と参加チームを検証し、ゲーム中の発見状況をメモリで管理します。
+- **Tank（試作）:** `tank/`。戦車 1 台は BlockDisplay 5 枚（車体・履帯 2・砲塔・砲身）と、運転手が乗る透明な ItemDisplay です。毎 tick `Tank.tick` が運転手の `currentInput`（WASD）から速度・車体の向きを更新し、砲塔と砲身は運転手の視線に追従させます。位置と回転は自前で計算し、表示の `teleportDuration`・`interpolationDuration`（2 tick）でクライアントに補間させます。砲弾は 1 tick ごとに `rayTraceBlocks` と戦車の箱（軸に平行）への `BoundingBox.rayTrace` で当たりを判定し、重力で落ちます。装甲は車体の向きと砲弾の水平方向から正面 0.5・側面 1.0・背面 1.5 倍です（`TankRules`）。運転手が座席から外れる（Shift・退出・死亡）と戦車を消します。表示は `isPersistent=false` で、停止時と `/tank clear` でも消します。
 - **PvP・BedWars・TNTRun:** 参加前に PlayerStore が持ち物とプレイヤー状態を YAML に退避します。退出・死亡・再接続時に復元します。PvP/BedWars の地形記録と PvPEconomy の決済台帳は各モジュールで共有します。
 - **Slot:** 抽選前に料金と受取可能枠を確認し、決済段階をファイルへ保存してから賞品処理を進めます。起動時の再試行対象と、結果不明として止める段階は `SlotPayment.kt` が定義します。
 - **Weapons:** `weapons/` の YAML 定義を読み、武器・弾薬・装置状態をアイテム PDC やデータファイルに保持します。射撃、再装填、爆発などはイベントとスケジュール処理で実行します。有効な定義が0件なら起動失敗、再読込失敗後は武器処理が停止したままです。3武器のID別固定上書きは `WeaponObservedOverrides.kt` が定義し、`WeaponCombat.kt` が適用します。数値と運営上の注意は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) の武器節を参照。
@@ -105,7 +106,11 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - Weapons は CrackShot 形式の設定を読みますが、すべての外部プラグイン機能・設定キーの互換を保証しません。武器効果の一部は YAML のコマンド設定から実行できます。
 - 機能の許可判定はコマンド入口・各操作に分かれており、コマンド受付権限だけで全 GUI・アイテム操作を閉じる統一ゲートではありません。必要な範囲は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) に記載します。
 
+- Tank は試作です。チーム・試合・報酬・アリーナ・持ち物の退避はなく、数値（速度・装填 40 tick・砲弾速度 3.0・威力 35・HP 100）は `TankRules` の仮置きです。当たり判定と衝突は車体の向きに合わせた箱ではなく軸に平行な箱で近似します。ゲーム内の見え方（座席の高さ、補間の滑らかさ、砲塔の向き）と統合版の操作は未確認です。`/games reload` では切り替わらず、有効化は再起動が必要です。
+
 ## 判断の記録
+
+- 2026-10-28: 戦車（`tank/`）を OyasaiGames のモジュールとして試作した。独立プラグインにしなかったのは、後で PvP のアリーナ・退避・決済を使い回すため。入力は NMS のパケットではなく Paper の `Player.getCurrentInput()` を毎 tick 読む。砲弾はエンティティではなく自前のレイで判定する。既定は無効・OP 限定。
 
 - 2026-10-26: PvP の賭けは有効のまま倍率 1.4 を維持し、配当の端数は四捨五入（HALF_UP）して整数にする。
 - 2026-10-13: 文書レビューの指摘を関連コードで照合し、無効時のコマンド登録、TNTRun の設定・パーティー・ジャンプ所持上限、復元失敗時のキック、再読込と武器の固定上書きを訂正した。プレイヤー向けの賭け直しは結果だけを案内する。
