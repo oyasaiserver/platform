@@ -110,6 +110,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 
 ## 判断の記録
 
+- 2026-10-28: Display の `setInterpolationDelay` は値が同じでも毎回クライアントへ送られ（`SynchedEntityData.set` の force）、クライアントは受け取るたびに補間の開始時刻を戻す。毎 tick 呼ぶと、止まっていても直前の向きとの間で回転方向に揺れ続けた。変換（`setTransformation`）が変わった tick だけ、変換と一緒に呼ぶ（`Tank.render`）。座席の teleport も位置が変わった tick だけにする。実機で揺れが消えたことを確認。
 - 2026-10-28: 戦車（`tank/`）を OyasaiGames のモジュールとして試作した。独立プラグインにしなかったのは、後で PvP のアリーナ・退避・決済を使い回すため。入力は NMS のパケットではなく Paper の `Player.getCurrentInput()` を毎 tick 読む。砲弾はエンティティではなく自前のレイで判定する。既定は無効・OP 限定。
 
 - 2026-10-26: PvP の賭けは有効のまま倍率 1.4 を維持し、配当の端数は四捨五入（HALF_UP）して整数にする。
