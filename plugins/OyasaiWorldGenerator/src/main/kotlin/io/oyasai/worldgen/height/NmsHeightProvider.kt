@@ -22,7 +22,7 @@ import org.bukkit.craftbukkit.CraftWorld
 import sun.misc.Unsafe
 
 class NmsHeightProvider(private val logger: Logger) {
-  val name: String = "NMS/Purpur-26.2"
+  val name: String = "NMS/Purpur-$SUPPORTED_MINECRAFT_VERSION"
 
   private val declarations = ConcurrentHashMap<String, HeightDeclaration>()
   private val unsafe: Unsafe by lazy { resolveUnsafe() }
@@ -39,7 +39,7 @@ class NmsHeightProvider(private val logger: Logger) {
     val spec = declaration.spec
     if (!isSupportedServer()) {
       logger.severe(
-          "[OWG][height] Refusing to patch ${world.name}: expected Purpur 26.2, got ${runtimeVersion()}"
+          "[OWG][height] Refusing to patch ${world.name}: expected Purpur $SUPPORTED_MINECRAFT_VERSION, got ${runtimeVersion()}"
       )
       return false
     }
@@ -686,6 +686,6 @@ class NmsHeightProvider(private val logger: Logger) {
   }
 
   companion object {
-    private const val SUPPORTED_MINECRAFT_VERSION = "26.3"
+    const val SUPPORTED_MINECRAFT_VERSION = "26.3"
   }
 }
