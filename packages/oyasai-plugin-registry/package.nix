@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   oyasai-plugins,
+  oyasai-external-plugins,
 }:
 
 let
@@ -30,7 +31,7 @@ let
             lib.filterAttrs (_: p: p ? velocity) lock
           );
         in
-        fromLock // staticFrom (./static + "/velocity") // oyasai-plugins
+        fromLock // staticFrom (./static + "/velocity") // oyasai-plugins // oyasai-external-plugins
       else
         version:
         let
@@ -38,7 +39,10 @@ let
             id: plugins: fetchurl (plugins.${platform}.${version} // { name = "${id}.jar"; })
           ) (lib.filterAttrs (_: p: lib.hasAttr version (p.${platform} or { })) lock);
         in
-        fromLock // staticFrom (./static + "/${platform}/${version}") // oyasai-plugins;
+        fromLock
+        // staticFrom (./static + "/${platform}/${version}")
+        // oyasai-plugins
+        // oyasai-external-plugins;
   };
 in
 final

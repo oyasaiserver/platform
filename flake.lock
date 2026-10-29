@@ -46,6 +46,22 @@
         "type": "github"
       }
     },
+    "coreprotect": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792433424,
+        "narHash": "sha256-uQOYdV1cuzAJvw4rbs2OoVw3fhnkKATKT+WPKJpQux4=",
+        "owner": "playpro",
+        "repo": "coreprotect",
+        "rev": "dffa04fc4cb6fe847b5df10db03cec230a505242",
+        "type": "github"
+      },
+      "original": {
+        "owner": "playpro",
+        "repo": "coreprotect",
+        "type": "github"
+      }
+    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
@@ -284,6 +300,7 @@
     "root": {
       "inputs": {
         "codegen": "codegen",
+        "coreprotect": "coreprotect",
         "devshell": "devshell",
         "flake-parts": "flake-parts",
         "gradle2nix": "gradle2nix",

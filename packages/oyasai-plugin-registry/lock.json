@@ -15,14 +15,6 @@
       }
     }
   },
-  "coreprotect": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/3sehX6Sg/CoreProtect-CE-24.1.jar",
-        "hash": "sha256-oqzvfAbvIBNVzvB9WRpgVd/tNYrXaPqqqvTidoZezJc="
-      }
-    }
-  },
   "discordsrv": {
     "paper": {
       "26.2": {

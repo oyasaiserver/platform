@@ -8,6 +8,10 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.systems.follows = "systems";
     };
+    coreprotect = {
+      url = "github:playpro/coreprotect";
+      flake = false;
+    };
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";

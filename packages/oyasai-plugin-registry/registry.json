@@ -11,12 +11,6 @@
       "type": "modrinth"
     }
   },
-  "coreprotect": {
-    "paper": {
-      "slug": "coreprotect",
-      "type": "modrinth"
-    }
-  },
   "discordsrv": {
     "paper": {
       "slug": "discordsrv",
