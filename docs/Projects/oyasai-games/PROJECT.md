@@ -35,8 +35,8 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 
 ### 構成と起動
 
-- Java はプラグイン本体、共通メニュー、ルーレットを実装します。Kotlin は BedWars、Dice、HeadHunt、肝試し、PvP、Slot、TNTRun、Toys、Weapons の機能を実装します。
-- 起動時に `config.yml` を保存・読み込み、機能を初期化します。`games.headhunt.enabled`・`games.slot.enabled`・`games.weapons.enabled`・`games.pvp.enabled`・`games.tntrun.enabled`・`games.roulette.enabled` は同梱既定で有効、`games.bedwars.enabled` は無効です。Dice・肝試し・Toys には同様の有効化スイッチがありません。
+- Java はプラグイン本体、共通メニュー、ルーレットを実装します。Kotlin は BedWars、Dice、HeadHunt、肝試し、PvP、Slot、Tank、TNTRun、Toys、Weapons の機能を実装します。
+- 起動時に `config.yml` を保存・読み込み、機能を初期化します。`games.headhunt.enabled`・`games.slot.enabled`・`games.weapons.enabled`・`games.pvp.enabled`・`games.tntrun.enabled`・`games.roulette.enabled` は同梱既定で有効、`games.bedwars.enabled` と `games.tank.enabled` は無効です。Dice・肝試し・Toys には同様の有効化スイッチがありません。
 - 初期化順は `OyasaiGamesPlugin.onEnable` が正本です。各機能は外部プラグインとの競合や依存を個別に確認します。肝試し・Toys の初期化には個別の try/catch がなく、SQLite 接続・対象 Skript CSV の解析などの例外が onEnable へ伝播すると起動処理が途中で失敗します。後続の Dice・ハブ登録は実行されず、初期化済み機能の最終状態はサーバー側依存で未確認です。
 - `/games reload` はルート設定を読み直します。Slot と Weapons を再設定し、PvP・BedWars・TNTRun を停止して再初期化し、ルーレット設定と候補を再読込します。HeadHunt・Dice・肝試し・Toys は再初期化しません。起動時に無効だったルーレットを再有効化する用途にも使えません。
 
@@ -45,6 +45,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - **ルーレット:** GUI で抽選条件を選択し、材料候補を分類してランダム抽選します。結果は Bukkit スケジューラーで順次表示します。選択内容、実行中タスク、完了後の待ち時間はメモリ上にあります。
 - **Dice:** アイテムに種類・個数と公開/非公開の真偽値を保持します。公開チャットの通知範囲は同ワールドの周囲30ブロック固定です。チャージ操作後に表示エンティティを動かし、停止・回収・時間切れで所有者へ返却します。結果は物理的な出目からではなく、停止時に乱数で決めます。
 - **HeadHunt:** 宝HEADの配置を登録・検証し、ブロックの TileState に宝UUIDを保存します。開始時に宝と参加チームを検証し、ゲーム中の発見状況をメモリで管理します。
+- **Tank（試作）:** `tank/`。第二次大戦の実車 4 種（`light` M24 チャーフィー、`medium` M4A3(75)W シャーマン、`heavy` ティーガーI、`pz3` III号戦車 N型）を、1 ブロック = 1 m・1 秒 = 20 tick で再現する。諸元は `TankRules.SPECS`。見た目は、サーバーの `plugins/OyasaiGames/tank-models/<車種>.json` があればそれ（`TankModels.load`）、なければ組み込みの簡易モデル（`TankModels.create`、40 枚以内）。どちらも表示 1 枚ごとに「グループ（車体・砲塔・砲身）＋グループの原点からの変換行列」を持つ。透明な ItemDisplay を土台にして、運転手と全表示をその乗客にし、毎 tick は土台だけを動かす（BDEngine と同じ作り。乗客はクライアント側で付いてくる）。向きは各表示の変換行列（`setTransformationMatrix`）にし、変わった tick だけ送る。モデルファイルは `plugins/OyasaiGames/tools/bdengine_tank.py` で BDEngine の書き出し（datapack の `create.mcfunction`）から作る。部品を形から車体・砲塔・砲身に分け、実車の車体長へ等倍で合わせる。分け方は推定なので `--preview` の色分け図で確かめる。モデルの著作物はリポジトリに入れない。毎 tick `Tank.tick` が運転手の `currentInput`（WASD）から速度（最高速・出力重量比の加速）と車体の向きを更新し、砲塔は視線へ実車の旋回速度で向かい、砲身は俯仰の範囲で視線に追従する。表示の補間は `teleportDuration`・`interpolationDuration`（2 tick）。左クリックで主砲（実車の装填時間・搭載弾数）。砲弾は実際の弾速で飛び、重力 9.81 m/s² で落ち、1 tick ごとに `rayTraceBlocks` と、車体の向きに合わせて回した箱（`Tank.hitTest`）で当たりを判定する。当たった面（正面・側面・背面・上面）の装甲を、正面の傾斜と入射角で実質の厚さにし、距離で減る貫通力と比べて貫通・非貫通・跳弾（法線から 70 度超）を決める。貫通したときだけ耐久（100）が減る。砲弾は毎 tick 飛んだ線分に橙色の光点（1 m ごと）と煙（2 m ごと）を出し、着弾で口径に比例した爆発（地形なら破片、貫通なら火花）を出す。粒子は遠くからも見えるよう強制表示。エンジン音は OyasaiVehicles の CarBuilder2 の標準の音と同じ式で毎 tick 鳴らし、回転数の代わりに最高速に対する速さの割合を使う。右クリック長押しで同軸機銃（実車の毎分発射数、射程 400、即着）。生き物に当たるとダメージ 4、戦車には効かず止まる。右クリックは手に物を持たないとサーバーへ届かないため、乗っている間はホットバーの空き枠に操縦用の棒（PDC `tank_control`）を置いて持たせ、降りると取り除く。持ち替え・落とす・動かすは止め、参加時に残りを取り除く。運転手が座席から外れる（Shift・退出・死亡）と戦車を消す。表示は `isPersistent=false` で、停止時と `/tank clear` でも消す。
 - **PvP・BedWars・TNTRun:** 参加前に PlayerStore が持ち物とプレイヤー状態を YAML に退避します。退出・死亡・再接続時に復元します。PvP/BedWars の地形記録と PvPEconomy の決済台帳は各モジュールで共有します。
 - **Slot:** 抽選前に料金と受取可能枠を確認し、決済段階をファイルへ保存してから賞品処理を進めます。起動時の再試行対象と、結果不明として止める段階は `SlotPayment.kt` が定義します。
 - **Weapons:** `weapons/` の YAML 定義を読み、武器・弾薬・装置状態をアイテム PDC やデータファイルに保持します。射撃、再装填、爆発などはイベントとスケジュール処理で実行します。有効な定義が0件なら起動失敗、再読込失敗後は武器処理が停止したままです。3武器のID別固定上書きは `WeaponObservedOverrides.kt` が定義し、`WeaponCombat.kt` が適用します。数値と運営上の注意は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) の武器節を参照。
@@ -105,7 +106,33 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 - Weapons は CrackShot 形式の設定を読みますが、すべての外部プラグイン機能・設定キーの互換を保証しません。武器効果の一部は YAML のコマンド設定から実行できます。
 - 機能の許可判定はコマンド入口・各操作に分かれており、コマンド受付権限だけで全 GUI・アイテム操作を閉じる統一ゲートではありません。必要な範囲は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-games/operator.md) に記載します。
 
+- Tank は試作です。チーム・試合・報酬・アリーナ・持ち物の退避はなく、耐久（100）と貫通時の減り（75mm 34、88mm 50）、機銃のダメージ、加速の係数、後退速度（前進の 1/4）、車体の旋回速度はゲーム上の値または推定です。形は少数のブロックで実車を近似したもので、細部や曲面は再現していません。当たり判定は砲塔を含めた 1 つの箱で、砲塔・防盾・下部の装甲を区別しません。地形との衝突は軸に平行な正方形で近似します。統合版の操作と、何台まで同時に動かせるかは未確認です。`/games reload` では切り替わらず、有効化は再起動が必要です。
+
+#### 戦車の諸元と出典（2026-10-28 調査）
+
+| | M24 チャーフィー（light） | M4A3(75)W シャーマン（medium） | ティーガーI（heavy） |
+|---|---|---|---|
+| 全長（車体）・全幅・全高 | 5.03・3.0・2.77 m | 5.84・2.62・2.74 m | 6.316・3.56・3.00 m |
+| 重量・出力・最高速 | 18.37 t・220 hp・56 km/h | 30.3 t・450 hp・42 km/h | 57 t・690 hp・45.4 km/h |
+| 主砲 | 75mm M6（L/39、2.92 m） | 75mm M3（L/40、3.0 m） | 8.8cm KwK 36（L/56） |
+| 弾速・貫通（100 m / 1000 m、垂直） | 618 m/s・88 / 73 mm | 618 m/s・88 / 73 mm | 773 m/s・152 / 114 mm（30 度板の 132 / 99 を換算） |
+| 装填・搭載弾数 | 3 秒・48 発 | 3 秒・104 発 | 6 秒・92 発 |
+| 装甲（正面・側面・背面・上面） | 25（60 度、推定）・25・19・13（推定） | 63.5（47 度）・38.1・38.1・19（推定） | 100・80・80・25 |
+| 砲塔旋回・俯仰 | 24 度/秒（推定）・+15/-10（推定） | 24 度/秒・+25/-10 | 19 度/秒（2000 rpm）・+15/-8（推定） |
+| 機銃 | M1919A4 450 発/分 | M1919A4 450 発/分 | MG 34 850 発/分 |
+
+III号戦車 N型（`pz3`）: 5.56×2.90×2.5 m、23 t、300 PS、40 km/h。7.5cm KwK 37 L/24（砲身 1.76 m、385 m/s、Pzgr. 39/1 の垂直板への計算値 100 m 54 mm・1000 m 46 mm、毎分 12〜15 発→装填 4.5 秒）、MG 34。装甲は N 型の値が資料になく、同じ車体の J〜M 型（正面 50 mm ＋ 20 mm の増加装甲）を使う。正面の傾斜・上面・砲塔旋回・俯仰・搭載弾数は推定。出典: [Panzer III](https://en.wikipedia.org/wiki/Panzer_III)、[7.5 cm KwK 37](https://en.wikipedia.org/wiki/7.5_cm_KwK_37)。
+
+足回りの参考: [The Tank Museum: Tiger Wheels](https://tankmuseum.org/article/tiger-wheels/)（ティーガーの挟み込み式転輪）、[AFV Weapons Profile: M4 Medium Sherman](https://ciar.org/ttk/mbt/afv_weapons_profile_pack/afv_weapons_profile_29__m4_medium_sherman.pdf)（シャーマンのサスペンション）。
+
+出典: Wikipedia の [M24 Chaffee](https://en.wikipedia.org/wiki/M24_Chaffee)、[M4 Sherman](https://en.wikipedia.org/wiki/M4_Sherman)、[Tiger I](https://en.wikipedia.org/wiki/Tiger_I)、[75 mm gun M2–M6](https://en.wikipedia.org/wiki/75_mm_gun_M2%E2%80%93M6)（M61 APC の 90 度・RHA の推定値、毎分 20 発）、[8.8 cm KwK 36](https://en.wikipedia.org/wiki/8.8_cm_KwK_36)（PzGr. 39、毎分 10 発）、[M1919](https://en.wikipedia.org/wiki/M1919_Browning_machine_gun)。シャーマンの装甲と砲塔旋回は [armedconflicts.com](https://www.armedconflicts.com/-t6347)・[AFV Database](https://afvdatabase.com/usa/m4sherman.html)。MG 34 の発射速度は [War Thunder Wiki](https://wiki.warthunder.com/MG34_(7.92_mm)) の幅（400〜900）の上寄りで、ゲームの資料。ティーガーの最高速は初期型の値（後に約 38 km/h に制限）。
+
 ## 判断の記録
+
+- 2026-10-28: Display の `setInterpolationDelay` は値が同じでも毎回クライアントへ送られ（`SynchedEntityData.set` の force）、クライアントは受け取るたびに補間の開始時刻を戻す。毎 tick 呼ぶと、止まっていても直前の向きとの間で回転方向に揺れ続けた。変換（`setTransformation`）が変わった tick だけ、変換と一緒に呼ぶ（`Tank.render`）。座席の teleport も位置が変わった tick だけにする。実機で揺れが消えたことを確認。
+- 2026-10-28: 戦車（`tank/`）を OyasaiGames のモジュールとして試作した。独立プラグインにしなかったのは、後で PvP のアリーナ・退避・決済を使い回すため。入力は NMS のパケットではなく Paper の `Player.getCurrentInput()` を毎 tick 読む。砲弾はエンティティではなく自前のレイで判定する。既定は無効・OP 限定。
+- 2026-10-28: BDEngine で作ったモデル（ティーガーI H 型と III 号戦車）を読めるようにし、III 号戦車を 4 つ目の車種にした。表示が 1 台 400 枚前後になるので、全表示を土台の乗客にして土台だけを動かす。分類はサーバーで毎回推定せず、手元のツールで一度だけ行い、色分け図で確かめる。
+- 2026-10-28: 戦車を第二次大戦の実車 3 種に置き換えた（人の指示: 大型・中型・小型を選べる、左クリック主砲・右クリック機銃）。現代の主力戦車は軽・中・重の区分が薄いため、区分がはっきりした時代を選んだ。右クリックを受けるため、乗車中だけ操縦用アイテムを持たせる（インベントリを丸ごと預からず、空き枠がなければ乗せない）。
 
 - 2026-10-26: PvP の賭けは有効のまま倍率 1.4 を維持し、配当の端数は四捨五入（HALF_UP）して整数にする。
 - 2026-10-13: 文書レビューの指摘を関連コードで照合し、無効時のコマンド登録、TNTRun の設定・パーティー・ジャンプ所持上限、復元失敗時のキック、再読込と武器の固定上書きを訂正した。プレイヤー向けの賭け直しは結果だけを案内する。

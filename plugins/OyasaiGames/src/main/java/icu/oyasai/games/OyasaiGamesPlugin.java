@@ -6,6 +6,7 @@ import icu.oyasai.games.gui.GamesHubListener;
 import icu.oyasai.games.headhunt.HeadHuntModule;
 import icu.oyasai.games.weapons.WeaponsModule;
 import icu.oyasai.games.pvp.PvpModule;
+import icu.oyasai.games.tank.TankModule;
 import icu.oyasai.games.kimodameshi.KimodameshiModule;
 import icu.oyasai.games.toys.ToysModule;
 import icu.oyasai.games.roulette.command.RouletteCommand;
@@ -38,6 +39,7 @@ public class OyasaiGamesPlugin extends JavaPlugin {
     private KimodameshiModule kimodameshiModule;
     private ToysModule toysModule;
     private DiceModule diceModule;
+    private TankModule tankModule;
 
     @Override
     public void onEnable() {
@@ -117,6 +119,17 @@ public class OyasaiGamesPlugin extends JavaPlugin {
             getLogger().log(java.util.logging.Level.SEVERE, "おやさいサイコロの初期化に失敗しました。", exception);
         }
 
+        // 試作中のため既定は無効（games.tank.enabled）。再読み込みでは切り替わらない。
+        if (getConfig().getBoolean("games.tank.enabled", false)) {
+            tankModule = new TankModule(this);
+            try {
+                tankModule.enable();
+            } catch (Exception | LinkageError exception) {
+                shutdownModule("tank", tankModule::disable);
+                getLogger().log(java.util.logging.Level.SEVERE, "tankの初期化に失敗しました。", exception);
+            }
+        }
+
         // 2. おやさいゲームズ共通ハブコマンド & リスナーの登録
         registerGamesHub();
 
@@ -159,6 +172,10 @@ public class OyasaiGamesPlugin extends JavaPlugin {
         if (toysModule != null) toysModule.disable();
         if (diceModule != null) {
             shutdownModule("おやさいサイコロ", diceModule::disable);
+        }
+
+        if (tankModule != null) {
+            shutdownModule("tank", tankModule::disable);
         }
 
         getLogger().info("OyasaiGames を安全に停止しました。");

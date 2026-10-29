@@ -29,6 +29,9 @@ commands:
   pa:
     description: PvP アリーナへの参加・観戦・管理
     aliases: [pvparena, ogpa]
+  tank:
+    description: 戦車（試作）。spawn [light|medium|heavy] で乗る、dummy [種類] で標的、clear で片付ける
+    permission: oyasaigames.tank.use
   oyasaigames:
     description: おやさいゲームズのメニューを開きます
     aliases: [games, og]
@@ -105,6 +108,9 @@ permissions:
     default: op
   oyasaigames.weapons.admin:
     description: 武器の管理コマンドを使用できます
+    default: op
+  oyasaigames.tank.use:
+    description: 戦車（試作）を使用できます
     default: op
   oyasaigames.pvp.use:
     default: true
