@@ -1,6 +1,7 @@
 {
   lib,
   jre,
+  openssl,
   oyasaiDockerTools,
   stdenv,
   velocityServers,
@@ -41,6 +42,11 @@ let
       fi
 
       mkdir -p logs/dumps
+
+      # Inject for reproducibility
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        export LD_LIBRARY_PATH="${lib.makeLibraryPath [ openssl ]}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+      ''}
 
       MEMORY="''${MEMORY:-512M}"
       exec ${lib.getExe package} \
