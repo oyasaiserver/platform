@@ -515,20 +515,20 @@
       "hash": "sha256-fpPEREL+uMe+yFvKnhY/2yjLin8QCj1En1mA64b4yPA="
     }
   },
-  "com.github.stefvanschie.inventoryframework:IF:0.12.1": {
-    "IF-0.12.1.jar": {
-      "url": "https://repo.maven.apache.org/maven2/com/github/stefvanschie/inventoryframework/IF/0.12.1/IF-0.12.1.jar",
-      "hash": "sha256-jtRzNvf9ukpWLXD8yAHn0FWuPSkVo5QuyDPiKCYXK2Y="
+  "com.github.stefvanschie.inventoryframework:IF:0.12.2": {
+    "IF-0.12.2.jar": {
+      "url": "https://repo.maven.apache.org/maven2/com/github/stefvanschie/inventoryframework/IF/0.12.2/IF-0.12.2.jar",
+      "hash": "sha256-SvTSHLu+Gul8cAsverabPBMB0McZSBCAr4KdNC1dzt0="
     },
-    "IF-0.12.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/github/stefvanschie/inventoryframework/IF/0.12.1/IF-0.12.1.pom",
-      "hash": "sha256-OaciEBgmRPotQ5cXHHIp49nspYJNB9ySZTW66PMeBR4="
+    "IF-0.12.2.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/github/stefvanschie/inventoryframework/IF/0.12.2/IF-0.12.2.pom",
+      "hash": "sha256-T3Dv0wYMV/qinfQyUMxm85R7/LlmhURwRElIEE29fvI="
     }
   },
-  "com.github.stefvanschie.inventoryframework:IF-parent:0.12.1": {
-    "IF-parent-0.12.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/github/stefvanschie/inventoryframework/IF-parent/0.12.1/IF-parent-0.12.1.pom",
-      "hash": "sha256-9hBwYvaFiRH6fBRRAVhJVzbLV+ADYoXMupgGbAor/eE="
+  "com.github.stefvanschie.inventoryframework:IF-parent:0.12.2": {
+    "IF-parent-0.12.2.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/github/stefvanschie/inventoryframework/IF-parent/0.12.2/IF-parent-0.12.2.pom",
+      "hash": "sha256-4MeHPI/i3wA4GhTMXIAdI5cfkbcIQhvV9tqYg0U8UIo="
     }
   },
   "com.google:google:5": {
