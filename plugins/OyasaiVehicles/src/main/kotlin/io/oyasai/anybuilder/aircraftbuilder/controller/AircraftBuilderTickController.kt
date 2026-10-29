@@ -32,6 +32,7 @@ fun AircraftBuilderEntityData.startImpl() {
             return
           }
 
+          val loopStart = System.nanoTime()
           val player = AircraftBuilderEntityList.getControlPlayer(this@startImpl)
           val controlKey = EntityRuntime.getWASD(player)
           val wasd = controlKey?.first
@@ -60,6 +61,7 @@ fun AircraftBuilderEntityData.startImpl() {
           AircraftBuilderEntityList.updateBarPlayer(player, this@startImpl.bossBar)
           this@startImpl.bodyLightTask()
           this@startImpl.setDisplayRotate()
+          EntityRuntime.Stats.recordLoop(loopStart)
         }
       }
       .runTaskTimer(this.plugin, 0L, 1L)
