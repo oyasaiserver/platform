@@ -3,6 +3,7 @@ package io.oyasai.anybuilder.aircraftbuilder.presentation
 import io.oyasai.VehicleMenuCommand
 import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
 import io.oyasai.anybuilder.common.playVehicleStepSounds
+import io.oyasai.anybuilder.runtime.EntityRuntime
 import io.oyasai.toolbox.ControlKey
 import io.oyasai.toolbox.Tools
 import org.bukkit.Sound
@@ -119,7 +120,8 @@ fun AircraftBuilderEntityData.setDisplayRotateImpl() {
     for (blockDisplay in displaySet) {
       val def = this.displayDef[blockDisplay]
       if (def != null) {
-        blockDisplay.setTransformation(
+        EntityRuntime.applyTransformation(
+            blockDisplay,
             Transformation(
                 Vector3f(def.translation)
                     .add(this.bodyReOffset.toVector3f())
@@ -130,7 +132,7 @@ fun AircraftBuilderEntityData.setDisplayRotateImpl() {
                     .rotateX(Math.toRadians(this.pitch.toDouble()).toFloat()),
                 def.scale,
                 def.rightRotation,
-            )
+            ),
         )
       }
     }

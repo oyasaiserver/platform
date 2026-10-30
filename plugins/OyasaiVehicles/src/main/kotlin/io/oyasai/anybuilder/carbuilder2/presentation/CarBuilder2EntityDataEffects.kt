@@ -3,6 +3,7 @@ package io.oyasai.anybuilder.carbuilder2.presentation
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityType
 import io.oyasai.anybuilder.common.playVehicleStepSounds
+import io.oyasai.anybuilder.runtime.EntityRuntime
 import io.oyasai.toolbox.ControlKey
 import kotlin.math.abs
 import kotlin.math.max
@@ -59,7 +60,8 @@ fun CarBuilder2EntityData.wheelTaskImpl(speed: Double, handleAngle: Float?) {
               translation.rotateAroundX(rpmRad)
             }
 
-        display.transformation =
+        EntityRuntime.applyTransformation(
+            display,
             Transformation(
                 finalTranslation
                     .add(offset.second)
@@ -69,7 +71,8 @@ fun CarBuilder2EntityData.wheelTaskImpl(speed: Double, handleAngle: Float?) {
                 currentRotation,
                 display.transformation.scale,
                 Quaternionf(),
-            )
+            ),
+        )
       }
     }
   }
@@ -94,7 +97,8 @@ fun CarBuilder2EntityData.setBodyRotateImpl(oldSpeed: Double) {
   for (displaySet in bodyMap.values) {
     for (blockDisplay in displaySet) {
       val defTrans = bodyDef[blockDisplay] ?: continue
-      blockDisplay.transformation =
+      EntityRuntime.applyTransformation(
+          blockDisplay,
           Transformation(
               Vector3f(defTrans.translation)
                   .add(this.bodyReOffset.toVector3f())
@@ -105,7 +109,8 @@ fun CarBuilder2EntityData.setBodyRotateImpl(oldSpeed: Double) {
                   .rotateX(Math.toRadians(this.pitch.toDouble()).toFloat()),
               defTrans.scale,
               defTrans.rightRotation,
-          )
+          ),
+      )
     }
   }
 }
