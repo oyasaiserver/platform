@@ -103,23 +103,44 @@ public class RouletteSessionTest {
     }
 
     @Test
-    @DisplayName("2種類を合わせても合計は上限10回に収まる")
-    public void totalNeverExceedsLimit() {
+    @DisplayName("2種類の合計が上限を超えたら反対側の回数が自動で減る")
+    public void oppositeCountShrinksWhenTotalExceedsLimit() {
         session.setSelectedMode(RouletteMode.FULL_BLOCK);
         for (int i = 0; i < 4; i++) {
             session.cycleCount(RouletteMode.FULL_BLOCK);
         }
-        // フルブロックが4回なら、装飾は残りの6回までしか選べない
-        for (int i = 0; i < 20; i++) {
+
+        // 装飾を6回まではそのまま増える
+        for (int i = 0; i < 6; i++) {
             session.cycleCount(RouletteMode.NON_FULL_BLOCK);
-            assertTrue(session.getTotalCount() <= RouletteSession.MAX_TOTAL_COUNT);
         }
-        assertEquals(6, session.getMaxCount(RouletteMode.NON_FULL_BLOCK));
+        assertEquals(4, session.getFullBlockCount());
+        assertEquals(6, session.getNonFullBlockCount());
+
+        // 7回にすると合計が11回になるので、フルブロックが3回に減る
+        session.cycleCount(RouletteMode.NON_FULL_BLOCK);
+        assertEquals(3, session.getFullBlockCount());
+        assertEquals(7, session.getNonFullBlockCount());
+
+        // 10回にするとフルブロックは0回になる
+        for (int i = 0; i < 3; i++) {
+            session.cycleCount(RouletteMode.NON_FULL_BLOCK);
+        }
+        assertEquals(0, session.getFullBlockCount());
+        assertEquals(10, session.getNonFullBlockCount());
+    }
+
+    @Test
+    @DisplayName("0回から減らして最大回数にしたときも反対側が自動で減る")
+    public void decreaseFromZeroAlsoShrinksOpposite() {
+        session.setSelectedMode(RouletteMode.FULL_BLOCK);
+        for (int i = 0; i < 4; i++) {
+            session.cycleCount(RouletteMode.FULL_BLOCK);
+        }
 
         session.decreaseCount(RouletteMode.NON_FULL_BLOCK);
-        session.decreaseCount(RouletteMode.NON_FULL_BLOCK);
-        session.decreaseCount(RouletteMode.NON_FULL_BLOCK);
-        session.decreaseCount(RouletteMode.NON_FULL_BLOCK);
-        assertTrue(session.getTotalCount() <= RouletteSession.MAX_TOTAL_COUNT);
+        assertEquals(10, session.getNonFullBlockCount());
+        assertEquals(0, session.getFullBlockCount());
+        assertEquals(RouletteSession.MAX_TOTAL_COUNT, session.getTotalCount());
     }
 }

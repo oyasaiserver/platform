@@ -86,15 +86,10 @@ public class RouletteSession {
     }
 
     /**
-     * 指定モードで今選べる最大回数を返します。
-     * フルブロックと装飾は、もう一方の回数と合わせて合計の上限に収まる範囲までです。
+     * 指定モードで選べる最大回数を返します。
      */
     public int getMaxCount(RouletteMode mode) {
-        return switch (mode) {
-            case ALL -> MAX_COUNT_ALL;
-            case FULL_BLOCK -> Math.min(MAX_COUNT_PER_MODE, MAX_TOTAL_COUNT - nonFullBlockCount);
-            case NON_FULL_BLOCK -> Math.min(MAX_COUNT_PER_MODE, MAX_TOTAL_COUNT - fullBlockCount);
-        };
+        return mode == RouletteMode.ALL ? MAX_COUNT_ALL : MAX_COUNT_PER_MODE;
     }
 
     private int getCount(RouletteMode mode) {
@@ -108,8 +103,15 @@ public class RouletteSession {
     private void setCount(RouletteMode mode, int count) {
         switch (mode) {
             case ALL -> this.selectedCount = count;
-            case FULL_BLOCK -> this.fullBlockCount = count;
-            case NON_FULL_BLOCK -> this.nonFullBlockCount = count;
+            case FULL_BLOCK -> {
+                this.fullBlockCount = count;
+                // 合計が上限を超えたら、反対側の回数を自動で減らす
+                this.nonFullBlockCount = Math.min(nonFullBlockCount, MAX_TOTAL_COUNT - count);
+            }
+            case NON_FULL_BLOCK -> {
+                this.nonFullBlockCount = count;
+                this.fullBlockCount = Math.min(fullBlockCount, MAX_TOTAL_COUNT - count);
+            }
         }
     }
 
