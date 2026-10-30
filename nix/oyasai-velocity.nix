@@ -56,6 +56,8 @@ let
         -XX:+HeapDumpOnOutOfMemoryError \
         -XX:HeapDumpPath=logs/dumps/ \
         -Dvelocity.max-plugin-message-payload-size=2100000 \
+        -DgeyserTransport=both \
+        -DgeyserRaknetPort=19133 \
         "$@"
     '';
 

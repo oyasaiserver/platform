@@ -269,10 +269,11 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       ports: ports({
         tcp: [
           25565, // Java
-          19132, // Bedrock NetherNet signaling (HTTP)
+          19132, // Bedrock NetherNet
         ],
         udp: [
           19132, // Bedrock
+          19133, // Bedrock RakNet
         ],
       }),
       env: envs({
