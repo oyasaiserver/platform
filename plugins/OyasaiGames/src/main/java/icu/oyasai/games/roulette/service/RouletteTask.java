@@ -129,7 +129,7 @@ public class RouletteTask extends BukkitRunnable {
         }
 
         String modeText = session.isSplitMode()
-                ? "フルブロック " + session.getFullBlockCount() + "回 ＋ フルブロック以外 " + session.getNonFullBlockCount() + "回"
+                ? "フルブロック " + session.getFullBlockCount() + "回 ＋ 装飾 " + session.getNonFullBlockCount() + "回"
                 : session.getSelectedMode().getDisplayName();
         Component details = Component.text("抽選モード：", NamedTextColor.GRAY)
                 .append(Component.text(modeText, NamedTextColor.YELLOW, TextDecoration.BOLD))

@@ -94,7 +94,7 @@ public class RouletteGui {
                 : createDisabledItem("フルブロックを選ぶと使えます"));
         inv.setItem(SLOT_COUNT_NON_FULL, split
                 ? createCountItem(RouletteMode.NON_FULL_BLOCK, session.getNonFullBlockCount(), session)
-                : createDisabledItem("フルブロック以外を選ぶと使えます"));
+                : createDisabledItem("装飾を選ぶと使えます"));
 
         // 他人の結果受信設定の取得
         boolean isReceiveChat = true;
@@ -356,15 +356,15 @@ public class RouletteGui {
             List<Component> lore = new ArrayList<>();
             if (session.isSplitMode()) {
                 lore.add(Component.text("・対象モード：", NamedTextColor.GRAY)
-                        .append(Component.text("フルブロック／フルブロック以外を分けて抽選", NamedTextColor.YELLOW, TextDecoration.BOLD))
+                        .append(Component.text("フルブロック／装飾を分けて抽選", NamedTextColor.YELLOW, TextDecoration.BOLD))
                         .decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text("・フルブロック　　：", NamedTextColor.GRAY)
+                lore.add(Component.text("・フルブロック　：", NamedTextColor.GRAY)
                         .append(Component.text(session.getFullBlockCount() + " 回", NamedTextColor.AQUA, TextDecoration.BOLD))
                         .decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text("・フルブロック以外：", NamedTextColor.GRAY)
+                lore.add(Component.text("・装飾　　　　　：", NamedTextColor.GRAY)
                         .append(Component.text(session.getNonFullBlockCount() + " 回", NamedTextColor.AQUA, TextDecoration.BOLD))
                         .decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text("・合計　　　　　　：", NamedTextColor.GRAY)
+                lore.add(Component.text("・合計　　　　　：", NamedTextColor.GRAY)
                         .append(Component.text(session.getTotalCount() + " 回", NamedTextColor.AQUA, TextDecoration.BOLD))
                         .decoration(TextDecoration.ITALIC, false));
             } else {

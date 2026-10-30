@@ -82,7 +82,7 @@ public class RouletteGuiListener implements Listener {
                 playButtonSound(player);
                 RouletteGui.render(inv, player, session);
             }
-            // フルブロック／フルブロック以外はどちらを押しても「分けて引くモード」に切り替わる
+            // フルブロック／装飾はどちらを押しても「分けて引くモード」に切り替わる
             case RouletteGui.SLOT_MODE_FULL, RouletteGui.SLOT_MODE_NON_FULL -> {
                 if (!session.isSplitMode()) {
                     session.setSelectedMode(RouletteMode.FULL_BLOCK);
