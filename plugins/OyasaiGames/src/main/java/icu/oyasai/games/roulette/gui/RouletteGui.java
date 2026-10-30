@@ -310,6 +310,7 @@ public class RouletteGui {
             List<Component> lore = new ArrayList<>();
             if (mode != RouletteMode.ALL) {
                 lore.add(Component.text("合計: " + session.getTotalCount() + " / " + RouletteSession.MAX_TOTAL_COUNT + " 回", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text("フルブロックと装飾で合計" + RouletteSession.MAX_TOTAL_COUNT + "個まで", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
             }
             lore.add(Component.text("▶ 左クリック: 1回増やす", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
