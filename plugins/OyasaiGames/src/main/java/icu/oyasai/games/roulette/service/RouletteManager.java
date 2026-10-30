@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -169,15 +170,44 @@ public class RouletteManager {
 
         // 3. サーバー側バリデーション（モードと回数の検証）
         RouletteMode mode = session.getSelectedMode();
-        int count = session.getSelectedCount();
 
         if (mode == null) {
             player.sendMessage(Component.text("無効な抽選モードです。", NamedTextColor.RED));
             return false;
         }
-        if (count != 1 && count != 3 && count != 5) {
-            player.sendMessage(Component.text("抽選回数は 1回、3回、5回 のいずれかのみ指定可能です。", NamedTextColor.RED));
-            return false;
+
+        // 種類ごとの抽選回数（全建築用は1種類、分けて引くモードは最大2種類）
+        Map<RouletteMode, Integer> plan = new LinkedHashMap<>();
+        if (session.isSplitMode()) {
+            int fullCount = session.getFullBlockCount();
+            int nonFullCount = session.getNonFullBlockCount();
+            if (fullCount < 0 || fullCount > RouletteSession.MAX_COUNT_PER_MODE
+                    || nonFullCount < 0 || nonFullCount > RouletteSession.MAX_COUNT_PER_MODE) {
+                player.sendMessage(Component.text("抽選回数は 1種類につき 0〜" + RouletteSession.MAX_COUNT_PER_MODE + "回 で指定してください。", NamedTextColor.RED));
+                return false;
+            }
+            int total = fullCount + nonFullCount;
+            if (total < 1) {
+                player.sendMessage(Component.text("抽選回数を1回以上選んでください。", NamedTextColor.RED));
+                return false;
+            }
+            if (total > RouletteSession.MAX_TOTAL_COUNT) {
+                player.sendMessage(Component.text("合計の抽選回数は " + RouletteSession.MAX_TOTAL_COUNT + "回 までです。", NamedTextColor.RED));
+                return false;
+            }
+            if (fullCount > 0) {
+                plan.put(RouletteMode.FULL_BLOCK, fullCount);
+            }
+            if (nonFullCount > 0) {
+                plan.put(RouletteMode.NON_FULL_BLOCK, nonFullCount);
+            }
+        } else {
+            int count = session.getSelectedCount();
+            if (count < 1 || count > RouletteSession.MAX_COUNT_ALL) {
+                player.sendMessage(Component.text("抽選回数は 1〜" + RouletteSession.MAX_COUNT_ALL + "回 で指定してください。", NamedTextColor.RED));
+                return false;
+            }
+            plan.put(RouletteMode.ALL, count);
         }
 
         // 匠ランク判定（特殊ブロックの解放有無）
@@ -185,26 +215,32 @@ public class RouletteManager {
         session.setSpecialAccess(special);
 
         // 4. 抽選対象リストの選定（一般プレイヤーにはコマンドブロック等を除外、匠には解放）
-        List<Material> pool = switch (mode) {
-            case ALL -> classifier.getAllBuildingItems(special);
-            case FULL_BLOCK -> classifier.getFullBlocks(special);
-            case NON_FULL_BLOCK -> classifier.getNonFullBlocks(special);
-        };
-
-        if (pool == null || pool.isEmpty()) {
-            player.sendMessage(Component.text("エラー: 抽選対象のブロックが登録されていません。", NamedTextColor.RED));
-            logger.severe("抽選プールが空です: モード=" + mode + " (special=" + special + ")");
-            return false;
+        Map<RouletteMode, List<Material>> pools = new LinkedHashMap<>();
+        for (RouletteMode planned : plan.keySet()) {
+            List<Material> pool = switch (planned) {
+                case ALL -> classifier.getAllBuildingItems(special);
+                case FULL_BLOCK -> classifier.getFullBlocks(special);
+                case NON_FULL_BLOCK -> classifier.getNonFullBlocks(special);
+            };
+            if (pool == null || pool.isEmpty()) {
+                player.sendMessage(Component.text("エラー: 抽選対象のブロックが登録されていません。", NamedTextColor.RED));
+                logger.severe("抽選プールが空です: モード=" + planned + " (special=" + special + ")");
+                return false;
+            }
+            pools.put(planned, pool);
         }
 
         // 5. サーバー側で乱数を生成して公平に抽選（同一アイテムの重複当選を許可）
-        List<Material> results = new ArrayList<>(count);
+        List<Material> results = new ArrayList<>();
+        List<RouletteMode> sources = new ArrayList<>();
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        int poolSize = pool.size();
 
-        for (int i = 0; i < count; i++) {
-            int randomIndex = random.nextInt(poolSize);
-            results.add(pool.get(randomIndex));
+        for (Map.Entry<RouletteMode, Integer> entry : plan.entrySet()) {
+            List<Material> pool = pools.get(entry.getKey());
+            for (int i = 0; i < entry.getValue(); i++) {
+                results.add(pool.get(random.nextInt(pool.size())));
+                sources.add(entry.getKey());
+            }
         }
 
         // 6. 実行状態に設定し、タスクをスケジュール実行
@@ -217,7 +253,8 @@ public class RouletteManager {
                 uuid,
                 player.getName(),
                 session,
-                results
+                results,
+                sources
         );
 
         // 1tick後に開始し、設定された間隔（約0.8秒）ごとに1行ずつ送信

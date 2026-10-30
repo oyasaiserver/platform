@@ -82,30 +82,31 @@ public class RouletteGuiListener implements Listener {
                 playButtonSound(player);
                 RouletteGui.render(inv, player, session);
             }
-            case RouletteGui.SLOT_MODE_FULL -> {
-                session.setSelectedMode(RouletteMode.FULL_BLOCK);
-                playButtonSound(player);
-                RouletteGui.render(inv, player, session);
-            }
-            case RouletteGui.SLOT_MODE_NON_FULL -> {
-                session.setSelectedMode(RouletteMode.NON_FULL_BLOCK);
+            // フルブロック／フルブロック以外はどちらを押しても「分けて引くモード」に切り替わる
+            case RouletteGui.SLOT_MODE_FULL, RouletteGui.SLOT_MODE_NON_FULL -> {
+                if (!session.isSplitMode()) {
+                    session.setSelectedMode(RouletteMode.FULL_BLOCK);
+                }
                 playButtonSound(player);
                 RouletteGui.render(inv, player, session);
             }
 
-            // 回数選択
-            case RouletteGui.SLOT_COUNT_1 -> {
-                session.setSelectedCount(1);
-                playButtonSound(player);
-                RouletteGui.render(inv, player, session);
-            }
-            case RouletteGui.SLOT_COUNT_3 -> {
-                session.setSelectedCount(3);
-                playButtonSound(player);
-                RouletteGui.render(inv, player, session);
-            }
-            case RouletteGui.SLOT_COUNT_5 -> {
-                session.setSelectedCount(5);
+            // 回数選択（左クリックで増加、右クリックで減少）。選んでいないモード側のボタンは押せない
+            case RouletteGui.SLOT_COUNT_ALL, RouletteGui.SLOT_COUNT_FULL, RouletteGui.SLOT_COUNT_NON_FULL -> {
+                RouletteMode target = switch (slot) {
+                    case RouletteGui.SLOT_COUNT_ALL -> RouletteMode.ALL;
+                    case RouletteGui.SLOT_COUNT_FULL -> RouletteMode.FULL_BLOCK;
+                    default -> RouletteMode.NON_FULL_BLOCK;
+                };
+                if ((target == RouletteMode.ALL) == session.isSplitMode()) {
+                    playDeniedSound(player);
+                    return;
+                }
+                if (event.isRightClick()) {
+                    session.decreaseCount(target);
+                } else {
+                    session.cycleCount(target);
+                }
                 playButtonSound(player);
                 RouletteGui.render(inv, player, session);
             }
@@ -149,6 +150,12 @@ public class RouletteGuiListener implements Listener {
 
             // 抽選開始ボタン
             case RouletteGui.SLOT_START -> {
+                if (session.getTotalCount() < 1) {
+                    player.sendMessage(Component.text("抽選回数を1回以上選んでください。", NamedTextColor.RED));
+                    playDeniedSound(player);
+                    return;
+                }
+
                 long remaining = manager.getRemainingCooldownSeconds(player.getUniqueId());
                 if (remaining > 0) {
                     player.sendMessage(net.kyori.adventure.text.Component.text("クールダウン中です。あと " + remaining + " 秒お待ちください。", net.kyori.adventure.text.format.NamedTextColor.RED));
@@ -190,6 +197,10 @@ public class RouletteGuiListener implements Listener {
     @EventHandler
     public void onPlayerQuit(org.bukkit.event.player.PlayerQuitEvent event) {
         manager.onPlayerQuit(event.getPlayer().getUniqueId());
+    }
+
+    private void playDeniedSound(Player player) {
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.7f, 1.0f);
     }
 
     private void playButtonSound(Player player) {

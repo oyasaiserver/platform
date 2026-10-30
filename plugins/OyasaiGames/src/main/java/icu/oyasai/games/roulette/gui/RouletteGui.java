@@ -22,23 +22,24 @@ import java.util.List;
  * ルーレット設定GUIの画面構築とアイテム描画を行うクラスです。
  */
 public class RouletteGui {
-    public static final int INVENTORY_SIZE = 27;
+    public static final int INVENTORY_SIZE = 36;
 
     // スロット配置の定数定義
     public static final int SLOT_MODE_ALL = 10;
-    public static final int SLOT_MODE_FULL = 11;
-    public static final int SLOT_MODE_NON_FULL = 12;
+    public static final int SLOT_MODE_FULL = 13;
+    public static final int SLOT_MODE_NON_FULL = 16;
 
-    public static final int SLOT_COUNT_1 = 14;
-    public static final int SLOT_COUNT_3 = 15;
-    public static final int SLOT_COUNT_5 = 16;
+    // 各モードの回数選択（クリックで増減）。全建築用は単独、フルブロックとそれ以外は分けて引くモード用
+    public static final int SLOT_COUNT_ALL = 19;
+    public static final int SLOT_COUNT_FULL = 22;
+    public static final int SLOT_COUNT_NON_FULL = 25;
 
-    public static final int SLOT_CANCEL = 18;
-    public static final int SLOT_VISIBILITY = 20;
-    public static final int SLOT_RECEIVE_CHAT = 21;
-    public static final int SLOT_STATUS = 22;
-    public static final int SLOT_INFO = 25;
-    public static final int SLOT_START = 26;
+    public static final int SLOT_CANCEL = 27;
+    public static final int SLOT_VISIBILITY = 29;
+    public static final int SLOT_RECEIVE_CHAT = 30;
+    public static final int SLOT_STATUS = 31;
+    public static final int SLOT_INFO = 34;
+    public static final int SLOT_START = 35;
 
     /**
      * プレイヤーにルーレットGUIを開きます。
@@ -75,19 +76,25 @@ public class RouletteGui {
             inv.setItem(i, filler);
         }
 
-        RouletteMode currentMode = session.getSelectedMode();
-        int currentCount = session.getSelectedCount();
         boolean hasSpecial = session.hasSpecialAccess();
+        boolean split = session.isSplitMode();
 
         // 2. モード選択ボタン（表示順厳守：全建築用 ➜ フルブロック ➜ それ以外）
-        inv.setItem(SLOT_MODE_ALL, createModeItem(RouletteMode.ALL, currentMode == RouletteMode.ALL, hasSpecial));
-        inv.setItem(SLOT_MODE_FULL, createModeItem(RouletteMode.FULL_BLOCK, currentMode == RouletteMode.FULL_BLOCK, hasSpecial));
-        inv.setItem(SLOT_MODE_NON_FULL, createModeItem(RouletteMode.NON_FULL_BLOCK, currentMode == RouletteMode.NON_FULL_BLOCK, hasSpecial));
+        //    フルブロックとそれ以外は「分けて引くモード」の間、両方とも選択中として表示する
+        inv.setItem(SLOT_MODE_ALL, createModeItem(RouletteMode.ALL, !split, hasSpecial));
+        inv.setItem(SLOT_MODE_FULL, createModeItem(RouletteMode.FULL_BLOCK, split, hasSpecial));
+        inv.setItem(SLOT_MODE_NON_FULL, createModeItem(RouletteMode.NON_FULL_BLOCK, split, hasSpecial));
 
-        // 3. 回数選択ボタン（1回, 3回, 5回）
-        inv.setItem(SLOT_COUNT_1, createCountItem(1, currentCount == 1));
-        inv.setItem(SLOT_COUNT_3, createCountItem(3, currentCount == 3));
-        inv.setItem(SLOT_COUNT_5, createCountItem(5, currentCount == 5));
+        // 3. 回数ボタン。選んでいないモード側のボタンは押せない
+        inv.setItem(SLOT_COUNT_ALL, split
+                ? createDisabledItem("全建築用アイテムを選ぶと使えます")
+                : createCountItem(RouletteMode.ALL, session.getSelectedCount(), session));
+        inv.setItem(SLOT_COUNT_FULL, split
+                ? createCountItem(RouletteMode.FULL_BLOCK, session.getFullBlockCount(), session)
+                : createDisabledItem("フルブロックを選ぶと使えます"));
+        inv.setItem(SLOT_COUNT_NON_FULL, split
+                ? createCountItem(RouletteMode.NON_FULL_BLOCK, session.getNonFullBlockCount(), session)
+                : createDisabledItem("フルブロック以外を選ぶと使えます"));
 
         // 他人の結果受信設定の取得
         boolean isReceiveChat = true;
@@ -98,7 +105,7 @@ public class RouletteGui {
             }
         }
 
-        // 4. 下段操作ボタン
+        // 5. 下段操作ボタン
         inv.setItem(SLOT_CANCEL, createCancelButton());
         inv.setItem(SLOT_VISIBILITY, createVisibilityButton(session.isBroadcastToAll()));
         inv.setItem(SLOT_RECEIVE_CHAT, createReceiveChatItem(isReceiveChat));
@@ -126,8 +133,19 @@ public class RouletteGui {
                 case 4 -> 15;
                 default -> 13;
             };
-            default -> 13;
+            default -> getGridResultSlot(totalCount, roundIndex);
         };
+    }
+
+    /**
+     * 1・3・5回以外の回数用の配置です。
+     * 9回までは中段（9〜17）に中央寄せで1列、10回以上は上段から9個ずつ並べます。
+     */
+    private static int getGridResultSlot(int totalCount, int roundIndex) {
+        if (totalCount <= 9) {
+            return 9 + (9 - totalCount) / 2 + roundIndex;
+        }
+        return roundIndex;
     }
 
     /**
@@ -143,7 +161,7 @@ public class RouletteGui {
             inv.setItem(i, filler);
         }
 
-        int count = session.getSelectedCount();
+        int count = session.getTotalCount();
         for (int i = 0; i < count; i++) {
             int slot = getResultSlot(count, i);
             inv.setItem(slot, createRollingSlotItem(i + 1));
@@ -172,7 +190,7 @@ public class RouletteGui {
      * 各回の抽選結果が出たときに、該当スロットのアイテムを本物のブロックに差し替えます。
      * エンチャントの輝きは付与せず、本来のブロックテクスチャを鮮明に表示します。
      */
-    public static void revealResult(Inventory inv, int roundIndex, int totalCount, Material material) {
+    public static void revealResult(Inventory inv, int roundIndex, int totalCount, Material material, RouletteMode source) {
         int slot = getResultSlot(totalCount, roundIndex);
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -183,6 +201,9 @@ public class RouletteGui {
             meta.displayName(displayName);
 
             List<Component> lore = new ArrayList<>();
+            if (source != null && source != RouletteMode.ALL) {
+                lore.add(Component.text("抽選元: " + source.getDisplayName(), NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            }
             String englishName = formatEnglishName(material);
             lore.add(Component.text("英語名: " + englishName, NamedTextColor.AQUA).decoration(TextDecoration.ITALIC, false));
             lore.add(Component.text("ID: " + material.getKey().asString(), NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
@@ -196,14 +217,14 @@ public class RouletteGui {
     /**
      * 全回の抽選が完了した画面を描画します。
      */
-    public static void renderFinished(Inventory inv, RouletteSession session, List<Material> results) {
+    public static void renderFinished(Inventory inv, List<Material> results, List<RouletteMode> sources) {
         if (inv.getHolder() instanceof RouletteGuiHolder holder) {
             holder.setState(RouletteGuiHolder.State.FINISHED);
         }
 
-        int count = session.getSelectedCount();
-        for (int i = 0; i < count && i < results.size(); i++) {
-            revealResult(inv, i, count, results.get(i));
+        int count = results.size();
+        for (int i = 0; i < count; i++) {
+            revealResult(inv, i, count, results.get(i), sources.get(i));
         }
 
         // 下段中央に「抽選完了！」（ネザースター）
@@ -275,36 +296,48 @@ public class RouletteGui {
         return item;
     }
 
-    private static ItemStack createCountItem(int count, boolean isSelected) {
-        Material mat = switch (count) {
-            case 1 -> Material.IRON_SHOVEL;
-            case 3 -> Material.GOLDEN_AXE;
-            case 5 -> Material.DIAMOND_PICKAXE;
-            default -> Material.PAPER;
-        };
-
-        ItemStack item = new ItemStack(mat, count);
+    /**
+     * 各モードの回数ボタンです。
+     * 左クリックで1回増え（上限の次は0に戻る）、右クリックで1回減ります。重なり数は回数と同じです。
+     */
+    private static ItemStack createCountItem(RouletteMode mode, int count, RouletteSession session) {
+        ItemStack item = new ItemStack(Material.RABBIT_FOOT, Math.max(1, count));
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            NamedTextColor titleColor = isSelected ? NamedTextColor.GREEN : NamedTextColor.WHITE;
-            String prefix = isSelected ? "✔ 【選択中】" : "";
-            meta.displayName(Component.text(prefix + count + " 回 抽選", titleColor, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+            NamedTextColor color = count > 0 ? NamedTextColor.GREEN : NamedTextColor.GRAY;
+            meta.displayName(Component.text(mode.getDisplayName() + "： " + count + " 回", color, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
 
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.text(count + "個のブロックをランダムに抽選します。", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            if (mode != RouletteMode.ALL) {
+                lore.add(Component.text("合計: " + session.getTotalCount() + " / " + RouletteSession.MAX_TOTAL_COUNT + " 回", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+            }
+            lore.add(Component.text("▶ 左クリック: 1回増やす", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("▶ 右クリック: 1回減らす", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
 
-            if (isSelected) {
+            if (count > 0) {
                 meta.setEnchantmentGlintOverride(true);
                 meta.addEnchant(Enchantment.UNBREAKING, 1, true);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             } else {
-                lore.add(Component.empty());
-                lore.add(Component.text("▶ クリックして選択", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
                 meta.setEnchantmentGlintOverride(false);
             }
-
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             meta.lore(lore);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    /**
+     * 今のモードでは使えないボタンの表示です。
+     */
+    private static ItemStack createDisabledItem(String hint) {
+        ItemStack item = new ItemStack(Material.GRAY_DYE);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.displayName(Component.text("今は使えません", NamedTextColor.DARK_GRAY, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+            meta.lore(List.of(Component.text(hint, NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
             item.setItemMeta(meta);
         }
         return item;
@@ -321,12 +354,27 @@ public class RouletteGui {
             meta.displayName(Component.text("現在の設定内容", NamedTextColor.GOLD, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
 
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.text("・対象モード：", NamedTextColor.GRAY)
-                    .append(Component.text(session.getSelectedMode().getDisplayName(), NamedTextColor.YELLOW, TextDecoration.BOLD))
-                    .decoration(TextDecoration.ITALIC, false));
-            lore.add(Component.text("・抽選回数　：", NamedTextColor.GRAY)
-                    .append(Component.text(session.getSelectedCount() + " 回", NamedTextColor.AQUA, TextDecoration.BOLD))
-                    .decoration(TextDecoration.ITALIC, false));
+            if (session.isSplitMode()) {
+                lore.add(Component.text("・対象モード：", NamedTextColor.GRAY)
+                        .append(Component.text("フルブロック／フルブロック以外を分けて抽選", NamedTextColor.YELLOW, TextDecoration.BOLD))
+                        .decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text("・フルブロック　　：", NamedTextColor.GRAY)
+                        .append(Component.text(session.getFullBlockCount() + " 回", NamedTextColor.AQUA, TextDecoration.BOLD))
+                        .decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text("・フルブロック以外：", NamedTextColor.GRAY)
+                        .append(Component.text(session.getNonFullBlockCount() + " 回", NamedTextColor.AQUA, TextDecoration.BOLD))
+                        .decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text("・合計　　　　　　：", NamedTextColor.GRAY)
+                        .append(Component.text(session.getTotalCount() + " 回", NamedTextColor.AQUA, TextDecoration.BOLD))
+                        .decoration(TextDecoration.ITALIC, false));
+            } else {
+                lore.add(Component.text("・対象モード：", NamedTextColor.GRAY)
+                        .append(Component.text(session.getSelectedMode().getDisplayName(), NamedTextColor.YELLOW, TextDecoration.BOLD))
+                        .decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.text("・抽選回数　：", NamedTextColor.GRAY)
+                        .append(Component.text(session.getTotalCount() + " 回", NamedTextColor.AQUA, TextDecoration.BOLD))
+                        .decoration(TextDecoration.ITALIC, false));
+            }
             lore.add(Component.text("・公開設定　：", NamedTextColor.GRAY)
                     .append(Component.text(session.isBroadcastToAll() ? "全体公開" : "自分のみ（非公開）", session.isBroadcastToAll() ? NamedTextColor.GREEN : NamedTextColor.AQUA, TextDecoration.BOLD))
                     .decoration(TextDecoration.ITALIC, false));
