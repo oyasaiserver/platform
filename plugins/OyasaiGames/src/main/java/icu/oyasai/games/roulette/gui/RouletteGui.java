@@ -27,12 +27,12 @@ public class RouletteGui {
     // スロット配置の定数定義
     public static final int SLOT_MODE_ALL = 10;
     public static final int SLOT_MODE_FULL = 13;
-    public static final int SLOT_MODE_NON_FULL = 16;
+    public static final int SLOT_MODE_NON_FULL = 14;
 
     // 各モードの回数選択（クリックで増減）。全建築用は単独、フルブロックとそれ以外は分けて引くモード用
     public static final int SLOT_COUNT_ALL = 19;
     public static final int SLOT_COUNT_FULL = 22;
-    public static final int SLOT_COUNT_NON_FULL = 25;
+    public static final int SLOT_COUNT_NON_FULL = 23;
 
     public static final int SLOT_CANCEL = 27;
     public static final int SLOT_VISIBILITY = 29;
