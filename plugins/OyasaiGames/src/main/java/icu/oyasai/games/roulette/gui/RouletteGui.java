@@ -297,9 +297,11 @@ public class RouletteGui {
     /**
      * 各モードの回数ボタンです。
      * 左クリックで1回増え（上限の次は0に戻る）、右クリックで1回減ります。重なり数は回数と同じです。
+     * 1個のアイテムには数字が表示されないため、0回のときだけ紙にして、ウサギの足（1回以上）と見分けられるようにします。
      */
     private static ItemStack createCountItem(RouletteMode mode, int count, RouletteSession session) {
-        ItemStack item = new ItemStack(Material.RABBIT_FOOT, Math.max(1, count));
+        Material icon = count > 0 ? Material.RABBIT_FOOT : Material.PAPER;
+        ItemStack item = new ItemStack(icon, Math.max(1, count));
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             NamedTextColor color = count > 0 ? NamedTextColor.GREEN : NamedTextColor.GRAY;
