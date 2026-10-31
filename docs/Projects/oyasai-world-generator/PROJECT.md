@@ -16,7 +16,7 @@ source: plugins/OyasaiWorldGenerator/（コードから作成。ゲーム内で�
 
 # OyasaiWorldGenerator
 
-展示用のボイド・スーパーフラットワールドを管理し、Purpur 26.2 で高さを適用するプラグインです。通常ワールドと範囲ポータルの台帳も扱います。
+展示用のボイド・スーパーフラットワールドを管理し、Purpur 26.3 で高さを適用するプラグインです。通常ワールドと範囲ポータルの台帳も扱います。
 
 - 使い方: [プレイヤー向け](player.md) / [運営向け](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-world-generator/operator.md)
 
@@ -25,7 +25,7 @@ source: plugins/OyasaiWorldGenerator/（コードから作成。ゲーム内で�
 | 項目 | 内容 |
 |---|---|
 | 実装の正本 | `plugins/OyasaiWorldGenerator/` |
-| 主要コード | `OyasaiWorldGenerator.kt`（起動・コマンド登録）、`config/OwgConfig.kt`（高さ管理設定）、`world/WorldLifecycle.kt`（自己テスト・高さ管理ワールドの起動/作成/ロード）、`height/NmsHeightProvider.kt`（Purpur 26.2 の高さ適用）、`world/NormalWorlds.kt`・`command/MultiverseCommand.kt`（通常ワールド台帳と操作）、`portal/Portals.kt`・`portal/PortalCommand.kt`（ポータル台帳と操作） |
+| 主要コード | `OyasaiWorldGenerator.kt`（起動・コマンド登録）、`config/OwgConfig.kt`（高さ管理設定）、`world/WorldLifecycle.kt`（自己テスト・高さ管理ワールドの起動/作成/ロード）、`height/NmsHeightProvider.kt`（Purpur 26.3 の高さ適用）、`world/NormalWorlds.kt`・`command/MultiverseCommand.kt`（通常ワールド台帳と操作）、`portal/Portals.kt`・`portal/PortalCommand.kt`（ポータル台帳と操作） |
 | テスト | `src/test/kotlin/io/oyasai/worldgen/`。設定既定値、Multiverse の通常ワールド台帳取り込み、ポータル台帳取り込みを確認します。`src/failureTest/` と生成されるテスト専用 Provider は failure injection 用です。 |
 | ビルド | `nix develop --command gradle :plugins:OyasaiWorldGenerator:build` |
 | Nix package | `packages/oyasai-plugins.nix` が `plugins/OyasaiWorldGenerator/` から `oyasaiworldgenerator` 属性を作ります。`packages/oyasai-minecraft-main.nix` と `packages/oyasai-minecraft-axiom.nix` に登録されています。 |
@@ -99,7 +99,7 @@ source: plugins/OyasaiWorldGenerator/（コードから作成。ゲーム内で�
 - プラグイン固有 `build.gradle.kts` は Paperweight Userdev と Purpur development bundle を使い、FAWE Bukkit API を `compileOnly`、テストの Purpur API を `testImplementation` にします。ルート `build.gradle.kts` は `:plugins:` 配下へ Kotlin JVM・Shadow・Java Library を適用し、通常 jar を無効化して `build` を `shadowJar` に依存させます。成果物は `OyasaiWorldGenerator.jar`（version/classifier なし）です。
 - `PortalSelection` は FAWE が有効なときだけ WorldEdit の選択範囲 API を呼びます。FAWE 未導入でポータル範囲選択が必要な操作は `[MVP] FAWE が必要です` を返します。
 - Multiverse API は依存していません。プラグイン名の有無を調べ、旧形式 YAML を直接読み取るだけです。CustomWorldHeight も実行時依存ではありません。
-- 高さ Provider は `org.bukkit.craftbukkit.CraftWorld`、Minecraft の `MappedRegistry` / `ServerLevel` / `DimensionType`、Moonrise/Starlight、リフレクションと JDK `Unsafe` を使用します。対応判定は Minecraft `26.2` かつサーバー名に `Purpur` を含む場合のみです。OWG のサービス API 登録はありません。
+- 高さ Provider は `org.bukkit.craftbukkit.CraftWorld`、Minecraft の `MappedRegistry` / `ServerLevel` / `DimensionType`、Moonrise/Starlight、リフレクションと JDK `Unsafe` を使用します。対応判定は Minecraft `26.3` かつサーバー名に `Purpur` を含む場合のみです。OWG のサービス API 登録はありません。
 
 ### テストが保証する範囲
 
@@ -114,7 +114,7 @@ source: plugins/OyasaiWorldGenerator/（コードから作成。ゲーム内で�
 
 ### 既知の制限と判断の記録
 
-- 高さを変える NMS 実装の対応先は Purpur 26.2 のみです。代替探索がある箇所は一意に特定できなければ失敗し、固定名依存の箇所は名前が変われば失敗します。変更後は各値を読み返して照合します。
+- 高さを変える NMS 実装の対応先は Purpur 26.3 のみです。代替探索がある箇所は一意に特定できなければ失敗し、固定名依存の箇所は名前が変われば失敗します。変更後は各値を読み返して照合します。
 - 起動前から `owg_selftest` のワールド/フォルダが存在すると自己テストを拒否し、ワールドを再利用・削除しません。自己テストや高さ照合が失敗しても、すでにロードされたワールドを自動アンロードしません。
 - 対象ゼロで起動すると自己テストは `NOT_RUN`、安全ゲートは false のままです。後続の `/owg create` は個別の自己テスト結果を起動時の `selfTestResult` へ反映せず、安全ゲートも更新しません。作成成功後でもアンロードすると `/owg load` は拒否され、`/owg check` も `NOT_RUN` のため合格しません。有効な対象設定・自己テスト有効・対応サーバーで再起動し、起動検査通過を確認する必要があります。
 - `clear-force-loaded-chunks` は既定 false です。有効時は高さ検証済みワールドの強制ロードチャンクを明示解除します。

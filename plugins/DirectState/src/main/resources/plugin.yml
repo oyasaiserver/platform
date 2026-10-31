@@ -2,7 +2,7 @@ name: DirectState
 version: "${version}"
 
 main: io.oyasai.directstate.DirectState
-api-version: "26.2"
+api-version: "26.3"
 softdepend: [CoreProtect, WorldGuard, FastAsyncWorldEdit]
 
 libraries:

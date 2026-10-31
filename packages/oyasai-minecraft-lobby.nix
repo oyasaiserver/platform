@@ -5,7 +5,7 @@
 }:
 oyasaiPurpur rec {
   name = "oyasai-minecraft-lobby";
-  version = "26.2";
+  version = "26.3";
 
   properties = {
     # keep-sorted start block=yes
@@ -31,6 +31,7 @@ oyasaiPurpur rec {
     spawn-npcs = false;
     spawn-protection = 0;
     view-distance = 16;
+    white-list = false; # 26.3 changed the default to true
     # keep-sorted end
   };
 

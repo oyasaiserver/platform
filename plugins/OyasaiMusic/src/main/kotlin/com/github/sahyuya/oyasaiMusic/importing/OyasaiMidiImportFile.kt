@@ -171,7 +171,7 @@ object OyasaiMidiImportFile {
         "customSoundsのサウンドID形式が不正です。"
       }
       val resolvedSound = soundResolver(rawSound, pattern)
-      require(resolvedSound != null) { "この26.2サーバーでは未対応のサウンドまたはパターンです: $rawSound #$pattern" }
+      require(resolvedSound != null) { "この26.3サーバーでは未対応のサウンドまたはパターンです: $rawSound #$pattern" }
       result[index] = resolvedSound
       previousIndex = index
     }
