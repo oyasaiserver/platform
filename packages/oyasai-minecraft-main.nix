@@ -27,6 +27,7 @@ oyasaiPurpur rec {
     spawn-protection = 0;
     sync-chunk-writes = false;
     view-distance = 32;
+    white-list = false; # 26.3 changed the default to true
     # keep-sorted end
   };
 
