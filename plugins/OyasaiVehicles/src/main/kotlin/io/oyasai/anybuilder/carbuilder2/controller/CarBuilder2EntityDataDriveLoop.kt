@@ -35,6 +35,7 @@ fun CarBuilder2EntityData.startImpl() {
             return
           }
 
+          val loopStart = System.nanoTime()
           val player = CarBuilder2EntityList.getControlPlayer(this@startImpl)
           val wasd = EntityRuntime.getWASD(player)?.first
           val slot = CarBuilder2EntityList.getInvSlotChange(this@startImpl, player)
@@ -110,6 +111,7 @@ fun CarBuilder2EntityData.startImpl() {
             }
             this@startImpl.headLightTask(setYaw0)
           }
+          EntityRuntime.Stats.recordLoop(loopStart)
         }
       }
       .runTaskTimer(this.plugin, 0L, 1L)

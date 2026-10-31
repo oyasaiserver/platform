@@ -60,6 +60,7 @@ CarBuilder2 と AircraftBuilder で車両・航空機を作成、試乗、購入
 - `CarBuilder2SpawnGeometry.kt` は offset のXが負のパーツを左右反転する。位置を `-x - scale.x` とし、Directional・Rotatable の東西と MultipleFacing の東西面を入れ替える。Wheel・Wheel2・HeadLight に使う。
 - `CarBuilder2EntityDataParticles.kt` は素材で表示用途を判定する。ライトは3種の FROGLIGHT、LANTERN、SOUL_LANTERN、SEA_LANTERN、END_ROD。車体だけで判定するブレーキは REDSTONE_BLOCK、RED_NETHER_BRICKS とその SLAB/STAIRS、CHISELED_NETHER_BRICKS。ウインカーは ORANGE/YELLOW の TERRACOTTA・SHULKER_BOX で、ローカルXが0以上なら左、それ以外は右。
 - イベントモードは通常の明るさ更新、車輪アニメーション、前方 LIGHT ブロック更新を抑止する。走行・音・煙・ライト素材・ブレーキ・ウインカーなどの処理は続く（各 controller / presentation）。
+- 表示の向き（車体・車輪・ヘッドライト・飛行機）は `EntityRuntime.applyTransformation` を通して変換行列で送る。旧方式（legacy、既定）は変換行列を書き換えるだけで、`interpolationDelay` を送り直さないためクライアントは補間せず毎 tick 新しい向きへ飛ぶ。smooth は OyasaiGames の戦車と同じく、変換が変わった表示だけ変換と `interpolationDelay = 0` を送り、`interpolationDuration`（2 tick）で補間させる。切り替えは全車両共通でメモリ上のみ（再起動で legacy）。比較用に、走行ループの処理時間と、車両の表示へ送ったメタデータのパケット数（`NmsMetadataFilterService` で数える。全プレイヤー分の合計と、net 設定で間引いた数）を `EntityRuntime.Stats` に集める。
 - `NmsMetadataFilterService.kt` は登録済み displayEntityIds のメタデータだけを対象とする。4tick周期の packetTick（0〜3）に対し、Ultra はフィルタなし、High は3、Medium は偶数、Low は0以外でフィルタを試みる。さらに packedItems の文字列表現が15文字より長く、14・15番目が `2,` でない場合だけ破棄する。Bundle 内にも同じ条件を適用する。属性IDを構造的に判定しているわけではない。
 
 ### 走行・計測条件

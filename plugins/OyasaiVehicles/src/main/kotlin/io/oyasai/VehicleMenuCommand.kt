@@ -4,6 +4,7 @@ import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderGUI
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2GUI
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2SmokeGUI
 import io.oyasai.anybuilder.common.VehicleRegistry
+import io.oyasai.anybuilder.runtime.EntityRuntime
 import io.oyasai.toolbox.CustomHead
 import io.oyasai.toolbox.CustomYaml
 import io.oyasai.toolbox.NetworkModeSetting
@@ -30,6 +31,7 @@ import org.bukkit.inventory.ItemStack
 // realvehicle|rvmenu net
 // realvehicle|rvmenu vip [car_smoke]
 // realvehicle|rvmenu admin eventmode|ubc
+// realvehicle|rvmenu admin rotation [legacy|smooth|reset]
 // realvehicle|rvmenu break
 
 object VehicleMenuCommand : CommandExecutor, TabCompleter {
@@ -44,6 +46,7 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
   private const val SUB_EVENT_MODE = "eventmode"
   private const val SUB_UNDER_BLOCK = "ubc"
   private const val SUB_RELOAD = "reload"
+  private const val SUB_ROTATION = "rotation"
   private const val SUB_VIP_SMOKE = "car_smoke"
   private const val MENU_SIZE = 45
   private const val HINT_ROW_WIDTH = 9
@@ -111,7 +114,7 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
           when (args[0]) {
             SUB_ADMIN ->
                 if (sender.hasOyasaiAdminPermission())
-                    mutableListOf(SUB_EVENT_MODE, SUB_UNDER_BLOCK, SUB_RELOAD)
+                    mutableListOf(SUB_EVENT_MODE, SUB_UNDER_BLOCK, SUB_RELOAD, SUB_ROTATION)
                 else mutableListOf()
             SUB_VIP -> mutableListOf(SUB_VIP_SMOKE)
             else -> mutableListOf()
@@ -119,6 +122,7 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
       3 ->
           when (args[1].lowercase(Locale.ROOT)) {
             SUB_RELOAD -> mutableListOf("all", "config", "vehicles")
+            SUB_ROTATION -> mutableListOf("legacy", "smooth", "reset")
             else -> mutableListOf()
           }
       else -> mutableListOf()
@@ -262,11 +266,33 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
                     Tools.color("[OyasaiVehicles] Unknown reload target: ${args[2]}")
                 )
           }
+      SUB_ROTATION -> handleRotationCommand(sender, args.getOrNull(2)?.lowercase(Locale.ROOT))
       null -> Unit
       else ->
           sender.sendMessage(Tools.color("[OyasaiVehicles] Unknown admin subcommand: ${args[1]}"))
     }
     return true
+  }
+
+  /** 回転の送り方を全車両で切り替える（再起動で旧方式に戻る）。切り替えと reset で測定値を 0 から取り直す。 */
+  private fun handleRotationCommand(sender: CommandSender, mode: String?) {
+    when (mode) {
+      "legacy",
+      "smooth" -> {
+        EntityRuntime.smoothRotation = mode == "smooth"
+        EntityRuntime.Stats.reset()
+      }
+      "reset" -> EntityRuntime.Stats.reset()
+      null -> Unit
+      else -> {
+        sender.sendMessage(Tools.color("[OyasaiVehicles] legacy / smooth / reset のどれかを指定してください"))
+        return
+      }
+    }
+    val current = if (EntityRuntime.smoothRotation) "smooth" else "legacy"
+    sender.sendMessage(
+        Tools.color("[OyasaiVehicles] 回転: &e$current&r ${EntityRuntime.Stats.report()}")
+    )
   }
 
   private fun handleBreakCommand(sender: CommandSender): Boolean {
