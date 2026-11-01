@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.inventory.meta.Damageable
 
 /** 復活地点を EssentialsSpawn と同じ順で決める。null ならバニラに任せる。 */
@@ -224,25 +225,37 @@ object SpawnFeature : Listener, CommandExecutor {
                   .color()
           )
         }
-    try {
-      val items = plugin.teleportFeature?.locations?.toolsKit.orEmpty().map(::parseToolsItem)
-      for (item in items) {
+    for (line in plugin.teleportFeature?.locations?.toolsKit.orEmpty()) {
+      try {
+        val item = parseToolsItem(line)
         player.inventory.addItem(item).values.forEach {
           player.world.dropItemNaturally(player.location, it)
         }
+      } catch (ex: Exception) {
+        plugin.logger.log(
+            Level.WARNING,
+            "Spawn: failed to parse tools kit item '$line'; check Kits/kits.yml",
+            ex,
+        )
       }
-    } catch (ex: Exception) {
-      plugin.logger.log(
-          Level.WARNING,
-          "Spawn: failed to give new player kit 'tools'; check Kits/kits.yml",
-          ex,
-      )
     }
   }
 }
 
 /** The tools kit accepts Essentials material aliases and common item metadata. */
-internal fun parseToolsItem(line: String): ItemStack {
+internal data class ParsedToolsKitEntry(
+    val material: Material,
+    val amount: Int,
+    val damage: Int? = null,
+    val displayName: String? = null,
+    val title: String? = null,
+    val author: String? = null,
+    val lore: List<String>? = null,
+    val unbreakable: Boolean = false,
+    val enchantments: Map<String, Int> = emptyMap(),
+)
+
+internal fun parseToolsKitEntry(line: String): ParsedToolsKitEntry {
   val tokens = line.trim().split(Regex("\\s+"))
   require(tokens.size >= 2 && !tokens[0].startsWith("/")) { "Unsupported tools kit entry: $line" }
   val materialToken = tokens[0].removePrefix("minecraft:").split(':', limit = 2)
@@ -252,20 +265,27 @@ internal fun parseToolsItem(line: String): ItemStack {
           ?: throw IllegalArgumentException("Unknown tools kit material: ${tokens[0]}")
   val amount = tokens[1].toInt()
   require(amount > 0) { "Invalid tools kit amount: $amount" }
-  val item = ItemStack(material, amount)
-  val meta = item.itemMeta ?: return item
-  if (materialToken.size == 2) {
-    require(meta is Damageable) { "Durability is unsupported for $material" }
-    meta.damage = materialToken[1].toInt()
-  }
+  val damage = materialToken.getOrNull(1)?.toInt()
+  var displayName: String? = null
+  var title: String? = null
+  var author: String? = null
+  var lore: List<String>? = null
+  var unbreakable = false
+  val enchantments = linkedMapOf<String, Int>()
   for (token in tokens.drop(2)) {
     val pair = token.split(':', limit = 2)
     require(pair.size == 2) { "Invalid tools kit metadata: $token" }
     val value = pair[1].replace('_', ' ').color()
     when (pair[0].lowercase()) {
-      "name" -> meta.setDisplayName(value)
-      "lore" -> meta.lore = value.split('|')
-      "unbreakable" -> meta.isUnbreakable = pair[1].toBooleanStrict()
+      "name" -> displayName = value
+      "title" -> {
+        displayName = value
+        title = value
+      }
+      "author" -> author = value
+      "book" -> Unit
+      "lore" -> lore = value.split('|')
+      "unbreakable" -> unbreakable = pair[1].toBooleanStrict()
       else -> {
         val enchantName =
             when (pair[0].lowercase()) {
@@ -273,12 +293,41 @@ internal fun parseToolsItem(line: String): ItemStack {
               "durability" -> "unbreaking"
               else -> pair[0].lowercase()
             }
-        val enchant =
-            Enchantment.getByKey(NamespacedKey.minecraft(enchantName))
-                ?: throw IllegalArgumentException("Unsupported tools kit metadata: $token")
-        meta.addEnchant(enchant, pair[1].toInt(), true)
+        enchantments[enchantName] = pair[1].toInt()
       }
     }
+  }
+  return ParsedToolsKitEntry(
+      material = material,
+      amount = amount,
+      damage = damage,
+      displayName = displayName,
+      title = title,
+      author = author,
+      lore = lore,
+      unbreakable = unbreakable,
+      enchantments = enchantments,
+  )
+}
+
+internal fun parseToolsItem(line: String): ItemStack {
+  val parsed = parseToolsKitEntry(line)
+  val item = ItemStack(parsed.material, parsed.amount)
+  val meta = item.itemMeta ?: return item
+  if (parsed.damage != null) {
+    require(meta is Damageable) { "Durability is unsupported for ${parsed.material}" }
+    meta.damage = parsed.damage
+  }
+  parsed.displayName?.let(meta::setDisplayName)
+  parsed.title?.let { (meta as? BookMeta)?.title = it }
+  parsed.author?.let { (meta as? BookMeta)?.author = it }
+  parsed.lore?.let { meta.lore = it }
+  if (parsed.unbreakable) meta.isUnbreakable = true
+  for ((enchantName, level) in parsed.enchantments) {
+    val enchant =
+        Enchantment.getByKey(NamespacedKey.minecraft(enchantName))
+            ?: throw IllegalArgumentException("Unsupported tools kit metadata: $enchantName:$level")
+    meta.addEnchant(enchant, level, true)
   }
   item.itemMeta = meta
   return item

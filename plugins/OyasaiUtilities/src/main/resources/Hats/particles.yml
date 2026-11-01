@@ -123,7 +123,7 @@ items:
       "1":
         particle: REDSTONE
         color: 16777215
-        size: 6.0
+        size: 4.0
   "20":
     key: magic_aura
     permission: magic_aura

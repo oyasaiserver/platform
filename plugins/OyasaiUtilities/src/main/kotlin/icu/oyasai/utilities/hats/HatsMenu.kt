@@ -40,6 +40,12 @@ internal enum class HatMode {
   FLYING,
 }
 
+internal const val MIN_DUST_PARTICLE_SIZE = 0.01f
+internal const val MAX_DUST_PARTICLE_SIZE = 4.0f
+
+internal fun clampDustParticleSize(size: Float): Float =
+    size.coerceIn(MIN_DUST_PARTICLE_SIZE, MAX_DUST_PARTICLE_SIZE)
+
 internal data class HatParticleSpec(
     val name: String,
     val randomColor: Boolean,
@@ -163,7 +169,7 @@ internal object HatsMenu {
               name = name,
               randomColor = randomColor,
               color = rgb?.let { Color.fromRGB(it and 0xFFFFFF) },
-              size = particleSection.getDouble("size", 1.0).toFloat().coerceIn(0.1f, 10.0f),
+              size = clampDustParticleSize(particleSection.getDouble("size", 1.0).toFloat()),
               items = items,
           )
         }
