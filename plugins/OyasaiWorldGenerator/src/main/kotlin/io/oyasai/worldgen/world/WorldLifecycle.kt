@@ -133,7 +133,9 @@ class WorldLifecycle(
       val supported = heightProvider.isSupportedServer()
       if (!supported) {
         startupInspectionPassed = false
-        sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 のみです")
+        sender.sendMessage(
+            "[OWG] NG: 対応対象は Purpur ${NmsHeightProvider.SUPPORTED_MINECRAFT_VERSION} のみです"
+        )
         return false
       }
       if (currentConfig.worlds.isEmpty() || currentConfig.validationErrors.isNotEmpty()) {
@@ -204,7 +206,9 @@ class WorldLifecycle(
     val entry = OwgConfig.defaultWorld(name, kind)
     val supported = isSupportedServer()
     if (!supported) {
-      sender.sendMessage("[OWG] NG: 対応対象は Purpur 26.2 のみです")
+      sender.sendMessage(
+          "[OWG] NG: 対応対象は Purpur ${NmsHeightProvider.SUPPORTED_MINECRAFT_VERSION} のみです"
+      )
       return false
     }
     if (!currentConfig.selfTest) {

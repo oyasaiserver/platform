@@ -2,7 +2,7 @@
 
 oyasaiPurpur rec {
   name = "oyasai-minecraft-main";
-  version = "26.2";
+  version = "26.3";
 
   icon = ../assets/icon-64x64.png;
 
@@ -27,6 +27,7 @@ oyasaiPurpur rec {
     spawn-protection = 0;
     sync-chunk-writes = false;
     view-distance = 32;
+    white-list = false; # 26.3 changed the default to true
     # keep-sorted end
   };
 

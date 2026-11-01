@@ -15,6 +15,7 @@ import net.minecraft.advancements.triggers.Criterion
 import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket
+import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket.PositionedAdvancement
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStackTemplate
 import org.bukkit.Material
@@ -91,7 +92,6 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
             false,
             true,
         )
-    toastDisplay.setLocation(1F, 0F)
     val toast =
         AdvancementHolder(
             toastId,
@@ -101,7 +101,10 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
     val addPacket =
         ClientboundUpdateAdvancementsPacket(
             false,
-            listOf(root, toast),
+            listOf(
+                PositionedAdvancement(root, 0F, 0F),
+                PositionedAdvancement(toast, 1F, 0F),
+            ),
             emptySet(),
             mapOf(
                 rootId to completedProgress(rootRequirements, ROOT_CRITERION),
