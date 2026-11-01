@@ -299,7 +299,8 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
 
   @EventHandler(ignoreCancelled = true)
   fun onTakeBook(event: PlayerTakeLecternBookEvent) {
-    val protection = protection(event.lectern.block) ?: return
+    @Suppress("USELESS_ELVIS") val lectern = (event.lectern as org.bukkit.block.Lectern?) ?: return
+    val protection = protection(lectern.block) ?: return
     if (protection.type == 6 || !canUse(event.player, protection)) event.isCancelled = true
   }
 

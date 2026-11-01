@@ -106,6 +106,9 @@ internal object GuidebookBookRules {
 
   fun bookmarkPage(saved: Int?, pageCount: Int): Int =
       (saved ?: 0).coerceIn(0, maxOf(pageCount - 1, 0))
+
+  fun closesVirtualLecternOnButton(buttonId: Int): Boolean =
+      buttonId == LecternMenu.BUTTON_TAKE_BOOK
 }
 
 object GuidebookBookUI {
@@ -702,9 +705,19 @@ object GuidebookBookUI {
         handle.openMenu(
             SimpleMenuProvider(
                 { id, inventory, _ ->
-                  LecternMenu(id, inventory).apply {
-                    (bukkitView as LecternView).topInventory.book = book
-                  }
+                  object : LecternMenu(id, inventory) {
+                        override fun clickMenuButton(
+                            player: net.minecraft.world.entity.player.Player,
+                            buttonId: Int,
+                        ): Boolean {
+                          if (GuidebookBookRules.closesVirtualLecternOnButton(buttonId)) {
+                            player.closeContainer()
+                            return true
+                          }
+                          return super.clickMenuButton(player, buttonId)
+                        }
+                      }
+                      .apply { (bukkitView as LecternView).topInventory.book = book }
                 },
                 CraftChatMessage.fromStringOrEmpty(bookTitle),
             )
