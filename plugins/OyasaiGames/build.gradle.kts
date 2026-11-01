@@ -17,3 +17,9 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().con
 }
 
 tasks.test { dependsOn(":plugins:OyasaiEconomy:shadowJar") }
+
+// Do not embed build timestamps in distributions.
+tasks.withType<AbstractArchiveTask>().configureEach {
+  isPreserveFileTimestamps = false
+  isReproducibleFileOrder = true
+}

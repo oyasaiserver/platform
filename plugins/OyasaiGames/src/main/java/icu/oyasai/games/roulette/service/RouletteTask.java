@@ -31,6 +31,7 @@ public class RouletteTask extends BukkitRunnable {
     private final String playerName;
     private final RouletteSession session;
     private final List<Material> results;
+    private final List<RouletteMode> sources;
 
     private int currentIndex = 0;
     private boolean headerSent = false;
@@ -40,13 +41,15 @@ public class RouletteTask extends BukkitRunnable {
                         UUID playerUuid,
                         String playerName,
                         RouletteSession session,
-                        List<Material> results) {
+                        List<Material> results,
+                        List<RouletteMode> sources) {
         this.plugin = plugin;
         this.manager = manager;
         this.playerUuid = playerUuid;
         this.playerName = playerName;
         this.session = session;
         this.results = results;
+        this.sources = sources;
     }
 
     @Override
@@ -63,13 +66,14 @@ public class RouletteTask extends BukkitRunnable {
         if (currentIndex < results.size()) {
             int roundNumber = currentIndex + 1;
             Material selectedMaterial = results.get(currentIndex);
-            broadcastResult(roundNumber, selectedMaterial);
+            RouletteMode source = sources.get(currentIndex);
+            broadcastResult(roundNumber, selectedMaterial, source);
 
             // プレイヤーがGUIを開いている場合は該当スロットに当選ブロックを表示
             Player player = Bukkit.getPlayer(playerUuid);
             if (player != null && player.isOnline()) {
                 if (player.getOpenInventory().getTopInventory().getHolder() instanceof RouletteGuiHolder) {
-                    RouletteGui.revealResult(player.getOpenInventory().getTopInventory(), currentIndex, session.getSelectedCount(), selectedMaterial);
+                    RouletteGui.revealResult(player.getOpenInventory().getTopInventory(), currentIndex, results.size(), selectedMaterial, source);
                 }
             }
 
@@ -89,7 +93,7 @@ public class RouletteTask extends BukkitRunnable {
         Player player = Bukkit.getPlayer(playerUuid);
         if (player != null && player.isOnline()) {
             if (player.getOpenInventory().getTopInventory().getHolder() instanceof RouletteGuiHolder) {
-                RouletteGui.renderFinished(player.getOpenInventory().getTopInventory(), session, results);
+                RouletteGui.renderFinished(player.getOpenInventory().getTopInventory(), results, sources);
             }
         }
 
@@ -124,10 +128,13 @@ public class RouletteTask extends BukkitRunnable {
             announce = prefix.append(Component.text("（非公開モード） 抽選を開始！", NamedTextColor.GRAY, TextDecoration.BOLD));
         }
 
+        String modeText = session.isSplitMode()
+                ? "フルブロック " + session.getFullBlockCount() + "回 ＋ 装飾 " + session.getNonFullBlockCount() + "回"
+                : session.getSelectedMode().getDisplayName();
         Component details = Component.text("抽選モード：", NamedTextColor.GRAY)
-                .append(Component.text(session.getSelectedMode().getDisplayName(), NamedTextColor.YELLOW, TextDecoration.BOLD))
+                .append(Component.text(modeText, NamedTextColor.YELLOW, TextDecoration.BOLD))
                 .append(Component.text("  /  抽選回数：", NamedTextColor.GRAY))
-                .append(Component.text(session.getSelectedCount() + "回", NamedTextColor.AQUA, TextDecoration.BOLD))
+                .append(Component.text(results.size() + "回", NamedTextColor.AQUA, TextDecoration.BOLD))
                 .append(Component.text("  /  設定：", NamedTextColor.GRAY))
                 .append(Component.text(session.isBroadcastToAll() ? "全体公開" : "自分のみ", session.isBroadcastToAll() ? NamedTextColor.GREEN : NamedTextColor.AQUA, TextDecoration.BOLD));
 
@@ -137,8 +144,10 @@ public class RouletteTask extends BukkitRunnable {
         sendMessageOrBroadcast(Component.empty());
     }
 
-    private void broadcastResult(int round, Material material) {
-        Component prefix = Component.text(round + "回目の結果： ", NamedTextColor.WHITE, TextDecoration.BOLD);
+    private void broadcastResult(int round, Material material, RouletteMode source) {
+        // 分けて引くモードのときだけ、どの種類から出たかを添える
+        String sourceLabel = session.isSplitMode() ? "（" + source.getDisplayName() + "）" : "";
+        Component prefix = Component.text(round + "回目の結果" + sourceLabel + "： ", NamedTextColor.WHITE, TextDecoration.BOLD);
         Component blockName = Component.translatable(material.translationKey(), NamedTextColor.GREEN, TextDecoration.BOLD);
         String englishName = RouletteGui.formatEnglishName(material);
         Component englishComponent = Component.text(" (" + englishName + ")", NamedTextColor.AQUA);

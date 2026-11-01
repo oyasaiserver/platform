@@ -8,7 +8,7 @@ import org.bukkit.Material;
  * GUI上の表示順序は要件に従い、以下の順番で固定します。
  * 1. 全建築用アイテム (ALL)
  * 2. フルブロックのみ (FULL_BLOCK)
- * 3. フルブロック以外 (NON_FULL_BLOCK)
+ * 3. 装飾（フルブロック以外） (NON_FULL_BLOCK)
  */
 public enum RouletteMode {
     ALL(
@@ -22,7 +22,7 @@ public enum RouletteMode {
         "完全な立方体（石、土、木、ガラス等）のみが対象です。"
     ),
     NON_FULL_BLOCK(
-        "フルブロック以外",
+        "装飾",
         Material.PEONY,
         "階段、ハーフ、フェンス、装飾などのブロックが対象です。"
     );
