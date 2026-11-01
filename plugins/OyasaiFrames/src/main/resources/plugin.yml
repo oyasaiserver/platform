@@ -4,11 +4,6 @@ version: ${version}
 api-version: "1.21"
 softdepend: [WorldGuard, FastAsyncWorldEdit]
 commands:
-  savedyeitem:
-    usage: /savedyeitem
-    permission: save.dye.item
-  getdye:
-    usage: /getdye
   tomap:
     usage: /tomap
   gakubuchilock:
@@ -34,6 +29,9 @@ commands:
   painttools:
     description: "PaintTools plugin command."
     permission: "painttools.command.painttools"
+  getdye:
+    usage: /getdye
+    description: Dye Box を開く
   toumeigakubuti:
     aliases: ["toumei", "invisibleframe"]
     description: "Frame transparency"

@@ -23,8 +23,8 @@ data class ShopCategory(
 data class ShopItem(
     val material: Material?,
     val materialId: String,
-    val buyPrice: Double,
-    val sellPrice: Double,
+    val buyPrice: Long,
+    val sellPrice: Long,
     val customName: String? = null,
     val customLore: List<String> = emptyList(),
     val enchantments: Map<Enchantment, Int> = emptyMap(),

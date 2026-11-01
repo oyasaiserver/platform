@@ -15,8 +15,14 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockExplodeEvent
+import org.bukkit.event.block.BlockFromToEvent
+import org.bukkit.event.block.BlockPistonExtendEvent
+import org.bukkit.event.block.BlockPistonRetractEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
 
 private const val PREFIX = "§6[HeadHunt] §r"
@@ -180,6 +186,36 @@ class TreasureListener(
           }
       event.player.sendMessage(PREFIX + message)
     }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun onBlockFromTo(event: BlockFromToEvent) {
+    if (treasureManager.isTreasureBlock(event.toBlock)) event.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun onEntityExplode(event: EntityExplodeEvent) {
+    event.blockList().removeIf { treasureManager.isTreasureBlock(it) }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun onBlockExplode(event: BlockExplodeEvent) {
+    event.blockList().removeIf { treasureManager.isTreasureBlock(it) }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun onPistonExtend(event: BlockPistonExtendEvent) {
+    if (event.blocks.any { treasureManager.isTreasureBlock(it) }) event.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun onPistonRetract(event: BlockPistonRetractEvent) {
+    if (event.blocks.any { treasureManager.isTreasureBlock(it) }) event.isCancelled = true
+  }
+
+  @EventHandler
+  fun onPlayerQuit(event: PlayerQuitEvent) {
+    gameManager.setSetMode(event.player.uniqueId, false)
   }
 
   private fun saveOrWarn(player: Player): Boolean {

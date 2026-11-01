@@ -5,6 +5,14 @@ import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.UUID
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+
+internal val TAB_SECTION_SERIALIZER =
+    LegacyComponentSerializer.builder()
+        .character(LegacyComponentSerializer.SECTION_CHAR)
+        .hexColors()
+        .useUnusualXRepeatedCharacterHexFormat()
+        .build()
 
 const val OYASAI_TAB_CHANNEL = "oyasaitab:main"
 const val LOCAL_TAB_ORDER_BASE = 1000

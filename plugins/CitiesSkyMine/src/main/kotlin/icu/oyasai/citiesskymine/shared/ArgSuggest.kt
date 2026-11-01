@@ -8,10 +8,6 @@ object ArgSuggest {
   fun positional(label: String, range: String, examples: List<String>): List<String> =
       listOf("<$label: $range>") + examples
 
-  /** key-value 形式の set サブコマンド用（/rc set, /ri set）。 値の位置で範囲説明+代表値を出す。 */
-  fun setValue(label: String, range: String, examples: List<String>): List<String> =
-      positional(label, range, examples)
-
   /** プレースホルダ文字列かどうかを判定する。 */
   fun isPlaceholder(arg: String): Boolean =
       arg.startsWith("<") || arg.startsWith("[") || arg.startsWith("eg.")

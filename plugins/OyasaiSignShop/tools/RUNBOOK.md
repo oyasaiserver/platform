@@ -12,6 +12,6 @@ python3 -m venv /path/to/signshop-export-venv
 
 既存の出力ファイルは上書きしない。書き出し前に `pending`・`compensation_failed` のうち `reviewed_at IS NULL` が 0 件であることを確認する。件数、全キー、`DataVersion`、`items` の `YAML:` 文字列、owner、リンク、未知フィールドを元 DB と照合し、旧 5.2.2 jar で読み込めることを隔離環境で試してから切り替える。外製 jar と自作 jar は同時に置かない。
 
-停止店の再開は自動で行わない。取引 ID を使って Vault/Essentials の履歴、残高、現物在庫、CoreProtect、DB 行を人が照合する。残高差だけで因果関係を決めない。停止中に DB バックアップ後、照合済み取引の `reviewed_at`・`review_note` と該当店の `halt_reason` を一トランザクションで更新し、失敗した取引の `status` は残す。通常の店の操作ではこの更新をしない。
+停止店の再開は自動で行わない。取引 ID を使って OyasaiEconomy の履歴、残高、現物在庫、CoreProtect、DB 行を人が照合する。残高差だけで因果関係を決めない。停止中に DB バックアップ後、照合済み取引の `reviewed_at`・`review_note` と該当店の `halt_reason` を一トランザクションで更新し、失敗した取引の `status` は残す。通常の店の操作ではこの更新をしない。
 
 ビルド対象は `:plugins:OyasaiSignShop:build`、成果物は `plugins/OyasaiSignShop/build/libs/OyasaiSignShop.jar`。Nix の選択名は `oyasaisignshop`。`provides: [SignShop]` により旧依存名を維持する。コマンド・権限・API パッケージ名は変更しない。

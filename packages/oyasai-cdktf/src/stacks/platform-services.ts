@@ -248,6 +248,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
           MEMORY: this.isMaster ? "8G" : "1G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
+          RCON_PASSWORD: randoms.rconPassword.result,
         }),
         volumes: [
           {
@@ -266,8 +267,14 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       stdinOpen: true,
       networksAdvanced: [network],
       ports: ports({
-        tcp: [25565], // Java
-        udp: [19132], // Bedrock
+        tcp: [
+          25565, // Java
+          19132, // Bedrock NetherNet
+        ],
+        udp: [
+          19132, // Bedrock
+          19133, // Bedrock RakNet
+        ],
       }),
       env: envs({
         FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,

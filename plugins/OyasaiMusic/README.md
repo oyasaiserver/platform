@@ -6,11 +6,10 @@ Minecraft 内でノートブロックの演奏を録音し、楽曲として公�
 ## 動作環境
 
 | 項目 | 必要なもの | | --- | --- | | サーバー | Paper / Purpur `26.2` | | Java | Java 25 | |
-必須プラグイン | FastAsyncWorldEdit (FAWE) `2.15.2` 以降 | | 任意プラグイン | Vault
-と経済プラグイン、TokenManager、OyasaiUtilities、Floodgate |
+必須プラグイン | FastAsyncWorldEdit (FAWE) `2.15.2` 以降 | | 任意プラグイン | OyasaiEconomy、OyasaiUtilities、Floodgate |
 
-FAWE は `/record we ...` でクリップボードを読むための必須依存です。Vault
-が無い場合、金銭報酬の送金は行われません。TokenManager へのポイント付与は、設定したコンソールコマンドで行います。
+FAWE は `/record we ...` でクリップボードを読むための必須依存です。OyasaiEconomy
+が無い場合、金銭報酬の送金は行われません。ポイントの付与は、設定したコンソールコマンドで行います。
 
 ## 導入
 
@@ -320,9 +319,9 @@ BPM、回路型・生演奏・現地回路録音は基準 120 BPM です。
 - 同じプレイヤーによる同じ楽曲の視聴が、1時間3回・1日10回以内
 - ジュークボックスの環境BGMではなく、個人再生である
 
-報酬は即時に失われず未受取残高へ蓄積され、トップメニューの「未受け取り報酬を受け取る」から受け取れます。金銭はVault経済へ、ポイントは
+報酬は即時に失われず未受取残高へ蓄積され、トップメニューの「未受け取り報酬を受け取る」から受け取れます。金銭は OyasaiEconomy の円へ、ポイントは
 `economy.points-command`（既定値:
-`token add %player% %points% -s`）で付与します。報酬額・回数制限・視聴完了率は `config.yml`
+`oyasaieconomy:token give %player% %points% -s`）で付与します。報酬額・回数制限・視聴完了率は `config.yml`
 から変更できます。
 
 作者の未受取報酬は報酬受取バンドルに、今回の受取額・ポイント・総収入とともに表示されます。ランキングは日間・週間・総合の楽曲／作者を表示し、管理者は
@@ -341,11 +340,11 @@ BPM、回路型・生演奏・現地回路録音は基準 120 BPM です。
 `economy.points-command` | ポイントを付与するコンソールコマンド | | `bedrock.name-prefix` |
 統合版プレイヤー名を判定する接頭辞 |
 
-TokenManager を使う場合の既定値は以下です。
+ポイント付与の既定値は以下です。
 
 ```yaml
 economy:
-  points-command: "token add %player% %points% -s"
+  points-command: "oyasaieconomy:token give %player% %points% -s"
 ```
 
 `%player%` は受取プレイヤー名、`%points%` と `%amount%` はポイント値に展開されます。設定を変えた後は

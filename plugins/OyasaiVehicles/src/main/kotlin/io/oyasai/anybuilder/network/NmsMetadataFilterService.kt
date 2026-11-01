@@ -118,7 +118,13 @@ object NmsMetadataFilterService : Listener {
       packet: ClientboundSetEntityDataPacket,
   ): Boolean {
     if (!EntityRuntime.displayEntityIds.contains(packet.id())) return false
+    val cancel = shouldThinOut(playerUUID, packet)
+    (if (cancel) EntityRuntime.Stats.droppedPackets else EntityRuntime.Stats.sentPackets)
+        .incrementAndGet()
+    return cancel
+  }
 
+  private fun shouldThinOut(playerUUID: UUID, packet: ClientboundSetEntityDataPacket): Boolean {
     val packetTick = EntityRuntime.packetTick
     when (VehicleMenuCommand.net(playerUUID).currentModeIndex()) {
       0 -> return false

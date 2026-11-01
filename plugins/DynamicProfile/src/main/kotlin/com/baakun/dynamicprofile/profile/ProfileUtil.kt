@@ -33,30 +33,34 @@ object ProfileUtil {
         statsData.title = -1
       }
     }
-    val titleLore =
-        mutableListOf(
-            "&a総プレイ時間: &7${statsData.getPlayTime()}",
-            "&a初ログイン: &7${statsData.getFirstPlayed()}",
+    fun basicLore(introductionLabel: String): MutableList<String> {
+      val titleLore =
+          mutableListOf(
+              "&a総プレイ時間: &7${statsData.getPlayTime()}",
+              "&a初ログイン: &7${statsData.getFirstPlayed()}",
+          )
+      if (!isSelfProfile) {
+        titleLore.add(
+            "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}"
         )
-    if (!isSelfProfile) {
-      titleLore.add(
-          "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}"
-      )
-    }
-    if (statsData.introduction.isNotEmpty()) {
-      titleLore.add("")
-      titleLore.add("&7自己紹介 &f:")
-      statsData.introduction.split("\n").forEach { line -> titleLore.add(" &f$line") }
-    }
-    if (statsData.title != -1) {
-      val currentTitle = getTitleFromId(statsData.title)
-      if (!currentTitle.description.isNullOrEmpty()) {
-        titleLore.add("")
-        titleLore.add("&7称号の説明 &f:")
-        currentTitle.description.forEach { line -> titleLore.add(" &f$line") }
       }
+      if (statsData.introduction.isNotEmpty()) {
+        titleLore.add("")
+        titleLore.add(introductionLabel)
+        statsData.introduction.split("\n").forEach { line -> titleLore.add(" &f$line") }
+      }
+      if (statsData.title != -1) {
+        val currentTitle = getTitleFromId(statsData.title)
+        if (!currentTitle.description.isNullOrEmpty()) {
+          titleLore.add("")
+          titleLore.add("&7称号の説明 &f:")
+          currentTitle.description.forEach { line -> titleLore.add(" &f$line") }
+        }
+      }
+      extraLoreFunc?.invoke(titleLore)
+      return titleLore
     }
-    extraLoreFunc?.invoke(titleLore)
+    val titleLore = basicLore("&7自己紹介 &f:")
     val playerHeadItem = Tools.getPlayerHead(player.uniqueId).addText(title, titleLore).allFlag()
     playerHeadItem.guiRun {
       soundPlayer?.playSound(
@@ -68,30 +72,7 @@ object ProfileUtil {
       )
       val list: MutableList<String> =
           if (playerHeadItemStatus) {
-            mutableListOf(
-                    "&a総プレイ時間: &7${statsData.getPlayTime()}",
-                    "&a初ログイン: &7${statsData.getFirstPlayed()}",
-                )
-                .apply {
-                  if (!isSelfProfile)
-                      add(
-                          "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}"
-                      )
-                  if (statsData.introduction.isNotEmpty()) {
-                    add("")
-                    add("&7自己紹介 &f：")
-                    statsData.introduction.split("\n").forEach { line -> add(" &f$line") }
-                  }
-                  if (statsData.title != -1) {
-                    val currentTitle = getTitleFromId(statsData.title)
-                    if (!currentTitle.description.isNullOrEmpty()) {
-                      add("")
-                      add("&7称号の説明 &f:")
-                      currentTitle.description.forEach { line -> add(" &f$line") }
-                    }
-                  }
-                  extraLoreFunc?.invoke(this)
-                }
+            basicLore("&7自己紹介 &f：")
           } else {
             mutableListOf(
                 "&a獲得経験値: &7${statsData.exp}",

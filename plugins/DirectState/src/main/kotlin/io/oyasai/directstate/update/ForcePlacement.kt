@@ -1,5 +1,6 @@
 package io.oyasai.directstate.update
 
+import io.oyasai.directstate.edit.hand.HandGeometry.horizontalFaces
 import java.util.UUID
 import org.bukkit.*
 import org.bukkit.block.Block
@@ -36,7 +37,6 @@ internal class ForcePlacement(
   /** 同じクリックから届く逆の手のイベントを重複処理しないための記録。 */
   private data class HandledClick(val tick: Int, val hand: EquipmentSlot)
 
-  private val horizontal = setOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
   private val handled = mutableMapOf<UUID, HandledClick>()
 
   /** バニラが支持不足で拒否する配置だけを再現する。 trueはこの層がイベントを処理済み、falseはバニラ配置へ譲ることを表す。 */
@@ -251,7 +251,7 @@ internal class ForcePlacement(
       target: Block,
   ): BlockData? {
     val wallOrTorch =
-        if (face in horizontal)
+        if (face in horizontalFaces)
             when (material) {
               Material.TORCH -> Material.WALL_TORCH
               Material.SOUL_TORCH -> Material.SOUL_WALL_TORCH
@@ -264,12 +264,12 @@ internal class ForcePlacement(
     if (data is Directional) {
       val direction =
           when (data) {
-            is Switch -> if (face in horizontal) face else playerFacing
+            is Switch -> if (face in horizontalFaces) face else playerFacing
             is TripwireHook,
-            is Ladder -> if (face in horizontal) face else playerFacing.oppositeFace
+            is Ladder -> if (face in horizontalFaces) face else playerFacing.oppositeFace
             is AmethystCluster -> face
             is WallHangingSign -> wallHangingSignFacing(face, playerFacing, lookDirection)
-            is WallSign -> if (face in horizontal) face else playerFacing.oppositeFace
+            is WallSign -> if (face in horizontalFaces) face else playerFacing.oppositeFace
             is Door,
             is Bed,
             is Stairs -> playerFacing

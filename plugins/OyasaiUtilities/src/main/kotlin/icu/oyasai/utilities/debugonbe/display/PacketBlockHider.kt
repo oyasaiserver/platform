@@ -2,15 +2,12 @@ package icu.oyasai.utilities.debugonbe.display
 
 import com.mojang.datafixers.util.Pair as MojangPair
 import icu.oyasai.utilities.debugonbe.model.ArmorStandPlacement
-import it.unimi.dsi.fastutil.shorts.ShortOpenHashSet
 import java.util.logging.Logger
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Rotations
-import net.minecraft.core.SectionPos
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket
-import net.minecraft.network.protocol.game.ClientboundSectionBlocksUpdatePacket
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket
@@ -62,40 +59,6 @@ class PacketBlockHider(private val plugin: org.bukkit.plugin.Plugin) {
     val pos = BlockPos(block.x, block.y, block.z)
     val actualState = nmsWorld.getBlockState(pos)
     sendBlockPacket(player, block.location, actualState)
-  }
-
-  fun showLightBlock(player: Player, block: Block) {
-    val lightState: BlockState = Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 15)
-    sendBlockPacket(player, block.location, lightState)
-  }
-
-  fun restoreLightBlock(player: Player, block: Block) {
-    restoreBlock(player, block)
-  }
-
-  fun hideBlocks(player: Player, blocks: List<Block>) {
-    val craftPlayer = player as CraftPlayer
-    val bySectionPos =
-        blocks.groupBy { block -> SectionPos.of(BlockPos(block.x, block.y, block.z)) }
-    for ((sectionPos, sectionBlocks) in bySectionPos) {
-      if (sectionBlocks.size == 1) {
-        hideBlock(player, sectionBlocks.first())
-        continue
-      }
-      val shortSet = ShortOpenHashSet()
-      val stateList = mutableListOf<BlockState>()
-      for (block in sectionBlocks) {
-        val localX = block.x and 0xF
-        val localY = block.y and 0xF
-        val localZ = block.z and 0xF
-        val packed = ((localX shl 8) or (localZ shl 4) or localY).toShort()
-        shortSet.add(packed)
-        stateList.add(Blocks.AIR.defaultBlockState())
-      }
-      val packet =
-          ClientboundSectionBlocksUpdatePacket(sectionPos, shortSet, stateList.toTypedArray())
-      craftPlayer.handle.connection.send(packet)
-    }
   }
 
   // ────────────────────────────────────────────────────────────────

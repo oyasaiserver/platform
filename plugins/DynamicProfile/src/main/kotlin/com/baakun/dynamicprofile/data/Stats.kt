@@ -89,31 +89,12 @@ data class Stats(
     set(type, count)
   }
 
-  /** ユーザーの所持ポイントをTokenManagerから取得して返す。取得できない場合-1を返す */
-  fun getPoint(): Int {
-    val user: OfflinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(uuid))
-    try { // なんかNoSuchElementError適菜の出ることがあるからtry
-      val player = user.player ?: return -1
-      return Tools.token?.getTokens(player)?.asLong?.toInt() ?: -1
-    } catch (_: Exception) {
-      return -1
-    }
-  }
+  /** 既存口座の投票ポイント。取得できない場合は -1。 */
+  fun getPoint(): Long = Tools.econ?.balance("token", UUID.fromString(uuid)) ?: -1L
 
-  /** ユーザーの所持金を[Double]で返す。Vaultプラグインがない場合-1を返す */
-  private fun getMoney(): Double {
-    val user: OfflinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(uuid))
-    return try { // こっちも心配だから
-      Tools.econ?.getBalance(user) ?: -1.0
-    } catch (_: Exception) {
-      -1.0
-    }
-  }
+  private fun getMoney(): Long = Tools.econ?.balance("yen", UUID.fromString(uuid)) ?: -1L
 
-  /** ユーザーの所持金をVaultプラグインのFormatに従った[String]で返す。Vaultがない場合はnullという文字を返す */
-  fun getMoneyString(): String {
-    return Tools.econ?.format(getMoney()) ?: "null"
-  }
+  fun getMoneyString(): String = Tools.econ?.format("yen", getMoney()) ?: "取得できません"
 
   /** サーバに存在した最後の日付と時間を文字列で返す。 オンラインの場合は現在の時間を返す。 */
   fun getLastOnlineTime(): String {

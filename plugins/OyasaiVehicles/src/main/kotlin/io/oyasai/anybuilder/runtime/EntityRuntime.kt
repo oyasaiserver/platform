@@ -5,16 +5,71 @@ import io.oyasai.toolbox.ControlKey
 import io.oyasai.toolbox.Tools
 import java.lang.reflect.Method
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicLong
 import org.bukkit.Location
 import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Display
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Transformation
 import org.bukkit.util.Vector
 
 object EntityRuntime {
   val displayEntityIds: MutableSet<Int> = ConcurrentHashMap.newKeySet()
   private var packetTickIndex: Int = 0
+
+  /**
+   * 表示の回転の送り方。false（旧方式）は変換行列を書き換えるだけで、補間の開始が送られないためクライアントは毎 tick 新しい向きへ飛ぶ。 true（smooth）は
+   * OyasaiGames の戦車と同じく、変わったときだけ送り、interpolationDelay を送り直して 2 tick かけて補間させる。
+   */
+  var smoothRotation: Boolean = false
+
+  fun applyTransformation(display: Display, next: Transformation) {
+    if (!smoothRotation) {
+      display.transformation = next
+      return
+    }
+    // interpolationDelay は値が同じでも毎回送られ補間をやり直させるので、変わらない tick は何も送らない。
+    if (display.transformation == next) return
+    display.transformation = next
+    display.interpolationDelay = 0
+  }
+
+  /** 方式を見比べるための測定値。走行ループの処理時間と、車両の表示へ送ったメタデータのパケット数（全プレイヤー分の合計）。 */
+  object Stats {
+    private var since = System.nanoTime()
+    private var loopNanos = 0L
+    private var loops = 0L
+    val sentPackets = AtomicLong()
+    val droppedPackets = AtomicLong()
+
+    fun recordLoop(startNanos: Long) {
+      loopNanos += System.nanoTime() - startNanos
+      loops++
+    }
+
+    fun reset() {
+      since = System.nanoTime()
+      loopNanos = 0L
+      loops = 0L
+      sentPackets.set(0L)
+      droppedPackets.set(0L)
+    }
+
+    fun report(): String {
+      val seconds = ((System.nanoTime() - since) / 1e9).coerceAtLeast(0.001)
+      val avgMicros = if (loops == 0L) 0.0 else loopNanos / 1e3 / loops
+      return "%.1f 秒: 車両 1 台 1 tick あたり %.1f µs（%d 回）、表示のメタデータ送信 %.1f 個/秒（net 設定で間引いた %.1f 個/秒）"
+          .format(
+              seconds,
+              avgMicros,
+              loops,
+              sentPackets.get() / seconds,
+              droppedPackets.get() / seconds,
+          )
+    }
+  }
 
   private val methodCache = mutableMapOf<Class<*>, Method?>()
   private val getHandleCache = mutableMapOf<Class<*>, Method?>()

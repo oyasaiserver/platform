@@ -1,0 +1,13 @@
+name: OyasaiEconomy
+version: "${version}"
+main: io.oyasai.economy.OyasaiEconomyPlugin
+api-version: "1.21"
+softdepend: [TAB]
+commands:
+  economy:
+    description: 経済設定の再読み込み
+    usage: /economy reload
+permissions:
+  oyasaieconomy.reload:
+    description: 経済設定の再読み込み
+    default: op

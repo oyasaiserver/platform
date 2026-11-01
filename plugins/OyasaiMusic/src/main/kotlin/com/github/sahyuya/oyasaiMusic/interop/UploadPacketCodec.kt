@@ -70,25 +70,6 @@ object UploadPacketCodec {
 
   data class Abort(override val id: UUID, val reason: Int) : ClientMessage
 
-  sealed interface ServerMessage {
-    val id: UUID
-  }
-
-  data class Ready(
-      override val id: UUID,
-      val capabilities: Int,
-      val maxOymiBytes: Int,
-      val maxCompressedBytes: Int,
-      val maxChunks: Int,
-      val chunkBytes: Int,
-  ) : ServerMessage
-
-  data class Status(
-      override val id: UUID,
-      val status: Int,
-      val detail: String,
-  ) : ServerMessage
-
   fun decodeClient(bytes: ByteArray): ClientMessage {
     require(bytes.size in 18..MAX_PACKET_BYTES) { "upload packet size is out of bounds" }
     return DataInputStream(ByteArrayInputStream(bytes)).use { input ->
@@ -120,37 +101,6 @@ object UploadPacketCodec {
             TYPE_FINISH -> Finish(id, input.readHash())
             TYPE_ABORT -> Abort(id, input.readUnsignedByte())
             else -> throw IllegalArgumentException("unknown client upload packet type")
-          }
-      require(input.available() == 0) { "trailing upload packet bytes" }
-      message
-    }
-  }
-
-  fun decodeServer(bytes: ByteArray): ServerMessage {
-    require(bytes.size in 18..MAX_PACKET_BYTES) { "upload packet size is out of bounds" }
-    return DataInputStream(ByteArrayInputStream(bytes)).use { input ->
-      require(input.readUnsignedByte() == VERSION) { "unsupported upload packet version" }
-      val type = input.readUnsignedByte()
-      val id = UUID(input.readLong(), input.readLong())
-      val message =
-          when (type) {
-            TYPE_READY ->
-                Ready(
-                    id = id,
-                    capabilities = input.readInt(),
-                    maxOymiBytes = input.readInt(),
-                    maxCompressedBytes = input.readInt(),
-                    maxChunks = input.readUnsignedShort(),
-                    chunkBytes = input.readUnsignedShort(),
-                )
-            TYPE_STATUS -> {
-              val status = input.readUnsignedByte()
-              val detail = input.readUTF()
-              require(status in STATUS_PROCESSING..STATUS_ERROR)
-              require(detail.length <= 64 && detail.all { it.code in 0x20..0x7e })
-              Status(id, status, detail)
-            }
-            else -> throw IllegalArgumentException("unknown server upload packet type")
           }
       require(input.available() == 0) { "trailing upload packet bytes" }
       message

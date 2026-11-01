@@ -13,7 +13,7 @@ softdepend:
 commands:
   csm:
     description: "CitiesSkyMine 統合コマンド"
-    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|crowd|selection|settings|config|cloud|bezier|debugstick|preset|schematic>"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|unconnect|columns|stack|crowd|selection|settings|config|cloud|bezier|debugstick|preset|schematic>"
   ".help":
     description: "CitiesSkyMine ヘルプショートカット"
     usage: "/.help <command>"
@@ -44,6 +44,9 @@ commands:
   ".ss":
     description: "SlabStairs 生成ショートカット"
     usage: "/.ss [material]"
+  ".unconnect":
+    description: "選択範囲の接続を全部外すショートカット"
+    usage: "/.unconnect"
   ".col":
     description: "柱割り生成ショートカット"
     usage: "/.col <columnWidth> <gap|count> [edge|center] [2d] [-s] [-p]"
@@ -99,6 +102,7 @@ permissions:
       citiesskymine.payload: true
       citiesskymine.window: true
       citiesskymine.slabstairs: true
+      citiesskymine.unconnect: true
       citiesskymine.columns: true
       citiesskymine.stack: true
       citiesskymine.crowd: true
@@ -151,6 +155,9 @@ permissions:
     default: false
   citiesskymine.slabstairs:
     description: "旧形式: SlabStairs 生成コマンドの使用権限"
+    default: false
+  citiesskymine.unconnect:
+    description: "旧形式: 接続解除コマンドの使用権限"
     default: false
   citiesskymine.columns:
     description: "旧形式: 柱割り生成コマンドの使用権限"

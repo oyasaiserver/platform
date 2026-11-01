@@ -2,6 +2,7 @@ package icu.oyasai.games.bedwars
 
 import icu.oyasai.games.OyasaiGamesPlugin
 import icu.oyasai.games.pvp.*
+import icu.oyasai.games.wholeMoney
 import java.io.File
 import java.util.UUID
 import java.util.logging.Level
@@ -233,9 +234,9 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
     BedWarsSettings.report(files)
     display = BedWarsDisplay(plugin, { p, name -> commandJoin(p, name) }, { p -> commandRejoin(p) })
     plugin.server.pluginManager.registerEvents(display, plugin)
-    if (plugin.server.pluginManager.isPluginEnabled("Vault")) {
+    if (plugin.server.pluginManager.isPluginEnabled("OyasaiEconomy")) {
       Bukkit.getServicesManager()
-          .getRegistration(net.milkbowl.vault.economy.Economy::class.java)
+          .getRegistration(io.oyasai.economy.api.OyasaiEconomyApi::class.java)
           ?.provider
           ?.let { economy = PvpEconomy(folder, it).also { bank -> bank.retry() } }
     }
@@ -253,8 +254,8 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
         )
       }
     }
-    if (files.config.getBoolean("vault.enable") && rewardConfigured())
-        check(economy != null) { "BedWars rewards require a Vault economy provider" }
+    if (files.config.getBoolean("economy.enable") && rewardConfigured())
+        check(economy != null) { "BedWars rewards require OyasaiEconomy" }
     plugin.server.pluginManager.registerEvents(this, plugin)
     for (name in listOf("bw", "bwparty", "shout")) plugin.getCommand(name)!!.let {
       it.setExecutor(this)
@@ -829,12 +830,12 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
 
   private fun rewardConfigured() =
       listOf("kill", "win", "final-kill", "bed-destroy").any {
-        bedWarsRewardAmount(it, files.config.getDouble("vault.reward.$it")) > 0
+        bedWarsRewardAmount(it, files.config.wholeMoney("economy.reward.$it")) > 0
       }
 
   private fun reward(id: UUID, event: String, type: String) {
-    val amount = bedWarsRewardAmount(type, files.config.getDouble("vault.reward.$type"))
-    if (files.config.getBoolean("vault.enable")) economy?.payOnce("$event:$type:$id", id, amount)
+    val amount = bedWarsRewardAmount(type, files.config.wholeMoney("economy.reward.$type"))
+    if (files.config.getBoolean("economy.enable")) economy?.payOnce("$event:$type:$id", id, amount)
   }
 
   private fun finish(match: BwMatch, winner: String?) {

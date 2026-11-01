@@ -6,7 +6,7 @@ import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderSpawn
 import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseCache
 import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityList
 import io.oyasai.anybuilder.common.event.VehicleEventListenerBase
-import io.oyasai.canRideAircraftBuilderOrAdmin
+import io.oyasai.canRideAircraftBuilder
 import java.util.*
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -49,7 +49,7 @@ object AircraftBuilderEvents : VehicleEventListenerBase() {
     val item = event.item?.clone() ?: return
     handleVehicleItemRightClickWithPermission(
         event = event,
-        canRide = { it.canRideAircraftBuilderOrAdmin() },
+        canRide = { it.canRideAircraftBuilder() },
         deniedMessage = "[AircraftBuilder] 実行権限がありません。",
         getItem = { item },
         isBuilderItem = AircraftBuilderItem::checkItem,
@@ -73,7 +73,7 @@ object AircraftBuilderEvents : VehicleEventListenerBase() {
   fun playerArmorStandRightClick(event: PlayerInteractAtEntityEvent) {
     handleSeatArmorStandRightClickWithPermission(
         event = event,
-        canRide = { it.canRideAircraftBuilderOrAdmin() },
+        canRide = { it.canRideAircraftBuilder() },
         deniedMessage = "[AircraftBuilder] 実行権限がありません。",
         isSeatArmorStand = AircraftBuilderEntityList::checkSeatArmorStand,
         getDrivingSeatData = AircraftBuilderEntityList::checkDrivingSeat,

@@ -88,12 +88,6 @@ object MaterialResolver {
     return item
   }
 
-  /** 指定素材が板ガラス（透明または色付き）であるか判定する。 */
-  fun isGlassPane(material: Material): Boolean {
-    val name = material.name
-    return name == "GLASS_PANE" || name.endsWith("_STAINED_GLASS_PANE")
-  }
-
   /** 色付き板ガラスに対応するガラスブロックの素材を取得する。 */
   fun getGlassBlockMaterial(glassPaneType: Material): Material {
     val name = glassPaneType.name

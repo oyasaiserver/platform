@@ -5,8 +5,13 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
-softdepend: [Vault, TokenManager, LuckPerms, floodgate, Essentials]
+softdepend: [OyasaiEconomy, LuckPerms, floodgate, Essentials, FastAsyncWorldEdit]
 commands:
+  oyasai-schematics:
+    description: "schematic.cloud の共有 ID から schematic をダウンロードして FAWE の保存先へ置く"
+    usage: "/<command> load <共有ID または URL>"
+    permission: oyasaiutilities.schematics.load
+    permission-message: "§cこのコマンドを使用する権限がありません。"
   home:
     usage: /<command>
     permission: essentials.home
@@ -283,9 +288,26 @@ commands:
     permission: essentials.spawn
   fart:
     description: "しゃがむとおならの音と煙を出すモードを切り替える"
-    usage: /fart
+    usage: /fart [stay|fly] [player]
+  items:
+    description: "特殊アイテムの台帳。登録されたアイテムを受け取る"
+    usage: /items [help | search <名前> | get <番号> | register [free|once|staff] [説明] | update <番号> [free|once|staff] | remove <番号> | restore <番号> | info [番号] | reset <番号> <プレイヤー>]
+    permission: oyasaiutilities.items.use
+    permission-message: "§cこのコマンドを使用する権限がありません。"
 
 permissions:
+  oyasaiutilities.items.use:
+    description: "アイテム台帳から受け取る"
+    default: true
+  oyasaiutilities.items.manage:
+    description: "アイテム台帳へ登録・変更・削除し、どのルールのアイテムも受け取る"
+    default: op
+  oyasaiutilities.schematics.load:
+    description: "schematic.cloud の共有 ID から schematic をダウンロードする"
+    default: op
+  oyasaiutilities.fart.others:
+    description: "他のプレイヤーのおならモードを切り替える"
+    default: op
   essentials.spawn:
     default: op
   essentials.spawn.others:

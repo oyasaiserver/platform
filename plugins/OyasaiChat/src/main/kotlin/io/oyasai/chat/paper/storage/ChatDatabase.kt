@@ -7,13 +7,11 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 /** One shared database; SQL writes and feature migrations are serialized off the server thread. */
-class ChatDatabase(file: File, private val onWriteFailure: (Throwable) -> Unit = {}) :
-    AutoCloseable {
+class ChatDatabase(file: File) : AutoCloseable {
   private val writer: Connection
   private val reader: Connection
   private val executor =
       Executors.newSingleThreadExecutor { task -> Thread(task, "OyasaiChat-SQLite") }
-  @Volatile private var writeFailure: Throwable? = null
 
   init {
     Class.forName("org.sqlite.JDBC")
@@ -92,17 +90,6 @@ class ChatDatabase(file: File, private val onWriteFailure: (Throwable) -> Unit =
     executor.submit { block(writer) }.get()
   }
 
-  fun write(block: (Connection) -> Unit) {
-    executor.execute {
-      try {
-        block(writer)
-      } catch (failure: Throwable) {
-        writeFailure = failure
-        onWriteFailure(failure)
-      }
-    }
-  }
-
   /** All submitted writes finish before either connection closes; failure is reported to caller. */
   override fun close() {
     executor.shutdown()
@@ -119,9 +106,6 @@ class ChatDatabase(file: File, private val onWriteFailure: (Throwable) -> Unit =
         synchronized(this) { reader.close() }
       } finally {
         writer.close()
-      }
-      writeFailure?.let {
-        throw IllegalStateException("SQLite writes failed; check earlier errors", it)
       }
     } finally {
       if (interrupted) Thread.currentThread().interrupt()

@@ -1,9 +1,9 @@
 package icu.oyasai.games.slot
 
 import icu.oyasai.games.OyasaiGamesPlugin
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.io.File
 import java.util.UUID
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -34,7 +34,7 @@ import org.bukkit.scheduler.BukkitTask
 class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecutor, TabCompleter {
   private val folder = File(plugin.dataFolder, "slot")
   private var config = YamlConfiguration()
-  private var economy: Economy? = null
+  private var economy: OyasaiEconomyApi? = null
   private var machines = linkedMapOf<UUID, SlotMachine>()
   private var active = false
   private val sessions = mutableMapOf<Pair<UUID, UUID>, Spin>()
@@ -74,13 +74,13 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       plugin.logger.warning("slot: 外製SlotMachineが有効なため起動しません。")
       return
     }
-    if (!plugin.server.pluginManager.isPluginEnabled("Vault")) {
-      plugin.logger.warning("slot: Vaultがないため起動しません。")
+    if (!plugin.server.pluginManager.isPluginEnabled("OyasaiEconomy")) {
+      plugin.logger.warning("slot: OyasaiEconomyがないため起動しません。")
       return
     }
-    economy = plugin.server.servicesManager.getRegistration(Economy::class.java)?.provider
+    economy = plugin.server.servicesManager.getRegistration(OyasaiEconomyApi::class.java)?.provider
     if (economy == null) {
-      plugin.logger.warning("slot: Vault経済がないため起動しません。")
+      plugin.logger.warning("slot: OyasaiEconomy経済がないため起動しません。")
       return
     }
     val imported = importLegacySlot(folder, File(plugin.dataFolder.parentFile, "SlotMachine"))
@@ -253,7 +253,7 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
         if (payment.phase in setOf("PAID", "REFUND_FAILED")) {
           if (
               !payment.refund {
-                economy!!.depositPlayer(Bukkit.getOfflinePlayer(id), it).transactionSuccess()
+                economy!!.deposit("yen", (Bukkit.getOfflinePlayer(id)).uniqueId, it).accepted
               }
           )
               plugin.logger.severe("slot: 復旧返金に失敗しました。paymentsを確認してください。")
@@ -344,8 +344,8 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       mapOf(
           "player" to player.name,
           "machineName" to machine.name,
-          "price" to economy!!.format(machine.price),
-          "balance" to economy!!.format(economy!!.getBalance(player)),
+          "price" to economy!!.format("yen", machine.price),
+          "balance" to economy!!.format("yen", (economy!!.balance("yen", player.uniqueId) ?: 0L)),
           "newline" to "\n",
       )
 
@@ -554,7 +554,7 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
           else null
       if (
           !payment.charge(machine.price, prize?.key) {
-            economy!!.withdrawPlayer(player, it).transactionSuccess()
+            economy!!.withdraw("yen", player.uniqueId, it).accepted
           }
       ) {
         fail(player, machine, message("notEnoughMoney", "&c所持金が足りません。"))
@@ -731,9 +731,7 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
   }
 
   private fun refund(player: Player, payment: SlotPayment) {
-    runCatching {
-          check(payment.refund { economy!!.depositPlayer(player, it).transactionSuccess() })
-        }
+    runCatching { check(payment.refund { economy!!.deposit("yen", player.uniqueId, it).accepted }) }
         .onFailure {
           plugin.logger.severe("slot: 返金未完了 (${payment.phase})。paymentsと経済ログを確認してください。")
         }

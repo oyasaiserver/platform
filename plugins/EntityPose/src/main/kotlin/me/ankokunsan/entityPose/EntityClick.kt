@@ -268,118 +268,58 @@ class EntityClick : Listener {
                 title,
             )
 
-        val ligbrwItem =
-            CustomHead.get("10673a3e975e95385683734de0aaae2fc14491c89c448fc77c954329312c558b")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}栗色")
-                        persistentDataContainer.set(
-                            WOLF_KEY,
-                            PersistentDataType.STRING,
-                            "LIGHT_BROWN",
-                        )
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val grawItem =
-            CustomHead.get("18b7d365417593267352816b1da57383c996a24ce4ac6323725c51b139bbcfac")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}灰色")
-                        persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "GRAY")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val strwItem =
-            CustomHead.get("c7da319bc006a570c550846c0e8cf6ad88d326ec9f447d5c168228c4d2dd6e27")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}しま模様")
-                        persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "STRIPED")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val spowItem =
-            CustomHead.get("a1a3c46ecc14787c41d7cf61c30415dd6cf9d0db4020b89532eefde81bc6d061")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}まだら模様")
-                        persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "SPOTTED")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val browItem =
-            CustomHead.get("f38b37576d4b2f972590f94ae839f221cfc04ca131f6e1bf93f1160a87f91722")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}赤茶色")
-                        persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "BROWN")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val whitewItem =
-            CustomHead.get("26c67affae90af1c69085a66487e16f591a45bef6665d03e0aef0f92b28f1f3d")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}雪")
-                        persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "WHITE")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val blawItem =
-            CustomHead.get("62fa964dc6849129428abee17d50bfdd69172f441b6f537b00536da2dd365e24")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}黒色")
-                        persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "BLACK")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val woowItem =
-            CustomHead.get("f7b424dd4463dfe1b6931efe536d3e1830df2c9c709b9abee3afaec5e3eb2ff6")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}森(ウッド柄)")
-                        persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "WOOD")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val norwItem =
-            CustomHead.get("dc64e0cc93c1e146012672bd0331dc6a444f413b10a8909a863fdf9e7a349a87")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ノーマル")
-                        persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "NORMAL")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        inv1.setItem(0, ligbrwItem)
-        inv1.setItem(1, grawItem)
-        inv1.setItem(2, strwItem)
-        inv1.setItem(3, spowItem)
-        inv1.setItem(4, browItem)
-        inv1.setItem(5, whitewItem)
-        inv1.setItem(6, blawItem)
-        inv1.setItem(7, woowItem)
-        inv1.setItem(8, norwItem)
+        fillVariantItems(
+            inv1,
+            WOLF_KEY,
+            listOf(
+                Triple(
+                    "10673a3e975e95385683734de0aaae2fc14491c89c448fc77c954329312c558b",
+                    "栗色",
+                    "LIGHT_BROWN",
+                ),
+                Triple(
+                    "18b7d365417593267352816b1da57383c996a24ce4ac6323725c51b139bbcfac",
+                    "灰色",
+                    "GRAY",
+                ),
+                Triple(
+                    "c7da319bc006a570c550846c0e8cf6ad88d326ec9f447d5c168228c4d2dd6e27",
+                    "しま模様",
+                    "STRIPED",
+                ),
+                Triple(
+                    "a1a3c46ecc14787c41d7cf61c30415dd6cf9d0db4020b89532eefde81bc6d061",
+                    "まだら模様",
+                    "SPOTTED",
+                ),
+                Triple(
+                    "f38b37576d4b2f972590f94ae839f221cfc04ca131f6e1bf93f1160a87f91722",
+                    "赤茶色",
+                    "BROWN",
+                ),
+                Triple(
+                    "26c67affae90af1c69085a66487e16f591a45bef6665d03e0aef0f92b28f1f3d",
+                    "雪",
+                    "WHITE",
+                ),
+                Triple(
+                    "62fa964dc6849129428abee17d50bfdd69172f441b6f537b00536da2dd365e24",
+                    "黒色",
+                    "BLACK",
+                ),
+                Triple(
+                    "f7b424dd4463dfe1b6931efe536d3e1830df2c9c709b9abee3afaec5e3eb2ff6",
+                    "森(ウッド柄)",
+                    "WOOD",
+                ),
+                Triple(
+                    "dc64e0cc93c1e146012672bd0331dc6a444f413b10a8909a863fdf9e7a349a87",
+                    "ノーマル",
+                    "NORMAL",
+                ),
+            ),
+            isMini,
+        )
         val filler = getFiller()
         (0 until inv1.size).forEach { i -> if (inv1.getItem(i) == null) inv1.setItem(i, filler) }
         player.openInventory(inv1)
@@ -397,146 +337,68 @@ class EntityClick : Listener {
                 title1,
             )
 
-        val toracItem =
-            CustomHead.get("ed2926a6976f05725fd0ac1079abead49427747a687929efe31e1ccdbcfa741f")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}トラ柄")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "TORA")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val mikecItem =
-            CustomHead.get("9f06cd1914abb82b52f42709b0c25e0affb92fc4b7be1ecfef59fbbe862a3b8b")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}三毛")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "MIKE")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val takicItem =
-            CustomHead.get("22f456e43d847ca8bb89e7a51d47770dd4becc52372a26b0f4a6b6a293e643a3")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}タキシード")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "TUXEDO")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val orecItem =
-            CustomHead.get("8270a64bd2dfdb977f4afb5aaa24c4c3acc621b7f116f63a77b3d27937def78f")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}赤色(絶対オレンジです)")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "ORANGE")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val shacItem =
-            CustomHead.get("136c0c1a548c0e3b47329cb870ceaa14b1a9f382bdadeae3f8b41f6d1367988f")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}シャム")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "SIAMESE")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val ligrcItem =
-            CustomHead.get("6d2fc072b70b920f14274fd65c8659e352bd22c14258ded99c9558ab8dbc3511")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ブリティッシュ_ショートヘア")
-                        persistentDataContainer.set(
-                            CAT_KEY,
-                            PersistentDataType.STRING,
-                            "LIGHT_GRAY",
-                        )
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val librcItem =
-            CustomHead.get("a6cd7cd7508255d0da95190bd5ad16c6541791597a9702ad8769fde9c97b4462")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ペルシャ")
-                        persistentDataContainer.set(
-                            CAT_KEY,
-                            PersistentDataType.STRING,
-                            "LIGHT_BROWN",
-                        )
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val ragcItem =
-            CustomHead.get("22e7d959081dac7ecf3d6c5738a93c8e3121af04e040c84eebab88c0440199e3")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ラグドール")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "RAG")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val whicItem =
-            CustomHead.get("68cc43cf43eea96b8f7ce953dc4e244c93480acf1344f0f6fbda648504ad0e06")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}白色")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "WHITE")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val gracItem =
-            CustomHead.get("f64e0f82177107d0c44696c1f03d4d34148243ebd9e0c2ebc3b496f1bd3b268")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ジェリー")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "GRAY")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        val blacItem =
-            CustomHead.get("966a68c309578c8bb625ec3931f97a5ac42b4120ccf1fe40a7391e88b0b9e811")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}黒色")
-                        persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "BLACK")
-                        if (isMini)
-                            persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
-                      }
-                }
-        inv2.setItem(0, toracItem)
-        inv2.setItem(1, mikecItem)
-        inv2.setItem(2, takicItem)
-        inv2.setItem(3, orecItem)
-        inv2.setItem(4, shacItem)
-        inv2.setItem(5, ligrcItem)
-        inv2.setItem(6, librcItem)
-        inv2.setItem(7, ragcItem)
-        inv2.setItem(8, whicItem)
-        inv2.setItem(9, gracItem)
-        inv2.setItem(10, blacItem)
+        fillVariantItems(
+            inv2,
+            CAT_KEY,
+            listOf(
+                Triple(
+                    "ed2926a6976f05725fd0ac1079abead49427747a687929efe31e1ccdbcfa741f",
+                    "トラ柄",
+                    "TORA",
+                ),
+                Triple(
+                    "9f06cd1914abb82b52f42709b0c25e0affb92fc4b7be1ecfef59fbbe862a3b8b",
+                    "三毛",
+                    "MIKE",
+                ),
+                Triple(
+                    "22f456e43d847ca8bb89e7a51d47770dd4becc52372a26b0f4a6b6a293e643a3",
+                    "タキシード",
+                    "TUXEDO",
+                ),
+                Triple(
+                    "8270a64bd2dfdb977f4afb5aaa24c4c3acc621b7f116f63a77b3d27937def78f",
+                    "赤色(絶対オレンジです)",
+                    "ORANGE",
+                ),
+                Triple(
+                    "136c0c1a548c0e3b47329cb870ceaa14b1a9f382bdadeae3f8b41f6d1367988f",
+                    "シャム",
+                    "SIAMESE",
+                ),
+                Triple(
+                    "6d2fc072b70b920f14274fd65c8659e352bd22c14258ded99c9558ab8dbc3511",
+                    "ブリティッシュ_ショートヘア",
+                    "LIGHT_GRAY",
+                ),
+                Triple(
+                    "a6cd7cd7508255d0da95190bd5ad16c6541791597a9702ad8769fde9c97b4462",
+                    "ペルシャ",
+                    "LIGHT_BROWN",
+                ),
+                Triple(
+                    "22e7d959081dac7ecf3d6c5738a93c8e3121af04e040c84eebab88c0440199e3",
+                    "ラグドール",
+                    "RAG",
+                ),
+                Triple(
+                    "68cc43cf43eea96b8f7ce953dc4e244c93480acf1344f0f6fbda648504ad0e06",
+                    "白色",
+                    "WHITE",
+                ),
+                Triple(
+                    "f64e0f82177107d0c44696c1f03d4d34148243ebd9e0c2ebc3b496f1bd3b268",
+                    "ジェリー",
+                    "GRAY",
+                ),
+                Triple(
+                    "966a68c309578c8bb625ec3931f97a5ac42b4120ccf1fe40a7391e88b0b9e811",
+                    "黒色",
+                    "BLACK",
+                ),
+            ),
+            isMini,
+        )
         val filler = getFiller()
         (0 until inv2.size).forEach { i -> if (inv2.getItem(i) == null) inv2.setItem(i, filler) }
         player.openInventory(inv2)
@@ -550,72 +412,39 @@ class EntityClick : Listener {
                 9,
                 "§3ウサギ選択",
             )
-        val brorItem =
-            CustomHead.get("c1db38ef3c1a1d59f779a0cd9f9e616de0cc9acc7734b8facc36fc4ea40d0235")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}茶色")
-                        persistentDataContainer.set(RABBIT_KEY, PersistentDataType.STRING, "BROWN")
-                      }
-                }
-        val whirItem =
-            CustomHead.get("a0dcddc236972edcd48e825b6b0054b7b6e1a781e6f12ae04c14a07827ca8dcc")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}白色")
-                        persistentDataContainer.set(RABBIT_KEY, PersistentDataType.STRING, "WHITE")
-                      }
-                }
-        val blarItem =
-            CustomHead.get("72c58116a147d1a9a26269224a8be184fe8e5f3f3df9b61751369ad87382ec9")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}黒色")
-                        persistentDataContainer.set(RABBIT_KEY, PersistentDataType.STRING, "BLACK")
-                      }
-                }
-        val whblrItem =
-            CustomHead.get("cb8cff4b15b8ca37e25750f345718f289cb22c5b3ad22627a71223faccc").apply {
-              itemMeta =
-                  itemMeta!!.apply {
-                    setDisplayName("${ChatColor.GREEN}白黒")
-                    persistentDataContainer.set(
-                        RABBIT_KEY,
-                        PersistentDataType.STRING,
-                        "WHITE_BLACK",
-                    )
-                  }
-            }
-        val gorItem =
-            CustomHead.get("c977a3266bf3b9eaf17e5a02ea5fbb46801159863dd288b93e6c12c9cb").apply {
-              itemMeta =
-                  itemMeta!!.apply {
-                    setDisplayName("${ChatColor.GREEN}金色")
-                    persistentDataContainer.set(RABBIT_KEY, PersistentDataType.STRING, "GOLD")
-                  }
-            }
-        val librrItem =
-            CustomHead.get("cc4349fe9902dd76c1361f8d6a1f79bff6f433f3b7b18a47058f0aa16b9053f")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ソルト＆ペッパー")
-                        persistentDataContainer.set(
-                            RABBIT_KEY,
-                            PersistentDataType.STRING,
-                            "LIGHT_BROWN",
-                        )
-                      }
-                }
-        inv3.setItem(0, brorItem)
-        inv3.setItem(1, whirItem)
-        inv3.setItem(2, blarItem)
-        inv3.setItem(3, whblrItem)
-        inv3.setItem(4, gorItem)
-        inv3.setItem(5, librrItem)
+        fillVariantItems(
+            inv3,
+            RABBIT_KEY,
+            listOf(
+                Triple(
+                    "c1db38ef3c1a1d59f779a0cd9f9e616de0cc9acc7734b8facc36fc4ea40d0235",
+                    "茶色",
+                    "BROWN",
+                ),
+                Triple(
+                    "a0dcddc236972edcd48e825b6b0054b7b6e1a781e6f12ae04c14a07827ca8dcc",
+                    "白色",
+                    "WHITE",
+                ),
+                Triple(
+                    "72c58116a147d1a9a26269224a8be184fe8e5f3f3df9b61751369ad87382ec9",
+                    "黒色",
+                    "BLACK",
+                ),
+                Triple(
+                    "cb8cff4b15b8ca37e25750f345718f289cb22c5b3ad22627a71223faccc",
+                    "白黒",
+                    "WHITE_BLACK",
+                ),
+                Triple("c977a3266bf3b9eaf17e5a02ea5fbb46801159863dd288b93e6c12c9cb", "金色", "GOLD"),
+                Triple(
+                    "cc4349fe9902dd76c1361f8d6a1f79bff6f433f3b7b18a47058f0aa16b9053f",
+                    "ソルト＆ペッパー",
+                    "LIGHT_BROWN",
+                ),
+            ),
+            false,
+        )
         val filler = getFiller()
         (0 until inv3.size).forEach { i -> if (inv3.getItem(i) == null) inv3.setItem(i, filler) }
 
@@ -629,57 +458,38 @@ class EntityClick : Listener {
                 9,
                 "§3オウム選択",
             )
-        val redItem =
-            CustomHead.get("5d1a168bc72cb314f7c86feef9d9bc7612365244ce67f0a104fce04203430c1d")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}赤色")
-                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "RED")
-                      }
-                }
-        val blueItem =
-            CustomHead.get("20e03b10c15ee5601423867dfb8bcbcbc919ca96c0eea63073ec8e795eabd05f")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}青色")
-                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "BLUE")
-                      }
-                }
-        val greenItem =
-            CustomHead.get("5fc9a3b9d5879c2150984dbfe588cc2e61fb1de1e60fd2a469f69dd4b6f6a993")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}緑色")
-                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "GREEN")
-                      }
-                }
-        val liblItem =
-            CustomHead.get("bc6471f23547b2dbdf60347ea128f8eb2baa6a79b0401724f23bd4e2564a2b61")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}シアン")
-                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "CYAN")
-                      }
-                }
-        val grayItem =
-            CustomHead.get("a3c34722ac64496c9b84d0c54019daae6185d6094990133ad6810eea3d24067a")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}灰色")
-                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "GRAY")
-                      }
-                }
-
-        inv4.setItem(0, redItem)
-        inv4.setItem(1, blueItem)
-        inv4.setItem(2, greenItem)
-        inv4.setItem(3, liblItem)
-        inv4.setItem(4, grayItem)
+        fillVariantItems(
+            inv4,
+            PARROT_KEY,
+            listOf(
+                Triple(
+                    "5d1a168bc72cb314f7c86feef9d9bc7612365244ce67f0a104fce04203430c1d",
+                    "赤色",
+                    "RED",
+                ),
+                Triple(
+                    "20e03b10c15ee5601423867dfb8bcbcbc919ca96c0eea63073ec8e795eabd05f",
+                    "青色",
+                    "BLUE",
+                ),
+                Triple(
+                    "5fc9a3b9d5879c2150984dbfe588cc2e61fb1de1e60fd2a469f69dd4b6f6a993",
+                    "緑色",
+                    "GREEN",
+                ),
+                Triple(
+                    "bc6471f23547b2dbdf60347ea128f8eb2baa6a79b0401724f23bd4e2564a2b61",
+                    "シアン",
+                    "CYAN",
+                ),
+                Triple(
+                    "a3c34722ac64496c9b84d0c54019daae6185d6094990133ad6810eea3d24067a",
+                    "灰色",
+                    "GRAY",
+                ),
+            ),
+            false,
+        )
         val filler = getFiller()
         (0 until inv4.size).forEach { i -> if (inv4.getItem(i) == null) inv4.setItem(i, filler) }
         player.openInventory(inv4)
@@ -692,104 +502,48 @@ class EntityClick : Listener {
                 9,
                 "§3馬選択",
             )
-        val white =
-            CustomHead.get("9f4bdd59d4f8f1d5782e0fee4bd64aed100627f188a91489ba37eeadededd827")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}白色")
-                        persistentDataContainer.set(
-                            HORSE_COLOR_KEY,
-                            PersistentDataType.STRING,
-                            "WHITE",
-                        )
-                      }
-                }
-        val chestnut =
-            CustomHead.get("9717d71025f7a62c90a333c51663ffeb385a9a0d92af68083c5b045c0524b23f")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}栗色")
-                        persistentDataContainer.set(
-                            HORSE_COLOR_KEY,
-                            PersistentDataType.STRING,
-                            "CHESTNUT",
-                        )
-                      }
-                }
-        val cream =
-            CustomHead.get("a6dae0ade0e0dafb6dbc7786ce4241242b6b6df527a0f7af0a42184c93fd646b")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}クリーム色")
-                        persistentDataContainer.set(
-                            HORSE_COLOR_KEY,
-                            PersistentDataType.STRING,
-                            "CREAM",
-                        )
-                      }
-                }
-        val brown =
-            CustomHead.get("25e397def0af06feef22421860088186639732aa0a5eb5756e0aa6b03fd092c8")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}茶色")
-                        persistentDataContainer.set(
-                            HORSE_COLOR_KEY,
-                            PersistentDataType.STRING,
-                            "BROWN",
-                        )
-                      }
-                }
-        val black =
-            CustomHead.get("3efb0b9857d7c8d295f6df97b605f40b9d07ebe128a6783d1fa3e1bc6e44117")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}黒色")
-                        persistentDataContainer.set(
-                            HORSE_COLOR_KEY,
-                            PersistentDataType.STRING,
-                            "BLACK",
-                        )
-                      }
-                }
-        val gray =
-            CustomHead.get("8f0d955889b0378d4933c956398567e770103ae9eff0f702d0d53d52e7f6a83b")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}灰色")
-                        persistentDataContainer.set(
-                            HORSE_COLOR_KEY,
-                            PersistentDataType.STRING,
-                            "GRAY",
-                        )
-                      }
-                }
-        val darkbrown =
-            CustomHead.get("156b7bc1a4836eb428ea8925eceb5e01dfbd30c7deff6c9482689823203cfd2f")
-                .apply {
-                  itemMeta =
-                      itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}暗い茶色")
-                        persistentDataContainer.set(
-                            HORSE_COLOR_KEY,
-                            PersistentDataType.STRING,
-                            "DARKBROWN",
-                        )
-                      }
-                }
-        inv4.setItem(0, white)
-        inv4.setItem(1, chestnut)
-        inv4.setItem(2, cream)
-        inv4.setItem(3, brown)
-        inv4.setItem(4, black)
-        inv4.setItem(5, gray)
-        inv4.setItem(6, darkbrown)
+        fillVariantItems(
+            inv4,
+            HORSE_COLOR_KEY,
+            listOf(
+                Triple(
+                    "9f4bdd59d4f8f1d5782e0fee4bd64aed100627f188a91489ba37eeadededd827",
+                    "白色",
+                    "WHITE",
+                ),
+                Triple(
+                    "9717d71025f7a62c90a333c51663ffeb385a9a0d92af68083c5b045c0524b23f",
+                    "栗色",
+                    "CHESTNUT",
+                ),
+                Triple(
+                    "a6dae0ade0e0dafb6dbc7786ce4241242b6b6df527a0f7af0a42184c93fd646b",
+                    "クリーム色",
+                    "CREAM",
+                ),
+                Triple(
+                    "25e397def0af06feef22421860088186639732aa0a5eb5756e0aa6b03fd092c8",
+                    "茶色",
+                    "BROWN",
+                ),
+                Triple(
+                    "3efb0b9857d7c8d295f6df97b605f40b9d07ebe128a6783d1fa3e1bc6e44117",
+                    "黒色",
+                    "BLACK",
+                ),
+                Triple(
+                    "8f0d955889b0378d4933c956398567e770103ae9eff0f702d0d53d52e7f6a83b",
+                    "灰色",
+                    "GRAY",
+                ),
+                Triple(
+                    "156b7bc1a4836eb428ea8925eceb5e01dfbd30c7deff6c9482689823203cfd2f",
+                    "暗い茶色",
+                    "DARKBROWN",
+                ),
+            ),
+            false,
+        )
         val filler = getFiller()
         (0 until inv4.size).forEach { i -> if (inv4.getItem(i) == null) inv4.setItem(i, filler) }
         player.openInventory(inv4)
@@ -860,110 +614,92 @@ class EntityClick : Listener {
         when (part) {
           StandPart.HEAD_X -> {
             entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
-            val deg = Math.toDegrees(entity.headPose.x)
-            actionBar(player, "§a頭_X軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.headPose.x, "頭_X軸側")
           }
 
           StandPart.HEAD_Y -> {
             entity.headPose = entity.headPose.setY(entity.headPose.y + rad)
-            val deg = Math.toDegrees(entity.headPose.y)
-            actionBar(player, "§a頭_Y軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.headPose.y, "頭_Y軸側")
           }
 
           StandPart.HEAD_Z -> {
             entity.headPose = entity.headPose.setZ(entity.headPose.z + rad)
-            val deg = Math.toDegrees(entity.headPose.z)
-            actionBar(player, "§a頭_Z軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.headPose.z, "頭_Z軸側")
           }
 
           StandPart.BODY_X -> {
             entity.bodyPose = entity.bodyPose.setX(entity.bodyPose.x + rad)
-            val deg = Math.toDegrees(entity.bodyPose.x)
-            actionBar(player, "§a上半身_X軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.bodyPose.x, "上半身_X軸側")
           }
 
           StandPart.BODY_Y -> {
             entity.bodyPose = entity.bodyPose.setY(entity.bodyPose.y + rad)
-            val deg = Math.toDegrees(entity.bodyPose.y)
-            actionBar(player, "§a上半身_Y軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.bodyPose.y, "上半身_Y軸側")
           }
 
           StandPart.BODY_Z -> {
             entity.bodyPose = entity.bodyPose.setZ(entity.bodyPose.z + rad)
-            val deg = Math.toDegrees(entity.bodyPose.z)
-            actionBar(player, "§a上半身_Z軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.bodyPose.z, "上半身_Z軸側")
           }
 
           StandPart.LEFT_ARM_X -> {
             entity.leftArmPose = entity.leftArmPose.setX(entity.leftArmPose.x + rad)
-            val deg = Math.toDegrees(entity.leftArmPose.x)
-            actionBar(player, "§a左手_X軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.leftArmPose.x, "左手_X軸側")
           }
 
           StandPart.LEFT_ARM_Y -> {
             entity.leftArmPose = entity.leftArmPose.setY(entity.leftArmPose.y + rad)
-            val deg = Math.toDegrees(entity.leftArmPose.y)
-            actionBar(player, "§a左手_Y軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.leftArmPose.y, "左手_Y軸側")
           }
 
           StandPart.LEFT_ARM_Z -> {
             entity.leftArmPose = entity.leftArmPose.setZ(entity.leftArmPose.z + rad)
-            val deg = Math.toDegrees(entity.leftArmPose.z)
-            actionBar(player, "§a左手_Z軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.leftArmPose.z, "左手_Z軸側")
           }
 
           StandPart.RIGHT_ARM_X -> {
             entity.rightArmPose = entity.rightArmPose.setX(entity.rightArmPose.x + rad)
-            val deg = Math.toDegrees(entity.rightArmPose.x)
-            actionBar(player, "§a右手_X軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.rightArmPose.x, "右手_X軸側")
           }
 
           StandPart.RIGHT_ARM_Y -> {
             entity.rightArmPose = entity.rightArmPose.setY(entity.rightArmPose.y + rad)
-            val deg = Math.toDegrees(entity.rightArmPose.y)
-            actionBar(player, "§a右手_Y軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.rightArmPose.y, "右手_Y軸側")
           }
 
           StandPart.RIGHT_ARM_Z -> {
             entity.rightArmPose = entity.rightArmPose.setZ(entity.rightArmPose.z + rad)
-            val deg = Math.toDegrees(entity.rightArmPose.z)
-            actionBar(player, "§a右手_Z軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.rightArmPose.z, "右手_Z軸側")
           }
 
           StandPart.LEFT_LEG_X -> {
             entity.leftLegPose = entity.leftLegPose.setX(entity.leftLegPose.x + rad)
-            val deg = Math.toDegrees(entity.leftLegPose.x)
-            actionBar(player, "§a左足_X軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.leftLegPose.x, "左足_X軸側")
           }
 
           StandPart.LEFT_LEG_Y -> {
             entity.leftLegPose = entity.leftLegPose.setY(entity.leftLegPose.y + rad)
-            val deg = Math.toDegrees(entity.leftLegPose.y)
-            actionBar(player, "§a左足_Y軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.leftLegPose.y, "左足_Y軸側")
           }
 
           StandPart.LEFT_LEG_Z -> {
             entity.leftLegPose = entity.leftLegPose.setZ(entity.leftLegPose.z + rad)
-            val deg = Math.toDegrees(entity.leftLegPose.z)
-            actionBar(player, "§a左足_Z軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.leftLegPose.z, "左足_Z軸側")
           }
 
           StandPart.RIGHT_LEG_X -> {
             entity.rightLegPose = entity.rightLegPose.setX(entity.rightLegPose.x + rad)
-            val deg = Math.toDegrees(entity.rightLegPose.x)
-            actionBar(player, "§a右足_X軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.rightLegPose.x, "右足_X軸側")
           }
 
           StandPart.RIGHT_LEG_Y -> {
             entity.rightLegPose = entity.rightLegPose.setY(entity.rightLegPose.y + rad)
-            val deg = Math.toDegrees(entity.rightLegPose.y)
-            actionBar(player, "§a右足_Y軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.rightLegPose.y, "右足_Y軸側")
           }
 
           StandPart.RIGHT_LEG_Z -> {
             entity.rightLegPose = entity.rightLegPose.setZ(entity.rightLegPose.z + rad)
-            val deg = Math.toDegrees(entity.rightLegPose.z)
-            actionBar(player, "§a右足_Z軸側: ${formatDeg(deg)}")
+            showPoseRotation(player, entity.rightLegPose.z, "右足_Z軸側")
           }
 
           StandPart.ALL -> {
@@ -1121,22 +857,34 @@ class EntityClick : Listener {
     }
   }
 
+  private fun showPoseRotation(player: Player, angle: Double, label: String) {
+    val deg = Math.toDegrees(angle)
+    actionBar(player, "§a$label: ${formatDeg(deg)}")
+  }
+
   private fun formatDeg(value: Double): String {
     val normalized = (value % 360 + 360) % 360
     return String.format("%.1f°", normalized)
   }
 
-  private fun getFiller(): ItemStack {
-    return ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE).apply {
-      itemMeta =
-          itemMeta?.apply {
-            setDisplayName(" ")
-            persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "FILLER")
+  private fun fillVariantItems(
+      inventory: org.bukkit.inventory.Inventory,
+      key: org.bukkit.NamespacedKey,
+      variants: List<Triple<String, String, String>>,
+      isMini: Boolean,
+  ) {
+    variants.forEachIndexed { index, (texture, name, value) ->
+      val item =
+          CustomHead.get(texture).apply {
+            itemMeta =
+                itemMeta!!.apply {
+                  setDisplayName("${ChatColor.GREEN}$name")
+                  persistentDataContainer.set(key, PersistentDataType.STRING, value)
+                  if (isMini)
+                      persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
+                }
           }
+      inventory.setItem(index, item)
     }
-  }
-
-  private fun formatLoc(value: Double): String {
-    return String.format("%.3f", value)
   }
 }

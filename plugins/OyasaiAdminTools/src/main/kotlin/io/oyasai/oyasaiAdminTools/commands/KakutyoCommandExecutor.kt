@@ -1,8 +1,8 @@
 package io.oyasai.oyasaiAdminTools.commands
 
+import io.oyasai.economy.api.OyasaiEconomyApi
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import io.oyasai.oyasaiAdminTools.worldborder.WorldBorderManager
-import me.realized.tokenmanager.api.TokenManager
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -52,13 +52,13 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
       return true
     }
 
-    val tmPlugin = Bukkit.getPluginManager().getPlugin("TokenManager")
-    if (tmPlugin !is TokenManager) {
-      sender.sendMessage("TokenManagerが見つかりませんでした。; ;")
+    val tmPlugin = Bukkit.getServicesManager().load(OyasaiEconomyApi::class.java)
+    if (tmPlugin == null) {
+      sender.sendMessage("OyasaiEconomyが見つかりませんでした。; ;")
       return true
     }
     // 現在のトークン残高確認
-    val balance = tmPlugin.getTokens(targetPlayer).orElse(0)
+    val balance = (tmPlugin.balance("token", targetPlayer.uniqueId) ?: 0L)
     if (balance < points) {
       sender.sendMessage("§c${targetName}のポイントが不足しています。(現在: $balance, 必要: $points)")
       return true
@@ -93,7 +93,7 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
     sender.sendMessage("§8中心: ($centerX, $centerZ)")
     sender.sendMessage("§8半径: $currentRadiusX -> $newRadiusX (+ $expansionRadius)")
 
-    val success = tmPlugin.removeTokens(targetPlayer, points)
+    val success = tmPlugin.withdraw("token", targetPlayer.uniqueId, points).accepted
     if (success) {
       WorldBorderManager.setRadii(currentWorldName, newRadiusX, newRadiusZ)
       sender.sendMessage("§b拡張成功！ ${targetName}から ${points}ポイント徴収しました。")

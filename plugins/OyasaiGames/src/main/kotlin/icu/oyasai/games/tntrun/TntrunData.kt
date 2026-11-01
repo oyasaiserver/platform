@@ -2,6 +2,7 @@ package icu.oyasai.games.tntrun
 
 import icu.oyasai.games.pvp.PvpEconomy
 import icu.oyasai.games.pvp.saveYaml
+import icu.oyasai.games.wholeMoney
 import java.io.File
 import java.util.UUID
 
@@ -112,7 +113,7 @@ internal fun deliverResult(file: File, folder: File, data: RunData, bank: PvpEco
     y.set("xp-applied", true)
     saveYaml(file, y)
   }
-  val money = y.getDouble("money")
+  val money = y.wholeMoney("money")
   if (money > 0) {
     check(bank != null) { "Reward economy provider is unavailable" }
     bank.pay(

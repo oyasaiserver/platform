@@ -26,7 +26,6 @@ object PlayerManagerCommandExecutor : CommandExecutor, TabCompleter {
         false
       }
     }
-    return true
   }
 
   override fun onTabComplete(

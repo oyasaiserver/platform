@@ -1,7 +1,7 @@
 package icu.oyasai.utilities.ore_reappears
 
 import icu.oyasai.utilities.OyasaiUtilities
-import net.milkbowl.vault.economy.Economy
+import io.oyasai.economy.api.OyasaiEconomyApi
 import org.bukkit.Bukkit.getServer
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable
 /** 鉱石再出現 */
 object OreReappears : Listener {
   private val worldList = mutableListOf<String>()
-  private val blockAndTickList = mutableMapOf<Material, Pair<Int, Double>>()
+  private val blockAndTickList = mutableMapOf<Material, Pair<Int, Long>>()
   private val breakBlockList = mutableSetOf<OreReappearsData>()
 
   private val eco by lazy { setupEconomy() }
@@ -27,12 +27,12 @@ object OreReappears : Listener {
     return switch
   }
 
-  /** Vault連携用 */
-  private fun setupEconomy(): Economy? {
-    if (getServer().pluginManager.getPlugin("Vault") == null) {
+  /** 経済APIの取得 */
+  private fun setupEconomy(): OyasaiEconomyApi? {
+    if (getServer().pluginManager.getPlugin("OyasaiEconomy") == null) {
       return null
     }
-    val rsp = getServer().servicesManager.getRegistration(Economy::class.java)
+    val rsp = getServer().servicesManager.getRegistration(OyasaiEconomyApi::class.java)
     if (rsp == null) {
       return null
     }
@@ -103,7 +103,7 @@ object OreReappears : Listener {
       e.block.getDrops(e.player.inventory.itemInMainHand, e.player).forEach {
         dropCount += it.amount
       }
-      eco?.depositPlayer(e.player, p.second * dropCount)
+      eco?.deposit("yen", e.player.uniqueId, Math.multiplyExact(p.second, dropCount.toLong()))
     }
 
     object : BukkitRunnable() {

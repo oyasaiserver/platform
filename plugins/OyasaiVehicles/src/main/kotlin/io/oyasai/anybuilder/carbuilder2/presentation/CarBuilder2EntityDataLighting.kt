@@ -4,6 +4,7 @@ import io.oyasai.VehicleMenuCommand
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2DisplayType
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityType
+import io.oyasai.anybuilder.runtime.EntityRuntime
 import io.oyasai.toolbox.ControlKey
 import io.oyasai.toolbox.Tools
 import kotlin.math.abs
@@ -186,7 +187,8 @@ fun CarBuilder2EntityData.retractableTaskImpl(switch: Boolean) {
               defTrans.translation.z.toDouble(),
           )
 
-      display.transformation =
+      EntityRuntime.applyTransformation(
+          display,
           Transformation(
               translation
                   .add(rotateOffset)
@@ -200,7 +202,8 @@ fun CarBuilder2EntityData.retractableTaskImpl(switch: Boolean) {
               rotation,
               display.transformation.scale,
               Quaternionf(),
-          )
+          ),
+      )
     }
   }
 }

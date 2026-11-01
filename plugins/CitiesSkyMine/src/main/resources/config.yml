@@ -4,6 +4,7 @@ limits:
   max-columns-csm: 100000
   max-blocks-window: 512
   max-blocks-slab-stairs: 200000
+  max-blocks-unconnect: 200000
   max-blocks-columns: 200000
   max-blocks-stack: 2000000
   max-blocks-crowd: 200000
@@ -63,17 +64,14 @@ access:
   legacy-permissions-bypass: true
   roles:
     admin:
-      display-name: "アドミン"
       permission: "citiesskymine.role.admin"
       inherits:
         - takumi
     takumi:
-      display-name: "たくみ"
       permission: "citiesskymine.role.takumi"
       inherits:
         - builder
     builder:
-      display-name: "建築士"
       permission: "citiesskymine.role.builder"
       inherits: []
   commands:
@@ -105,6 +103,10 @@ access:
       - takumi
       - admin
     slabstairs:
+      - builder
+      - takumi
+      - admin
+    unconnect:
       - builder
       - takumi
       - admin
@@ -192,4 +194,3 @@ sui:
   max-ping: 150 # -1 で無効
 
 prefix: "<gray>[<gold>CitiesSkyMine</gold>]</gray> "
-debug: false

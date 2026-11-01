@@ -9,7 +9,6 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
-import org.bukkit.entity.Player
 
 class DebugStickCommand(private val plugin: Main, memoryStore: DebugStickMemoryStore) :
     CommandExecutor, TabCompleter {
@@ -22,10 +21,7 @@ class DebugStickCommand(private val plugin: Main, memoryStore: DebugStickMemoryS
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.DEBUGSTICK)) return true
     if (!plugin.config.getBoolean("debug-stick.enabled", true)) {
       MessageUtil.error(sender, "デバッグ棒互換コマンドは無効です。")

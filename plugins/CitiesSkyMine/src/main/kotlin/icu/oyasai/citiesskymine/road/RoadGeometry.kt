@@ -53,9 +53,7 @@ object RoadGeometry {
           }
 
       val lenAB = hypot(B.x - A.x, B.z - A.z)
-      val lenBC = hypot(C.x - B.x, C.z - B.z)
       val tIn = min(T, lenAB * 0.45)
-      val tOut = min(T, lenBC * 0.45)
 
       // 曲線開始点 (B から A 方向へ tIn)
       val dInX = (A.x - B.x) / lenAB

@@ -1,10 +1,10 @@
 package io.oyasai.signshop
 
 import com.griefcraft.lwc.LWCPlugin
+import io.oyasai.economy.api.EconomyResult
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.util.UUID
 import java.util.logging.Level
-import net.milkbowl.vault.economy.Economy
-import net.milkbowl.vault.economy.EconomyResponse
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -44,22 +44,8 @@ class SignShopPlugin : JavaPlugin(), Listener {
   private val active = mutableSetOf<Shop>()
   private val activeBoxes = mutableSetOf<Point>()
   private var dbHealthy = true
-  private var migrationFailed = false
-
-  override fun onLoad() {
-    try {
-      migrateLegacyData(dataFolder, logger::info)
-    } catch (error: Exception) {
-      migrationFailed = true
-      logger.log(Level.SEVERE, "旧 SignShop のデータをコピーできません。起動を中止します", error)
-    }
-  }
 
   override fun onEnable() {
-    if (migrationFailed) {
-      Bukkit.getPluginManager().disablePlugin(this)
-      return
-    }
     if (
         Bukkit.getPluginManager().plugins.any {
           it !== this &&
@@ -474,7 +460,8 @@ class SignShopPlugin : JavaPlugin(), Listener {
       reject("値段を読めません。運営に連絡してください")
       return
     }
-    val economy = Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
+    val economy =
+        Bukkit.getServicesManager().getRegistration(OyasaiEconomyApi::class.java)?.provider
     if (yen > 0 && economy == null) {
       reject("経済サービスがありません")
       return
@@ -568,11 +555,7 @@ class SignShopPlugin : JavaPlugin(), Listener {
       stock = plan::apply
     }
     val payer = if (type == "Sell") owner else player.uniqueId
-    if (
-        yen > 0 &&
-            type != "iSell" &&
-            economy?.has(Bukkit.getOfflinePlayer(payer), yen.toDouble()) != true
-    ) {
+    if (yen > 0 && type != "iSell" && (economy?.balance("yen", payer) ?: -1L) < yen) {
       reject("残高が足りません")
       return
     }
@@ -626,13 +609,18 @@ class SignShopPlugin : JavaPlugin(), Listener {
     }
   }
 
-  private fun money(economy: Economy, account: String, yen: Long, deposit: Boolean): MoneyResult =
+  private fun money(
+      economy: OyasaiEconomyApi,
+      account: String,
+      yen: Long,
+      deposit: Boolean,
+  ): MoneyResult =
       try {
         val target = Bukkit.getOfflinePlayer(UUID.fromString(account))
         val response =
-            if (deposit) economy.depositPlayer(target, yen.toDouble())
-            else economy.withdrawPlayer(target, yen.toDouble())
-        moneyResult(response, yen)
+            if (deposit) economy.deposit("yen", target.uniqueId, yen)
+            else economy.withdraw("yen", target.uniqueId, yen)
+        if (!response.accepted) MoneyResult.FAILED else moneyResult(response.completion.join(), yen)
       } catch (_: Exception) {
         MoneyResult.UNKNOWN
       }
@@ -765,9 +753,10 @@ internal fun denyUse(type: String, isOp: Boolean, hasPermission: (String) -> Boo
         !hasPermission("SignShop.Admin.$type") &&
         !hasPermission("SignShop.Admin.*")
 
-internal fun moneyResult(response: EconomyResponse, yen: Long): MoneyResult =
-    when {
-      response.transactionSuccess() && response.amount == yen.toDouble() -> MoneyResult.OK
-      response.type == EconomyResponse.ResponseType.FAILURE -> MoneyResult.FAILED
-      else -> MoneyResult.UNKNOWN
+internal fun moneyResult(response: EconomyResult, yen: Long): MoneyResult =
+    when (response) {
+      is EconomyResult.Success ->
+          if (kotlin.math.abs(response.delta) == yen) MoneyResult.OK else MoneyResult.UNKNOWN
+      is EconomyResult.InsufficientFunds -> MoneyResult.FAILED
+      is EconomyResult.Failed -> MoneyResult.UNKNOWN
     }

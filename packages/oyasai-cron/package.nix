@@ -3,6 +3,7 @@
   lib,
   stdenv,
   oyasaiDockerTools,
+  cacert,
 }:
 let
   final = package-lock2nix.mkNpmModule {
@@ -13,6 +14,7 @@ let
         config = {
           Cmd = [ (lib.getExe final) ];
           WorkingDir = "/data";
+          Env = [ "SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt" ];
         };
       };
     };

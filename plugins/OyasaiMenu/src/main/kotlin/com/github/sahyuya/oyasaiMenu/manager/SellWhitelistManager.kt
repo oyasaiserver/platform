@@ -30,7 +30,7 @@ class SellWhitelistManager(private val plugin: OyasaiMenu) {
       val id: String,
       val displayName: String,
       val materialName: String,
-      val sellPrice: Double,
+      val sellPrice: Long,
       val itemDataB64: String,
   )
 
@@ -64,7 +64,9 @@ entries: []
       val id = map["id"]?.toString() ?: return@forEach
       val displayName = map["display_name"]?.toString() ?: ""
       val material = map["material"]?.toString() ?: ""
-      val sellPrice = (map["sell_price"] as? Number)?.toDouble() ?: return@forEach
+      val sellPrice =
+          (map["sell_price"]?.takeIf { it is Int || it is Long } as? Number)?.toLong()
+              ?: return@forEach
       val itemData = map["item_data"]?.toString() ?: return@forEach
       entries.add(WhitelistEntry(id, displayName, material, sellPrice, itemData))
     }
@@ -102,7 +104,7 @@ entries: []
   // ============================
 
   /** アイテムがホワイトリストに一致する場合の売却価格を返す。 耐久値は無視して比較する。 */
-  fun getPrice(item: ItemStack): Double? {
+  fun getPrice(item: ItemStack): Long? {
     val normalized = normalizeForComparison(item)
     return entries
         .firstOrNull { entry ->
@@ -120,7 +122,7 @@ entries: []
   // 編集 API
   // ============================
 
-  fun addEntry(item: ItemStack, sellPrice: Double): String? {
+  fun addEntry(item: ItemStack, sellPrice: Long): String? {
     if (item.type.isAir) return "AIR はホワイトリストに追加できません。"
     if (sellPrice <= 0) return "売値は 1 以上で指定してください。"
 

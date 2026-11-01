@@ -26,6 +26,8 @@ class OyasaiAdminTools : JavaPlugin() {
   var worldborderAvailable = false
     private set
 
+  private var assistant: AutoCloseable? = null
+
   private val staffFeatures = mutableListOf<io.oyasai.oyasaiAdminTools.staff.StaffFeature>()
   private var playerHistory: io.oyasai.oyasaiAdminTools.playerhistory.PlayerHistoryFeature? = null
   var tpOffline: io.oyasai.oyasaiAdminTools.tpoffline.TpOfflineFeature? = null
@@ -55,38 +57,8 @@ class OyasaiAdminTools : JavaPlugin() {
       return
     }
 
-    bulletinAvailable =
-        try {
-          db.importBulletinIfNeeded(dataFolder)?.let { logger.info("Bulletin legacy import: $it") }
-          true
-        } catch (failure: Exception) {
-          logger.severe("Bulletin disabled: legacy import failed: ${failure.message}")
-          false
-        }
-    worldborderAvailable =
-        try {
-          val keys =
-              listOf(
-                  "message",
-                  "round-border",
-                  "whoosh-effect",
-                  "portal-redirection",
-                  "knock-back-dist",
-                  "timer-delay-ticks",
-                  "deny-enderpearl",
-              )
-          val settings = keys.associateWith { config.get("worldborder.$it") }
-          db.importWorldborderIfNeeded(
-                  dataFolder,
-                  File(dataFolder.parentFile, "WorldBorder/config.yml"),
-                  settings,
-              )
-              ?.let { logger.info("Worldborder legacy import: $it") }
-          true
-        } catch (failure: Exception) {
-          logger.severe("Worldborder disabled: legacy import failed: ${failure.message}")
-          false
-        }
+    bulletinAvailable = true
+    worldborderAvailable = true
 
     if (bulletinAvailable) {
       AnnouncementManager.load()
@@ -120,6 +92,22 @@ class OyasaiAdminTools : JavaPlugin() {
       enableStaffFeature { io.oyasai.oyasaiAdminTools.tpoffline.TpOfflineFeature(this, history) }
     }
 
+    getCommand("assistant")?.setExecutor { sender, _, _, _ ->
+      sender.sendMessage("運営アシスタントは無効です。")
+      true
+    }
+    try {
+      val feature = io.oyasai.oyasaiAdminTools.assistant.AssistantFeature(this)
+      assistant = feature
+      feature.enable()
+    } catch (failure: Throwable) {
+      try {
+        assistant?.close()
+      } catch (_: Throwable) {}
+      assistant = null
+      logger.log(java.util.logging.Level.SEVERE, "Assistant disabled", failure)
+    }
+
     // Bulletin Commands
     val bulletinExecutor = io.oyasai.oyasaiAdminTools.bulletin.BulletinCommandExecutor
     this.getCommand("bulletin")?.setExecutor(bulletinExecutor)
@@ -135,6 +123,12 @@ class OyasaiAdminTools : JavaPlugin() {
   }
 
   override fun onDisable() {
+    try {
+      assistant?.close()
+    } catch (failure: Throwable) {
+      logger.log(java.util.logging.Level.SEVERE, "Assistant shutdown failed", failure)
+    }
+    assistant = null
     staffFeatures.asReversed().forEach { feature ->
       try {
         feature.disable()

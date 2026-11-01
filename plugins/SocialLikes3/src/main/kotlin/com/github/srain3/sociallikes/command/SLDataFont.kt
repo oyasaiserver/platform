@@ -178,34 +178,6 @@ object SLDataFont : CommandExecutor, TabCompleter, Listener {
     return "ＳＬ　$firstLabel　$sparkline　$lastLabel　計$total"
   }
 
-  private fun logDebug(
-      weeklyLikes: List<WeeklyLikeCount>,
-      graphText: String,
-      graphConfig: GraphConfig,
-  ) {
-    val weeklySummary =
-        if (weeklyLikes.isEmpty()) "(no rows)"
-        else weeklyLikes.joinToString(", ") { "${it.weekStart}=${it.count}" }
-    val codePoints = graphText.codePoints().toArray().joinToString(" ") { "U+%04X".format(it) }
-
-    Tools.plugin.logger.info(
-        "[SLDataFont] Config: background=${formatCodePoint(graphConfig.backgroundCodePoint)} " +
-            "cursorReset=${formatCodePoint(graphConfig.cursorResetCodePoint)} " +
-            "barStartOffset=${graphConfig.barStartOffsetCodePoint?.let(::formatCodePoint) ?: "none"} " +
-            "barBase=${formatCodePoint(graphConfig.barBaseCodePoint)} " +
-            "barLevels=${graphConfig.barLevels} " +
-            "separator=${graphConfig.barSeparatorCodePoint?.let(::formatCodePoint) ?: "none"} " +
-            "guiSlots=${graphConfig.guiSlots} displayWeeks=${graphConfig.displayWeeks}"
-    )
-    Tools.plugin.logger.info("[SLDataFont] Weekly likes: $weeklySummary")
-    Tools.plugin.logger.info("[SLDataFont] Graph glyph code points: $codePoints")
-    weeklyLikes.firstOrNull()?.let {
-      Tools.plugin.logger.info(
-          "[SLDataFont] Tooltip sample: slot=0,9,18,27,36 name=${weekLabel(it)} lore=いいね ${it.count}"
-      )
-    }
-  }
-
   private fun createInventory(
       graphText: String,
       weeklyLikes: List<WeeklyLikeCount>,
@@ -465,8 +437,6 @@ object SLDataFont : CommandExecutor, TabCompleter, Listener {
 
   private fun isGraphInventory(inventory: Inventory): Boolean =
       inventory.holder is GraphInventoryHolder
-
-  private fun formatCodePoint(codePoint: Int): String = "U+%04X".format(codePoint)
 
   private class GraphInventoryHolder : InventoryHolder {
     private lateinit var backingInventory: Inventory

@@ -36,7 +36,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
     if (!EconomyManager.isAvailable) {
-      player.sendMessage(c("&cショップには Vault と経済プラグインが必要です。"))
+      player.sendMessage(c("&cショップには OyasaiEconomy が必要です。"))
       return
     }
     val category =
@@ -186,7 +186,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     }
     inv.setItem(52, quantitySelector)
 
-    val balance = if (EconomyManager.isAvailable) EconomyManager.getBalance(player) else 0.0
+    val balance = if (EconomyManager.isAvailable) EconomyManager.getBalance(player) else 0L
     val (invertMat, invertTitle, invertDesc) =
         if (state.isInverted) {
           Triple(Material.REDSTONE, "&c反転中", "&c左=売却 右=購入")

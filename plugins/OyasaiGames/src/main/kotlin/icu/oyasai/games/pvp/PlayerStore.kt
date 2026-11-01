@@ -48,9 +48,6 @@ internal fun requireExclusiveSnapshot(directory: File, fileName: String) {
   }
 }
 
-internal fun gameSnapshotPending(dataFolder: File, id: java.util.UUID): Boolean =
-    listOf("pvp", "bedwars", "tntrun").any { File(dataFolder, "$it/players/$id.yml").exists() }
-
 internal class PlayerStore(private val directory: File) {
   fun file(player: Player) = File(directory, "${player.uniqueId}.yml")
 

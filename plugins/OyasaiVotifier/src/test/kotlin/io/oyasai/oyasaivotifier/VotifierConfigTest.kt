@@ -15,7 +15,7 @@ class VotifierConfigTest {
         YamlConfiguration().apply {
           loadFromString(
               """
-              host: 0.0.0.0
+              host: 0L.0L
               port: 8192
               tokens:
                 default: secret
@@ -38,16 +38,16 @@ class VotifierConfigTest {
     val rewards =
         RewardTable(
             listOf(
-                WeightedReward(50, Reward(30_000.0, 15, emptyList())),
-                WeightedReward(40, Reward(20_000.0, 10, emptyList())),
-                WeightedReward(10, Reward(50_000.0, 20, emptyList())),
+                WeightedReward(50, Reward(30_000L, 15, emptyList())),
+                WeightedReward(40, Reward(20_000L, 10, emptyList())),
+                WeightedReward(10, Reward(50_000L, 20, emptyList())),
             )
         )
 
-    assertEquals(30_000.0, rewards.pick { 49 }.money)
-    assertEquals(20_000.0, rewards.pick { 50 }.money)
-    assertEquals(20_000.0, rewards.pick { 89 }.money)
-    assertEquals(50_000.0, rewards.pick { 90 }.money)
+    assertEquals(30_000L, rewards.pick { 49 }.money)
+    assertEquals(20_000L, rewards.pick { 50 }.money)
+    assertEquals(20_000L, rewards.pick { 89 }.money)
+    assertEquals(50_000L, rewards.pick { 90 }.money)
   }
 
   @Test
@@ -60,9 +60,9 @@ class VotifierConfigTest {
     val parsed = VotifierConfig.load(config)
 
     assertEquals(60, parsed.party.votesNeeded)
-    assertEquals(30_000.0, parsed.individual.pick { 0 }.money)
-    assertEquals(20_000.0, parsed.individual.pick { 50 }.money)
-    assertEquals(50_000.0, parsed.individual.pick { 90 }.money)
+    assertEquals(30_000L, parsed.individual.pick { 0 }.money)
+    assertEquals(20_000L, parsed.individual.pick { 50 }.money)
+    assertEquals(50_000L, parsed.individual.pick { 90 }.money)
     assertEquals(
         "§8(§6zVoteParty§8) §cMR0203§6さんが投票しました！§7(§b6§7/§a60§7)",
         parsed.messages.voteBroadcastChat("MR0203", 6, 60),

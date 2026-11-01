@@ -1,22 +1,21 @@
 package icu.oyasai.games.pvp
 
+import icu.oyasai.games.wholeMoney
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.io.File
 import java.util.UUID
-import net.milkbowl.vault.economy.Economy
-import org.bukkit.Bukkit
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 
 internal class PvpEconomy(
     private val folder: File,
-    private val provider: Economy,
-    private val offlinePlayer: (UUID) -> org.bukkit.OfflinePlayer = Bukkit::getOfflinePlayer,
+    private val provider: OyasaiEconomyApi,
 ) {
   private val file = File(folder, "payments.yml")
   private var busy = false
 
   private inline fun <T> serialized(action: () -> T): T {
-    check(!busy) { "Economy transaction is already in progress" }
+    check(!busy) { "OyasaiEconomyApi transaction is already in progress" }
     busy = true
     try {
       return action()
@@ -29,10 +28,10 @@ internal class PvpEconomy(
 
   fun requireProvider() = Unit
 
-  fun charge(player: Player, amount: Double, key: String = UUID.randomUUID().toString()): String? {
+  fun charge(player: Player, amount: Long, key: String = UUID.randomUUID().toString()): String? {
     return serialized {
-      require(amount.isFinite() && amount >= 0)
-      if (amount == 0.0) return null
+      require(amount >= 0)
+      if (amount == 0L) return null
       val economy = provider
       val y = ledger()
       check(!y.contains("debits.$key")) { "Debit key already exists" }
@@ -40,11 +39,14 @@ internal class PvpEconomy(
       y.set("debits.$key.amount", amount)
       y.set("debits.$key.state", "uncertain")
       saveYaml(file, y)
-      val response = economy.withdrawPlayer(player, amount)
-      if (!response.transactionSuccess()) {
+      val response = economy.withdraw("yen", player.uniqueId, amount)
+      if (!response.accepted) {
         y.set("debits.$key", null)
         saveYaml(file, y)
-        error("Economy withdrawal failed")
+        error("OyasaiEconomyApi withdrawal failed")
+      }
+      check(response.completion.join() is io.oyasai.economy.api.EconomyResult.Success) {
+        "引き落としを保存できません"
       }
       y.set("debits.$key.state", "charged")
       saveYaml(file, y)
@@ -73,7 +75,7 @@ internal class PvpEconomy(
     }
   }
 
-  fun settle(key: String?, amount: Double) {
+  fun settle(key: String?, amount: Long) {
     return serialized {
       if (key == null) return
       val y = ledger()
@@ -90,13 +92,13 @@ internal class PvpEconomy(
 
   fun refund(key: String?) {
     if (key == null) return
-    settle(key, ledger().getDouble("debits.$key.amount"))
+    settle(key, ledger().wholeMoney("debits.$key.amount"))
   }
 
-  fun pay(id: UUID, amount: Double, key: String = UUID.randomUUID().toString()) {
+  fun pay(id: UUID, amount: Long, key: String = UUID.randomUUID().toString()) {
     return serialized {
-      require(amount.isFinite() && amount >= 0)
-      if (amount == 0.0) return
+      require(amount >= 0)
+      if (amount == 0L) return
       val y = ledger()
       if (y.contains("credits.$key")) return
       y.set("credits.$key.player", id.toString())
@@ -108,11 +110,11 @@ internal class PvpEconomy(
   }
 
   // A durable event key also prevents a caller retry from creating another credit.
-  // Uncertain Vault responses deliberately remain blocked for reconciliation.
-  fun payOnce(event: String, id: UUID, amount: Double) {
+  // Uncertain 経済API responses deliberately remain blocked for reconciliation.
+  fun payOnce(event: String, id: UUID, amount: Long) {
     serialized {
-      require(event.isNotBlank() && amount.isFinite() && amount >= 0)
-      if (amount == 0.0) return
+      require(event.isNotBlank() && amount >= 0)
+      if (amount == 0L) return
       val key =
           "event-" +
               java.security.MessageDigest.getInstance("SHA-256")
@@ -122,7 +124,7 @@ internal class PvpEconomy(
       val path = "credits.$key"
       if (y.contains(path)) {
         check(
-            y.getString("$path.player") == id.toString() && y.getDouble("$path.amount") == amount
+            y.getString("$path.player") == id.toString() && y.wholeMoney("$path.amount") == amount
         ) {
           "Payment event does not match the existing ledger"
         }
@@ -140,19 +142,22 @@ internal class PvpEconomy(
     val economy = provider
     val path = "credits.$key"
     if (y.getString("$path.state") != "pending") return
-    val amount = y.getDouble("$path.amount")
-    if (amount == 0.0) {
+    val amount = y.wholeMoney("$path.amount")
+    if (amount == 0L) {
       y.set("$path.state", "paid")
       saveYaml(file, y)
       return
     }
-    // Vault has no idempotent transactions. Keep uncertain debits/credits for
+    // 経済API has no idempotent transactions. Keep uncertain debits/credits for
     // administrator reconciliation rather than automatically repeat them.
     y.set("$path.state", "uncertain")
     saveYaml(file, y)
-    val response =
-        economy.depositPlayer(offlinePlayer(UUID.fromString(y.getString("$path.player")!!)), amount)
-    y.set("$path.state", if (response.transactionSuccess()) "paid" else "pending")
+    val response = economy.deposit("yen", UUID.fromString(y.getString("$path.player")!!), amount)
+    y.set(
+        "$path.state",
+        if (response.completion.join() is io.oyasai.economy.api.EconomyResult.Success) "paid"
+        else "pending",
+    )
     saveYaml(file, y)
   }
 
@@ -163,7 +168,7 @@ internal class PvpEconomy(
         if (y.getString("debits.$key.state") == "charged") {
           y.set("debits.$key.state", "settled")
           y.set("credits.$key.player", y.getString("debits.$key.player"))
-          y.set("credits.$key.amount", y.getDouble("debits.$key.amount"))
+          y.set("credits.$key.amount", y.wholeMoney("debits.$key.amount"))
           y.set("credits.$key.state", "pending")
           saveYaml(file, y)
         }

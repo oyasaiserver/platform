@@ -1,12 +1,12 @@
 package io.oyasai.signshop
 
+import io.oyasai.economy.api.EconomyResult
 import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import net.milkbowl.vault.economy.EconomyResponse
 
 class SignShopTest {
   @Test
@@ -30,22 +30,19 @@ class SignShopTest {
   }
 
   @Test
-  fun vaultMoneyResponse() {
-    fun result(amount: Double, type: EconomyResponse.ResponseType) =
-        moneyResult(EconomyResponse(amount, 0.0, type, ""), 10)
-
-    assertEquals(MoneyResult.FAILED, result(10.0, EconomyResponse.ResponseType.FAILURE))
-    assertEquals(MoneyResult.FAILED, result(0.0, EconomyResponse.ResponseType.FAILURE))
-    assertEquals(MoneyResult.OK, result(10.0, EconomyResponse.ResponseType.SUCCESS))
-    assertEquals(MoneyResult.UNKNOWN, result(9.0, EconomyResponse.ResponseType.SUCCESS))
-    assertEquals(MoneyResult.UNKNOWN, result(10.0, EconomyResponse.ResponseType.NOT_IMPLEMENTED))
+  fun economyMoneyResult() {
+    assertEquals(MoneyResult.FAILED, moneyResult(EconomyResult.InsufficientFunds(0, 10), 10))
+    assertEquals(MoneyResult.OK, moneyResult(EconomyResult.Success(100, 10), 10))
+    assertEquals(MoneyResult.OK, moneyResult(EconomyResult.Success(100, -10), 10))
+    assertEquals(MoneyResult.UNKNOWN, moneyResult(EconomyResult.Success(100, 9), 10))
+    assertEquals(MoneyResult.UNKNOWN, moneyResult(EconomyResult.Failed("保存失敗"), 10))
   }
 
   @Test
   fun price() {
     assertEquals(1200, priceYen(" ¥1,200 "))
     assertEquals(0, priceYen("￥0"))
-    assertEquals(2, priceYen("1.5"))
+    assertNull(priceYen("1.5"))
     listOf("-1", "1狐火", "", "0.1", "1,00", "NaN", "10,000,000,000,001").forEach {
       assertNull(priceYen(it), it)
     }

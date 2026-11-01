@@ -78,7 +78,6 @@ oyasaiPurpur rec {
     oyasaichat
     oyasaitab
     plugmanx
-    vertex
     viaversion
     # keep-sorted end
   ];

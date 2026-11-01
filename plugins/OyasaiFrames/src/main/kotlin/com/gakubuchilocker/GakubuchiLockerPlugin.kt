@@ -10,6 +10,7 @@ import java.util.UUID
 
 class GakubuchiLockerPlugin(val plugin: OyasaiFrames) {
   lateinit var db: DatabaseManager
+  private var finderHandler: GakubuchiFinderCommand? = null
   val ownerKey
     get() = plugin.ownerKey
 
@@ -42,6 +43,7 @@ class GakubuchiLockerPlugin(val plugin: OyasaiFrames) {
     }
 
     val finderHandler = GakubuchiFinderCommand(this)
+    this.finderHandler = finderHandler
     plugin.getCommand("gakubuchifinder")?.let { cmd ->
       cmd.setExecutor(finderHandler)
       cmd.tabCompleter = finderHandler
@@ -54,11 +56,13 @@ class GakubuchiLockerPlugin(val plugin: OyasaiFrames) {
     }
 
     plugin.server.pluginManager.registerEvents(FrameEventListener(this), plugin)
+    plugin.server.pluginManager.registerEvents(finderHandler, plugin)
 
     logger.info("Gakubuchi-Locker が有効になりました。")
   }
 
   fun onDisable() {
+    finderHandler?.cleanup()
     if (::db.isInitialized) db.close()
     logger.info("Gakubuchi-Locker が無効になりました。")
   }

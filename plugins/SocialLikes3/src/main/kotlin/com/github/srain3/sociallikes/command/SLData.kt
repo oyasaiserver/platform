@@ -48,7 +48,6 @@ import org.bukkit.inventory.meta.SkullMeta
 object SLData : CommandExecutor, TabCompleter, Listener {
   private const val DIALOG_AXIS_MAX = 7500
   private const val DIALOG_AXIS_DIVISIONS = 5
-  private const val DIALOG_GRAPH_ROWS = DIALOG_AXIS_DIVISIONS
   private const val DIALOG_BODY_WIDTH = 520
   private const val DIALOG_BUTTON_WIDTH = 130
   private const val DIALOG_ACTION_COLUMNS = 2
@@ -65,7 +64,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   // \u53F3\u8EF8\u306E\u4F59\u767D\u306F\u5143\u3005"\u2581\u2581\u2581"(hiddenColor\u3067\u5857\u3063\u3066\u898B\u3048\u306A\u304F\u3059\u308B\u60F3\u5B9A)\u3060\u3063\u305F\u304C\u3001\u5B9F\u6A5F\u3067\u306F
   // \u2581\u306E\u898B\u305F\u76EE\u306E\u7DDA\u304ChiddenColor\u3067\u3082\u8584\u304F\u898B\u3048\u3066\u3057\u307E\u3063\u3066\u3044\u305F(\u30E6\u30FC\u30B6\u30FC\u6307\u6458)\u3002NBSP\u306F\u4E2D\u8EAB\u304C\u7A7A\u306E\u30B0\u30EA\u30D5
   // \u306A\u306E\u3067\u8272\u306B\u95A2\u4FC2\u306A\u304F\u672C\u5F53\u306B\u4F55\u3082\u63CF\u753B\u3055\u308C\u306A\u3044\u3002
-  private const val DIALOG_NBSP_X3 = "\u00A0\u00A0\u00A0"
   private const val DIALOG_FULL_SPACE = '\u3000'
   // U+2B1B\u3002\u5B9F\u6E2Cadvance=8px(dialogMeasuredGlyphMetrics\u53C2\u7167)\u3002\u6D3B\u52D5\u30D2\u30FC\u30C8\u30DE\u30C3\u30D7\u306F\u6587\u5B57\u3092\u56FA\u5B9A\u3057
   // \u8272\u3060\u3051\u3067\u6FC3\u6DE1\u3092\u8868\u3059(DIALOG_STYLE.md\u300C\u4F7F\u3046\u6587\u5B57\u300D\u53C2\u7167\u3001`\u2581\u2591\u2592\u2593\u2588`\u306E\u9001\u308A\u5E45\u4E0D\u4E00\u81F4\u3092\u56DE\u907F)\u3002
@@ -368,21 +366,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       }
     }
     return DialogRequest(period)
-  }
-
-  private fun dialogArgumentSuggestions(previousArgs: List<String>): List<String> {
-    val hasPeriod = previousArgs.any { dialogPeriod(it) != null }
-    return buildList { if (!hasPeriod) addAll(listOf("week", "month", "year")) }
-  }
-
-  private fun dialogStatsPlayerSuggestions(sender: CommandSender, input: String): List<String> {
-    if (sender !is Player || !sender.isOp) return emptyList()
-    return buildSet {
-          Bukkit.getOnlinePlayers().mapTo(this) { it.name }
-          addAll(SLDatabase.getCachedPlayerNames())
-        }
-        .filter { it.startsWith(input, ignoreCase = true) }
-        .sortedBy { it.lowercase() }
   }
 
   private fun handleDialogStats(player: Player, args: List<String>) {
@@ -820,7 +803,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val graph = buildDialogGraph(series, size, config)
     val bodyWidth = dialogBodyWidth(graph)
     val playerHeadBody = dialogPlayerHeadBody(player, series, bodyWidth, 32, 32)
-    logDialogGraphPreview(period, size, graph, subtitle)
 
     val actions =
         listOf(
@@ -2220,46 +2202,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         else -> String.format("#%06x", color.value())
       }
 
-  private fun dialogStatsSummaryComponent(
-      stats: SLDataStatsService.ExtendedStats,
-      targetName: String,
-      palette: DialogTextPalette,
-  ): Component {
-    val peak =
-        stats.peakLikeDay?.let {
-          "全体の受けいいね最多日 ${it.dateLabel} ${formatCount(it.count)}件 / 直近12週平均${formatAverageCount(it.averageCount)}件/日"
-        } ?: "全体の受けいいね最多日はまだありません"
-    val personalBest =
-        "送ったいいね自己ベスト 日${dialogLatestPersonalBest(stats.personalBestHistory.daily)} / " +
-            "週${dialogLatestPersonalBest(stats.personalBestHistory.weekly)} / " +
-            "月${dialogLatestPersonalBest(stats.personalBestHistory.monthly)}"
-    val week = stats.playerWeek
-    return Component.empty()
-        .font(DIALOG_FONT)
-        .append(Component.text("今週 ${week.label}\n", palette.secondary))
-        .append(
-            Component.text(
-                "作成 ${formatCount(week.buildsCreated)} / 送った ${formatCount(week.likesGiven)} / 受けた ${formatCount(week.likesReceived)} / 宣伝 ${formatCount(week.publicityCount)}\n",
-                palette.primary,
-            )
-        )
-        .append(Component.text("これまでの記録\n", palette.secondary))
-        .append(Component.text("$peak\n", NamedTextColor.YELLOW))
-        .append(Component.text("$personalBest\n", NamedTextColor.GOLD))
-        .append(
-            Component.text(
-                "一番乗り ${formatCount(stats.ownFirstLikeCount)}回\n",
-                NamedTextColor.AQUA,
-            )
-        )
-        .append(
-            Component.text(
-                "※ 時系列指標は全いいねに時刻がある建築だけを対象（${reliablePublishedScope(stats)}）",
-                NamedTextColor.GRAY,
-            )
-        )
-  }
-
   private fun dialogStatsRowsBody(
       palette: DialogTextPalette,
       title: String,
@@ -2714,20 +2656,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         else -> stats2Text("Section.stats2.given.streak.future_title", "称号: これから")
       }
 
-  private fun reliablePublishedScope(stats: SLDataStatsService.ExtendedStats): String {
-    val population = stats.reliableTimestampPopulation
-    val excluded = population.postCutoffBuildCount - population.postCutoffCompleteBuildCount
-    val suffix = if (excluded > 0) "（時刻欠落 ${formatCount(excluded)}件は除外）" else ""
-    return stats2Text(
-        "Section.stats2.builds.age.subtitle",
-        "対象: 2026/7/2以降に公開した建築 ${formatCount(population.postCutoffBuildCount)}件$suffix",
-        mapOf(
-            "age_target_count" to formatCount(population.postCutoffBuildCount),
-            "age_missing_suffix" to suffix,
-        ),
-    )
-  }
-
   /**
    * 2026-08-17: `reliablePublishedScope`はサーバー全体の建築数を返すため、この対象プレイヤーだけの
    * `stats.ageDistribution.received`(棒グラフの実データ)の件数と食い違っていた(ユーザー指摘)。
@@ -2958,10 +2886,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     )
   }
 
-  private fun dialogLatestPersonalBest(
-      records: List<SLDataStatsService.PersonalBestRecord>
-  ): String = records.lastOrNull()?.let { "${it.count}件" } ?: "なし"
-
   private fun formatDialogDuration(millis: Long): String {
     val nonNegativeMillis = millis.coerceAtLeast(0L)
     if (nonNegativeMillis < 60_000L) {
@@ -3158,37 +3082,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return ceil(value / maximum * width.toDouble()).toInt().coerceIn(1, width)
   }
 
-  private fun dialogComparisonValueRowComponent(
-      value: DialogComparisonValue,
-      maximum: Double,
-      row: DialogComparisonTableRow,
-      labelWidth: Int,
-      maxValueWidth: Int = 0,
-  ): Component {
-    val filledCount =
-        if (maximum <= 0.0) 0 else ((value.value / maximum) * 10.0).toInt().coerceIn(0, 10)
-    val remainingCount = 10 - filledCount
-    val percent =
-        if (maximum <= 0.0) 0 else (value.value / maximum * 100.0).toInt().coerceIn(0, 100)
-    val label = dialogFixedLabel(value.label, labelWidth, fillChar = '　')
-    val paddedPercent = percent.toString().padStart(3, ' ')
-    val rawValueText = formatComparisonValue(value.value, row)
-    val valueText =
-        if (maxValueWidth > 0) rawValueText.padStart(maxValueWidth, ' ') else rawValueText
-
-    val rowString =
-        "§f${label.fixed}${label.padding} §a${"█".repeat(filledCount)}§8${"█".repeat(remainingCount)} §7${paddedPercent}% §8= §e${valueText}" +
-            (if (value.sample != null) " §7${value.sample}" else "")
-
-    return Component.text(rowString)
-        .font(DIALOG_FONT)
-        .hoverEvent(
-            net.kyori.adventure.text.event.HoverEvent.showText(
-                Component.text("§e${value.label}: §f${rawValueText} (${paddedPercent.trim()}%)")
-            )
-        )
-  }
-
   private fun dialogFixedLabel(
       label: String,
       width: Int,
@@ -3225,92 +3118,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         fixed = normalized,
         padding = "_".repeat(underCount),
         finePadding = "\u07F2".repeat(fineCount),
-    )
-  }
-
-  private fun logDialogGraphPreview(
-      period: Period,
-      size: DialogGraphSize,
-      graph: DialogGraph,
-      subtitle: String,
-  ) {
-    val buttonColumnWidth = DIALOG_BUTTON_WIDTH * DIALOG_ACTION_COLUMNS
-    val bodyWidth = dialogBodyWidth(graph)
-    val subtitleAdvance = uniformDialogAdvance(subtitle)
-    Tools.plugin.logger.info(
-        "[SLData] Dialog ${period.name.lowercase()} graph preview style=${graph.widthStyle.name.lowercase()} size=${size.arg}" +
-            " cellAdvancePx=${graph.cellAdvancePx} axisMax=${graph.axisMax} ticks=${graph.ticks.joinToString("/")}" +
-            " bodyWidthPx=$bodyWidth baseBodyWidthPx=$DIALOG_BODY_WIDTH graphWidthPx=${graph.width}" +
-            " plotWidthChars=${graph.plotWidthChars} plotWidthPx=${graph.plotWidthAdvance}" +
-            " rightAxisWidthChars=${graph.rightAxisWidthChars} graphRowChars=${graph.graphRowChars}" +
-            " xAxisRowChars=${graph.xAxisRowChars}" +
-            " buttonColumnPx=$buttonColumnWidth buttonDeltaPx=${graph.width - buttonColumnWidth}" +
-            " rows=${graph.graphRows} barChars=${graph.barWidthChars} gapChars=${graph.barGapChars}" +
-            " glyphAdvances=${graph.glyphAdvances.entries.joinToString(",") { "${it.key}=${it.value}" }}" +
-            " rowAdvances=${graph.rowAdvances.joinToString("/")}" +
-            " aligned=${graph.rowAdvances.distinct().size == 1}" +
-            " subtitleAdvance=$subtitleAdvance" +
-            " latestBarColumn=${graph.latestBarColumn} latestMarkerColumn=${graph.latestMarkerColumn ?: "none"}" +
-            " latestMarkerRow=${formatDialogMarkerRow(graph.latestMarkerRow)}" +
-            " latestAligned=${graph.latestMarkerColumn == null || graph.latestMarkerColumn == graph.latestBarColumn}\n${graph.plain}"
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Dialog ${period.name.lowercase()} geometry size=${size.arg} " +
-            "scale=${graph.diagnostics.horizontalScale}x${graph.diagnostics.verticalScale} " +
-            "plotChars=${graph.plotWidthChars} plotMarginLeft=${graph.diagnostics.plotMarginLeftChars} " +
-            "plotMarginRight=${graph.diagnostics.plotMarginRightChars} marginDelta=${graph.diagnostics.plotMarginDeltaChars} " +
-            "plotRange=${graph.diagnostics.plotStartColumn}..${graph.diagnostics.plotEndColumn} " +
-            "rightAxisStart=${graph.diagnostics.rightAxisStartColumn} rightAxisWidth=${graph.rightAxisWidthChars} " +
-            "graphRowChars=${graph.graphRowChars} xAxisRowChars=${graph.xAxisRowChars} " +
-            "barGaps=${graph.diagnostics.barGaps.joinToString("/")}"
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Dialog ${period.name.lowercase()} line-advances size=${size.arg} " +
-            graph.lineAdvances.joinToString("; ") {
-              "${it.name}=chars:${it.chars},advance:${it.advancePx},asciiSpace:${it.hasAsciiSpace}"
-            } +
-            "; subtitle=chars:${subtitle.length},advance:$subtitleAdvance,asciiSpace:${subtitle.contains(' ')}"
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Dialog ${period.name.lowercase()} bars size=${size.arg} " +
-            graph.diagnostics.bars.joinToString("; ") {
-              "#${it.index + 1} ${it.label}:${it.count} center=${it.centerColumn} " +
-                  "drawn=${it.startColumn}..${it.endColumn}"
-            }
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Dialog ${period.name.lowercase()} x-axis size=${size.arg} " +
-            graph.diagnostics.xLabels.joinToString("; ") {
-              "${it.label}@bucket#${it.bucketIndex + 1} barCenterRow=${it.barCenterColumn} " +
-                  "labelStartRow=${it.labelStartColumn} labelCenterRow=${it.labelCenterColumn} " +
-                  "idealStartRow=${it.idealStartColumn} delta=${it.deltaColumns} " +
-                  "barCenterPx=${formatDialogPx(it.barCenterPx)} labelStartPx=${formatDialogPx(it.labelStartPx.toDouble())} " +
-                  "labelCenterPx=${formatDialogPx(it.labelCenterPx)} deltaPx=${formatDialogPx(it.deltaPx)}"
-            }
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Dialog ${period.name.lowercase()} y-axis size=${size.arg} " +
-            graph.diagnostics.yLabels.joinToString("; ") {
-              "${it.value}=labelRow:${it.labelRow},tickRow:${it.tickRow},delta:${it.deltaRows}"
-            }
-    )
-    Tools.plugin.logger.info(
-        "[SLData] Dialog measured unifont glyphs source=minecraft/font/unifont.zip " +
-            "metrics=" +
-            graph.glyphMetrics.joinToString("; ") {
-              "${it.char}(U+%04X raw=%d left=%s right=%s paintedRaw=%d drawnPx=%.1f advance=%d repeatGap=%.1f connects=%s)"
-                  .format(
-                      it.codePoint,
-                      it.sourceWidth,
-                      it.paintedLeft?.toString() ?: "none",
-                      it.paintedRight?.toString() ?: "none",
-                      it.paintedWidth,
-                      it.drawnWidth,
-                      it.advance,
-                      it.repeatGap,
-                      it.connectsWhenRepeated,
-                  )
-            }
     )
   }
 
@@ -4356,17 +4163,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return DialogPlotLayout(plotWidth, leftMargin, rightMargin, bars)
   }
 
-  private fun dialogTopBarRow(valueUnits: Int, unitsPerRow: Int, graphRows: Int): Int =
-      if (valueUnits <= 0) graphRows
-      else graphRows - ceil(valueUnits.toDouble() / unitsPerRow.toDouble()).toInt()
-
-  private fun buildDialogLatestMarker(width: Int, markerIndex: Int): String {
-    if (width <= 0) return ""
-    val chars = CharArray(width) { DIALOG_NBSP }
-    chars[markerIndex.coerceIn(0, width - 1)] = '▼'
-    return String(chars)
-  }
-
   private fun buildDialogMarkedBarCell(barWidthChars: Int): String {
     if (barWidthChars <= 1) return "▼"
     val chars = CharArray(barWidthChars) { '─' }
@@ -4524,12 +4320,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return DialogXAxisLabels(text.toString(), placed)
   }
 
-  /** Uses the exact same low-block glyph for graph axes and X-axis label gaps. */
-  private fun dialogAxisFill(config: DialogRenderConfig, count: Int): String =
-      config.lineChar.toString().repeat(count.coerceAtLeast(0))
-
   /**
-   * X軸ラベル行の「ラベルの無い区間」専用の埋め文字。[dialogAxisFill]と同じ送り幅(▁基準)だが、 実際に印字するのはNBSP(本当に空のグリフ)にする。2026-08-17:
+   * X軸ラベル行の「ラベルの無い区間」専用の埋め文字。低ブロックグリフと同じ送り幅(▁基準)だが、 実際に印字するのはNBSP(本当に空のグリフ)にする。2026-08-17:
    * ▁をhiddenColorで塗る方式は 実機でうっすら見えてしまっていた(ユーザー指摘)。
    */
   private fun dialogInvisibleAxisFill(config: DialogRenderConfig, count: Int): String =
@@ -4556,12 +4348,4 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         Period.MONTH -> label.substringAfter("/", label)
         Period.YEAR -> label.takeLast(2)
       }.let { if (it.length <= 4) it else it.take(4) }
-
-  private fun centerCell(label: String, width: Int): String {
-    if (label.isBlank()) return " ".repeat(width)
-    val clipped = if (label.length > width) label.take(width) else label
-    val left = (width - clipped.length) / 2
-    val right = width - clipped.length - left
-    return " ".repeat(left) + clipped + " ".repeat(right)
-  }
 }

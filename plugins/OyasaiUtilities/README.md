@@ -13,7 +13,14 @@
 
 ## Fart
 
-`/fart` でおならモードを切り替える。ON のプレイヤーがしゃがみ始めると、おならの音と硫黄色の煙を、視線と逆向きの後ろから出す。状態はメモリだけで、再起動で全員 OFF に戻る。
+`/fart` で通常のおならモードを ON にする。ON のときに引数なしで使うと、どのモードでも OFF にする。しゃがみ始めると、おならの音と硫黄色の煙を、視線と逆向きの後ろから出す。
+
+- `/fart stay`: 居座りモード。他のプレイヤーの頭に乗ってしゃがんでも降りず、おならだけ出す。降りるには `/fart` で OFF にしてからしゃがむ。
+- `/fart fly`: 飛行モード。しゃがむたびに上向き速度を0.3加算（上限0.6）し、落下距離をリセットする。飛行モード中は連打をやめて落ちても落下ダメージを受けない。
+
+`/fart [stay|fly] [player]` または `/fart <player>` で、オンラインの対象のモードを切り替える（名前だけなら通常モード）。名前指定は自分自身でも `oyasaiutilities.fart.others`（既定 OP）が必要。コンソールは名前指定時だけ使える。結果は実行者に、別の対象にも現在のモードを通知する。タブ補完は stay・fly を提示し、この権限がある場合はオンラインのプレイヤー名も前方一致で提示する。
+
+3モードは同時に使えず、同じモードの再指定でも OFF になる。状態はメモリだけで、再起動で全員 OFF に戻る。
 
 ## JoinCommands
 
@@ -22,6 +29,12 @@
 ## Spawn
 
 外製 EssentialsSpawn の置き換え。`/spawn [player]` でスポーン地点へ移動（他人指定は `oyasaiutilities.spawn.others`）。地点は `Spawn/config.yml` の1か所で、無ければ起動時に `Essentials/spawn.yml` の `spawns.default` を取り込む。死亡時の復活先（牢屋・`respawn-at-home`）と初参加時のキット・移動・歓迎文は Essentials の設定に従う。Essentials が無いときは無効。
+
+## Schematics (by shunueda)
+
+`/oyasai-schematics load <ID または URL>` で schematic.cloud の共有 ID から `.schem` をダウンロードし、`plugins/FastAsyncWorldEdit/schematics/` に置く。権限は `oyasaiutilities.schematics.load`（既定 OP）。FastAsyncWorldEdit（FAWE）が必要。
+
+ロードは自動で行わない。成功メッセージをクリックして `/schematic load <ID>.schem` をコピーし、自分で実行してロードする。ダウンロードは32 MiBまで。
 
 ## NotNBT (by Srain3)
 
@@ -63,3 +76,7 @@
 ・サバイバルのドロップアイテムはクリエでは拾えない。(`cm.bypass`(OP)はスルーする)
 ・クリエで置いた機能がある(アイテム増殖に繋がりそうな)ブロックは、クリエの人しか弄れなくなる。(`cm.bypass`(OP)はスルーする)
 ・逆にサバイバルのブロックは、クリエでは弄れない。(`cm.bypass`(OP)はスルーする) ・インベントリもゲームモード別に切り替わる。
+
+## Items
+
+運営が登録した特殊アイテムを、`/items`（一覧 GUI）、`/items search <名前>`（空白区切りの全語を含む名前、大文字小文字を区別しない）か `/items get <番号>` で受け取れる台帳。`/items help` は見出し・コマンド一覧・番号の補足を表示し、運営には管理コマンドとルールの意味も表示する。コンソールでも利用できる。番号は1から登録順に自動採番し、削除後も再利用しない。一覧の説明の先頭に `No.<番号>` を表示し、検索結果のページ送りも絞り込みを保つ。取得ルールは free・once・staff。運営は `/items register [free|once|staff] [説明]`（番号の入力は不要）と `/items update <番号> [ルール]`・`remove <番号>`・`restore <番号>`・`info [番号]`・`reset <番号> <プレイヤー>`（`oyasaiutilities.items.manage`）。`restore` は削除済みの登録を、番号・内容・取得記録を変えずに一覧へ戻す。`update` は有効な登録だけを置き換える。`register` は削除済みを含む同じアイテム（個数は無視）があれば断り、全一致の番号・名前と、有効なら `update`、削除済みなら `restore` を案内する。`/items info` はメインハンドと同じアイテムを個数を無視して探し、削除済みを含む全一致の詳細を表示する。削除済みは番号と名前に明記する。コンソールでは番号が必須。保存は共通 SQLite。持ち主の追跡はしない。

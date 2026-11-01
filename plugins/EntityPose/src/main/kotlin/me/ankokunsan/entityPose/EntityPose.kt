@@ -73,8 +73,6 @@ class EntityPose : JavaPlugin() {
     HORSE_STYLE_KEY = NamespacedKey(this, "horse_style")
     DEATH_KEY = NamespacedKey(this, "death_key")
 
-    Bou.create()
-    CopyWand.create1()
     getCommand("ep")?.setExecutor(EntityCommands())
 
     val board = Bukkit.getScoreboardManager()!!.mainScoreboard

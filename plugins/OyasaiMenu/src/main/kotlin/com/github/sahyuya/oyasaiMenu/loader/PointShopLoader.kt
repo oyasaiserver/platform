@@ -5,6 +5,7 @@ import com.github.sahyuya.oyasaiMenu.model.PointShopCategory
 import com.github.sahyuya.oyasaiMenu.model.PointShopItem
 import java.io.File
 import org.bukkit.Material
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 
 /**
@@ -43,6 +44,9 @@ class PointShopLoader(private val plugin: OyasaiMenu) {
 
       itemsSec.getKeys(false).forEach { key ->
         val sec = itemsSec.getConfigurationSection(key) ?: return@forEach
+        val cost =
+            parsePointShopCost(sec) { plugin.logger.warning("$it (pointshop $catId.$key)") }
+                ?: return@forEach
         val iconName = sec.getString("icon", "CHEST")?.uppercase() ?: "CHEST"
         val customTexture: String? = sec.getString("texture")
 
@@ -58,11 +62,6 @@ class PointShopLoader(private val plugin: OyasaiMenu) {
                       }
             }
 
-        val cost = sec.getLong("cost", 0L)
-        if (cost < 1) {
-          plugin.logger.warning("無効なポイントショップ価格 (pointshop $catId.$key): $cost")
-          return@forEach
-        }
         items[key] =
             PointShopItem(
                 key = key,
@@ -70,7 +69,8 @@ class PointShopLoader(private val plugin: OyasaiMenu) {
                 name = sec.getString("name", "") ?: "",
                 lore = sec.getStringList("lore"),
                 cost = cost,
-                message = sec.getString("message", "&a${cost}P 使用しました") ?: "",
+                message =
+                    sec.getString("message", if (cost == 0L) "" else "&a${cost}P 使用しました") ?: "",
                 commands = sec.getStringList("commands"),
                 closeOnPurchase = sec.getBoolean("close-on-purchase", false),
                 customTexture = customTexture,
@@ -90,4 +90,18 @@ class PointShopLoader(private val plugin: OyasaiMenu) {
   fun getAllCategories(): Map<String, PointShopCategory> = categories.toMap()
 
   fun reload() = loadAll()
+}
+
+internal fun parsePointShopCost(sec: ConfigurationSection, warn: (String) -> Unit): Long? {
+  if (!sec.getBoolean("enabled", true)) return null
+  if (!sec.isLong("cost") && !sec.isInt("cost")) {
+    warn("ポイントショップ価格 cost は0以上の整数で指定してください。")
+    return null
+  }
+  val cost = sec.getLong("cost")
+  if (cost < 0) {
+    warn("無効なポイントショップ価格: $cost")
+    return null
+  }
+  return cost
 }

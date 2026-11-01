@@ -14,9 +14,8 @@ import com.github.srain3.sociallikes.datas.GuidebookType
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.gui.GuidebookBookUI
-import io.oyasai.oyasaitoken.api.OyasaiTokenService
-import io.oyasai.oyasaitoken.api.TokenRequest
-import io.oyasai.oyasaitoken.api.TokenResult
+import io.oyasai.economy.api.EconomyResult
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import net.kyori.adventure.key.Key
@@ -394,17 +393,15 @@ object GuidebookService {
       GuidebookBookUI.openInfo(player, guidebook)
       return
     }
-    val tokens =
-        if (Tools.getTokenManager() == null) null
-        else Bukkit.getServicesManager().getRegistration(OyasaiTokenService::class.java)?.provider
+    val tokens = Tools.economy()
     if (tokens == null) {
       repostsInProgress.remove(uuid)
       player.sendMessage(Tools.socialLikesLOGO + " &c現在ポイントを利用できません。".color())
       return
     }
-    val request = TokenRequest(uuid, price.toLong(), player.name)
+    val amount = price.toLong()
     val charge =
-        runCatching { tokens.charge(request) }
+        runCatching { tokens.withdraw("token", player.uniqueId, amount).completion }
             .getOrElse { error ->
               repostsInProgress.remove(uuid)
               Tools.plugin.logger.severe(
@@ -425,9 +422,9 @@ object GuidebookService {
                     )
                     repostMessage(uuid, "&cポイントの処理に失敗しました。")
                   }
-                  result is TokenResult.InsufficientFunds ->
+                  result is EconomyResult.InsufficientFunds ->
                       repostMessage(uuid, "&cポイントが足りません（${price}P必要）。")
-                  result !is TokenResult.Success -> repostMessage(uuid, "&cポイントを引き落とせませんでした。")
+                  result !is EconomyResult.Success -> repostMessage(uuid, "&cポイントを引き落とせませんでした。")
                   else -> {
                     val current = SLDatabase.loadGuidebookBlocking(guidebookId)
                     val currentEntries = progress(entries(guidebookId, uuid)).total
@@ -437,7 +434,7 @@ object GuidebookService {
                             repostPrice(currentEntries) != price ||
                             !SLDatabase.recordGuidebookPublicityBlocking(guidebookId, uuid, price)
                     ) {
-                      refundRepost(tokens, request, uuid)
+                      refundRepost(tokens, amount, uuid)
                       return@Runnable
                     }
                     Bukkit.broadcast(
@@ -461,8 +458,8 @@ object GuidebookService {
     }
   }
 
-  private fun refundRepost(tokens: OyasaiTokenService, request: TokenRequest, uuid: UUID) {
-    val refund = runCatching { tokens.grant(request) }.getOrNull()
+  private fun refundRepost(tokens: OyasaiEconomyApi, amount: Long, uuid: UUID) {
+    val refund = runCatching { tokens.deposit("token", uuid, amount).completion }.getOrNull()
     if (refund == null) {
       Tools.plugin.logger.severe("[SL3] Guidebook repost refund failed for $uuid")
       repostMessage(uuid, "&c宣伝できず、返金にも失敗しました。運営に連絡してください。")
@@ -474,7 +471,7 @@ object GuidebookService {
           .runTask(
               Tools.plugin,
               Runnable {
-                if (error != null || result !is TokenResult.Success) {
+                if (error != null || result !is EconomyResult.Success) {
                   Tools.plugin.logger.severe(
                       "[SL3] Guidebook repost refund failed for $uuid: ${error?.message ?: result}"
                   )
@@ -503,16 +500,14 @@ object GuidebookService {
       player.sendMessage(Tools.socialLikesLOGO + " &c追加枠の価格が変わりました。もう一度確認してください。".color())
       return
     }
-    val tokens =
-        if (Tools.getTokenManager() == null) null
-        else Bukkit.getServicesManager().getRegistration(OyasaiTokenService::class.java)?.provider
+    val tokens = Tools.economy()
     if (tokens == null) {
       purchasesInProgress.remove(player.uniqueId)
       player.sendMessage(Tools.socialLikesLOGO + " &c現在ポイントを利用できません。".color())
       return
     }
-    val request = TokenRequest(player.uniqueId, offer.price.toLong(), player.name)
-    runCatching { tokens.charge(request) }
+    val amount = offer.price.toLong()
+    runCatching { tokens.withdraw("token", player.uniqueId, amount).completion }
         .getOrElse { error ->
           purchasesInProgress.remove(player.uniqueId)
           Tools.plugin.logger.severe(
@@ -530,11 +525,11 @@ object GuidebookService {
               )
               purchaseMessage(player.uniqueId, "&cポイントの処理に失敗しました。")
             }
-            result is TokenResult.InsufficientFunds -> {
+            result is EconomyResult.InsufficientFunds -> {
               purchasesInProgress.remove(player.uniqueId)
               purchaseMessage(player.uniqueId, "&cポイントが足りません（${offer.price}P必要）。")
             }
-            result !is TokenResult.Success -> {
+            result !is EconomyResult.Success -> {
               purchasesInProgress.remove(player.uniqueId)
               purchaseMessage(player.uniqueId, "&cポイントを引き落とせませんでした。")
             }
@@ -546,9 +541,11 @@ object GuidebookService {
               Tools.plugin.logger.severe(
                   "[SL3] Extra guidebook slot save failed for ${player.uniqueId}; refunding ${offer.price}P"
               )
-              tokens.grant(request).whenComplete { refund, refundError ->
+              tokens.deposit("token", player.uniqueId, amount).completion.whenComplete {
+                  refund,
+                  refundError ->
                 purchasesInProgress.remove(player.uniqueId)
-                if (refundError != null || refund !is TokenResult.Success) {
+                if (refundError != null || refund !is EconomyResult.Success) {
                   Tools.plugin.logger.severe(
                       "[SL3] Extra guidebook slot refund FAILED for ${player.uniqueId}: ${refundError?.message ?: refund}"
                   )

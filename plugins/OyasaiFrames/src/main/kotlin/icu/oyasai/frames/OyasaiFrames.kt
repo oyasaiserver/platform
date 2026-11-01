@@ -13,7 +13,6 @@ import org.bukkit.persistence.PersistentDataType
 class OyasaiFrames : ImageOnMap() {
   private var lockerFeature: GakubuchiLockerPlugin? = null
   private var paintFeature: PaintTools? = null
-  private var dyeItem: DyeItem? = null
 
   val ownerKey
     get() = OWNER_KEY
@@ -64,18 +63,14 @@ class OyasaiFrames : ImageOnMap() {
       logger.severe("Painting failed to start: ${e.message}")
     }
 
-    try {
-      val dye = DyeItem(this)
-      dyeItem = dye
-      dye.enable()
-    } catch (e: Exception) {
-      logger.severe("Dye item failed to start: ${e.message}")
+    getCommand("getdye")?.setExecutor { sender, _, _, _ ->
+      if (sender is Player) sender.performCommand("painttools dye")
+      else sender.sendMessage("このコマンドはプレイヤー専用です。")
+      true
     }
   }
 
   override fun onDisable() {
-    runCatching { dyeItem?.disable() }
-        .onFailure { logger.severe("Dye item shutdown failed: ${it.message}") }
     runCatching { paintFeature?.onDisable() }
         .onFailure { logger.severe("Painting shutdown failed: ${it.message}") }
     runCatching { super.onDisable() }

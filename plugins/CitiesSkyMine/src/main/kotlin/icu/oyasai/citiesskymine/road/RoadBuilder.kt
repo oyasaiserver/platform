@@ -78,7 +78,7 @@ object RoadBuilder {
     }
   }
 
-  private fun traceBlocksForOffset(
+  internal fun traceBlocksForOffset(
       path: List<PathPoint>,
       offset: Int,
       avoidRightAngleCorners: Boolean,
@@ -286,7 +286,7 @@ object RoadBuilder {
         }
       }
 
-  private data class TraceResult(
+  internal data class TraceResult(
       val blocks: List<TracedBlock>,
       val removedCorners: List<TracedBlock>,
   )

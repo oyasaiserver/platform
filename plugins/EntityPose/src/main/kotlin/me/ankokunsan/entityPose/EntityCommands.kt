@@ -167,7 +167,6 @@ class EntityCommands : CommandExecutor, TabCompleter {
       player.sendMessage("スケール: $scale")
       player.sendMessage("アレンジのロック: $arrangelock")
     }
-    return
   }
 
   private fun entityinfoset(player: Player) {
@@ -194,7 +193,6 @@ class EntityCommands : CommandExecutor, TabCompleter {
       ChooseGUi.openAllSettingGUI(player, targets)
     } else {
       ChooseGUi.openSettingGUI(player, target)
-      return
     }
   }
 
@@ -302,7 +300,6 @@ class EntityCommands : CommandExecutor, TabCompleter {
       player.sendMessage("§6[EntityPose] §e範囲選択をリセットしました")
     } else {
       player.sendMessage("§6[EntityPose] §c範囲選択されているエンティティがいません")
-      return
     }
   }
 
@@ -326,10 +323,6 @@ class EntityCommands : CommandExecutor, TabCompleter {
         player.sendMessage("§6[EntityPose] §conまたはoff を入力してください")
       }
     }
-  }
-
-  private fun formatLoc(value: Double): String {
-    return String.format("%.3f", value)
   }
 
   private fun formatDeg1(angle: EulerAngle): String {

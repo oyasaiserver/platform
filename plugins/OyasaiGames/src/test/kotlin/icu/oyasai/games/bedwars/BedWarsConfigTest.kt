@@ -43,6 +43,20 @@ class BedWarsConfigTest {
           .trimIndent()
 
   @Test
+  fun `reward settings reject fractional money and retired keys`(@TempDir folder: File) {
+    val file = File(folder, "config.yml")
+    file.writeText("economy: {enable: true, reward: {kill: 10}}\n")
+    assertEquals(
+        10,
+        BedWarsFiles(folder, Logger.getAnonymousLogger()).config.getLong("economy.reward.kill"),
+    )
+    file.writeText("economy: {reward: {kill: 1.5}}\n")
+    assertFailsWith<IllegalArgumentException> { BedWarsFiles(folder, Logger.getAnonymousLogger()) }
+    file.writeText("vault: {enable: true}\n")
+    assertFailsWith<IllegalArgumentException> { BedWarsFiles(folder, Logger.getAnonymousLogger()) }
+  }
+
+  @Test
   fun `completed games use configured main lobby while interruption keeps original destination`() {
     val config =
         YamlConfiguration().apply {
@@ -150,7 +164,7 @@ class BedWarsConfigTest {
         listOf("nested.other"),
         BedWarsSettings.unsupported(y, setOf("known", "nested.supported")),
     )
-    assertTrue("vault.reward.final-kill" in BedWarsSettings.configKeys)
+    assertTrue("economy.reward.final-kill" in BedWarsSettings.configKeys)
     assertTrue("upgrades.time.Diamond-II" in BedWarsSettings.sbaKeys)
     assertTrue("party.enabled" in BedWarsSettings.sbaKeys)
   }

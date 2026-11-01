@@ -8,9 +8,9 @@ v2.4.0 | | 最終更新日 | 2026-03-07 |
 ## 概要
 
 OyasaiPets（内部名: BigWolf）は、PaperMC 1.21 向けのペットシステムプラグインです。
-プレイヤーはトークン（TokenManager）を使ってペットの購入・育成・復活・交配を行います。
+プレイヤーはトークン（OyasaiEconomy）を使ってペットの購入・育成・復活・交配を行います。
 
-**必須依存:** TokenManager（無効/未導入の場合、OyasaiPets は起動しません）
+**必須依存:** OyasaiEconomy（無効/未導入の場合、OyasaiPets は起動しません）
 
 ---
 
@@ -19,7 +19,7 @@ OyasaiPets（内部名: BigWolf）は、PaperMC 1.21 向けのペットシステ
 ### 前提条件
 
 - PaperMC 1.21 以上のサーバー
-- TokenManager プラグイン導入済み
+- OyasaiEconomy プラグイン導入済み
 - ゲーム内OPアカウント（本プラグインのコマンドはコンソール実行不可）
 
 ### 手順
@@ -32,7 +32,7 @@ OyasaiPets（内部名: BigWolf）は、PaperMC 1.21 向けのペットシステ
 1. 起動ログを確認
    ```
    OyasaiPets (BigWolf) v<version>
-   TokenManager found - Economy system enabled
+   OyasaiEconomy found - Economy system enabled
    ```
 1. `plugins/OyasaiPets/config.yml` を必要に応じて編集
 1. `/bigwolfop reload` で設定を再読込
@@ -44,7 +44,7 @@ OyasaiPets（内部名: BigWolf）は、PaperMC 1.21 向けのペットシステ
 
 ### 失敗時対応
 
-- `TokenManager not found!` が出る: TokenManager の導入状態と起動状態を確認
+- `OyasaiEconomy not found!` が出る: OyasaiEconomy の導入状態と起動状態を確認
 - `api-version` 関連エラー: PaperMC バージョンを確認
 
 ---

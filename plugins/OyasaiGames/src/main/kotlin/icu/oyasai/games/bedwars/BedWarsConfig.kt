@@ -1,5 +1,6 @@
 package icu.oyasai.games.bedwars
 
+import icu.oyasai.games.wholeMoney
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -192,6 +193,13 @@ internal data class BwArena(
 internal class BedWarsFiles(val folder: File, private val logger: Logger) {
   val config = load("config.yml")
   val sba = load("SBA/sbaconfig.yml")
+
+  init {
+    require(!config.contains("vault")) { "経済設定をeconomyへ変更し、報酬は整数で指定してください" }
+    config.getConfigurationSection("economy.reward")?.getKeys(false)?.forEach {
+      config.wholeMoney("economy.reward.$it")
+    }
+  }
 
   private fun load(name: String): YamlConfiguration =
       YamlConfiguration().also { if (File(folder, name).isFile) it.load(File(folder, name)) }

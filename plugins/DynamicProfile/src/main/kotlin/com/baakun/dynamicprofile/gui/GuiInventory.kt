@@ -10,23 +10,9 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.InventoryHolder
 
 /** GUIとして使うインベントリを作成する。自動でそのインベントリ内で起こるクリックイベントをキャンセルする。 */
 object GuiInventory : Listener {
-  /**
-   * インベントリ(GUI)を作成して返す
-   *
-   * @param line 行数(1～6)
-   * @param title インベントリのタイトル
-   * @param [owner] インベントリの所有者、デフォnull
-   */
-  fun createInventory(line: Int, title: String, owner: InventoryHolder? = null): Inventory {
-    val inv = Bukkit.createInventory(owner, 9 * line, title)
-    invList.add(inv)
-    return inv
-  }
-
   /**
    * インベントリ(GUI)を作成して返す
    *
@@ -68,13 +54,5 @@ object GuiInventory : Listener {
     if (!invList.contains(e.view.topInventory)) return
     // Tools.plugin.logger.info("debug: invListにあるInventoryのCloseEvent発生")
     invList.remove(e.view.topInventory)
-  }
-
-  /** プラグイン無効化の時の処理 */
-  fun disableTask() {
-    // invListにあるインベントリを見ているプレイヤーにインベントリを閉じさせる処理
-    invList.toList().forEach { inv ->
-      inv.viewers.toList().forEach { player -> player.closeInventory() }
-    }
   }
 }

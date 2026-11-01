@@ -61,7 +61,7 @@ object AllBuild {
                   Tools.plugin.logger.severe("createSignItemにエラー０００: ${slData.id}")
                 }
               }
-              allBuildItem.toSortedMap()
+
               Tools.plugin.logger.info(
                   "[SL3] timing allBuildItemGeneration=${(System.nanoTime() - startedAt) / 1_000_000}ms"
               )
@@ -84,7 +84,6 @@ object AllBuild {
   /** 更新されたデータのGUIアイテムを作成する */
   fun updateSLSignData(slData: SLData) {
     createSignItem(slData)
-    allBuildItem.toSortedMap()
   }
 
   /** 消去されたデータのGUIアイテムを消去する */

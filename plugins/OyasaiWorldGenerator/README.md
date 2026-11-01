@@ -21,7 +21,7 @@
 
 ## 高さ適用の設計
 
-`HeightProvider` を境界にし、現行の `NmsHeightProvider` は Purpur 26.2 以外で何も変更せず `false` を返します。`WorldInitEvent` (`NORMAL`) ではアンロードせず、次を行います。
+`NmsHeightProvider` は Purpur 26.2 以外で何も変更せず `false` を返します。`WorldInitEvent` (`NORMAL`) ではアンロードせず、次を行います。
 
 1. バニラ `the_end` または `overworld` の `DimensionType` を複製し、`minY` / `height` / `logicalHeight` だけを変更する。
 2. `DimensionType` レジストリの元の frozen 状態と intrusive-holder map を保存し、一時的に登録可能にしてから必ず復元する。
@@ -43,7 +43,7 @@
 
 OWG 側で独自に書いたもの:
 
-- `HeightProvider` の境界、宣言・適用・検証状態の管理。
+- `NmsHeightProvider` による宣言・適用・検証状態の管理。
 - バニラ `the_end` / `overworld` レコードを3項目だけ差し替えて複製する処理と、OWG 固有 namespace/key の設計。
 - レジストリ状態を `try/finally` で保存・復元し、各書き込みを読み返す処理。
 - フィールド名が変わった場合の型・宣言順・変更前値による一意探索と fail-closed 判定。

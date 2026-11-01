@@ -37,7 +37,7 @@ class TablistFormatterTest {
             )
             .joinToString("\n"),
         TablistFormatter.footerLegacy(
-            money = 599113222.0,
+            money = 599113222L,
             tokens = 57721,
             online = 3,
             tps = "20",

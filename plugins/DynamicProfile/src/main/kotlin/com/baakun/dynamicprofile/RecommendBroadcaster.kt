@@ -41,7 +41,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
 
     val perm =
         plugin.server.servicesManager
-            .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
+            .getRegistration(net.luckperms.api.LuckPerms::class.java)
             ?.provider
 
     val (targetPlayers, cache) = // targetPlayers: おススメ設定済み　かつ　枠に合致するプレイヤーのリスト
@@ -49,9 +49,24 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
           0 -> { // 特別枠
             val filtered =
                 onlinePlayers.filter { player ->
-                  (perm?.playerInGroup(player, "spdonator") == true ||
-                      perm?.playerInGroup(player, "donator") == true) &&
-                      getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+                  (perm?.userManager?.getUser(player.uniqueId)?.let { user ->
+                    user
+                        .getInheritedGroups(
+                            perm.contextManager.getQueryOptions(user).orElseGet {
+                              perm.contextManager.staticQueryOptions
+                            }
+                        )
+                        .any { it.name == "spdonator" }
+                  } == true ||
+                      perm?.userManager?.getUser(player.uniqueId)?.let { user ->
+                        user
+                            .getInheritedGroups(
+                                perm.contextManager.getQueryOptions(user).orElseGet {
+                                  perm.contextManager.staticQueryOptions
+                                }
+                            )
+                            .any { it.name == "donator" }
+                      } == true) && getStats(player.uniqueId).recommends.values.any { it != EMPTY }
                 }
             if (filtered.isEmpty()) { // 通常枠Fallback
               val normalFiltered =
@@ -90,9 +105,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
               else -> {
                 cache.clear()
-                val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
-                if (retryUncached.isEmpty()) return
-                retryUncached.random()
+                targetPlayers.random()
               }
             }
         cache.add(player.uniqueId)
@@ -121,9 +134,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               uncached.isNotEmpty() -> uncached.random()
               else -> {
                 buildingCache.clear()
-                val retryUncached = allRecommends.filter { (_, id) -> id !in buildingCache }
-                if (retryUncached.isEmpty()) return
-                retryUncached.random()
+                allRecommends.random()
               }
             }
         buildingCache.add(selected)
@@ -137,9 +148,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
               else -> {
                 cache.clear()
-                val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
-                if (retryUncached.isEmpty()) return
-                retryUncached.random()
+                targetPlayers.random()
               }
             }
         val buildingCache =
@@ -153,9 +162,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               uncachedBuildings.isNotEmpty() -> uncachedBuildings.random()
               else -> {
                 buildingCache.clear()
-                val retryUncached = recommendIds.filter { it !in buildingCache }
-                if (retryUncached.isEmpty()) return
-                retryUncached.random()
+                recommendIds.random()
               }
             }
         cache.add(player.uniqueId)

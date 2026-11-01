@@ -10,37 +10,6 @@ object UploadV2Codec {
   const val MAX_BYTES = 1_048_576
   const val MAX_NOTES = 100_000
 
-  fun unicode15Decode(text: String, byteCount: Int): ByteArray {
-    require(
-        byteCount in 0..MAX_BYTES &&
-            text.length == (byteCount * 8 + 14) / 15 &&
-            text.length * 3 <= 765 * 400
-    )
-    val out = ByteArrayOutputStream(byteCount)
-    var bits = 0
-    var count = 0
-    text.forEach { char ->
-      bits = (bits shl 15) or value(char)
-      count += 15
-      while (count >= 8 && out.size() < byteCount) {
-        count -= 8
-        out.write((bits ushr count) and 255)
-      }
-    }
-    require(out.size() == byteCount && (count == 0 || (bits and ((1 shl count) - 1)) == 0)) {
-      "invalid Unicode15 padding"
-    }
-    return out.toByteArray()
-  }
-
-  private fun value(char: Char): Int =
-      when (char.code) {
-        in 0x3400..0x4dbf -> char.code - 0x3400
-        in 0x4e00..0x9fff -> char.code - 0x4e00 + 6592
-        in 0xe000..0xf43f -> char.code - 0xe000 + 27584
-        else -> throw IllegalArgumentException("invalid Unicode15 alphabet")
-      }
-
   fun reconstructOymi(compact: ByteArray): ByteArray {
     require(compact.size in 1..MAX_BYTES) { "OYMC size is out of bounds" }
     val input = DataInputStream(ByteArrayInputStream(compact))

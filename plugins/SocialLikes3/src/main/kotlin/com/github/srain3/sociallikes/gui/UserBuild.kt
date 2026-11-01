@@ -107,7 +107,7 @@ object UserBuild {
               builds.forEach { slData ->
                 createSignItem(slData, ownerNames[slData.owner.toString()])
               }
-              userBuildItem.toSortedMap()
+
               Tools.plugin.logger.info(
                   "[SL3] timing userBuildItemGeneration=${(System.nanoTime() - startedAt) / 1_000_000}ms"
               )
@@ -120,7 +120,6 @@ object UserBuild {
   /** 更新されたデータのGUIアイテムを作成する */
   fun updateSLSignData(slData: SLData) {
     createSignItem(slData)
-    userBuildItem.toSortedMap()
   }
 
   /** 消去されたデータのGUIアイテムを消去する */

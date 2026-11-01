@@ -123,12 +123,6 @@ class GameManager(
     teamFound.clear()
   }
 
-  fun canDeleteAll(): Boolean = state != GameState.RUNNING
-
-  fun findsOf(playerId: UUID): Set<UUID> = soloFound[playerId] ?: emptySet()
-
-  fun findsOfTeam(teamName: String): Set<UUID> = teamFound[teamName]?.keys ?: emptySet()
-
   fun onTreasureFound(
       playerId: UUID,
       treasureId: UUID,

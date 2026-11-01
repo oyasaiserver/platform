@@ -50,18 +50,6 @@ object PublicityHistory {
     SLDatabase.savePublicityHistory(pData)
   }
 
-  fun delSLID(slid: Int) {
-    data.toMap().forEach { (num, pData) ->
-      if (pData.slid == slid) {
-        data.remove(num)
-        yaml.set("$num", null)
-      }
-    }
-    yaml.save()
-
-    SLDatabase.deletePublicityHistoryBySLID(slid)
-  }
-
   fun getData(): Map<Int, PublicityData> {
     return data.toMap()
   }

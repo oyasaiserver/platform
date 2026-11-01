@@ -38,19 +38,14 @@ internal fun resolveName(input: String, names: Collection<String>): String? {
 internal fun resolveBetArena(input: String, targets: Map<String, Collection<String>>): String? =
     targets.filterValues { resolveName(input, it) != null }.keys.singleOrNull()
 
-internal fun betPayout(
-    amount: Double,
-    winningTotal: Double,
-    total: Double,
-    factor: Double,
-): Double {
-  require(listOf(amount, winningTotal, total, factor).all { it.isFinite() && it >= 0 })
+internal fun betPayout(amount: Long, winningTotal: Long, total: Long, factor: BigDecimal): Long {
+  require(listOf(amount, winningTotal, total).all { it >= 0 } && factor.signum() >= 0)
   require(winningTotal > 0 && amount <= winningTotal && winningTotal <= total)
   return BigDecimal.valueOf(amount)
       .multiply(BigDecimal.valueOf(total))
-      .multiply(BigDecimal.valueOf(factor))
-      .divide(BigDecimal.valueOf(winningTotal), 2, RoundingMode.HALF_UP)
-      .toDouble()
+      .multiply(factor)
+      .divide(BigDecimal.valueOf(winningTotal), 0, RoundingMode.HALF_UP)
+      .longValueExact()
 }
 
 internal fun autoClass(value: String, team: String): String {

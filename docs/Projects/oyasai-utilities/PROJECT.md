@@ -32,7 +32,7 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 | プラグイン定義 | `src/main/resources/plugin.yml`（name `OyasaiUtilities`、version `0.1.0`、api-version `1.21`）。`paper-plugin.yml` はこのディレクトリに存在しない |
 | 関連資料 | [`README.md`](../../../plugins/OyasaiUtilities/README.md)、[`PLAYER_STATE.md`](../../../plugins/OyasaiUtilities/PLAYER_STATE.md)、[`TELEPORT.md`](../../../plugins/OyasaiUtilities/TELEPORT.md)、[`SQLITE_STORAGE.md`](../../../plugins/OyasaiUtilities/SQLITE_STORAGE.md)、[`WORKSTATIONS.md`](../../../plugins/OyasaiUtilities/WORKSTATIONS.md) |
 | 利用者向けガイド | [player.md](player.md)、[operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-utilities/operator.md) |
-| しゃがみイベントの共有 | `PlayerToggleSneakEvent` は Sit（乗り物・這いの解除）、Elevator（下り）、Fart（おなら）が使う。新しいしゃがみ機能では cancel せず、他の機能の処理を止めない |
+| しゃがみイベントの共有 | `PlayerToggleSneakEvent` は Sit（乗り物・這いの解除）、Elevator（下り）、Fart（おなら）が使う。`PlayerToggleSneakEvent` は cancel しない。Fart の居座り中は Sit が頭から降ろす処理を省略し、Fart が `EntityDismountEvent` を LOW で取消可能かつしゃがみ中の場合だけ取り消す。降車対象は `event.dismounted` で判定する（イベント発火時には `player.vehicle` が既に null）。Sit は取り消された降車を処理しない |
 
 ## 技術仕様
 
@@ -45,16 +45,18 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 | 移動・ホーム・ワープ・入獄・スポーン | `teleport/`, `spawn/`, `tpath/`, `tpswitch/` | Essentials 互換のコマンド、移動安全、入獄、履歴、受付設定 |
 | プレイヤー状態 | `playerstate/` | ゲームモード、飛行、速度、時刻、回復、AFK、ニックネーム、死亡時処理 |
 | 作業台・頭 | `workstation/` | 作業台 GUI、エンダーチェスト、廃棄、帽子、プレイヤー頭（統合版の頭は `BedrockSkull.kt`。仕様は `WORKSTATIONS.md`） |
-| おなら | `fart/` | しゃがむとおならの音と硫黄色の煙を出すモードを切り替える（`/fart`）。状態はメモリのみ |
+| おなら | `fart/` | `/fart [stay\|fly] [player]` で通常・居座り・飛行の排他モードを切り替える。しゃがみ開始で共通の音と硫黄色の煙。居座りはプレイヤーの頭からのスニーク降車を防ぎ、飛行は上向き速度を0.3加算（上限0.6）し落下距離をリセット、FLY 中の落下ダメージを取り消す。引数なしは ON なら全モード OFF、OFF なら通常。同じモード再指定も OFF。状態は UUID ごとのメモリのみ。名前のみ指定は対象の通常モードを切り替える。名前指定（自分自身も含む）は `oyasaiutilities.fart.others`（既定 OP）が必要でオンラインの完全一致のみ。コンソールは名前指定時のみ可。実行者に結果、別の対象にもモードを通知。タブ補完は stay・fly と、権限がある場合のみ対象名を前方一致で提示 |
+| アイテム台帳 | `items/` | `/items` で、運営が登録した特殊アイテムを一覧 GUI（45件/ページ）または `/items get <番号>` で受け取る。登録は手に持った ItemStack を `serializeAsBytes` で保存（個数も保存）。取得ルールは free（誰でも何度でも）・once（1人1回）・staff（運営のみ。一覧と補完に出さない）。`oyasaiutilities.items.manage` を持つ人は登録・更新・削除・復元・情報・受取済みの取消ができ、どのルールのアイテムも受け取れる。`/items help` は見出し・コマンド一覧・番号の補足を表示し、運営には管理コマンドとルールの意味も表示する。コンソールでも利用できる。番号は1から登録順に自動採番（削除済みを含む最大番号+1）。`register [free\|once\|staff] [説明]` でIDの指定は不要。削除は論理削除で番号は再利用しない。`restore <番号>` は削除済みの登録の有効フラグだけを戻し、登録内容と取得記録を保持する。`update` は有効な登録の差し替えのみ。`register` は削除済みを含む全件との `isSimilar` 一致（個数は無視）があれば登録を拒否し、全一致の番号・名前と、有効なら `update`、削除済みなら `restore` を案内する。判定は番号なし `info` と共有する。`/items info [番号]` は詳細を表示し、番号なしならメインハンドと保存済み ItemStack を `isSimilar` で比較（個数は無視）して、削除済みを含む全一致の詳細を表示する。削除済みは番号と名前に明記する。コンソールは番号必須。一覧の lore の先頭に `No.<番号>` を表示。`/items search <名前>` は名前だけを対象に空白区切りの全語を含むものを検索し、大文字小文字は区別しない。全角半角・ひらがなカタカナの表記ゆれは吸収しない。検索語はページ送りでも維持する。受け取りは `items_log` に残すが、「今誰が持っているか」は追跡しない。持ち物が満杯なら足元に落とす。保存は共通 SQLite の `items_catalog`・`items_log`（機能名 `items`、版2。版1の文字列IDは作成日時順、同じ日時なら旧ID順の連番に移行し、取得記録も同じ番号へ付け替え、旧IDは残さない）、読み込み時にメモリへ載せ、書き込みは共通 DB の専用スレッド |
 | アイテム保管 | `backpack/`, `adminbp/` | 個人 SQLite バックパック、OP 向け YAML 管理バックパック |
 | 採掘 | `veinminer/`, `oresmelter/`, `ore_reappears/` | 連鎖採掘、自動精錬、鉱石の時間差再生成・経済連携 |
 | モード・アイテム制限 | `creative_management/`, `notnbt/` | ゲームモード別インベントリ、由来印、クリエイティブ由来アイテムの制限 |
 | 表示・装飾 | `hats/`, `hologram/`, `debugonbe/`, `timerbar/`, `elevator/` | パーティクル帽子、TextDisplay、プレイヤー向け仮表示、タイマー、床式エレベーター |
 | 旧 Skript 移植機能 | `skriptport/`, `pita/`, `getuuid/` | 案内、飛行速度・reach・scale、暗視、慣性停止、UUID 表示、短縮コマンド |
 | スキン・参加時処理 | `skin/`, `redbull/`, `joincommands/` | Mojang スキン、期限付き飛行、設定済み参加コマンド |
-| 共通保存基盤 | `storage/UtilitiesDatabase.kt`, `YamlConfig.kt` | PlayerState / Teleport 共通 SQLite、YAML 読込・保存 |
+| Schematics | `schematic/SchematicFeature.kt`, `schematic/SchematicStore.kt` | schematic.cloud の共有 ID から FAWE の保存先へダウンロード |
+| 共通保存基盤 | `storage/UtilitiesDatabase.kt`, `YamlConfig.kt` | PlayerState / Teleport / Items 共通 SQLite、YAML 読込・保存 |
 
-`onEnable` は共通 DB を先に開き、Workstation・PlayerState・Teleport は個別の try/catch で失敗時に後始末して続行する。Spawn は Teleport が有効な場合にだけ有効化する。Guidance は保存初期化を内部で処理するが、他機能の全てが個別例外隔離されているわけではない。停止時は各 Feature の後始末後、`finally` で共通 DB を閉じる。
+`onEnable` は共通 DB を先に開き、Workstation・Items・PlayerState・Teleport は個別の try/catch で失敗時に後始末して続行する。Spawn は Teleport が有効な場合にだけ有効化する。Guidance は保存初期化を内部で処理するが、他機能の全てが個別例外隔離されているわけではない。停止時は各 Feature の後始末後、`finally` で共通 DB を閉じる。
 
 ### 主要な処理の流れ
 
@@ -64,6 +66,25 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 - PlayerState は Bukkit イベントとコマンドの両方で状態を更新する。Essentials が有効な場合のみ互換 bridge を作り、通常名/別名を置き換える際も Essentials・バニラ以外が所有する同名コマンドは奪わない。
 - DebugOnBE は対象ブロックをメインスレッドで走査し、プレイヤーごとのパケット表示を作る。ワールドのブロック状態を置き換えない。Veinminer は隣接鉱石を読み込み済みチャンク内で探索し、各ブロックを `Player.breakBlock` で破壊する。
 - PlayerSit・ホログラム・帽子・Red Bull などはそれぞれ専用 listener / scheduler を持つ。機能間で一括トランザクションや一括設定再読込は提供しない。
+
+### Schematics
+
+`SchematicFeature.enable()` は `plugin.yml` で宣言した `oyasai-schematics` を `plugin.getCommand(...)` で取得し、executor を設定する。初期化例外は機能内で SEVERE ログに記録し、他の機能の起動を続ける。
+
+1. `/oyasai-schematics load <共有ID または URL>` を受け付ける。権限 `oyasaiutilities.schematics.load`（既定 OP）は Bukkit がコマンド受付時に検査し、拒否時は「このコマンドを使用する権限がありません。」と表示する。コンソールも利用でき、追加引数は無視する。`load` の大文字・小文字は区別せず、引数なし・未知のサブコマンド・ID なしは `false` を返して使い方を表示する。
+2. `SchematicStore.idOf` は第2引数の最後の `/` より後を ID とする。URL 自体の構文・配布元は検証せず、末尾が `/` なら空 ID、クエリ文字列などは ID の一部になる。ID の有効文字・URI エンコード・保存先の正規化による検査はない。
+3. 非同期タスクで `plugins/FastAsyncWorldEdit/schematics/` を作り、固定の `https://api.schematic.cloud/download/<ID>` へ `HttpURLConnection` で接続する。入力 URL 自体へのアクセスではない。HTTP 200 だけを受け付け、接続10秒・読み取り30秒のタイムアウトを設定する。Content-Length と実際の受信量を32 MiBに制限し、Content-Length が不明でも受信量を検査する。
+4. ストリーム処理開始前に60秒後の期限を設定する。`SchematicStore.save` は保存先の `download-*.part` へ8192バイトずつ書き、各 read の直前に期限を検査する。接続・レスポンス待ちはこの期限に含まず、ブロック中の read を期限時点で中断しないため、全処理が厳密に60秒以内に終わる保証はない。
+5. 完了後、`Files.move` の `REPLACE_EXISTING` と `ATOMIC_MOVE` で `<ID>.schem` へ移動する。原子的移動が非対応の場合の代替処理はない。`ATOMIC_MOVE` での既存ファイル置換は実装依存で、環境によっては失敗する。HTTP 接続は `finally` で切断し、一時ファイルも `finally` で削除する。最終ファイルへ移動する前の失敗では、既存の同名ファイルを変更しない。
+6. 結果はメインスレッドで通知する。成功時は「[oyasai-schematics] ダウンロード成功。このメッセージをクリックしてコマンドをコピー、実行してロードできます。」に `/schematic load <ID>.schem` のコピー操作を付ける。失敗時は「[oyasai-schematics] ダウンロードに失敗しました: 理由」と warning ログを出す。サイズ超過は `IllegalArgumentException`（「サイズ上限は 32 MiB です」）、期限超過は `IllegalStateException`（「ダウンロードがタイムアウトしました」）、HTTP エラーは「HTTP ステータス番号」となる。
+
+保存先は全利用者・全ワールドで共通。レスポンスをそのまま保存するため、Content-Type・schematic 形式・内部のブロック数・配置範囲は検査しない。ロック・重複排除・バックアップはなく、同時取得では成功通知後にも別の結果へ置き換わり得る。移動後の一時ファイル削除で例外が起きると保存済みでも失敗扱いとなる。削除自体の失敗やプロセス終了では `.part` が残り得るが、起動時の回収処理はない。専用設定・DB・履歴・移行処理はない。
+
+受付・進捗の通知はなく、再実行のたびに別の非同期タスクを登録する。実行中の権限再検査、同時数・実行間隔の制限、ログアウトによる取消、停止時の通信取消・完了待ち・保存の巻き戻しは行わない。非同期処理終了時にプラグインが無効なら、結果通知と失敗ログの同期タスクを登録しない。
+
+FastAsyncWorldEdit は `softdepend`。クラスを直接利用せず、保存先とコピー用コマンドで連携する。FAWE の存在・有効状態や `/schematic load` の権限は検査しない。ロード・貼り付けやワールドの変更はこの機能では行わない。外部 API の稼働・ID の仕様、原子的移動の対応状況、停止時の実動作、ゲーム内表示と FAWE でのロードは未確認。
+
+`schematic/SchematicStoreTest.kt` は ID 抽出、正常保存、一時ファイルの削除、サイズ超過時の既存ファイル保護、期限超過をネットワークなしで検査する。
 
 ### データ形式と永続化
 
@@ -102,26 +123,27 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 | Purpur development bundle / Paper API | Paperweight userdev の開発 API。`plugin.yml` の api-version は `1.21` |
 | SQLite JDBC | `implementation`。共通・個別 SQLite ストアで利用 |
 | EssentialsX 2.21.2 | `compileOnly`、plugin.yml softdepend。PlayerState / Teleport の bridge と旧 YAML 移行、名前空間・コマンド互換に使う |
-| Vault | `compileOnly`、softdepend。OreReappears と Red Bull の経済連携 |
+| OyasaiEconomy | `compileOnly`、softdepend。OreReappears と Red Bull の経済連携 |
 | LuckPerms | `compileOnly`、softdepend。PlayerSit の primary group、Guidance の案内者 group、Red Bull の期限付き権限 |
 | Floodgate | plugin.yml softdepend。Skin の統合版プレイヤー識別。導入済み API を利用できない場合は `/skin` を拒否 |
-| OyasaiToken（TokenManager 互換 API） | Gradle `compileOnly(project(":plugins:OyasaiToken"))`、plugin.yml softdepend は `TokenManager`。Red Bull は `me.realized.tokenmanager.api.TokenManager` を import し、`getPlugin("TokenManager")` をこの型に cast して残高取得・消費。同じリポジトリの OyasaiToken がこの interface を実装し、`provides: [TokenManager]` で公開（`redbull/RedBullFeature.kt`, `plugins/OyasaiToken/src/main/resources/plugin.yml`） |
 
 機能内のコードパスは、特記しなければ `src/main/kotlin/icu/oyasai/utilities/` からの相対パス。旧取り込み元の `plugins/TPswitch/config.yml`・`plugins/Skript/guide_data.csv`・`plugins/Essentials/spawn.yml`・`plugins/Essentials/config.yml` は、OyasaiUtilities の dataFolder ではなくその親（サーバーの `plugins/`）を基準にする。
 
 ### テストが保証する範囲
 
-`src/test/` のテストコードから確認できる範囲は、純粋なルール・設定パーサー・保存層の振る舞いである。22個のテストファイルは主に次を検査する。
+`src/test/` のテストコードから確認できる範囲は、純粋なルール・設定パーサー・保存層の振る舞いである。主に次を検査する。
 
 - 共通 SQLite の機能別 migration、rollback、WAL 設定、非同期書込・flush・close、失敗報告。
 - Teleport のエイリアス・権限名、ホーム上限、jail 期間と制限、TPA 期限・重複、テレポート安全判定、旧 userdata / Warps / Jail / Kits の移行、Essentials 不在時の型ロード。
 - PlayerState のエイリアスと権限、ゲームモード・死亡保持・速度・時刻・ニックネーム規則、旧データの一度限りの移行。
 - Backpack の SQLite データ版とサイズ権限、Sit の rank / 乗車 graph / SQLite migration、TPswitch の受付と旧 YAML 取込。
+- Fart のモード切替・引数・補完・飛行速度と降車取消。`FartFeatureTest` は `player.vehicle == null` の降車イベントを再現し、居座り・プレイヤーの頭・しゃがみ中・取消可能の組み合わせだけを取り消すことを検査する。
 - Workstation のエイリアス・頭生成・hat 制限、Veinminer の素材グループ・数値フォールバック、Elevator の5ペア・距離・空間条件。
 - Hologram の旧設定読込・シリアライズ・テキスト整形、JoinCommands の定義解析、Skin の Mojang 応答解析・キャッシュ期限、Guidance の CSV / SQLite / メニュー文言。
 - Spawn の復活地点選択。
+- Schematics の ID 抽出・保存・サイズ上限・期限と失敗時の一時ファイル削除・既存ファイル保護。
 
-これらはイベント順、Paper 上の GUI 表示、Essentials / Vault / LuckPerms / TokenManager / Floodgate の実接続、実ワールドでの安全性、クライアント表示、実データ移行後の運用を保証しない。この資料の更新時にテストは実行していない。
+これらはイベント順、Paper 上の GUI 表示、Essentials / OyasaiEconomy / LuckPerms / OyasaiEconomy / Floodgate の実接続、実ワールドでの安全性、クライアント表示、実データ移行後の運用を保証しない。この資料の更新時にテストは実行していない。
 
 ### 既知の制限・確認できていないこと
 
@@ -139,7 +161,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 - OreReappears の待機鉱石はメモリだけに保持される。異常終了後の復元はない。CreativeManagement はイベント経路を限定して処理し、全ての外部プラグイン・ホッパー経路を封鎖するものではない。
 - DebugOnBE の表示状態・粒子・ブロック表示は実サーバー・Java/統合版クライアントで確認していない。画面表示用データの不足する形状は置換対象にならない。
 - Skin は同じ名前の取得だけをまとめ、キャッシュは6時間（境界時刻を含む）。Floodgate は reflection で識別し、API が使えなければ安全側に全員を拒否する（`skin/SkinFeature.kt`, `skin/SkinStore.kt`）。scale の0や小さな負数のクライアント表示は未確認。
-- Skin の複数コマンド要求順、LuckPerms / 経済 / TokenManager の外部保存結果、メッセージのゲーム内表示は未検証。コード上で戻り値・例外を確認しない外部操作がある。
+- Skin の複数コマンド要求順、LuckPerms / 経済 / OyasaiEconomy の外部保存結果、メッセージのゲーム内表示は未検証。コード上で戻り値・例外を確認しない外部操作がある。
 - `plugin.yml`・全ソース・設定リソース・テストコードを読んだが、ゲーム内起動・操作・データ移行・障害注入は未実施。実サーバーの有効な権限付与や非公開設定も確認していない。
 
 ## 統合版（Bedrock）の頭（`/skull`）
@@ -165,4 +187,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 
 ## 判断の記録
 
-- 2026-10-13: 文書レビューの指摘を現行コードで照合。TokenManager は OyasaiToken の互換 API、旧取り込み元は dataFolder の親を基準とする。TPswitch 障害・容器制限・速度種別には分岐と免除があるため、無条件の断定を避けて記載した。利用者への影響は player/operator、イベント・未対応経路の詳細は本書へ置く。ゲーム内操作・外部 API 接続・障害再現は未実施。
+
+## 2026-10-25 経済APIの統合
+
+経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。

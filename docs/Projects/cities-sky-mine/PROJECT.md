@@ -44,6 +44,7 @@ plugin.yml の名前は CitiesSkyMine、main は `icu.oyasai.citiesskymine.Main`
 | 外壁 | `facade/`。固定パレットの手続き生成、または専用schemからベイを繰り返す |
 | payload | `payload/PayloadCommand.kt`。文字列復元→柱データ→中空化→回転・アンカー→配置 |
 | 部品・複製 | `window/`・`slabstairs/`・`columns/`・`stack/`。配置計画または選択からのコピー |
+| 接続解除 | `unconnect/`。`/csm unconnect`・`/.unconnect` で直方体選択内の接続状態を解除 |
 | 群衆 | `crowd/`。純粋な配置計算、ブロック／マネキン、頭texturesの登録・走査 |
 | 雲・曲線 | `cloud/`（ノイズ）、`bezier/`（de Casteljau と線・球・板のラスタライズ） |
 | 設定・選択・プリセット | `config/`・`selection/`・`preset/`。個人GUI、サーバー設定、選択保存、許可したブラシコマンドの再実行 |
@@ -52,7 +53,7 @@ plugin.yml の名前は CitiesSkyMine、main は `icu.oyasai.citiesskymine.Main`
 
 ### 起動・コマンドの流れ
 
-`onEnable` は既定設定保存→FAWE の検出→個人データ・権限・HUD・旧デバッグ棒データ読込→ハンドラ作成→`bind` による24コマンド登録→イベント・定期処理の開始。`bind` は見つからないコマンドを例外にせずスキップする。`/csm` とショートカットは同じハンドラを共有する。HUD/SUI は専用コマンドで、統合ルートにはない。
+`onEnable` は既定設定保存→FAWE の検出→個人データ・権限・HUD・旧デバッグ棒データ読込→ハンドラ作成→`bind` による25コマンド登録→イベント・定期処理の開始。`bind` は見つからないコマンドを例外にせずスキップする。`/csm` とショートカットは同じハンドラを共有する。HUD/SUI は専用コマンドで、統合ルートにはない。
 
 統合ルートは多くの機能で追加の権限チェックを行い、各ハンドラでも確認する。`load`・`load64` は先頭を落とさず委譲、crowd の heads は crowd の追加判定を飛ばし、設定編集は固定 admin 判定へ委譲する。payload のヘルプ・undo案内・clear は直接ショートカットでは通常の権限判定なし（clear はプレイヤー限定）だが、統合 payload 経由は追加判定を受ける。
 
@@ -70,6 +71,16 @@ plugin.yml の名前は CitiesSkyMine、main は `icu.oyasai.citiesskymine.Main`
 - stack は同じ EditSession で順次 `getFullBlock(src)` を読み、dst のIDでスキップを判定する。元の選択のスナップショットではないため、重複領域は先の書込みを読むことがある。
 - 一般スキマティックは ClipboardHolder のY回転を使い、空気無視を指定でき、entities・biomes はコピーしない。ファサードは別の専用読込で、固定座標・寸法を切り出し、`getBlock` の状態だけを座標変換して置く（NBT・状態の向きの回転は行わない）。
 - 手続きファサードは1ブロックごとの set の例外を握りつぶすため、未設置があっても生成完了と表示し得る。専用schemはパスだけをキーに1件キャッシュし、同パスのファイルを差し替えても読み直さない。config reload もキャッシュを消さない。
+
+### 接続解除
+
+`/csm unconnect`（短縮 `/.unconnect`）は `selectedCuboid` で取得した直方体選択を走査する。`unconnect/UnconnectBlocks.kt` の純関数は入力の `BlockData` を複製し、フェンス・板ガラス・鉄格子の全許可方向、チョルスプラントの上下を含む全方向を false にする。壁は東西南北の height を `NONE`、up を true にする。水没など他の状態は保持し、フェンスゲート・つる・キノコブロック・スカルクの脈や変更不要の状態は対象外。
+
+走査前に選択範囲の総ブロック数を制限し、変更が必要なブロックだけを `CsmEditSession.run` の `EditSession.setBlock` で書き戻す。成功した書き込み数を通知し、0件は情報表示。取り消しは FAWE の `//undo`。物理更新を起こさないため外した状態は保たれるが、隣のブロックを後から置く・壊すとバニラが再計算して接続が戻ることがある。
+
+### Kotlin のリロケート
+
+shadowJar で `kotlin` を `icu.oyasai.citiesskymine.libs.kotlin` へ移している。移さないと、同じサーバーの別プラグインが同梱する Kotlin と `kotlin.jvm.functions.Function1` が食い違い、`CsmEditSession.run`（FAWE の編集を伴う全コマンド）が `LinkageError: loader constraint violation` で失敗することがある（検証サーバーで再現）。
 
 ### データ形式と永続化
 
@@ -113,7 +124,8 @@ WorldEdit/FAWE のセッション、選択、EditSession、ClipboardFormats、Cl
 
 ### テストが保証する範囲・既知の制限
 
-- `CommandRegistrationTest`: plugin.yml の24登録名が期待集合と一致し、Mainの登録ソースと一致すること。実際の起動・権限・委譲先の挙動は検証しない。
+- `CommandRegistrationTest`: plugin.yml の25登録名が期待集合と一致し、Mainの登録ソースと一致すること。実際の起動・権限・委譲先の挙動は検証しない。
+- `UnconnectBlocksTest`: サーバー不要の BlockData テスト用実装で、対象の全方向解除、壁の柱化、入力不変、水没保持、対象外・再実行時の無変更を検証する。実サーバーでの状態変換・物理更新・undo は検証しない。
 - `NaturalCrowdTest`: 指定された5条件で目標数以下、範囲内、セル重複なし、別グループの間隔、同seedの再現性。Bukkit配置・スキン・マネキン・削除は検証しない。
 - `WorldEditSelectionPreviewTest`: 近傍だけの線の格子index、体積上限の境界と大きな寸法でのoverflow回避。実パーティクル・権限・非同期の安全性は検証しない。
 - コマンド入力、保存失敗・移行、undo、ワールド変更、多重実行、地形・保護プラグインとの相互作用にはテストがない。この作業ではテストを実行していない。

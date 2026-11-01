@@ -2,6 +2,8 @@ package io.oyasai.anybuilder.aircraftbuilder.presentation
 
 import io.oyasai.VehicleMenuCommand
 import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
+import io.oyasai.anybuilder.common.playVehicleStepSounds
+import io.oyasai.anybuilder.runtime.EntityRuntime
 import io.oyasai.toolbox.ControlKey
 import io.oyasai.toolbox.Tools
 import org.bukkit.Sound
@@ -68,20 +70,7 @@ fun AircraftBuilderEntityData.soundTaskImpl(wasd: ControlKey?) {
       this.gasDouble.toFloat() * 0.45f,
       0.5f + this.gasDouble.toFloat(),
   )
-  world.playSound(
-      loc,
-      Sound.ENTITY_COW_STEP,
-      SoundCategory.PLAYERS,
-      0.15f + speedVolumeBase,
-      0.5f + speedPitchBase,
-  )
-  world.playSound(
-      loc,
-      Sound.ENTITY_HORSE_STEP_WOOD,
-      SoundCategory.PLAYERS,
-      0.375f + speedVolumeBase,
-      0.5f + speedPitchRpm,
-  )
+  playVehicleStepSounds(world, loc, speedVolumeBase, speedPitchBase, speedPitchRpm)
 }
 
 fun AircraftBuilderEntityData.updateBarImpl() {
@@ -131,7 +120,8 @@ fun AircraftBuilderEntityData.setDisplayRotateImpl() {
     for (blockDisplay in displaySet) {
       val def = this.displayDef[blockDisplay]
       if (def != null) {
-        blockDisplay.setTransformation(
+        EntityRuntime.applyTransformation(
+            blockDisplay,
             Transformation(
                 Vector3f(def.translation)
                     .add(this.bodyReOffset.toVector3f())
@@ -142,7 +132,7 @@ fun AircraftBuilderEntityData.setDisplayRotateImpl() {
                     .rotateX(Math.toRadians(this.pitch.toDouble()).toFloat()),
                 def.scale,
                 def.rightRotation,
-            )
+            ),
         )
       }
     }

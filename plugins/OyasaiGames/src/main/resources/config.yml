@@ -20,6 +20,9 @@ games:
     enabled: true
   roulette:
     enabled: true
+  tank:
+    # 試作。有効にしても operator 権限のみ（oyasaigames.tank.use）。
+    enabled: false
 
 # ------------------------------------------------------------------------------
 # 建築用アイテム抽選ルーレット設定

@@ -34,21 +34,21 @@ rewards:
       tokens: 15
       commands:
         - 'tellraw @a [{"color":"blue","text":"Minecraft.jp(JMS) "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://minecraft.jp/servers/oyasai.icu/vote"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true},"     ",{"color":"dark_green","text":"MinePortal "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://mineportal.jp/servers/clrfqwdka0000lgansuxtj9mi"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true}]'
-        - token addall 3
+        - oyasaieconomy:token giveall 3
     # Production zVoteParty: 40% ¥20,000 + 10P, then 2P for every online player.
     - weight: 40
       money: 20000
       tokens: 10
       commands:
         - 'tellraw @a [{"color":"blue","text":"Minecraft.jp(JMS) "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://minecraft.jp/servers/oyasai.icu/vote"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true},"     ",{"color":"dark_green","text":"MinePortal "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://mineportal.jp/servers/clrfqwdka0000lgansuxtj9mi"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true}]'
-        - token addall 2
+        - oyasaieconomy:token giveall 2
     # Production zVoteParty: 10% ¥50,000 + 20P, then 5P for every online player.
     - weight: 10
       money: 50000
       tokens: 20
       commands:
         - 'tellraw @a [{"color":"blue","text":"Minecraft.jp(JMS) "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://minecraft.jp/servers/oyasai.icu/vote"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true},"     ",{"color":"dark_green","text":"MinePortal "},{"color":"gray","text":"は"},{"bold":true,"click_event":{"action":"open_url","url":"https://mineportal.jp/servers/clrfqwdka0000lgansuxtj9mi"},"color":"yellow","hover_event":{"action":"show_text","value":[{"text":"クリックでリンクを開く","color":"gold"}]},"text":"コチラ","underlined":true}]'
-        - token addall 5
+        - oyasaieconomy:token giveall 5
   party:
     # Production zVoteParty threshold: 60 votes. Each online player draws independently.
     votes-needed: 60

@@ -8,6 +8,10 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.systems.follows = "systems";
     };
+    coreprotect = {
+      url = "github:playpro/coreprotect";
+      flake = false;
+    };
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,7 +25,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-minecraft = {
-      url = "github:infinidoge/nix-minecraft/pull/230/merge";
+      url = "github:infinidoge/nix-minecraft";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
     };

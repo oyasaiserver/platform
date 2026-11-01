@@ -48,13 +48,13 @@ object GiftItem : Listener {
       return
     }
 
-    val econResult = econ?.withdrawPlayer(e.player.name, 100.0)
-    if (econResult == null || !econResult.transactionSuccess()) {
+    val econResult = econ?.withdraw("yen", e.player.uniqueId, 100L)
+    if (econResult == null || !econResult.accepted) {
       returnItems(e.player, giftInv)
       e.player.sendMessage("&c支払いに失敗したため、アイテムを返却しました。".color())
       return
     }
-    e.player.sendMessage("シュルカー代 ${econ?.format(econResult.amount)} を払いました。")
+    e.player.sendMessage("シュルカー代 ${econ?.format("yen", 100L)} を払いました。")
 
     val shulkerBoxItem = ItemStack(Material.SHULKER_BOX)
     val bsm = shulkerBoxItem.itemMeta as BlockStateMeta

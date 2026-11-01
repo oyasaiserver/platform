@@ -36,7 +36,6 @@ oyasaiPurpur rec {
     oyasaitab
     oyasaiworldgenerator
     plugmanx
-    vault
     viaversion
     worldguard
     # keep-sorted end

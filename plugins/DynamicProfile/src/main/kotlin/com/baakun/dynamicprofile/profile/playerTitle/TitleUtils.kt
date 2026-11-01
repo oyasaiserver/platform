@@ -76,14 +76,4 @@ object TitleUtils {
         .map { it.id }
         .collect(Collectors.toList())
   }
-
-  /** 指定した称号の所有者リストをGUIで表示する */
-  fun showTitleOwners(player: Player, titleId: Int) {
-    TitleGui.showTitleOwnersGui(player, titleId)
-  }
-
-  /** 指定したプレイヤーの所有称号リストをGUIで表示する */
-  fun showPlayerTitles(player: Player, targetPlayerName: String) {
-    TitleGui.showPlayerTitlesGui(player, targetPlayerName)
-  }
 }

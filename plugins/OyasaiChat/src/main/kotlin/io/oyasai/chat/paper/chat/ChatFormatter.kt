@@ -3,7 +3,6 @@ package io.oyasai.chat.paper.chat
 import io.oyasai.chat.common.model.ChannelDefinition
 import io.oyasai.chat.common.model.ChatConfig
 import io.oyasai.chat.paper.OyasaiChatPlugin
-import io.papermc.paper.chat.ChatRenderer
 import java.net.URI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
@@ -59,10 +58,6 @@ class ChatFormatter(
           canSendLinks = player.hasPermission("oyasaichat.links.send"),
       )
 
-  fun chat(channel: ChannelDefinition, sender: Player, message: String): Component {
-    return chat(channel, snapshot(sender), Component.text(message))
-  }
-
   fun chat(
       channel: ChannelDefinition,
       snapshot: ChatPresentationSnapshot,
@@ -115,30 +110,8 @@ class ChatFormatter(
     )
   }
 
-  fun renderer(channel: ChannelDefinition, snapshot: ChatPresentationSnapshot): ChatRenderer =
-      ChatRenderer.viewerUnaware { _, _, message -> chat(channel, snapshot, message) }
-
   fun remoteOrigin(format: String, backendId: String): Component =
       mini.deserialize(format, Placeholder.unparsed("backend", backendId))
-
-  /**
-   * AsyncChatEventから届いたPMモード入力用のRenderer。
-   *
-   * Paperは全閲覧者に同じComponentを配信する。
-   */
-  fun privateRenderer(
-      senderName: String,
-      targetName: String?,
-      senderPresentation: ChatPresentationSnapshot,
-  ): ChatRenderer =
-      ChatRenderer.viewerUnaware { _, _, message ->
-        privateMessage(
-            senderName = senderName,
-            targetName = targetName ?: "(unresolved)",
-            message = message,
-            presentation = senderPresentation,
-        )
-      }
 
   private fun render(
       format: String,

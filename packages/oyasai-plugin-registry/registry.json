@@ -11,12 +11,6 @@
       "type": "modrinth"
     }
   },
-  "coreprotect": {
-    "paper": {
-      "slug": "coreprotect",
-      "type": "modrinth"
-    }
-  },
   "discordsrv": {
     "paper": {
       "slug": "discordsrv",
@@ -64,6 +58,18 @@
   "plugmanx": {
     "paper": {
       "slug": "plugmanx",
+      "type": "modrinth"
+    }
+  },
+  "skbee": {
+    "paper": {
+      "slug": "skbee",
+      "type": "modrinth"
+    }
+  },
+  "skript": {
+    "paper": {
+      "slug": "skript",
       "type": "modrinth"
     }
   },

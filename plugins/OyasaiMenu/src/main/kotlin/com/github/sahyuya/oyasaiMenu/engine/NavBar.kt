@@ -179,7 +179,7 @@ object NavBar {
                 else "---",
             tokens =
                 if (TokenCurrencyManager.isAvailable)
-                    "${TokenCurrencyManager.format(TokenCurrencyManager.getTokens(player))}&fP"
+                    "${TokenCurrencyManager.format((TokenCurrencyManager.getTokens(player) ?: 0L))}&fP"
                 else "---",
         )
     playerStatsCache[player.uniqueId] = snapshot

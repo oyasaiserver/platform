@@ -2,12 +2,14 @@ package icu.oyasai.games.tntrun
 
 import icu.oyasai.games.pvp.PvpEconomy
 import icu.oyasai.games.pvp.saveYaml
+import io.oyasai.economy.api.EconomyOperation
+import io.oyasai.economy.api.EconomyResult
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.io.File
 import java.lang.reflect.Proxy
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 import kotlin.test.*
-import net.milkbowl.vault.economy.Economy
-import net.milkbowl.vault.economy.EconomyResponse
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -63,22 +65,23 @@ class TntrunDataTest {
         }
       } as OfflinePlayer
 
-  private fun bank(dir: File, action: (String, Double) -> Unit) =
+  private fun bank(dir: File, action: (String, Long) -> Unit) =
       PvpEconomy(
           dir,
-          Proxy.newProxyInstance(Economy::class.java.classLoader, arrayOf(Economy::class.java)) {
-              _,
-              m,
-              args ->
-            if (m.name in setOf("withdrawPlayer", "depositPlayer")) {
-              val amount = args!![1] as Double
+          Proxy.newProxyInstance(
+              OyasaiEconomyApi::class.java.classLoader,
+              arrayOf(OyasaiEconomyApi::class.java),
+          ) { _, m, args ->
+            if (m.name in setOf("withdraw", "deposit")) {
+              val amount = args!![2] as Long
               action(m.name, amount)
-              EconomyResponse(amount, 1000.0, EconomyResponse.ResponseType.SUCCESS, "")
+              EconomyOperation(
+                  true,
+                  CompletableFuture.completedFuture(EconomyResult.Success(1000, amount)),
+              )
             } else null
-          } as Economy,
-      ) {
-        offline()
-      }
+          } as OyasaiEconomyApi,
+      )
 
   @Test
   fun `legacy stats root and player jumps prefer UUID over exact legacy names`(@TempDir dir: File) {
@@ -163,16 +166,16 @@ class TntrunDataTest {
           set("match", match)
           set("winner", id.toString())
           set("xp", 50)
-          set("money", 25.0)
+          set("money", 25L)
           set("stats", true)
         },
     )
-    val deposits = mutableListOf<Double>()
-    val bank = bank(dir) { method, amount -> if (method == "depositPlayer") deposits.add(amount) }
+    val deposits = mutableListOf<Long>()
+    val bank = bank(dir) { method, amount -> if (method == "deposit") deposits.add(amount) }
     deliverResult(result, dir, data, bank)
     deliverResult(result, dir, RunData(dir), bank)
     bank.retry()
-    assertEquals(listOf(25.0), deposits)
+    assertEquals(listOf(25L), deposits)
     assertEquals(50, readYaml(snapshot).getInt("total-exp"))
     assertEquals("0 games / 1 wins", RunData(dir).stats(id))
     assertTrue(readYaml(result).getBoolean("delivered"))
@@ -194,7 +197,7 @@ class TntrunDataTest {
           set("after", 3)
         }
     saveYaml(purchase, yaml)
-    bank.charge(player(), 10.0, key)
+    bank.charge(player(), 10L, key)
     recoverPurchase(purchase, data, bank)
     // Crash can leave the intent after the receipt was written; replay is replacement, not
     // increment.
@@ -202,7 +205,7 @@ class TntrunDataTest {
     recoverPurchase(purchase, RunData(dir), bank)
     bank.retry()
     assertEquals(3, RunData(dir).jumps(id))
-    assertEquals(listOf("withdrawPlayer"), calls)
+    assertEquals(listOf("withdraw"), calls)
     assertFalse(purchase.exists())
   }
 
@@ -221,7 +224,7 @@ class TntrunDataTest {
         },
     )
     val crashBank = bank(dir) { _, _ -> error("simulated provider disconnect") }
-    assertFails { crashBank.charge(player(), 10.0, key) }
+    assertFails { crashBank.charge(player(), 10L, key) }
     val calls = mutableListOf<String>()
     val recovered = bank(dir) { m, _ -> calls.add(m) }
     assertFails { recoverPurchase(purchase, data, recovered) }

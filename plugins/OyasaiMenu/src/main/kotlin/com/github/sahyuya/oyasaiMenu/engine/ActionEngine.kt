@@ -4,6 +4,7 @@ import com.github.sahyuya.oyasaiMenu.OyasaiMenu
 import com.github.sahyuya.oyasaiMenu.model.ActionType
 import com.github.sahyuya.oyasaiMenu.model.MenuAction
 import com.github.sahyuya.oyasaiMenu.model.PlayerMenuState
+import com.github.sahyuya.oyasaiMenu.util.GuiUtil
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import com.github.sahyuya.oyasaiMenu.util.PlayerAccess
@@ -162,24 +163,7 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         val cmd = applyPlaceholders(player, action.getString("command"))
         if (cmd.isNotEmpty()) {
           val normalized = cmd.removePrefix("/")
-          player.sendMessage(
-              Component.text()
-                  .decoration(TextDecoration.ITALIC, false)
-                  .append(Component.text("▶ ").color(NamedTextColor.GREEN))
-                  .append(
-                      Component.text(normalized)
-                          .color(NamedTextColor.YELLOW)
-                          .clickEvent(ClickEvent.suggestCommand(normalized))
-                          .hoverEvent(
-                              HoverEvent.showText(
-                                  Component.text("クリックでコマンドをチャット欄に入力")
-                                      .color(NamedTextColor.GRAY)
-                                      .decoration(TextDecoration.ITALIC, false)
-                              )
-                          )
-                  )
-                  .build()
-          )
+          player.sendMessage(GuiUtil.buildSuggestCommandComponent(normalized, "クリックでコマンドをチャット欄に入力"))
         }
       }
 

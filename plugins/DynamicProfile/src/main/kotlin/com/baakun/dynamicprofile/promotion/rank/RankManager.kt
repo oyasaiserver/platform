@@ -22,11 +22,6 @@ object RankManager {
     else Gson().fromJson(file.readText(), object : TypeToken<MutableList<Rank>>() {}.type)
   }
 
-  fun addRank(rank: Rank) {
-    ranks.add(rank)
-    ranks.sortBy { it.grade }
-  }
-
   fun getRankByName(name: String): Rank? {
     return ranks.find { it.name.equals(name, ignoreCase = true) }
   }

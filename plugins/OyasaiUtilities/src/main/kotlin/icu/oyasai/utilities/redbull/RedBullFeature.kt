@@ -1,6 +1,7 @@
 package icu.oyasai.utilities.redbull
 
 import icu.oyasai.utilities.OyasaiUtilities.plugin
+import io.oyasai.economy.api.OyasaiEconomyApi
 import io.papermc.paper.datacomponent.DataComponentTypes
 import io.papermc.paper.datacomponent.item.Consumable
 import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation
@@ -10,12 +11,10 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.UUID
-import me.realized.tokenmanager.api.TokenManager
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -39,8 +38,8 @@ import org.bukkit.scheduler.BukkitTask
 /** Red Bull の購入、飲用、一日 Fly 権限を扱う。 */
 object RedBullFeature : Listener {
   private const val TOKEN_COST = 20L
-  private const val SINGLE_PRICE = 213.0
-  private const val SET_PRICE = 2480.0
+  private const val SINGLE_PRICE = 213L
+  private const val SET_PRICE = 2480L
   private const val FLY_PERMISSION = "essentials.fly"
   private val ticketExpiryKey = NamespacedKey(plugin, "redbull-fly-expiry")
   private val redBullKey = NamespacedKey(plugin, "redbull-item")
@@ -77,15 +76,15 @@ object RedBullFeature : Listener {
     val economy =
         economy()
             ?: run {
-              Bukkit.getConsoleSender().sendMessage("§c[RedBull] Vault の経済プロバイダーが見つかりません。")
+              Bukkit.getConsoleSender().sendMessage("§c[RedBull] OyasaiEconomy の経済プロバイダーが見つかりません。")
               return false
             }
-    if (economy.getBalance(target) < price) {
+    if ((economy.balance("yen", target.uniqueId) ?: 0L) < price) {
       target.sendMessage("§cRed Bull の購入には ${price.toInt()}円必要です。")
       return false
     }
-    val result = economy.withdrawPlayer(target, price)
-    if (!result.transactionSuccess()) {
+    val result = economy.withdraw("yen", target.uniqueId, price)
+    if (!result.accepted) {
       target.sendMessage("§c料金の支払いに失敗しました。")
       return false
     }
@@ -201,15 +200,15 @@ object RedBullFeature : Listener {
     val tokenManager =
         tokenManager()
             ?: run {
-              player.sendMessage("§cTokenManager が見つからないため、Red Bull を使用できません。")
+              player.sendMessage("§cOyasaiEconomy が見つからないため、Red Bull を使用できません。")
               return ActivationResult.TOKEN_MANAGER_UNAVAILABLE
             }
-    val balance = tokenManager.getTokens(player).orElse(0L)
+    val balance = (tokenManager.balance("token", player.uniqueId) ?: 0L)
     if (balance < TOKEN_COST) {
       player.sendMessage("§cポイントが不足しています。必要: ${TOKEN_COST}P / 所持: ${balance}P")
       return ActivationResult.INSUFFICIENT_TOKENS
     }
-    if (!tokenManager.removeTokens(player, TOKEN_COST)) {
+    if (!tokenManager.withdraw("token", player.uniqueId, TOKEN_COST).accepted) {
       player.sendMessage("§cポイントの消費に失敗しました。残高は変更されていません。")
       return ActivationResult.INSUFFICIENT_TOKENS
     }
@@ -359,11 +358,11 @@ object RedBullFeature : Listener {
     return item?.itemMeta?.persistentDataContainer?.has(redBullKey, PersistentDataType.BYTE) == true
   }
 
-  private fun tokenManager(): TokenManager? =
-      Bukkit.getPluginManager().getPlugin("TokenManager") as? TokenManager
+  private fun tokenManager(): OyasaiEconomyApi? =
+      Bukkit.getServicesManager().load(OyasaiEconomyApi::class.java)
 
-  private fun economy(): Economy? =
-      Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
+  private fun economy(): OyasaiEconomyApi? =
+      Bukkit.getServicesManager().getRegistration(OyasaiEconomyApi::class.java)?.provider
 
   private enum class ActivationResult {
     ACTIVATED,

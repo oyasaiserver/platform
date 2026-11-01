@@ -6,6 +6,9 @@ source: plugins/SocialLikes3/（コードから作成。ゲーム内での確認
 
 # SocialLikes3 SQLite 移行 + OyasaiToken 内製化 — 設計書
 
+> 過去の検討案。現在の経済実装は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照する。
+> この文書の独立 OyasaiToken DB、依存側 API 書換、旧 Gradle プロジェクト名の例は現在の手順ではない。
+
 - ターゲット: Minecraft 26.2
 - ステータス: 当初設計の記録（現行仕様・移行手順ではない）
 - 作成日: 2026-07-01
@@ -251,7 +254,7 @@ tasks.shadowJar {
 ```kotlin
 dependencies {
     // compileOnly(libs.tokenmanager) を削除
-    compileOnly(project(":plugins:OyasaiToken"))  // API のみ参照
+    compileOnly(project(":plugins:OyasaiEconomy"))  // API のみ参照
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
     implementation(libs.sqlite.jdbc)
@@ -263,7 +266,7 @@ dependencies {
 
 ```kotlin
 // compileOnly(libs.tokenmanager) を削除
-compileOnly(project(":plugins:OyasaiToken"))  // API のみ参照
+compileOnly(project(":plugins:OyasaiEconomy"))  // API のみ参照
 ```
 
 ## 7. 実装順序

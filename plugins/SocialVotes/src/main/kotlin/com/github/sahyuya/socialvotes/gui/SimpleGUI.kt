@@ -14,7 +14,6 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.ItemStack
 
 object SimpleGUI {
 
@@ -23,15 +22,6 @@ object SimpleGUI {
 
   fun forget(uuid: UUID) {
     signViewMap.remove(uuid)
-  }
-
-  private fun item(material: Material, name: String, lore: List<String> = listOf()): ItemStack {
-    val it = ItemStack(material)
-    val meta = it.itemMeta!!
-    meta.setDisplayName(name)
-    meta.lore = lore
-    it.itemMeta = meta
-    return it
   }
 
   fun open(p: Player, sign: SVSign) {
@@ -54,7 +44,7 @@ object SimpleGUI {
     // 看板情報
     inv.setItem(
         9,
-        item(
+        createGuiItem(
             Material.OAK_SIGN,
             "§a看板情報",
             listOf("§f名前: §e${sign.name}") +
@@ -79,14 +69,14 @@ object SimpleGUI {
     } else {
       groupLore.add("§cグループ未所属")
     }
-    inv.setItem(10, item(Material.PAPER, "§bグループ情報", groupLore))
+    inv.setItem(10, createGuiItem(Material.PAPER, "§bグループ情報", groupLore))
 
     // 看板名変更
     val isCreator = sign.creators.contains(p.uniqueId)
     val canCreatorEdit = isCreator || p.isOp
     inv.setItem(
         11,
-        item(
+        createGuiItem(
             Material.KNOWLEDGE_BOOK,
             "§e看板名変更",
             if (canCreatorEdit) listOf("§7クリックで名前を変更") else listOf("§c制作者のみ操作可能"),
@@ -96,7 +86,7 @@ object SimpleGUI {
     // 制作者名変更
     inv.setItem(
         12,
-        item(
+        createGuiItem(
             Material.WRITABLE_BOOK,
             "§e制作者表示名変更",
             if (canCreatorEdit) listOf("§7クリックで制作者欄の表示名を変更") else listOf("§c制作者のみ操作可能"),
@@ -106,7 +96,7 @@ object SimpleGUI {
     // 制作者追加
     inv.setItem(
         13,
-        item(
+        createGuiItem(
             Material.NAME_TAG,
             "§a制作者プレイヤー追加",
             if (canCreatorEdit) listOf("§7mcid をチャット入力") else listOf("§c制作者のみ操作可能"),
@@ -114,17 +104,17 @@ object SimpleGUI {
     )
 
     // 制作者削除
-    inv.setItem(14, item(Material.STRUCTURE_VOID, "§c制作者削除", listOf("§7mcid をチャット入力")))
+    inv.setItem(14, createGuiItem(Material.STRUCTURE_VOID, "§c制作者削除", listOf("§7mcid をチャット入力")))
 
     // 自分の個別投票リセット
-    inv.setItem(15, item(Material.REDSTONE, "§c個別投票リセット", listOf("§7この看板への自分の投票数を0に戻す")))
+    inv.setItem(15, createGuiItem(Material.REDSTONE, "§c個別投票リセット", listOf("§7この看板への自分の投票数を0に戻す")))
 
     // グループ投票リセット
-    inv.setItem(16, item(Material.GUNPOWDER, "§cグループ投票リセット", listOf("§7所属グループの自分の票を0に戻す")))
+    inv.setItem(16, createGuiItem(Material.GUNPOWDER, "§cグループ投票リセット", listOf("§7所属グループの自分の票を0に戻す")))
     // 詳細設定
     inv.setItem(
         17,
-        item(
+        createGuiItem(
             Material.COMPARATOR,
             "§6詳細設定",
             when {
@@ -136,7 +126,7 @@ object SimpleGUI {
     )
 
     // 装飾
-    val white = item(Material.WHITE_STAINED_GLASS_PANE, " ")
+    val white = createGuiItem(Material.WHITE_STAINED_GLASS_PANE, " ")
     for (i in 0..8) {
       inv.setItem(i, white)
     }

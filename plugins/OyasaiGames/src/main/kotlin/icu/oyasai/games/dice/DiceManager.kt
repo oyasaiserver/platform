@@ -79,13 +79,6 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     return activeGroups.any { it.ownerUuid == uuid }
   }
 
-  /** サイコロを新しく入手できるかチェック（1人1個まで） */
-  fun canGiveDice(player: Player): Boolean {
-    if (hasActiveDice(player)) return false
-    if (diceItem.hasDice(player)) return false
-    return true
-  }
-
   /**
    * サイコロを安全に配布、またはすでに所持している場合はモードを更新する
    *

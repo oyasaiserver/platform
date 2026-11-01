@@ -1,6 +1,7 @@
 package icu.oyasai.games.tntrun
 
 import icu.oyasai.games.pvp.saveYaml
+import icu.oyasai.games.wholeMoney
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -57,17 +58,17 @@ internal data class RunArena(val name: String, val yaml: YamlConfiguration) {
     )
     require(yaml.getList("spawnpoints").orEmpty().isEmpty())
     require(!yaml.getBoolean("testmode"))
-    require(yaml.getDouble("joinfee") == 0.0) {
+    require(yaml.wholeMoney("joinfee") == 0L) {
       "Paid arena entry is outside this deployment scope"
     }
     for (path in
         listOf("reward") +
             (yaml.getConfigurationSection("places")?.getKeys(false)?.map { "places.$it" }
                 ?: emptyList())) {
-      require(yaml.getDouble("$path.money").isFinite() && yaml.getDouble("$path.money") >= 0)
+      require(yaml.wholeMoney("$path.money") >= 0)
       require(yaml.getInt("$path.xp") in 0..1_000_000)
       if (path != "reward")
-          require(yaml.getDouble("$path.money") == 0.0 && yaml.getInt("$path.xp") == 0) {
+          require(yaml.wholeMoney("$path.money") == 0L && yaml.getInt("$path.xp") == 0) {
             "Runner-up rewards are outside the imported deployment scope"
           }
       require(yaml.getStringList("$path.command").isEmpty() && !yaml.contains("$path.material"))

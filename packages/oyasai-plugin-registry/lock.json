@@ -15,14 +15,6 @@
       }
     }
   },
-  "coreprotect": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/3sehX6Sg/CoreProtect-CE-24.1.jar",
-        "hash": "sha256-oqzvfAbvIBNVzvB9WRpgVd/tNYrXaPqqqvTidoZezJc="
-      }
-    }
-  },
   "discordsrv": {
     "paper": {
       "26.2": {
@@ -61,8 +53,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.0/builds/1262/downloads/velocity",
-      "hash": "sha256-jTMaNivDXfvTCWtb9+8G4q+C74x9k5UR80eOv+L5Urw="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.1/builds/1277/downloads/velocity",
+      "hash": "sha256-fv5Ooo1uLE9uWvV4EEXQMSh3neScgqaBWx7OGgg7i3Q="
     }
   },
   "luckperms": {
@@ -85,11 +77,27 @@
       }
     }
   },
+  "skbee": {
+    "paper": {
+      "26.2": {
+        "url": "https://cdn.modrinth.com/data/a0tlbHZO/versions/FUHfTDWo/SkBee-3.26.0.jar",
+        "hash": "sha256-aMC8WphHj/4WrQjheb3zglu7TvzExov+gTReKLee1KI="
+      }
+    }
+  },
+  "skript": {
+    "paper": {
+      "26.2": {
+        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/md6XoYzV/Skript-2.17.1.jar",
+        "hash": "sha256-7ZHgH0ysVeE0lXfTa91tU2/loCKRrrvc/lSyc1BcIAA="
+      }
+    }
+  },
   "viaversion": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/ThFX3jBF/ViaVersion-5.12.2-SNAPSHOT.jar",
-        "hash": "sha256-27Z2fJOthyRvS52t/tT8g7vVvABjPQOTT4VXrrylHUo="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/MBNGPVLI/ViaVersion-5.12.3-SNAPSHOT.jar",
+        "hash": "sha256-Rnbm2wIC0q0JIbRtpGSIXElu9ydKqiZUArcNQWMclsA="
       }
     }
   },

@@ -64,25 +64,10 @@ object SLDatabase {
 
   data class WeeklyLikeCount(val weekStart: LocalDate, val count: Int)
 
-  data class BuildLikeSummary(
-      val buildId: Int,
-      val title: String,
-      val ownerUuid: String,
-      val currentCount: Int,
-      val previousCount: Int = 0,
-  ) {
-    val delta: Int
-      get() = currentCount - previousCount
-  }
-
   data class OwnerLikeSummary(
       val ownerUuid: String,
       val currentCount: Int,
-      val previousCount: Int = 0,
-  ) {
-    val delta: Int
-      get() = currentCount - previousCount
-  }
+  )
 
   /** One persisted like together with the build dimensions needed by /sldata analysis. */
   data class BuildLikeEvent(
@@ -1204,16 +1189,6 @@ object SLDatabase {
     } ?: MigrationReadiness(sqlitePrimaryReady = false, negativeBuildCount = 0)
   }
 
-  fun markSqlitePrimaryReady(): Boolean {
-    return submitWriteBlocking("markSqlitePrimaryReady") {
-      MigrationState.upsert {
-        it[MigrationState.key] = SQLITE_PRIMARY_READY_KEY
-        it[MigrationState.value] = "true"
-      }
-      true
-    } ?: false
-  }
-
   /**
    * Reads active sign locations and the ID migration map on the SQLite read executor. The callback
    * is deliberately invoked off the main thread; callers must schedule Bukkit work.
@@ -1314,12 +1289,6 @@ object SLDatabase {
   fun savePublicityHistory(data: PublicityData) {
     val snapshot = data.toPublicityHistorySnapshot()
     submit("savePublicityHistory") { upsertPublicityHistory(snapshot) }
-  }
-
-  fun deletePublicityHistoryBySLID(slid: Int) {
-    submit("deletePublicityHistoryBySLID") {
-      PublicityHistoryRows.deleteWhere { PublicityHistoryRows.slId eq slid }
-    }
   }
 
   fun syncPublicityHistory(dataList: Collection<PublicityData>) {

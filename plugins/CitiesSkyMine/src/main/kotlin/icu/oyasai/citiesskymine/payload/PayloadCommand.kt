@@ -188,11 +188,13 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
     if (context.actor == null) {
       MessageUtil.warn(sender, "プレイヤー実行ではないため、FAWE の //undo 履歴には登録していません。")
-    } else if (faweUndoRecorded) {
-      MessageUtil.info(sender, "FAWE の //undo でこの配置を取り消せます。")
-    } else {
-      MessageUtil.warn(sender, "配置は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-    }
+    } else
+        MessageUtil.undoResult(
+            sender,
+            faweUndoRecorded,
+            "FAWE の //undo でこの配置を取り消せます。",
+            "配置は完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+        )
     return true
   }
 

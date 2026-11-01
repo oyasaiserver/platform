@@ -1,9 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.db
 
 import com.github.sahyuya.oyasaiMusic.model.Song
-import com.github.sahyuya.oyasaiMusic.model.SongStatus
 import com.github.sahyuya.oyasaiMusic.util.UuidUtil
-import java.sql.ResultSet
 import java.util.UUID
 
 /** LIKES/VIEWS/FAVORITESは楽曲単位、FOLLOWERS/RECORD_SALESは作者単位のランキング。 */
@@ -67,7 +65,7 @@ class RankingRepository(private val db: DatabaseManager) {
         ps.setInt(idx, limit)
         ps.executeQuery().use { rs ->
           val list = mutableListOf<SongRanking>()
-          while (rs.next()) list += SongRanking(song = rs.toSongRow(), score = rs.getLong("score"))
+          while (rs.next()) list += SongRanking(song = rs.toSong(), score = rs.getLong("score"))
           list
         }
       }
@@ -114,26 +112,4 @@ class RankingRepository(private val db: DatabaseManager) {
       }
     }
   }
-
-  private fun ResultSet.toSongRow(): Song =
-      Song(
-          id = getLong("id"),
-          authorUuid = UuidUtil.fromBytes(getBytes("author_uuid")),
-          title = getString("title"),
-          createdAt = getLong("created_at"),
-          bpm = getInt("bpm"),
-          recordMaterial = getString("record_material"),
-          price = getInt("price"),
-          referenceUrl = getString("reference_url"),
-          status = SongStatus.fromCode(getInt("status")),
-          likes = getLong("likes"),
-          views = getLong("views"),
-          fileName = getString("file_name"),
-          supportsPositional = getInt("supports_positional") != 0,
-          published = getInt("published") != 0,
-          limitedPublication = getInt("limited_publication") != 0,
-          collectible = getInt("collectible") != 0,
-          recordIdentity = getString("record_identity") ?: "",
-          reviewRequestedAt = getLong("review_requested_at").let { if (wasNull()) null else it },
-      )
 }

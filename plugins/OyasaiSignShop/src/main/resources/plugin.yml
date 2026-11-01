@@ -3,7 +3,7 @@ provides: [SignShop]
 version: ${version}
 main: io.oyasai.signshop.SignShopPlugin
 api-version: "1.21"
-depend: [Vault]
+depend: [OyasaiEconomy]
 softdepend: [LWC]
 commands:
   signshop:

@@ -3,7 +3,7 @@ package io.oyasai.anybuilder.carbuilder2.command
 import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
 import io.oyasai.anybuilder.common.command.BuilderCommandTabSupport
 import io.oyasai.canCreateCarBuilder2
-import io.oyasai.canRideCarBuilder2OrAdmin
+import io.oyasai.canRideCarBuilder2
 import io.oyasai.canUseCarBuilder2
 import io.oyasai.hasOyasaiAdminPermission
 import java.util.Locale
@@ -48,7 +48,7 @@ fun handleCarBuilder2Tab(
               ?: return if (sender.canCreateCarBuilder2()) mutableListOf("save")
               else mutableListOf()
       val subCommands = mutableListOf<String>()
-      if (sender.canRideCarBuilder2OrAdmin()) {
+      if (sender.canRideCarBuilder2()) {
         subCommands.add("spawn")
       }
       if (sender.canUseCarBuilder2()) {

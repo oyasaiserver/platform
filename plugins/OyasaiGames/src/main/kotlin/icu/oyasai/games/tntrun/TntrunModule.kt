@@ -4,10 +4,11 @@ import icu.oyasai.games.OyasaiGamesPlugin
 import icu.oyasai.games.pvp.PlayerStore
 import icu.oyasai.games.pvp.PvpEconomy
 import icu.oyasai.games.pvp.saveYaml
+import icu.oyasai.games.wholeMoney
+import io.oyasai.economy.api.OyasaiEconomyApi
 import java.io.File
 import java.util.UUID
 import java.util.logging.Level
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Sign
@@ -66,7 +67,7 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
   private var bars = YamlConfiguration()
   private var shop = YamlConfiguration()
   private var bank: PvpEconomy? = null
-  private var provider: Economy? = null
+  private var provider: OyasaiEconomyApi? = null
   private var task: BukkitTask? = null
   private var enabled = false
   private var tick = 0L
@@ -108,15 +109,18 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
         importTntrun(folder, File(plugin.dataFolder.parentFile, "TNTRun_reloaded"), plugin.logger)
     if (folder.exists()) {
       data = RunData(folder)
-      if (plugin.server.pluginManager.isPluginEnabled("Vault")) {
-        provider = Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
+      if (plugin.server.pluginManager.isPluginEnabled("OyasaiEconomy")) {
+        provider =
+            Bukkit.getServicesManager().getRegistration(OyasaiEconomyApi::class.java)?.provider
         bank = provider?.let { PvpEconomy(folder, it) }
       }
       File(folder, "purchases")
           .listFiles()
           ?.filter { it.extension == "yml" }
           ?.forEach { file ->
-            runCatching { recoverPurchase(file, data, bank ?: error("Economy unavailable")) }
+            runCatching {
+                  recoverPurchase(file, data, bank ?: error("OyasaiEconomyApi unavailable"))
+                }
                 .onFailure {
                   plugin.logger.warning(
                       "TNTRun purchase recovery requires administrator reconciliation"
@@ -369,7 +373,8 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
     check(a.rules.phase in listOf(Phase.WAITING, Phase.COUNTDOWN)) { "この試合には参加できません" }
     check(a.rules.active.size < a.config.maximum) { "満員です" }
     check(!bankHasUncertainty(player.uniqueId)) { "取引の照合が必要です" }
-    if (a.config.yaml.getDouble("reward.money") > 0) check(bank != null) { "Vault economy が必要です" }
+    if (a.config.yaml.wholeMoney("reward.money") > 0)
+        check(bank != null) { "OyasaiEconomy economy が必要です" }
     recover(player)
     check(player.isOnline && !store.pending(player))
     val location = a.config.location()
@@ -641,7 +646,7 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
           YamlConfiguration().also {
             it.set("match", a.id.toString())
             it.set("winner", winner.player.uniqueId.toString())
-            it.set("money", if (eligible) c.getDouble("reward.money") else 0.0)
+            it.set("money", if (eligible) c.wholeMoney("reward.money") else 0L)
             it.set("xp", if (eligible) c.getInt("reward.xp") else 0)
             it.set(
                 "stats",
@@ -780,7 +785,7 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
     balance.itemMeta =
         balance.itemMeta.also {
           it.setDisplayName(
-              "${provider?.getBalance(p.player) ?: 0.0}${global.getString("currency.suffix"," coins")}"
+              "${(provider?.balance("yen", p.player.uniqueId) ?: 0L) ?: 0.0}${global.getString("currency.suffix"," coins")}"
           )
         }
     holder.contents.setItem(size - 1, balance)
@@ -791,7 +796,7 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
     require(shop.getString("$key.material") == "FEATHER") {
       "Only the deployed double jump offer is supported"
     }
-    require(shop.getDouble("$key.cost").isFinite() && shop.getDouble("$key.cost") >= 0)
+    require(shop.wholeMoney("$key.cost") >= 0)
     require(shop.getInt("$key.amount", 1) in 1..10)
   }
 
@@ -820,11 +825,11 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
     ) {
       "ダブルジャンプの上限です"
     }
-    val economy = bank ?: error("Vault economy が必要です")
-    val cost = shop.getDouble("$key.cost")
+    val economy = bank ?: error("OyasaiEconomy economy が必要です")
+    val cost = shop.wholeMoney("$key.cost")
     val keyId = UUID.randomUUID().toString()
     val after = data.jumps(id) + amount
-    if (cost == 0.0) {
+    if (cost == 0L) {
       data.purchased(id, keyId, after)
       return
     }

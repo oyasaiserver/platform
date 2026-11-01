@@ -34,6 +34,7 @@ import icu.oyasai.citiesskymine.selection.WorldEditSuiCommand
 import icu.oyasai.citiesskymine.slabstairs.SlabStairsCommand
 import icu.oyasai.citiesskymine.stack.StackCommand
 import icu.oyasai.citiesskymine.storage.PlayerDataStore
+import icu.oyasai.citiesskymine.unconnect.UnconnectCommand
 import icu.oyasai.citiesskymine.window.WindowCommand
 import java.util.HashMap
 import java.util.UUID
@@ -97,6 +98,7 @@ class Main : JavaPlugin() {
     val payloadHandler = PayloadCommand(this)
     val windowHandler = WindowCommand(this)
     val slabStairsHandler = SlabStairsCommand(this)
+    val unconnectHandler = UnconnectCommand(this)
     val columnLayoutHandler = ColumnLayoutCommand(this)
     val stackHandler = StackCommand(this)
     val crowdHandler = CrowdCommand(this)
@@ -120,6 +122,7 @@ class Main : JavaPlugin() {
             payloadHandler,
             windowHandler,
             slabStairsHandler,
+            unconnectHandler,
             columnLayoutHandler,
             stackHandler,
             crowdHandler,
@@ -136,6 +139,7 @@ class Main : JavaPlugin() {
     bind(payloadHandler, ".pl")
     bind(windowHandler, ".win")
     bind(slabStairsHandler, ".ss")
+    bind(unconnectHandler, ".unconnect")
     bind(columnLayoutHandler, ".col")
     bind(stackHandler, ".ns")
     bind(crowdHandler, ".crowd")

@@ -1,6 +1,7 @@
 {
   lib,
   jre,
+  openssl,
   oyasaiDockerTools,
   stdenv,
   velocityServers,
@@ -42,6 +43,11 @@ let
 
       mkdir -p logs/dumps
 
+      # Inject for reproducibility
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        export LD_LIBRARY_PATH="${lib.makeLibraryPath [ openssl ]}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+      ''}
+
       MEMORY="''${MEMORY:-512M}"
       exec ${lib.getExe package} \
         -Xmx"''${MEMORY}" \
@@ -50,6 +56,8 @@ let
         -XX:+HeapDumpOnOutOfMemoryError \
         -XX:HeapDumpPath=logs/dumps/ \
         -Dvelocity.max-plugin-message-payload-size=2100000 \
+        -DgeyserTransport=both \
+        -DgeyserRaknetPort=19133 \
         "$@"
     '';
 

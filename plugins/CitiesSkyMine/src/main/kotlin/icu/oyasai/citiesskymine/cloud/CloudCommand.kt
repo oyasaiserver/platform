@@ -33,10 +33,7 @@ class CloudCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       label: String,
       args: Array<String>,
   ): Boolean {
-    if (sender !is Player) {
-      MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
-      return true
-    }
+    if (!MessageUtil.requirePlayer(sender)) return true
     if (!plugin.access.require(sender, CommandKey.CLOUD)) return true
     build(sender, args.toList())
     return true
@@ -139,11 +136,12 @@ class CloudCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                             player,
                             "雲を生成しました: size=${options.size} height=${options.height} density=${options.density} yOffset=${options.yOffset} seed=${options.resolvedSeed} blocks=${plan.placements.size}",
                         )
-                        if (result.undoRecorded) {
-                          MessageUtil.info(player, "FAWE の //undo でこの雲生成を取り消せます。")
-                        } else {
-                          MessageUtil.warn(player, "雲生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
-                        }
+                        MessageUtil.undoResult(
+                            player,
+                            result.undoRecorded,
+                            "FAWE の //undo でこの雲生成を取り消せます。",
+                            "雲生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。",
+                        )
                       } catch (e: Exception) {
                         if (player.isOnline) MessageUtil.error(player, "雲生成に失敗しました: ${e.message}")
                       } finally {

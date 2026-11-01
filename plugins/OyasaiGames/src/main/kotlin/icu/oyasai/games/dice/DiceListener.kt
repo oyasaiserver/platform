@@ -3,6 +3,7 @@ package icu.oyasai.games.dice
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Sound
+import org.bukkit.block.Crafter
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
@@ -10,8 +11,11 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.block.CrafterCraftEvent
+import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
+import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerAnimationEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
@@ -27,6 +31,29 @@ class DiceListener(
     private val diceManager: DiceManager,
     private val chargeManager: DiceChargeManager,
 ) : Listener {
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  fun onPrepareItemCraft(event: PrepareItemCraftEvent) {
+    if (event.inventory.matrix.any(diceItem::isDice)) {
+      event.inventory.result = null
+    }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun onCraftItem(event: CraftItemEvent) {
+    if (event.inventory.matrix.any(diceItem::isDice)) {
+      event.isCancelled = true
+      event.inventory.result = null
+    }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun onCrafterCraft(event: CrafterCraftEvent) {
+    val crafter = event.block.state as? Crafter ?: return
+    if (crafter.inventory.contents.any(diceItem::isDice)) {
+      event.isCancelled = true
+    }
+  }
 
   /** サイコロに関連する操作かどうかを判定。 一般の建築（通常のLodestone等の設置）を誤って巻き込まないよう、サイコロ所持中またはチャージ中・直近投擲時のみ対象とする。 */
   private fun isDiceAction(player: Player, item: ItemStack?): Boolean {

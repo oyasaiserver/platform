@@ -22,9 +22,6 @@ class CarBuilder2Config(fileName: String) : CustomYaml(fileName) {
   fun isOwnerOrAdmin(sender: CommandSender): Boolean =
       VehicleConfigCommon.isOwnerOrAdmin(this, sender)
 
-  @Deprecated("Use isOwnerOrAdmin")
-  fun isOwnerOrOP(sender: CommandSender): Boolean = isOwnerOrAdmin(sender)
-
   fun getOffset(type: CarBuilder2BaseDataType): MutableMap<Int, Vector> {
     val offsets = sortedMapOf<Int, Vector>()
     val prefix = "${type.configName}.Offset."
@@ -121,18 +118,7 @@ class CarBuilder2Config(fileName: String) : CustomYaml(fileName) {
     return getDouble("HeadLight.Angle", 45.0)
   }
 
-  fun getHeadLightRotateOffsets(): MutableMap<Int, Vector> {
-    val rotateOffset = getHeadLightRotateOffset()
-    val indexes = getOffset(CarBuilder2BaseDataType.HeadLight).keys.sorted()
-    if (indexes.isEmpty()) return mutableMapOf(0 to rotateOffset)
-    return indexes.associateWith { rotateOffset.clone() }.toMutableMap()
-  }
-
   fun getHeadLightRotateOffset(): Vector {
     return getVector("HeadLight.rOffset") ?: Vector().zero()
-  }
-
-  override fun save() {
-    super.save()
   }
 }

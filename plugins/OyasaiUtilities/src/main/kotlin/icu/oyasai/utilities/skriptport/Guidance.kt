@@ -41,15 +41,6 @@ class Guidance(private val plugin: Main) : CommandExecutor, Listener {
     }
     try {
       store.open()
-      // 一時的な取り込み。本番で全件取り込み済みを確認したら CSV 読込とこの分岐を撤去する。
-      val legacy = File(plugin.dataFolder.parentFile, "Skript/guide_data.csv")
-      if (legacy.isFile && store.canImport()) {
-        val data = readGuidanceCsv(legacy)
-        if (store.importLegacy(data))
-            plugin.logger.info(
-                "Guidance import: clicked=${data.clicked.size}, guidedby=${data.guides.size}, guidedbyname=${data.names.size}, guidedat=${data.dates.size}"
-            )
-      }
       ready = true
       plugin.server.pluginManager.registerEvents(this, plugin)
     } catch (failure: Exception) {
@@ -199,7 +190,7 @@ class Guidance(private val plugin: Main) : CommandExecutor, Listener {
       return
     }
     val name = pairNames[player.uniqueId] ?: "<none>"
-    console("token add $name 10")
+    console("oyasaieconomy:token give $name 10")
     store.complete(player.uniqueId, signId, guide, name, System.currentTimeMillis())
     player.sendMessage("§a${signId}エリアの案内完了！ありがとうございました！")
     plugin.server

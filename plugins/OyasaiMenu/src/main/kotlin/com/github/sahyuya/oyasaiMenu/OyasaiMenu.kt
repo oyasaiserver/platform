@@ -5,14 +5,14 @@ import com.github.sahyuya.oyasaiMenu.engine.*
 import com.github.sahyuya.oyasaiMenu.item.MenuItem
 import com.github.sahyuya.oyasaiMenu.loader.*
 import com.github.sahyuya.oyasaiMenu.manager.*
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.TabCompleter
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class OyasaiMenu : JavaPlugin(), Listener {
-  private var menuItem: MenuItem? = null
-
   lateinit var menuLoader: MenuLoader
   lateinit var shopLoader: ShopLoader
   lateinit var pointShopLoader: PointShopLoader
@@ -34,7 +34,6 @@ class OyasaiMenu : JavaPlugin(), Listener {
 
     try {
       val item = MenuItem(this)
-      menuItem = item
       item.enable()
     } catch (e: Exception) {
       logger.severe("Menu item failed to start: ${e.message}")
@@ -67,21 +66,14 @@ class OyasaiMenu : JavaPlugin(), Listener {
     CooldownManager.init(this)
 
     // 公開コマンド
-    getCommand("menu")?.setExecutor(MenuCommand(this))
-    getCommand("menu")?.tabCompleter = MenuCommand(this)
-    getCommand("shop")?.setExecutor(ShopCommand(this))
-    getCommand("shop")?.tabCompleter = ShopCommand(this)
-    getCommand("pointshop")?.setExecutor(PointShopCommand(this))
-    getCommand("pointshop")?.tabCompleter = PointShopCommand(this)
-    getCommand("sell")?.setExecutor(SellCommand(this))
-    getCommand("sell")?.tabCompleter = SellCommand(this)
+    registerCommand("menu", MenuCommand(this))
+    registerCommand("shop", ShopCommand(this))
+    registerCommand("pointshop", PointShopCommand(this))
+    registerCommand("sell", SellCommand(this))
     // OP用コマンド
-    getCommand("adminmenu")?.setExecutor(AdminMenuCommand(this))
-    getCommand("adminmenu")?.tabCompleter = AdminMenuCommand(this)
-    getCommand("menuedit")?.setExecutor(MenuEditCommand(this))
-    getCommand("menuedit")?.tabCompleter = MenuEditCommand(this)
-    getCommand("oyasaimenu")?.setExecutor(OyasaiMenuCommand(this))
-    getCommand("oyasaimenu")?.tabCompleter = OyasaiMenuCommand(this)
+    registerCommand("adminmenu", AdminMenuCommand(this))
+    registerCommand("menuedit", MenuEditCommand(this))
+    registerCommand("oyasaimenu", OyasaiMenuCommand(this))
 
     listOf(
             menuEngine,
@@ -102,9 +94,15 @@ class OyasaiMenu : JavaPlugin(), Listener {
     )
   }
 
+  private fun <T> registerCommand(name: String, handler: T)
+      where T : CommandExecutor, T : TabCompleter {
+    getCommand(name)?.apply {
+      setExecutor(handler)
+      tabCompleter = handler
+    }
+  }
+
   override fun onDisable() {
-    runCatching { menuItem?.disable() }
-        .onFailure { logger.severe("Menu item shutdown failed: ${it.message}") }
     logger.info("OyasaiMenu を無効化しました。")
   }
 

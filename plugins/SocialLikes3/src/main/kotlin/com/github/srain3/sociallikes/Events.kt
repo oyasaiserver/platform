@@ -280,7 +280,10 @@ object Events : Listener {
           Bukkit.getPluginManager().callEvent(likeEvent)
 
           if (e.player.uniqueId != data.owner) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give ${e.player.name} 1000")
+            Bukkit.dispatchCommand(
+                Bukkit.getConsoleSender(),
+                "oyasaieconomy:eco give ${e.player.name} 1000",
+            )
           }
 
           // 制作者がオンラインの場合通知
@@ -485,21 +488,10 @@ object Events : Listener {
                   if (playerUuid in offlineLikeCommits) return
                   offlineLikesPoint[playerUuid]
                 } ?: return
-            val tokenManager = Tools.getTokenManager()
-            val tokenCommitAdd = tokenManager?.let(Tools::findAddTokensWithCommit)
-            if (tokenCommitAdd == null) {
-              Tools.warnTokenCommitFallback()
-              if (
-                  Tools.addTokens(player, pointInt.toLong()) &&
-                      removeOfflineLikePoints(player.uniqueId, pointInt)
-              ) {
-                sendLikeRewardMessage(player, pointInt.toLong(), offline = true)
-              }
-              return
-            }
+            val economy = Tools.economy() ?: return
 
             synchronized(offlineLikesPointLock) { if (!offlineLikeCommits.add(playerUuid)) return }
-            Tools.tokenCommit(tokenCommitAdd, playerUuid, pointInt.toLong()).whenComplete {
+            Tools.tokenCommit(economy, playerUuid, pointInt.toLong()).whenComplete {
                 committed,
                 failure ->
               try {

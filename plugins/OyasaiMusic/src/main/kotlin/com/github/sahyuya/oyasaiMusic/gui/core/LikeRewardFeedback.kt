@@ -9,7 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-/** DBで新規いいねが確定した後にだけ呼ぶ、送信者側の効果音と即時報酬。 通常時は未受取残高を経由せずオンラインのPlayerへ直接入金し、Vault障害時だけ退避する。 */
+/** DBで新規いいねが確定した後にだけ呼ぶ、送信者側の効果音と即時報酬。 通常時は未受取残高を経由せずオンラインのPlayerへ直接入金し、OyasaiEconomy障害時だけ退避する。 */
 internal fun OyasaiMusic.deliverLikeSenderReward(player: Player) {
   soundEffectService.play(PluginSoundEffect.LIKE_SENT, listOf(player))
   val amount = likeService.likerMoneyReward
@@ -20,10 +20,10 @@ internal fun OyasaiMusic.deliverLikeSenderReward(player: Player) {
           .getOrElse {
             logger.log(
                 Level.WARNING,
-                "いいね即時報酬のVault入金呼び出しに失敗しました: player=${player.uniqueId}, amount=$amount",
+                "いいね即時報酬のOyasaiEconomy入金呼び出しに失敗しました: player=${player.uniqueId}, amount=$amount",
                 it,
             )
-            PayoutResult.Failed("Vault入金処理で例外が発生しました")
+            PayoutResult.Failed("OyasaiEconomy入金処理で例外が発生しました")
           }
   when (payout) {
     PayoutResult.Success -> {
@@ -40,7 +40,7 @@ internal fun OyasaiMusic.deliverLikeSenderReward(player: Player) {
   }
 }
 
-/** Vault障害時だけ報酬を失わないため未受取残高へ退避する。通常のいいね報酬経路では呼ばれない。 */
+/** OyasaiEconomy障害時だけ報酬を失わないため未受取残高へ退避する。通常のいいね報酬経路では呼ばれない。 */
 private fun OyasaiMusic.storeFailedLikeReward(player: Player, amount: Long, reason: String) {
   val playerUuid = player.uniqueId
   Bukkit.getScheduler()

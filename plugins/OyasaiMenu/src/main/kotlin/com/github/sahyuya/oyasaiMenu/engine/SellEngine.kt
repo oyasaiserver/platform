@@ -31,7 +31,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
     if (!EconomyManager.isAvailable) {
-      player.sendMessage(c("&cショップには Vault と経済プラグインが必要です。"))
+      player.sendMessage(c("&cショップには OyasaiEconomy が必要です。"))
       return
     }
     player.openInventory(buildSellInventory())
@@ -42,7 +42,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   // 売却価格の統一取得
   // ============================
 
-  fun getSellPrice(item: ItemStack): Double? {
+  fun getSellPrice(item: ItemStack): Long? {
     if (item.type.isAir) return null
     val isCustom = plugin.sellWhitelistManager.hasCustomContent(item)
     return if (!isCustom) {
@@ -147,21 +147,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
 
-    var earned = 0.0
-    var count = 0
-    var unsellable = 0
-    val soldSlots = mutableListOf<Int>()
-
-    items.forEach { (slot, stack) ->
-      val price = getSellPrice(stack)
-      if (price != null && price > 0) {
-        earned += price * stack.amount
-        count += stack.amount
-        soldSlots += slot
-      } else {
-        unsellable++
-      }
-    }
+    val (earned, count, unsellable, soldSlots) = summarizeSale(items)
 
     if (count == 0) {
       player.sendMessage(
@@ -193,6 +179,31 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   // ============================
   // ユーティリティ
   // ============================
+
+  internal data class SaleSummary(
+      val earned: Long,
+      val count: Int,
+      val unsellable: Int,
+      val soldSlots: List<Int>,
+  )
+
+  internal fun summarizeSale(items: Map<Int, ItemStack>): SaleSummary {
+    var earned = 0L
+    var count = 0
+    var unsellable = 0
+    val soldSlots = mutableListOf<Int>()
+    items.forEach { (slot, stack) ->
+      val price = getSellPrice(stack)
+      if (price != null && price > 0) {
+        earned += price * stack.amount
+        count += stack.amount
+        soldSlots += slot
+      } else {
+        unsellable++
+      }
+    }
+    return SaleSummary(earned, count, unsellable, soldSlots)
+  }
 
   private fun getInputItems(inv: Inventory): Map<Int, ItemStack> =
       (0..44).mapNotNull { i -> inv.getItem(i)?.takeIf { !it.type.isAir }?.let { i to it } }.toMap()
