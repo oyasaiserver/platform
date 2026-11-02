@@ -465,7 +465,7 @@ internal object HatsRenderer {
               randomOffset.y,
               randomOffset.z,
               speed,
-              DustOptions(color, spec.size),
+              DustOptions(color, clampDustParticleSize(spec.size)),
           )
       dataType == ItemStack::class.java -> {
         val material = spec.items.randomOrNull() ?: return
