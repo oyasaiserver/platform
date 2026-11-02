@@ -5,11 +5,11 @@ import java.time.ZoneOffset
 import java.util.UUID
 import org.bukkit.Bukkit
 
-data class RankUpData(val user: UUID, var buildCount: Int) {
+data class RankUpData(val user: UUID, @Volatile var buildCount: Int) {
   private val firstLoginLong: Long? =
       try {
         val firstPlayed = Bukkit.getOfflinePlayer(user).firstPlayed
-        if (firstPlayed == 0L) {
+        if (firstPlayed <= 0L) {
           null
         } else {
           firstPlayed / 1000L
@@ -24,12 +24,17 @@ data class RankUpData(val user: UUID, var buildCount: Int) {
 
   /** プレイヤーの最後のログイン時間を取得する、未プレイの場合null */
   fun lastOnlineTime(): LocalDateTime? {
-    val offPlayer = Bukkit.getOfflinePlayer(user)
-    val long = offPlayer.lastSeen / 1000L
-    if (long == 0L) {
-      return null
+    return try {
+      val offPlayer = Bukkit.getOfflinePlayer(user)
+      val long = offPlayer.lastSeen / 1000L
+      if (long <= 0L) {
+        null
+      } else {
+        LocalDateTime.ofEpochSecond(long, 0, ZoneOffset.UTC)
+      }
+    } catch (_: Exception) {
+      null
     }
-    return LocalDateTime.ofEpochSecond(long, 0, ZoneOffset.UTC)
   }
 
   /** 初ログインからの経過日数を返す、未プレイの場合null */

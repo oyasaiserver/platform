@@ -13,13 +13,18 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.Bukkit
 import org.bukkit.inventory.ItemStack
 
 object SLRankUp {
   private val format = DateTimeFormatter.ofPattern("yyyy/MM/dd")
   /** ランクアップ候補を格納 */
-  private val data = mutableMapOf<UUID, RankUpData>()
+  private val data = ConcurrentHashMap<UUID, RankUpData>()
+
+  internal fun isRecentCandidate(lastOnline: LocalDateTime?, beforeTime: LocalDateTime): Boolean {
+    return lastOnline != null && beforeTime.isBefore(lastOnline)
+  }
 
   /** GUIを返す */
   fun getGUI(rankFilter: List<String>, lastOnlineDay: Int): ChestGui {
@@ -46,20 +51,18 @@ object SLRankUp {
   private fun headItems(rankFilter: List<String>, lastOnlineDay: Int): MutableList<ItemStack> {
     val list = mutableListOf<ItemStack>()
     val beforeTime = LocalDateTime.now(ZoneOffset.UTC).minusDays(lastOnlineDay.toLong())
-    data
+    data.values
         .toList()
         .sortedWith(
-            Comparator.comparingInt<Pair<UUID, RankUpData>> { it.second.buildCount }
-                .thenComparingLong {
-                  it.second.lastOnlineTime()?.toEpochSecond(ZoneOffset.UTC) ?: 0L
-                }
+            Comparator.comparingInt<RankUpData> { it.buildCount }
+                .thenComparingLong { it.lastOnlineTime()?.toEpochSecond(ZoneOffset.UTC) ?: 0L }
         )
-        .toMap()
-        .forEach { (_, rud) ->
+        .forEach { rud ->
           val player = Bukkit.getOfflinePlayer(rud.user)
           val rank = getRank(player.uniqueId)
           if (!rankFilter.contains(rank)) return@forEach
-          if (!beforeTime.isBefore(rud.lastOnlineTime())) return@forEach
+          val lastOnline = rud.lastOnlineTime()
+          if (!isRecentCandidate(lastOnline, beforeTime)) return@forEach
 
           val item = SLPlayerHeads.createHead(player.uniqueId, player.name ?: "Unknown")
 
@@ -69,7 +72,7 @@ object SLRankUp {
               mutableListOf(
                   "&f現ランク: $rank",
                   "&f初ログイン: &e${rud.firstLogin?.format(format)}",
-                  "&f最終オンライン: &e${rud.lastOnlineTime()?.format(format)}",
+                  "&f最終オンライン: &e${lastOnline?.format(format)}",
                   "&f経過日数: ${rud.numberOfDaysElapsed()}",
                   "&f建築数: ${rud.buildCount}",
               ),
@@ -88,27 +91,32 @@ object SLRankUp {
 
   /** プラグインロード時にデータを作るタスク */
   fun createDataTask() {
-    val slDataList = Data.getSLDataAll()
-    slDataList.forEach { slData ->
-      if (!data.containsKey(slData.owner)) {
-        data[slData.owner] = RankUpData(slData.owner, 1)
+    val rebuilt = LinkedHashMap<UUID, RankUpData>()
+    Data.getSLDataAll().forEach { slData ->
+      val current = rebuilt[slData.owner]
+      if (current == null) {
+        rebuilt[slData.owner] = RankUpData(slData.owner, 1)
       } else {
-        data[slData.owner]?.plusBuild()
+        current.plusBuild()
       }
     }
+    data.clear()
+    data.putAll(rebuilt)
   }
 
   /** 途中で建築が増えたときのタスク */
   fun plusBuildTask(user: UUID) {
-    if (!data.containsKey(user)) {
-      data[user] = RankUpData(user, 1)
-    } else {
-      data[user]?.plusBuild()
+    data.compute(user) { _, current ->
+      if (current == null) {
+        RankUpData(user, 1)
+      } else {
+        current.apply { plusBuild() }
+      }
     }
   }
 
   /** 途中で建築が減ったときのタスク */
   fun minusBuildTask(user: UUID) {
-    data[user]?.minusBuild()
+    data.computeIfPresent(user) { _, current -> current.apply { minusBuild() } }
   }
 }
