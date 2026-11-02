@@ -82,7 +82,9 @@ class PaperNetworkBridge(
             if (!player.isOnline || envelope.targetPlayerId != player.uniqueId) return@Runnable
             if (envelope.replyToMessageId == null) {
               // Post-connect announcement starts authentication; it cannot set the ID itself.
-              requestIdentity(player)
+              if (!config.network.identity.confirmed) {
+                requestIdentity(player)
+              }
               return@Runnable
             }
             val identity = config.network.identity

@@ -258,6 +258,9 @@ class NetworkMessageRouter(
               )
               return false
             }
+    if (server.playersConnected.isEmpty()) {
+      return false
+    }
     if (!server.sendPluginMessage(identifier, data)) {
       logger.warn("Velocity could not send OyasaiChat message to '{}'.", backend)
       return false

@@ -137,4 +137,20 @@ class BackendIdentityTest {
         identity.accept(response(request), player, now),
     )
   }
+
+  @Test
+  fun `concurrent join and post-connect requests accept earlier correlated response`() {
+    val identity = BackendIdentity("main")
+    val first = identity.request(player, "Player", now)
+    val second = identity.request(player, "Player", now + 10)
+    assertEquals(
+        BackendIdentity.Acceptance.CONFIRMED,
+        identity.accept(response(first), player, now + 20),
+    )
+    assertTrue(identity.confirmed)
+    assertEquals(
+        BackendIdentity.Acceptance.REJECTED,
+        identity.accept(response(second), player, now + 30),
+    )
+  }
 }

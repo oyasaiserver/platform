@@ -104,7 +104,14 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
                     .get(2, TimeUnit.SECONDS)
           }
           .getOrElse {
-            plugin.logger.severe("Unable to plan chat for $playerId: ${it.message}")
+            val detail = it.message ?: it::class.simpleName ?: "unknown"
+            if (it is java.util.concurrent.TimeoutException) {
+              plugin.logger.warning(
+                  "Timed out waiting for server thread to plan chat for $playerId."
+              )
+            } else {
+              plugin.logger.severe("Unable to plan chat for $playerId: $detail")
+            }
             LocalChatPlan.Rejected("Chat processing is temporarily unavailable.")
           }
 
