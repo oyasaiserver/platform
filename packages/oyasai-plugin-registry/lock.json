@@ -34,8 +34,8 @@
   "fastasyncworldedit": {
     "paper": {
       "26.3": {
-        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/A1gBu4MM/FastAsyncWorldEdit-Paper-2.16.1.jar",
-        "hash": "sha256-oXBsQUEqEI49L9vZ6d0MYJBPK6RUFMbt8RwSYoEuGDg="
+        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/JOyEqKdC/FastAsyncWorldEdit-Paper-2.16.2.jar",
+        "hash": "sha256-p0IZ+mYMeCyXeeZ0CGfN45WiTROB3LpsT4Ai5OnD+H0="
       }
     }
   },
@@ -96,8 +96,8 @@
   "viaversion": {
     "paper": {
       "26.3": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/MBNGPVLI/ViaVersion-5.12.3-SNAPSHOT.jar",
-        "hash": "sha256-Rnbm2wIC0q0JIbRtpGSIXElu9ydKqiZUArcNQWMclsA="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/h2Bniign/ViaVersion-5.12.3-SNAPSHOT.jar",
+        "hash": "sha256-Nrgc/6cYYtDq5jrphg3sPEmkq/rKjjBDilnM2Wwa838="
       }
     }
   },
