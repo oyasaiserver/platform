@@ -31,6 +31,8 @@ import org.bukkit.scheduler.BukkitTask
 
 object SLSignLikes {
 
+  internal fun snapshotLikes(likes: List<UUID>): List<UUID> = likes.toList()
+
   private val profileCache = ConcurrentHashMap<UUID, SLPlayerHeads.ProfileData>()
 
   private fun createLoadingItem(): ItemStack {
@@ -75,13 +77,14 @@ object SLSignLikes {
       pagePane: PaginatedPane,
       gui: ChestGui,
   ) {
-    if (uuids.isEmpty()) return
+    val snapshot = snapshotLikes(uuids)
+    if (snapshot.isEmpty()) return
 
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             Tools.plugin,
             Runnable {
-              uuids.forEachIndexed { index, uuid ->
+              snapshot.forEachIndexed { index, uuid ->
                 // 1. キャッシュヒット
                 val cached = profileCache[uuid]
                 if (cached != null) {
@@ -157,15 +160,16 @@ object SLSignLikes {
         ChestGui(6, Tools.socialLikesLOGOShort + "&0ID:${slData.id}「&2${slData.title}&0」p1".color())
     gui.cancelClickWithSound()
 
+    val likesSnapshot = snapshotLikes(slData.likes)
     val pagePane = PaginatedPane(9, 5)
     val headStacks =
         java.util.Collections.synchronizedList(
-            MutableList(slData.likes.size) { createLoadingItem() }
+            MutableList(likesSnapshot.size) { createLoadingItem() }
         )
     pagePane.populateWithItemStacks(headStacks)
     gui.addPane(Slot.fromXY(0, 0), pagePane)
 
-    loadHeadsAsync(slData.likes, headStacks, pagePane, gui)
+    loadHeadsAsync(likesSnapshot, headStacks, pagePane, gui)
     val ownerName = SLPlayerHeads.resolveName(slData.owner) ?: "Unknown"
 
     val navigation = StaticPane(9, 1)

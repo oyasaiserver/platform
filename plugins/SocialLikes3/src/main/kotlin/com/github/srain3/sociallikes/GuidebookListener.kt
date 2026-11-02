@@ -171,7 +171,7 @@ object GuidebookListener : Listener {
     (event.player as? org.bukkit.entity.Player)?.let { GuidebookBookUI.closed(it, event.view) }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOWEST)
   fun onTakeLecternBook(event: PlayerTakeLecternBookEvent) {
     if (GuidebookBookUI.isViewBook(event.player.openInventory.topInventory.getItem(0))) {
       event.isCancelled = true

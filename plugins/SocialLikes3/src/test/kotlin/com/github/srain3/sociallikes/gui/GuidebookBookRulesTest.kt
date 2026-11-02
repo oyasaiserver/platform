@@ -99,6 +99,24 @@ class GuidebookBookRulesTest {
     assertEquals(0, GuidebookBookRules.bookmarkPage(4, 0))
   }
 
+  @Test
+  fun `virtual lectern closes instead of firing take book event on button 3`() {
+    assertTrue(GuidebookBookRules.closesVirtualLecternOnButton(3))
+    assertFalse(GuidebookBookRules.closesVirtualLecternOnButton(1))
+    assertFalse(GuidebookBookRules.closesVirtualLecternOnButton(2))
+  }
+
+  @Test
+  fun `snapshot likes isolates async head loading from concurrent mutations`() {
+    val liveLikes = mutableListOf(UUID(0, 1), UUID(0, 2))
+    val snapshot = SLSignLikes.snapshotLikes(liveLikes)
+    val iterator = snapshot.iterator()
+    assertEquals(UUID(0, 1), iterator.next())
+    liveLikes.add(UUID(0, 3))
+    assertEquals(UUID(0, 2), iterator.next())
+    assertFalse(iterator.hasNext())
+  }
+
   private fun entry(id: Int, title: String?, valid: Boolean, liked: Boolean) =
       GuidebookService.EntryView(
           id,
