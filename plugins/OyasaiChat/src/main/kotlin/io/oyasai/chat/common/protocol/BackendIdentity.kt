@@ -14,7 +14,7 @@ class BackendIdentity(val configuredId: String) {
 
   private var adoptedId: String? = null
   private var conflicted = false
-  private val pending = mutableMapOf<UUID, Pair<UUID, Long>>()
+  private val pending = mutableMapOf<UUID, MutableList<Pair<UUID, Long>>>()
 
   enum class Acceptance {
     REJECTED,
@@ -24,7 +24,8 @@ class BackendIdentity(val configuredId: String) {
 
   @Synchronized
   fun request(player: UUID, name: String, now: Long = System.currentTimeMillis()): NetworkEnvelope {
-    pending.entries.removeIf { now - it.value.second > MAX_MESSAGE_AGE_MILLIS }
+    pending.values.forEach { list -> list.removeIf { now - it.second > MAX_MESSAGE_AGE_MILLIS } }
+    pending.entries.removeIf { it.value.isEmpty() }
     val request =
         NetworkEnvelope.backend(
             type = MessageType.BACKEND_ID_REQUEST,
@@ -34,7 +35,11 @@ class BackendIdentity(val configuredId: String) {
             content = "IDENTIFY",
             timestamp = now,
         )
-    pending[player] = request.messageId to now
+    val list = pending.getOrPut(player) { mutableListOf() }
+    list.add(request.messageId to now)
+    while (list.size > 4) {
+      list.removeAt(0)
+    }
     return request
   }
 
@@ -44,14 +49,20 @@ class BackendIdentity(val configuredId: String) {
       carrier: UUID,
       now: Long = System.currentTimeMillis(),
   ): Acceptance {
-    val request = pending[carrier] ?: return Acceptance.REJECTED
+    val requests = pending[carrier] ?: return Acceptance.REJECTED
+    requests.removeIf { now - it.second > MAX_MESSAGE_AGE_MILLIS }
+    val request =
+        requests.firstOrNull { it.first == envelope.replyToMessageId }
+            ?: run {
+              if (requests.isEmpty()) pending.remove(carrier)
+              return Acceptance.REJECTED
+            }
     if (
         envelope.type != MessageType.BACKEND_ID ||
             envelope.originKind != MessageOrigin.PROXY ||
             envelope.originBackend != PROXY_ORIGIN_BACKEND ||
             !envelope.isFresh(now) ||
             envelope.targetPlayerId != carrier ||
-            envelope.replyToMessageId != request.first ||
             now - request.second > MAX_MESSAGE_AGE_MILLIS ||
             envelope.content.isBlank() ||
             envelope.content.length > 64 ||

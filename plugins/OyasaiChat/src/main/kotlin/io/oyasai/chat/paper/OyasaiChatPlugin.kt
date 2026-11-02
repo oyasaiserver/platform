@@ -140,7 +140,16 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     if (!runtime.config.network.deliveryEnabled) return
     // Paper join can precede Velocity post-connect; retry on the next tick as well
     // as handling the proxy announcement. PM state requests require a confirmed ID.
-    server.scheduler.runTask(this, Runnable { runtime.bridge.requestIdentity(player) })
+    if (!runtime.config.network.identity.confirmed) {
+      server.scheduler.runTask(
+          this,
+          Runnable {
+            if (!runtime.config.network.identity.confirmed) {
+              runtime.bridge.requestIdentity(player)
+            }
+          },
+      )
+    }
     if (runtime.config.network.identity.confirmed) runtime.privateMessages.onBackendJoin(player)
   }
 
