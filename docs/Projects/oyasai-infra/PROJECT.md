@@ -85,10 +85,10 @@ source:
 |---|---|---|
 | `alloy` | `alloy` | docker ソケットを読み、全コンテナのログを Grafana Cloud の Loki へ。設定は `packages/oyasai-cdktf/assets/config.alloy` |
 | `mariadb` | `mariadb` | 同じホストディレクトリをデータと `docker-entrypoint-initdb.d` の両方にマウントしている |
-| `oyasai-minecraft-main` / `-lobby` / `-axiom` | 同名 | `mariadb` に依存。データはホスト側の環境別ディレクトリ（`baseHostPath`）にバインド |
+| `oyasai-minecraft-main` / `-lobby` / `-axiom` / `-survival` | 同名 | `mariadb` に依存。データはホスト側の環境別ディレクトリ（`baseHostPath`）にバインド |
 | `oyasai-velocity` | `oyasai-velocity` | Java・Bedrock の入口 |
 | `oyasai-web` / `caddy` | `oyasai-web` / `caddy` | §5 |
-| `minecraft-main-backup` / `minecraft-axiom-backup`（master のみ） | `mc-backup` | |
+| `minecraft-main-backup` / `minecraft-axiom-backup` / `minecraft-survival-backup`（master のみ） | `mc-backup` | |
 | `mariadb-backup`（master のみ） | `mysql-backup` | `command: ["dump"]` |
 | `oyasai-cron`（master のみ） | `oyasai-cron` | §4 |
 

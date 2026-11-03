@@ -48,7 +48,7 @@ platform/
 ├── packages/            Nix パッケージ。ファイル1つ（またはディレクトリ1つ）が1パッケージ
 │   ├── oyasai-plugins.nix              Gradle で plugins/* をビルドした jar 群
 │   ├── oyasai-plugin-registry/         外部プラグインの取得元・ロック・固定 jar
-│   ├── oyasai-minecraft-{main,lobby,axiom}.nix   Purpur サーバー
+│   ├── oyasai-minecraft-{main,lobby,axiom,survival}.nix   Purpur サーバー
 │   ├── oyasai-velocity.nix             Velocity プロキシ
 │   ├── oyasai-cdktf/ ・ oyasai-cdktf-bindings/ ・ oyasai-infra/   インフラ（CDKTF・Terraform Cloud）
 │   └── その他（oyasai-cron・oyasai-web・standalone-images など）
@@ -92,7 +92,8 @@ platform/
 | `oyasai-minecraft-main` | Purpur 26.2 のメインサーバー。プラグイン一覧と server.properties | `packages/oyasai-minecraft-main.nix:1-79` |
 | `oyasai-minecraft-lobby` | Purpur 26.2 のロビー（フラット・void）。ゲームルールを起動コマンドで固定 | `packages/oyasai-minecraft-lobby.nix:1-85` |
 | `oyasai-minecraft-axiom` | Purpur 26.2 の建築用サーバー（creative、ホワイトリスト） | `packages/oyasai-minecraft-axiom.nix:1-44` |
-| `oyasai-velocity` | 入口のプロキシ。Velocity 用プラグインと、接続先サーバーの一覧 | `packages/oyasai-velocity.nix:1-43` |
+| `oyasai-minecraft-survival` | Purpur 26.3 のサバイバルサーバー。プラグイン無し、hard、サバイバル | `packages/oyasai-minecraft-survival.nix:1-27` |
+| `oyasai-velocity` | 入口のプロキシ。Velocity 用プラグインと、接続先サーバーの一覧 | `packages/oyasai-velocity.nix:1-45` |
 | `oyasai-cdktf` | CDKTF の CLI ラッパー。`OYASAI_IMAGE_IDS`・`NIX_CACHE_PUBLIC_KEY`・`CDKTF_APP` を埋め込む | `packages/oyasai-cdktf/package.nix:1-35`、`packages/oyasai-cdktf/package.json:7` |
 | `oyasai-cdktf-bindings` | cdktf の provider 生成バインディングと、`cdktf` コマンド（cdktf-cli）の提供元。`gen/` は自動生成（中身は未読） | `packages/oyasai-cdktf-bindings/package.nix:1-61`、`packages/oyasai-cdktf-bindings/package.json:10-12` |
 | `oyasai-infra` | Terraform Cloud の workspace を一覧・作成・削除する `just` ラッパー | `packages/oyasai-infra/package.nix`、`packages/oyasai-infra/terraform_io.just` |
@@ -136,7 +137,7 @@ platform/
 ### 3.3 サーバーの組み立て（Nix）
 
 1. `packages/oyasai-minecraft-*.nix` は `oyasaiPurpur`（`nix/oyasai-purpur.nix`）を呼ぶ。引数は `name`・`version`（`26.2`）・`icon`・`properties`・`paperConfig`・`purpurConfig`・`plugins`。
-2. `plugins` は `with oyasai-plugin-registry.forPlatform "paper" version; [ ... ]` で書く。registry の結果には自前の `oyasai-plugins` も混ざる（5 節）。
+2. `plugins` は `with oyasai-plugin-registry.forPlatform "paper" version; [ ... ]` で書く。registry の結果には自前の `oyasai-plugins` も混ざる（5 節）。`oyasai-minecraft-survival` は `plugins = [ ]` で、プラグインを入れない。
 3. `nix/oyasai-purpur.nix` は、nix-minecraft の `purpur-26_2` を使い、vanilla jar を `cache/` に置き、`plugins/` の jar を入れ替え、`paper-global.yml`・`purpur.yml`・`server.properties` を書き、`java ... -jar server.jar nogui` を `exec` する `writeShellApplication` を作る（`:25-106`）。
    - 環境変数: `MEMORY`（既定 2G、`:91`）。ほかに RCON のパスワードと Floodgate の鍵を環境変数で受け取り、ファイルへ書き出す（`:67-71`、`:83-89`）。
 4. `packages/oyasai-velocity.nix` は `oyasaiVelocity` を呼ぶ。`velocity.toml` に接続先 `main`・`lobby`・`axiom` を書き、`try = ["main", "lobby"]` にする（`:24-42`）。`MEMORY` の既定は 512M（`nix/oyasai-velocity.nix:45`）。
@@ -163,8 +164,8 @@ platform/
    - `platform-<env>-services`（`src/stacks/platform-services.ts`）: Docker 上のコンテナ群。
 5. `platform-services.ts:77-94` が `OYASAI_IMAGE_IDS` の各キーから `docker.Image` を作る。`imageId(name)` で引けないと `Missing image in OYASAI_IMAGE_IDS` で失敗する。
 6. コンテナ（`platform-services.ts`）:
-   - 全環境: `alloy`（ログ送信）、`mariadb`、`oyasai-minecraft-main`・`-lobby`・`-axiom`、`oyasai-velocity`、`oyasai-web`、`caddy`（`oyasai-web` へ reverse-proxy）。
-   - `master` のみ（`:325-414`）: `minecraft-main-backup`・`minecraft-axiom-backup`（mc-backup。restic で R2 へ）、`mariadb-backup`（mysql-backup）、`oyasai-cron`。
+   - 全環境: `alloy`（ログ送信）、`mariadb`、`oyasai-minecraft-main`・`-lobby`・`-axiom`・`-survival`、`oyasai-velocity`、`oyasai-web`、`caddy`（`oyasai-web` へ reverse-proxy）。
+   - `master` のみ（`:325-414`）: `minecraft-main-backup`・`minecraft-axiom-backup`・`minecraft-survival-backup`（mc-backup。restic で R2 へ）、`mariadb-backup`（mysql-backup）、`oyasai-cron`。
    - Docker ネットワークは `network`。サーバーのデータはホストのディレクトリを `/data` に割り当てる（`:96-106`）。
 7. backend と Docker の接続先:
    - `common-infra`・`common-internal`・`platform-<env>-infra` は環境によらず Terraform Cloud（`CloudBackend`）。
@@ -184,6 +185,7 @@ CDKTF をいつ・どの順で実行するか（PR 環境、`master` への自�
 | `oyasai-minecraft-main` | `packages/oyasai-minecraft-main.nix` | Purpur 26.2（registry では `paper`） | メインワールド。プラグインが多い。Velocity 連携を有効化 |
 | `oyasai-minecraft-lobby` | `packages/oyasai-minecraft-lobby.nix` | Purpur 26.2 | ロビー。void・フラット、ゲームルールを固定 |
 | `oyasai-minecraft-axiom` | `packages/oyasai-minecraft-axiom.nix` | Purpur 26.2 | creative、`white-list = true`。`try` には入らない（接続先の登録のみ） |
+| `oyasai-minecraft-survival` | `packages/oyasai-minecraft-survival.nix` | Purpur 26.3 | プラグイン無しのバニラ相当。hard・survival。`try` には入らない（接続先の登録のみ） |
 
 - 各 Purpur サーバーのプラグインは `forPlatform "paper" "26.2"`（外部）と自前の小文字名（`oyasai-plugins` の passthru）が混ざる。`oyasaieconomy`・`directstate` なども自前（`plugins/OyasaiEconomy/` など）。
 - Velocity のプラグインは `forPlatform "velocity"`（版の引数なし）。自前の `oyasaiban`・`oyasaichat`・`oyasaimusic`・`oyasaitab` もここに入る。`OyasaiChat` などは同じ jar に `plugin.yml` と `velocity-plugin.json` の両方を持ち、Paper と Velocity の両方で使われる。
