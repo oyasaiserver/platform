@@ -9,6 +9,7 @@ dependencies {
   implementation(libs.discord.webhooks)
   implementation(libs.sqlite.jdbc)
   testImplementation(libs.purpur.api)
+  testImplementation(libs.luckperms.api)
   testImplementation(project(":plugins:OyasaiEconomy"))
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.4.0")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.4")

@@ -36,7 +36,7 @@ object CarBuilder2Schematic {
       for (x in 0 until region.width) {
         for (z in 0 until region.length) {
           val pos = BlockVector3.at(min.x() + x, min.y() + y, min.z() + z)
-          val blockData = BukkitAdapter.adapt(clipboard.getFullBlock(pos))
+          val blockData = BukkitAdapter.adapt(clipboard.getBlock(pos))
           if (blockData.material != Material.AIR) {
             raw[Vector(x.toDouble(), y.toDouble(), z.toDouble())] = blockData
           }

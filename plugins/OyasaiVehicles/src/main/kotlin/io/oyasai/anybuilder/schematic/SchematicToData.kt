@@ -1,22 +1,81 @@
 package io.oyasai.anybuilder.schematic
 
+import com.sk89q.jnbt.CompoundTag
+import com.sk89q.jnbt.NBTInputStream
+import com.sk89q.jnbt.NBTOutputStream
+import com.sk89q.jnbt.Tag
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
+import java.io.InputStream
 import java.util.*
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 import org.bukkit.Material
 import org.bukkit.block.data.BlockData
 import org.bukkit.util.BoundingBox
 import org.bukkit.util.Vector
 
 object SchematicToData {
+  private val STRIPPED_SCHEMATIC_KEYS = setOf("BlockEntities", "TileEntities", "Entities")
+
+  @Suppress("DEPRECATION")
+  internal fun stripEntitiesFromSchematicStream(rawBytes: ByteArray): InputStream {
+    return try {
+      val namedTag =
+          NBTInputStream(GZIPInputStream(ByteArrayInputStream(rawBytes))).use { nbtIn ->
+            nbtIn.readNamedTag()
+          }
+      val rootTag = namedTag.tag as? CompoundTag ?: return ByteArrayInputStream(rawBytes)
+      val strippedRoot = stripEntitiesFromRootCompound(rootTag)
+      val outBytes = ByteArrayOutputStream()
+      GZIPOutputStream(outBytes).use { gzipOut ->
+        NBTOutputStream(gzipOut).use { nbtOut -> nbtOut.writeNamedTag(namedTag.name, strippedRoot) }
+      }
+      ByteArrayInputStream(outBytes.toByteArray())
+    } catch (_: Exception) {
+      ByteArrayInputStream(rawBytes)
+    }
+  }
+
+  @Suppress("DEPRECATION")
+  internal fun stripEntitiesFromRootCompound(root: CompoundTag): CompoundTag {
+    val rootMap = LinkedHashMap<String, Tag<*, *>>(root.value)
+    val schematicChild = rootMap["Schematic"] as? CompoundTag
+    if (schematicChild != null) {
+      rootMap["Schematic"] = stripEntitiesFromSchematicCompound(schematicChild)
+      return CompoundTag(rootMap)
+    }
+    return stripEntitiesFromSchematicCompound(root)
+  }
+
+  @Suppress("DEPRECATION")
+  private fun stripEntitiesFromSchematicCompound(schematic: CompoundTag): CompoundTag {
+    val map = LinkedHashMap<String, Tag<*, *>>(schematic.value)
+    for (key in STRIPPED_SCHEMATIC_KEYS) {
+      map.remove(key)
+    }
+    val blocksTag = map["Blocks"] as? CompoundTag
+    if (blocksTag != null) {
+      val blocksMap = LinkedHashMap<String, Tag<*, *>>(blocksTag.value)
+      for (key in STRIPPED_SCHEMATIC_KEYS) {
+        blocksMap.remove(key)
+      }
+      map["Blocks"] = CompoundTag(blocksMap)
+    }
+    return CompoundTag(map)
+  }
+
   fun fileToRawBlockData(file: File): MutableMap<Vector, BlockData>? {
     val rawBlockData = LinkedHashMap<Vector, BlockData>()
     if (file.isFile && file.exists()) {
       val format = ClipboardFormats.findByFile(file) ?: return null
       try {
-        format.getReader(FileInputStream(file)).use { reader ->
+        val rawBytes = FileInputStream(file).use { it.readBytes() }
+        format.getReader(stripEntitiesFromSchematicStream(rawBytes)).use { reader ->
           val clipboard = reader.read()
           val region = clipboard.region
           val min = clipboard.minimumPoint
@@ -24,7 +83,7 @@ object SchematicToData {
           for (y in 0 until region.getHeight()) {
             for (x in 0 until region.getWidth()) {
               for (z in 0 until region.getLength()) {
-                val block = clipboard.getFullBlock(min.add(x, y, z))
+                val block = clipboard.getBlock(min.add(x, y, z))
                 val bukkitBlockData = BukkitAdapter.adapt(block)
                 if (bukkitBlockData.material != Material.AIR) {
                   rawBlockData[Vector(x, y, z)] = bukkitBlockData
