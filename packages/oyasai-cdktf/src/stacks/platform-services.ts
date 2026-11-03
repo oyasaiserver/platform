@@ -101,6 +101,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       minecraftAxiom: join(baseHostPath, "minecraft-axiom"),
       minecraftLobby: join(baseHostPath, "minecraft-lobby"),
       minecraftMain: join(baseHostPath, "minecraft-main"),
+      minecraftSurvival: join(baseHostPath, "minecraft-survival"),
       velocity: join(baseHostPath, "velocity"),
       // keep-sorted end
     } as const;
@@ -259,6 +260,34 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       },
     );
 
+    const minecraftSurvivalContainer = new Container(
+      this,
+      this.t("minecraft-survival-container"),
+      {
+        image: imageId("oyasai-minecraft-survival"),
+        name: "oyasai-minecraft-survival",
+        dependsOn: [mariadbContainer],
+        restart: "unless-stopped",
+        tty: true,
+        stdinOpen: true,
+        destroyGraceSeconds: 2 * 60,
+        init: true,
+        networksAdvanced: [network],
+        env: envs({
+          FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
+          MEMORY: this.isMaster ? "8G" : "1G",
+          PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
+          RCON_PASSWORD: randoms.rconPassword.result,
+        }),
+        volumes: [
+          {
+            containerPath: "/data",
+            hostPath: hostPaths.minecraftSurvival,
+          },
+        ],
+      },
+    );
+
     new Container(this, this.t("velocity-container"), {
       image: imageId("oyasai-velocity"),
       name: "oyasai-velocity",
@@ -335,6 +364,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       const backedupMinecraftContainers = {
         ["minecraft-main"]: minecraftMainContainer,
         ["minecraft-axiom"]: minecraftAxiomContainer,
+        ["minecraft-survival"]: minecraftSurvivalContainer,
       } as const;
 
       for (const [backupId, minecraftContainer] of Object.entries(

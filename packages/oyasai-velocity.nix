@@ -4,6 +4,7 @@
   oyasai-minecraft-main,
   oyasai-minecraft-lobby,
   oyasai-minecraft-axiom,
+  oyasai-minecraft-survival,
 }:
 
 oyasaiVelocity {
@@ -34,6 +35,8 @@ oyasaiVelocity {
       main = oyasai-minecraft-main.name;
       lobby = oyasai-minecraft-lobby.name;
       axiom = oyasai-minecraft-axiom.name;
+      survival = oyasai-minecraft-survival.name;
+
       try = [
         "main"
         "lobby"
