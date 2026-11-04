@@ -230,43 +230,58 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
     p.gameMode = if (role == "spectator") GameMode.SPECTATOR else GameMode.ADVENTURE
     later(1) {
       if (state != "preparing") return@later
-      if (!p.isOnline) {
+      try {
+        if (!p.isOnline) {
+          failed = true
+          return@later
+        }
+        clearItems(p)
+        console("effect clear ${p.name}")
+        p.foodLevel = 20 // Skript food level 10（満腹度は0..10）。
+        when (role) {
+          "hunter" -> {
+            val chest =
+                location(1248.0, 7.0, -3026.0).block.state as? Chest
+                    ?: run {
+                      failed = true
+                      return@later
+                    }
+            hunterAttributes(p)
+            console("attribute ${p.name} minecraft:entity_interaction_range base reset")
+            console("attribute ${p.name} minecraft:block_interaction_range base reset")
+            p.performCommand("ch 3")
+            p.performCommand("leave g")
+            p.inventory.setHelmet(chest.inventory.getItem(0)?.clone())
+            p.inventory.setChestplate(chest.inventory.getItem(1)?.clone())
+            for (slot in 2..26) chest.inventory.getItem(slot)?.let { giveItem(p, it.clone()) }
+            p.sendMessage("§cあなたは鬼です。30秒後に出発します。")
+          }
+          "runner" -> {
+            val chest =
+                location(1247.0, 7.0, -3026.0).block.state as? Chest
+                    ?: run {
+                      failed = true
+                      return@later
+                    }
+            runnerAttributes(p)
+            console("attribute ${p.name} minecraft:block_interaction_range base reset")
+            p.performCommand("ch 2")
+            p.performCommand("leave g")
+            chest.inventory.contents.filterNotNull().forEach { giveItem(p, it.clone()) }
+            p.teleport(start())
+            p.sendMessage("§aあなたは探索者です。15分間で可能な限りミッションをこなして下さい。")
+          }
+          else -> {
+            p.teleport(start())
+            p.sendMessage("§eあなたは観戦者です。")
+          }
+        }
+      } catch (e: Exception) {
         failed = true
+        plugin.logger.warning("Kimodameshi prepare failed for ${p.name}: ${e.message}")
+      } finally {
         pending--
-        return@later
       }
-      clearItems(p)
-      console("effect clear ${p.name}")
-      p.foodLevel = 20 // Skript food level 10（満腹度は0..10）。
-      when (role) {
-        "hunter" -> {
-          hunterAttributes(p)
-          console("attribute ${p.name} minecraft:entity_interaction_range base reset")
-          console("attribute ${p.name} minecraft:block_interaction_range base reset")
-          p.performCommand("ch 3")
-          p.performCommand("leave g")
-          val chest = location(1248.0, 7.0, -3026.0).block.state as Chest
-          p.inventory.setHelmet(chest.inventory.getItem(0)?.clone())
-          p.inventory.setChestplate(chest.inventory.getItem(1)?.clone())
-          for (slot in 2..26) chest.inventory.getItem(slot)?.let { giveItem(p, it.clone()) }
-          p.sendMessage("§cあなたは鬼です。30秒後に出発します。")
-        }
-        "runner" -> {
-          runnerAttributes(p)
-          console("attribute ${p.name} minecraft:block_interaction_range base reset")
-          p.performCommand("ch 2")
-          p.performCommand("leave g")
-          val chest = location(1247.0, 7.0, -3026.0).block.state as Chest
-          chest.inventory.contents.filterNotNull().forEach { giveItem(p, it.clone()) }
-          p.teleport(start())
-          p.sendMessage("§aあなたは探索者です。15分間で可能な限りミッションをこなして下さい。")
-        }
-        else -> {
-          p.teleport(start())
-          p.sendMessage("§eあなたは観戦者です。")
-        }
-      }
-      pending--
     }
   }
 
@@ -425,9 +440,10 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
       teams[it] = "spectator"
     }
     control(1240, mode == "small")
-    failed = false
-    pending = participants.size
-    players().forEach { prepare(it, team(it)!!) }
+    val onlineParticipants = players()
+    failed = onlineParticipants.size != participants.size
+    pending = onlineParticipants.size
+    onlineParticipants.forEach { prepare(it, team(it)!!) }
   }
 
   private fun tick() {
@@ -737,6 +753,7 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
         )
     private val ADMIN =
         setOf(
+            "startgame",
             "givemission",
             "setteam",
             "clearteams",

@@ -628,17 +628,35 @@ internal class WeaponDevices(
         pressurePlate(event.block, event.entity as? LivingEntity)
   }
 
+  private fun canTriggerFrameTrap(frame: ItemFrame, item: ItemStack): Boolean {
+    if (frame.isFixed) return false
+    val trapOwner = owned(item)?.toString() ?: return false
+    val frameOwner =
+        frame.persistentDataContainer.keys
+            .firstOrNull { it.key == "gakubuchi_owner" }
+            ?.let { frame.persistentDataContainer.get(it, PersistentDataType.STRING) }
+    return frameOwner == null || frameOwner == trapOwner
+  }
+
   private fun pressurePlate(block: org.bukkit.block.Block, victim: LivingEntity?) {
     block.world
         .getNearbyEntities(block.location, 4.0, 4.0, 4.0)
         .filterIsInstance<ItemFrame>()
         .forEach { frame ->
+          val item = frame.item
           if (
               frame.location.distanceSquared(block.location) <= 16 &&
-                  trap(frame.item, block.location, 2, victim) &&
-                  !info(catalog.identify(frame.item)!!).flags[3]
-          )
+                  canTriggerFrameTrap(frame, item) &&
+                  trap(item, block.location, 2, victim) &&
+                  !info(catalog.identify(item)!!).flags[3]
+          ) {
+            if (item.amount > 1) {
+              item.amount -= 1
+              frame.setItem(item)
+            } else {
               frame.setItem(ItemStack(Material.AIR))
+            }
+          }
         }
   }
 
