@@ -31,7 +31,7 @@ object MapIdList {
   fun saveID(id: Int) {
     ids.add(id)
     existing.add(id)
-    lastId = id
+    if (id > lastId) lastId = id
     MapData.newCanvas(id)
     persist { store.register(id, id) }
   }

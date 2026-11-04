@@ -55,17 +55,26 @@ object PaintToolsCmd : CommandExecutor {
           return false
         } else {
           if (!sender.hasPermission("painttools.command.painttools.canvas")) return false
-          val mapView = Bukkit.createMap(sender.world)
           var id = getID()
           if (args.size == 2) {
-            if (args[1].toIntOrNull() != null) {
-              id = args[1].toInt()
+            val requestedId = args[1].toIntOrNull()
+            if (requestedId != null) {
+              if (!checkID(requestedId)) {
+                sender.sendMessage(ToolBox.colorMessage("[PaintTools] &cそのIDは存在しません!"))
+                return true
+              }
+              if (!canManageCanvasId(sender, requestedId)) {
+                sender.sendMessage(ToolBox.colorMessage("[PaintTools] &cそのIDを操作する権限がありません!"))
+                return true
+              }
+              id = requestedId
             } else {
               saveID(id)
             }
           } else {
             saveID(id)
           }
+          val mapView = Bukkit.createMap(sender.world)
           sender.inventory.addItem(createMap(mapView, id))
         }
 
@@ -79,6 +88,10 @@ object PaintToolsCmd : CommandExecutor {
           if (args[1].toIntOrNull() == null) return false
           val id = args[1].toInt()
           if (checkID(id)) {
+            if (!canManageCanvasId(sender, id)) {
+              sender.sendMessage(ToolBox.colorMessage("[PaintTools] &cそのIDを操作する権限がありません!"))
+              return true
+            }
             // 存在するIDが
             if (MapIdList.checkLockID(id)) {
               // ロックされている場合
@@ -103,6 +116,10 @@ object PaintToolsCmd : CommandExecutor {
           if (args[1].toIntOrNull() == null) return false
           val id = args[1].toInt()
           if (checkID(id)) {
+            if (!canManageCanvasId(sender, id)) {
+              sender.sendMessage(ToolBox.colorMessage("[PaintTools] &cそのIDを操作する権限がありません!"))
+              return true
+            }
             // 存在するIDが
             if (MapIdList.removeLockID(id)) {
               // アンロック出来た場合
@@ -287,6 +304,26 @@ object PaintToolsCmd : CommandExecutor {
     return inv
   }
 
+  private fun extractCanvasId(item: ItemStack?): Int? {
+    if (item == null || item.type != Material.FILLED_MAP) return null
+    val mapMeta = item.itemMeta as? MapMeta ?: return null
+    return mapMeta.persistentDataContainer.get(
+        ToolBox.pl.paintIdKey,
+        PersistentDataType.INTEGER,
+    )
+  }
+
+  private fun canManageCanvasId(sender: Player, id: Int): Boolean {
+    if (sender.isOp) return true
+    if (sender.inventory.contents.any { extractCanvasId(it) == id }) return true
+    val vec = frameLookVector(sender.eyeLocation)
+    val entity =
+        sender.world
+            .rayTraceEntities(sender.eyeLocation, vec, 8.0, 0.025) { it is ItemFrame }
+            ?.hitEntity as? ItemFrame ?: return false
+    return extractCanvasId(entity.item) == id && ToolBox.pl.canModify(entity, sender)
+  }
+
   /** undo処理 */
   private fun undoCommand(sender: Player, num: Int) {
     val vec = frameLookVector(sender.eyeLocation)
@@ -296,17 +333,22 @@ object PaintToolsCmd : CommandExecutor {
             .rayTraceEntities(sender.eyeLocation, vec, 8.0, 0.025) { it is ItemFrame }
             ?.hitEntity
     if (entity is ItemFrame) {
-      val mapMeta = entity.item.itemMeta as MapMeta
+      if (!ToolBox.canModify(entity, sender)) return
+      val mapMeta = entity.item.itemMeta as? MapMeta ?: return
       val id =
           mapMeta.persistentDataContainer.get(
               ToolBox.pl.paintIdKey,
               PersistentDataType.INTEGER,
           ) ?: return
       if (!checkID(id)) return
+      if (MapIdList.checkLockID(id)) {
+        sender.sendMessage(ToolBox.colorMessage("[PaintTools] &cLockされたIDです!"))
+        return
+      }
       val data = MapData.undoCash?.get(num, id) ?: return
       val view = mapMeta.mapView ?: return
       val mMap = MapData.loadMapData(id) ?: return
-      mMap.cash = data
+      mMap.cash = data.toMutableMap()
       mMap.changed()
       for (render in view.renderers) {
         view.removeRenderer(render)
