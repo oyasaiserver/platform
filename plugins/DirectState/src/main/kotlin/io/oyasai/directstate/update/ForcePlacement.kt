@@ -9,13 +9,16 @@ import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockState
 import org.bukkit.block.data.*
 import org.bukkit.block.data.type.*
+import org.bukkit.entity.Cushion
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Vehicle
 import org.bukkit.event.*
+import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockCanBuildEvent
 import org.bukkit.event.block.BlockMultiPlaceEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
@@ -29,6 +32,7 @@ internal class ForcePlacement(
     private val createBlockData: (Material) -> BlockData = { it.createBlockData() },
     private val applyItem: (Player, Block, ItemStack) -> Unit = BlockEntityAccess::applyItem,
     private val placeCushion: ((PlayerInteractEvent, Block) -> Unit)? = null,
+    private val enabled: (Player) -> Boolean = { false },
     private val protectPlacement: (Player, Map<Block, BlockData>) -> Unit,
 ) : Listener {
   /** 複数ブロック配置を構成する、一つの座標と配置後状態。 */
@@ -40,8 +44,41 @@ internal class ForcePlacement(
   private val horizontal = setOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
   private val handled = mutableMapOf<UUID, HandledClick>()
 
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun cushion(event: PlayerInteractAtEntityEvent) {
+    val cushion = event.rightClicked as? Cushion ?: return
+    val player = event.player
+    if (!enabled(player) || !allowed(player)) return
+    val item = player.inventory.getItem(event.hand)
+    if (placementMaterial(item) == null) return
+    val point = event.clickedPosition.clone().add(cushion.location.toVector())
+    if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
+    val eye = player.eyeLocation.toVector()
+    val direction = point.subtract(eye)
+    if (direction.lengthSquared() == 0.0) return
+    val hit = cushion.boundingBox.rayTrace(eye, direction, 6.0) ?: return
+    val face = hit.hitBlockFace ?: return
+    if (face != BlockFace.UP && face != BlockFace.DOWN && face !in horizontal) return
+    // 面のわずか内側のセルをクリック元にし、境界上でも隣のセルを取り違えない。 隣接したブロックに判定が吸われないようにする。
+    val inside = hit.hitPosition.clone().subtract(face.direction.multiply(1.0e-7))
+    val clicked = cushion.world.getBlockAt(inside.blockX, inside.blockY, inside.blockZ)
+    val interaction =
+        PlayerInteractEvent(
+            player,
+            Action.RIGHT_CLICK_BLOCK,
+            item,
+            clicked,
+            face,
+            event.hand,
+            hit.hitPosition.clone().subtract(clicked.location.toVector()),
+        )
+    if (tryPlace(interaction, onCushion = true)) event.isCancelled = true
+  }
+
   /** バニラが支持不足で拒否する配置だけを再現する。 trueはこの層がイベントを処理済み、falseはバニラ配置へ譲ることを表す。 */
-  fun tryPlace(event: PlayerInteractEvent): Boolean {
+  fun tryPlace(event: PlayerInteractEvent): Boolean = tryPlace(event, onCushion = false)
+
+  private fun tryPlace(event: PlayerInteractEvent, onCushion: Boolean): Boolean {
     val player = event.player
     val hand = event.hand ?: return false
     val clicked = event.clickedBlock ?: return false
@@ -73,7 +110,7 @@ internal class ForcePlacement(
     }
     // ボタンやチェストなどの通常の使用と配置の挙動を維持する。それらに向けてしゃがむと配置する。
     val material = placementMaterial(item) ?: return false
-    if (VanillaInteraction.consumesClick(event)) return false
+    if (!onCushion && VanillaInteraction.consumesClick(event)) return false
     val signMaterial = material.name.endsWith("_SIGN")
     // 上下クリックの吊り看板だけは、バニラでは支持判定前に拒否されるため強制配置する。
     val forcedHangingSign =
@@ -81,7 +118,8 @@ internal class ForcePlacement(
             !material.name.endsWith("_WALL_HANGING_SIGN") &&
             faceIsFloorOrCeiling(event.blockFace)
     val face = event.blockFace
-    val target = placementTarget(clicked, material, face)
+    val target =
+        if (onCushion) clicked.getRelative(face) else placementTarget(clicked, material, face)
     if (!withinBounds(player, target) || !target.isReplaceable) return false
     val point =
         event.interactionPoint?.toVector()?.subtract(target.location.toVector()) ?: return false
@@ -107,9 +145,10 @@ internal class ForcePlacement(
     val needsForcedPlacement =
         material == Material.KELP ||
             material == Material.SEAGRASS ||
+            onCushion ||
             forcedHangingSign ||
             (signMaterial && clicked.isReplaceable)
-    if (state.isSupported(target) && !needsForcedPlacement) return false
+    if (!needsForcedPlacement && state.isSupported(target)) return false
 
     event.isCancelled = true
     handled[player.uniqueId] = HandledClick(Bukkit.getCurrentTick(), hand)

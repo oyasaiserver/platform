@@ -86,7 +86,7 @@ internal class CushionSupport(
     if (!original.isSimilar(event.item) || original.amount < 1) return
     val location =
         target.location.clone().add(0.5, 0.0, 0.5).apply {
-          y = point.y
+          y = Math.round(point.y * 8).toDouble() / 8
           setDirection(player.facing.direction)
         }
     if (location.y < target.world.minHeight || location.y >= target.world.maxHeight) return

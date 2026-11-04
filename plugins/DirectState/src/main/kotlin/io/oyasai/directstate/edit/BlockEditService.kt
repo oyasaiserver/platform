@@ -75,6 +75,7 @@ internal class BlockEditService(
       if (edit.blockEntityPresent == null) edit.block.setBlockData(edit.data, false)
       else BlockEntityAccess.setBody(edit.block, edit.data, edit.blockEntityPresent)
     }
+    updateMode.afterEdit(player, edits.map { it.block })
     edits.forEach { edit ->
       queueEdit(player, before.getValue(edit.block), edit.block, edit.block.blockData.clone())
     }
