@@ -24,6 +24,7 @@ oyasaiPurpur rec {
     # keep-sorted start
     clickmobs
     oyasaichat
+    oyasaitab
     plugmanx
     survivalharvest
     survivalpull
