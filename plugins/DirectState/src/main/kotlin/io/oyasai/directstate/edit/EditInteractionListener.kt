@@ -2,6 +2,7 @@ package io.oyasai.directstate.edit
 
 import io.oyasai.directstate.Permissions
 import io.oyasai.directstate.edit.hand.HandEditor
+import io.oyasai.directstate.edit.hand.HandGeometry
 import io.oyasai.directstate.edit.hold.HoldEditor
 import io.oyasai.directstate.edit.replace.BlockReplacement
 import io.oyasai.directstate.edit.replace.TypeReplaceMode
@@ -9,11 +10,16 @@ import io.oyasai.directstate.edit.shape.ShapeEditor
 import io.oyasai.directstate.integration.BlockEntityAccess
 import io.oyasai.directstate.settings.PlayerSettingsStore
 import io.papermc.paper.event.player.PlayerStopUsingItemEvent
+import kotlin.math.floor
 import net.kyori.adventure.text.Component
 import org.bukkit.FluidCollisionMode
+import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
+import org.bukkit.block.TileState
 import org.bukkit.block.data.type.Door
+import org.bukkit.entity.Cushion
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
@@ -21,6 +27,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -39,14 +46,89 @@ internal class EditInteractionListener(
     private val shapeEditor: ShapeEditor,
     private val handEditor: HandEditor,
     private val blockReplacement: BlockReplacement,
+    private val ignoredBlockPdcKeys: Set<NamespacedKey> = emptySet(),
+    private val canEditEntity: (Player, Location) -> Boolean = { _, _ -> true },
 ) : Listener {
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun cushion(event: PlayerInteractAtEntityEvent) {
+    val cushion = event.rightClicked as? Cushion ?: return
+    val player = event.player
+    val handTool = tools.isHandTool(player.inventory.itemInMainHand)
+    if (!handTool && !wantsHandEditing(player)) return
+    val from = cushion.location
+    val point = event.clickedPosition.clone().add(from.toVector())
+    if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
+    val eye = player.eyeLocation.toVector()
+    val direction = point.subtract(eye)
+    if (direction.lengthSquared() == 0.0) return
+    val box = cushion.boundingBox
+    val face = box.rayTrace(eye, direction, 6.0)?.hitBlockFace ?: return
+    if (face !in HandGeometry.sixFaces) return
+    event.isCancelled = true
+    if (event.hand != EquipmentSlot.HAND) return
+    if (!Permissions.has(player, if (handTool) Permissions.STICK else Permissions.HAND)) {
+      player.sendActionBar(Component.text("権限が必要です"))
+      return
+    }
+    val to =
+        from.clone().apply {
+          // 押した軸だけ1/8刻みへ揃え、他の座標はそのまま保つ。
+          if (face.modX != 0) x = Math.round(x * 8 - face.modX).toDouble() / 8
+          if (face.modY != 0) y = Math.round(y * 8 - face.modY).toDouble() / 8
+          if (face.modZ != 0) z = Math.round(z * 8 - face.modZ).toDouble() / 8
+        }
+    val moved = box.clone().shift(to.x - from.x, to.y - from.y, to.z - from.z)
+    val world = cushion.world
+    if (moved.minY < world.minHeight || moved.maxY > world.maxHeight) return
+    if (
+        !world.worldBorder.isInside(Location(world, moved.minX, to.y, moved.minZ)) ||
+            !world.worldBorder.isInside(
+                Location(world, Math.nextDown(moved.maxX), to.y, Math.nextDown(moved.maxZ))
+            )
+    )
+        return
+    for (x in (floor(moved.minX).toInt() shr 4)..(floor(Math.nextDown(moved.maxX)).toInt() shr 4)) {
+      for (z in
+          (floor(moved.minZ).toInt() shr 4)..(floor(Math.nextDown(moved.maxZ)).toInt() shr 4)) {
+        if (!world.isChunkLoaded(x, z)) return
+      }
+    }
+    if (
+        !player.isOp &&
+            player.server.operators.isNotEmpty() &&
+            world == player.server.worlds.firstOrNull()
+    ) {
+      val spawn = world.spawnLocation
+      val radius = player.server.spawnRadius
+      if (
+          radius > 0 &&
+              listOf(from, to).any {
+                kotlin.math.max(
+                    kotlin.math.abs(it.blockX - spawn.blockX),
+                    kotlin.math.abs(it.blockZ - spawn.blockZ),
+                ) <= radius
+              }
+      )
+          return
+    }
+    if (!canEditEntity(player, from) || !canEditEntity(player, to)) return
+    holdEditor.stop(player.uniqueId)
+    if (cushion.teleport(to)) player.swingHand(EquipmentSlot.HAND)
+  }
+
   /** DirectStateが扱う操作だけを受理し、バニラ操作と他プラグインの拒否を尊重して振り分ける。 */
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun interact(event: PlayerInteractEvent) {
     if (event.hand != EquipmentSlot.HAND) return
     val item = event.item
     val handTool = tools.isHandTool(item)
-    val handEditing = handTool || wantsHandEditing(event)
+    val emptyHandEditing = wantsHandEditing(event)
+    if (emptyHandEditing && ignoredBlockPdcKeys.isNotEmpty()) {
+      val state = event.clickedBlock?.state
+      if (state is TileState && ignoredBlockPdcKeys.any { state.persistentDataContainer.has(it) })
+          return
+    }
+    val handEditing = handTool || emptyHandEditing
     val directReplacement = wantsDirectReplacement(event)
     if (!tools.isTool(item) && !handEditing && !directReplacement) return
 
@@ -89,7 +171,10 @@ internal class EditInteractionListener(
 
   /** 素手編集を選ぶ条件。両手が空で、スニークしていない右クリックだけを受け付ける。 */
   private fun wantsHandEditing(event: PlayerInteractEvent): Boolean {
-    val player = event.player
+    return event.action == Action.RIGHT_CLICK_BLOCK && wantsHandEditing(event.player)
+  }
+
+  private fun wantsHandEditing(player: Player): Boolean {
     val configured = playerSettings.get(player.uniqueId)
     // 素手編集は片方の手にでもアイテムがあれば、通常のMinecraft操作へ譲る。
     val bothHandsEmpty =
@@ -97,8 +182,7 @@ internal class EditInteractionListener(
     return configured.handEnabled &&
         !configured.itemlessModesDisabled &&
         !player.isSneaking &&
-        bothHandsEmpty &&
-        event.action == Action.RIGHT_CLICK_BLOCK
+        bothHandsEmpty
   }
 
   /** 手持ちブロックによる置換を選ぶ条件。編集棒は置換用ブロックとして扱わない。 */

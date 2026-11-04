@@ -6,6 +6,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin
 import com.sk89q.worldguard.protection.flags.StateFlag
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException
 import io.oyasai.directstate.update.PlayerUpdateRule
+import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -33,6 +34,18 @@ private constructor(private val owner: JavaPlugin, private val flag: StateFlag) 
   }
 
   companion object {
+    fun canBuild(player: Player, location: Location): Boolean {
+      val worldGuard = WorldGuard.getInstance()
+      val local = WorldGuardPlugin.inst().wrapPlayer(player)
+      return worldGuard.platform.sessionManager.hasBypass(
+          local,
+          BukkitAdapter.adapt(location.world!!),
+      ) ||
+          worldGuard.platform.regionContainer
+              .createQuery()
+              .testBuild(BukkitAdapter.adapt(location), local)
+    }
+
     /** WorldGuardへフラグを登録し、同名の互換フラグがあれば再利用する。 */
     fun register(owner: JavaPlugin): PlayerUpdateRule? {
       val registry = WorldGuard.getInstance().flagRegistry

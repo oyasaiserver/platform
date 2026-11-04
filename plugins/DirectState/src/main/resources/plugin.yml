@@ -3,7 +3,7 @@ version: "${version}"
 
 main: io.oyasai.directstate.DirectState
 api-version: "26.3"
-softdepend: [CoreProtect, WorldGuard, FastAsyncWorldEdit]
+softdepend: [CoreProtect, WorldGuard]
 
 libraries:
   - org.xerial:sqlite-jdbc:3.53.2.1

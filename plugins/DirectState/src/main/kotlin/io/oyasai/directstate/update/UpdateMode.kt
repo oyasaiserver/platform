@@ -51,10 +51,13 @@ internal class UpdateMode(
   private val guard = UpdateGuard<Position, Saved>()
   private val buttons = mutableMapOf<Position, ButtonReset>()
   private var tick = 0L
-  private val forcePlacement = ForcePlacement(plugin, ::protectPlacement)
+  private val cushions = CushionSupport(plugin, ::enabled)
+  private val forcePlacement =
+      ForcePlacement(plugin, placeCushion = cushions::place, protectPlacement = ::protectPlacement)
 
   init {
     plugin.server.pluginManager.registerEvents(forcePlacement, plugin)
+    plugin.server.pluginManager.registerEvents(cushions, plugin)
     plugin.server.scheduler.runTaskTimer(plugin, Runnable { tick() }, 1L, 1L)
   }
 
@@ -166,7 +169,8 @@ internal class UpdateMode(
         player.isSneaking &&
             (!player.inventory.itemInMainHand.type.isAir ||
                 !player.inventory.itemInOffHand.type.isAir)
-    val directlyToggleable = (data is Switch || data is Openable) && !holdingItemWhileSneaking
+    val directlyToggleable =
+        (data is Switch || VanillaInteraction.opensByHand(data)) && !holdingItemWhileSneaking
     if (directlyToggleable) {
       event.setUseInteractedBlock(Event.Result.DENY)
       if (event.hand != EquipmentSlot.HAND) return
