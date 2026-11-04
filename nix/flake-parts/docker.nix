@@ -57,7 +57,7 @@
               let
                 attrs = builtins.listToAttrs (
                   map (
-                    { name, image }: lib.nameValuePair name "${image.imageName}:${image.imageTag}"
+                    { name, image }: lib.nameValuePair name (builtins.unsafeDiscardStringContext image.drvPath)
                   ) docker-image-derivs
                 );
                 rawJson = builtins.unsafeDiscardStringContext (builtins.toJSON attrs);
