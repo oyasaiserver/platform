@@ -27,6 +27,29 @@ data class OyasaiTabPlayerSnapshot(
 
 data class OyasaiTabSnapshot(val serverName: String, val players: List<OyasaiTabPlayerSnapshot>)
 
+/** Velocity → Paper。snapshot のバージョン byte（2）とは異なる種類 byte を使う。 */
+object OyasaiTabNetworkCountCodec {
+  private const val TYPE = 0x80
+
+  fun encode(count: Int): ByteArray {
+    require(count >= 0) { "OyasaiTab network count must be non-negative." }
+    val bytes = ByteArrayOutputStream()
+    DataOutputStream(bytes).use { out ->
+      out.writeByte(TYPE)
+      out.writeInt(count)
+    }
+    return bytes.toByteArray()
+  }
+
+  fun decode(bytes: ByteArray): Int {
+    require(bytes.size == 5) { "Invalid OyasaiTab network count length." }
+    return DataInputStream(ByteArrayInputStream(bytes)).use { input ->
+      require(input.readUnsignedByte() == TYPE) { "Unsupported OyasaiTab message type." }
+      input.readInt().also { require(it >= 0) { "OyasaiTab network count must be non-negative." } }
+    }
+  }
+}
+
 object OyasaiTabSnapshotCodec {
   private const val VERSION = 2
   private const val MAX_PLAYERS = 1000
