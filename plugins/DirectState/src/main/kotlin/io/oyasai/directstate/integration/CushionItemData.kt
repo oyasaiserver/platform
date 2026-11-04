@@ -9,12 +9,15 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 internal object CushionItemData {
-    fun apply(player: Player, cushion: Cushion, item: ItemStack) {
-        val entity = (cushion as CraftCushion).handle
-        val location = cushion.location
-        EntityType.createDefaultStackConfig<net.minecraft.world.entity.decoration.Cushion>(
-            entity.level(), CraftItemStack.asNMSCopy(item), (player as CraftPlayer).handle,
-        ).apply(entity)
-        entity.snapTo(location.x, location.y, location.z, location.yaw, location.pitch)
-    }
+  fun apply(player: Player, cushion: Cushion, item: ItemStack) {
+    val entity = (cushion as CraftCushion).handle
+    val location = cushion.location
+    EntityType.createDefaultStackConfig<net.minecraft.world.entity.decoration.Cushion>(
+            entity.level(),
+            CraftItemStack.asNMSCopy(item),
+            (player as CraftPlayer).handle,
+        )
+        .apply(entity)
+    entity.snapTo(location.x, location.y, location.z, location.yaw, location.pitch)
+  }
 }
