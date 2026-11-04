@@ -112,6 +112,10 @@ class HeadHuntCommand(
     val player = requirePlayer(sender) ?: return
     when (args.getOrNull(1)?.lowercase()) {
       "on" -> {
+        if (gameManager.isRunning) {
+          sender.sendMessage(PREFIX + "ゲーム進行中は設定モードをONにできません。")
+          return
+        }
         gameManager.setSetMode(player.uniqueId, true)
         sender.sendMessage(PREFIX + "宝HEAD設定モードをONにしました。")
       }

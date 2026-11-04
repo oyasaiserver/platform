@@ -49,15 +49,25 @@ public class GamesHubListener implements Listener {
                     player.sendMessage("ルーレットは無効です。");
                     return;
                 }
+                if (!player.hasPermission("oyasaigames.roulette.use")) {
+                    player.sendMessage("§cYou don't have the required permission to use this command");
+                    return;
+                }
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.2f);
                 RouletteSession session = rouletteManager.getOrCreateSession(player);
                 RouletteGui.open(player, session);
             }
             case GamesHubGui.SLOT_DICE -> {
                 player.closeInventory();
-                if (diceModule != null) {
-                    diceModule.getDiceManager().giveDiceSafely(player, DiceMode.ONE_D6);
+                if (diceModule == null) {
+                    player.sendMessage("おやさいサイコロは無効です。");
+                    return;
                 }
+                if (!player.hasPermission("oyasaigames.dice.use")) {
+                    player.sendMessage("§cYou don't have the required permission to use this command");
+                    return;
+                }
+                diceModule.getDiceManager().giveDiceSafely(player, DiceMode.ONE_D6);
             }
             case GamesHubGui.SLOT_BEDWARS -> {
                 player.closeInventory();

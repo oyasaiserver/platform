@@ -306,6 +306,9 @@ public class RouletteManager {
      * 不要になったセッションを解放し、実行中のタスクがあれば安全に停止します。
      */
     public void onPlayerQuit(UUID uuid) {
+        if (runningPlayers.contains(uuid)) {
+            cooldowns.put(uuid, System.currentTimeMillis());
+        }
         removeSession(uuid);
         cancelTask(uuid);
     }
