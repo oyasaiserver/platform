@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.EventTask
 import com.velocitypowered.api.event.ResultedEvent
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.LoginEvent
+import com.velocitypowered.api.event.player.ServerPreConnectEvent
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Dependency
@@ -80,6 +81,25 @@ constructor(
               }
             }
       }
+
+  @Subscribe
+  fun onServerPreConnect(event: ServerPreConnectEvent) {
+    val serverName = event.originalServer.serverInfo.name
+    val grantedPermissions =
+        ServerAccess.requiredPermissions(serverName)
+            .filter { event.player.hasPermission(it) }
+            .toSet()
+    if (ServerAccess.canConnect(serverName, grantedPermissions)) return
+
+    event.result = ServerPreConnectEvent.ServerResult.denied()
+    val message = Component.text(ServerAccess.deniedMessage(serverName))
+    if (event.previousServer == null) {
+      // Velocity は初期接続の CONNECTION_CANCELLED では次の候補へ進まない。
+      event.player.disconnect(message)
+    } else {
+      event.player.sendMessage(message)
+    }
+  }
 
   @Subscribe
   fun onProxyShutdown(event: ProxyShutdownEvent): EventTask = EventTask.async { database.close() }

@@ -53,6 +53,14 @@ Velocity 全体で BAN を管理し、ログイン時に有効 BAN を判定す�
 
 `LoginEvent` を `EventTask.withContinuation` で非同期に止め、DB スレッドで `seen_names` 更新 → 全体の期限切れ削除 → `active_punishments` 照会をまとめて行う。有効 BAN があれば理由と残り期間（秒は切り上げ）で拒否。DB の例外時も拒否する（fail-closed）。DB 接続は起動時に非同期で開くため、開けなくてもプラグインは有効のままで、全ログインが拒否される。
 
+### 鯖ごとの入場判定（`ServerAccess`）
+
+- `ServerPreConnectEvent` で `originalServer.serverInfo.name` を判定する。規則はコードに固定し、鯖名の大文字小文字は区別しない。規則にない鯖は制限しない。
+- `survival` は `group.jokyu` または `oyasai.server.survival`、`axiom` は `group.takumi` または `oyasai.server.axiom` のいずれかを `hasPermission` で持つ人だけ通す。上位グループからの継承は権限プロバイダーに任せる。axiom はこれに合わせて Paper の白リストを使わない（`packages/oyasai-minecraft-axiom.nix`）。
+- 権限がなければ `ServerResult.denied()` にし、鯖ごとの文（例「サバイバルサーバーには上級以上の人だけが入れます」）を表示する。初期接続でも判定し、その場合は同じ文で切断する。
+- Velocity は初期接続にも通常の接続要求を使うが、拒否の `CONNECTION_CANCELLED` は次候補へ進めず無視するため、初期接続時は明示的に切断する（[接続処理](https://github.com/PaperMC/Velocity/blob/dev/3.0.0/proxy/src/main/java/com/velocitypowered/proxy/connection/client/ConnectedPlayer.java)、[初期接続処理](https://github.com/PaperMC/Velocity/blob/dev/3.0.0/proxy/src/main/java/com/velocitypowered/proxy/connection/client/AuthSessionHandler.java)）。
+- `ServerAccess.canConnect` は鯖名と取得済み権限の集合だけを使う純粋な判定。`ServerAccessTest.kt` で対象外・各権限単独・両方・権限なし・無関係の権限・鯖名の大文字小文字・axiom の規則を検証する。
+
 ### BAN 後処理（`afterBan`）
 
 対象 UUID が接続中なら拒否画面と同じ文で切断 → 全プレイヤーに legacy 色コードのメッセージと `minecraft:item.mace.smash_ground_heavy`（音量0.5・ピッチ2.0）→ `DiscordNotifier.sendBan`。Webhook は手組みの JSON の embed（サムネイルは `vzge.me` の頭像）を `HttpClient.sendAsync` で投げっぱなしにする。URL が空なら毎回 warn。
