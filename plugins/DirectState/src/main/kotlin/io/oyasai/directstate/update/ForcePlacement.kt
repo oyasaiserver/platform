@@ -206,7 +206,7 @@ internal class ForcePlacement(
         if (data is Directional) {
             val direction = when (data) {
                 is Switch -> if (face in horizontal) face else playerFacing
-                is TripwireHook, is Ladder -> if (face in horizontal) face else playerFacing.oppositeFace
+                is TripwireHook, is Ladder, is ShelfMushroom -> if (face in horizontal) face else playerFacing.oppositeFace
                 is AmethystCluster -> face
                 is WallHangingSign -> wallHangingSignFacing(face, playerFacing, lookDirection)
                 is WallSign, is WallSkull -> if (face in horizontal) face else playerFacing.oppositeFace

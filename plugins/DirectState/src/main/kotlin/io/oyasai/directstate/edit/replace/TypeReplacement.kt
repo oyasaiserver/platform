@@ -86,6 +86,8 @@ internal class TypeReplacement(private val blockNames: Set<String>) {
         val kind = when {
             name == "GLASS" || name.endsWith("_STAINED_GLASS") -> "glass"
             name == "GLASS_PANE" || name.endsWith("_STAINED_GLASS_PANE") -> "pane"
+            name.endsWith("_WOOL_SLAB") -> "slab"
+            name.endsWith("_WOOL_STAIRS") -> "stairs"
             name.endsWith("_WOOL") -> "wool"
             name.endsWith("_CARPET") -> "carpet"
             name.endsWith("_BED") -> "bed"
@@ -95,6 +97,8 @@ internal class TypeReplacement(private val blockNames: Set<String>) {
             name == "GLASS" || name == "GLASS_PANE" -> "clear_glass"
             kind == "glass" -> name.removeSuffix("_STAINED_GLASS")
             kind == "pane" -> name.removeSuffix("_STAINED_GLASS_PANE")
+            kind == "slab" -> name.removeSuffix("_WOOL_SLAB")
+            kind == "stairs" -> name.removeSuffix("_WOOL_STAIRS")
             else -> name.substringBeforeLast('_')
         }
         return Variant("colour:$family", kind)
