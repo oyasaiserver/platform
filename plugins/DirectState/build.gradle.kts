@@ -10,5 +10,3 @@ dependencies {
   compileOnly(libs.worldguard.core) { isTransitive = false }
   implementation(libs.kotlin.stdlib)
 }
-
-paperweight { addServerDependencyTo.set(listOf(configurations.compileOnly.get())) }
