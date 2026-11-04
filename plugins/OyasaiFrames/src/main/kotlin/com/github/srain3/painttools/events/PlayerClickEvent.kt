@@ -625,15 +625,33 @@ object PlayerClickEvent : Listener {
       y: Int,
   ) {
     if (x < 0 || x > 127 || y < 0 || y > 127) return
-    if (mapData.cash[(x + 1) + (y * 128)] != selectColor) return
+    val startIndex = (x + 1) + (y * 128)
+    if (mapData.cash[startIndex] != selectColor) return
     if (selectColor == javaColor) return
-    mapData.cash[(x + 1) + (y * 128)] = javaColor
+    val queue = ArrayDeque<Pair<Int, Int>>()
+    mapData.cash[startIndex] = javaColor
     mapData.changed()
-    buketTaskFill(selectColor, mapData, javaColor, x + 1, y)
-    buketTaskFill(selectColor, mapData, javaColor, x - 1, y)
-    buketTaskFill(selectColor, mapData, javaColor, x, y + 1)
-    buketTaskFill(selectColor, mapData, javaColor, x, y - 1)
-    // Java起動時に-Xssのサイズを大きめ(開発時は5M指定)でエラーなくなる
+    queue.addLast(x to y)
+    while (queue.isNotEmpty()) {
+      val (cx, cy) = queue.removeFirst()
+      val neighbors =
+          arrayOf(
+              (cx + 1) to cy,
+              (cx - 1) to cy,
+              cx to (cy + 1),
+              cx to (cy - 1),
+          )
+      for ((nx, ny) in neighbors) {
+        if (nx in 0..127 && ny in 0..127) {
+          val index = (nx + 1) + (ny * 128)
+          if (mapData.cash[index] == selectColor) {
+            mapData.cash[index] = javaColor
+            mapData.changed()
+            queue.addLast(nx to ny)
+          }
+        }
+      }
+    }
   }
 
   // 一時保存のブラシサイズ
