@@ -3,6 +3,7 @@ package io.oyasai.oyasaitab
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
@@ -211,6 +212,38 @@ class TablistFormatterTest {
         )
 
     assertEquals(snapshot, OyasaiTabSnapshotCodec.decode(OyasaiTabSnapshotCodec.encode(snapshot)))
+  }
+
+  @Test
+  fun roundTripsNetworkCountCodec() {
+    listOf(0, 1, 1001, Int.MAX_VALUE).forEach { count ->
+      assertEquals(
+          count,
+          OyasaiTabNetworkCountCodec.decode(OyasaiTabNetworkCountCodec.encode(count)),
+      )
+    }
+  }
+
+  @Test
+  fun keepsNetworkCountSeparateFromSnapshots() {
+    val snapshot = OyasaiTabSnapshotCodec.encode(OyasaiTabSnapshot("main", emptyList()))
+    assertEquals(2, snapshot[0].toInt())
+    assertFailsWith<IllegalArgumentException> { OyasaiTabNetworkCountCodec.decode(snapshot) }
+    assertFailsWith<IllegalArgumentException> {
+      OyasaiTabSnapshotCodec.decode(OyasaiTabNetworkCountCodec.encode(10))
+    }
+    assertFailsWith<IllegalArgumentException> {
+      OyasaiTabNetworkCountCodec.decode(byteArrayOf(2, 0, 0, 0, 10))
+    }
+  }
+
+  @Test
+  fun rejectsInvalidNetworkCounts() {
+    assertFailsWith<IllegalArgumentException> { OyasaiTabNetworkCountCodec.encode(-1) }
+    val valid = OyasaiTabNetworkCountCodec.encode(10)
+    listOf(valid.copyOf(4), valid.copyOf(6), byteArrayOf(valid[0], -1, -1, -1, -1)).forEach {
+      assertFailsWith<IllegalArgumentException> { OyasaiTabNetworkCountCodec.decode(it) }
+    }
   }
 
   @Test
