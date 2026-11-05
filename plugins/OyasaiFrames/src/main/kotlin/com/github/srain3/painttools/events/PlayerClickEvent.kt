@@ -18,6 +18,8 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
@@ -25,12 +27,23 @@ import org.bukkit.util.Vector
 
 /** プレイヤーがブロックをクリックしたときに処理する */
 object PlayerClickEvent : Listener {
+  private fun isPaintToolItem(item: ItemStack): Boolean =
+      ToolBox.checkDye(item.type) ||
+          item.type == Material.PAPER ||
+          item.type == Material.INK_SAC ||
+          item.type == Material.SUGAR ||
+          (item.type == Material.FEATHER && item.itemMeta?.hasDisplayName() == true)
+
   @Suppress("DEPRECATION")
   @EventHandler(priority = EventPriority.HIGHEST)
   fun clickEvent(event: PlayerInteractEvent) {
     if (event.isCancelled && event !is RepeatStopEvent) return
+    if (event.hand != null && event.hand != EquipmentSlot.HAND) return
     if (!event.hasBlock()) return
     if (!event.hasItem()) return
+    val handItem = event.item ?: return
+    if (!isPaintToolItem(handItem)) return
+    if (!event.player.hasPermission("painttools.canvas.use")) return
 
     val clickBlock = event.clickedBlock ?: return
     var clickFace = event.blockFace
@@ -57,7 +70,7 @@ object PlayerClickEvent : Listener {
       clickFace = clickFace.oppositeFace
     }
 
-    val mapMeta = frame.item.itemMeta as MapMeta
+    val mapMeta = frame.item.itemMeta as? MapMeta ?: return
     val id =
         mapMeta.persistentDataContainer.get(
             ToolBox.pl.paintIdKey,
@@ -75,8 +88,6 @@ object PlayerClickEvent : Listener {
               return
             }
     val before = mMap.revision
-
-    val handItem = event.item ?: return
     val sneak = event.player.isSneaking
     val rtr = event.player.rayTraceBlocks(8.0) ?: return
     val pos = clickBlock.location.toVector().subtract(rtr.hitPosition)
