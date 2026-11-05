@@ -75,10 +75,10 @@ public final class SurvivalEnderKeep extends SurvivalFeature implements Listener
                 throw new IllegalArgumentException("Unexpected ender chest size: " + saved.length);
             }
             if (snapshot != null && EnderContents.shouldRestore(snapshot.world(), world)) {
-                player.getEnderChest().setContents(EnderContents.forRestore(saved));
+                player.getEnderChest().setContents(EnderContents.forRestore(saved, ThreadLocalRandom.current()));
                 // Keep the original payload for this immediate world-marker update.
                 enqueue(id, new PlayerStore.Snapshot(world, snapshot.count(), snapshot.items()));
-                player.sendMessage("前のワールドのエンダーチェストの中身を引き継ぎました（シュルカーボックスとバンドルの中身は空になります）");
+                player.sendMessage("前のワールドのエンダーチェストの中身を引き継ぎました（6個以上入っていた場合は抽選で5個。シュルカーボックスとバンドルの中身は空になります）");
             }
             ready.add(id);
         } catch (RuntimeException e) {

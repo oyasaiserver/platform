@@ -6,7 +6,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BundleMeta;
 import org.junit.jupiter.api.Test;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,7 +30,7 @@ class EnderContentsTest {
         when(copy.getItemMeta()).thenReturn(meta);
         when(meta.getBlockState()).thenReturn(box);
         when(box.getInventory()).thenReturn(inventory);
-        ItemStack[] result = EnderContents.forRestore(new ItemStack[]{original, null});
+        ItemStack[] result = EnderContents.forRestore(new ItemStack[]{original, null}, new Random(1));
         assertSame(copy, result[0]);
         assertNull(result[1]);
         verify(inventory).clear();
@@ -44,11 +46,26 @@ class EnderContentsTest {
         when(copy.getItemMeta()).thenReturn(meta);
         ItemStack other = mock(ItemStack.class), otherCopy = mock(ItemStack.class);
         when(other.clone()).thenReturn(otherCopy);
-        ItemStack[] result = EnderContents.forRestore(new ItemStack[]{bundle, other});
+        ItemStack[] result = EnderContents.forRestore(new ItemStack[]{bundle, other}, new Random(1));
         assertArrayEquals(new ItemStack[]{copy, otherCopy}, result);
         verify(meta).setItems(List.of());
         verify(copy).setItemMeta(meta);
         verify(bundle, never()).setItemMeta(any());
         verify(otherCopy, never()).setItemMeta(any());
+    }
+
+    @Test void drawsFiveFilledSlotsInPlaceWhenMoreThanFive() {
+        ItemStack[] saved = new ItemStack[27];
+        ItemStack[] copies = new ItemStack[27];
+        for (int i = 0; i < 27; i += 3) {
+            saved[i] = mock(ItemStack.class);
+            copies[i] = mock(ItemStack.class);
+            when(saved[i].clone()).thenReturn(copies[i]);
+        }
+        ItemStack[] result = EnderContents.forRestore(saved, new Random(1));
+        assertEquals(EnderContents.KEEP, Arrays.stream(result).filter(item -> item != null).count());
+        for (int i = 0; i < 27; i++) {
+            if (result[i] != null) assertSame(copies[i], result[i]);
+        }
     }
 }
