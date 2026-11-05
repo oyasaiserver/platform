@@ -24,12 +24,9 @@ oyasaiPurpur rec {
     # keep-sorted start
     clickmobs
     oyasaichat
+    oyasaisurvival
     oyasaitab
     plugmanx
-    survivalenderkeep
-    survivalharvest
-    survivalpull
-    survivalspawnlimit
     veinminer
     # keep-sorted end
   ];
