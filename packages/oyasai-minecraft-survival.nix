@@ -26,6 +26,7 @@ oyasaiPurpur rec {
     oyasaichat
     oyasaitab
     plugmanx
+    survivalenderkeep
     survivalharvest
     survivalpull
     survivalspawnlimit
