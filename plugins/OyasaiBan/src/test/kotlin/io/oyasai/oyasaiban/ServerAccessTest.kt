@@ -13,15 +13,10 @@ class ServerAccessTest {
   }
 
   @Test
-  fun allowsEitherPermissionOrBoth() {
-    for (permissions in
-        listOf(
-            setOf("group.jokyu"),
-            setOf("oyasai.server.survival"),
-            setOf("group.jokyu", "oyasai.server.survival"),
-        )) {
-      assertTrue(ServerAccess.canConnect("survival", permissions), permissions.toString())
-    }
+  fun survivalNeedsRankAndWhitelist() {
+    assertTrue(ServerAccess.canConnect("survival", setOf("group.jokyu", "oyasai.server.survival")))
+    assertFalse(ServerAccess.canConnect("survival", setOf("group.jokyu")))
+    assertFalse(ServerAccess.canConnect("survival", setOf("oyasai.server.survival")))
   }
 
   @Test
@@ -34,8 +29,10 @@ class ServerAccessTest {
   fun matchesServerNamesIgnoringCase() {
     for (server in listOf("survival", "SURVIVAL", "Survival")) {
       assertFalse(ServerAccess.canConnect(server, emptySet()), server)
-      assertTrue(ServerAccess.canConnect(server, setOf("group.jokyu")), server)
-      assertTrue(ServerAccess.canConnect(server, setOf("oyasai.server.survival")), server)
+      assertTrue(
+          ServerAccess.canConnect(server, setOf("group.jokyu", "oyasai.server.survival")),
+          server,
+      )
     }
     assertTrue(ServerAccess.canConnect("MAIN", emptySet()))
   }

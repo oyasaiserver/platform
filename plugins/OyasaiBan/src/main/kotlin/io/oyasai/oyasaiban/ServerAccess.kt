@@ -1,14 +1,20 @@
 package io.oyasai.oyasaiban
 
 internal object ServerAccess {
-  private class Rule(val permissions: Set<String>, val deniedMessage: String)
+  // requireAll: すべての権限が要る。false ならどれか1つで通す。
+  private class Rule(
+      val permissions: Set<String>,
+      val deniedMessage: String,
+      val requireAll: Boolean = false,
+  )
 
   private val rules =
       mapOf(
           "survival" to
               Rule(
                   setOf("group.jokyu", "oyasai.server.survival"),
-                  "サバイバルサーバーには上級以上の人だけが入れます",
+                  "サバイバルサーバーには、上級以上でホワイトリストに載った人だけが入れます",
+                  requireAll = true,
               ),
           "axiom" to Rule(setOf("group.takumi", "oyasai.server.axiom"), "Axiom サーバーには匠以上の人だけが入れます"),
       )
@@ -20,7 +26,8 @@ internal object ServerAccess {
       rules[serverName.lowercase()]?.deniedMessage ?: "このサーバーには入れません"
 
   fun canConnect(serverName: String, grantedPermissions: Set<String>): Boolean {
-    val required = requiredPermissions(serverName)
-    return required.isEmpty() || required.any { it in grantedPermissions }
+    val rule = rules[serverName.lowercase()] ?: return true
+    return if (rule.requireAll) grantedPermissions.containsAll(rule.permissions)
+    else rule.permissions.any { it in grantedPermissions }
   }
 }

@@ -56,10 +56,10 @@ Velocity 全体で BAN を管理し、ログイン時に有効 BAN を判定す�
 ### 鯖ごとの入場判定（`ServerAccess`）
 
 - `ServerPreConnectEvent` で `originalServer.serverInfo.name` を判定する。規則はコードに固定し、鯖名の大文字小文字は区別しない。規則にない鯖は制限しない。
-- `survival` は `group.jokyu` または `oyasai.server.survival`、`axiom` は `group.takumi` または `oyasai.server.axiom` のいずれかを `hasPermission` で持つ人だけ通す。上位グループからの継承は権限プロバイダーに任せる。axiom はこれに合わせて Paper の白リストを使わない（`packages/oyasai-minecraft-axiom.nix`）。
-- 権限がなければ `ServerResult.denied()` にし、鯖ごとの文（例「サバイバルサーバーには上級以上の人だけが入れます」）を表示する。初期接続でも判定し、その場合は同じ文で切断する。
+- `survival` は `group.jokyu`（上級以上）と `oyasai.server.survival`（ホワイトリスト）の両方を持つ人だけ通す（`requireAll`）。`axiom` は `group.takumi` または `oyasai.server.axiom` のどちらかを持つ人を通す。判定は `hasPermission`。上位グループからの継承は権限プロバイダーに任せる。axiom はこれに合わせて Paper の白リストを使わない（`packages/oyasai-minecraft-axiom.nix`）。
+- 権限がなければ `ServerResult.denied()` にし、鯖ごとの文（例「サバイバルサーバーには、上級以上でホワイトリストに載った人だけが入れます」）を表示する。初期接続でも判定し、その場合は同じ文で切断する。
 - Velocity は初期接続にも通常の接続要求を使うが、拒否の `CONNECTION_CANCELLED` は次候補へ進めず無視するため、初期接続時は明示的に切断する（[接続処理](https://github.com/PaperMC/Velocity/blob/dev/3.0.0/proxy/src/main/java/com/velocitypowered/proxy/connection/client/ConnectedPlayer.java)、[初期接続処理](https://github.com/PaperMC/Velocity/blob/dev/3.0.0/proxy/src/main/java/com/velocitypowered/proxy/connection/client/AuthSessionHandler.java)）。
-- `ServerAccess.canConnect` は鯖名と取得済み権限の集合だけを使う純粋な判定。`ServerAccessTest.kt` で対象外・各権限単独・両方・権限なし・無関係の権限・鯖名の大文字小文字・axiom の規則を検証する。
+- `ServerAccess.canConnect` は鯖名と取得済み権限の集合だけを使う純粋な判定。`ServerAccessTest.kt` で対象外・survival の段位だけ／白リストだけ／両方・権限なし・無関係の権限・鯖名の大文字小文字・axiom の規則を検証する。
 
 ### BAN 後処理（`afterBan`）
 
