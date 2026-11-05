@@ -507,14 +507,14 @@
       "hash": "sha256-tRHwy9KXGCZWE0ImjyX3pot4maOncgKjbJmOVeFm0+c="
     }
   },
-  "com.github.luben:zstd-jni:1.5.7-23": {
-    "zstd-jni-1.5.7-23.jar": {
-      "url": "https://repo.maven.apache.org/maven2/com/github/luben/zstd-jni/1.5.7-23/zstd-jni-1.5.7-23.jar",
-      "hash": "sha256-fSUyzsZydr/eMQVQJZN+qzT67aU2hnSCAD4pA4CK8wA="
+  "com.github.luben:zstd-jni:1.5.7-24": {
+    "zstd-jni-1.5.7-24.jar": {
+      "url": "https://repo.maven.apache.org/maven2/com/github/luben/zstd-jni/1.5.7-24/zstd-jni-1.5.7-24.jar",
+      "hash": "sha256-efXmeM5DfwnVq1XfHG5/yM9qLrjnMFLzSxQ0ZAYvyws="
     },
-    "zstd-jni-1.5.7-23.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/github/luben/zstd-jni/1.5.7-23/zstd-jni-1.5.7-23.pom",
-      "hash": "sha256-BRtrve5iuIqLB0Xpwd4pxAo+EFUkfIWbVmDoVB2dlGc="
+    "zstd-jni-1.5.7-24.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/github/luben/zstd-jni/1.5.7-24/zstd-jni-1.5.7-24.pom",
+      "hash": "sha256-hsbUWqOskII1etBewyJu3JsKs2ufZhTo6+6tunLElq4="
     }
   },
   "com.github.luben:zstd-jni:1.4.8-1": {
@@ -1043,32 +1043,32 @@
       "hash": "sha256-EzY4pvaLR0cMJZnqazHgvKMkMQCt7mFGP9ZoNbHEVxI="
     }
   },
-  "com.sk89q.worldguard:worldguard-bukkit:7.0.19": {
-    "worldguard-bukkit-7.0.19.jar": {
-      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.19/worldguard-bukkit-7.0.19.jar",
-      "hash": "sha256-KAiyv24+CBAnTj8DPObCD7hiZbVq/G/Afh02s+lXCSw="
+  "com.sk89q.worldguard:worldguard-bukkit:7.0.20": {
+    "worldguard-bukkit-7.0.20.jar": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.20/worldguard-bukkit-7.0.20.jar",
+      "hash": "sha256-x/xu7RiiAGbYRh84CcL4Lsd+kFTLIemOxfC4XiRBBXQ="
     },
-    "worldguard-bukkit-7.0.19.module": {
-      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.19/worldguard-bukkit-7.0.19.module",
-      "hash": "sha256-Kd980xnGBZB7fze9VhAD/DV4wY52hhIYoktwSa6V9Pw="
+    "worldguard-bukkit-7.0.20.module": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.20/worldguard-bukkit-7.0.20.module",
+      "hash": "sha256-mKa6j+H1weNWV6k2wlKhZsNibN1FiuwLIOsmZLy+Rpc="
     },
-    "worldguard-bukkit-7.0.19.pom": {
-      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.19/worldguard-bukkit-7.0.19.pom",
-      "hash": "sha256-81kE8z+FGLjLPjv6rlDeY5rPdTmAkxeu4oYi3iBW84M="
+    "worldguard-bukkit-7.0.20.pom": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.20/worldguard-bukkit-7.0.20.pom",
+      "hash": "sha256-OVPInIEeTlO5WK6NFIroZ1+RATUXCp5LpNvzN19tz8c="
     }
   },
-  "com.sk89q.worldguard:worldguard-core:7.0.19": {
-    "worldguard-core-7.0.19.jar": {
-      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.19/worldguard-core-7.0.19.jar",
-      "hash": "sha256-Ujrw/xEv5W6qDD+fvwTXW8LzVqvjL9BcQBNox2dWTME="
+  "com.sk89q.worldguard:worldguard-core:7.0.20": {
+    "worldguard-core-7.0.20.jar": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.20/worldguard-core-7.0.20.jar",
+      "hash": "sha256-lNsR/zGRsHgEL2gUm7dowvtVtvYepE9dKcktSOqZw/o="
     },
-    "worldguard-core-7.0.19.module": {
-      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.19/worldguard-core-7.0.19.module",
-      "hash": "sha256-HW6tPV1wYshFsn/zUDQgUqImxdfpD2cA1ZcVNmWMcTs="
+    "worldguard-core-7.0.20.module": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.20/worldguard-core-7.0.20.module",
+      "hash": "sha256-KDH3qWOoA1cp9vYhO47nFbfR8obpVv7QQR0twtIE1jo="
     },
-    "worldguard-core-7.0.19.pom": {
-      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.19/worldguard-core-7.0.19.pom",
-      "hash": "sha256-zt58JiFfm6Q+xneCAVvrPxtncGB975yZ0/iPf+aMkdg="
+    "worldguard-core-7.0.20.pom": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.20/worldguard-core-7.0.20.pom",
+      "hash": "sha256-H+2xYMG4mPWR85CPA9AQsERYMD6LBU74kk4Mv9nCgcU="
     }
   },
   "com.squareup.okhttp3:logging-interceptor:4.9.3": {
@@ -1277,18 +1277,18 @@
       "hash": "sha256-w6Jdg3Ki6lnDuVTQYu9kSFOKvwWC2IY+PCMl5BKmfk4="
     }
   },
-  "com.velocitypowered:velocity-api:4.2.1-SNAPSHOT": {
-    "velocity-api-4.2.1-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.2.1-SNAPSHOT/velocity-api-4.2.1-20261018.134934-11.jar",
+  "com.velocitypowered:velocity-api:4.3.0": {
+    "velocity-api-4.3.0.jar": {
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.3.0/velocity-api-4.3.0.jar",
       "hash": "sha256-wMZi6aVjpFMIlKgcfCzwuPFJ0krWJjclu2ySwg2OjdM="
     },
-    "velocity-api-4.2.1-SNAPSHOT.module": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.2.1-SNAPSHOT/velocity-api-4.2.1-20261018.134934-11.module",
-      "hash": "sha256-IiJYX8m5WaTLeBrCJj7upyw5Gm2FpTSYQiKFx+ov4Lk="
+    "velocity-api-4.3.0.module": {
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.3.0/velocity-api-4.3.0.module",
+      "hash": "sha256-s17yopofTLlYyh7b3KlQ2TVR8QE+1C613SW7A4mwrKU="
     },
-    "velocity-api-4.2.1-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.2.1-SNAPSHOT/velocity-api-4.2.1-20261018.134934-11.pom",
-      "hash": "sha256-3RgcIO4qlTSMc1TuhwQuhv8VNnTNZBuzqBANefWZ06g="
+    "velocity-api-4.3.0.pom": {
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.3.0/velocity-api-4.3.0.pom",
+      "hash": "sha256-r/oFEi8dEln5Bbt5Kej4piLkqaMumNTKOsJ4WFXQoBs="
     }
   },
   "com.velocitypowered:velocity-brigadier:1.0.0-SNAPSHOT": {
@@ -1607,15 +1607,15 @@
   },
   "io.papermc.codebook:codebook-cli:2.0.1-SNAPSHOT": {
     "codebook-cli-2.0.1-SNAPSHOT-all.jar": {
-      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260919.143548-5-all.jar",
-      "hash": "sha256-10AswVuZNEb3cQ3qa7umCGwyqjTAvBYRZlsxAWoYrWI="
+      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20261104.030308-7-all.jar",
+      "hash": "sha256-TMvKbmEr1ntTGmq+x/rhANZPYfgv2ykZ5UvMq4koipc="
     },
     "codebook-cli-2.0.1-SNAPSHOT.module": {
-      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260919.143548-5.module",
-      "hash": "sha256-4fvsQj3cpmFeXORyI7rXQ6KqHaDwRN5fsO3F2KEGHU8="
+      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20261104.030308-7.module",
+      "hash": "sha256-ZgRB2CX2G303phUeyiMjreBGBCG215DHNzyPq2WTUXc="
     },
     "codebook-cli-2.0.1-SNAPSHOT.pom": {
-      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260919.143548-5.pom",
+      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20261104.030308-7.pom",
       "hash": "sha256-yUwD8yERBn0z3hvuKK5ABYHlM9ywbtd9XiyHk5DHDgQ="
     }
   },
@@ -3053,32 +3053,32 @@
       "hash": "sha256-llrrK+3/NpgZvd4b96CzuJuCR91pyIuGN112Fju4w5c="
     }
   },
-  "org.jetbrains.exposed:exposed-core:1.5.1": {
-    "exposed-core-1.5.1.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.5.1/exposed-core-1.5.1.jar",
-      "hash": "sha256-Zon+iZmxTlbqUeUY+iSVVzvoKAysk5IwpdWxIWTGwa0="
+  "org.jetbrains.exposed:exposed-core:1.6.0": {
+    "exposed-core-1.6.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.6.0/exposed-core-1.6.0.jar",
+      "hash": "sha256-eo2+40fTV38eTyBOlA9fPjGm/pM5WvIDsnJj/5n9iuM="
     },
-    "exposed-core-1.5.1.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.5.1/exposed-core-1.5.1.module",
-      "hash": "sha256-jiJhwltdS8lnvcWNC1BJq0TY1dbgZ0pY7pHSgEHOQhc="
+    "exposed-core-1.6.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.6.0/exposed-core-1.6.0.module",
+      "hash": "sha256-zx0h8SdfWuLahlixOsXz7R6wr4LJjxK3nQboqchA1BI="
     },
-    "exposed-core-1.5.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.5.1/exposed-core-1.5.1.pom",
-      "hash": "sha256-IiTdLgknUK+9ujTPlR1Vc2GWquKQhI3idhnztETBVlk="
+    "exposed-core-1.6.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.6.0/exposed-core-1.6.0.pom",
+      "hash": "sha256-QsVZ+xIDjNFRw2Lub8ZmxQ7N4MN1x6/dCa/nuOciNI4="
     }
   },
-  "org.jetbrains.exposed:exposed-jdbc:1.5.1": {
-    "exposed-jdbc-1.5.1.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.5.1/exposed-jdbc-1.5.1.jar",
-      "hash": "sha256-LXh/E/jfX9WnQN6XTPK6kmumTHQh6lK7D/KH6Je1IMw="
+  "org.jetbrains.exposed:exposed-jdbc:1.6.0": {
+    "exposed-jdbc-1.6.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.6.0/exposed-jdbc-1.6.0.jar",
+      "hash": "sha256-TjZPzsCa+jaoHsKzYCuzF5ae7eZZ7Vc6NuTT/bRSdfU="
     },
-    "exposed-jdbc-1.5.1.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.5.1/exposed-jdbc-1.5.1.module",
-      "hash": "sha256-vOYUsHQBNElrkiTv732FH89weIerA+1mFwus9TZPMfc="
+    "exposed-jdbc-1.6.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.6.0/exposed-jdbc-1.6.0.module",
+      "hash": "sha256-GWfkjIFVZoW018uOTADWH+KBH0Lvcs7hBO0z/hjMWFQ="
     },
-    "exposed-jdbc-1.5.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.5.1/exposed-jdbc-1.5.1.pom",
-      "hash": "sha256-58qk/spbrsExxXPAfGdftZWTJyMofS18V99Khc5+HOY="
+    "exposed-jdbc-1.6.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.6.0/exposed-jdbc-1.6.0.pom",
+      "hash": "sha256-NaO+5niHg6x7AAwFH+XWLX9A4LqkvSuoNOGZvBRUW1Q="
     }
   },
   "org.jetbrains.kotlin:fus-statistics-gradle-plugin:2.4.21": {
