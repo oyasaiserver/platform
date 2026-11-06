@@ -47,6 +47,8 @@ class OyasaiFrames : ImageOnMap() {
     } catch (e: Exception) {
       logger.severe("Frame locking failed to start: ${e.message}")
       runCatching { locker.onDisable() }
+      server.pluginManager.disablePlugin(this)
+      return
     }
 
     try {
