@@ -62,32 +62,84 @@ public final class SurvivalHarvest extends SurvivalFeature implements Listener {
         if (block == null) {
             return;
         }
-        switch (block.getType()) {
-            case WHEAT, CARROTS, POTATOES, BEETROOTS, NETHER_WART -> { }
-            default -> { return; }
-        }
-        if (!(block.getBlockData() instanceof Ageable crop)
-                || crop.getAge() != crop.getMaximumAge()) {
-            return;
+        Material type = block.getType();
+        boolean cane = type == Material.SUGAR_CANE;
+        if (cane) {
+            block = caneBase(block);
+        } else {
+            switch (type) {
+                case WHEAT, CARROTS, POTATOES, BEETROOTS, NETHER_WART -> { }
+                default -> { return; }
+            }
+            if (!(block.getBlockData() instanceof Ageable crop)
+                    || crop.getAge() != crop.getMaximumAge()) {
+                return;
+            }
         }
         if (!player.isSneaking()) {
-            harvest(block, player, event);
+            harvest(block, cane, player, event);
             return;
         }
-        Material type = block.getType();
+        // Sugar cane spreads between the bottom blocks of neighbouring stalks.
         var queue = new ArrayDeque<Block>();
         var visited = new HashSet<Block>();
         queue.add(block);
         visited.add(block);
         while (!queue.isEmpty()) {
             Block current = queue.remove();
-            harvest(current, player, event);
+            harvest(current, cane, player, event);
             for (BlockFace face : new BlockFace[] {
                     BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}) {
                 Block next = current.getRelative(face);
-                if (visited.size() < 128 && next.getType() == type && visited.add(next)) {
+                if (next.getType() != type) {
+                    continue;
+                }
+                if (cane) {
+                    next = caneBase(next);
+                }
+                if (visited.size() < 128 && visited.add(next)) {
                     queue.add(next);
                 }
+            }
+        }
+    }
+
+    private void harvest(Block block, boolean cane, Player player, PlayerInteractEvent event) {
+        if (cane) {
+            harvestCane(block, player, event);
+        } else {
+            harvest(block, player, event);
+        }
+    }
+
+    private static Block caneBase(Block cane) {
+        Block base = cane;
+        while (base.getRelative(BlockFace.DOWN).getType() == Material.SUGAR_CANE) {
+            base = base.getRelative(BlockFace.DOWN);
+        }
+        return base;
+    }
+
+    // Cuts everything above the bottom block, top first, so a protected block stops the cut
+    // without leaving cane floating.
+    private void harvestCane(Block base, Player player, PlayerInteractEvent event) {
+        var cut = new ArrayDeque<Block>();
+        for (Block up = base.getRelative(BlockFace.UP); up.getType() == Material.SUGAR_CANE;
+                up = up.getRelative(BlockFace.UP)) {
+            cut.push(up);
+        }
+        var tool = player.getInventory().getItemInMainHand();
+        for (Block block : cut) {
+            BlockBreakEvent harvest = new BlockBreakEvent(block, player);
+            getServer().getPluginManager().callEvent(harvest);
+            if (harvest.isCancelled()) {
+                return;
+            }
+            var drops = block.getDrops(tool, player);
+            event.setCancelled(true);
+            block.setType(Material.AIR, false);
+            for (var drop : drops) {
+                block.getWorld().dropItemNaturally(block.getLocation(), drop);
             }
         }
     }
