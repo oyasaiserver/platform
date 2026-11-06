@@ -125,11 +125,15 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     }
 
     // 3. 未所持の場合: 新規配布
-    val item = diceItem.createDice(mode)
-    val leftOver = player.inventory.addItem(item)
-    if (leftOver.isNotEmpty()) {
-      leftOver.values.forEach { player.world.dropItem(player.location, it) }
+    if (player.inventory.firstEmpty() == -1) {
+      player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 0.8f, 1.0f)
+      player.sendMessage(
+          Component.text("[おやさいサイコロ] 🎲 インベントリがいっぱいのためサイコロを受け取れません。", NamedTextColor.RED)
+      )
+      return false
     }
+    val item = diceItem.createDice(mode)
+    player.inventory.addItem(item)
     player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 0.8f, 1.2f)
     player.sendMessage(
         Component.text("[おやさいサイコロ] 🎲 サイコロ (", NamedTextColor.GREEN)
@@ -169,11 +173,15 @@ class DiceManager(val plugin: Plugin, val diceItem: DiceItem) {
     }
 
     // 3. 配布
-    val item = diceItem.createDice(mode)
-    val leftOver = player.inventory.addItem(item)
-    if (leftOver.isNotEmpty()) {
-      leftOver.values.forEach { player.world.dropItem(player.location, it) }
+    if (player.inventory.firstEmpty() == -1) {
+      player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 0.8f, 1.0f)
+      player.sendMessage(
+          Component.text("[おやさいサイコロ] 🎲 インベントリがいっぱいのためサイコロを受け取れません。", NamedTextColor.RED)
+      )
+      return false
     }
+    val item = diceItem.createDice(mode)
+    player.inventory.addItem(item)
     player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 0.8f, 1.2f)
     player.sendMessage(
         Component.text("[おやさいサイコロ] 🎲 サイコロ (", NamedTextColor.GREEN)

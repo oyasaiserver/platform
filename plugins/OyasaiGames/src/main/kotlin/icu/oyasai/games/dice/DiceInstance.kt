@@ -234,7 +234,7 @@ class DiceInstance(
 
                     if (normal.y > 0.4) {
                       // 床面衝突: バウンド＆摩擦（微小反発は0に収束させて速やかに静止）
-                      val bounceY = -reflection.y * FLOOR_BOUNCE_RESTITUTION
+                      val bounceY = Math.abs(reflection.y) * FLOOR_BOUNCE_RESTITUTION
                       reflection.y =
                           if (Math.abs(bounceY) < BOUNCE_DAMPING_THRESHOLD) 0.0 else bounceY
                       reflection.x *= FLOOR_FRICTION_XZ

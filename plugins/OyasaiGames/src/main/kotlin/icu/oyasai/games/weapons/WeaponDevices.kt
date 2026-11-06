@@ -470,9 +470,12 @@ internal class WeaponDevices(
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun breakBlock(event: BlockBreakEvent) {
     val sign = event.block.state as? Sign
+    val signId = sign?.let { DeviceInfo.signId(it.getLine(0)) }
     if (
-        sign != null &&
-            DeviceInfo.signId(sign.getLine(0)) != null &&
+        signId != null &&
+            catalog.definitions.values.any {
+              it.b("SignShops.Enable") && it.i("SignShops.Sign_Gun_ID") == signId
+            } &&
             (event.player.gameMode != GameMode.CREATIVE ||
                 !event.player.hasPermission("oyasaigames.weapons.admin"))
     ) {
