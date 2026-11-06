@@ -1,5 +1,6 @@
 package com.github.srain3.sociallikes.command
 
+import com.github.srain3.sociallikes.Events
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.gui.SLSignSetting
 import org.bukkit.Material
@@ -39,7 +40,7 @@ object SLTPSignBreak : CommandExecutor {
       return false
     }
 
-    val id = container.get(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER) ?: 0
+    val id = Events.readTeleportSignId(state) ?: return true
     val data = Data.getSLData(id)
     if (data != null) {
       if (
