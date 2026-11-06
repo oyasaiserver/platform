@@ -129,7 +129,15 @@ internal class AssistantFeature(
                             (lastOutput[id]?.let { "\n直近のコマンド結果（観測データ）: ${it}" } ?: "")
                       }
                   "get_selection" -> onMain { AssistantSelection.read(player(id)) }
-                  "lock_selection" -> onMain { lockSelection(player(id), operator) }
+                  "lock_selection" ->
+                      if (request.args.isEmpty()) onMain { lockSelection(player(id), operator) }
+                      else
+                          grantArea(
+                              id,
+                              operator,
+                              request.args.getValue("area"),
+                              request.args.getValue("summary"),
+                          )
                   "unlock_selection" ->
                       onMain {
                         val result = locks.unlock(player(id).uniqueId)
@@ -412,7 +420,46 @@ internal class AssistantFeature(
     return execute(id, operator, command, action == 2, asOperator, requireLock = locked)
   }
 
-  private fun lockSelection(player: Player, operator: String): String =
+  private suspend fun grantArea(id: UUID, operator: String, text: String, summary: String): String {
+    if (summary.isBlank() || summary.length > 500 || summary.any { it.isISOControl() || it == '§' })
+        return "拒否: 要約は500文字以内の1行にしてください。"
+    val area =
+        try {
+          AssistantSelectionLock.Area.parse(text)
+        } catch (failure: IllegalArgumentException) {
+          return failure.message.orEmpty()
+        }
+    val description =
+        try {
+          onMain {
+            val player = player(id)
+            val command = resolve(player, operator, "//gmask #region")
+            if (command == null || !AssistantBatch.maskChange(command.text)) return@onMain null
+            locks.survey(player, area)
+          }
+        } catch (failure: Throwable) {
+          audit(operator, "denied:work-area", failure.javaClass.simpleName)
+          return failure.message?.takeIf { it.startsWith("拒否:") } ?: "拒否: 作業範囲を確かめられませんでした。"
+        } ?: return "拒否: FAWE のマスクのコマンドを実行できません。"
+    val action =
+        confirm(
+            id,
+            operator,
+            emptyList(),
+            summary,
+            true,
+            batch = true,
+            description = "$description\nこの範囲の中の FAWE と、範囲内の座標だけの /setblock・/fill を確認なしにします。",
+        )
+    if (action != 1) return "拒否: 本人が許可しませんでした"
+    return onMain { lockSelection(player(id), operator, area) }
+  }
+
+  private fun lockSelection(
+      player: Player,
+      operator: String,
+      area: AssistantSelectionLock.Area? = null,
+  ): String =
       try {
         val command = resolve(player, operator, "//gmask #region")
         if (
@@ -421,7 +468,7 @@ internal class AssistantFeature(
                 !AssistantBatch.maskChange(command.text)
         )
             return "拒否: FAWE のマスクのコマンドを実行できません。"
-        locks.lock(player).also {
+        locks.lock(player, area).also {
           audit(operator, "execute", "sendAs=operator ${command.text}")
           audit(operator, "execution-result", "sendAs=operator accepted=true")
           audit(operator, "selection-lock", it)
@@ -442,6 +489,7 @@ internal class AssistantFeature(
         return null
     if (allows.allows(command.text)) return "shared"
     if (locked && AssistantBatch.maskedEdit(command.text)) return "selection-lock"
+    if (locked && locks.inside(player, command.text)) return "selection-lock"
     if (autoApprove.entries.isEmpty()) return null
     return autoApprove.match(command.text, player.uniqueId, player.world.name, consume)?.let {
       "auto-approve:${it.number}"
@@ -535,6 +583,7 @@ internal class AssistantFeature(
       deadline: Long = Long.MAX_VALUE,
   ): String {
     var collector: AssistantOutputCollector? = null
+    val faweOutput = mutableListOf<String>()
     var stage = "operator-state"
     try {
       val immediate = onMain {
@@ -566,7 +615,7 @@ internal class AssistantFeature(
               )
               if (locked && AssistantBatch.fawe(command.text)) {
                 stage = "dispatch:operator:fawe-sync"
-                locks.execute(player, command.text)
+                locks.execute(player, command.text) { faweOutput += it }
               } else {
                 stage = "dispatch:operator:bukkit"
                 player.performCommand(command.text)
@@ -609,6 +658,7 @@ internal class AssistantFeature(
           player.sendMessage("運営全員の共有許可リストへ追加しました: ${AssistantRules.scope(command.text)}")
         }
         if (!accepted) "失敗: コマンドの実行が受け付けられませんでした。"
+        else if (faweOutput.isNotEmpty()) AssistantCommandOutput.fawe(faweOutput)
         else if (asOperator) AssistantCommandOutput.playerOnly() else null
       }
       stage = "collect-output"
@@ -648,8 +698,11 @@ internal class AssistantFeature(
       summary: String,
       asOperator: Boolean,
       batch: Boolean = false,
+      description: String? = null,
   ): Int {
-    val command = commands.first()
+    // A work-area card describes the area instead of listing commands.
+    val shown = description ?: commands.joinToString("\n") { "/${it.text}" }
+    val head = shown.lineSequence().first().removePrefix("/")
     // Under dsh ACP's fixed 60s MCP call timeout, leaving room to run and collect output.
     val proposal = Pending(System.nanoTime() + 45_000_000_000L)
     onMain {
@@ -658,7 +711,7 @@ internal class AssistantFeature(
       audit(
           operator,
           "propose",
-          "sendAs=${if (asOperator) "operator" else "assistant"} ${command.text} | $summary",
+          "sendAs=${if (asOperator) "operator" else "assistant"} $head | $summary",
       )
       fun button(label: String, action: Int): Component =
           Component.text(
@@ -673,10 +726,9 @@ internal class AssistantFeature(
               .hoverEvent(
                   Component.text(
                       if (action == 2)
-                          "運営全員に効く常時許可: ${AssistantRules.scope(command.text)}\n" +
-                              if (' ' !in command.text) "引数なしのときだけ確認なしになります。"
-                              else "この範囲の引数は何でも確認なしになります。"
-                      else "/${command.text}"
+                          "運営全員に効く常時許可: ${AssistantRules.scope(head)}\n" +
+                              if (' ' !in head) "引数なしのときだけ確認なしになります。" else "この範囲の引数は何でも確認なしになります。"
+                      else shown
                   )
               )
               .clickEvent(
@@ -706,11 +758,12 @@ internal class AssistantFeature(
               )
       proposal.card =
           Component.text(
-                  commands.joinToString("\n") { "/${it.text}" } +
-                      "\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
+                  shown +
+                      if (description != null) "\n"
+                      else "\n送り主: ${if (asOperator) "運営本人（出力は本人画面）" else "AI専用（出力はAIへ）"}\n"
               )
-              .append(button("[実行]", 1))
-      if (!batch && AssistantRules.scope(command.text) != null)
+              .append(button(if (description != null) "[許可]" else "[実行]", 1))
+      if (!batch && AssistantRules.scope(head) != null)
           proposal.card =
               proposal.card.append(Component.text("   ")).append(button("[次から確認しない]", 2))
       if (!batch)
@@ -720,7 +773,7 @@ internal class AssistantFeature(
           plugin,
           Runnable {
             if (pending[id] === proposal && proposal.decision.complete(0)) {
-              audit(operator, "cancel", "expired: ${command.text}")
+              audit(operator, "cancel", "expired: $head")
             }
           },
           900L,
@@ -729,7 +782,7 @@ internal class AssistantFeature(
     }
     val action = withTimeoutOrNull(45_000) { proposal.decision.await() } ?: 0
     onMain { if (pending[id] === proposal) pending.remove(id) }
-    if (action == 0) audit(operator, "cancel", commands.joinToString { it.text })
+    if (action == 0) audit(operator, "cancel", commands.joinToString { it.text }.ifEmpty { head })
     return action
   }
 

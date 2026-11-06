@@ -20,6 +20,8 @@ internal object AssistantProtocol {
           "search_memory" to setOf("query", "days"),
           "record_memory" to setOf("summary"),
       )
+  // A work area: lock_selection with an explicit cuboid, granted by one confirmation.
+  private val alternatives = mapOf("lock_selection" to setOf("area", "summary"))
 
   data class Request(val id: String, val tool: String, val args: Map<String, String>)
 
@@ -49,8 +51,10 @@ internal object AssistantProtocol {
     val tool = string(json, "tool")
     val expected = tools[tool] ?: error("unknown tool")
     val args = json.getAsJsonObject("args")
-    require(args != null && args.keySet() == expected) { "invalid arguments" }
-    return Request(id, tool, expected.associateWith { string(args, it) })
+    require(args != null && (args.keySet() == expected || args.keySet() == alternatives[tool])) {
+      "invalid arguments"
+    }
+    return Request(id, tool, args.keySet().associateWith { string(args, it) })
   }
 
   fun encode(id: String, value: String, error: Boolean): ByteArray {

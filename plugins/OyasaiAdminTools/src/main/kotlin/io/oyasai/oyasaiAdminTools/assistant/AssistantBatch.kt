@@ -16,6 +16,19 @@ internal object AssistantBatch {
           command.substringBefore(' ').substringAfter(':').removePrefix("/") in
               setOf("gmask", "mask")
 
+  /** setblock/fill with integer corners only (no ~ or ^), every corner inside [area]. */
+  fun vanillaInside(command: String, area: AssistantSelectionLock.Area): Boolean {
+    val words = command.split(' ')
+    val count =
+        when (words[0]) {
+          "minecraft:setblock" -> 3
+          "minecraft:fill" -> 6
+          else -> return false
+        }
+    val numbers = words.drop(1).take(count).map { it.toIntOrNull() ?: return false }
+    return numbers.size == count && numbers.chunked(3).all { (x, y, z) -> area.contains(x, y, z) }
+  }
+
   // Only audited block-edit paths use the automatic mask allowance. Other FAWE tools need consent.
   fun maskedEdit(command: String): Boolean {
     if (!fawe(command)) return false
@@ -83,6 +96,9 @@ internal object AssistantBatch {
             "stack",
             "paste",
             "cut",
+            // Selection only: the fixed mask does not follow it.
+            "pos1",
+            "pos2",
         )
   }
 }

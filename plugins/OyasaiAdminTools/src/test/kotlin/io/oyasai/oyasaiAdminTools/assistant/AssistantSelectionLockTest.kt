@@ -27,20 +27,25 @@ class AssistantSelectionLockTest {
     val original = current
     var empty = true
     var intact = true
+    override var area: AssistantSelectionLock.Area? = null
 
     override fun validate(player: Player, maxBlocks: Long) {
       require(empty) { "not empty" }
     }
 
-    override fun lock(player: Player, maxBlocks: Long): String {
-      validate(player, maxBlocks)
+    override fun survey(player: Player, area: AssistantSelectionLock.Area, maxBlocks: Long) =
+        "$area"
+
+    override fun lock(player: Player, maxBlocks: Long, area: AssistantSelectionLock.Area?): String {
+      if (area == null) validate(player, maxBlocks)
+      this.area = area ?: AssistantSelectionLock.Area(listOf(0, 0, 0), listOf(0, 0, 0))
       current = "fixed"
       return "fixed"
     }
 
     override fun intact(player: Player) = intact
 
-    override fun execute(player: Player, command: String) = true
+    override fun execute(player: Player, command: String, output: (String) -> Unit) = true
 
     override fun restore() {
       current = original
@@ -89,6 +94,33 @@ class AssistantSelectionLockTest {
     locks.lock(player)
     locks.unlock(id)
     assertEquals("original", mask.current)
+  }
+
+  @Test
+  fun confirmedAreaSkipsAirAndAllowsOnlyVanillaEditsInsideIt() {
+    val mask = Mask().apply { empty = false }
+    val locks = AssistantSelectionLock(1000, 10, { mask })
+    assertFails { locks.lock(player) }
+    val area = AssistantSelectionLock.Area.parse("5,70,5 0 64 0")
+    assertEquals(listOf(0, 64, 0), area.min)
+    assertEquals(252, area.volume)
+    for (text in listOf("0 0 0 1 1", "0 0 0 1 1 x", "~ 0 0 1 1 1")) assertFails {
+      AssistantSelectionLock.Area.parse(text)
+    }
+    assertFalse(locks.inside(player, "minecraft:setblock 1 65 1 stone"))
+    locks.lock(player, area)
+    assertTrue(locks.inside(player, "minecraft:setblock 1 65 1 chest{Items:[]}"))
+    assertTrue(locks.inside(player, "minecraft:fill 0 64 0 5 70 5 air destroy"))
+    for (command in
+        listOf(
+            "minecraft:fill 0 64 0 6 70 5 air",
+            "minecraft:setblock ~ 65 1 stone",
+            "minecraft:setblock 1 65",
+            "minecraft:clone 0 64 0 1 65 1 2 66 2",
+            "fastasyncworldedit:/set stone",
+        )) assertFalse(locks.inside(player, command), command)
+    locks.unlock(id)
+    assertFalse(locks.inside(player, "minecraft:setblock 1 65 1 stone"))
   }
 
   @Test

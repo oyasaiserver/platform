@@ -55,25 +55,46 @@ class AssistantFeatureTest {
     var maskIntact = true
     var emptySelection = true
     var restored = 0
+    var lockedArea: AssistantSelectionLock.Area? = null
+    var faweOutput = emptyList<String>()
     val locks =
         AssistantSelectionLock(
             1_000_000,
             10,
             {
               object : AssistantSelectionLock.Mask {
+                override val area
+                  get() = lockedArea
+
                 override fun validate(player: Player, maxBlocks: Long) {
                   require(emptySelection)
                 }
 
-                override fun lock(player: Player, maxBlocks: Long): String {
-                  validate(player, maxBlocks)
+                override fun survey(
+                    player: Player,
+                    area: AssistantSelectionLock.Area,
+                    maxBlocks: Long,
+                ) = "作業許可: 範囲=$area"
+
+                override fun lock(
+                    player: Player,
+                    maxBlocks: Long,
+                    area: AssistantSelectionLock.Area?,
+                ): String {
+                  if (area == null) validate(player, maxBlocks)
+                  lockedArea = area
                   return "fixed"
                 }
 
                 override fun intact(player: Player) = maskIntact
 
-                override fun execute(player: Player, command: String): Boolean {
+                override fun execute(
+                    player: Player,
+                    command: String,
+                    output: (String) -> Unit,
+                ): Boolean {
                   synchronous++
+                  faweOutput.forEach(output)
                   return player.performCommand(command)
                 }
 
@@ -163,7 +184,7 @@ class AssistantFeatureTest {
       fawe = FaweCommandFakes(known)
       fawe.register("gmask", listOf("/gmask"))
       fawe.register("mask", listOf("/mask"))
-      for (name in listOf("/set", "/distr", "/regen", "/generate")) fawe.register(name)
+      for (name in listOf("/set", "/distr", "/regen", "/generate", "/pos1")) fawe.register(name)
       val commands =
           factory.fake<CommandMap> { name, args ->
             when (name) {
@@ -887,6 +908,55 @@ class AssistantFeatureTest {
           JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
           "minecraft_get_chat",
       )
+    }
+  }
+
+  @Test
+  fun workAreaNeedsOneConfirmationThenRunsFaweWithoutCardsAndReturnsItsOutput() {
+    for (action in listOf(0, 1)) Fixture().use { f ->
+      f.emptySelection = false
+      f.send("lock_selection", """{"area":"9 70 9 0 64 0","summary":"内装"}""")
+      f.drainUntil { f.timers.isNotEmpty() }
+      assertFalse(f.locks.active(f.player))
+      val card =
+          net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+              .serialize(f.messages.single())
+      assertContains(card, "0,64,0..9,70,9")
+      assertContains(card, "[許可]")
+      assertFalse("[入力欄へ]" in card)
+      f.decision().complete(action)
+      f.drainUntil { f.responses.isNotEmpty() }
+      val granted = JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString
+      if (action == 0) {
+        assertContains(granted, "拒否")
+        assertFalse(f.locks.active(f.player))
+        return@use
+      }
+      assertContains(granted, "fixed")
+      assertEquals(listOf(0, 64, 0), f.lockedArea!!.min)
+      f.timers.clear()
+      f.faweOutput = listOf("1,000 blocks have been changed.")
+      f.send("run_commands", """{"commands":"//pos1 1,64,1\n//set stone","summary":"床"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertTrue(f.timers.isEmpty())
+      assertEquals(2, f.synchronous)
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "1,000 blocks have been changed.",
+      )
+    }
+  }
+
+  @Test
+  fun workAreaRejectsMalformedAreaWithoutACard() {
+    Fixture().use { f ->
+      f.send("lock_selection", """{"area":"0 64 0 9 ~ 9","summary":"内装"}""")
+      f.drainUntil { f.responses.isNotEmpty() }
+      assertContains(
+          JsonParser.parseString(f.responses.remove()).asJsonObject["result"].asString,
+          "整数6個",
+      )
+      assertTrue(f.timers.isEmpty())
     }
   }
 

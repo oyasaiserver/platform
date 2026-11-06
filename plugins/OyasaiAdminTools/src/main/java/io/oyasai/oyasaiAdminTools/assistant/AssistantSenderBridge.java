@@ -98,15 +98,24 @@ public abstract class AssistantSenderBridge implements CommandSender {
       Class<?> permissions = Class.forName("net.minecraft.server.permissions.PermissionSet", true, loader);
       Object restricted = permissions.getField("NO_PERMISSIONS").get(null);
       Object name = vanillaText.getMethod("literal", String.class).invoke(null, displayName);
-      Object isolated = stack.getConstructor(source,
-          Class.forName("net.minecraft.world.phys.Vec3", true, loader),
-          Class.forName("net.minecraft.world.phys.Vec2", true, loader),
-          Class.forName("net.minecraft.server.level.ServerLevel", true, loader),
-          permissions, String.class, vanillaText,
-          Class.forName("net.minecraft.server.MinecraftServer", true, loader),
-          Class.forName("net.minecraft.world.entity.Entity", true, loader))
-          .newInstance(forwarding, stack.getMethod("getPosition").invoke(base), stack.getMethod("getRotation").invoke(base),
-              stack.getMethod("getLevel").invoke(base), restricted, displayName, name, stack.getMethod("getServer").invoke(base), null);
+      Class<?> vec3 = Class.forName("net.minecraft.world.phys.Vec3", true, loader);
+      Class<?> vec2 = Class.forName("net.minecraft.world.phys.Vec2", true, loader);
+      Class<?> level = Class.forName("net.minecraft.server.level.ServerLevel", true, loader);
+      Class<?> server = Class.forName("net.minecraft.server.MinecraftServer", true, loader);
+      Object position = stack.getMethod("getPosition").invoke(base);
+      Object rotation = stack.getMethod("getRotation").invoke(base);
+      Object world = stack.getMethod("getLevel").invoke(base);
+      Object minecraft = stack.getMethod("getServer").invoke(base);
+      Object isolated;
+      try {
+        // 26.3: a fixed display name and no entity.
+        isolated = stack.getConstructor(source, vec3, vec2, level, permissions, vanillaText, server)
+            .newInstance(forwarding, position, rotation, world, restricted, name, minecraft);
+      } catch (NoSuchMethodException older) {
+        isolated = stack.getConstructor(source, vec3, vec2, level, permissions, String.class, vanillaText, server,
+                Class.forName("net.minecraft.world.entity.Entity", true, loader))
+            .newInstance(forwarding, position, rotation, world, restricted, displayName, name, minecraft, null);
+      }
       // No native permission grant and no Player entity: only this sender's Bukkit permissions apply.
       return (CommandSender)Class.forName("org.bukkit.craftbukkit.command.ProxiedNativeCommandSender", true, loader)
           .getConstructor(stack, CommandSender.class, CommandSender.class).newInstance(isolated, this, this);

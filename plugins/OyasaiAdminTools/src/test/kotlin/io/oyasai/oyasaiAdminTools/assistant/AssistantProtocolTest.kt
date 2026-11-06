@@ -16,6 +16,21 @@ class AssistantProtocolTest {
       assertFails { AssistantProtocol.decode(request(tool, """{"extra":"bad"}""")) }
     }
     assertEquals(
+        "0 64 0 9 70 9",
+        AssistantProtocol.decode(
+                request("lock_selection", """{"area":"0 64 0 9 70 9","summary":"内装"}""")
+            )
+            .args["area"],
+    )
+    for (args in listOf("""{"area":"0 64 0 9 70 9"}""", """{"summary":"内装"}""")) assertFails {
+      AssistantProtocol.decode(request("lock_selection", args))
+    }
+    assertFails {
+      AssistantProtocol.decode(
+          request("unlock_selection", """{"area":"0 0 0 1 1 1","summary":"x"}""")
+      )
+    }
+    assertEquals(
         "plugins\nplugins",
         AssistantProtocol.decode(
                 request("run_commands", """{"commands":"plugins\nplugins","summary":"一覧"}""")

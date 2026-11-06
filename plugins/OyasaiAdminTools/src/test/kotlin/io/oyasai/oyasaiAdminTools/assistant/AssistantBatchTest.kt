@@ -19,7 +19,13 @@ class AssistantBatchTest {
   @Test
   fun onlyAuditedFaweBlockEditsGetMaskAllowance() {
     for (command in
-        listOf("/set stone", "/walls glass", "/paste", "brush sphere stone 3")) assertTrue(
+        listOf(
+            "/set stone",
+            "/walls glass",
+            "/paste",
+            "brush sphere stone 3",
+            "/pos1 1,2,3",
+        )) assertTrue(
         AssistantBatch.maskedEdit("fastasyncworldedit:$command"),
         command,
     )

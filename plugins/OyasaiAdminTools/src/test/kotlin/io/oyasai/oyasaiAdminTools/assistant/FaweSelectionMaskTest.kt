@@ -7,6 +7,7 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer
 import com.sk89q.worldedit.bukkit.WorldEditPlugin
 import com.sk89q.worldedit.extension.platform.Actor
 import com.sk89q.worldedit.extension.platform.PlatformManager
+import com.sk89q.worldedit.extension.platform.PlayerProxy
 import com.sk89q.worldedit.session.SessionManager
 import com.sk89q.worldedit.session.SessionOwner
 import com.sk89q.worldedit.util.lifecycle.SimpleLifecycled
@@ -32,7 +33,8 @@ class FaweSelectionMaskTest {
     lateinit var expectedActor: Actor
 
     override fun get(owner: SessionOwner): LocalSession {
-      assertSame(expectedActor, owner)
+      // The FAWE wrapper is kept underneath the actor that copies output for the AI.
+      assertSame(expectedActor, (owner as PlayerProxy).basePlayer)
       throw SessionLookupReached()
     }
   }
@@ -60,6 +62,19 @@ class FaweSelectionMaskTest {
           metadata
         } as Player
     val proxyActor = allocate(LocationMaskedPlayerWrapper::class.java)
+    PlayerProxy::class
+        .java
+        .getDeclaredField("world")
+        .apply { isAccessible = true }
+        .set(
+            proxyActor,
+            Proxy.newProxyInstance(
+                com.sk89q.worldedit.world.World::class.java.classLoader,
+                arrayOf(com.sk89q.worldedit.world.World::class.java),
+            ) { _, _, _ ->
+              null
+            },
+        )
     val platform = allocate(ProxyPlatform::class.java).apply { this.proxyActor = proxyActor }
     val sessions = allocate(Sessions::class.java).apply { expectedActor = proxyActor }
     val worldEdit = allocate(WorldEdit::class.java)
@@ -74,7 +89,7 @@ class FaweSelectionMaskTest {
     try {
       instance.set(null, plugin)
       assertFailsWith<SessionLookupReached> {
-        mask.execute(player, "fastasyncworldedit:/set stone")
+        mask.execute(player, "fastasyncworldedit:/set stone") {}
       }
     } finally {
       instance.set(null, previous)
