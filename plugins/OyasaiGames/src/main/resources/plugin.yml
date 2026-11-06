@@ -54,6 +54,8 @@ commands:
     usage: "/leavegame"
   startgame:
     usage: "/startgame"
+    permission: op
+    permission-message: "§cYou don't have the required permission to use this command"
   givemission:
     usage: "/givemission <player>"
     permission: op
