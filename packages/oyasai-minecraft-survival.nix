@@ -1,6 +1,6 @@
-{ oyasaiPurpur }:
+{ oyasaiPurpur, oyasai-plugin-registry }:
 
-oyasaiPurpur {
+oyasaiPurpur rec {
   name = "oyasai-minecraft-survival";
   version = "26.3";
 
@@ -19,4 +19,15 @@ oyasaiPurpur {
       online-mode = true;
     };
   };
+
+  plugins = with oyasai-plugin-registry.forPlatform "paper" version; [
+    # keep-sorted start
+    clickmobs
+    oyasaichat
+    oyasaisurvival
+    oyasaitab
+    plugmanx
+    veinminer
+    # keep-sorted end
+  ];
 }

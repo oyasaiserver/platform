@@ -1745,6 +1745,32 @@
       "hash": "sha256-l+xg94CLU++5rWuiYdLBsjdCP0PC2oelxQEaNYUJXO0="
     }
   },
+  "net.bytebuddy:byte-buddy:1.17.7": {
+    "byte-buddy-1.17.7.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy/1.17.7/byte-buddy-1.17.7.jar",
+      "hash": "sha256-NXXcuKmPr5Q9PBWVxHoWBHxPzoqD67smJi8aL2dUY1c="
+    },
+    "byte-buddy-1.17.7.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy/1.17.7/byte-buddy-1.17.7.pom",
+      "hash": "sha256-7n+6hWnDu1wekeWBL9n0oPMb4n5WjVNU4a39GRGfl7M="
+    }
+  },
+  "net.bytebuddy:byte-buddy-agent:1.17.7": {
+    "byte-buddy-agent-1.17.7.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy-agent/1.17.7/byte-buddy-agent-1.17.7.jar",
+      "hash": "sha256-qbqIfcolKtYbfVFTKU805vO99LJzawQ3PRNhWmlfwP8="
+    },
+    "byte-buddy-agent-1.17.7.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy-agent/1.17.7/byte-buddy-agent-1.17.7.pom",
+      "hash": "sha256-gU7kLWsBF/S40etrHWLBbbTAtZfYOzrY2qV4HrFF19w="
+    }
+  },
+  "net.bytebuddy:byte-buddy-parent:1.17.7": {
+    "byte-buddy-parent-1.17.7.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy-parent/1.17.7/byte-buddy-parent-1.17.7.pom",
+      "hash": "sha256-ilfiDczgDaccM+8+GdndhY/p0gQsouK8onhxcA1SaYw="
+    }
+  },
   "net.coreprotect:coreprotect:22.4": {
     "coreprotect-22.4.jar": {
       "url": "https://maven.playpro.com/net/coreprotect/coreprotect/22.4/coreprotect-22.4.jar",
@@ -4053,6 +4079,16 @@
       "hash": "sha256-2FMadGyYj39o7V8YjN6pRQBq6pk+xd+eUk4NJ9YUkdo="
     }
   },
+  "org.mockito:mockito-core:5.23.0": {
+    "mockito-core-5.23.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar",
+      "hash": "sha256-rilb69XRH6uXqyl4Fdx2FxiLhgA8vOPf1cDVw6bMSgw="
+    },
+    "mockito-core-5.23.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.pom",
+      "hash": "sha256-wC4pALknetv+EnVtfQuUcua55Zcq4fKNGaQaplE3d+M="
+    }
+  },
   "org.mozilla:rhino:1.7.14": {
     "rhino-1.7.14.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/mozilla/rhino/1.7.14/rhino-1.7.14.jar",
@@ -4091,6 +4127,22 @@
     "rhino-runtime-1.7.14.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/mozilla/rhino-runtime/1.7.14/rhino-runtime-1.7.14.pom",
       "hash": "sha256-XwpgkMnP466JKQQz++ggRETUZnbL9mJV++1R7SQOX0M="
+    }
+  },
+  "org.objenesis:objenesis:3.3": {
+    "objenesis-3.3.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/objenesis/objenesis/3.3/objenesis-3.3.jar",
+      "hash": "sha256-At/QsEOaVZHjW3CO0vVHTrCUj1Or90Y36Vm45O9pv+s="
+    },
+    "objenesis-3.3.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/objenesis/objenesis/3.3/objenesis-3.3.pom",
+      "hash": "sha256-ugxA2iZpoEi24k73BmpHHw+8v8xQnmo+hWyk3fphStM="
+    }
+  },
+  "org.objenesis:objenesis-parent:3.3": {
+    "objenesis-parent-3.3.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/objenesis/objenesis-parent/3.3/objenesis-parent-3.3.pom",
+      "hash": "sha256-MFw4SqLx4cf+U6ltpBw+w1JDuX1CjSSo93mBjMEL5P8="
     }
   },
   "org.opentest4j:opentest4j:1.3.0": {

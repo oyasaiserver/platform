@@ -276,14 +276,15 @@ internal class WeaponCombat(
 
   private fun consume(player: Player, w: WeaponDefinition, side: Boolean): Boolean {
     val item = player.inventory.itemInMainHand
-    if (
+    val ammoPerShot = WeaponObservedOverrides.forWeapon(w.id)?.ammoPerShot ?: 1
+    val needInventoryAmmo =
         requiresInventoryAmmo(
             w.b("Ammo.Enable"),
             w.b("Reload.Enable"),
             w.b("Reload.Take_Ammo_On_Reload"),
         )
-    ) {
-      if (ammoCount(player, w) == 0) {
+    if (needInventoryAmmo) {
+      if (ammoCount(player, w) < ammoPerShot) {
         effects.sounds(w.s("Ammo.Sounds_Shoot_With_No_Ammo"), player.location)
         return false
       }
@@ -295,13 +296,16 @@ internal class WeaponCombat(
         reload(player, w)
         return false
       }
-      setRounds(item, w, count - (WeaponObservedOverrides.forWeapon(w.id)?.ammoPerShot ?: 1), side)
+      setRounds(item, w, count - ammoPerShot, side)
       if (count == 1) {
         effects.sounds(w.s("Reload.Sounds_Out_Of_Ammo"), player.location)
       }
     }
     if (w.b("Extras.One_Time_Use")) item.amount--
     player.inventory.setItemInMainHand(item)
+    if (needInventoryAmmo) {
+      takeAmmo(player, w, ammoPerShot)
+    }
     return true
   }
 

@@ -1,0 +1,32 @@
+name: OyasaiSurvival
+version: ${version}
+main: io.oyasai.survival.OyasaiSurvival
+api-version: "26.3"
+commands:
+  pullbench:
+    description: コンソール専用の性能測定（debug.bench が true の時のみ）
+    usage: /pullbench setup <world> <x> <y> <z> [seed [sx sy sz]] | run <scenario> [repeat] | reset | clear
+  pull:
+    description: 近くの倉庫のアイテム一覧・検索と取り出し
+    usage: /pull [gui|<item|hand> [amount]|reload]
+  wh:
+    description: 倉庫の登録・編集・除外・メンバー設定
+    usage: /wh pos1|pos2 [x y z]|link <名前>|unlink|create <名前>|resize <名前>|rename <旧> <新>|delete <名前>|list|info|exclude add|remove <item|hand>|exclude list|member add|remove <名前> <プレイヤー>
+  spawnlimit:
+    aliases: [sl]
+    description: 全ワールドの湧き上限を表示・変更する
+    usage: /<command> [monster|animal|water_animal|water_ambient|water_underground_creature|axolotl|ambient] [0以上の整数]
+    permission: survivalspawnlimit.admin
+  distance:
+    description: 全ワールドの描画距離・シミュレーション距離を表示・変更する
+    usage: /<command> [view|simulation|sim] [2〜32の整数]
+    permission: survivalspawnlimit.admin
+  enderkeep:
+    usage: /enderkeep info <player>
+    description: 保存したエンダーチェストの情報を表示
+    permission: survivalenderkeep.admin
+permissions:
+  survivalspawnlimit.admin:
+    default: op
+  survivalenderkeep.admin:
+    default: op

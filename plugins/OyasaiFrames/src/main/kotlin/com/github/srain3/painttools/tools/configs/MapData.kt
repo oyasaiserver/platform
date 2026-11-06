@@ -50,6 +50,7 @@ object MapData {
 
   internal fun initialize(database: CanvasStore) {
     store = database
+    if (undoCash == null) undoCash = UndoCash()
   }
 
   fun newCanvas(id: Int) {
