@@ -658,6 +658,7 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
               } ?: emptyMap(),
           ),
       )
+      player.inventory.storageContents = contents
       for (reward in spin.prize?.rewards.orEmpty()) {
         reward.command?.let { command ->
           // Console commands may leave side effects even when they fail or throw.
@@ -672,7 +673,6 @@ class SlotModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
           }
         }
       }
-      player.inventory.storageContents = contents
       spin.payment.complete()
     } catch (failure: Exception) {
       if (spin.commandStarted) throw failure

@@ -14,30 +14,29 @@ internal class PvpTerrain(private val folder: File, private val arena: ArenaConf
 
   private fun key(block: Block) = "${block.world.name},${block.x},${block.y},${block.z}"
 
-  private fun record(block: Block, state: org.bukkit.block.BlockState = block.state) {
+  private fun record(block: Block, state: org.bukkit.block.BlockState = block.state): Boolean {
     val coordinate = key(block)
-    if (!saved.add(coordinate)) return
+    if (!saved.add(coordinate)) return false
     val path = "blocks.${sequence++}"
     journal.set("$path.location", coordinate)
     journal.set("$path.data", state.blockData.asString)
     if (arena.bool("modules.blockrestore.restorecontainers") && state is Container)
         journal.set("$path.items", (state as Container).inventory.contents.map { it?.clone() })
+    return true
   }
 
   fun beforeChange(block: Block) {
     if (!arena.has("BlockRestore") || !arena.bool("modules.blockrestore.restoreblocks", true))
         return
     if (arena.regions.none { it.type == "BATTLE" && it.contains(block.location) }) return
-    record(block)
-    saveYaml(file, journal)
+    if (record(block)) saveYaml(file, journal)
   }
 
   fun beforeReplaced(state: org.bukkit.block.BlockState) {
     if (!arena.has("BlockRestore") || !arena.bool("modules.blockrestore.restoreblocks", true))
         return
     if (arena.regions.none { it.type == "BATTLE" && it.contains(state.location) }) return
-    record(state.block, state)
-    saveYaml(file, journal)
+    if (record(state.block, state)) saveYaml(file, journal)
   }
 
   fun begin() {

@@ -22,6 +22,7 @@ import com.github.srain3.sociallikes.gui.SLSignSetting
 import com.github.srain3.sociallikes.gui.UserBuild
 import java.time.LocalDateTime
 import java.util.*
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.HoverEvent
@@ -52,6 +53,7 @@ import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BlockStateMeta
 import org.bukkit.persistence.PersistentDataType
@@ -207,6 +209,30 @@ object Events : Listener {
     return if (generation == CURRENT_ID_GENERATION) rawId else SLDatabase.resolveMigratedId(rawId)
   }
 
+  fun readTeleportSignId(sign: Sign): Int? {
+    val container = sign.persistentDataContainer
+    val rawId = container.get(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER) ?: return null
+    val front = sign.getSide(Side.FRONT)
+    val click = front.line(0).clickEvent()
+    val placedCommand =
+        if (
+            sign.isPlaced &&
+                click?.action() == net.kyori.adventure.text.event.ClickEvent.Action.RUN_COMMAND
+        )
+            (click.payload() as? net.kyori.adventure.text.event.ClickEvent.Payload.Text)?.value()
+        else null
+    return resolveTeleportSignId(
+        rawId,
+        container.get(idGenerationKey, PersistentDataType.INTEGER),
+        placedCommand,
+        SLDatabase::resolveMigratedId,
+        PlainTextComponentSerializer.plainText().serialize(front.line(1)).unColor(),
+        PlainTextComponentSerializer.plainText().serialize(front.line(2)).unColor(),
+    ) { id ->
+      Data.getSLData(id)?.let { it.title.unColor() to Bukkit.getOfflinePlayer(it.owner).name }
+    }
+  }
+
   /** 看板のIDと世代マーカーを同時に更新する。 */
   fun markSignIdGeneration2(sign: Sign, id: Int) {
     sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
@@ -228,6 +254,17 @@ object Events : Listener {
     if (e.action != Action.RIGHT_CLICK_BLOCK) return
     val block = e.clickedBlock?.state
     if (block !is Sign) return
+    if (block.persistentDataContainer.has(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER)) {
+      e.isCancelled = true
+      if (e.hand != EquipmentSlot.HAND) return
+      if (!Data.loading) {
+        e.player.sendMessage(Tools.socialLikesLOGO + " &e現在ロード作業中です、しばらくお待ち下さい。".color())
+        return
+      }
+      val id = readTeleportSignId(block) ?: return
+      Bukkit.dispatchCommand(e.player, "sociallikes3:sltp $id")
+      return
+    }
     if (GuidebookListener.handleSignRightClick(e, block)) return
 
     // 表面の1行目をカラーコードを外して取得、SL3の看板のみ中へ進む
@@ -683,50 +720,42 @@ object Events : Listener {
     targetSide.color = sourceSide.color
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun handleTeleportSignPlace(e: BlockPlaceEvent) {
     val itemMeta = e.itemInHand.itemMeta as? BlockStateMeta ?: return
     val sourceSign = itemMeta.blockState as? Sign ?: return
-    val teleportId =
-        sourceSign.persistentDataContainer.get(
-            SLSignSetting.sltpSignKey,
-            PersistentDataType.INTEGER,
-        ) ?: return
+    val teleportId = readTeleportSignId(sourceSign) ?: return
+    val slData =
+        Data.getSLData(teleportId)
+            ?: run {
+              e.player.sendMessage(Tools.socialLikesLOGO + " &cID:${teleportId}は存在しません".color())
+              e.isCancelled = true
+              return
+            }
     val ownerId =
         sourceSign.persistentDataContainer.get(
             SLSignSetting.sltpSignUUIDKey,
             PersistentDataType.STRING,
         )
 
-    val frontLines = (0 until 4).map { sourceSign.getSide(Side.FRONT).line(it) }
-    val backLines = (0 until 4).map { sourceSign.getSide(Side.BACK).line(it) }
-    val waxed = sourceSign.isWaxed
     val placedBlock = e.blockPlaced
-
-    val placedState = placedBlock.state
-    if (placedState !is Sign) return
-
-    val front = placedState.getSide(Side.FRONT)
-    frontLines.forEachIndexed { index, component -> front.line(index, component) }
-    val back = placedState.getSide(Side.BACK)
-    backLines.forEachIndexed { index, component -> back.line(index, component) }
-
-    placedState.isWaxed = waxed
-    placedState.persistentDataContainer.set(
-        SLSignSetting.sltpSignKey,
-        PersistentDataType.INTEGER,
-        teleportId,
-    )
-    if (ownerId != null) {
-      placedState.persistentDataContainer.set(
-          SLSignSetting.sltpSignUUIDKey,
-          PersistentDataType.STRING,
-          ownerId,
-      )
-    }
-    placedState.update(true)
-
-    e.player.sendMessage(Tools.socialLikesLOGO + "&eSLTP看板を設置しました！".color())
-    e.player.sendMessage(Tools.socialLikesLOGO + "&e看板を見ながら /slsignbreak で破壊＆再取得できます。".color())
+    val placedType = placedBlock.type
+    if (placedBlock.state !is Sign) return
+    // 設置イベント後に適用されるBlockEntityで復元結果が上書きされるため、1tick待つ。
+    object : BukkitRunnable() {
+          override fun run() {
+            if (e.isCancelled || !e.canBuild() || placedBlock.type != placedType) return
+            val sign = placedBlock.state as? Sign ?: return
+            copySignSide(sourceSign, sign, Side.FRONT)
+            copySignSide(sourceSign, sign, Side.BACK)
+            SLSignSetting.writeCommandSign(sign, slData, ownerId)
+            if (!sign.update()) return
+            e.player.sendMessage(Tools.socialLikesLOGO + "&eSLTP看板を設置しました！".color())
+            e.player.sendMessage(
+                Tools.socialLikesLOGO + "&e看板を見ながら /slsignbreak で破壊＆再取得できます。".color()
+            )
+          }
+        }
+        .runTaskLater(plugin, 1)
   }
 }

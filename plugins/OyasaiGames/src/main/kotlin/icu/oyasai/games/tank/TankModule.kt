@@ -80,10 +80,19 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       args: Array<out String>,
   ): Boolean {
     val player = sender as? Player ?: return true.also { sender.sendMessage("プレイヤーのみ使えます。") }
+    if (!player.hasPermission("oyasaigames.tank.use")) {
+      player.sendMessage("§cYou don't have the required permission to use this command")
+      return true
+    }
     val action = args.firstOrNull()?.lowercase()
     if (action == "clear") {
-      tanks.toList().forEach(::destroy)
-      player.sendMessage("戦車をすべて片付けました。")
+      if (player.hasPermission("oyasaigames.admin")) {
+        tanks.toList().forEach(::destroy)
+        player.sendMessage("戦車をすべて片付けました。")
+      } else {
+        tanks.filter { it.driver?.uniqueId == player.uniqueId }.toList().forEach(::destroy)
+        player.sendMessage("自分の戦車を片付けました。")
+      }
       return true
     }
     val spec = TankRules.spec(args.getOrNull(1)?.lowercase())

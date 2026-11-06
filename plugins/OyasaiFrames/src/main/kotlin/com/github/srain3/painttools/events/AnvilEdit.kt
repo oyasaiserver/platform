@@ -39,9 +39,17 @@ object AnvilEdit : Listener {
               )
             }
           }
-          val handMeta = stateSnapshot.player.inventory.itemInMainHand.itemMeta
-          handMeta?.setDisplayName(stateSnapshot.text)
-          stateSnapshot.player.inventory.itemInMainHand.itemMeta = handMeta
+          val handItem = stateSnapshot.player.inventory.itemInMainHand
+          val handMeta = handItem.itemMeta
+          if (
+              handItem.type == Material.FEATHER &&
+                  handMeta != null &&
+                  handMeta.hasCustomModelData() &&
+                  handMeta.customModelData == 831
+          ) {
+            handMeta.setDisplayName(stateSnapshot.text)
+            handItem.itemMeta = handMeta
+          }
           return@onClick listOf(AnvilGUI.ResponseAction.close())
         }
         plugin(ToolBox.pl)
