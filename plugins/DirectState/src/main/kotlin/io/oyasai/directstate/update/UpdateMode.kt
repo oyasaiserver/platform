@@ -38,6 +38,7 @@ internal class UpdateMode(
     private val personalSetting: (Player) -> Boolean,
     private val writePersonalSetting: (Player, Boolean) -> Unit,
     private val write: (Player, Block, BlockData) -> Unit,
+    private val naturalLocks: NaturalUpdateLock = NaturalUpdateLock(plugin),
 ) : Listener {
   /** UpdateGuardのキーに使う、ワールドとブロック座標。 */
   private data class Position(val world: UUID, val x: Int, val y: Int, val z: Int)
@@ -98,7 +99,15 @@ internal class UpdateMode(
 
   /** 永続固定する */
   fun afterEdit(player: Player, blocks: List<Block>) {
-    if (enabled(player)) blocks.forEach { setDaylightLocked(it, true) }
+    naturalLocks.forget(blocks)
+    if (!enabled(player)) return
+    blocks.forEach { setDaylightLocked(it, true) }
+    naturalLocks.freeze(blocks)
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  fun unload(event: org.bukkit.event.world.ChunkUnloadEvent) {
+    naturalLocks.flush()
   }
 
   private fun setDaylightLocked(block: Block, locked: Boolean) {
@@ -135,6 +144,7 @@ internal class UpdateMode(
 
   /** 編集元の周囲2ブロックを保存し、短時間の更新抑制対象として登録する。 */
   fun beforeEdit(player: Player, roots: List<Block>) {
+    naturalLocks.forget(roots)
     roots.forEach { guard.forget(position(it)) }
     if (!enabled(player)) return
     val nearby = mutableMapOf<Position, Saved>()
@@ -465,6 +475,7 @@ internal class UpdateMode(
 
   /** 停止時にボタンを戻し、すべての保留状態を破棄する。 */
   fun close() {
+    naturalLocks.flush()
     buttons.values.toList().forEach(::resetButton)
     buttons.clear()
     guard.clear()
