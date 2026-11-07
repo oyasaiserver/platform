@@ -198,6 +198,90 @@ class SurvivalHarvestTest {
         verify(block, never()).getRelative(any(BlockFace.class));
     }
 
+    // Column at (x, z): ground, then `height` sugar cane, then air. Index 0 is the bottom cane.
+    private List<Block> caneAt(java.util.Map<String, Block> field, int x, int z, int height) {
+        var column = new java.util.ArrayList<Block>();
+        Block ground = mock(Block.class);
+        when(ground.getType()).thenReturn(Material.GRASS_BLOCK);
+        Block air = mock(Block.class);
+        when(air.getType()).thenReturn(Material.AIR);
+        for (int y = 0; y < height; y++) {
+            Block cane = mock(Block.class);
+            when(cane.getType()).thenReturn(Material.SUGAR_CANE);
+            when(cane.getDrops(tool, player)).thenReturn(List.of(drop));
+            when(cane.getWorld()).thenReturn(world);
+            when(cane.getLocation()).thenReturn(new Location(world, x, 64 + y, z));
+            column.add(cane);
+        }
+        for (int y = 0; y < height; y++) {
+            Block below = y == 0 ? ground : column.get(y - 1);
+            Block above = y == height - 1 ? air : column.get(y + 1);
+            Block cane = column.get(y);
+            int level = y;
+            when(cane.getRelative(any(BlockFace.class))).thenAnswer(invocation -> {
+                BlockFace face = invocation.getArgument(0);
+                if (face == BlockFace.UP) return above;
+                if (face == BlockFace.DOWN) return below;
+                Block side = field.get((x + face.getModX()) + "," + level + "," + (z + face.getModZ()));
+                return side == null ? air : side;
+            });
+            field.put(x + "," + y + "," + z, cane);
+        }
+        return column;
+    }
+
+    @Test
+    void sugarCaneKeepsBottomAndCutsTopFirst() {
+        var column = caneAt(new HashMap<>(), 0, 0, 3);
+        when(event.getClickedBlock()).thenReturn(column.get(1));
+
+        plugin.onInteract(event);
+
+        var order = inOrder(column.get(2), column.get(1));
+        order.verify(column.get(2)).setType(Material.AIR, false);
+        order.verify(column.get(1)).setType(Material.AIR, false);
+        verify(column.get(0), never()).setType(any(), anyBoolean());
+        verify(world, times(2)).dropItemNaturally(any(), eq(drop));
+        verify(event, atLeastOnce()).setCancelled(true);
+    }
+
+    @Test
+    void sugarCaneStopsAtProtectedBlockAndIgnoresSingleBlock() {
+        var column = caneAt(new HashMap<>(), 0, 0, 3);
+        when(event.getClickedBlock()).thenReturn(column.get(2));
+        doAnswer(invocation -> {
+            BlockBreakEvent harvest = invocation.getArgument(0);
+            if (harvest.getBlock() == column.get(2)) harvest.setCancelled(true);
+            return null;
+        }).when(manager).callEvent(any(BlockBreakEvent.class));
+        plugin.onInteract(event);
+        verify(column.get(1), never()).setType(any(), anyBoolean());
+
+        var single = caneAt(new HashMap<>(), 5, 5, 1);
+        when(event.getClickedBlock()).thenReturn(single.get(0));
+        plugin.onInteract(event);
+        verify(single.get(0), never()).setType(any(), anyBoolean());
+        verify(event, never()).setCancelled(anyBoolean());
+        verifyNoInteractions(world);
+    }
+
+    @Test
+    void sneakingCutsNeighbouringSugarCane() {
+        var field = new HashMap<String, Block>();
+        var left = caneAt(field, 0, 0, 3);
+        var right = caneAt(field, 1, 0, 2);
+        when(event.getClickedBlock()).thenReturn(left.get(2));
+        when(player.isSneaking()).thenReturn(true);
+
+        plugin.onInteract(event);
+
+        verify(left.get(1)).setType(Material.AIR, false);
+        verify(left.get(2)).setType(Material.AIR, false);
+        verify(right.get(1)).setType(Material.AIR, false);
+        verify(left.get(0), never()).setType(any(), anyBoolean());
+        verify(right.get(0), never()).setType(any(), anyBoolean());
+    }
+
     @Test
     void cancelsFarmlandTrampleOnly() {
         doCallRealMethod().when(plugin).onTrample(event);
