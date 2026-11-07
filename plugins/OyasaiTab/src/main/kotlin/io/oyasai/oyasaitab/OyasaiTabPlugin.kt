@@ -20,6 +20,7 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.plugin.messaging.PluginMessageListener
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.scoreboard.Criteria
 import org.bukkit.scoreboard.DisplaySlot
@@ -98,14 +99,17 @@ private class FullOyasaiTabRuntime(
     private val luckPerms: LuckPerms,
     private val config: OyasaiTabConfig,
     private val isAfk: (Player) -> Boolean,
-) : OyasaiTabRuntime, Listener {
+) : OyasaiTabRuntime, Listener, PluginMessageListener {
   private val legacy = LegacyComponentSerializer.legacyAmpersand()
   private val network = PaperTabSnapshotBridge(plugin, config)
   private val lastPlayerListNames = mutableMapOf<UUID, String>()
   private var task: BukkitTask? = null
+  private var networkPlayerCount: Int? = null
+  private var networkPlayerCountReceivedAt = 0L
 
   override fun start(): OyasaiTabRuntime {
     network.start()
+    Bukkit.getMessenger().registerIncomingPluginChannel(plugin, OYASAI_TAB_CHANNEL, this)
     ensurePingObjective()
     cleanupEmptyOwnTeams()
     Bukkit.getPluginManager().registerEvents(this, plugin)
@@ -119,6 +123,7 @@ private class FullOyasaiTabRuntime(
     task?.cancel()
     task = null
     network.stop()
+    Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin, OYASAI_TAB_CHANNEL, this)
     HandlerList.unregisterAll(this)
     lastPlayerListNames.clear()
     scoreboard.getObjective(PING_OBJECTIVE)?.let {
@@ -135,6 +140,13 @@ private class FullOyasaiTabRuntime(
     scoreboard.getObjective(PING_OBJECTIVE)?.getScore(event.player.name)?.resetScore()
   }
 
+  override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
+    if (channel != OYASAI_TAB_CHANNEL) return
+    val count = runCatching { OyasaiTabNetworkCountCodec.decode(message) }.getOrNull() ?: return
+    networkPlayerCount = count
+    networkPlayerCountReceivedAt = System.nanoTime()
+  }
+
   private fun updateAll() {
     val players = Bukkit.getOnlinePlayers().toList()
     val profiles = players.associateWith { profile(it) }
@@ -147,7 +159,10 @@ private class FullOyasaiTabRuntime(
         )
     val allLikes = Data.userLikesInt.values.sum()
     val buildings = Data.getBuildingInt()
-    val online = players.size
+    val online =
+        networkPlayerCount.takeIf {
+          System.nanoTime() - networkPlayerCountReceivedAt <= 5_000_000_000L
+        } ?: players.size
     val tps = TablistFormatter.formatTps(Bukkit.getTPS().firstOrNull() ?: 0.0)
     val version = Bukkit.getMinecraftVersion()
 

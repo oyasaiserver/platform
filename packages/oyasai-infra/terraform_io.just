@@ -16,7 +16,7 @@ list_workspaces:
     curl \
       -v \
       -L \
-      --fail \
+      --fail-with-body \
       -H "{{ auth_header }}" \
       -H "{{ content_type_header }}" \
       "{{ org_base_url }}/workspaces"
@@ -58,7 +58,7 @@ delete_workspace workspace:
     curl \
       -v \
       -L \
-      --fail \
+      --fail-with-body \
       -H "{{ auth_header }}" \
       -H "{{ content_type_header }}" \
       -X POST \

@@ -1,0 +1,19 @@
+# 倉庫を探す距離
+radius: 16
+debug:
+  bench: false # コンソール専用の破壊的な性能測定用設備・コマンド
+# radius は 0 以上、この値以下に制限されます。大きな値は処理負荷が増えます。
+max-radius: 32
+# 取り出した個数が多い順に表示・強調する容器数（0以下では内訳・強調なし）
+show-max-lines: 5
+# 表示した容器のブロック中心に、実行者だけに見えるパーティクルを4個ずつ出す
+highlight: true
+warehouse:
+  max-volume: 131072 # 64 * 64 * 32
+  max-per-player: 3
+  link-distance: 64 # 倉庫の範囲から各軸の最短距離。境界を含む
+  max-links: 4 # ラージチェストは両半分で1件
+  stacks-per-tick: 32
+performance:
+  snapshot-containers-per-tick: 16 # 索引初期読込の容器数/tick（ラージチェストは各半分を1として数える）
+  log-slow-ms: 20 # メインスレッドの読み取り・移動の1 tick分が超過したらWARN

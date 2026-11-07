@@ -17,6 +17,7 @@ import io.oyasai.directstate.settings.PlayerSettingsStore
 import io.oyasai.directstate.update.PlayerUpdateRule
 import io.oyasai.directstate.update.UpdateMode
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
 import org.bukkit.block.data.BlockData
 import org.bukkit.entity.Player
@@ -37,6 +38,20 @@ class DirectState : JavaPlugin() {
   }
 
   override fun onEnable() {
+    saveDefaultConfig()
+    val ignoredBlockPdcKeys =
+        config
+            .getStringList("ignored-block-pdc-keys")
+            .mapNotNull { value ->
+              NamespacedKey.fromString(value)?.takeIf { ':' in value }
+                  ?: run {
+                    logger.warning(
+                        "Invalid ignored-block-pdc-keys entry: $value (expected namespace:key)"
+                    )
+                    null
+                  }
+            }
+            .toSet()
     playerSettings = PlayerSettingsStore(dataFolder, logger)
     playerSettings.load()
 
@@ -75,6 +90,11 @@ class DirectState : JavaPlugin() {
             shapeEditor,
             handEditor,
             blockReplacement,
+            ignoredBlockPdcKeys,
+            canEditEntity = { player, location ->
+              !server.pluginManager.isPluginEnabled("WorldGuard") ||
+                  WorldGuardUpdates.canBuild(player, location)
+            },
         )
     // 同じ優先度のUpdate Modeより先に、通常の編集イベントを処理する。
     server.pluginManager.registerEvents(interactions, this)

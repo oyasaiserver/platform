@@ -115,6 +115,9 @@ internal object BlockStateEditor {
           rule<Observer>("observer", { it.material.name == "OBSERVER" }, ::editObserver),
       )
 
+  internal val geometryRuleIds
+    get() = geometryRules.map { it.id }
+
   /** falseならクリックを消費せず、Minecraft本来の操作へ譲る。 */
   fun supports(data: BlockData): Boolean {
     val name = data.material.name
@@ -144,6 +147,7 @@ internal object BlockStateEditor {
       is SculkCatalyst,
       is SculkShrieker,
       is SeaPickle,
+      is ShelfMushroom,
       is FlowerBed,
       is LeafLitter,
       is Dripleaf,
@@ -184,7 +188,8 @@ internal object BlockStateEditor {
       data is Directional && isFacingMaterial(name) -> true
       data is EndPortalFrame && name == "END_PORTAL_FRAME" -> true
       data is Chest && name == "CHEST" -> true
-      data is Bell && name == "BELL" || name == "ENCHANTING_TABLE" -> true
+      data is Bell && name == "BELL" -> true
+      name == "ENCHANTING_TABLE" -> true
       data is Scaffolding && name == "SCAFFOLDING" -> true
       data is Bisected && name in twoBlockPlantMaterials -> true
       data is MultipleFacing && name in mushroomFaceMaterials -> true
@@ -581,6 +586,10 @@ internal object BlockStateEditor {
       }
       data is SeaPickle -> {
         data.pickles = next(data.pickles, data.maximumPickles, data.minimumPickles)
+      }
+      data is ShelfMushroom -> {
+        if (face in horizontalFaces) cycleFacing(data)
+        else data.age = next(data.age, data.maximumAge)
       }
       data is FlowerBed -> {
         if (face in horizontalFaces) cycleFacing(data)

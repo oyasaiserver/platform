@@ -4,9 +4,13 @@ import com.destroystokyo.paper.event.block.BlockDestroyEvent
 import io.oyasai.directstate.Permissions
 import io.papermc.paper.event.player.PlayerOpenSignEvent
 import java.util.UUID
+import org.bukkit.GameMode
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Tag
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
+import org.bukkit.block.DaylightDetector
 import org.bukkit.block.data.Bisected
 import org.bukkit.block.data.BlockData
 import org.bukkit.block.data.Openable
@@ -22,6 +26,7 @@ import org.bukkit.event.hanging.HangingBreakEvent
 import org.bukkit.event.player.*
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 
 // AI生成
@@ -33,6 +38,7 @@ internal class UpdateMode(
     private val personalSetting: (Player) -> Boolean,
     private val writePersonalSetting: (Player, Boolean) -> Unit,
     private val write: (Player, Block, BlockData) -> Unit,
+    private val naturalLocks: NaturalUpdateLock = NaturalUpdateLock(plugin),
 ) : Listener {
   /** UpdateGuardのキーに使う、ワールドとブロック座標。 */
   private data class Position(val world: UUID, val x: Int, val y: Int, val z: Int)
@@ -48,13 +54,22 @@ internal class UpdateMode(
       val at: Long,
   )
 
+  private val daylightLock = NamespacedKey(plugin, "daylight-locked")
   private val guard = UpdateGuard<Position, Saved>()
   private val buttons = mutableMapOf<Position, ButtonReset>()
   private var tick = 0L
-  private val forcePlacement = ForcePlacement(plugin, ::protectPlacement)
+  private val cushions = CushionSupport(plugin, ::enabled)
+  private val forcePlacement =
+      ForcePlacement(
+          plugin,
+          placeCushion = cushions::place,
+          enabled = ::enabled,
+          protectPlacement = ::protectPlacement,
+      )
 
   init {
     plugin.server.pluginManager.registerEvents(forcePlacement, plugin)
+    plugin.server.pluginManager.registerEvents(cushions, plugin)
     plugin.server.scheduler.runTaskTimer(plugin, Runnable { tick() }, 1L, 1L)
   }
 
@@ -82,6 +97,33 @@ internal class UpdateMode(
   /** ブロックのチャンクが現在読み込まれているか調べる。 */
   private fun loaded(block: Block) = block.world.isChunkLoaded(block.x shr 4, block.z shr 4)
 
+  /** 永続固定する */
+  fun afterEdit(player: Player, blocks: List<Block>) {
+    naturalLocks.forget(blocks)
+    if (!enabled(player)) return
+    blocks.forEach { setDaylightLocked(it, true) }
+    naturalLocks.freeze(blocks)
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  fun unload(event: org.bukkit.event.world.ChunkUnloadEvent) {
+    naturalLocks.flush()
+  }
+
+  private fun setDaylightLocked(block: Block, locked: Boolean) {
+    if (block.type != Material.DAYLIGHT_DETECTOR) return
+    val state = block.state as? DaylightDetector ?: return
+    val pdc = state.persistentDataContainer
+    if (pdc.has(daylightLock) == locked) return
+    if (locked) pdc.set(daylightLock, PersistentDataType.BYTE, 1.toByte())
+    else pdc.remove(daylightLock)
+    check(state.update(false, false)) { "Could not save daylight lock at ${block.location}" }
+  }
+
+  private fun daylightLocked(block: Block) =
+      block.type == Material.DAYLIGHT_DETECTOR &&
+          (block.state as? DaylightDetector)?.persistentDataContainer?.has(daylightLock) == true
+
   /** ベッドの相を返す。 */
   private fun bedCounterpart(block: Block): Block? {
     val data = block.blockData as? Bed ?: return null
@@ -102,6 +144,7 @@ internal class UpdateMode(
 
   /** 編集元の周囲2ブロックを保存し、短時間の更新抑制対象として登録する。 */
   fun beforeEdit(player: Player, roots: List<Block>) {
+    naturalLocks.forget(roots)
     roots.forEach { guard.forget(position(it)) }
     if (!enabled(player)) return
     val nearby = mutableMapOf<Position, Saved>()
@@ -137,6 +180,7 @@ internal class UpdateMode(
         if (event is BlockMultiPlaceEvent) event.replacedBlockStates.map { it.block }
         else listOf(event.blockPlaced)
     beforeEdit(event.player, blocks)
+    afterEdit(event.player, blocks)
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -150,9 +194,32 @@ internal class UpdateMode(
   /** 感圧操作を止め、右クリックのボタン・ドア等を更新なしの直接編集へ変える。 */
   fun interact(event: PlayerInteractEvent) {
     val player = event.player
-    if (!enabled(player)) return
+    val suppress = enabled(player)
     val block = event.clickedBlock ?: return
     if (event.useInteractedBlock() == Event.Result.DENY) return
+    if (
+        event.action == Action.RIGHT_CLICK_BLOCK &&
+            block.type == Material.DAYLIGHT_DETECTOR &&
+            !isTool(event.item) &&
+            (player.gameMode == GameMode.SURVIVAL || player.gameMode == GameMode.CREATIVE) &&
+            !(player.isSneaking &&
+                (!player.inventory.itemInMainHand.type.isAir ||
+                    !player.inventory.itemInOffHand.type.isAir))
+    ) {
+      if (suppress) {
+        event.setUseInteractedBlock(Event.Result.DENY)
+        event.setUseItemInHand(Event.Result.DENY)
+        if (event.hand != EquipmentSlot.HAND) return
+        val data = block.blockData as org.bukkit.block.data.type.DaylightDetector
+        data.isInverted = !data.isInverted
+        write(player, block, data)
+        afterEdit(player, listOf(block))
+      } else if (event.hand == EquipmentSlot.HAND && Permissions.has(player, Permissions.UPDATE)) {
+        setDaylightLocked(block, false)
+      }
+      return
+    }
+    if (!suppress) return
     if (event.action == Action.PHYSICAL) {
       // 信号が発生する前に、プレイヤー位置を起点とするプレート作動・トリップワイヤー・踏み荒らしを防ぐ。
       event.setUseInteractedBlock(Event.Result.DENY)
@@ -166,7 +233,8 @@ internal class UpdateMode(
         player.isSneaking &&
             (!player.inventory.itemInMainHand.type.isAir ||
                 !player.inventory.itemInOffHand.type.isAir)
-    val directlyToggleable = (data is Switch || data is Openable) && !holdingItemWhileSneaking
+    val directlyToggleable =
+        (data is Switch || VanillaInteraction.opensByHand(data)) && !holdingItemWhileSneaking
     if (directlyToggleable) {
       event.setUseInteractedBlock(Event.Result.DENY)
       if (event.hand != EquipmentSlot.HAND) return
@@ -244,7 +312,9 @@ internal class UpdateMode(
   @EventHandler(priority = EventPriority.HIGHEST)
   /** 周辺ブロックのレッドストーン出力を現在値に固定する。 */
   fun redstone(event: BlockRedstoneEvent) {
-    if (guard.neighbor(position(event.block), tick)) event.newCurrent = event.oldCurrent
+    // 同じBlockStateならサーバーが周囲への更新通知前に終了する。
+    if (guard.neighbor(position(event.block), tick) || daylightLocked(event.block))
+        event.newCurrent = event.oldCurrent
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -405,6 +475,7 @@ internal class UpdateMode(
 
   /** 停止時にボタンを戻し、すべての保留状態を破棄する。 */
   fun close() {
+    naturalLocks.flush()
     buttons.values.toList().forEach(::resetButton)
     buttons.clear()
     guard.clear()

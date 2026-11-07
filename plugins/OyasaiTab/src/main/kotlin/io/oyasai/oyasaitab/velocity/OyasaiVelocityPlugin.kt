@@ -17,6 +17,7 @@ import com.velocitypowered.api.proxy.player.TabListEntry
 import io.oyasai.oyasaitab.CrossServerTabEntry
 import io.oyasai.oyasaitab.CrossServerTabLogic
 import io.oyasai.oyasaitab.OYASAI_TAB_CHANNEL
+import io.oyasai.oyasaitab.OyasaiTabNetworkCountCodec
 import io.oyasai.oyasaitab.OyasaiTabSnapshotCodec
 import io.oyasai.oyasaitab.TAB_SECTION_SERIALIZER
 import java.nio.file.Files
@@ -60,6 +61,18 @@ constructor(
     }
     reapplyDelay = loadReapplyDelay(configPath)
     proxy.channelRegistrar.register(identifier)
+    proxy.scheduler
+        .buildTask(
+            this,
+            Runnable {
+              val data = OyasaiTabNetworkCountCodec.encode(proxy.playerCount)
+              proxy.allServers
+                  .filter { it.playersConnected.isNotEmpty() }
+                  .forEach { it.sendPluginMessage(identifier, data) }
+            },
+        )
+        .repeat(Duration.ofSeconds(1))
+        .schedule()
     logger.info("OyasaiTab Velocity bridge enabled.")
   }
 

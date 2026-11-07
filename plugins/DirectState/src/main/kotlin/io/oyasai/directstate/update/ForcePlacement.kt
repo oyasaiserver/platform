@@ -1,6 +1,7 @@
 package io.oyasai.directstate.update
 
-import io.oyasai.directstate.edit.hand.HandGeometry.horizontalFaces
+import io.oyasai.directstate.integration.BlockEntityAccess
+import io.papermc.paper.datacomponent.DataComponentTypes
 import java.util.UUID
 import org.bukkit.*
 import org.bukkit.block.Block
@@ -8,27 +9,30 @@ import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockState
 import org.bukkit.block.data.*
 import org.bukkit.block.data.type.*
+import org.bukkit.entity.Cushion
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Vehicle
 import org.bukkit.event.*
+import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockCanBuildEvent
 import org.bukkit.event.block.BlockMultiPlaceEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.BannerMeta
-import org.bukkit.inventory.meta.BlockDataMeta
-import org.bukkit.inventory.meta.BlockStateMeta
-import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.util.Vector
 
 /** 強制配置。通常の有効な配置はバニラのパイプラインに残す。 */
 internal class ForcePlacement(
     private val plugin: JavaPlugin,
+    private val createBlockData: (Material) -> BlockData = { it.createBlockData() },
+    private val applyItem: (Player, Block, ItemStack) -> Unit = BlockEntityAccess::applyItem,
+    private val placeCushion: ((PlayerInteractEvent, Block) -> Unit)? = null,
+    private val enabled: (Player) -> Boolean = { false },
     private val protectPlacement: (Player, Map<Block, BlockData>) -> Unit,
 ) : Listener {
   /** 複数ブロック配置を構成する、一つの座標と配置後状態。 */
@@ -37,10 +41,44 @@ internal class ForcePlacement(
   /** 同じクリックから届く逆の手のイベントを重複処理しないための記録。 */
   private data class HandledClick(val tick: Int, val hand: EquipmentSlot)
 
+  private val horizontal = setOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
   private val handled = mutableMapOf<UUID, HandledClick>()
 
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun cushion(event: PlayerInteractAtEntityEvent) {
+    val cushion = event.rightClicked as? Cushion ?: return
+    val player = event.player
+    if (!enabled(player) || !allowed(player)) return
+    val item = player.inventory.getItem(event.hand)
+    if (placementMaterial(item) == null) return
+    val point = event.clickedPosition.clone().add(cushion.location.toVector())
+    if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
+    val eye = player.eyeLocation.toVector()
+    val direction = point.subtract(eye)
+    if (direction.lengthSquared() == 0.0) return
+    val hit = cushion.boundingBox.rayTrace(eye, direction, 6.0) ?: return
+    val face = hit.hitBlockFace ?: return
+    if (face != BlockFace.UP && face != BlockFace.DOWN && face !in horizontal) return
+    // 面のわずか内側のセルをクリック元にし、境界上でも隣のセルを取り違えない。 隣接したブロックに判定が吸われないようにする。
+    val inside = hit.hitPosition.clone().subtract(face.direction.multiply(1.0e-7))
+    val clicked = cushion.world.getBlockAt(inside.blockX, inside.blockY, inside.blockZ)
+    val interaction =
+        PlayerInteractEvent(
+            player,
+            Action.RIGHT_CLICK_BLOCK,
+            item,
+            clicked,
+            face,
+            event.hand,
+            hit.hitPosition.clone().subtract(clicked.location.toVector()),
+        )
+    if (tryPlace(interaction, onCushion = true)) event.isCancelled = true
+  }
+
   /** バニラが支持不足で拒否する配置だけを再現する。 trueはこの層がイベントを処理済み、falseはバニラ配置へ譲ることを表す。 */
-  fun tryPlace(event: PlayerInteractEvent): Boolean {
+  fun tryPlace(event: PlayerInteractEvent): Boolean = tryPlace(event, onCushion = false)
+
+  private fun tryPlace(event: PlayerInteractEvent, onCushion: Boolean): Boolean {
     val player = event.player
     val hand = event.hand ?: return false
     val clicked = event.clickedBlock ?: return false
@@ -56,26 +94,32 @@ internal class ForcePlacement(
     val item = event.item ?: return false
     if (!allowed(player) || item.amount <= 0 || event.useItemInHand() == Event.Result.DENY)
         return false
+    if (Tag.ITEMS_CUSHIONS.isTagged(item.type)) {
+      val place = placeCushion ?: return false
+      if (VanillaInteraction.consumesClick(event)) return false
+      val point = event.interactionPoint ?: return false
+      if (point.blockY !in clicked.world.minHeight until clicked.world.maxHeight) return false
+      val offset = if (clicked.isReplaceable) BlockFace.SELF else event.blockFace
+      val target =
+          clicked.world.getBlockAt(clicked.x + offset.modX, point.blockY, clicked.z + offset.modZ)
+      if (!withinBounds(player, clicked) || !withinBounds(player, target)) return false
+      event.isCancelled = true
+      handled[player.uniqueId] = HandledClick(Bukkit.getCurrentTick(), hand)
+      place(event, target)
+      return true
+    }
     // ボタンやチェストなどの通常の使用と配置の挙動を維持する。それらに向けてしゃがむと配置する。
-    if (
-        prefersVanillaInteraction(clicked) &&
-            !player.isSneaking &&
-            !(clicked.type == Material.REDSTONE_WIRE && item.type == Material.REDSTONE)
-    )
-        return false
     val material = placementMaterial(item) ?: return false
+    if (!onCushion && VanillaInteraction.consumesClick(event)) return false
     val signMaterial = material.name.endsWith("_SIGN")
     // 上下クリックの吊り看板だけは、バニラでは支持判定前に拒否されるため強制配置する。
     val forcedHangingSign =
         material.name.endsWith("_HANGING_SIGN") &&
             !material.name.endsWith("_WALL_HANGING_SIGN") &&
             faceIsFloorOrCeiling(event.blockFace)
-    // 看板は強制配置後にBlockStateMetaを配置先へコピーする。それ以外のブロックエンティティはネイティブ配置に任せる。
-    val meta = item.itemMeta
-    if ((meta is BlockStateMeta || meta is SkullMeta || meta is BannerMeta) && !signMaterial)
-        return false
     val face = event.blockFace
-    val target = placementTarget(clicked, material, face)
+    val target =
+        if (onCushion) clicked.getRelative(face) else placementTarget(clicked, material, face)
     if (!withinBounds(player, target) || !target.isReplaceable) return false
     val point =
         event.interactionPoint?.toVector()?.subtract(target.location.toVector()) ?: return false
@@ -101,9 +145,10 @@ internal class ForcePlacement(
     val needsForcedPlacement =
         material == Material.KELP ||
             material == Material.SEAGRASS ||
+            onCushion ||
             forcedHangingSign ||
             (signMaterial && clicked.isReplaceable)
-    if (state.isSupported(target) && !needsForcedPlacement) return false
+    if (!needsForcedPlacement && state.isSupported(target)) return false
 
     event.isCancelled = true
     handled[player.uniqueId] = HandledClick(Bukkit.getCurrentTick(), hand)
@@ -121,8 +166,18 @@ internal class ForcePlacement(
     if (!checkedItem.isSimilar(originalItem) || checkedItem.amount != originalItem.amount)
         return true
     protectPlacement(player, parts.associate { it.block to it.data })
-    parts.forEach { it.block.setBlockData(it.data, false) }
-    if (signMaterial) copySignState(item, target)
+    try {
+      parts.forEach { it.block.setBlockData(it.data, false) }
+      applyItem(player, target, originalItem)
+    } catch (error: Exception) {
+      restore(player, previousStates)
+      plugin.logger.log(
+          java.util.logging.Level.WARNING,
+          "Force placement reverted because item data could not be applied.",
+          error,
+      )
+      return true
+    }
     val placeEvent =
         if (parts.size == 1) {
           BlockPlaceEvent(
@@ -224,6 +279,7 @@ internal class ForcePlacement(
   /** アイテムから配置ブロック材質を取得し、RedstoneとStringの特殊名も補う。 */
   private fun placementMaterial(item: ItemStack): Material? =
       when (item.type) {
+        Material.POWDER_SNOW_BUCKET -> null // バケツの返却は通常の液体配置に任せる。
         Material.REDSTONE -> Material.REDSTONE_WIRE
         Material.STRING -> Material.TRIPWIRE
         else ->
@@ -236,10 +292,6 @@ internal class ForcePlacement(
                 ?.let(Material::matchMaterial)
       }
 
-  /** 通常の右クリック動作を持つブロックなら、強制配置よりバニラ操作を優先する。 Paperには正確な代替APIがないため、非推奨呼び出しをここだけに限定する。 */
-  @Suppress("DEPRECATION")
-  private fun prefersVanillaInteraction(block: Block) = block.type.isInteractable
-
   /** アイテム・クリック面・視線から、強制配置後のBlockDataを組み立てる。 */
   private fun placementState(
       material: Material,
@@ -251,29 +303,33 @@ internal class ForcePlacement(
       target: Block,
   ): BlockData? {
     val wallOrTorch =
-        if (face in horizontalFaces)
+        if (face in horizontal)
             when (material) {
               Material.TORCH -> Material.WALL_TORCH
               Material.SOUL_TORCH -> Material.SOUL_WALL_TORCH
               Material.REDSTONE_TORCH -> Material.REDSTONE_WALL_TORCH
-              else -> wallSignVariant(material)
+              else -> wallVariant(material)
             }
         else material
     val actual = hangingSignVariant(wallOrTorch, face)
-    val data = actual.createBlockData()
+    val data = createBlockData(actual)
     if (data is Directional) {
       val direction =
           when (data) {
-            is Switch -> if (face in horizontalFaces) face else playerFacing
+            is Switch -> if (face in horizontal) face else playerFacing
             is TripwireHook,
-            is Ladder -> if (face in horizontalFaces) face else playerFacing.oppositeFace
+            is Ladder,
+            is ShelfMushroom -> if (face in horizontal) face else playerFacing.oppositeFace
             is AmethystCluster -> face
             is WallHangingSign -> wallHangingSignFacing(face, playerFacing, lookDirection)
-            is WallSign -> if (face in horizontalFaces) face else playerFacing.oppositeFace
+            is WallSign,
+            is WallSkull -> if (face in horizontal) face else playerFacing.oppositeFace
             is Door,
             is Bed,
             is Stairs -> playerFacing
-            else -> if (actual.name.endsWith("WALL_TORCH")) face else playerFacing.oppositeFace
+            else ->
+                if (actual.name.endsWith("WALL_TORCH") || actual.name.endsWith("_WALL_BANNER")) face
+                else playerFacing.oppositeFace
           }
       if (direction in data.faces) data.facing = direction
     }
@@ -314,8 +370,6 @@ internal class ForcePlacement(
           } else playerFacing.oppositeFace
     }
     if (data is Waterlogged) data.isWaterlogged = target.type == Material.WATER
-    val meta = item.itemMeta
-    if (meta is BlockDataMeta && meta.hasBlockData()) meta.getBlockData(actual).copyTo(data)
     if (
         data is MultipleFacing &&
             actual.name in setOf("VINE", "GLOW_LICHEN", "SCULK_VEIN", "RESIN_CLUMP")
@@ -333,7 +387,7 @@ internal class ForcePlacement(
           (target.blockData as? MultipleFacing)?.takeIf { it.material == actual }?.faces.orEmpty()
       data.allowedFaces.forEach { data.setFace(it, it.name == support.name || it in existing) }
     }
-    return data
+    return item.getData(DataComponentTypes.BLOCK_DATA)?.applyTo(data) ?: data
   }
 
   /** 壁吊り看板をクリック面と直交させ、視線側へ正面を向ける。 */
@@ -360,36 +414,17 @@ internal class ForcePlacement(
     ) ?: material
   }
 
-  /** 通常看板を横面用の壁看板へ変える。 */
-  private fun wallSignVariant(material: Material): Material {
-    if (
-        !material.name.endsWith("_SIGN") ||
-            material.name.endsWith("_WALL_SIGN") ||
-            material.name.endsWith("_HANGING_SIGN")
-    )
-        return material
-    return Material.matchMaterial(material.name.removeSuffix("_SIGN") + "_WALL_SIGN") ?: material
+  /** 看板・旗・頭は、同じアイテムでも横面では壁用のブロックを置く。 */
+  private fun wallVariant(material: Material): Material {
+    if (material.name.contains("_WALL_") || material.name.endsWith("_HANGING_SIGN")) return material
+    val suffix =
+        listOf("_SIGN", "_BANNER", "_SKULL", "_HEAD").firstOrNull { material.name.endsWith(it) }
+            ?: return material
+    return Material.matchMaterial(material.name.removeSuffix(suffix) + "_WALL" + suffix) ?: material
   }
 
   /** 上面または下面へのクリックか調べる。 */
   private fun faceIsFloorOrCeiling(face: BlockFace) = face == BlockFace.UP || face == BlockFace.DOWN
-
-  /** BlockStateMetaが持つ看板の文字・色・発光・編集状態を配置先へコピーする。 */
-  private fun copySignState(item: ItemStack, target: Block) {
-    val meta = item.itemMeta as? BlockStateMeta ?: return
-    if (!meta.hasBlockState()) return
-    val source = meta.blockState as? org.bukkit.block.Sign ?: return
-    val destination = target.state as? org.bukkit.block.Sign ?: return
-    for (side in org.bukkit.block.sign.Side.entries) {
-      val sourceSide = source.getSide(side)
-      val destinationSide = destination.getSide(side)
-      for (line in 0 until 4) destinationSide.line(line, sourceSide.line(line))
-      destinationSide.color = sourceSide.color
-      destinationSide.isGlowingText = sourceSide.isGlowingText
-    }
-    destination.isWaxed = source.isWaxed
-    destination.update(true, false)
-  }
 
   /** ベッド・二段ブロックを全パーツへ展開し、単体ブロックは一件だけ返す。 */
   private fun parts(target: Block, data: BlockData): List<Part> {

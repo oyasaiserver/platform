@@ -251,34 +251,28 @@ class ChatService(
         surface = ChatTextSurface.EXTERNAL_CHAT,
     )
     if (config.network.groupFor(channel) != null) {
-      val transport = plugin.server.onlinePlayers.firstOrNull()
-      if (transport == null) {
-        plugin.logger.warning(
-            "Cannot route external message on '${channel.id}': no player connection is available for plugin messaging."
-        )
-      } else {
-        val sent =
-            bridge.send(
-                transport,
-                NetworkEnvelope.backend(
-                    type = MessageType.CHANNEL_MESSAGE,
-                    backendId = config.network.backendId,
-                    channelId = channel.id,
-                    networkGroup = config.network.groupFor(channel),
-                    originBackendPrefix =
-                        config.network.remoteMessagePrefix.takeIf { it.isNotBlank() },
-                    originBackendSuffix =
-                        config.network.remoteMessageSuffix.takeIf { it.isNotBlank() },
-                    senderCanSendLinks = true,
-                    senderName = senderName,
-                    content = message,
-                ),
-            )
-        if (!sent) {
-          plugin.logger.warning(
-              "External message for '${channel.id}' was shown locally but network delivery failed."
+      val transport = plugin.server.onlinePlayers.firstOrNull() ?: return
+      val sent =
+          bridge.send(
+              transport,
+              NetworkEnvelope.backend(
+                  type = MessageType.CHANNEL_MESSAGE,
+                  backendId = config.network.backendId,
+                  channelId = channel.id,
+                  networkGroup = config.network.groupFor(channel),
+                  originBackendPrefix =
+                      config.network.remoteMessagePrefix.takeIf { it.isNotBlank() },
+                  originBackendSuffix =
+                      config.network.remoteMessageSuffix.takeIf { it.isNotBlank() },
+                  senderCanSendLinks = true,
+                  senderName = senderName,
+                  content = message,
+              ),
           )
-        }
+      if (!sent) {
+        plugin.logger.warning(
+            "External message for '${channel.id}' was shown locally but network delivery failed."
+        )
       }
     }
   }

@@ -10,7 +10,7 @@ oyasaiPurpur rec {
     force-gamemode = true;
     gamemode = "creative";
     online-mode = false; # handled by velocity
-    white-list = true;
+    white-list = false; # access is checked by OyasaiBan on velocity
     # keep-sorted end
   };
 

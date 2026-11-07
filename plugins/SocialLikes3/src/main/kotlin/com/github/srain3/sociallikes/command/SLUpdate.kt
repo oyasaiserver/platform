@@ -9,6 +9,7 @@ import com.github.srain3.sociallikes.Tools.updateLegacySLSign
 import com.github.srain3.sociallikes.Tools.updateSLSign
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLDatabase
+import com.sk89q.worldedit.IncompleteRegionException
 import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.session.SessionOwner
@@ -68,6 +69,35 @@ object SLUpdate : CommandExecutor, TabCompleter {
     return true
   }
 
+  internal sealed interface RegionSelectionResult<out T> {
+    data class Selected<out T>(val region: T) : RegionSelectionResult<T>
+
+    data class Failure(val message: String) : RegionSelectionResult<Nothing>
+  }
+
+  internal fun <W, T> resolveRegionSelection(
+      selectionWorld: W?,
+      playerWorld: W,
+      loadSelection: (W) -> T,
+      isIncompleteSelection: (Throwable) -> Boolean = { it is IncompleteRegionException },
+  ): RegionSelectionResult<T> {
+    if (selectionWorld == null) {
+      return RegionSelectionResult.Failure("&cWorldEditで範囲を選択してください。")
+    }
+    if (selectionWorld != playerWorld) {
+      return RegionSelectionResult.Failure("&c選択範囲のワールドが現在のワールドと異なります。")
+    }
+    return try {
+      RegionSelectionResult.Selected(loadSelection(playerWorld))
+    } catch (ex: Throwable) {
+      if (isIncompleteSelection(ex)) {
+        RegionSelectionResult.Failure("&cWorldEditで2点を選択してから実行してください。")
+      } else {
+        throw ex
+      }
+    }
+  }
+
   fun updateAllInRegion(player: Player) {
     val we = WorldEdit.getInstance()
     if (we == null) {
@@ -76,7 +106,22 @@ object SLUpdate : CommandExecutor, TabCompleter {
     }
     val actor = BukkitAdapter.adapt(player)
     val localSession = we.sessionManager.get(actor as SessionOwner)
-    val region = localSession.selection
+    val world = BukkitAdapter.adapt(player.world)
+    val region =
+        when (
+            val selection =
+                resolveRegionSelection(
+                    localSession?.selectionWorld,
+                    world,
+                    { localSession.getSelection(it) },
+                )
+        ) {
+          is RegionSelectionResult.Selected -> selection.region
+          is RegionSelectionResult.Failure -> {
+            player.sendMessage((Tools.socialLikesLOGO + selection.message).color())
+            return
+          }
+        }
 
     region.forEach { blockVector3 ->
       val block =

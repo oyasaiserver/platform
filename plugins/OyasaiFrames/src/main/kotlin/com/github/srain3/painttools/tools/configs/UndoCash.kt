@@ -18,8 +18,8 @@ data class UndoCash(var undoData: MutableList<MutableList<MapDataCash>?> = mutab
   }
 
   fun get(min: Int, id: Int): MutableMap<Int, Color>? {
-    return if (undoData.size == 3 && min in 1..3) {
-      undoData[3 - min]?.lastOrNull { it.checkID(id) }?.cash
+    return if (min in 1..3 && min <= undoData.size) {
+      undoData[undoData.size - min]?.lastOrNull { it.checkID(id) }?.cash?.toMutableMap()
     } else {
       null
     }

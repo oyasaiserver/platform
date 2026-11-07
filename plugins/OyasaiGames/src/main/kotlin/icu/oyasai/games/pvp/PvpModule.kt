@@ -17,6 +17,7 @@ import org.bukkit.command.TabExecutor
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
+import org.bukkit.entity.TNTPrimed
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.HandlerList
@@ -979,7 +980,12 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     val p = players[victim.uniqueId]
     val attacker =
         (e as? EntityDamageByEntityEvent)?.damager.let {
-          if (it is Player) it else (it as? Projectile)?.shooter as? Player
+          when (it) {
+            is Player -> it
+            is Projectile -> it.shooter as? Player
+            is TNTPrimed -> it.source as? Player
+            else -> null
+          }
         }
     val a = attacker?.let { players[it.uniqueId] }
     if (p == null) {

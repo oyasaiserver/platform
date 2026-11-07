@@ -62,7 +62,7 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 - グループは LuckPerms の `primaryGroup` を小文字にしたもの。ユーザーが読み込まれていなければ空文字（色なし・順位最後・`default` の名前タグ・称号なし）。
 - 名前タグ（`updateNameTag`）: 接頭辞と後置きの組から、チーム名を `nametag.team-prefix` ＋ CRC32（`group|prefix|suffix`）の base36 6 文字で作る。既存のチームに別のプラグインが入っているプレイヤーは触らない（`currentTeam != null && !ownsTeam`）。値が変わったときだけチームを更新する。
 - ping（`updatePing`）: `oyasaitab_ping` の objective（表示名 `TAB`、`PLAYER_LIST` スロット）のスコアを ping に合わせる。退出時にスコアを消す（`onQuit`）。
-- 停止（`stop`）: タイマーを止め、送信の登録を外し、objective と自分のチームだけを外す。
+- 停止（`stop`）: タイマーを止め、送受信の登録を外し、objective と自分のチームだけを外す。
 
 **Paper 側（`SnapshotOnlyOyasaiTabRuntime`）**
 
@@ -88,13 +88,14 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 - **別サーバー向けの名前（`playerNameNoBadgeLegacy`、Velocity の `remoteDisplayNameLegacy`）:** Likes のバッジを外し、Velocity 側で `§7<§6サーバー名§7>§f ` を付ける。サーバー名は `serverName.replaceFirstChar { uppercase }`（`main` → `Main`）。
 - **並び（`TabOrder.calculate`）:** AFK（0/1）→ `sort-groups` の順位（無ければ `Int.MAX_VALUE`）→ 名前の大文字小文字を無視した比較 → 名前の完全一致。`baseOrder`（1000）＋ 人数 − 順位 − 1 を listOrder にする。ローカルは 1000 以上、別サーバーは 1 から 999 の帯。
 - **別サーバーの並び（`remoteOrders`）:** サーバー名 → 名前 → UUID の順。最大 999 件まで（超えた分は表示されない）。
-- **フッター:** 所持金は `#,##0.##`、トークンは `#,##0`、TPS は `Bukkit.getTPS()` の先頭（1 分平均）を `#.##` で上限 20。人数は自サーバーのオンライン数。Likes 合計は `Data.userLikesInt` の全員分の合計（オンラインに限らない）。ヘッダーの `Likes：` は閲覧者本人の Likes、バージョンは `Bukkit.getMinecraftVersion()`。
+- **フッター:** 所持金は `#,##0.##`、トークンは `#,##0`、TPS は `Bukkit.getTPS()` の先頭（1 分平均）を `#.##` で上限 20。人数は Velocity から過去 5 秒以内に受け取ったネットワーク全体の人数を使い、未受信・期限切れなら自サーバーのオンライン数に戻す。Likes 合計は `Data.userLikesInt` の全員分の合計（オンラインに限らない）。ヘッダーの `Likes：` は閲覧者本人の Likes、バージョンは `Bukkit.getMinecraftVersion()`。
 - **名前タグ:** テンプレートは `group-prefixes[group]`、無ければ `group-prefixes.default`。後置きは `group-suffixes[group]` で、`default` には戻らない。ping は自サーバーのスコアボードにだけ出すので、Velocity が足した別サーバーの entry には付かない（コードの読み）。
 - **称号（`normalizeSuffix`）:** MiniMessage のタグを含むときは legacy 形式に変換して保存する（hex の形式を崩さないため）。
 
 ### データ形式と永続化
 
 - 送信データ（`OyasaiTabSnapshotCodec`）: 先頭 1 byte がバージョン（現在 2）、サーバー名（UTF）、人数（unsigned short）、人ごとに UUID（long 2 つ）・名前（UTF）・サーバー名（UTF）・ping（int）。人数は 1000 以下（`MAX_PLAYERS`）。バージョンが違えば例外。
+- 人数通知（`OyasaiTabNetworkCountCodec`）: 同じ `oyasaitab:main` で Velocity → Paper に送る。先頭 byte は種類 `0x80`、続く int は非負の人数（計 5 byte）。既存 snapshot の形式は変えない。Velocity は毎秒 `proxy.playerCount` をプレイヤーがいる各バックエンドへ送る。Paper は Full モードだけ受信登録し、人数と受信時刻をメモリに保持する。送信専用モードの動作と Velocity の受信メッセージ転送抑止は変わらない。
 - Velocity は受けた値を `ConcurrentHashMap` に持つ（メモリのみ）。永続化はない。
 - Paper の設定は `saveDefaultConfig()` で作る（既存のファイルは上書きしない）。Velocity の設定は、ファイルがないときだけ resource からコピーする。
 - データベースやファイルの出力はない。
@@ -124,7 +125,7 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 
 ### テストが保証する範囲
 
-`TablistFormatterTest`（16 件）が確かめる範囲:
+`TablistFormatterTest` が確かめる範囲:
 
 - タブ名・AFK 表示・ヘッダー・フッター・TPS・名前タグの書式の文字列。
 - 称号の MiniMessage → legacy 変換と、hex の読み戻し。
@@ -132,6 +133,7 @@ TAB プラグインの本番で使っている部分（ヘッダー・フッタ�
 - 別サーバーの差分（`diffForViewer`）: 除去・忘れる・移動中の二重表示の抑止。
 - 切断時の除去（再接続していれば残す）。
 - データ形式の往復（`roundTripsSnapshotCodec`）と、別サーバーの名前の表示。
+- 人数通知の往復、snapshot との識別、不正な人数・長さ・種類の拒否。
 
 テストで保証**しない**もの: Bukkit・Velocity の実動作、スコアボードのチーム・objective の挙動、送信と受信の結合、不正なデータの扱い（版違い・人数超過）、設定ファイルの読み込み、起動の分岐。
 
