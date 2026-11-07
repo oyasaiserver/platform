@@ -61,7 +61,7 @@ plugin.yml の名前は CitiesSkyMine、main は `icu.oyasai.citiesskymine.Main`
 
 ### 生成と取り消し
 
-`CsmEditSession.run` は world と（あれば）actor を指定して EditSession を作り、edit が true なら `LocalSession.remember(editSession)` → `Operations.complete(editSession.commit())` を行い、最後に close する。`changed` は編集ラムダの戻り値で、実際に変更されたブロック数の照合ではない。
+`CsmEditSession.run` は world と（あれば）actor を指定して EditSession を作り、edit が true なら `Operations.complete(editSession.commit())` を行う。close 後に、edit が true かつ player がある場合だけ `LocalSession.remember(editSession)` を呼ぶ。これは FAWE 自身のコマンドと同じ順序で、close 時のキュー処理を終えてから履歴を登録する。`changed` は編集ラムダの戻り値で、実際に変更されたブロック数の照合ではない。
 `FaweUndo.remember` は例外を警告して false を返す。配置を止めたり巻き戻したりしない。編集途中・commit の例外に対する一括復旧はない。
 
 - 道路は0.4ブロック間隔で直線・クロソイド入り／円弧／クロソイド出しをサンプルする。高さは最寄りの通過点区間へ投影して補間。道路幅ごとのラインを格子追跡し、白線→車道・歩道→除いた角の補填の順で設置する。ベジェとは別の計算である。
