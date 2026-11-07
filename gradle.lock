@@ -1685,6 +1685,12 @@
       "hash": "sha256-GE28pJp9A+Oh358Pl7RiCW6En1rQXFz3s4YibsFZ73k="
     }
   },
+  "it.unimi.dsi:fastutil:8.5.15": {
+    "fastutil-8.5.15.pom": {
+      "url": "https://repo.maven.apache.org/maven2/it/unimi/dsi/fastutil/8.5.15/fastutil-8.5.15.pom",
+      "hash": "sha256-f2baEne0E7MncoaNO1C1XF/lTiZD8bVORZbk9Sofvtg="
+    }
+  },
   "jakarta.inject:jakarta.inject-api:2.0.1": {
     "jakarta.inject-api-2.0.1.jar": {
       "url": "https://repo.maven.apache.org/maven2/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar",

@@ -45,8 +45,23 @@ class DynamicProfile : JavaPlugin() {
     val allStats = Collections.synchronizedMap(mutableMapOf<UUID, Stats>())
     val failedUser = Collections.synchronizedList(mutableListOf<UUID>())
     val playTimes = Collections.synchronizedMap(mutableMapOf<Player, BukkitRunnable>())
-    val provider: RegisteredServiceProvider<LuckPerms>? =
-        Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
+    var provider: RegisteredServiceProvider<LuckPerms>? = null
+      internal set
+
+    internal fun resolveLuckPermsProvider(
+        lookup: () -> RegisteredServiceProvider<LuckPerms>? = {
+          Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
+        }
+    ): RegisteredServiceProvider<LuckPerms>? {
+      val resolved =
+          try {
+            lookup()
+          } catch (_: Throwable) {
+            null
+          }
+      provider = resolved
+      return resolved
+    }
   }
 
   @Volatile
@@ -80,7 +95,11 @@ class DynamicProfile : JavaPlugin() {
     reloadConfig()
     NumberBanner.createBanner()
 
-    if (provider == null) {
+    if (
+        resolveLuckPermsProvider {
+          server.servicesManager.getRegistration(LuckPerms::class.java)
+        } == null
+    ) {
       logger.warning("LuckPerms is not found.")
     }
     loader.submit {
