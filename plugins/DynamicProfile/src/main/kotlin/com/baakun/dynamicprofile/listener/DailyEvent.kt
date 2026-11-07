@@ -1,5 +1,6 @@
 package com.baakun.dynamicprofile.listener
 
+import com.baakun.dynamicprofile.DynamicProfile.Companion.allStats
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allUser
 import com.baakun.dynamicprofile.DynamicProfile.Companion.failedUser
 import com.baakun.dynamicprofile.DynamicProfile.Companion.playTimes
@@ -10,7 +11,9 @@ import com.baakun.dynamicprofile.util.Tools.saveStats
 import com.vexsoftware.votifier.model.VotifierEvent
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -85,9 +88,26 @@ object DailyEvent : Listener {
 
   @EventHandler
   fun vote(e: VotifierEvent) {
-    val ofp = Bukkit.getOfflinePlayer(e.vote.username)
-    val userStats = getStats(ofp.uniqueId)
+    val uuid = resolveVotePlayerUuid(e.vote.username) ?: return
+    val userStats = getStats(uuid)
     userStats.addCount(BehType.VOTE)
-    saveStats(ofp.uniqueId)
+    saveStats(uuid)
+  }
+
+  internal fun resolveVotePlayerUuid(
+      rawUsername: String?,
+      resolveOnlinePlayer: (String) -> Player? = Bukkit::getPlayerExact,
+      resolveCachedOfflinePlayer: (String) -> OfflinePlayer? = Bukkit::getOfflinePlayerIfCached,
+      hasProfile: (UUID) -> Boolean = { uuid ->
+        allStats.containsKey(uuid) || allUser.contains(uuid)
+      },
+  ): UUID? {
+    val username = rawUsername?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+    resolveOnlinePlayer(username)?.let {
+      return it.uniqueId
+    }
+    val cached = resolveCachedOfflinePlayer(username) ?: return null
+    val uuid = cached.uniqueId
+    return uuid.takeIf { cached.isOnline || cached.hasPlayedBefore() || hasProfile(uuid) }
   }
 }
