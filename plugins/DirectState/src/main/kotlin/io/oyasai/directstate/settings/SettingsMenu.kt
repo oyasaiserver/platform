@@ -166,9 +166,9 @@ internal class SettingsMenu(
       Page.REPLACE -> menu.setItem(13, link(Material.RED_STAINED_GLASS_PANE, "何もありません"))
       Page.GENERAL -> boolean(10, Material.NOTE_BLOCK, "編集音", configured.editSound)
       Page.UNIT ->
-          listOf(32, 16, 8, 4).forEachIndexed { index, divisor ->
+          listOf(64, 32, 16, 8, 4).forEachIndexed { index, divisor ->
             menu.setItem(
-                10 + index * 2,
+                9 + index * 2,
                 link(Material.PAPER, "1/$divisor block").apply {
                   editMeta {
                     it.setEnchantmentGlintOverride(configured.adjustmentDivisor == divisor)
@@ -246,7 +246,7 @@ internal class SettingsMenu(
           }
       Page.GENERAL -> if (slot == 10) save(player) { it.editSound = !it.editSound } else return
       Page.UNIT -> {
-        val divisor = mapOf(10 to 32, 12 to 16, 14 to 8, 16 to 4)[slot] ?: return
+        val divisor = mapOf(9 to 64, 11 to 32, 13 to 16, 15 to 8, 17 to 4)[slot] ?: return
         save(player) { it.adjustmentDivisor = divisor }
       }
       Page.REPLACE -> return

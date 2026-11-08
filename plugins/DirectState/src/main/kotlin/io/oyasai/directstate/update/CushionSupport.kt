@@ -7,6 +7,9 @@ import org.bukkit.GameMode
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
+import org.bukkit.block.data.Bisected
+import org.bukkit.block.data.type.Slab
 import org.bukkit.entity.Cushion
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -86,7 +89,17 @@ internal class CushionSupport(
     if (!original.isSimilar(event.item) || original.amount < 1) return
     val location =
         target.location.clone().add(0.5, 0.0, 0.5).apply {
-          y = Math.round(point.y * 8).toDouble() / 8
+          y = if (event.blockFace.modY != 0) point.y else Math.round(point.y * 8).toDouble() / 8
+          if (event.blockFace == BlockFace.DOWN) {
+            val clicked = event.clickedBlock!!
+            val bottomOrFull =
+                when (val data = clicked.blockData) {
+                  is Slab -> data.type != Slab.Type.TOP
+                  is Bisected -> data.half == Bisected.Half.BOTTOM
+                  else -> clicked.collisionShape.boundingBoxes.any { it.volume == 1.0 }
+                }
+            if (bottomOrFull) y -= 0.25 // クッションの厚みだけ下げ、上面をクリック位置に合わせる。
+          }
           setDirection(player.facing.direction)
         }
     if (location.y < target.world.minHeight || location.y >= target.world.maxHeight) return

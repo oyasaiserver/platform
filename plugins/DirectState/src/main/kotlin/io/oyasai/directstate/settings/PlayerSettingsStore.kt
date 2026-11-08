@@ -80,7 +80,7 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
                       itemlessModesDisabled = rows.getInt("itemless_modes_disabled") != 0,
                       inverseCushionOnShift = rows.getInt("inverse_cushion_on_shift") != 0,
                       adjustmentDivisor =
-                          rows.getInt("adjustment_divisor").takeIf { it in setOf(32, 16, 8, 4) }
+                          rows.getInt("adjustment_divisor").takeIf { it in setOf(64, 32, 16, 8, 4) }
                               ?: 8,
                       forcePlacement = rows.getInt("force_placement") != 0,
                       keepState = rows.getInt("keep_state") != 0,
