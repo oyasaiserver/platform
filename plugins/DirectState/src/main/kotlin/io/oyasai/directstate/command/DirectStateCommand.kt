@@ -25,6 +25,7 @@ internal class DirectStateCommand(
   private val menu =
       SettingsMenu(
           { playerSettings.get(it.uniqueId) },
+          { player, change -> playerSettings.update(player.uniqueId, change) },
           { player, slot ->
             when (slot) {
               10 -> Permissions.has(player, Permissions.HAND)

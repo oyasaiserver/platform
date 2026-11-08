@@ -29,6 +29,7 @@ internal class BlockEditService(
     private val plugin: JavaPlugin,
     private val updateMode: UpdateMode,
     private val blockChangeLog: BlockChangeLog?,
+    private val editSound: (Player) -> Boolean = { true },
 ) {
   private var tickCount = 0L
   // 同じプレイヤーが同じ座標へ続けて行った変更を、一件のログにまとめるための保留表。
@@ -99,7 +100,13 @@ internal class BlockEditService(
           },
       )
     }
-    player.playSound(edits.first().block.location, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 0.3f, 1.5f)
+    if (editSound(player))
+        player.playSound(
+            edits.first().block.location,
+            Sound.BLOCK_WOODEN_BUTTON_CLICK_ON,
+            0.3f,
+            1.5f,
+        )
     player.sendActionBar(Component.text(describe(edits.first().data)))
   }
 
