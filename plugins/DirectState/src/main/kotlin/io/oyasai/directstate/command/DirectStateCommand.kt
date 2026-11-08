@@ -1,6 +1,7 @@
 package io.oyasai.directstate.command
 
 import io.oyasai.directstate.Permissions
+import io.oyasai.directstate.edit.EditHistory
 import io.oyasai.directstate.edit.ToolItems
 import io.oyasai.directstate.edit.replace.TypeReplaceMode
 import io.oyasai.directstate.settings.PlayerSettingsStore
@@ -21,6 +22,7 @@ internal class DirectStateCommand(
     private val updateMode: UpdateMode,
     private val createTool: (ToolItems.Kind) -> ItemStack,
     private val markTool: (ItemStack, ToolItems.Kind) -> Unit,
+    private val history: EditHistory? = null,
 ) : TabExecutor {
   private val menu =
       SettingsMenu(
@@ -91,7 +93,9 @@ internal class DirectStateCommand(
           "sstick",
           "hstick" -> Permissions.GET_TOOL
           null,
-          "gui" -> null
+          "gui",
+          "undo",
+          "redo" -> null
           else -> Permissions.ALL
         }
     if (sender !is Player || permission != null && !Permissions.has(sender, permission)) {
@@ -124,9 +128,50 @@ internal class DirectStateCommand(
       "stick" -> handleTool(sender, commandArgs, ToolItems.Kind.HAND)
       "sstick" -> handleTool(sender, commandArgs, ToolItems.Kind.SIMPLE)
       "hstick" -> handleTool(sender, commandArgs, ToolItems.Kind.HOLD)
+      "undo",
+      "redo" -> replayHistory(sender, commandArgs, operation == "redo")
       else -> sender.sendMessage("/ds help でコマンド一覧を表示します。")
     }
     return true
+  }
+
+  private fun replayHistory(player: Player, args: List<String>, redo: Boolean) {
+    val operation = if (redo) "redo" else "undo"
+    if (
+        !Permissions.has(player, Permissions.HISTORY_OTHER) &&
+            !Permissions.has(player, Permissions.HAND) &&
+            !Permissions.has(player, Permissions.STICK)
+    ) {
+      player.sendMessage("権限がありません。")
+      return
+    }
+    val count = if (args.isEmpty()) 1 else args[0].toIntOrNull()
+    if (args.size > 2 || count == null || count < 1) {
+      player.sendMessage("/ds $operation [回数] [対象]")
+      return
+    }
+    val targetName = args.getOrNull(1)
+    if (
+        targetName != null &&
+            !targetName.equals(player.name, true) &&
+            !Permissions.has(player, Permissions.HISTORY_OTHER)
+    ) {
+      player.sendMessage("権限がありません。")
+      return
+    }
+    val owner =
+        if (targetName == null || targetName.equals(player.name, true)) player.uniqueId
+        else history?.findPlayer(targetName)
+    if (owner == null) {
+      player.sendMessage("${targetName}の履歴が見つかりません。")
+      return
+    }
+    val result = history?.replay(player, owner, count, redo) ?: EditHistory.Result(0, 0)
+    val action = if (redo) "やり直しました" else "取り消しました"
+    player.sendMessage(
+        "${targetName ?: player.name}: ${result.applied}操作を${action}。" +
+            if (result.skipped > 0) "復元できない${result.skipped}操作をスキップしました" else ""
+    )
   }
 
   /** インベントリに空きがあるときだけ、指定された種類の棒を渡す。 */
@@ -180,7 +225,15 @@ internal class DirectStateCommand(
               "hand",
               "update",
               "replace",
+              "undo",
+              "redo",
           )
+      args.size == 2 && args[0].lowercase() in setOf("undo", "redo") ->
+          matches(args[1], "1", "5", "10", "100")
+      args.size == 3 &&
+          args[0].lowercase() in setOf("undo", "redo") &&
+          Permissions.has(sender, Permissions.HISTORY_OTHER) ->
+          history?.playerNames()?.filter { it.startsWith(args[2], true) } ?: emptyList()
       args.size == 2 && args[0].equals("help", true) -> matches(args[1], "1", "2", "3")
       args.size == 2 && args[0].equals("replace", true) ->
           matches(args[1], "on", "off", "toggle", "type")

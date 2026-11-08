@@ -49,6 +49,7 @@ internal class EditInteractionListener(
     private val blockReplacement: BlockReplacement,
     private val ignoredBlockPdcKeys: Set<NamespacedKey> = emptySet(),
     private val canEditEntity: (Player, Location) -> Boolean = { _, _ -> true },
+    private val history: EditHistory? = null,
 ) : Listener {
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun cushion(event: PlayerInteractAtEntityEvent) {
@@ -119,7 +120,10 @@ internal class EditInteractionListener(
     }
     if (!canEditEntity(player, from) || !canEditEntity(player, to)) return
     holdEditor.stop(player.uniqueId)
-    if (cushion.teleport(to)) player.swingHand(EquipmentSlot.HAND)
+    if (cushion.teleport(to)) {
+      history?.recordCushion(player, cushion, from)
+      player.swingHand(EquipmentSlot.HAND)
+    }
   }
 
   /** DirectStateが扱う操作だけを受理し、バニラ操作と他プラグインの拒否を尊重して振り分ける。 */
@@ -297,7 +301,7 @@ internal class EditInteractionListener(
             changedBlocks += BlockEdit(other, otherData.apply { isOpen = data.isOpen })
       }
     }
-    edits.apply(player, changedBlocks)
+    edits.apply(player, changedBlocks, remember = true)
     if (result.sound != null) player.playSound(block.location, result.sound, 0.7f, 1.0f)
   }
 

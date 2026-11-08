@@ -15,7 +15,7 @@ commands:
   directstate:
     aliases: ["ds", "dsh", "dsr", "dsu"]
     description: ブロック形状編集と周辺更新抑止
-    usage: /ds [help|toggle|tgl|stick|sstick|hstick|hand|update|replace]
+    usage: /ds [help|toggle|tgl|stick|sstick|hstick|hand|update|replace|undo|redo]
 permissions:
   directstate.ds:
     description: DirectStateの全機能
@@ -28,6 +28,7 @@ permissions:
       directstate.stick: true
       directstate.sstick: true
       directstate.hstick: true
+      directstate.history.other: true
   directstate.dsh:
     description: Handの設定と使用
     default: false
@@ -49,3 +50,6 @@ permissions:
   directstate.hstick:
     description: ホールド棒の使用
     default: false
+  directstate.history.other:
+    description: 他人の編集履歴のundo・redo
+    default: op

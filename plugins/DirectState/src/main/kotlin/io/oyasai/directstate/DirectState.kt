@@ -3,6 +3,7 @@ package io.oyasai.directstate
 import io.oyasai.directstate.command.DirectStateCommand
 import io.oyasai.directstate.edit.BlockEdit
 import io.oyasai.directstate.edit.BlockEditService
+import io.oyasai.directstate.edit.EditHistory
 import io.oyasai.directstate.edit.EditInteractionListener
 import io.oyasai.directstate.edit.ToolItems
 import io.oyasai.directstate.edit.hand.HandEditor
@@ -86,8 +87,13 @@ class DirectState : JavaPlugin(), Listener {
           logger.info("CoreProtect is not installed or enabled; block change logging is disabled.")
           null
         }
+    val history =
+        EditHistory(
+            server,
+            restoreBlocks = { player, snapshots -> edits.restore(player, snapshots) },
+        )
     edits =
-        BlockEditService(this, updateMode, blockChangeLog) {
+        BlockEditService(this, updateMode, blockChangeLog, history) {
           playerSettings.get(it.uniqueId).editSound
         }
 
@@ -105,11 +111,13 @@ class DirectState : JavaPlugin(), Listener {
               !server.pluginManager.isPluginEnabled("WorldGuard") ||
                   WorldGuardUpdates.canBuild(player, location)
             },
+            history = history,
         )
     // 同じ優先度のUpdate Modeより先に、通常の編集イベントを処理する。
     server.pluginManager.registerEvents(interactions, this)
     server.pluginManager.registerEvents(updateMode, this)
-    DirectStateCommand(this, playerSettings, updateMode, tools::create, tools::mark).register()
+    DirectStateCommand(this, playerSettings, updateMode, tools::create, tools::mark, history)
+        .register()
 
     server.scheduler.runTaskTimer(
         this,
