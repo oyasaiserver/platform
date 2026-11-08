@@ -107,6 +107,11 @@ class DiceInstance(
   private var settleStayTask: BukkitTask? = null
 
   private val currentLocation = startLoc.clone()
+
+  /** 現在（静止後は最終）の位置。合計ホログラムなど、サイコロの停止位置を基準にする処理で使う。 */
+  val settledLocation: Location
+    get() = currentLocation.clone()
+
   private val velocity = initialVelocity.clone()
   private var restTickCount = 0
 
