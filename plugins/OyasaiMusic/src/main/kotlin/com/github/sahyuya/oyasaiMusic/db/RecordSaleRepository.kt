@@ -16,24 +16,31 @@ class RecordSaleRepository(private val db: DatabaseManager) {
       creditAuthor: Boolean,
   ) =
       db.transaction { conn ->
-        conn
-            .prepareStatement(
-                """
-                INSERT INTO record_sales
-                    (song_id, buyer_uuid, author_uuid, gross_amount, author_share, created_at)
-                VALUES (?, ?, ?, ?, ?, ?)
-                """
-                    .trimIndent()
-            )
-            .use { ps ->
+        val songExists =
+            conn.prepareStatement("SELECT 1 FROM songs WHERE id = ?").use { ps ->
               ps.setLong(1, songId)
-              ps.setBytes(2, UuidUtil.toBytes(buyerUuid))
-              ps.setBytes(3, UuidUtil.toBytes(authorUuid))
-              ps.setLong(4, grossAmount.coerceAtLeast(0))
-              ps.setLong(5, authorShare.coerceAtLeast(0))
-              ps.setLong(6, Instant.now().epochSecond)
-              ps.executeUpdate()
+              ps.executeQuery().use { it.next() }
             }
+        if (songExists) {
+          conn
+              .prepareStatement(
+                  """
+                  INSERT INTO record_sales
+                      (song_id, buyer_uuid, author_uuid, gross_amount, author_share, created_at)
+                  VALUES (?, ?, ?, ?, ?, ?)
+                  """
+                      .trimIndent()
+              )
+              .use { ps ->
+                ps.setLong(1, songId)
+                ps.setBytes(2, UuidUtil.toBytes(buyerUuid))
+                ps.setBytes(3, UuidUtil.toBytes(authorUuid))
+                ps.setLong(4, grossAmount.coerceAtLeast(0))
+                ps.setLong(5, authorShare.coerceAtLeast(0))
+                ps.setLong(6, Instant.now().epochSecond)
+                ps.executeUpdate()
+              }
+        }
 
         if (creditAuthor && authorShare > 0) {
           conn

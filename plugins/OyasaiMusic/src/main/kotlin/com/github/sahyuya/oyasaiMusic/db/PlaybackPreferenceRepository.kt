@@ -30,6 +30,12 @@ class PlaybackPreferenceRepository(private val db: DatabaseManager) {
 
   fun setMode(userUuid: UUID, songId: Long, mode: PlaybackMode) =
       db.transaction { conn ->
+        val songExists =
+            conn.prepareStatement("SELECT 1 FROM songs WHERE id = ?").use { ps ->
+              ps.setLong(1, songId)
+              ps.executeQuery().use { it.next() }
+            }
+        if (!songExists) return@transaction
         conn
             .prepareStatement(
                 "INSERT INTO playback_preferences (user_uuid, song_id, mode) VALUES (?, ?, ?) " +

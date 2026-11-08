@@ -69,9 +69,20 @@ class PlaylistRepository(private val db: DatabaseManager) {
             }
       }
 
-  /** @return true = 新規追加できた / false = 既に登録済みだった */
+  /** @return true = 新規追加できた / false = 既に登録済みだった、または対象が存在しない */
   fun addSong(playlistId: Long, songId: Long): Boolean =
       db.transaction { conn ->
+        val exists =
+            conn
+                .prepareStatement(
+                    "SELECT 1 WHERE EXISTS (SELECT 1 FROM playlists WHERE id = ?) AND EXISTS (SELECT 1 FROM songs WHERE id = ?)"
+                )
+                .use { ps ->
+                  ps.setLong(1, playlistId)
+                  ps.setLong(2, songId)
+                  ps.executeQuery().use { it.next() }
+                }
+        if (!exists) return@transaction false
         val nextPosition =
             conn
                 .prepareStatement(

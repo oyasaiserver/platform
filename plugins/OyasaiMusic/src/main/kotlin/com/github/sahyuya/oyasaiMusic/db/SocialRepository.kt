@@ -20,6 +20,7 @@ class SocialRepository(private val db: DatabaseManager) {
       authorPointReward: Long,
   ): Boolean =
       db.transaction { conn ->
+        if (!songExists(conn, songId)) return@transaction false
         val added =
             conn
                 .prepareStatement(
@@ -64,6 +65,7 @@ class SocialRepository(private val db: DatabaseManager) {
 
   fun addFavorite(userUuid: UUID, songId: Long): Boolean =
       db.transaction { conn ->
+        if (!songExists(conn, songId)) return@transaction false
         conn
             .prepareStatement(
                 "INSERT INTO favorites (user_uuid, song_id, created_at) VALUES (?, ?, ?) " +
@@ -214,6 +216,15 @@ class SocialRepository(private val db: DatabaseManager) {
         ) {
           return@transaction false
         }
+        val totalViews =
+            conn
+                .prepareStatement("UPDATE songs SET views = views + 1 WHERE id = ? RETURNING views")
+                .use { ps ->
+                  ps.setLong(1, songId)
+                  ps.executeQuery().use { rs ->
+                    if (rs.next()) rs.getLong(1) else return@transaction false
+                  }
+                }
         conn
             .prepareStatement(
                 "INSERT INTO view_history (user_uuid, song_id, timestamp) VALUES (?, ?, ?)"
@@ -224,15 +235,6 @@ class SocialRepository(private val db: DatabaseManager) {
               ps.setLong(3, timestamp)
               ps.executeUpdate()
             }
-        val totalViews =
-            conn
-                .prepareStatement("UPDATE songs SET views = views + 1 WHERE id = ? RETURNING views")
-                .use { ps ->
-                  ps.setLong(1, songId)
-                  ps.executeQuery().use { rs ->
-                    if (rs.next()) rs.getLong(1) else return@transaction false
-                  }
-                }
         if (monetizationEligible && viewsPerPoint > 0 && totalViews % viewsPerPoint == 0L) {
           ensureUser(conn, authorUuid)
           conn
@@ -245,6 +247,12 @@ class SocialRepository(private val db: DatabaseManager) {
               }
         }
         true
+      }
+
+  private fun songExists(conn: java.sql.Connection, songId: Long): Boolean =
+      conn.prepareStatement("SELECT 1 FROM songs WHERE id = ?").use { ps ->
+        ps.setLong(1, songId)
+        ps.executeQuery().use { it.next() }
       }
 
   private fun ensureUser(conn: java.sql.Connection, uuid: UUID) {
