@@ -21,9 +21,12 @@ import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
 import org.bukkit.block.data.BlockData
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
 
-class DirectState : JavaPlugin() {
+class DirectState : JavaPlugin(), Listener {
   private lateinit var playerSettings: PlayerSettingsStore
   private lateinit var holdEditor: HoldEditor
   private lateinit var edits: BlockEditService
@@ -54,6 +57,8 @@ class DirectState : JavaPlugin() {
             .toSet()
     playerSettings = PlayerSettingsStore(dataFolder, logger)
     playerSettings.load()
+    server.pluginManager.registerEvents(this, this)
+    server.onlinePlayers.forEach { playerSettings.recordName(it.uniqueId, it.name) }
 
     val tools = ToolItems(this)
     val shapeEditor = ShapeEditor()
@@ -71,6 +76,8 @@ class DirectState : JavaPlugin() {
             ::personalUpdateEnabled,
             ::writeUpdateMode,
             ::applyEdit,
+            forcePlacementSetting = { playerSettings.get(it.uniqueId).forcePlacement },
+            keepStateSetting = { playerSettings.get(it.uniqueId).keepState },
         )
     val blockChangeLog =
         if (server.pluginManager.isPluginEnabled("CoreProtect")) {
@@ -79,7 +86,10 @@ class DirectState : JavaPlugin() {
           logger.info("CoreProtect is not installed or enabled; block change logging is disabled.")
           null
         }
-    edits = BlockEditService(this, updateMode, blockChangeLog)
+    edits =
+        BlockEditService(this, updateMode, blockChangeLog) {
+          playerSettings.get(it.uniqueId).editSound
+        }
 
     val interactions =
         EditInteractionListener(
@@ -110,6 +120,11 @@ class DirectState : JavaPlugin() {
         1L,
         1L,
     )
+  }
+
+  @EventHandler
+  fun playerJoined(event: PlayerJoinEvent) {
+    playerSettings.recordName(event.player.uniqueId, event.player.name)
   }
 
   override fun onDisable() {

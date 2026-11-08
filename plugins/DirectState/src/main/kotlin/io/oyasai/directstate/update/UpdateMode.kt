@@ -39,6 +39,8 @@ internal class UpdateMode(
     private val writePersonalSetting: (Player, Boolean) -> Unit,
     private val write: (Player, Block, BlockData) -> Unit,
     private val naturalLocks: NaturalUpdateLock = NaturalUpdateLock(plugin),
+    private val forcePlacementSetting: (Player) -> Boolean = { true },
+    private val keepStateSetting: (Player) -> Boolean = { true },
 ) : Listener {
   /** UpdateGuardのキーに使う、ワールドとブロック座標。 */
   private data class Position(val world: UUID, val x: Int, val y: Int, val z: Int)
@@ -58,12 +60,12 @@ internal class UpdateMode(
   private val guard = UpdateGuard<Position, Saved>()
   private val buttons = mutableMapOf<Position, ButtonReset>()
   private var tick = 0L
-  private val cushions = CushionSupport(plugin, ::enabled)
+  private val cushions = CushionSupport(plugin, ::keepingEnabled)
   private val forcePlacement =
       ForcePlacement(
           plugin,
           placeCushion = cushions::place,
-          enabled = ::enabled,
+          enabled = ::forcePlacementEnabled,
           protectPlacement = ::protectPlacement,
       )
 
@@ -91,6 +93,12 @@ internal class UpdateMode(
   /** 個人設定またはWorldGuard領域設定のどちらかが有効か調べる。 */
   private fun enabled(player: Player) = personalEnabled(player) || regionRule.suppress(player)
 
+  private fun forcePlacementEnabled(player: Player) =
+      enabled(player) && (regionRule.forcePlacement(player) ?: forcePlacementSetting(player))
+
+  private fun keepingEnabled(player: Player) =
+      enabled(player) && (regionRule.keepState(player) ?: keepStateSetting(player))
+
   /** Bukkit BlockをUpdateGuard用の不変な座標へ変換する。 */
   private fun position(block: Block) = Position(block.world.uid, block.x, block.y, block.z)
 
@@ -100,7 +108,7 @@ internal class UpdateMode(
   /** 永続固定する */
   fun afterEdit(player: Player, blocks: List<Block>) {
     naturalLocks.forget(blocks)
-    if (!enabled(player)) return
+    if (!keepingEnabled(player)) return
     blocks.forEach { setDaylightLocked(it, true) }
     naturalLocks.freeze(blocks)
   }

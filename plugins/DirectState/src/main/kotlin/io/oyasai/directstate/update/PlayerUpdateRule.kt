@@ -6,4 +6,8 @@ import org.bukkit.entity.Player
 internal fun interface PlayerUpdateRule {
   /** このプレイヤーの配置で物理更新を抑止する必要があるか判定する。 */
   fun suppress(player: Player): Boolean
+
+  fun forcePlacement(player: Player): Boolean? = null
+
+  fun keepState(player: Player): Boolean? = null
 }

@@ -109,7 +109,7 @@ internal class CushionSupport(
       if (place.isCancelled || cushion.isDead) return
       val checked = player.inventory.getItem(hand)
       if (!checked.isSimilar(original) || checked.amount != original.amount) return
-      keep(cushion)
+      if (enabled(player)) keep(cushion)
       target.world.addEntity(cushion)
       if (!cushion.isValid) return
       val current = player.inventory.getItem(hand)

@@ -11,6 +11,7 @@ import io.oyasai.directstate.integration.BlockEntityAccess
 import io.oyasai.directstate.settings.PlayerSettingsStore
 import io.papermc.paper.event.player.PlayerStopUsingItemEvent
 import kotlin.math.floor
+import kotlin.math.roundToLong
 import net.kyori.adventure.text.Component
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
@@ -54,7 +55,8 @@ internal class EditInteractionListener(
     val cushion = event.rightClicked as? Cushion ?: return
     val player = event.player
     val handTool = tools.isHandTool(player.inventory.itemInMainHand)
-    if (!handTool && !wantsHandEditing(player)) return
+    val configured = playerSettings.get(player.uniqueId)
+    if (!handTool && !wantsHandEditing(player, configured.inverseCushionOnShift)) return
     val from = cushion.location
     val point = event.clickedPosition.clone().add(from.toVector())
     if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
@@ -72,10 +74,14 @@ internal class EditInteractionListener(
     }
     val to =
         from.clone().apply {
-          // 押した軸だけ1/8刻みへ揃え、他の座標はそのまま保つ。
-          if (face.modX != 0) x = Math.round(x * 8 - face.modX).toDouble() / 8
-          if (face.modY != 0) y = Math.round(y * 8 - face.modY).toDouble() / 8
-          if (face.modZ != 0) z = Math.round(z * 8 - face.modZ).toDouble() / 8
+          val divisor = configured.adjustmentDivisor
+          val direction = if (configured.inverseCushionOnShift && player.isSneaking) 1 else -1
+          if (face.modX != 0)
+              x = (x * divisor + face.modX * direction).roundToLong().toDouble() / divisor
+          if (face.modY != 0)
+              y = (y * divisor + face.modY * direction).roundToLong().toDouble() / divisor
+          if (face.modZ != 0)
+              z = (z * divisor + face.modZ * direction).roundToLong().toDouble() / divisor
         }
     val moved = box.clone().shift(to.x - from.x, to.y - from.y, to.z - from.z)
     val world = cushion.world
@@ -174,14 +180,14 @@ internal class EditInteractionListener(
     return event.action == Action.RIGHT_CLICK_BLOCK && wantsHandEditing(event.player)
   }
 
-  private fun wantsHandEditing(player: Player): Boolean {
+  private fun wantsHandEditing(player: Player, allowShift: Boolean = false): Boolean {
     val configured = playerSettings.get(player.uniqueId)
     // 素手編集は片方の手にでもアイテムがあれば、通常のMinecraft操作へ譲る。
     val bothHandsEmpty =
         player.inventory.itemInMainHand.type.isAir && player.inventory.itemInOffHand.type.isAir
     return configured.handEnabled &&
         !configured.itemlessModesDisabled &&
-        !player.isSneaking &&
+        (!player.isSneaking || allowShift) &&
         bothHandsEmpty
   }
 
