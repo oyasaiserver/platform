@@ -67,10 +67,11 @@ internal object BlockStateEditor {
   private val cauldrons =
       setOf("CAULDRON", "WATER_CAULDRON", "POWDER_SNOW_CAULDRON", "LAVA_CAULDRON")
   private val bambooBlocks = setOf("BAMBOO_BLOCK", "STRIPPED_BAMBOO_BLOCK")
-  private val ironOpenables = setOf("IRON_DOOR", "IRON_TRAPDOOR")
   /** クリック位置の解釈が必要な操作。ここで登録してく　並び順が、そのまま判定の優先順になる。 */
   private val geometryRules =
       listOf(
+          rule<Door>("door", edit = ::editDoor),
+          rule<TrapDoor>("trapdoor", edit = ::editTrapDoor),
           rule<BlockData>("cauldron", { it.material.name in cauldrons }, ::editCauldron),
           rule<CopperBulb>(
               "copper-bulb",
@@ -163,7 +164,6 @@ internal object BlockStateEditor {
     // 同じBlockData型でも、一部の材質だけに専用操作があるもの。
     return when {
       data is MultipleFacing && name == "IRON_BARS" -> true
-      data is Openable && name in ironOpenables -> true
       data is BrewingStand && name == "BREWING_STAND" -> true
       data is Farmland && name == "FARMLAND" -> true
       data is Lectern && name == "LECTERN" -> true
@@ -228,9 +228,6 @@ internal object BlockStateEditor {
         } else {
           cycleFacing(data)
         }
-      }
-      data is Openable && name in ironOpenables -> {
-        data.isOpen = !data.isOpen
       }
       data is Barrel && name == "BARREL" -> {
         if (face == data.facing) data.isOpen = !data.isOpen else cycleFacing(data)
@@ -652,6 +649,46 @@ internal object BlockStateEditor {
   /** minimumからmaximumまで進め、maximumの次はminimumへ戻す。 */
   private fun next(value: Int, maximum: Int, minimum: Int = 0): Int =
       if (value >= maximum) minimum else value + 1
+
+  /** 上下端ではhalf、それ以外では開閉 */
+  private fun editDoor(data: Door, click: BlockClick): Result? {
+    val face = click.face ?: return null
+    val facing = data.facing
+    val left = horizontalFaces[(horizontalFaces.indexOf(facing) + 3) % horizontalFaces.size]
+    val hingeSide =
+        if (data.isOpen) facing.oppositeFace
+        else if (data.hinge == Door.Hinge.LEFT) left else left.oppositeFace
+    val hingeDistance =
+        0.5 - click.position.clone().subtract(Vector(0.5, 0.5, 0.5)).dot(hingeSide.direction)
+    val edge = 2.0 / 16.0
+    when {
+      face == hingeSide || (face != hingeSide.oppositeFace && hingeDistance <= edge) -> {
+        data.hinge = if (data.hinge == Door.Hinge.LEFT) Door.Hinge.RIGHT else Door.Hinge.LEFT
+      }
+      click.position.y >= 1.0 - edge || click.position.y <= edge -> {
+        data.half =
+            if (data.half == Bisected.Half.BOTTOM) Bisected.Half.TOP else Bisected.Half.BOTTOM
+      }
+      else -> data.isOpen = !data.isOpen
+    }
+    return Result(data)
+  }
+
+  /** 板の軸側の端では向きを反転 それ以外では開閉 */
+  private fun editTrapDoor(data: TrapDoor, click: BlockClick): Result? {
+    val face = click.face ?: return null
+    val hingeSide =
+        if (!data.isOpen) data.facing.oppositeFace
+        else if (data.half == Bisected.Half.BOTTOM) BlockFace.DOWN else BlockFace.UP
+    val hingeDistance =
+        0.5 - click.position.clone().subtract(Vector(0.5, 0.5, 0.5)).dot(hingeSide.direction)
+    if (face == hingeSide || (face != hingeSide.oppositeFace && hingeDistance <= 2.0 / 16.0)) {
+      data.facing = data.facing.oppositeFace
+    } else {
+      data.isOpen = !data.isOpen
+    }
+    return Result(data)
+  }
 
   /** 上面内側なら内容物を巡回し、それ以外は通常の水量編集へ譲る。 */
   private fun editCauldron(data: BlockData, click: BlockClick): Result? {
