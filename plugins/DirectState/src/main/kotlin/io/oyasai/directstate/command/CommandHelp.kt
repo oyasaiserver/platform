@@ -24,6 +24,8 @@ internal object CommandHelp {
         sender.sendMessage(helpLine("/ds help", "このヘルプ"))
         sender.sendMessage(helpLine("/ds toggle", "有効化・無効化"))
         sender.sendMessage(helpLine("/dsh", "素手デバッグ棒"))
+        sender.sendMessage(helpLine("/ds undo [回数] [対象]", "dshの編集を取り消す"))
+        sender.sendMessage(helpLine("/ds redo [回数] [対象]", "取り消した操作をやり直す"))
       }
       2 -> {
         sender.sendMessage(helpLine("/dsu", "更新抑制モード"))

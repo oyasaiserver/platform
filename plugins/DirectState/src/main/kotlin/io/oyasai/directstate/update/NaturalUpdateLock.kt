@@ -28,7 +28,7 @@ internal class NaturalUpdateLock(
       stop(block)
       if (block.type == Material.SNIFFER_EGG) eggs[block] = block.blockData.clone()
     }
-    // 通常はBlockPlaceEventの後にonPlaceが孵化（block tickという）を予約する。
+    // 通常はBlockPlaceEventの後にonPlaceが孵化（block tick）を予約する。
     if (schedule && eggs.isNotEmpty())
         plugin.server.scheduler.runTaskLater(plugin, Runnable { flush() }, 1L)
   }

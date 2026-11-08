@@ -2,8 +2,10 @@ package io.oyasai.directstate.update
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent
 import io.oyasai.directstate.Permissions
+import io.oyasai.directstate.integration.BlockEntityAccess
 import io.papermc.paper.event.player.PlayerOpenSignEvent
 import java.util.UUID
+import net.minecraft.world.ticks.SavedTick
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -131,6 +133,26 @@ internal class UpdateMode(
   private fun daylightLocked(block: Block) =
       block.type == Material.DAYLIGHT_DETECTOR &&
           (block.state as? DaylightDetector)?.persistentDataContainer?.has(daylightLock) == true
+
+  data class EditState(
+      val daylightLocked: Boolean,
+      val ticks: List<SavedTick<net.minecraft.world.level.block.Block>>?,
+  )
+
+  fun captureState(block: Block) =
+      EditState(
+          daylightLocked(block),
+          if (block.type == Material.SNIFFER_EGG || block.type == Material.CREAKING_HEART)
+              BlockEntityAccess.scheduledTicks(block)
+          else null,
+      )
+
+  /** 履歴復元において実行者の現在設定は参照しない */
+  fun restoreState(block: Block, state: EditState) {
+    buttons.remove(position(block))
+    setDaylightLocked(block, state.daylightLocked)
+    state.ticks?.let { BlockEntityAccess.restoreScheduledTicks(block, it) }
+  }
 
   /** ベッドの相を返す。 */
   private fun bedCounterpart(block: Block): Block? {

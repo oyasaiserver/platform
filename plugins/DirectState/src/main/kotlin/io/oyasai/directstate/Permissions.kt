@@ -12,6 +12,7 @@ internal object Permissions {
   const val STICK = "directstate.stick"
   const val SIMPLE_STICK = "directstate.sstick"
   const val HOLD_STICK = "directstate.hstick"
+  const val HISTORY_OTHER = "directstate.history.other"
 
   fun has(permissible: Permissible, permission: String) =
       permissible.hasPermission(ALL) || permissible.hasPermission(permission)

@@ -59,7 +59,7 @@ internal class ForcePlacement(
     val hit = cushion.boundingBox.rayTrace(eye, direction, 6.0) ?: return
     val face = hit.hitBlockFace ?: return
     if (face != BlockFace.UP && face != BlockFace.DOWN && face !in horizontal) return
-    // 面のわずか内側のセルをクリック元にし、境界上でも隣のセルを取り違えない。 隣接したブロックに判定が吸われないようにする。
+    // 面のわずか内側のセルをクリック元にし、境界上でも隣のセルを取り違えない。
     val inside = hit.hitPosition.clone().subtract(face.direction.multiply(1.0e-7))
     val clicked = cushion.world.getBlockAt(inside.blockX, inside.blockY, inside.blockZ)
     val interaction =
