@@ -283,7 +283,7 @@ internal class EditInteractionListener(
           blockReplacement.convert(result.data, result.material, TypeReplaceMode.OFF)
         }
     val changedBlocks = mutableListOf(BlockEdit(block, data, result.blockEntityPresent))
-    if (data is Door) {
+    if (data is Door && (block.blockData as? Door)?.isOpen != data.isOpen) {
       val other = blockReplacement.counterpart(block)
       if (other != null) {
         val otherData = other.blockData
