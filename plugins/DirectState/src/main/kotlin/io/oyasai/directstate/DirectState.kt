@@ -112,6 +112,7 @@ class DirectState : JavaPlugin(), Listener {
                   WorldGuardUpdates.canBuild(player, location)
             },
             history = history,
+            afterEntityEdit = updateMode::afterEntityEdit,
         )
     // 同じ優先度のUpdate Modeより先に、通常の編集イベントを処理する。
     server.pluginManager.registerEvents(interactions, this)

@@ -3,6 +3,7 @@ package io.oyasai.directstate.edit
 import io.oyasai.directstate.Permissions
 import io.oyasai.directstate.edit.hand.HandEditor
 import io.oyasai.directstate.edit.hand.HandGeometry
+import io.oyasai.directstate.edit.hand.HangingEditor
 import io.oyasai.directstate.edit.hold.HoldEditor
 import io.oyasai.directstate.edit.replace.BlockReplacement
 import io.oyasai.directstate.edit.replace.TypeReplaceMode
@@ -50,7 +51,59 @@ internal class EditInteractionListener(
     private val ignoredBlockPdcKeys: Set<NamespacedKey> = emptySet(),
     private val canEditEntity: (Player, Location) -> Boolean = { _, _ -> true },
     private val history: EditHistory? = null,
+    private val afterEntityEdit: (Player, org.bukkit.entity.Entity) -> Unit = { _, _ -> },
 ) : Listener {
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun hanging(event: PlayerInteractAtEntityEvent) {
+    val entity = event.rightClicked
+    val before = HangingEditor.snapshot(entity) ?: return
+    val player = event.player
+    val handTool = tools.isHandTool(player.inventory.itemInMainHand)
+    if (!handTool && !wantsHandEditing(player)) return
+    val location = entity.location
+    val point = event.clickedPosition.clone().add(location.toVector())
+    if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
+    val eye = player.eyeLocation.toVector()
+    val direction = point.clone().subtract(eye)
+    if (direction.lengthSquared() == 0.0) return
+    val hit = entity.boundingBox.rayTrace(eye, direction, 6.0) ?: return
+    val face = hit.hitBlockFace ?: return
+    if (
+        entity is org.bukkit.entity.ItemFrame &&
+            !entity.item.type.isAir &&
+            !HangingEditor.isBorder(entity, hit.hitPosition, face)
+    )
+        return
+    event.isCancelled = true
+    if (event.hand != EquipmentSlot.HAND) return
+    if (!Permissions.has(player, if (handTool) Permissions.STICK else Permissions.HAND)) {
+      player.sendActionBar(Component.text("権限が必要です"))
+      return
+    }
+    if (
+        !player.isOp &&
+            player.server.operators.isNotEmpty() &&
+            entity.world == player.server.worlds.firstOrNull()
+    ) {
+      val spawn = entity.world.spawnLocation
+      val radius = player.server.spawnRadius
+      if (
+          radius > 0 &&
+              kotlin.math.max(
+                  kotlin.math.abs(location.blockX - spawn.blockX),
+                  kotlin.math.abs(location.blockZ - spawn.blockZ),
+              ) <= radius
+      )
+          return
+    }
+    if (!canEditEntity(player, location)) return
+    val edited = HangingEditor.edit(entity, hit.hitPosition, face) ?: return
+    holdEditor.stop(player.uniqueId)
+    afterEntityEdit(player, edited)
+    history?.recordHanging(player, edited, before)
+    player.swingHand(EquipmentSlot.HAND)
+  }
+
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun cushion(event: PlayerInteractAtEntityEvent) {
     val cushion = event.rightClicked as? Cushion ?: return

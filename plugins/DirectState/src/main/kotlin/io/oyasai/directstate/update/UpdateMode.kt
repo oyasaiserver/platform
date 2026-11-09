@@ -62,6 +62,7 @@ internal class UpdateMode(
   private val guard = UpdateGuard<Position, Saved>()
   private val buttons = mutableMapOf<Position, ButtonReset>()
   private var tick = 0L
+  private val hangings = HangingSupport(::enabled, ::keepingEnabled, isTool)
   private val cushions = CushionSupport(plugin, ::keepingEnabled)
   private val forcePlacement =
       ForcePlacement(
@@ -74,6 +75,7 @@ internal class UpdateMode(
   init {
     plugin.server.pluginManager.registerEvents(forcePlacement, plugin)
     plugin.server.pluginManager.registerEvents(cushions, plugin)
+    plugin.server.pluginManager.registerEvents(hangings, plugin)
     plugin.server.scheduler.runTaskTimer(plugin, Runnable { tick() }, 1L, 1L)
   }
 
@@ -107,6 +109,9 @@ internal class UpdateMode(
   /** ブロックのチャンクが現在読み込まれているか調べる。 */
   private fun loaded(block: Block) = block.world.isChunkLoaded(block.x shr 4, block.z shr 4)
 
+  fun afterEntityEdit(player: Player, entity: org.bukkit.entity.Entity) =
+      hangings.touch(player, entity)
+
   /** 永続固定する */
   fun afterEdit(player: Player, blocks: List<Block>) {
     naturalLocks.forget(blocks)
@@ -137,6 +142,7 @@ internal class UpdateMode(
   data class EditState(
       val daylightLocked: Boolean,
       val ticks: List<SavedTick<net.minecraft.world.level.block.Block>>?,
+      val hangings: Map<UUID, Boolean> = emptyMap(),
   )
 
   fun captureState(block: Block) =
@@ -145,6 +151,7 @@ internal class UpdateMode(
           if (block.type == Material.SNIFFER_EGG || block.type == Material.CREAKING_HEART)
               BlockEntityAccess.scheduledTicks(block)
           else null,
+          HangingSupport.affected(block).associate { it.uniqueId to HangingSupport.isLocked(it) },
       )
 
   /** 履歴復元において実行者の現在設定は参照しない */
@@ -152,6 +159,9 @@ internal class UpdateMode(
     buttons.remove(position(block))
     setDaylightLocked(block, state.daylightLocked)
     state.ticks?.let { BlockEntityAccess.restoreScheduledTicks(block, it) }
+    state.hangings.forEach { (id, locked) ->
+      plugin.server.getEntity(id)?.let { HangingSupport.setLocked(it, locked) }
+    }
   }
 
   /** ベッドの相を返す。 */
@@ -177,6 +187,7 @@ internal class UpdateMode(
     naturalLocks.forget(roots)
     roots.forEach { guard.forget(position(it)) }
     if (!enabled(player)) return
+    hangings.beforeEdit(player, roots)
     val nearby = mutableMapOf<Position, Saved>()
     for (root in roots) for (x in -2..2) for (y in -2..2) for (z in -2..2) {
       if (root.y + y !in root.world.minHeight until root.world.maxHeight) continue
