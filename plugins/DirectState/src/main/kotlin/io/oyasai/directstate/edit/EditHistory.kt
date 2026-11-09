@@ -1,5 +1,6 @@
 package io.oyasai.directstate.edit
 
+import io.oyasai.directstate.edit.hand.HangingEditor
 import io.oyasai.directstate.update.UpdateMode
 import java.util.UUID
 import org.bukkit.Location
@@ -7,6 +8,7 @@ import org.bukkit.Server
 import org.bukkit.block.BlockState
 import org.bukkit.block.data.BlockData
 import org.bukkit.entity.Cushion
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 
 /** DSが変更する状態を保存する。 */
@@ -27,6 +29,13 @@ internal class EditHistory(
 ) {
   private sealed interface Change {
     data class Blocks(val before: List<BlockSnapshot>, val after: List<BlockSnapshot>) : Change
+
+    data class Hanging(
+        val entity: UUID,
+        val position: Position,
+        val before: HangingEditor.State,
+        val after: HangingEditor.State,
+    ) : Change
 
     data class CushionMove(val entity: UUID, val before: Position, val after: Position) : Change
   }
@@ -72,6 +81,12 @@ internal class EditHistory(
         record(player, Change.CushionMove(cushion.uniqueId, Position(before), Position(after)))
   }
 
+  fun recordHanging(player: Player, entity: Entity, before: HangingEditor.State) {
+    val after = HangingEditor.snapshot(entity) ?: return
+    if (before != after)
+        record(player, Change.Hanging(entity.uniqueId, Position(entity.location), before, after))
+  }
+
   private fun record(player: Player, change: Change) {
     val history = histories.getOrPut(player.uniqueId) { History(player.name) }
     history.name = player.name
@@ -101,6 +116,15 @@ internal class EditHistory(
         is Change.Blocks -> {
           val states = if (redo) change.after else change.before
           restoreBlocks(player, states)
+        }
+        is Change.Hanging -> {
+          change.position.location(server)?.let {
+            it.world!!.getChunkAt(it.blockX shr 4, it.blockZ shr 4)
+          }
+          val entity = server.getEntity(change.entity)
+          entity != null &&
+              entity.isValid &&
+              HangingEditor.restore(entity, if (redo) change.after else change.before)
         }
         is Change.CushionMove -> {
           // 読込範囲外にあるクッションも、記録したチャンクを読み込んで探す。
