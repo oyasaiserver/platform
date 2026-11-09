@@ -77,6 +77,9 @@ class DiceInstance(
     /** 万が一斜面等で転がり続けた場合の強制停止タイムアウト（100tick = 5秒） */
     const val PHYSICS_TIMEOUT_TICKS = 100
 
+    /** タイムアウト時に空中のサイコロを真下の地面へ降ろすための探索距離 */
+    const val TIMEOUT_DROP_RAY_DISTANCE = 384.0
+
     /** 回転アニメーションを適用する最低移動速度 */
     const val MIN_ROTATION_SPEED = 0.02
   }
@@ -104,6 +107,11 @@ class DiceInstance(
   private var settleStayTask: BukkitTask? = null
 
   private val currentLocation = startLoc.clone()
+
+  /** 現在（静止後は最終）の位置。合計ホログラムなど、サイコロの停止位置を基準にする処理で使う。 */
+  val settledLocation: Location
+    get() = currentLocation.clone()
+
   private val velocity = initialVelocity.clone()
   private var restTickCount = 0
 
@@ -201,7 +209,12 @@ class DiceInstance(
 
                 // タイムアウト保護（一定時間以上転がり続けた場合強制停止・確定）
                 if (tickCount > PHYSICS_TIMEOUT_TICKS) {
-                  settle()
+                  // 高く投げて空中にいる場合に備え、真下の地面へ降ろしてから確定する
+                  if (!dropToGround(world)) {
+                    settleEmergency()
+                  } else {
+                    settle()
+                  }
                   cancel()
                   return
                 }
@@ -234,7 +247,7 @@ class DiceInstance(
 
                     if (normal.y > 0.4) {
                       // 床面衝突: バウンド＆摩擦（微小反発は0に収束させて速やかに静止）
-                      val bounceY = -reflection.y * FLOOR_BOUNCE_RESTITUTION
+                      val bounceY = Math.abs(reflection.y) * FLOOR_BOUNCE_RESTITUTION
                       reflection.y =
                           if (Math.abs(bounceY) < BOUNCE_DAMPING_THRESHOLD) 0.0 else bounceY
                       reflection.x *= FLOOR_FRICTION_XZ
@@ -333,6 +346,20 @@ class DiceInstance(
     world.playSound(currentLocation, Sound.BLOCK_AMETHYST_BLOCK_HIT, volume * 0.5f, pitch + 0.2f)
   }
 
+  /** 現在位置の真下にある地面へ移動する。地面が見つからなければ false を返す。 */
+  private fun dropToGround(world: org.bukkit.World): Boolean {
+    val ray =
+        world.rayTraceBlocks(
+            currentLocation,
+            Vector(0.0, -1.0, 0.0),
+            TIMEOUT_DROP_RAY_DISTANCE,
+            FluidCollisionMode.NEVER,
+            true,
+        ) ?: return false
+    currentLocation.set(ray.hitPosition.x, ray.hitPosition.y, ray.hitPosition.z)
+    return true
+  }
+
   private fun settleEmergency() {
     val player = plugin.server.getPlayer(ownerUuid)
     if (player != null && player.isOnline) {
@@ -353,6 +380,8 @@ class DiceInstance(
     // サイコロの表示を確定＆正面上向きに姿勢を整える
     val display = itemDisplay
     if (display != null && display.isValid) {
+      // 強制停止で位置が補正された場合も、表示を最終位置に合わせる
+      display.teleport(currentLocation)
       display.setItemStack(ItemStack(mode.material))
 
       val rotQuat =

@@ -59,7 +59,6 @@ class DiceListener(
   private fun isDiceAction(player: Player, item: ItemStack?): Boolean {
     if (diceItem.isDice(item)) return true
     if (diceItem.isDice(player.inventory.itemInMainHand)) return true
-    if (diceItem.isDice(player.inventory.itemInOffHand)) return true
     if (chargeManager.isCharging(player)) return true
     if (chargeManager.isRecentThrower(player)) return true
     return false
@@ -69,7 +68,12 @@ class DiceListener(
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
   fun onBlockPlace(event: BlockPlaceEvent) {
     val player = event.player
-    if (!isDiceAction(player, event.itemInHand)) return
+    if (
+        !diceItem.isDice(event.itemInHand) &&
+            !chargeManager.isCharging(player) &&
+            !chargeManager.isRecentThrower(player)
+    )
+        return
 
     event.isCancelled = true
     event.setBuild(false)
@@ -84,10 +88,7 @@ class DiceListener(
     diceManager.plugin.server.scheduler.runTaskLater(
         diceManager.plugin,
         Runnable {
-          if (loc.block.type == event.blockPlaced.type) {
-            loc.block.setBlockData(previousData, false)
-          }
-          player.sendBlockChange(loc, previousData)
+          player.sendBlockChange(loc, loc.block.blockData)
           player.updateInventory()
         },
         1L,
@@ -102,19 +103,18 @@ class DiceListener(
     val eventItem = event.item
     val effectiveItem = if (eventItem != null && !eventItem.type.isAir) eventItem else mainHand
 
-    val isHoldingDice =
-        diceItem.isDice(mainHand) || diceItem.isDice(offHand) || diceItem.isDice(effectiveItem)
-    val isDiceContext = isHoldingDice || isDiceAction(player, effectiveItem)
-
     // オフハンド操作、またはサイコロ操作時のメインハンド以外での操作は無効化
     if (event.hand != EquipmentSlot.HAND) {
-      if (isDiceContext) {
+      if (diceItem.isDice(offHand) || isDiceAction(player, effectiveItem)) {
         event.setUseItemInHand(Event.Result.DENY)
         event.setUseInteractedBlock(Event.Result.DENY)
         event.isCancelled = true
       }
       return
     }
+
+    val isHoldingDice = diceItem.isDice(mainHand) || diceItem.isDice(effectiveItem)
+    val isDiceContext = isHoldingDice || isDiceAction(player, effectiveItem)
 
     if (isDiceContext) {
       val action = event.action

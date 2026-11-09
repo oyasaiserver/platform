@@ -41,4 +41,46 @@ class PromotionMigrationTest {
       folder.deleteRecursively()
     }
   }
+
+  @Test
+  fun `resolveLuckPermsProvider updates companion provider lazily on enable`() {
+    com.baakun.dynamicprofile.DynamicProfile.provider = null
+    assertNull(com.baakun.dynamicprofile.DynamicProfile.provider)
+
+    var registered = false
+    val fakeProvider =
+        org.bukkit.plugin.RegisteredServiceProvider(
+            net.luckperms.api.LuckPerms::class.java,
+            java.lang.reflect.Proxy.newProxyInstance(
+                net.luckperms.api.LuckPerms::class.java.classLoader,
+                arrayOf(net.luckperms.api.LuckPerms::class.java),
+            ) { _, _, _ ->
+              null
+            } as net.luckperms.api.LuckPerms,
+            org.bukkit.plugin.ServicePriority.Normal,
+            java.lang.reflect.Proxy.newProxyInstance(
+                org.bukkit.plugin.Plugin::class.java.classLoader,
+                arrayOf(org.bukkit.plugin.Plugin::class.java),
+            ) { _, _, _ ->
+              null
+            } as org.bukkit.plugin.Plugin,
+        )
+
+    assertNull(
+        com.baakun.dynamicprofile.DynamicProfile.resolveLuckPermsProvider {
+          if (registered) fakeProvider else null
+        }
+    )
+    assertNull(com.baakun.dynamicprofile.DynamicProfile.provider)
+
+    registered = true
+    assertSame(
+        fakeProvider,
+        com.baakun.dynamicprofile.DynamicProfile.resolveLuckPermsProvider {
+          if (registered) fakeProvider else null
+        },
+    )
+    assertSame(fakeProvider, com.baakun.dynamicprofile.DynamicProfile.provider)
+    com.baakun.dynamicprofile.DynamicProfile.provider = null
+  }
 }

@@ -18,7 +18,6 @@ import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import io.oyasai.economy.api.OyasaiEconomyApi
 import java.util.UUID
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -105,12 +104,26 @@ object SLSignSetting {
     val meta = item.itemMeta as org.bukkit.inventory.meta.BlockStateMeta
     val signState = meta.blockState as Sign
 
-    val front = signState.getSide(Side.FRONT)
+    writeCommandSign(signState, slData, owner.toString())
+    meta.blockState = signState
+
+    meta.itemName(
+        (Component.text("SLTP看板 ")
+            .color(TextColor.color(85, 255, 85))
+            .append(
+                Component.text("(${slData.title}, ID: ${slData.id})")
+                    .color(TextColor.color(255, 85, 255))
+            ))
+    )
+    item.itemMeta = meta
+    return item
+  }
+
+  fun writeCommandSign(sign: Sign, slData: SLData, owner: String?) {
+    val front = sign.getSide(Side.FRONT)
     front.line(
         0,
-        Component.text("(SocialTeleport)")
-            .clickEvent(ClickEvent.runCommand("/sltp ${slData.id}"))
-            .color(TextColor.color(0, 170, 0)),
+        Component.text("(SocialTeleport)").color(TextColor.color(0, 170, 0)),
     )
     front.line(1, Component.text("[${slData.title}]").color(TextColor.color(85, 255, 85)))
     front.line(
@@ -125,26 +138,17 @@ object SLSignSetting {
             .append(Component.text(slData.id).color(TextColor.color(255, 170, 0))),
     )
 
-    signState.isWaxed = true
+    sign.isWaxed = true
 
-    signState.persistentDataContainer.set(sltpSignKey, PersistentDataType.INTEGER, slData.id)
-    signState.persistentDataContainer.set(
-        sltpSignUUIDKey,
-        PersistentDataType.STRING,
-        owner.toString(),
+    sign.persistentDataContainer.set(sltpSignKey, PersistentDataType.INTEGER, slData.id)
+    sign.persistentDataContainer.set(
+        Events.idGenerationKey,
+        PersistentDataType.INTEGER,
+        Events.CURRENT_ID_GENERATION,
     )
-    meta.blockState = signState
-
-    meta.itemName(
-        (Component.text("SLTP看板 ")
-            .color(TextColor.color(85, 255, 85))
-            .append(
-                Component.text("(${slData.title}, ID: ${slData.id})")
-                    .color(TextColor.color(255, 85, 255))
-            ))
-    )
-    item.itemMeta = meta
-    return item
+    if (owner != null) {
+      sign.persistentDataContainer.set(sltpSignUUIDKey, PersistentDataType.STRING, owner)
+    }
   }
 
   fun createGUI(sign: Sign, slData: SLData): ChestGui {

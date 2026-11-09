@@ -21,7 +21,17 @@ class TreasureFileStore(
     val treasures = linkedMapOf<UUID, Treasure>()
     if (!dataFile.exists()) return treasures
 
-    val yaml = YamlConfiguration.loadConfiguration(dataFile)
+    val yaml =
+        runCatching { YamlConfiguration().apply { load(dataFile) } }
+            .getOrElse { ex ->
+              logger.log(Level.WARNING, "宝HEADデータの読み込みに失敗したためバックアップを確認します: ${ex.message}")
+              val backupFile = File(dataFile.parentFile, dataFile.name + ".bak")
+              if (!backupFile.exists()) return treasures
+              runCatching { YamlConfiguration().apply { load(backupFile) } }
+                  .getOrElse {
+                    return treasures
+                  }
+            }
     val section = yaml.getConfigurationSection("treasures") ?: return treasures
     for (key in section.getKeys(false)) {
       val entry = section.getConfigurationSection(key)

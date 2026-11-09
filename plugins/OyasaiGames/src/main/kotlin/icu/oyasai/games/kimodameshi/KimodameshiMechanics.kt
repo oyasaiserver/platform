@@ -89,11 +89,11 @@ class KimodameshiMechanics(private val game: KimodameshiModule) : Listener {
           game.team(p) in listOf("runner", "hunter") &&
           p.health > 0
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun onDamage(event: EntityDamageEvent) {
     val victim = event.entity as? Player ?: return
     if (!game.active() || !game.participant(victim) || game.team(victim) != "runner") return
-    if (event.damage < victim.health) return
+    if (event.finalDamage < victim.health) return
     event.isCancelled = true
     victim.health = maxHealth(victim)
     game.teams[victim.uniqueId] = "spectator"

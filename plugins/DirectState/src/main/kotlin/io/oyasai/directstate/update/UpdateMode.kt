@@ -2,8 +2,10 @@ package io.oyasai.directstate.update
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent
 import io.oyasai.directstate.Permissions
+import io.oyasai.directstate.integration.BlockEntityAccess
 import io.papermc.paper.event.player.PlayerOpenSignEvent
 import java.util.UUID
+import net.minecraft.world.ticks.SavedTick
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -38,6 +40,9 @@ internal class UpdateMode(
     private val personalSetting: (Player) -> Boolean,
     private val writePersonalSetting: (Player, Boolean) -> Unit,
     private val write: (Player, Block, BlockData) -> Unit,
+    private val naturalLocks: NaturalUpdateLock = NaturalUpdateLock(plugin),
+    private val forcePlacementSetting: (Player) -> Boolean = { true },
+    private val keepStateSetting: (Player) -> Boolean = { true },
 ) : Listener {
   /** UpdateGuardのキーに使う、ワールドとブロック座標。 */
   private data class Position(val world: UUID, val x: Int, val y: Int, val z: Int)
@@ -57,18 +62,20 @@ internal class UpdateMode(
   private val guard = UpdateGuard<Position, Saved>()
   private val buttons = mutableMapOf<Position, ButtonReset>()
   private var tick = 0L
-  private val cushions = CushionSupport(plugin, ::enabled)
+  private val hangings = HangingSupport(::enabled, ::keepingEnabled, isTool)
+  private val cushions = CushionSupport(plugin, ::keepingEnabled)
   private val forcePlacement =
       ForcePlacement(
           plugin,
           placeCushion = cushions::place,
-          enabled = ::enabled,
+          enabled = ::forcePlacementEnabled,
           protectPlacement = ::protectPlacement,
       )
 
   init {
     plugin.server.pluginManager.registerEvents(forcePlacement, plugin)
     plugin.server.pluginManager.registerEvents(cushions, plugin)
+    plugin.server.pluginManager.registerEvents(hangings, plugin)
     plugin.server.scheduler.runTaskTimer(plugin, Runnable { tick() }, 1L, 1L)
   }
 
@@ -90,15 +97,32 @@ internal class UpdateMode(
   /** 個人設定またはWorldGuard領域設定のどちらかが有効か調べる。 */
   private fun enabled(player: Player) = personalEnabled(player) || regionRule.suppress(player)
 
+  private fun forcePlacementEnabled(player: Player) =
+      enabled(player) && (regionRule.forcePlacement(player) ?: forcePlacementSetting(player))
+
+  private fun keepingEnabled(player: Player) =
+      enabled(player) && (regionRule.keepState(player) ?: keepStateSetting(player))
+
   /** Bukkit BlockをUpdateGuard用の不変な座標へ変換する。 */
   private fun position(block: Block) = Position(block.world.uid, block.x, block.y, block.z)
 
   /** ブロックのチャンクが現在読み込まれているか調べる。 */
   private fun loaded(block: Block) = block.world.isChunkLoaded(block.x shr 4, block.z shr 4)
 
+  fun afterEntityEdit(player: Player, entity: org.bukkit.entity.Entity) =
+      hangings.touch(player, entity)
+
   /** 永続固定する */
   fun afterEdit(player: Player, blocks: List<Block>) {
-    if (enabled(player)) blocks.forEach { setDaylightLocked(it, true) }
+    naturalLocks.forget(blocks)
+    if (!keepingEnabled(player)) return
+    blocks.forEach { setDaylightLocked(it, true) }
+    naturalLocks.freeze(blocks)
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  fun unload(event: org.bukkit.event.world.ChunkUnloadEvent) {
+    naturalLocks.flush()
   }
 
   private fun setDaylightLocked(block: Block, locked: Boolean) {
@@ -114,6 +138,31 @@ internal class UpdateMode(
   private fun daylightLocked(block: Block) =
       block.type == Material.DAYLIGHT_DETECTOR &&
           (block.state as? DaylightDetector)?.persistentDataContainer?.has(daylightLock) == true
+
+  data class EditState(
+      val daylightLocked: Boolean,
+      val ticks: List<SavedTick<net.minecraft.world.level.block.Block>>?,
+      val hangings: Map<UUID, Boolean> = emptyMap(),
+  )
+
+  fun captureState(block: Block) =
+      EditState(
+          daylightLocked(block),
+          if (block.type == Material.SNIFFER_EGG || block.type == Material.CREAKING_HEART)
+              BlockEntityAccess.scheduledTicks(block)
+          else null,
+          HangingSupport.affected(block).associate { it.uniqueId to HangingSupport.isLocked(it) },
+      )
+
+  /** 履歴復元において実行者の現在設定は参照しない */
+  fun restoreState(block: Block, state: EditState) {
+    buttons.remove(position(block))
+    setDaylightLocked(block, state.daylightLocked)
+    state.ticks?.let { BlockEntityAccess.restoreScheduledTicks(block, it) }
+    state.hangings.forEach { (id, locked) ->
+      plugin.server.getEntity(id)?.let { HangingSupport.setLocked(it, locked) }
+    }
+  }
 
   /** ベッドの相を返す。 */
   private fun bedCounterpart(block: Block): Block? {
@@ -135,8 +184,10 @@ internal class UpdateMode(
 
   /** 編集元の周囲2ブロックを保存し、短時間の更新抑制対象として登録する。 */
   fun beforeEdit(player: Player, roots: List<Block>) {
+    naturalLocks.forget(roots)
     roots.forEach { guard.forget(position(it)) }
     if (!enabled(player)) return
+    hangings.beforeEdit(player, roots)
     val nearby = mutableMapOf<Position, Saved>()
     for (root in roots) for (x in -2..2) for (y in -2..2) for (z in -2..2) {
       if (root.y + y !in root.world.minHeight until root.world.maxHeight) continue
@@ -465,6 +516,7 @@ internal class UpdateMode(
 
   /** 停止時にボタンを戻し、すべての保留状態を破棄する。 */
   fun close() {
+    naturalLocks.flush()
     buttons.values.toList().forEach(::resetButton)
     buttons.clear()
     guard.clear()

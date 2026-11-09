@@ -1761,17 +1761,26 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun explode(event: EntityExplodeEvent) {
-    val match = arenaAt(event.location) ?: return
-    if (
-        match.phase != BwPhase.RUNNING ||
-            !event.entity.persistentDataContainer.has(entityKey, PersistentDataType.STRING)
-    ) {
+    val entityMatchId =
+        event.entity.persistentDataContainer.get(entityKey, PersistentDataType.STRING)
+    val match = arenaAt(event.location)
+    if (match == null) {
+      if (entityMatchId != null) {
+        event.isCancelled = true
+        event.blockList().clear()
+      } else {
+        event.blockList().removeIf { arenaAt(it.location) != null }
+      }
+      return
+    }
+    if (match.phase != BwPhase.RUNNING || entityMatchId != match.id) {
       event.isCancelled = true
       return
     }
     val exceptions = files.config.getStringList("destroy-placed-blocks-by-explosion-except").toSet()
     event.blockList().removeIf {
-      !files.config.getBoolean("destroy-placed-blocks-by-explosion", true) ||
+      !match.config.contains(it.location) ||
+          !files.config.getBoolean("destroy-placed-blocks-by-explosion", true) ||
           key(it) !in match.placed ||
           it.type.name in exceptions ||
           protectedArea(match, it.location)
@@ -1788,7 +1797,11 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
 
   @EventHandler(ignoreCancelled = true)
   fun blockExplosion(event: BlockExplodeEvent) {
-    if (arenaAt(event.block.location) != null) event.isCancelled = true
+    if (arenaAt(event.block.location) != null) {
+      event.isCancelled = true
+    } else {
+      event.blockList().removeIf { arenaAt(it.location) != null }
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

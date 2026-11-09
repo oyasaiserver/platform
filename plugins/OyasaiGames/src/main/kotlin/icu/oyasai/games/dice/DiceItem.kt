@@ -3,7 +3,6 @@ package icu.oyasai.games.dice
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.NamespacedKey
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
@@ -35,30 +34,6 @@ class DiceItem(private val plugin: Plugin) {
     if (meta.persistentDataContainer.has(diceKey, PersistentDataType.BYTE)) return true
     if (meta.persistentDataContainer.has(modeKey, PersistentDataType.STRING)) return true
 
-    // 2. 耐久力エンチャント判定（サイコロ素材かつ耐久力エンチャントが付与されている）
-    if (
-        meta.hasEnchant(Enchantment.UNBREAKING) && DiceType.entries.any { it.material == item.type }
-    )
-        return true
-
-    // 3. Lore判定（プレーンテキストで確実にチェック）
-    val loreList = meta.lore()
-    if (loreList != null && loreList.isNotEmpty()) {
-      val plain = PlainTextComponentSerializer.plainText()
-      for (line in loreList) {
-        val text = plain.serialize(line)
-        if (text.contains("投げて遊べる本格サイコロ") || text.contains("サイコロ")) return true
-      }
-    }
-
-    // 4. 表示名判定（プレーンテキストで確実にチェック）
-    val display = meta.displayName()
-    if (display != null) {
-      val plain = PlainTextComponentSerializer.plainText()
-      val text = plain.serialize(display)
-      if (text.contains("サイコロ") || text.contains("ダイス") || text.contains("コイントス")) return true
-    }
-
     return false
   }
 
@@ -78,7 +53,7 @@ class DiceItem(private val plugin: Plugin) {
 
   fun hasDice(player: Player): Boolean {
     if (isDice(player.inventory.itemInOffHand)) return true
-    for (item in player.inventory.contents) {
+    for (item in player.inventory.storageContents) {
       if (isDice(item)) return true
     }
     return false
@@ -86,7 +61,7 @@ class DiceItem(private val plugin: Plugin) {
 
   fun sanitizePlayerDice(player: Player) {
     var foundFirst = false
-    val contents = player.inventory.contents
+    val contents = player.inventory.storageContents
     var modified = false
 
     for (i in contents.indices) {
@@ -107,7 +82,7 @@ class DiceItem(private val plugin: Plugin) {
     }
 
     if (modified) {
-      player.inventory.contents = contents
+      player.inventory.storageContents = contents
     }
 
     // オフハンドの検証

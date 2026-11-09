@@ -45,9 +45,10 @@ internal class PvpEconomy(
         saveYaml(file, y)
         error("OyasaiEconomyApi withdrawal failed")
       }
-      check(response.completion.join() is io.oyasai.economy.api.EconomyResult.Success) {
-        "引き落としを保存できません"
-      }
+      val debitResult =
+          runCatching { response.completion.get(5, java.util.concurrent.TimeUnit.SECONDS) }
+              .getOrNull()
+      check(debitResult is io.oyasai.economy.api.EconomyResult.Success) { "引き落としを保存できません" }
       y.set("debits.$key.state", "charged")
       saveYaml(file, y)
       return key
@@ -153,10 +154,12 @@ internal class PvpEconomy(
     y.set("$path.state", "uncertain")
     saveYaml(file, y)
     val response = economy.deposit("yen", UUID.fromString(y.getString("$path.player")!!), amount)
+    val creditResult =
+        runCatching { response.completion.get(5, java.util.concurrent.TimeUnit.SECONDS) }
+            .getOrNull()
     y.set(
         "$path.state",
-        if (response.completion.join() is io.oyasai.economy.api.EconomyResult.Success) "paid"
-        else "pending",
+        if (creditResult is io.oyasai.economy.api.EconomyResult.Success) "paid" else "pending",
     )
     saveYaml(file, y)
   }

@@ -3,6 +3,7 @@ package io.oyasai.directstate
 import io.oyasai.directstate.command.DirectStateCommand
 import io.oyasai.directstate.edit.BlockEdit
 import io.oyasai.directstate.edit.BlockEditService
+import io.oyasai.directstate.edit.EditHistory
 import io.oyasai.directstate.edit.EditInteractionListener
 import io.oyasai.directstate.edit.ToolItems
 import io.oyasai.directstate.edit.hand.HandEditor
@@ -21,9 +22,12 @@ import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
 import org.bukkit.block.data.BlockData
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
 
-class DirectState : JavaPlugin() {
+class DirectState : JavaPlugin(), Listener {
   private lateinit var playerSettings: PlayerSettingsStore
   private lateinit var holdEditor: HoldEditor
   private lateinit var edits: BlockEditService
@@ -54,6 +58,8 @@ class DirectState : JavaPlugin() {
             .toSet()
     playerSettings = PlayerSettingsStore(dataFolder, logger)
     playerSettings.load()
+    server.pluginManager.registerEvents(this, this)
+    server.onlinePlayers.forEach { playerSettings.recordName(it.uniqueId, it.name) }
 
     val tools = ToolItems(this)
     val shapeEditor = ShapeEditor()
@@ -71,6 +77,8 @@ class DirectState : JavaPlugin() {
             ::personalUpdateEnabled,
             ::writeUpdateMode,
             ::applyEdit,
+            forcePlacementSetting = { playerSettings.get(it.uniqueId).forcePlacement },
+            keepStateSetting = { playerSettings.get(it.uniqueId).keepState },
         )
     val blockChangeLog =
         if (server.pluginManager.isPluginEnabled("CoreProtect")) {
@@ -79,7 +87,15 @@ class DirectState : JavaPlugin() {
           logger.info("CoreProtect is not installed or enabled; block change logging is disabled.")
           null
         }
-    edits = BlockEditService(this, updateMode, blockChangeLog)
+    val history =
+        EditHistory(
+            server,
+            restoreBlocks = { player, snapshots -> edits.restore(player, snapshots) },
+        )
+    edits =
+        BlockEditService(this, updateMode, blockChangeLog, history) {
+          playerSettings.get(it.uniqueId).editSound
+        }
 
     val interactions =
         EditInteractionListener(
@@ -95,11 +111,14 @@ class DirectState : JavaPlugin() {
               !server.pluginManager.isPluginEnabled("WorldGuard") ||
                   WorldGuardUpdates.canBuild(player, location)
             },
+            history = history,
+            afterEntityEdit = updateMode::afterEntityEdit,
         )
     // 同じ優先度のUpdate Modeより先に、通常の編集イベントを処理する。
     server.pluginManager.registerEvents(interactions, this)
     server.pluginManager.registerEvents(updateMode, this)
-    DirectStateCommand(this, playerSettings, updateMode, tools::create, tools::mark).register()
+    DirectStateCommand(this, playerSettings, updateMode, tools::create, tools::mark, history)
+        .register()
 
     server.scheduler.runTaskTimer(
         this,
@@ -110,6 +129,11 @@ class DirectState : JavaPlugin() {
         1L,
         1L,
     )
+  }
+
+  @EventHandler
+  fun playerJoined(event: PlayerJoinEvent) {
+    playerSettings.recordName(event.player.uniqueId, event.player.name)
   }
 
   override fun onDisable() {

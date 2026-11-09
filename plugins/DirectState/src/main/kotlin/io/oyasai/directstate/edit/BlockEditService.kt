@@ -8,6 +8,8 @@ import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockState
+import org.bukkit.block.Container
+import org.bukkit.block.TileState
 import org.bukkit.block.data.BlockData
 import org.bukkit.block.data.type.Fence
 import org.bukkit.block.data.type.GlassPane
@@ -29,10 +31,13 @@ internal class BlockEditService(
     private val plugin: JavaPlugin,
     private val updateMode: UpdateMode,
     private val blockChangeLog: BlockChangeLog?,
+    private val history: EditHistory? = null,
+    private val editSound: (Player) -> Boolean = { true },
 ) {
   private var tickCount = 0L
   // 同じプレイヤーが同じ座標へ続けて行った変更を、一件のログにまとめるための保留表。
   private val pendingEdits = mutableMapOf<EditKey, PendingEdit>()
+  private val pendingCandles = mutableMapOf<Block, BlockData>()
   private val faces = listOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
 
   /** プレイヤーとワールド座標を合わせた、保留ログの重複しないキー。 */
@@ -59,7 +64,7 @@ internal class BlockEditService(
   }
 
   /** 要求された変更から重複と無変更を除き、更新抑制・ワールド反映・ログ記録を同じ順で行う。 すべての編集がこの関数を通ることで、機能ごとの適用漏れを防ぐ。 */
-  fun apply(player: Player, requested: List<BlockEdit>) {
+  fun apply(player: Player, requested: List<BlockEdit>, remember: Boolean = false) {
     val edits =
         requested
             .distinctBy { edit -> edit.block.location }
@@ -69,9 +74,11 @@ internal class BlockEditService(
                       true
             }
     if (edits.isEmpty()) return
+    val snapshots = if (remember && history != null) edits.map { snapshot(it.block) } else null
     updateMode.beforeEdit(player, edits.map { edit -> edit.block })
     val before = edits.associate { edit -> edit.block to edit.block.state }
     edits.forEach { edit ->
+      pendingCandles.remove(edit.block)
       if (edit.blockEntityPresent == null) edit.block.setBlockData(edit.data, false)
       else BlockEntityAccess.setBody(edit.block, edit.data, edit.blockEntityPresent)
     }
@@ -79,16 +86,21 @@ internal class BlockEditService(
     edits.forEach { edit ->
       queueEdit(player, before.getValue(edit.block), edit.block, edit.block.blockData.clone())
     }
+    if (snapshots != null)
+        history?.recordBlocks(player, snapshots, edits.map { snapshot(it.block) })
     // Paperが直後に上書きするため、ロウソクの状態だけ1tick後にもう一度反映する。
     val candleStates =
         edits
             .filter { edit -> edit.data is org.bukkit.block.data.type.Candle }
             .map { edit -> BlockEdit(edit.block, edit.data.clone()) }
     if (candleStates.isNotEmpty()) {
+      candleStates.forEach { pendingCandles[it.block] = it.data }
       plugin.server.scheduler.runTask(
           plugin,
           Runnable {
             candleStates.forEach { edit ->
+              if (pendingCandles[edit.block] !== edit.data) return@forEach
+              pendingCandles.remove(edit.block)
               if (
                   edit.block.type == edit.data.material &&
                       edit.block.blockData.asString != edit.data.asString
@@ -99,8 +111,67 @@ internal class BlockEditService(
           },
       )
     }
-    player.playSound(edits.first().block.location, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 0.3f, 1.5f)
+    if (editSound(player))
+        player.playSound(
+            edits.first().block.location,
+            Sound.BLOCK_WOODEN_BUTTON_CLICK_ON,
+            0.3f,
+            1.5f,
+        )
     player.sendActionBar(Component.text(describe(edits.first().data)))
+  }
+
+  private fun snapshot(block: Block): BlockSnapshot {
+    val body =
+        if (block.type in setOf(Material.BELL, Material.ENCHANTING_TABLE, Material.CREAKING_HEART))
+            BlockEntityAccess.hasBody(block)
+        else null
+    val tile = if (body == false) null else (block.state as? TileState)?.copy()
+    return BlockSnapshot(
+        block.world.uid,
+        block.x,
+        block.y,
+        block.z,
+        block.blockData.clone(),
+        body,
+        updateMode.captureState(block),
+        tile,
+    )
+  }
+
+  /** 同じ編集経路で更新抑制・ログを扱い、復元自体を新しい履歴にはしない。 */
+  fun restore(player: Player, snapshots: List<BlockSnapshot>): Boolean {
+    val available =
+        snapshots.mapNotNull { state ->
+          val world = plugin.server.getWorld(state.world) ?: return@mapNotNull null
+          if (state.y !in world.minHeight until world.maxHeight) return@mapNotNull null
+          world.getChunkAt(state.x shr 4, state.z shr 4)
+          world.getBlockAt(state.x, state.y, state.z) to state
+        }
+    if (available.isEmpty()) return false
+    val blocks = available.map { it.first }
+    flush()
+    updateMode.beforeEdit(player, blocks)
+    val before = blocks.map { it.state }
+    available.forEach { (block, state) ->
+      pendingCandles.remove(block)
+      // アイテム入れるために空にしとく
+      (block.state as? Container)?.let { container ->
+        container.snapshotInventory.clear()
+        check(container.update(false, false)) { "Could not clear container at ${block.location}" }
+      }
+      if (state.body == null) block.setBlockData(state.data.clone(), false)
+      else BlockEntityAccess.setBody(block, state.data.clone(), state.body)
+      if (state.tile != null)
+          check(state.tile.copy(block.location).update(true, false)) {
+            "Could not restore block entity at ${block.location}"
+          }
+      updateMode.restoreState(block, state.updates)
+    }
+    blocks.forEachIndexed { index, block ->
+      blockChangeLog?.record(player.name, before[index], block.location, block.blockData.clone())
+    }
+    return true
   }
 
   /** CoreProtect有効時だけ、同じ座標の連続変更を既存の保留ログへまとめる。 */

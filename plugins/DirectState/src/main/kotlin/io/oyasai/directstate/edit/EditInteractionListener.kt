@@ -3,6 +3,7 @@ package io.oyasai.directstate.edit
 import io.oyasai.directstate.Permissions
 import io.oyasai.directstate.edit.hand.HandEditor
 import io.oyasai.directstate.edit.hand.HandGeometry
+import io.oyasai.directstate.edit.hand.HangingEditor
 import io.oyasai.directstate.edit.hold.HoldEditor
 import io.oyasai.directstate.edit.replace.BlockReplacement
 import io.oyasai.directstate.edit.replace.TypeReplaceMode
@@ -11,6 +12,7 @@ import io.oyasai.directstate.integration.BlockEntityAccess
 import io.oyasai.directstate.settings.PlayerSettingsStore
 import io.papermc.paper.event.player.PlayerStopUsingItemEvent
 import kotlin.math.floor
+import kotlin.math.roundToLong
 import net.kyori.adventure.text.Component
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
@@ -48,13 +50,67 @@ internal class EditInteractionListener(
     private val blockReplacement: BlockReplacement,
     private val ignoredBlockPdcKeys: Set<NamespacedKey> = emptySet(),
     private val canEditEntity: (Player, Location) -> Boolean = { _, _ -> true },
+    private val history: EditHistory? = null,
+    private val afterEntityEdit: (Player, org.bukkit.entity.Entity) -> Unit = { _, _ -> },
 ) : Listener {
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun hanging(event: PlayerInteractAtEntityEvent) {
+    val entity = event.rightClicked
+    val before = HangingEditor.snapshot(entity) ?: return
+    val player = event.player
+    val handTool = tools.isHandTool(player.inventory.itemInMainHand)
+    if (!handTool && !wantsHandEditing(player)) return
+    val location = entity.location
+    val point = event.clickedPosition.clone().add(location.toVector())
+    if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
+    val eye = player.eyeLocation.toVector()
+    val direction = point.clone().subtract(eye)
+    if (direction.lengthSquared() == 0.0) return
+    val hit = entity.boundingBox.rayTrace(eye, direction, 6.0) ?: return
+    val face = hit.hitBlockFace ?: return
+    if (
+        entity is org.bukkit.entity.ItemFrame &&
+            !entity.item.type.isAir &&
+            !HangingEditor.isBorder(entity, hit.hitPosition, face)
+    )
+        return
+    event.isCancelled = true
+    if (event.hand != EquipmentSlot.HAND) return
+    if (!Permissions.has(player, if (handTool) Permissions.STICK else Permissions.HAND)) {
+      player.sendActionBar(Component.text("権限が必要です"))
+      return
+    }
+    if (
+        !player.isOp &&
+            player.server.operators.isNotEmpty() &&
+            entity.world == player.server.worlds.firstOrNull()
+    ) {
+      val spawn = entity.world.spawnLocation
+      val radius = player.server.spawnRadius
+      if (
+          radius > 0 &&
+              kotlin.math.max(
+                  kotlin.math.abs(location.blockX - spawn.blockX),
+                  kotlin.math.abs(location.blockZ - spawn.blockZ),
+              ) <= radius
+      )
+          return
+    }
+    if (!canEditEntity(player, location)) return
+    val edited = HangingEditor.edit(entity, hit.hitPosition, face) ?: return
+    holdEditor.stop(player.uniqueId)
+    afterEntityEdit(player, edited)
+    history?.recordHanging(player, edited, before)
+    player.swingHand(EquipmentSlot.HAND)
+  }
+
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun cushion(event: PlayerInteractAtEntityEvent) {
     val cushion = event.rightClicked as? Cushion ?: return
     val player = event.player
     val handTool = tools.isHandTool(player.inventory.itemInMainHand)
-    if (!handTool && !wantsHandEditing(player)) return
+    val configured = playerSettings.get(player.uniqueId)
+    if (!handTool && !wantsHandEditing(player, configured.inverseCushionOnShift)) return
     val from = cushion.location
     val point = event.clickedPosition.clone().add(from.toVector())
     if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
@@ -72,10 +128,14 @@ internal class EditInteractionListener(
     }
     val to =
         from.clone().apply {
-          // 押した軸だけ1/8刻みへ揃え、他の座標はそのまま保つ。
-          if (face.modX != 0) x = Math.round(x * 8 - face.modX).toDouble() / 8
-          if (face.modY != 0) y = Math.round(y * 8 - face.modY).toDouble() / 8
-          if (face.modZ != 0) z = Math.round(z * 8 - face.modZ).toDouble() / 8
+          val divisor = configured.adjustmentDivisor
+          val direction = if (configured.inverseCushionOnShift && player.isSneaking) 1 else -1
+          if (face.modX != 0)
+              x = (x * divisor + face.modX * direction).roundToLong().toDouble() / divisor
+          if (face.modY != 0)
+              y = (y * divisor + face.modY * direction).roundToLong().toDouble() / divisor
+          if (face.modZ != 0)
+              z = (z * divisor + face.modZ * direction).roundToLong().toDouble() / divisor
         }
     val moved = box.clone().shift(to.x - from.x, to.y - from.y, to.z - from.z)
     val world = cushion.world
@@ -113,7 +173,10 @@ internal class EditInteractionListener(
     }
     if (!canEditEntity(player, from) || !canEditEntity(player, to)) return
     holdEditor.stop(player.uniqueId)
-    if (cushion.teleport(to)) player.swingHand(EquipmentSlot.HAND)
+    if (cushion.teleport(to)) {
+      history?.recordCushion(player, cushion, from)
+      player.swingHand(EquipmentSlot.HAND)
+    }
   }
 
   /** DirectStateが扱う操作だけを受理し、バニラ操作と他プラグインの拒否を尊重して振り分ける。 */
@@ -174,14 +237,14 @@ internal class EditInteractionListener(
     return event.action == Action.RIGHT_CLICK_BLOCK && wantsHandEditing(event.player)
   }
 
-  private fun wantsHandEditing(player: Player): Boolean {
+  private fun wantsHandEditing(player: Player, allowShift: Boolean = false): Boolean {
     val configured = playerSettings.get(player.uniqueId)
     // 素手編集は片方の手にでもアイテムがあれば、通常のMinecraft操作へ譲る。
     val bothHandsEmpty =
         player.inventory.itemInMainHand.type.isAir && player.inventory.itemInOffHand.type.isAir
     return configured.handEnabled &&
         !configured.itemlessModesDisabled &&
-        !player.isSneaking &&
+        (!player.isSneaking || allowShift) &&
         bothHandsEmpty
   }
 
@@ -283,7 +346,7 @@ internal class EditInteractionListener(
           blockReplacement.convert(result.data, result.material, TypeReplaceMode.OFF)
         }
     val changedBlocks = mutableListOf(BlockEdit(block, data, result.blockEntityPresent))
-    if (data is Door) {
+    if (data is Door && (block.blockData as? Door)?.isOpen != data.isOpen) {
       val other = blockReplacement.counterpart(block)
       if (other != null) {
         val otherData = other.blockData
@@ -291,7 +354,7 @@ internal class EditInteractionListener(
             changedBlocks += BlockEdit(other, otherData.apply { isOpen = data.isOpen })
       }
     }
-    edits.apply(player, changedBlocks)
+    edits.apply(player, changedBlocks, remember = true)
     if (result.sound != null) player.playSound(block.location, result.sound, 0.7f, 1.0f)
   }
 

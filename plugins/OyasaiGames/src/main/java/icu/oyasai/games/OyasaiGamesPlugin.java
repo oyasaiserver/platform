@@ -105,18 +105,34 @@ public class OyasaiGamesPlugin extends JavaPlugin {
             try { tntrunModule.disable(); }
             catch (Exception | LinkageError cleanup) { getLogger().log(java.util.logging.Level.SEVERE, "TNTRun終了処理に失敗しました。", cleanup); }
         }
-        kimodameshiModule = new KimodameshiModule(this);
-        kimodameshiModule.enable();
-        toysModule = new ToysModule(this);
-        toysModule.enable();
+        if (getConfig().getBoolean("games.kimodameshi.enabled", true)) {
+            kimodameshiModule = new KimodameshiModule(this);
+            try {
+                kimodameshiModule.enable();
+            } catch (Exception | LinkageError exception) {
+                shutdownModule("kimodameshi", kimodameshiModule::disable);
+                getLogger().log(java.util.logging.Level.SEVERE, "kimodameshiの初期化に失敗しました。", exception);
+            }
+        }
+        if (getConfig().getBoolean("games.toys.enabled", true)) {
+            toysModule = new ToysModule(this);
+            try {
+                toysModule.enable();
+            } catch (Exception | LinkageError exception) {
+                shutdownModule("toys", toysModule::disable);
+                getLogger().log(java.util.logging.Level.SEVERE, "toysの初期化に失敗しました。", exception);
+            }
+        }
 
         // おやさいサイコロモジュールの初期化
-        diceModule = new DiceModule(this);
-        try {
-            diceModule.enable();
-        } catch (Exception | LinkageError exception) {
-            shutdownModule("おやさいサイコロ", diceModule::disable);
-            getLogger().log(java.util.logging.Level.SEVERE, "おやさいサイコロの初期化に失敗しました。", exception);
+        if (getConfig().getBoolean("games.dice.enabled", true)) {
+            diceModule = new DiceModule(this);
+            try {
+                diceModule.enable();
+            } catch (Exception | LinkageError exception) {
+                shutdownModule("おやさいサイコロ", diceModule::disable);
+                getLogger().log(java.util.logging.Level.SEVERE, "おやさいサイコロの初期化に失敗しました。", exception);
+            }
         }
 
         // 試作中のため既定は無効（games.tank.enabled）。再読み込みでは切り替わらない。
@@ -168,8 +184,12 @@ public class OyasaiGamesPlugin extends JavaPlugin {
             catch (Exception | LinkageError exception) { getLogger().log(java.util.logging.Level.SEVERE, "TNTRun終了処理に失敗しました。", exception); }
         }
 
-        if (kimodameshiModule != null) kimodameshiModule.disable();
-        if (toysModule != null) toysModule.disable();
+        if (kimodameshiModule != null) {
+            shutdownModule("kimodameshi", kimodameshiModule::disable);
+        }
+        if (toysModule != null) {
+            shutdownModule("toys", toysModule::disable);
+        }
         if (diceModule != null) {
             shutdownModule("おやさいサイコロ", diceModule::disable);
         }

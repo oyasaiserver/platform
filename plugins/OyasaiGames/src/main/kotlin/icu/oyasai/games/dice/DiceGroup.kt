@@ -217,9 +217,10 @@ class DiceGroup(
     var maxY = Double.NEGATIVE_INFINITY
     var avgZ = 0.0
     for (d in dices) {
-      avgX += d.startLoc.x
-      if (d.startLoc.y > maxY) maxY = d.startLoc.y
-      avgZ += d.startLoc.z
+      val loc = d.settledLocation
+      avgX += loc.x
+      if (loc.y > maxY) maxY = loc.y
+      avgZ += loc.z
     }
     avgX /= dices.size
     avgZ /= dices.size

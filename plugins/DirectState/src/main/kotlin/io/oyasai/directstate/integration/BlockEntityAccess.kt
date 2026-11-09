@@ -2,6 +2,10 @@ package io.oyasai.directstate.integration
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.BlockItem
+import net.minecraft.world.level.levelgen.structure.BoundingBox
+import net.minecraft.world.ticks.LevelChunkTicks
+import net.minecraft.world.ticks.SavedTick
+import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.TileState
 import org.bukkit.block.data.BlockData
@@ -75,6 +79,31 @@ internal object BlockEntityAccess {
     chunks.forEach { it.world.refreshChunk(it.x, it.z) }
   }
 
+  /** この座標に予約されたブロックtick（特有の定期実行処理とか）を、実行待ち分も含めて除去する。 */
+  fun clearScheduledTicks(block: Block) {
+    val level = (block.world as CraftWorld).handle
+    level.blockTicks.clearArea(BoundingBox(BlockPos(block.x, block.y, block.z)))
+  }
+
+  /** 固定操作が消す予約tickも、残り時間を含めて保存する。 */
+  fun scheduledTicks(block: Block): List<SavedTick<net.minecraft.world.level.block.Block>> {
+    val level = (block.world as CraftWorld).handle
+    val position = BlockPos(block.x, block.y, block.z)
+    val ticks =
+        level.getChunk(block.x shr 4, block.z shr 4).blockTicks
+            as LevelChunkTicks<net.minecraft.world.level.block.Block>
+    return ticks.all.filter { it.pos() == position }.map { it.toSavedTick(level.gameTime) }.toList()
+  }
+
+  fun restoreScheduledTicks(
+      block: Block,
+      ticks: List<SavedTick<net.minecraft.world.level.block.Block>>,
+  ) {
+    val level = (block.world as CraftWorld).handle
+    clearScheduledTicks(block)
+    ticks.forEach { level.blockTicks.schedule(it.unpack(level.gameTime, level.nextSubTickCount())) }
+  }
+
   private fun writeBody(block: Block, data: BlockData, present: Boolean) {
     val level = (block.world as CraftWorld).handle
     val chunk = level.getChunk(block.x shr 4, block.z shr 4)
@@ -86,6 +115,9 @@ internal object BlockEntityAccess {
       level.getBlockEntity(position)
     } else {
       chunk.removeBlockEntity(position)
+      if (block.type == Material.CREAKING_HEART) {
+        clearScheduledTicks(block)
+      }
     }
     chunk.markUnsaved()
   }

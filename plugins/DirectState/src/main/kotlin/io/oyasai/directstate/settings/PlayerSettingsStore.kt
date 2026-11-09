@@ -37,11 +37,31 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
               .trimIndent()
       )
     }
+    val additions =
+        mapOf(
+            "inverse_cushion_on_shift" to "INTEGER NOT NULL DEFAULT 0",
+            "adjustment_divisor" to "INTEGER NOT NULL DEFAULT 8",
+            "force_placement" to "INTEGER NOT NULL DEFAULT 1",
+            "keep_state" to "INTEGER NOT NULL DEFAULT 1",
+            "edit_sound" to "INTEGER NOT NULL DEFAULT 1",
+            "player_name" to "TEXT",
+        )
+    connection.createStatement().use { statement ->
+      val columns =
+          statement.executeQuery("PRAGMA table_info(player_settings)").use { rows ->
+            buildSet { while (rows.next()) add(rows.getString("name")) }
+          }
+      additions
+          .filterKeys { it !in columns }
+          .forEach { (name, type) ->
+            statement.execute("ALTER TABLE player_settings ADD COLUMN $name $type")
+          }
+    }
     users.clear()
     connection
         .prepareStatement(
             "SELECT uuid, hand_enabled, update_enabled, replacement_enabled, type_replacement_mode, " +
-                "itemless_modes_disabled " +
+                "itemless_modes_disabled, inverse_cushion_on_shift, adjustment_divisor, force_placement, keep_state, edit_sound, player_name " +
                 "FROM player_settings"
         )
         .use { statement ->
@@ -58,6 +78,14 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
                           TypeReplaceMode.parse(rows.getString("type_replacement_mode"))
                               ?: TypeReplaceMode.OFF,
                       itemlessModesDisabled = rows.getInt("itemless_modes_disabled") != 0,
+                      inverseCushionOnShift = rows.getInt("inverse_cushion_on_shift") != 0,
+                      adjustmentDivisor =
+                          rows.getInt("adjustment_divisor").takeIf { it in setOf(64, 32, 16, 8, 4) }
+                              ?: 8,
+                      forcePlacement = rows.getInt("force_placement") != 0,
+                      keepState = rows.getInt("keep_state") != 0,
+                      editSound = rows.getInt("edit_sound") != 0,
+                      playerName = rows.getString("player_name"),
                   )
             }
           }
@@ -66,6 +94,10 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
 
   /** 設定を返す。初回のプレイヤーには既定値を作る。 */
   fun get(uuid: UUID): PlayerSettings = users.getOrPut(uuid) { PlayerSettings() }
+
+  fun recordName(uuid: UUID, name: String) {
+    if (get(uuid).playerName != name) update(uuid) { it.playerName = name }
+  }
 
   /** 設定のコピーを保存してからメモリへ反映する。保存失敗時は現在値を保つ。 */
   fun update(uuid: UUID, change: (PlayerSettings) -> Unit) {
@@ -92,14 +124,20 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
         .prepareStatement(
             """
             INSERT INTO player_settings
-                (uuid, hand_enabled, update_enabled, replacement_enabled, type_replacement_mode, itemless_modes_disabled)
-            VALUES (?, ?, ?, ?, ?, ?)
+                (uuid, hand_enabled, update_enabled, replacement_enabled, type_replacement_mode, itemless_modes_disabled, inverse_cushion_on_shift, adjustment_divisor, force_placement, keep_state, edit_sound, player_name)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(uuid) DO UPDATE SET
                 hand_enabled = excluded.hand_enabled,
                 update_enabled = excluded.update_enabled,
                 replacement_enabled = excluded.replacement_enabled,
                 type_replacement_mode = excluded.type_replacement_mode,
-                itemless_modes_disabled = excluded.itemless_modes_disabled
+                itemless_modes_disabled = excluded.itemless_modes_disabled,
+                inverse_cushion_on_shift = excluded.inverse_cushion_on_shift,
+                adjustment_divisor = excluded.adjustment_divisor,
+                force_placement = excluded.force_placement,
+                keep_state = excluded.keep_state,
+                edit_sound = excluded.edit_sound,
+                player_name = excluded.player_name
             """
                 .trimIndent()
         )
@@ -110,6 +148,12 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
           statement.setInt(4, if (settings.replacementEnabled) 1 else 0)
           statement.setString(5, settings.typeReplacementMode.name)
           statement.setInt(6, if (settings.itemlessModesDisabled) 1 else 0)
+          statement.setInt(7, if (settings.inverseCushionOnShift) 1 else 0)
+          statement.setInt(8, settings.adjustmentDivisor)
+          statement.setInt(9, if (settings.forcePlacement) 1 else 0)
+          statement.setInt(10, if (settings.keepState) 1 else 0)
+          statement.setInt(11, if (settings.editSound) 1 else 0)
+          statement.setString(12, settings.playerName)
           statement.executeUpdate()
         }
   }
