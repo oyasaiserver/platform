@@ -108,6 +108,9 @@ class OyasaiMusic : JavaPlugin() {
   lateinit var ambientPlaybackRegistry: AmbientPlaybackRegistry
     private set
 
+  lateinit var musicTransactions: com.github.sahyuya.oyasaiMusic.economy.MusicTransactions
+    private set
+
   lateinit var economyService: EconomyService
     private set
 
@@ -136,6 +139,8 @@ class OyasaiMusic : JavaPlugin() {
   lateinit var bedrockTransferService: BedrockTransferService
     private set
 
+  val playbackPreparation = com.github.sahyuya.oyasaiMusic.audio.PlaybackPreparation()
+
   override fun onEnable() {
     saveDefaultConfig()
     reloadConfig()
@@ -153,6 +158,8 @@ class OyasaiMusic : JavaPlugin() {
             config.getString("storage.database-file", "database.db") ?: "database.db",
         )
     databaseManager.connect()
+    musicTransactions = com.github.sahyuya.oyasaiMusic.economy.MusicTransactions(this)
+    musicTransactions.initialize()
     songRepository = SongRepository(databaseManager)
     userRepository = UserRepository(databaseManager)
     socialRepository = SocialRepository(databaseManager)
@@ -265,6 +272,7 @@ class OyasaiMusic : JavaPlugin() {
   }
 
   override fun onDisable() {
+    playbackPreparation.close()
     if (::playbackController.isInitialized) playbackController.shutdown()
     // Import jobs that already crossed the persistence boundary must drain before DB close.
     val uploadsDrained = !::ommtUploadService.isInitialized || ommtUploadService.shutdown()
@@ -277,15 +285,17 @@ class OyasaiMusic : JavaPlugin() {
     }
     if (::resourcePackService.isInitialized) resourcePackService.shutdown()
     if (::pluginMessaging.isInitialized) pluginMessaging.disable()
+    val transactionsDrained = !::musicTransactions.isInitialized || musicTransactions.close()
     if (::databaseManager.isInitialized) {
-      if (uploadsDrained) databaseManager.close()
-      else logger.severe("DB close skipped because an OMMT import is still running")
+      if (uploadsDrained && transactionsDrained) databaseManager.close()
+      else logger.severe("DB close skipped because an import or transaction is still running")
     }
     logger.info("OyasaiMusicを無効化しました。")
   }
 
   /** `/oyasaimusic reload` 用。設定値を参照するサービスを現在のconfigで再構成する。 */
   fun reloadRuntimeConfiguration() {
+    playbackPreparation.invalidate()
     if (::ommtUploadService.isInitialized) ommtUploadService.reloadReset()
     reloadConfig()
     if (::resourcePackService.isInitialized) resourcePackService.reload()
@@ -306,6 +316,7 @@ class OyasaiMusic : JavaPlugin() {
 
   /** Propagates edited song metadata to playback and open menus. */
   fun applySongUpdate(updatedSong: Song) {
+    playbackPreparation.invalidate()
     playbackController.applySongMetadataUpdate(updatedSong)
     menuManager.refreshForSongUpdate(updatedSong)
   }
@@ -313,7 +324,9 @@ class OyasaiMusic : JavaPlugin() {
   private fun configureRuntimeServices() {
     likeService =
         LikeService(
+            database = databaseManager,
             socialRepository = socialRepository,
+            journal = musicTransactions.journal,
             likeRewardMoney = config.getLong("economy.like-reward-money", 1000),
             likeRewardPoints = config.getLong("economy.like-reward-points", 2),
         )
@@ -325,7 +338,7 @@ class OyasaiMusic : JavaPlugin() {
             dayLimit = config.getInt("playback.view-limit-per-day", 10),
             viewsPerPoint = config.getInt("playback.views-per-point", 10),
         )
-    economyService = EconomyService(this)
+    economyService = EconomyService()
   }
 
   private fun createPlaybackEngine(): PlaybackEngine {
@@ -333,7 +346,6 @@ class OyasaiMusic : JavaPlugin() {
         plugin = this,
         bedrockPrefix = config.getString("bedrock.name-prefix", ".") ?: ".",
         chordLimit = config.getInt("bedrock.chord-limit", 3),
-        lookaheadMs = config.getLong("playback.lookahead-ms", 35L).coerceIn(0L, 50L),
         defaultMode = PlaybackMode.DEFAULT,
     )
   }

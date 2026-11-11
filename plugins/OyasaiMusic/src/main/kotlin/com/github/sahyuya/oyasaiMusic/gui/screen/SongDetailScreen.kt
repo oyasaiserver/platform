@@ -1,8 +1,6 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
-import com.github.sahyuya.oyasaiMusic.economy.PayoutResult
-import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordItem
 import com.github.sahyuya.oyasaiMusic.model.Song
 import com.github.sahyuya.oyasaiMusic.util.HeadTextureUtil
 import net.kyori.adventure.text.Component
@@ -325,100 +323,23 @@ class SongDetailScreen(
 
   private fun buyRecord() {
     val songId = song.id ?: return
-    if (!purchases.add(viewer.uniqueId)) return
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              val result = runCatching { plugin.songRepository.findById(songId) }
-              if (!plugin.isEnabled) {
-                purchases.remove(viewer.uniqueId)
-                return@Runnable
-              }
-              Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        try {
-                          if (!viewer.isOnline) return@Runnable
-                          val current = result.getOrNull()
-                          if (current == null || current.recordIdentity != song.recordIdentity) {
-                            viewer.sendMessage("§c楽曲情報を取得できません。画面を開き直してください。")
-                            return@Runnable
-                          }
-                          song = current
-                          val cost = current.purchasePrice(viewer.uniqueId)
-                          if (cost == null) {
-                            viewer.sendMessage("§c非売品です。")
-                            render()
-                            return@Runnable
-                          }
-                          val material =
-                              Material.matchMaterial(current.recordMaterial)
-                                  ?: Material.MUSIC_DISC_13
-                          val authorName = Bukkit.getOfflinePlayer(current.authorUuid).name ?: "不明"
-                          val item =
-                              PhysicalRecordItem.create(
-                                  plugin,
-                                  material,
-                                  songId,
-                                  current.title,
-                                  authorName,
-                                  current.recordIdentity,
-                              )
-                          val payment =
-                              if (cost == 0) PayoutResult.Success
-                              else plugin.economyService.withdraw(viewer, cost.toLong())
-                          if (payment !is PayoutResult.Success) {
-                            viewer.sendMessage(
-                                "§c購入できませんでした: " +
-                                    when (payment) {
-                                      is PayoutResult.Failed -> payment.reason
-                                      is PayoutResult.Unavailable -> payment.reason
-                                      else -> ""
-                                    }
-                            )
-                            return@Runnable
-                          }
-                          viewer.inventory.addItem(item).values.forEach {
-                            viewer.world.dropItemNaturally(viewer.location, it)
-                          }
-                          if (cost > 0) {
-                            val buyer = viewer.uniqueId
-                            val share =
-                                (cost *
-                                        plugin.config.getDouble(
-                                            "economy.record-sale-author-share",
-                                            0.8,
-                                        ))
-                                    .toLong()
-                            Bukkit.getScheduler()
-                                .runTaskAsynchronously(
-                                    plugin,
-                                    Runnable {
-                                      plugin.recordSaleRepository.recordSale(
-                                          songId,
-                                          buyer,
-                                          current.authorUuid,
-                                          cost.toLong(),
-                                          share,
-                                          current.isMonetizationEligible(),
-                                      )
-                                    },
-                                )
-                          }
-                          viewer.sendMessage("§aレコードを受け取りました: " + current.title)
-                          viewer.sendMessage(
-                              if (cost == 0) "§7無料で入手しました。" else "§7" + cost + "円を支払いました。"
-                          )
-                          render()
-                        } finally {
-                          purchases.remove(viewer.uniqueId)
-                        }
-                      },
-                  )
-            },
-        )
+    val id = viewer.uniqueId
+    if (!purchases.add(id)) return
+    plugin.musicTransactions.purchase(viewer, songId, song.recordIdentity).whenComplete {
+        message,
+        error ->
+      purchases.remove(id)
+      if (!plugin.isEnabled) return@whenComplete
+      Bukkit.getScheduler()
+          .runTask(
+              plugin,
+              Runnable {
+                if (!viewer.isOnline) return@Runnable
+                viewer.sendMessage(message ?: (error.cause ?: error).message.orEmpty())
+                menuManager.refreshCurrent(id)
+              },
+          )
+    }
   }
 
   companion object {
@@ -539,16 +460,17 @@ class SongDetailScreen(
             Runnable {
               val added = plugin.likeService.like(viewer.uniqueId, song)
               val refreshed =
-                  if (added) plugin.songRepository.findById(requireNotNull(song.id)) else null
+                  if (added != null) plugin.songRepository.findById(requireNotNull(song.id))
+                  else null
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
-                        if (added) {
+                        if (added != null) {
                           hasLiked = true
                           if (refreshed != null) song = refreshed
                           GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
-                          plugin.deliverLikeSenderReward(viewer)
+                          plugin.deliverLikeSenderReward(viewer, added.senderReward)
                           Bukkit.getPlayer(song.authorUuid)?.let { author ->
                             plugin.toastNotificationService.showLikeReceived(
                                 author,

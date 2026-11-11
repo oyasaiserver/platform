@@ -71,14 +71,22 @@ class MenuManager(private val plugin: OyasaiMusic) : Listener {
    * プレイヤーがGUIを閉じている場合は何もしない。
    */
   fun refreshCurrent(playerUuid: UUID) {
-    current[playerUuid]?.refresh()
+    val player = org.bukkit.Bukkit.getPlayer(playerUuid) ?: return
+    val menu = current[playerUuid] ?: return
+    if (player.openInventory.topInventory === menu.inventory) menu.refresh()
   }
 
   /** 楽曲設定が保存された直後に、開いている全GUIへ最新情報を配信する。 一覧系は再読込、詳細・設定画面は同一IDの曲だけをその場で差し替える。 */
   fun refreshForSongUpdate(updatedSong: Song) {
-    current.values.toSet().forEach { menu ->
-      if (menu is SongUpdateAware) menu.onSongUpdated(updatedSong) else menu.refresh()
-    }
+    current
+        .filter { (id, menu) ->
+          org.bukkit.Bukkit.getPlayer(id)?.openInventory?.topInventory === menu.inventory
+        }
+        .values
+        .toSet()
+        .forEach { menu ->
+          if (menu is SongUpdateAware) menu.onSongUpdated(updatedSong) else menu.refresh()
+        }
   }
 
   @EventHandler(priority = EventPriority.HIGH)

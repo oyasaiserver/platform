@@ -256,9 +256,9 @@ class SongListMenu(
                   .runTask(
                       plugin,
                       Runnable {
-                        if (added) {
+                        if (added != null) {
                           GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
-                          plugin.deliverLikeSenderReward(viewer)
+                          plugin.deliverLikeSenderReward(viewer, added.senderReward)
                           Bukkit.getPlayer(song.authorUuid)?.let { author ->
                             plugin.toastNotificationService.showLikeReceived(
                                 author,

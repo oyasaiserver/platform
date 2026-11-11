@@ -29,6 +29,10 @@ class PlaybackSession(
   /** Candidates remain vanilla until their exact hash-bound READY acknowledgement succeeds. */
   internal val bufferCandidates: MutableSet<UUID> = CopyOnWriteArraySet()
   internal val ackDeadlinesMillis: MutableMap<UUID, Long> = java.util.concurrent.ConcurrentHashMap()
+  internal val wireIds = mutableMapOf<UUID, UUID>()
+  internal val membership = mutableMapOf<UUID, UUID>()
+  internal val cutovers = mutableMapOf<UUID, Int>()
+  internal var ambient = false
   internal var playbackTask: BukkitTask? = null
   internal val outboundTasks: MutableList<BukkitTask> = mutableListOf()
   private val cancelled = AtomicBoolean(false)
@@ -41,20 +45,9 @@ class PlaybackSession(
     internal set
 
   private val clock = PlaybackClock()
-  internal var initialDelayMs: Long = 0
-  internal var startDeadlineMillis: Long = System.currentTimeMillis()
-  internal var routeDecisionDeadlineMillis: Long = System.currentTimeMillis()
-  internal var bufferedFirstNoteMs: Int = 0
-  internal var bufferedHash: ByteArray = ByteArray(0)
 
-  internal fun startAfter(delayMs: Long, routeDecisionLeadMs: Long) {
-    initialDelayMs = delayMs.coerceAtLeast(0)
-    startDeadlineMillis = System.currentTimeMillis() + initialDelayMs
-    routeDecisionDeadlineMillis =
-        (startDeadlineMillis - routeDecisionLeadMs.coerceAtLeast(0)).coerceAtLeast(
-            System.currentTimeMillis()
-        )
-    clock.startAfter(initialDelayMs)
+  internal fun start() {
+    clock.startAfter(0L)
   }
 
   /** 現在の再生位置（ミリ秒）。一時停止中はその時点の値のまま変化しない。 */

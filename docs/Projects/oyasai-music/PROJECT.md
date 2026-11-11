@@ -1,7 +1,7 @@
 ---
 title: "OyasaiMusic — 録音・楽曲共有・環境BGM"
 status: active
-source: plugins/OyasaiMusic/（コードから作成。ゲーム内での確認は未実施）
+source: plugins/OyasaiMusic/（3.0.6のローカル実装・自動テスト・隔離接続試験。本番導入は未確認）
 source_of_truth: "plugins/OyasaiMusic/"
 related_paths:
   - packages/oyasai-plugins.nix
@@ -10,7 +10,7 @@ related_paths:
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
-last_validated: "2026-10-13"
+last_validated: "2026-11-11"
 ---
 
 # OyasaiMusic
@@ -27,25 +27,35 @@ last_validated: "2026-10-13"
 | 主要コード | `OyasaiMusic.kt`（初期化・reload）、`command/`、`gui/core/`・`gui/screen/`（アクセス・操作・再生制御）、`audio/recording/`・`audio/playback/`、`db/`、`item/` |
 | 連携 | `importing/`（OYMI変換）、`interop/`（OMMT通信）、`resourcepack/`（Paperパック）、`velocity/`（中継・Geyser）、`economy/EconomyService.kt` |
 | 定義・既定値 | `src/main/resources/plugin.yml`・`velocity-plugin.json`・`config.yml`・`sound-catalog.json`・`soundeffect/`。`paper-plugin.yml` はない |
-| テスト | このチェックアウトのプラグイン配下に `src/test/`・テストファイルはない。純粋関数や `readCustomSoundsForTesting` はあるが、テスト保証の根拠にはしない |
-| ビルド | `nix develop --command gradle :plugins:OyasaiMusic:build`。ルート設定により `shadowJar` を実行し `plugins/OyasaiMusic/build/libs/OyasaiMusic.jar` を出力（本調査ではビルド未実施） |
+| テスト | `src/test/` に経済API、SQLite取引復旧、音源準備、OYPBの共通fixture、切り替え位置の境界を確認する自動テストがある。クライアント実接続での試験は別途必要 |
+| ビルド | `nix develop --command gradle :plugins:OyasaiMusic:build`。ルート設定により `shadowJar` を実行し `plugins/OyasaiMusic/build/libs/OyasaiMusic.jar` を出力 |
 | Nix package | `packages/oyasai-plugins.nix` がプラグインディレクトリを検出し `oyasaimusic` を公開する |
 | 既存説明 | [実装側README](../../../plugins/OyasaiMusic/README.md)。現行仕様と食い違う箇所があるため、この資料とコードを優先 |
 
 ## 技術仕様
 
+### 3.0.6 の連携と取引
+
+対象はPurpur 26.3 build2655。OMMT 3.0.6の対応クライアントはMinecraft 26.3のFabric版。ローカル再生の転送はOYPB v2を使用する。OMMT 3.0.5と3.0.6が対応する。v2能力を確認できない接続はサーバー再生へ切り替える。既存の通信番号、アップロード形式、保存音源の旧版読み込みは維持する。接続ごとに対応能力を確認し、双方が複数セッションに対応する場合だけ環境BGMのローカル再生を使う。サーバーが楽曲アクセス、パック許可、再生位置を決定し、MODの応答は転送・発音の状態確認に使う。
+
+ジュークボックスの途中参加はサーバーで再生を始め、準備完了後に指定位置でMODに切り替える。個人用1枠と環境用最大7枠を独立管理する。旧版、MODなし、Bedrock、上限超過や準備失敗では環境BGMのサーバー再生を続ける。配信上限はプレイヤーごとに2チャンク/tick、全体で32チャンク/tick。既存の音源カタログは看板の番号と固定パターンの対応を保持する。
+
+同梱カタログは26.3の定義を収録する。新規23イベントには `10.*.*` の追加番号を割り当て、従来の自動採番から外す。既存のパターン順と重みを保持し、硫黄キューブの1イベントは26.3のサンプル参照先へ更新した。既存の拡張バンクに収録されていない新規イベントは、Paperで通常音域へ折り畳む。旧カタログは既存採番の回帰試験に使用する。
+
+購入、受取、いいね報酬、宣伝はSQLiteの取引台帳に記録し、経済APIの完了応答に従って進める。結果不明の取引には管理者の照合が必要。経済DBの確定とMinecraftのアイテム保存は個別に行われる。
+
 ### 構成と依存
 
 - Paperの入口は `OyasaiMusic`、Velocityは `OyasaiMusicVelocity`。plugin.ymlはFAWEをdepend、OyasaiEconomy・OyasaiUtilities・Floodgateをsoftdependとする。Geyser APIはVelocity側で使う。
 - `build.gradle.kts` はPurpur開発バンドルを使い、Kotlin stdlib・SQLite JDBCを同梱しrelocateする。SQLiteはminimizeの除外対象。OyasaiEconomy、FAWE、Velocity、GeyserはcompileOnly。Gsonはサーバー環境のものを使う。
-- 依存カタログはPurpur `26.2.build.2622-stable`、FAWE `2.15.3`、Velocity `4.1.2-SNAPSHOT`、Geyser `2.11.2-SNAPSHOT`、SQLite JDBC `3.53.4.0`、OyasaiEconomy API。実行環境での組合せは未検証。
+- 依存カタログはPurpur `26.3.build.2655-stable`、FAWE `2.16.1`、Velocity `4.3.0`、Geyser `2.11.2-SNAPSHOT`、SQLite JDBC `3.53.4.0`、OyasaiEconomy API。隔離Purpur 26.3 build2655とFAWE 2.16.1、OyasaiEconomyで起動・停止・購入・受取・宣伝を確認した。Velocity・Geyserの実行試験は未実施。
 - ディレクトリ名とKotlin packageが一致しない部分がある。`audio/playback/` と `audio/recording/` はpackage `audio`、`gui/core/` と `gui/screen/` はpackage `gui`。
 
 ### 起動・停止・再読み込み
 
 `onEnable` はFAWE確認 → 既定設定・音源ディレクトリ・カタログ → DBとRepository → Plugin Message登録 → サービス・ランキング・GUI → 録音・コマンド・再生 → 環境BGM復元・タイマーの順。DB接続・移行・カタログ初期化に対する全体の例外回復処理はない。
 
-`onDisable` はコントローラー停止、OMMT保存処理の排出待ち（最大10秒）、環境BGM・再生停止、能力・パック状態の破棄、通信解除、DB終了。OMMTが排出できないとDBを閉じない。他の非同期作業の一括排出はしない。
+`onDisable` はコントローラー停止、OMMT保存処理の排出待ち（最大10秒）、環境BGM・再生停止、能力・パック状態の破棄、通信解除、DB終了。OMMTが排出できないとDBを閉じない。取引DBワーカーには最大1秒の排出猶予を設け、外部経済APIのFutureはメインスレッドで待たない。未確定の取引は台帳から照合する。他の非同期作業の一括排出はしない。
 
 reloadは設定・パック・カタログ・通知するサーバー能力・報酬サービス・再生エンジンを更新し、旧エンジンを停止する。DB・音源保存先・録音コマンド・録音セッション・コントローラー全体は再作成しない。詳細な適用範囲は [operator.md](https://github.com/oyasaiserver/docs/blob/main/Projects/oyasai-music/operator.md#reload-の範囲)。
 
@@ -69,13 +79,13 @@ reloadは設定・パック・カタログ・通知するサーバー能力・�
 - `SongRepository` は削除された最小の正の欠番IDを同トランザクションで再利用。新しい `record_identity` はUUIDで別曲への参照を防ぐ。旧identityなしのアイテム・装填データはこの保証の対象外。
 - 公開切替は通常／限定のどちらでもreleasedから下書きへ戻る。初回の通常公開時刻をDBに記録し、初回だけ `oyasaimusic.notify` 所持者へ新曲通知する。リポストは通常公開のみ・10PのAPI消費成功後に通知する。
 - 審査申請はreleased・未申請の行だけを仮OKへ更新。取消は仮OK・申請ありだけを下書きへ戻し申請時刻を消す。運営の判定変更はstatusだけを変える。収益化条件は `referenceUrl != null` または仮OK／永続OKで、URL内容の妥当性は検証しない。
-- いいねはUNIQUE(user, song)を使い、初回だけ統計・作者ポイントを同トランザクションで加算。送信者へのOyasaiEconomy即時入金とその障害時退避は別処理。
+- いいねはUNIQUE(user, song)を使い、初回だけ統計・作者ポイント・送信者への報酬取引を同トランザクションで保存する。送信者への入金は経済APIのcompletion成功で確定する。結果不明は台帳に残し、自動再送しない。
 - 個人再生の80%到達通知は1セッション1回。環境BGM・審査は除外。`ViewCountService` はAFK metadataを同期で確認し、直近1時間／24時間の上限・履歴・視聴数・収益化対象のポイントをDBトランザクションで処理する。自分の曲・非公開曲の視聴を排除する条件はない。
-- 購入は最新の曲・identityを再取得して判定し、同期でOyasaiEconomy所持金検査と引落、アイテム配布。余りは地面へ落とす。販売履歴・作者還元は後から非同期保存で、DB失敗による返金はない。受取はtakePending → 外部送金 → 失敗分restorePending。外部APIとSQLiteを一括確定せず、強制終了への再実行保証はない。
+- 購入は非同期で最新の曲・identity・公開状態・価格を再取得し、取引意図を保存してから経済APIへ引落を依頼する。completion成功後に販売履歴・作者還元を同じDBトランザクションで確定し、メインスレッドでレコードを付与する。余りは地面へ落とす。受取は利用可能残高と処理中の予約を分け、送金成功とDB保存後に受取累計を確定する。明確な失敗では予約を戻し、不明結果は要照合とする。外部経済DB・SQLite・Minecraftアイテム保存は一括確定できず、自動再送・返金・再配布はしない。
 
 ### 再生とGUI
 
-`PlaybackController` が曲・音源を非同期読取し、OYPB候補を準備、OMMTの能力交渉後に曲identity・アクセスを再確認して同期で開始する。プレイヤーごとの要求世代で古い読取結果・曲間タイマーを無視する。直前の曲の停止は新しい開始時に行う。
+`PlaybackController` が再生方式のDB取得と音源準備を非同期で行い、能力交渉で必要と判定した経路のOYPBだけを生成する。MODなしの経路ではOYPBを生成しない。曲identity・アクセスを再確認して同期で開始し、プレイヤーごとの要求世代で古い読取結果・曲間タイマーを無視する。直前の曲の停止は新しい開始時に行う。`PlaybackPreparation` は2ワーカー・待機32件で同じ準備要求を共有し、キャッシュを推定128MiBかつ最大256項目に制限する。編集・削除・reloadで無効化し、曲identity・音源改訂・再生方式・カタログ世代・バンク識別子を区別する。
 
 `PlaybackEngine` は1セッション1個の毎tickカーソルと単調時計を使う。1tick最大4096音を検査して、経過時刻までの音を送る。音量0は送信しない。最後の発音時刻＋50ms以降、全音処理後に完了通知。一時停止は時計とタスクを止め、再開に500msの猶予。コントローラーは接続中の400tickの停止放置で終了扱いにする。`PlaybackController.onPlayerQuit` でこのタイマーを取り消し、joinでは再登録しないため、一時停止中の退出・再参加ではこの自動終了は働かない。個人再生のセッションは切断だけでは破棄せず、再接続時に残りの再生とボスバーを復元し得るが、再生リスト・保留要求・能力世代は消す。
 
@@ -127,7 +137,7 @@ DBの構成・移行・バックアップ対象は [operator.md](https://github.
 
 ### テストが保証する範囲・既知の制限
 
-プラグイン配下の自動テストは存在しないため、録音時刻、回路解析、SQLite移行、報酬、権限、PDC、通信再送・期限、Geyser確認、音声出力にテストによる保証はない。ルートGradleにはJUnit5設定があるが、このプラグインの検証実績を示すものではない。本資料作成ではビルド・ゲーム内・実サービス接続を行っていない。
+3.0.6では25件の自動テストで、カタログの既存採番・パターン、能力通知、通信エンベロープの境界に加え、経済completion、SQLite移行・取引復旧、音源準備の共有・保持上限・キュー飽和、OYPB共通fixture、切り替え位置・終了境界、セッション枠と転送割り当てを確認した。OMMT 26.3の実デコーダーでも共通fixtureを確認した。隔離したWindows 26.3の開発クライアント接続では個人＋複数環境再生、枠超過、ACK喪失、MODなしへの代替、購入・報酬・宣伝と購入中断後の手動照合を確認した。これは通信・発音要求・保存結果の試験で、聴取による品質確認ではない。旧OMMT 3.0.5＋新Pluginは個人ローカル再生と環境サーバー再生の両立を確認した。配布JARは隔離modsへ配置し、開発クラスを除外したLoom/Fabricランタイムで26.3の実読込元と音声エンジン初期化を確認した。26.3では全枠使用中の個人曲切り替え・reload後の環境再生復帰も確認した。購入では外部応答返却前、支払成功保存後、アイテム保存後の停止からの照合・確定を確認した。Mac実機、Bedrock、50人の実接続負荷比較は未実施。新MOD＋旧Pluginの試験はPlugin先行更新の方針により今回の対象外。録音時刻・回路解析・全GUI・全移行世代を包括的に保証するテストではない。
 
 - GUIの `editPrice` は `price < 0` を拒否するため、表示される「-1で非売化」と実装が不一致。
 - 古い音源上書き・通常録音・購入・報酬受取はファイル／外部API／DBを一括確定せず、失敗や停止時に部分更新が残り得る。

@@ -165,7 +165,7 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
       val insertedGameMode: GameMode,
       var session: PlaybackSession? = null,
       /** 音源読み込み中の二重起動を防ぐ。状態変更はメインスレッド上で行う。 */
-      var loading: Boolean = false,
+      var loadingTicket: Any? = null,
       /** 現在トリガーが再生を許可しているか。 */
       var enabled: Boolean = trigger == AmbientTrigger.JUKEBOX,
       /** 非ループ曲が最後まで鳴り終えたか。トリガー再投入まで再生し直さない。 */
@@ -267,7 +267,9 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
     entry.redstonePowered = powered
     if (!risingEdge) return
 
-    if (entry.session != null || entry.loading || (entry.enabled && !entry.completed)) {
+    if (
+        entry.session != null || entry.loadingTicket != null || (entry.enabled && !entry.completed)
+    ) {
       entry.enabled = false
       entry.completed = false
       stopPlayback(k)
@@ -280,6 +282,11 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
 
   /** 接近トリガーの開始判定・範囲内リスナーの追従のため、定期的(1秒毎想定)に呼び出す。 */
   fun tick() {
+    val snapshots =
+        entries.values
+            .mapNotNull { it.location.world }
+            .distinctBy { it.uid }
+            .associateWith { world -> world.players.map { it to it.location } }
     entries.forEach { (k, entry) ->
       val world = entry.location.world ?: return@forEach
       if (!world.isChunkLoaded(entry.location.blockX shr 4, entry.location.blockZ shr 4)) {
@@ -290,7 +297,14 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
         dropRecord(entry.location)
         return@forEach
       }
-      val nearby = nearbyPlayers(entry)
+      val range = entry.range.blocks?.toDouble()
+      val nearby =
+          snapshots[world]
+              .orEmpty()
+              .filter { (_, location) ->
+                range == null || location.distanceSquared(entry.location) <= range * range
+              }
+              .map { it.first }
 
       // BlockRedstoneEventは周囲のダストだけに発火し、ジュークボックス自身には届かない
       // 場合がある。そのため実際の通電状態を毎秒確認して、RSトリガーを確実に反映する。
@@ -308,19 +322,22 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
         }
       }
 
+      if (entry.session?.isCancelled == true) entry.session = null
       if (
           entry.enabled &&
               entry.session == null &&
-              !entry.loading &&
+              entry.loadingTicket == null &&
               !(entry.completed && !entry.loop)
       ) {
-        startPlayback(k)
+        startPlayback(k, nearby)
       }
 
       val session = entry.session ?: return@forEach
       val nearbyUuids = nearby.map { it.uniqueId }.toSet()
-      session.recipients.filter { it !in nearbyUuids }.forEach { session.recipients.remove(it) }
-      nearby.forEach { p -> session.recipients.add(p.uniqueId) }
+      session.recipients
+          .filter { it !in nearbyUuids }
+          .forEach { plugin.playbackEngine.removeRecipient(session, it) }
+      nearby.forEach { p -> plugin.playbackEngine.addRecipient(session, p) }
     }
   }
 
@@ -338,34 +355,62 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
     }
   }
 
-  private fun startPlayback(key: String) {
+  private fun startPlayback(key: String, listeners: List<Player>? = null) {
     val entry = entries[key] ?: return
     if (
-        !entry.enabled || entry.session != null || entry.loading || (entry.completed && !entry.loop)
+        !entry.enabled ||
+            entry.session != null ||
+            entry.loadingTicket != null ||
+            (entry.completed && !entry.loop)
     )
         return
     // リスナーがいない状態で空セッションを作ると、再生完了コールバックが発火せず
     // 後から範囲へ入ったプレイヤーに再生できなくなるため、入場を待つ。
-    if (nearbyPlayers(entry).isEmpty()) return
+    if ((listeners ?: nearbyPlayers(entry)).isEmpty()) return
     val file = File(plugin.audioDirectory, entry.song.fileName)
     if (!file.exists()) {
       plugin.logger.warning("環境BGMの音源ファイルが見つかりません: ${file.name}")
       entry.completed = true
       return
     }
-    entry.loading = true
+    val ticket = Any()
+    val engine = plugin.playbackEngine
+    entry.loadingTicket = ticket
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val audio = runCatching { SongAudioFile.read(file) }
+              val audio = runCatching {
+                plugin.playbackPreparation
+                    .audio(
+                        file,
+                        entry.song,
+                        plugin.config.getInt("bedrock.chord-limit", 3),
+                        plugin.resourcePackService.playbackTemplate(),
+                    )
+                    .get()
+              }
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
-                        entry.loading = false
+                        if (entry.loadingTicket !== ticket) return@Runnable
+                        entry.loadingTicket = null
                         // 読み込み中に撤去・差し替え・停止された場合は、古い結果を利用しない。
-                        if (entries[key] !== entry || !entry.enabled || entry.session != null)
+                        if (
+                            entries[key] !== entry ||
+                                !entry.enabled ||
+                                entry.session != null ||
+                                plugin.playbackEngine !== engine
+                        )
+                            return@Runnable
+                        val world = entry.location.world ?: return@Runnable
+                        if (
+                            !world.isChunkLoaded(
+                                entry.location.blockX shr 4,
+                                entry.location.blockZ shr 4,
+                            ) || entry.location.block.type != org.bukkit.Material.JUKEBOX
+                        )
                             return@Runnable
                         val loaded =
                             audio.getOrElse {
@@ -379,11 +424,15 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
                           entry.completed = true
                           return@Runnable
                         }
+                        val recipients = nearbyPlayers(entry)
+                        if (recipients.isEmpty()) return@Runnable
                         val session =
-                            plugin.playbackEngine.play(
+                            engine.play(
                                 song = entry.song,
                                 notes = loaded.notes,
-                                recipients = nearbyPlayers(entry),
+                                preparedAudio = loaded,
+                                ambient = true,
+                                recipients = recipients,
                                 onCompletion = {
                                   entry.session = null
                                   entry.completed = !entry.loop
@@ -399,6 +448,7 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
 
   private fun stopPlayback(key: String) {
     val entry = entries[key] ?: return
+    entry.loadingTicket = null
     entry.session?.let { plugin.playbackEngine.stop(it) }
     entry.session = null
   }
