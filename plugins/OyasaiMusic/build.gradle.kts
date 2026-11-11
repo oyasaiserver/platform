@@ -1,7 +1,5 @@
 plugins { alias(libs.plugins.paperweight.userdev) }
 
-version = "3.0.6"
-
 dependencies {
   compileOnly(project(":plugins:OyasaiEconomy"))
   testImplementation(project(":plugins:OyasaiEconomy"))
