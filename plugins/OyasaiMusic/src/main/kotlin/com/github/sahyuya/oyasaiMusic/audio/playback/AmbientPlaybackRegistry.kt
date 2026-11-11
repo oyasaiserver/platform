@@ -406,8 +406,10 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
                             return@Runnable
                         val world = entry.location.world ?: return@Runnable
                         if (
-                            !world.isChunkLoaded(entry.location.blockX shr 4, entry.location.blockZ shr 4) ||
-                                entry.location.block.type != org.bukkit.Material.JUKEBOX
+                            !world.isChunkLoaded(
+                                entry.location.blockX shr 4,
+                                entry.location.blockZ shr 4,
+                            ) || entry.location.block.type != org.bukkit.Material.JUKEBOX
                         )
                             return@Runnable
                         val loaded =

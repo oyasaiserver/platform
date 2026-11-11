@@ -8922,6 +8922,203 @@
     ],
     "subtitle": "subtitles.block.generic.footsteps"
   },
+  "block.poplar_leaves.ambient": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.1.1",
+    "sounds": [
+      {
+        "name": "block/poplar_leaves/ambient1",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient2",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient3",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient4",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient5",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient6",
+        "volume": 4,
+        "weight": 3
+      },
+      {
+        "name": "block/poplar_leaves/ambient7",
+        "volume": 4,
+        "weight": 3
+      },
+      {
+        "name": "block/poplar_leaves/ambient8",
+        "volume": 4,
+        "weight": 3
+      },
+      {
+        "name": "block/poplar_leaves/ambient9",
+        "volume": 4,
+        "weight": 3
+      },
+      {
+        "name": "block/poplar_leaves/ambient10",
+        "volume": 4,
+        "weight": 3
+      },
+      {
+        "name": "block/poplar_leaves/ambient11",
+        "volume": 4,
+        "weight": 3
+      },
+      {
+        "name": "block/poplar_leaves/ambient12",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient13",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient14",
+        "volume": 4,
+        "weight": 3
+      },
+      {
+        "name": "block/poplar_leaves/ambient15",
+        "volume": 4,
+        "weight": 4
+      },
+      {
+        "name": "block/poplar_leaves/ambient16",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient17",
+        "volume": 4,
+        "weight": 3
+      },
+      {
+        "name": "block/poplar_leaves/ambient18",
+        "volume": 4,
+        "weight": 4
+      },
+      {
+        "name": "block/poplar_leaves/ambient19",
+        "volume": 4,
+        "weight": 2
+      },
+      {
+        "name": "block/poplar_leaves/ambient20",
+        "volume": 4
+      },
+      {
+        "name": "block/poplar_leaves/ambient21",
+        "volume": 4
+      },
+      {
+        "name": "block/poplar_leaves/ambient22",
+        "volume": 4
+      },
+      {
+        "name": "block/poplar_leaves/ambient23",
+        "volume": 4
+      },
+      {
+        "name": "block/poplar_leaves/ambient24",
+        "volume": 4
+      },
+      {
+        "name": "block/poplar_leaves/wind1",
+        "volume": 2
+      },
+      {
+        "name": "block/poplar_leaves/wind2",
+        "volume": 2
+      },
+      {
+        "name": "block/poplar_leaves/wind3",
+        "volume": 2
+      }
+    ],
+    "subtitle": "subtitles.block.poplar_leaves.ambient"
+  },
+  "block.poplar_leaves.break": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.1.2",
+    "sounds": [
+      "block/leaf_litter/break1",
+      "block/leaf_litter/break2",
+      "block/leaf_litter/break3",
+      "block/leaf_litter/break4",
+      "block/leaf_litter/break5"
+    ],
+    "subtitle": "subtitles.block.generic.break"
+  },
+  "block.poplar_leaves.fall": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.1.3",
+    "sounds": [
+      "block/leaf_litter/step1",
+      "block/leaf_litter/step2",
+      "block/leaf_litter/step3",
+      "block/leaf_litter/step4",
+      "block/leaf_litter/step5",
+      "block/leaf_litter/step6"
+    ],
+    "subtitle": "subtitles.block.generic.fall"
+  },
+  "block.poplar_leaves.hit": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.1.4",
+    "sounds": [
+      "block/leaf_litter/step1",
+      "block/leaf_litter/step2",
+      "block/leaf_litter/step3",
+      "block/leaf_litter/step4",
+      "block/leaf_litter/step5",
+      "block/leaf_litter/step6"
+    ],
+    "subtitle": "subtitles.block.generic.hit"
+  },
+  "block.poplar_leaves.place": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.1.5",
+    "sounds": [
+      "block/leaf_litter/place1",
+      "block/leaf_litter/place2",
+      "block/leaf_litter/place3",
+      "block/leaf_litter/place4",
+      "block/leaf_litter/place5"
+    ],
+    "subtitle": "subtitles.block.generic.place"
+  },
+  "block.poplar_leaves.step": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.1.6",
+    "sounds": [
+      "block/leaf_litter/step1",
+      "block/leaf_litter/step2",
+      "block/leaf_litter/step3",
+      "block/leaf_litter/step4",
+      "block/leaf_litter/step5",
+      "block/leaf_litter/step6"
+    ],
+    "subtitle": "subtitles.block.generic.footsteps"
+  },
   "block.portal.ambient": {
     "sounds": [
       {
@@ -9223,6 +9420,28 @@
   "block.pumpkin.carve": {
     "sounds": ["block/pumpkin/carve1", "block/pumpkin/carve2"],
     "subtitle": "subtitles.block.pumpkin.carve"
+  },
+  "block.red_shrub.break": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.2.1",
+    "sounds": [
+      "block/red_shrub/break1",
+      "block/red_shrub/break2",
+      "block/red_shrub/break3",
+      "block/red_shrub/break4"
+    ],
+    "subtitle": "subtitles.block.generic.break"
+  },
+  "block.red_shrub.place": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.2.2",
+    "sounds": [
+      "block/red_shrub/place1",
+      "block/red_shrub/place2",
+      "block/red_shrub/place3",
+      "block/red_shrub/place4"
+    ],
+    "subtitle": "subtitles.block.generic.place"
   },
   "block.redstone_torch.burnout": {
     "sounds": ["random/fizz"],
@@ -10363,6 +10582,117 @@
     ],
     "subtitle": "subtitles.block.shelf.take_item"
   },
+  "block.shelf_mushroom.bounce": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.3.1",
+    "sounds": [
+      "block/shelf_mushroom/bounce1",
+      "block/shelf_mushroom/bounce2",
+      "block/shelf_mushroom/bounce3",
+      "block/shelf_mushroom/bounce4",
+      "block/shelf_mushroom/bounce5"
+    ],
+    "subtitle": "subtitles.block.shelf_mushroom.bounce"
+  },
+  "block.shelf_mushroom.break": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.3.2",
+    "sounds": [
+      {
+        "name": "block/shelf_mushroom/break1",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/break2",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/break3",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/break4",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/break5",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/break6",
+        "pitch": 1.2,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.block.generic.break"
+  },
+  "block.shelf_mushroom.fall": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.3.3",
+    "sounds": [
+      "block/shelf_mushroom/bounce1",
+      "block/shelf_mushroom/bounce2",
+      "block/shelf_mushroom/bounce3",
+      "block/shelf_mushroom/bounce4",
+      "block/shelf_mushroom/bounce5"
+    ],
+    "subtitle": "subtitles.block.generic.fall"
+  },
+  "block.shelf_mushroom.place": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.3.4",
+    "sounds": [
+      {
+        "name": "block/shelf_mushroom/place1",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/place2",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/place3",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/place4",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/place5",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "block/shelf_mushroom/place6",
+        "pitch": 1.2,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.block.generic.place"
+  },
+  "block.shelf_mushroom.step": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.3.5",
+    "sounds": [
+      "block/shelf_mushroom/step1",
+      "block/shelf_mushroom/step2",
+      "block/shelf_mushroom/step3",
+      "block/shelf_mushroom/step4",
+      "block/shelf_mushroom/step5",
+      "block/shelf_mushroom/step6"
+    ],
+    "subtitle": "subtitles.block.generic.footsteps"
+  },
   "block.shroomlight.break": {
     "sounds": [
       "block/shroomlight/break1",
@@ -11343,6 +11673,73 @@
       }
     ],
     "subtitle": "subtitles.block.pressure_plate.click"
+  },
+  "block.straw_bed.break": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.4.1",
+    "sounds": [
+      "block/straw_bed/break1",
+      "block/straw_bed/break2",
+      "block/straw_bed/break3",
+      "block/straw_bed/break4"
+    ],
+    "subtitle": "subtitles.block.generic.break"
+  },
+  "block.straw_bed.break_leave": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.4.2",
+    "sounds": ["block/straw_bed/break_leave"],
+    "subtitle": "subtitles.block.straw_bed.break_leave"
+  },
+  "block.straw_bed.fall": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.4.3",
+    "sounds": [
+      "block/straw_bed/hit1",
+      "block/straw_bed/hit2",
+      "block/straw_bed/hit3",
+      "block/straw_bed/hit4",
+      "block/straw_bed/hit5",
+      "block/straw_bed/hit6"
+    ],
+    "subtitle": "subtitles.block.generic.fall"
+  },
+  "block.straw_bed.hit": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.4.4",
+    "sounds": [
+      "block/straw_bed/hit1",
+      "block/straw_bed/hit2",
+      "block/straw_bed/hit3",
+      "block/straw_bed/hit4",
+      "block/straw_bed/hit5",
+      "block/straw_bed/hit6"
+    ],
+    "subtitle": "subtitles.block.generic.hit"
+  },
+  "block.straw_bed.place": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.4.5",
+    "sounds": [
+      "block/straw_bed/place1",
+      "block/straw_bed/place2",
+      "block/straw_bed/place3",
+      "block/straw_bed/place4"
+    ],
+    "subtitle": "subtitles.block.generic.place"
+  },
+  "block.straw_bed.step": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.4.6",
+    "sounds": [
+      "block/straw_bed/step1",
+      "block/straw_bed/step2",
+      "block/straw_bed/step3",
+      "block/straw_bed/step4",
+      "block/straw_bed/step5",
+      "block/straw_bed/step6"
+    ],
+    "subtitle": "subtitles.block.generic.footsteps"
   },
   "block.sulfur.break": {
     "sounds": [
@@ -15069,6 +15466,49 @@
   "entity.creeper.primed": {
     "sounds": ["random/fuse"],
     "subtitle": "subtitles.entity.creeper.primed"
+  },
+  "entity.cushion.break": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.5.1",
+    "sounds": [
+      "entity/cushion/break1",
+      "entity/cushion/break2",
+      "entity/cushion/break3"
+    ],
+    "subtitle": "subtitles.entity.cushion.break"
+  },
+  "entity.cushion.get_up": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.5.2",
+    "sounds": [
+      "entity/cushion/get_up1",
+      "entity/cushion/get_up2",
+      "entity/cushion/get_up3"
+    ],
+    "subtitle": "subtitles.entity.cushion.get_up"
+  },
+  "entity.cushion.place": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.5.3",
+    "sounds": [
+      "entity/cushion/place1",
+      "entity/cushion/place2",
+      "entity/cushion/place3",
+      "entity/cushion/place4",
+      "entity/cushion/place5",
+      "entity/cushion/place6"
+    ],
+    "subtitle": "subtitles.entity.cushion.place"
+  },
+  "entity.cushion.sit": {
+    "oyasaimusic_bank": false,
+    "oyasaimusic_sign_id": "10.5.4",
+    "sounds": [
+      "entity/cushion/sit1",
+      "entity/cushion/sit2",
+      "entity/cushion/sit3"
+    ],
+    "subtitle": "subtitles.entity.cushion.sit"
   },
   "entity.dolphin.ambient": {
     "sounds": [
@@ -25844,447 +26284,5 @@
       "ambient/weather/rain4"
     ],
     "subtitle": "subtitles.weather.rain"
-  },
-  "block.poplar_leaves.ambient": {
-    "sounds": [
-      {
-        "name": "block/poplar_leaves/ambient1",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient2",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient3",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient4",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient5",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient6",
-        "volume": 4.0,
-        "weight": 3
-      },
-      {
-        "name": "block/poplar_leaves/ambient7",
-        "volume": 4.0,
-        "weight": 3
-      },
-      {
-        "name": "block/poplar_leaves/ambient8",
-        "volume": 4.0,
-        "weight": 3
-      },
-      {
-        "name": "block/poplar_leaves/ambient9",
-        "volume": 4.0,
-        "weight": 3
-      },
-      {
-        "name": "block/poplar_leaves/ambient10",
-        "volume": 4.0,
-        "weight": 3
-      },
-      {
-        "name": "block/poplar_leaves/ambient11",
-        "volume": 4.0,
-        "weight": 3
-      },
-      {
-        "name": "block/poplar_leaves/ambient12",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient13",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient14",
-        "volume": 4.0,
-        "weight": 3
-      },
-      {
-        "name": "block/poplar_leaves/ambient15",
-        "volume": 4.0,
-        "weight": 4
-      },
-      {
-        "name": "block/poplar_leaves/ambient16",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient17",
-        "volume": 4.0,
-        "weight": 3
-      },
-      {
-        "name": "block/poplar_leaves/ambient18",
-        "volume": 4.0,
-        "weight": 4
-      },
-      {
-        "name": "block/poplar_leaves/ambient19",
-        "volume": 4.0,
-        "weight": 2
-      },
-      {
-        "name": "block/poplar_leaves/ambient20",
-        "volume": 4.0
-      },
-      {
-        "name": "block/poplar_leaves/ambient21",
-        "volume": 4.0
-      },
-      {
-        "name": "block/poplar_leaves/ambient22",
-        "volume": 4.0
-      },
-      {
-        "name": "block/poplar_leaves/ambient23",
-        "volume": 4.0
-      },
-      {
-        "name": "block/poplar_leaves/ambient24",
-        "volume": 4.0
-      },
-      {
-        "name": "block/poplar_leaves/wind1",
-        "volume": 2.0
-      },
-      {
-        "name": "block/poplar_leaves/wind2",
-        "volume": 2.0
-      },
-      {
-        "name": "block/poplar_leaves/wind3",
-        "volume": 2.0
-      }
-    ],
-    "subtitle": "subtitles.block.poplar_leaves.ambient",
-    "oyasaimusic_sign_id": "10.1.1",
-    "oyasaimusic_bank": false
-  },
-  "block.poplar_leaves.break": {
-    "sounds": [
-      "block/leaf_litter/break1",
-      "block/leaf_litter/break2",
-      "block/leaf_litter/break3",
-      "block/leaf_litter/break4",
-      "block/leaf_litter/break5"
-    ],
-    "subtitle": "subtitles.block.generic.break",
-    "oyasaimusic_sign_id": "10.1.2",
-    "oyasaimusic_bank": false
-  },
-  "block.poplar_leaves.fall": {
-    "sounds": [
-      "block/leaf_litter/step1",
-      "block/leaf_litter/step2",
-      "block/leaf_litter/step3",
-      "block/leaf_litter/step4",
-      "block/leaf_litter/step5",
-      "block/leaf_litter/step6"
-    ],
-    "subtitle": "subtitles.block.generic.fall",
-    "oyasaimusic_sign_id": "10.1.3",
-    "oyasaimusic_bank": false
-  },
-  "block.poplar_leaves.hit": {
-    "sounds": [
-      "block/leaf_litter/step1",
-      "block/leaf_litter/step2",
-      "block/leaf_litter/step3",
-      "block/leaf_litter/step4",
-      "block/leaf_litter/step5",
-      "block/leaf_litter/step6"
-    ],
-    "subtitle": "subtitles.block.generic.hit",
-    "oyasaimusic_sign_id": "10.1.4",
-    "oyasaimusic_bank": false
-  },
-  "block.poplar_leaves.place": {
-    "sounds": [
-      "block/leaf_litter/place1",
-      "block/leaf_litter/place2",
-      "block/leaf_litter/place3",
-      "block/leaf_litter/place4",
-      "block/leaf_litter/place5"
-    ],
-    "subtitle": "subtitles.block.generic.place",
-    "oyasaimusic_sign_id": "10.1.5",
-    "oyasaimusic_bank": false
-  },
-  "block.poplar_leaves.step": {
-    "sounds": [
-      "block/leaf_litter/step1",
-      "block/leaf_litter/step2",
-      "block/leaf_litter/step3",
-      "block/leaf_litter/step4",
-      "block/leaf_litter/step5",
-      "block/leaf_litter/step6"
-    ],
-    "subtitle": "subtitles.block.generic.footsteps",
-    "oyasaimusic_sign_id": "10.1.6",
-    "oyasaimusic_bank": false
-  },
-  "block.red_shrub.break": {
-    "sounds": [
-      "block/red_shrub/break1",
-      "block/red_shrub/break2",
-      "block/red_shrub/break3",
-      "block/red_shrub/break4"
-    ],
-    "subtitle": "subtitles.block.generic.break",
-    "oyasaimusic_sign_id": "10.2.1",
-    "oyasaimusic_bank": false
-  },
-  "block.red_shrub.place": {
-    "sounds": [
-      "block/red_shrub/place1",
-      "block/red_shrub/place2",
-      "block/red_shrub/place3",
-      "block/red_shrub/place4"
-    ],
-    "subtitle": "subtitles.block.generic.place",
-    "oyasaimusic_sign_id": "10.2.2",
-    "oyasaimusic_bank": false
-  },
-  "block.shelf_mushroom.bounce": {
-    "sounds": [
-      "block/shelf_mushroom/bounce1",
-      "block/shelf_mushroom/bounce2",
-      "block/shelf_mushroom/bounce3",
-      "block/shelf_mushroom/bounce4",
-      "block/shelf_mushroom/bounce5"
-    ],
-    "subtitle": "subtitles.block.shelf_mushroom.bounce",
-    "oyasaimusic_sign_id": "10.3.1",
-    "oyasaimusic_bank": false
-  },
-  "block.shelf_mushroom.break": {
-    "sounds": [
-      {
-        "name": "block/shelf_mushroom/break1",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/break2",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/break3",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/break4",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/break5",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/break6",
-        "pitch": 1.2,
-        "volume": 0.8
-      }
-    ],
-    "subtitle": "subtitles.block.generic.break",
-    "oyasaimusic_sign_id": "10.3.2",
-    "oyasaimusic_bank": false
-  },
-  "block.shelf_mushroom.fall": {
-    "sounds": [
-      "block/shelf_mushroom/bounce1",
-      "block/shelf_mushroom/bounce2",
-      "block/shelf_mushroom/bounce3",
-      "block/shelf_mushroom/bounce4",
-      "block/shelf_mushroom/bounce5"
-    ],
-    "subtitle": "subtitles.block.generic.fall",
-    "oyasaimusic_sign_id": "10.3.3",
-    "oyasaimusic_bank": false
-  },
-  "block.shelf_mushroom.place": {
-    "sounds": [
-      {
-        "name": "block/shelf_mushroom/place1",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/place2",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/place3",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/place4",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/place5",
-        "pitch": 1.2,
-        "volume": 0.8
-      },
-      {
-        "name": "block/shelf_mushroom/place6",
-        "pitch": 1.2,
-        "volume": 0.8
-      }
-    ],
-    "subtitle": "subtitles.block.generic.place",
-    "oyasaimusic_sign_id": "10.3.4",
-    "oyasaimusic_bank": false
-  },
-  "block.shelf_mushroom.step": {
-    "sounds": [
-      "block/shelf_mushroom/step1",
-      "block/shelf_mushroom/step2",
-      "block/shelf_mushroom/step3",
-      "block/shelf_mushroom/step4",
-      "block/shelf_mushroom/step5",
-      "block/shelf_mushroom/step6"
-    ],
-    "subtitle": "subtitles.block.generic.footsteps",
-    "oyasaimusic_sign_id": "10.3.5",
-    "oyasaimusic_bank": false
-  },
-  "block.straw_bed.break": {
-    "sounds": [
-      "block/straw_bed/break1",
-      "block/straw_bed/break2",
-      "block/straw_bed/break3",
-      "block/straw_bed/break4"
-    ],
-    "subtitle": "subtitles.block.generic.break",
-    "oyasaimusic_sign_id": "10.4.1",
-    "oyasaimusic_bank": false
-  },
-  "block.straw_bed.break_leave": {
-    "sounds": [
-      "block/straw_bed/break_leave"
-    ],
-    "subtitle": "subtitles.block.straw_bed.break_leave",
-    "oyasaimusic_sign_id": "10.4.2",
-    "oyasaimusic_bank": false
-  },
-  "block.straw_bed.fall": {
-    "sounds": [
-      "block/straw_bed/hit1",
-      "block/straw_bed/hit2",
-      "block/straw_bed/hit3",
-      "block/straw_bed/hit4",
-      "block/straw_bed/hit5",
-      "block/straw_bed/hit6"
-    ],
-    "subtitle": "subtitles.block.generic.fall",
-    "oyasaimusic_sign_id": "10.4.3",
-    "oyasaimusic_bank": false
-  },
-  "block.straw_bed.hit": {
-    "sounds": [
-      "block/straw_bed/hit1",
-      "block/straw_bed/hit2",
-      "block/straw_bed/hit3",
-      "block/straw_bed/hit4",
-      "block/straw_bed/hit5",
-      "block/straw_bed/hit6"
-    ],
-    "subtitle": "subtitles.block.generic.hit",
-    "oyasaimusic_sign_id": "10.4.4",
-    "oyasaimusic_bank": false
-  },
-  "block.straw_bed.place": {
-    "sounds": [
-      "block/straw_bed/place1",
-      "block/straw_bed/place2",
-      "block/straw_bed/place3",
-      "block/straw_bed/place4"
-    ],
-    "subtitle": "subtitles.block.generic.place",
-    "oyasaimusic_sign_id": "10.4.5",
-    "oyasaimusic_bank": false
-  },
-  "block.straw_bed.step": {
-    "sounds": [
-      "block/straw_bed/step1",
-      "block/straw_bed/step2",
-      "block/straw_bed/step3",
-      "block/straw_bed/step4",
-      "block/straw_bed/step5",
-      "block/straw_bed/step6"
-    ],
-    "subtitle": "subtitles.block.generic.footsteps",
-    "oyasaimusic_sign_id": "10.4.6",
-    "oyasaimusic_bank": false
-  },
-  "entity.cushion.break": {
-    "sounds": [
-      "entity/cushion/break1",
-      "entity/cushion/break2",
-      "entity/cushion/break3"
-    ],
-    "subtitle": "subtitles.entity.cushion.break",
-    "oyasaimusic_sign_id": "10.5.1",
-    "oyasaimusic_bank": false
-  },
-  "entity.cushion.get_up": {
-    "sounds": [
-      "entity/cushion/get_up1",
-      "entity/cushion/get_up2",
-      "entity/cushion/get_up3"
-    ],
-    "subtitle": "subtitles.entity.cushion.get_up",
-    "oyasaimusic_sign_id": "10.5.2",
-    "oyasaimusic_bank": false
-  },
-  "entity.cushion.place": {
-    "sounds": [
-      "entity/cushion/place1",
-      "entity/cushion/place2",
-      "entity/cushion/place3",
-      "entity/cushion/place4",
-      "entity/cushion/place5",
-      "entity/cushion/place6"
-    ],
-    "subtitle": "subtitles.entity.cushion.place",
-    "oyasaimusic_sign_id": "10.5.3",
-    "oyasaimusic_bank": false
-  },
-  "entity.cushion.sit": {
-    "sounds": [
-      "entity/cushion/sit1",
-      "entity/cushion/sit2",
-      "entity/cushion/sit3"
-    ],
-    "subtitle": "subtitles.entity.cushion.sit",
-    "oyasaimusic_sign_id": "10.5.4",
-    "oyasaimusic_bank": false
   }
 }

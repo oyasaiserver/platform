@@ -364,7 +364,8 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                             buffered ->
                           if (!isCurrent()) return@negotiation
                           val useBuffer =
-                              buffered && plugin.ommtPlaybackClientRegistry.supportsV2(viewer.uniqueId)
+                              buffered &&
+                                  plugin.ommtPlaybackClientRegistry.supportsV2(viewer.uniqueId)
                           if (useBuffer) plugin.resourcePackService.confirmBundledBank(viewer)
                           val manifest =
                               if (

@@ -107,12 +107,9 @@ class PlaybackPreparationTest {
       assertEquals(256, preparation.entryCount())
       val reloaded = preparation.audio(file, song, 3, null).get(10, TimeUnit.SECONDS)
       assertNotSame(first, reloaded)
-      val fold =
-          preparation.payload(reloaded, PlaybackMode.DEFAULT, null).get(10, TimeUnit.SECONDS)
+      val fold = preparation.payload(reloaded, PlaybackMode.DEFAULT, null).get(10, TimeUnit.SECONDS)
       val spatial =
-          preparation
-              .payload(reloaded, PlaybackMode.POSITIONAL, null)
-              .get(10, TimeUnit.SECONDS)
+          preparation.payload(reloaded, PlaybackMode.POSITIONAL, null).get(10, TimeUnit.SECONDS)
       val bankA =
           preparation
               .payload(reloaded, PlaybackMode.DEFAULT, ByteArray(32) { 1 })

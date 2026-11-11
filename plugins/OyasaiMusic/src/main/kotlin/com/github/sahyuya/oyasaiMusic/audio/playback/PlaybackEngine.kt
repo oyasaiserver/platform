@@ -632,9 +632,7 @@ class PlaybackEngine(
           if (server.ommtPlaybackClientRegistry.supportsBankManifest(player.uniqueId))
               server.resourcePackService.manifestHashFor(player.uniqueId)
           else null
-      server.playbackPreparation.payload(audio, ctx.mode, manifest).whenComplete {
-          result,
-          error ->
+      server.playbackPreparation.payload(audio, ctx.mode, manifest).whenComplete { result, error ->
         if (!server.isEnabled) return@whenComplete
         Bukkit.getScheduler()
             .runTask(
