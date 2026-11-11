@@ -168,6 +168,21 @@ class OyasaiResourcePackService(
 
   fun configuredManifestHash(): ByteArray? = config?.manifestHash?.copyOf()
 
+  /** Confirm the opted-in local bank before choosing the playback buffer format. */
+  internal fun confirmBundledBank(player: Player): Boolean {
+    val active = config ?: return false
+    val id = player.uniqueId
+    if (!player.isOnline || states[id] != ConnectionState.ALLOWED) return false
+    val bedrockPrefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
+    if (BedrockUtil.isBedrock(player, bedrockPrefix)) return false
+    val clients = plugin.ommtPlaybackClientRegistry
+    if (!clients.isCapable(id) || !clients.matchesBank(id, active.manifestHash)) return false
+    states[id] = ConnectionState.SUCCESS
+    requested.remove(id)
+    sendBankConsent(player)
+    return true
+  }
+
   private fun sendBankConsent(player: Player) {
     val active = config
     val allowed = active != null && states[player.uniqueId]?.retainsOptIn() == true
@@ -183,39 +198,7 @@ class OyasaiResourcePackService(
   }
 
   /** Uses vanilla for 0..24 and the nearest generated F# anchor outside that range. */
-  fun extendedPlayback(player: UUID, note: NoteEvent): ExtendedPlayback? {
-    val active = config ?: return null
-    if (!isLoaded(player)) return null
-    if (note.pitchCents in VANILLA_MIN_CENTS..VANILLA_MAX_CENTS) return null
-    if (note.pitchCents !in BANK_MIN_CENTS..BANK_MAX_CENTS) return null
-    val anchor =
-        BANK_ANCHORS.minWith(
-            compareBy<Int> { kotlin.math.abs(note.pitchCents - it * 100) }.thenBy { it }
-        )
-    val residualCents = note.pitchCents - anchor * 100
-    val event =
-        note.customSound?.let { raw ->
-          val canonical = raw.lowercase().let { if (':' in it) it else "minecraft:$it" }
-          if (!canonical.matches(Regex("[a-z0-9_.-]+:[a-z0-9/._-]+"))) return null
-          val pattern =
-              VanillaSoundCatalog.patternForSeed(canonical, note.customSoundSeed ?: return null)
-                  ?: return null
-          val key =
-              MessageDigest.getInstance("SHA-256")
-                  .digest(canonical.toByteArray(Charsets.UTF_8))
-                  .joinToString("") { "%02x".format(it.toInt() and 0xff) }
-                  .take(16)
-          "oyasaimusic:bank/c/$key/p/$pattern/a/${anchorToken(anchor)}"
-        }
-            ?: run {
-              if (note.instrument !in 0..19) return null
-              active.eventTemplate
-                  .replace("{instrument}", note.instrument.toString())
-                  .replace("{anchor}", anchorToken(anchor))
-            }
-    if (!event.matches(Regex("[a-z0-9_.-]+:[a-z0-9/._-]+"))) return null
-    return ExtendedPlayback(event, 2.0.pow(residualCents / 1200.0).toFloat())
-  }
+  internal fun playbackTemplate(): String? = config?.eventTemplate
 
   /** Completion is always invoked on the Paper main thread and reports persistence success. */
   fun allow(
@@ -432,15 +415,7 @@ class OyasaiResourcePackService(
 
     // A current OMMT client that advertises the exact bank capability needs no Java pack
     // request. The persisted ALLOW still gates this opt-in path.
-    if (
-        plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId) &&
-            plugin.ommtPlaybackClientRegistry.matchesBank(player.uniqueId, active.manifestHash)
-    ) {
-      states[player.uniqueId] = ConnectionState.SUCCESS
-      requested.remove(player.uniqueId)
-      sendBankConsent(player)
-      return false
-    }
+    if (confirmBundledBank(player)) return false
 
     // Route discovery normally completed before this method is called. Keep the edge case
     // safe: wait for the probe rather than treating UNKNOWN as a loaded pack.
@@ -596,9 +571,45 @@ class OyasaiResourcePackService(
           }
           .getOrNull()
 
-  private fun anchorToken(anchor: Int): String = if (anchor < 0) "m${-anchor}" else "p$anchor"
+  companion object {
+    internal fun resolveExtendedPlayback(
+        note: NoteEvent,
+        eventTemplate: String,
+    ): ExtendedPlayback? {
+      if (note.pitchCents in VANILLA_MIN_CENTS..VANILLA_MAX_CENTS) return null
+      if (note.pitchCents !in BANK_MIN_CENTS..BANK_MAX_CENTS) return null
+      val anchor =
+          BANK_ANCHORS.minWith(
+              compareBy<Int> { kotlin.math.abs(note.pitchCents - it * 100) }.thenBy { it }
+          )
+      val residualCents = note.pitchCents - anchor * 100
+      val event =
+          note.customSound?.let { raw ->
+            val canonical = raw.lowercase().let { if (':' in it) it else "minecraft:$it" }
+            if (!canonical.matches(Regex("[a-z0-9_.-]+:[a-z0-9/._-]+"))) return null
+            val definition = VanillaSoundCatalog.find(canonical) ?: return null
+            if (!definition.bankCompatible) return null
+            val pattern =
+                definition.patternForSeed(note.customSoundSeed ?: return null) ?: return null
+            val key =
+                MessageDigest.getInstance("SHA-256")
+                    .digest(canonical.toByteArray(Charsets.UTF_8))
+                    .joinToString("") { "%02x".format(it.toInt() and 0xff) }
+                    .take(16)
+            "oyasaimusic:bank/c/$key/p/$pattern/a/${anchorToken(anchor)}"
+          }
+              ?: run {
+                if (note.instrument !in 0..19) return null
+                eventTemplate
+                    .replace("{instrument}", note.instrument.toString())
+                    .replace("{anchor}", anchorToken(anchor))
+              }
+      if (!event.matches(Regex("[a-z0-9_.-]+:[a-z0-9/._-]+"))) return null
+      return ExtendedPlayback(event, 2.0.pow(residualCents / 1200.0).toFloat())
+    }
 
-  private companion object {
+    private fun anchorToken(anchor: Int): String = if (anchor < 0) "m${-anchor}" else "p$anchor"
+
     const val VANILLA_MIN_CENTS = 0
     const val VANILLA_MAX_CENTS = 2_400
     const val BANK_MIN_CENTS = -4_800

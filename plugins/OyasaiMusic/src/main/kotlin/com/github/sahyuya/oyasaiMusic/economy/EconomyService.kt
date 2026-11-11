@@ -5,68 +5,46 @@ import io.oyasai.economy.api.OyasaiEconomyApi
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import org.bukkit.Bukkit
-import org.bukkit.OfflinePlayer
-import org.bukkit.entity.Player
-import org.bukkit.plugin.Plugin
 
-class EconomyService(private val plugin: Plugin) {
+class EconomyService {
   private fun economy() = Bukkit.getServicesManager().load(OyasaiEconomyApi::class.java)
 
-  fun withdraw(player: Player, amount: Long): PayoutResult {
-    val provider = economy() ?: return PayoutResult.Unavailable("経済APIを利用できません")
-    return withdrawWithinBalance(provider, player, amount)
-  }
-
-  fun deposit(player: Player, amount: Long): PayoutResult {
-    val provider = economy() ?: return PayoutResult.Unavailable("経済APIを利用できません")
-    return if (provider.deposit("yen", player.uniqueId, amount).accepted) PayoutResult.Success
-    else PayoutResult.Failed("入金に失敗しました")
-  }
-
-  fun grantPoints(player: Player, amount: Long): CompletableFuture<PayoutResult> =
-      tokenPayout(economy(), player.uniqueId, player.name, amount, false)
-
-  fun chargePoints(player: Player, amount: Long): CompletableFuture<PayoutResult> =
-      tokenPayout(economy(), player.uniqueId, player.name, amount, true)
+  fun transfer(
+      uuid: UUID,
+      currency: String,
+      amount: Long,
+      charge: Boolean,
+  ): CompletableFuture<PayoutResult> = completePayout(economy(), uuid, currency, amount, charge)
 }
 
-internal fun tokenPayout(
+internal fun completePayout(
     provider: OyasaiEconomyApi?,
     uuid: UUID,
-    playerName: String,
+    currency: String,
     amount: Long,
     charge: Boolean,
 ): CompletableFuture<PayoutResult> {
-  if (amount < 0) return CompletableFuture.completedFuture(PayoutResult.Failed("ポイント数が不正です"))
+  if (amount < 0) return CompletableFuture.completedFuture(PayoutResult.Failed("金額が不正です"))
   if (amount == 0L) return CompletableFuture.completedFuture(PayoutResult.Success)
   if (provider == null)
       return CompletableFuture.completedFuture(PayoutResult.Unavailable("経済APIを利用できません"))
-  return runCatching {
-        (if (charge) provider.withdraw("token", uuid, amount)
-            else provider.deposit("token", uuid, amount))
-            .completion
-            .handle { result, error ->
-              when {
-                error != null -> PayoutResult.Failed("ポイント処理を保存できませんでした")
-                result is EconomyResult.Success -> PayoutResult.Success
-                result is EconomyResult.InsufficientFunds ->
-                    PayoutResult.Failed("ポイントが不足しています（必要: ${amount}P）")
-                else -> PayoutResult.Failed("ポイント処理に失敗しました")
-              }
-            }
-      }
-      .getOrElse { CompletableFuture.completedFuture(PayoutResult.Failed("ポイントAPIの呼び出しに失敗しました")) }
-}
-
-internal fun withdrawWithinBalance(
-    provider: OyasaiEconomyApi,
-    player: OfflinePlayer,
-    amount: Long,
-): PayoutResult {
-  if (amount < 0) return PayoutResult.Failed("価格が不正です")
-  if (amount == 0L) return PayoutResult.Success
-  return if (provider.withdraw("yen", player.uniqueId, amount).accepted) PayoutResult.Success
-  else PayoutResult.Failed("所持金不足、または引き落としに失敗しました")
+  return try {
+    val operation =
+        if (charge) provider.withdraw(currency, uuid, amount)
+        else provider.deposit(currency, uuid, amount)
+    operation.completion
+        .thenApply<PayoutResult> { result ->
+          when (result) {
+            is EconomyResult.Success -> PayoutResult.Success
+            is EconomyResult.InsufficientFunds -> PayoutResult.Failed("残高が不足しています")
+            is EconomyResult.Failed -> PayoutResult.Failed("経済処理に失敗しました")
+          }
+        }
+        .orTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+        .exceptionally { PayoutResult.Unknown("経済処理の結果を確認できません。管理者による照合が必要です") }
+  } catch (error: Exception) {
+    CompletableFuture.completedFuture(PayoutResult.Unknown("経済APIの応答が不明です。管理者による照合が必要です"))
+  }
 }
 
 sealed interface PayoutResult {
@@ -75,4 +53,6 @@ sealed interface PayoutResult {
   data class Unavailable(val reason: String) : PayoutResult
 
   data class Failed(val reason: String) : PayoutResult
+
+  data class Unknown(val reason: String) : PayoutResult
 }

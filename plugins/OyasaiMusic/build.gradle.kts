@@ -1,5 +1,7 @@
 plugins { alias(libs.plugins.paperweight.userdev) }
 
+version = "3.0.6"
+
 dependencies {
   compileOnly(project(":plugins:OyasaiEconomy"))
   testImplementation(project(":plugins:OyasaiEconomy"))
@@ -22,7 +24,7 @@ tasks {
 
   processResources {
     val properties = mapOf("version" to project.version.toString())
-    filesNotMatching(listOf("**/*.bin", "**/sound-catalog.json")) { expand(properties) }
+    filesNotMatching(listOf("**/*.bin", "**/sound-catalog*.json")) { expand(properties) }
   }
 }
 

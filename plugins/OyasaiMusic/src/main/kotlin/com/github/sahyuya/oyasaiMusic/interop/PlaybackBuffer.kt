@@ -36,6 +36,8 @@ object PlaybackBuffer {
   const val CAP_OYPB_V2 = 1 shl 1
   const val CAP_BANK_MANIFEST_V1 = 1 shl 2
   const val CAP_SOUND_CATALOG_26_2 = 1 shl 3
+  const val CAP_MULTI_SESSION = 1 shl 4
+  const val CLIENT_CAP_MULTI_SESSION = 1 shl 5
 
   const val CLIENT_CAP_OYPB_V2 = 1
   const val CLIENT_CAP_STARTED_ACK = 1 shl 1
@@ -43,38 +45,17 @@ object PlaybackBuffer {
   const val CLIENT_CAP_POSITIONAL_PAN = 1 shl 3
   const val CLIENT_CAP_BANK_MANIFEST_V1 = 1 shl 4
 
-  sealed interface Payload {
-    val compressed: ByteArray
-    val chunks: List<ByteArray>
-    val hash: ByteArray
-    val durationMs: Int
-    val firstNoteMs: Int
-    val mode: Int
-  }
-
-  data class Prepared(
-      override val compressed: ByteArray,
-      override val chunks: List<ByteArray>,
-      override val hash: ByteArray,
-      override val durationMs: Int,
-      override val firstNoteMs: Int,
-  ) : Payload {
-    override val mode: Int = 0
-  }
-
   /** v2 keeps OYMB runtime ids, signed cents, deterministic custom variants and pan. */
   data class PreparedV2(
-      override val compressed: ByteArray,
-      override val chunks: List<ByteArray>,
-      override val hash: ByteArray,
-      override val durationMs: Int,
-      override val firstNoteMs: Int,
+      val compressed: ByteArray,
+      val chunks: List<ByteArray>,
+      val hash: ByteArray,
+      val durationMs: Int,
+      val firstNoteMs: Int,
       val spatialMode: Int,
       val bankPolicy: Int,
       val manifestHash: ByteArray,
-  ) : Payload {
-    override val mode: Int = 1
-  }
+  )
 
   fun prepareV2(
       notes: List<NoteEvent>,
@@ -178,57 +159,6 @@ object PlaybackBuffer {
         null
       }
 
-  fun prepare(notes: List<NoteEvent>): Prepared? =
-      try {
-        // OYPB v1 carries only an unsigned vanilla pitch. Keep its bytes frozen and route every
-        // custom, extended or detuned note through normal Paper playback instead.
-        if (
-            notes.size !in 1..100_000 ||
-                notes.any {
-                  it.customSound != null || it.pitchCents !in 0..2400 || it.pitchCents % 100 != 0
-                }
-        )
-            return null
-        val sorted = notes.sortedBy { it.timeMs }
-        val duration = sorted.last().timeMs
-        val raw =
-            ByteArrayOutputStream().use { bytes ->
-              DataOutputStream(bytes).use { out ->
-                out.writeInt(0x4F595042)
-                out.writeByte(1)
-                varUInt(out, duration)
-                varUInt(out, sorted.size)
-                varUInt(out, 0)
-                var previous = 0
-                sorted.forEach { note ->
-                  require(note.timeMs >= previous)
-                  varUInt(out, note.timeMs - previous)
-                  previous = note.timeMs
-                  varUInt(out, note.instrument)
-                  out.writeByte(note.pitch.toInt())
-                  out.writeByte(note.volume)
-                  out.writeByte(note.pan + 100)
-                  varUInt(out, 0)
-                }
-              }
-              bytes.toByteArray()
-            }
-        val compressed = deflate(raw)
-        if (compressed.size !in 1..MAX_COMPRESSED) return null
-        val chunks = compressed.asList().chunked(CHUNK_BYTES).map { chunk -> chunk.toByteArray() }
-        if (chunks.size !in 1..MAX_CHUNKS) null
-        else
-            Prepared(
-                compressed,
-                chunks,
-                MessageDigest.getInstance("SHA-256").digest(compressed),
-                duration,
-                sorted.firstOrNull { it.volume > 0 }?.timeMs ?: sorted.first().timeMs,
-            )
-      } catch (_: Exception) {
-        null
-      }
-
   fun envelope(type: Int, session: UUID, body: DataOutputStream.() -> Unit = {}): ByteArray =
       PlaybackWireCodec.encode(type, session, body)
 
@@ -236,8 +166,12 @@ object PlaybackBuffer {
     val match = Regex("(?<!\\d)(\\d+)\\.(\\d+)(?:\\.(\\d+))?").find(minecraftVersion) ?: return 0
     val major = match.groupValues[1].toIntOrNull() ?: return 0
     val minor = match.groupValues[2].toIntOrNull() ?: return 0
-    return if (major == 26 && minor == 2)
-        CAP_BRASS_NOTE_BLOCK or CAP_OYPB_V2 or CAP_BANK_MANIFEST_V1 or CAP_SOUND_CATALOG_26_2
+    return if (major == 26 && minor in 2..3)
+        CAP_BRASS_NOTE_BLOCK or
+            CAP_OYPB_V2 or
+            CAP_BANK_MANIFEST_V1 or
+            CAP_SOUND_CATALOG_26_2 or
+            CAP_MULTI_SESSION
     else 0
   }
 

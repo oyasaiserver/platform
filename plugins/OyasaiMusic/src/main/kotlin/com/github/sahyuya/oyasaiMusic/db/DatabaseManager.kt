@@ -23,14 +23,23 @@ import org.bukkit.plugin.Plugin
  * SQLite JDBCの単一Connectionはスレッドセーフではないため、 全てのアクセスは [transaction] / [query] を介して同期的に行うこと。
  * 呼び出し側は必ず非同期スレッド（BukkitSchedulerのasync等）から呼び出すこと。
  */
-class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
+class DatabaseManager
+internal constructor(
+    private val dbFile: File,
+    private val logger: java.util.logging.Logger =
+        java.util.logging.Logger.getLogger(DatabaseManager::class.java.name),
+) {
 
-  private val dbFile: File = File(plugin.dataFolder, databaseFileName)
+  constructor(
+      plugin: Plugin,
+      databaseFileName: String,
+  ) : this(File(plugin.dataFolder, databaseFileName), plugin.logger)
+
   private lateinit var connection: Connection
   private val lock = Any()
 
   fun connect() {
-    plugin.dataFolder.mkdirs()
+    dbFile.absoluteFile.parentFile.mkdirs()
     Class.forName("org.sqlite.JDBC")
     connection = DriverManager.getConnection("jdbc:sqlite:${dbFile.absolutePath}")
     connection.createStatement().use { st: Statement ->
@@ -42,7 +51,9 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
     // VACUUM INTO includes committed WAL data; never copy a live SQLite file alone.
     if (!columnExists(connection, "songs", "record_identity")) {
       val backup =
-          File(plugin.dataFolder, databaseFileNameForBackup()).absolutePath.replace("'", "''")
+          File(dbFile.absoluteFile.parentFile, databaseFileNameForBackup())
+              .absolutePath
+              .replace("'", "''")
       connection.createStatement().use { it.execute("VACUUM INTO '$backup'") }
     }
     migrateSchema()
@@ -53,6 +64,31 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
       connection.close()
     }
   }
+
+  /** Run before installing a feature, outside a transaction so VACUUM includes the WAL. */
+  fun backupBeforeFeature(feature: String, supportedVersion: Int) =
+      synchronized(lock) {
+        val version =
+            connection
+                .prepareStatement("SELECT version FROM music_feature_schema WHERE feature=?")
+                .use { p ->
+                  p.setString(1, feature)
+                  p.executeQuery().use { r -> if (r.next()) r.getInt(1) else null }
+                }
+        check(version == null || version == supportedVersion) {
+          "Unsupported $feature schema: $version"
+        }
+        if (version == null) {
+          val backup =
+              File(
+                  dbFile.absoluteFile.parentFile,
+                  "${dbFile.name}.before-$feature-v$supportedVersion-${java.util.UUID.randomUUID()}.bak",
+              )
+          connection.createStatement().use {
+            it.execute("VACUUM INTO '${backup.absolutePath.replace("'", "''")}'")
+          }
+        }
+      }
 
   /**
    * DB操作を同期化し、成功時はcommit・例外時はrollbackする。
@@ -107,7 +143,6 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
         st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_songs_author ON songs(author_uuid);")
         st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_songs_status ON songs(status);")
         st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_songs_created_at ON songs(created_at);")
-        st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_songs_published ON songs(published);")
 
         st.executeUpdate(
             """
@@ -321,19 +356,19 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
               "ALTER TABLE songs ADD COLUMN supports_positional INTEGER NOT NULL DEFAULT 0;"
           )
         }
-        plugin.logger.info("DBマイグレーション: songs.supports_positional カラムを追加しました。")
+        logger.info("DBマイグレーション: songs.supports_positional カラムを追加しました。")
       }
       if (!columnExists(conn, "songs", "published")) {
         conn.createStatement().use { st ->
           st.executeUpdate("ALTER TABLE songs ADD COLUMN published INTEGER NOT NULL DEFAULT 0;")
         }
-        plugin.logger.info("DBマイグレーション: songs.published カラムを追加しました。")
+        logger.info("DBマイグレーション: songs.published カラムを追加しました。")
       }
       if (!columnExists(conn, "songs", "review_requested_at")) {
         conn.createStatement().use { st ->
           st.executeUpdate("ALTER TABLE songs ADD COLUMN review_requested_at INTEGER;")
         }
-        plugin.logger.info("DBマイグレーション: songs.review_requested_at カラムを追加しました。")
+        logger.info("DBマイグレーション: songs.review_requested_at カラムを追加しました。")
       }
       if (!columnExists(conn, "songs", "first_published_at")) {
         conn.createStatement().use {
@@ -351,6 +386,7 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
         }
       }
       conn.createStatement().use { st ->
+        st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_songs_published ON songs(published);")
         st.executeUpdate(
             "CREATE INDEX IF NOT EXISTS idx_songs_review_requested ON songs(review_requested_at);"
         )

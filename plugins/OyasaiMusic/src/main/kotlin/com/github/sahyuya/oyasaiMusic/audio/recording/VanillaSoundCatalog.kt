@@ -3,7 +3,6 @@ package com.github.sahyuya.oyasaiMusic.audio
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.io.File
-import java.security.MessageDigest
 import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.plugin.java.JavaPlugin
@@ -14,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin
 object VanillaSoundCatalog {
 
   private const val CATALOG_FILE_NAME = "sound-catalog.json"
-  private const val LEGACY_BUNDLED_SHA1 = "655f8be286cf6f2297bcc3c36f8f83a5a2cac3dc"
 
   private data class EventParts(val eventKey: String, val group: String, val tail: List<String>)
 
@@ -26,6 +24,7 @@ object VanillaSoundCatalog {
       val eventKey: String,
       val idPrefix: String?,
       private val patterns: List<Pattern>,
+      val bankCompatible: Boolean = true,
   ) {
     private val seedCache = ConcurrentHashMap<Int, Long>()
 
@@ -73,10 +72,7 @@ object VanillaSoundCatalog {
     val file = File(plugin.dataFolder, CATALOG_FILE_NAME)
     if (!file.exists()) {
       plugin.saveResource(CATALOG_FILE_NAME, false)
-    } else if (sha1(file) == LEGACY_BUNDLED_SHA1) {
-      plugin.saveResource(CATALOG_FILE_NAME, true)
-      plugin.logger.info("sound-catalog.json を公式 Minecraft 26.2 カタログへ更新しました。")
-    }
+    } // Existing numbering and seed weights are operator-owned; never overwrite.
     return reload(file)
   }
 
@@ -110,8 +106,10 @@ object VanillaSoundCatalog {
   }
 
   /** JSONの sounds 配列を解析する。イベント名に含まれるドットはJSONキーとしてそのまま扱う。 */
-  private fun parseDefinitions(text: String): List<SoundDefinition> {
+  internal fun parseDefinitions(text: String): List<SoundDefinition> {
     val patternsByEvent = linkedMapOf<String, List<Pattern>>()
+    val explicitIds = mutableMapOf<String, String>()
+    val bankExcluded = mutableSetOf<String>()
     val root = JsonParser.parseString(text).asJsonObject
     root.entrySet().forEach { (rawEventKey, value) ->
       val definition = value.takeIf { it.isJsonObject }?.asJsonObject ?: return@forEach
@@ -119,18 +117,33 @@ object VanillaSoundCatalog {
       val patterns =
           sounds.mapIndexed { index, sound -> Pattern(index + 1, sound.weight().coerceAtLeast(1)) }
       if (patterns.isNotEmpty()) {
-        patternsByEvent[rawEventKey.removePrefix("minecraft:").lowercase()] = patterns
+        val eventKey = rawEventKey.removePrefix("minecraft:").lowercase()
+        patternsByEvent[eventKey] = patterns
+        definition.get("oyasaimusic_sign_id")?.let { value ->
+          require(value.isJsonPrimitive && value.asJsonPrimitive.isString)
+          val id = value.asString
+          require(id.matches(Regex("10\\.[1-9][0-9]{0,3}\\.[1-9][0-9]{0,3}"))) {
+            "サウンドの追加番号が不正です: $eventKey"
+          }
+          explicitIds[eventKey] = id
+        }
+        definition.get("oyasaimusic_bank")?.let { value ->
+          require(value.isJsonPrimitive && value.asJsonPrimitive.isBoolean)
+          if (!value.asBoolean) bankExcluded += eventKey
+        }
       }
     }
+    require(explicitIds.values.toSet().size == explicitIds.size) { "サウンドの追加番号が重複しています" }
 
     val indexed =
         patternsByEvent.keys.mapNotNull { eventKey ->
+          if (eventKey in explicitIds) return@mapNotNull null
           val parts = eventKey.split('.')
           val group = parts.firstOrNull() ?: return@mapNotNull null
           if (group !in primaryGroups || parts.size < 2) return@mapNotNull null
           EventParts(eventKey, group, parts.drop(1))
         }
-    val idByEvent = HashMap<String, String>()
+    val idByEvent = HashMap(explicitIds)
     primaryGroups.forEachIndexed { groupIndex, group ->
       val numbered =
           indexed
@@ -161,7 +174,9 @@ object VanillaSoundCatalog {
         }
     return patternsByEvent.entries
         .sortedBy { it.key }
-        .map { (eventKey, patterns) -> SoundDefinition(eventKey, idByEvent[eventKey], patterns) }
+        .map { (eventKey, patterns) ->
+          SoundDefinition(eventKey, idByEvent[eventKey], patterns, eventKey !in bankExcluded)
+        }
   }
 
   private fun com.google.gson.JsonElement.weight(): Int {
@@ -171,9 +186,4 @@ object VanillaSoundCatalog {
 
   private fun JsonObject.intOrNull(member: String): Int? =
       get(member)?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asInt
-
-  private fun sha1(file: File): String =
-      MessageDigest.getInstance("SHA-1").digest(file.readBytes()).joinToString("") {
-        "%02x".format(it.toInt() and 0xff)
-      }
 }

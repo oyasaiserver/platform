@@ -28,7 +28,12 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
       var timeoutTask: BukkitTask? = null,
   )
 
-  private data class Expected(val hash: String, val generation: Long, @Volatile var expiresAt: Long)
+  private data class Expected(
+      val hash: String,
+      val generation: Long,
+      @Volatile var expiresAt: Long,
+      @Volatile var awaitingStart: Boolean = false,
+  )
 
   data class Started(val firstNoteMs: Int, val generation: Long)
 
@@ -183,7 +188,11 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
         PlaybackBuffer.serverCapabilitiesEnvelope(plugin.server.minecraftVersion),
     )
     pending[player.uniqueId]?.let {
-      it.callback = callback
+      val previous = it.callback
+      it.callback = { result ->
+        previous(result)
+        callback(result)
+      }
       return
     }
     val generation = System.nanoTime()
@@ -192,16 +201,20 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
             .withoutPadding()
             .encodeToString(ByteArray(16).also(random::nextBytes))
     val active = Pending(nonce, generation, System.nanoTime() + PROBE_TIMEOUT_NANOS, callback)
+    if (plugin.config.getBoolean("playback.diagnostics")) plugin.logger.info("capabilityProbe=sent")
     generations[player.uniqueId] = generation
     bankManifests.remove(player.uniqueId)
     pending[player.uniqueId] = active
     ready.remove(player.uniqueId)
     expected.remove(player.uniqueId)
+    val probePacket =
+        PlaybackBuffer.envelope(PlaybackBuffer.TYPE_PROBE, UUID(0L, 0L)) { writeUTF(nonce) }
     player.sendPluginMessage(
         plugin,
         PlaybackBuffer.CHANNEL,
-        PlaybackBuffer.envelope(PlaybackBuffer.TYPE_PROBE, UUID(0L, 0L)) { writeUTF(nonce) },
+        probePacket,
     )
+    var nextRetry = System.nanoTime() + 500_000_000L
     active.timeoutTask =
         plugin.server.scheduler.runTaskTimer(
             plugin,
@@ -214,8 +227,23 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
                 active.timeoutTask?.cancel()
                 return@Runnable
               }
-              if (System.nanoTime() < active.expiresAtNanos) return@Runnable
+              if (System.nanoTime() < active.expiresAtNanos) {
+                if (System.nanoTime() >= nextRetry) {
+                  // Discovery and the server capability advertisement may both have been sent
+                  // before the client's channel registration. Restore their original ordering.
+                  player.sendPluginMessage(
+                      plugin,
+                      PlaybackBuffer.CHANNEL,
+                      PlaybackBuffer.serverCapabilitiesEnvelope(plugin.server.minecraftVersion),
+                  )
+                  player.sendPluginMessage(plugin, PlaybackBuffer.CHANNEL, probePacket)
+                  nextRetry = System.nanoTime() + 500_000_000L
+                }
+                return@Runnable
+              }
               if (pending.remove(player.uniqueId, active)) {
+                if (plugin.config.getBoolean("playback.diagnostics"))
+                    plugin.logger.info("capabilityProbe=timeout")
                 presence[player.uniqueId] = Presence.VANILLA_ONLY
                 active.callback(false)
               }
@@ -227,6 +255,8 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
   }
 
   private fun acceptProbe(player: Player, nonce: String) {
+    if (plugin.config.getBoolean("playback.diagnostics"))
+        plugin.logger.info("capabilityProbe=response")
     if (!nonce.matches(Regex("[A-Za-z0-9_-]{22}"))) return
     val active = pending[player.uniqueId] ?: return
     if (
@@ -238,6 +268,8 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
         return
     active.timeoutTask?.cancel()
     presence[player.uniqueId] = Presence.MOD_PRESENT
+    if (plugin.config.getBoolean("playback.diagnostics"))
+        plugin.logger.info("capabilityProbe=confirmed")
     acceptedNonces[player.uniqueId] = active.generation to active.nonce
     active.callback(true)
   }
@@ -278,6 +310,10 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
       supportsV2(playerId) &&
           (clientCapabilities[playerId] ?: 0) and PlaybackBuffer.CLIENT_CAP_BANK_MANIFEST_V1 != 0
 
+  fun supportsMultiSession(playerId: UUID): Boolean =
+      supportsV2(playerId) &&
+          (clientCapabilities[playerId] ?: 0) and PlaybackBuffer.CLIENT_CAP_MULTI_SESSION != 0
+
   fun expectReady(playerId: UUID, session: UUID, hash: ByteArray, deadlineMillis: Long) {
     sweep()
     val generation = generations[playerId] ?: return
@@ -298,7 +334,9 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
   private fun acceptReady(player: Player, session: UUID, hash: String) {
     val wanted = expected[player.uniqueId]?.get(session) ?: return
     if (
-        wanted.expiresAt >= System.currentTimeMillis() &&
+        !wanted.awaitingStart &&
+            wanted.hash == hash &&
+            wanted.expiresAt >= System.currentTimeMillis() &&
             wanted.generation == generations[player.uniqueId]
     )
         ready.computeIfAbsent(player.uniqueId) { ConcurrentHashMap() }[session] = hash
@@ -324,12 +362,15 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
   ): Boolean {
     val wanted = expected[playerId]?.get(session) ?: return false
     if (
-        wanted.generation != generations[playerId] ||
+        wanted.awaitingStart ||
+            wanted.expiresAt < System.currentTimeMillis() ||
+            wanted.generation != generations[playerId] ||
             wanted.hash != Base64.getUrlEncoder().withoutPadding().encodeToString(hash) ||
             !isCapable(playerId)
     )
         return false
     wanted.expiresAt = deadlineMillis
+    wanted.awaitingStart = true
     return true
   }
 
@@ -362,12 +403,14 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
   private fun acceptStarted(player: Player, session: UUID, hash: ByteArray, first: Int) {
     val wanted = expected[player.uniqueId]?.get(session) ?: return
     if (
-        wanted.expiresAt >= System.currentTimeMillis() &&
+        wanted.awaitingStart &&
+            wanted.expiresAt >= System.currentTimeMillis() &&
             wanted.generation == generations[player.uniqueId] &&
             wanted.hash == Base64.getUrlEncoder().withoutPadding().encodeToString(hash)
     )
-        started.computeIfAbsent(player.uniqueId) { ConcurrentHashMap() }[session] =
-            Started(first, wanted.generation)
+        started
+            .computeIfAbsent(player.uniqueId) { ConcurrentHashMap() }
+            .putIfAbsent(session, Started(first, wanted.generation))
   }
 
   fun removeExpected(playerId: UUID, session: UUID) {

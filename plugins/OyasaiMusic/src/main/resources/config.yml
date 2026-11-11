@@ -13,9 +13,8 @@ recording:
   default-record-material: "MUSIC_DISC_13"
 
 playback:
-  # 音符をメインスレッドへ少し早めに渡し、混雑時の遅延を吸収する（0〜50ms）。
-  # 35msは追加タスクを増やさず、通常時のズレも目立ちにくい推奨値。
-  lookahead-ms: 35
+  # 再生診断の集計を /oyasaimusic playbackstats で表示する
+  diagnostics: false
   # 視聴カウント判定: 直近1時間の再生回数上限
   view-limit-per-hour: 3
   # 視聴カウント判定: 直近24時間の再生回数上限

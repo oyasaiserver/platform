@@ -22,7 +22,7 @@ class EconomyServiceTest {
         } as OyasaiEconomyApi
     val uuid = UUID.randomUUID()
     val amount = 9_007_199_254_740_993L
-    val result = tokenPayout(api, uuid, "Alice", amount, false)
+    val result = completePayout(api, uuid, "token", amount, false)
     assertFalse(result.isDone)
     assertEquals(listOf("token", uuid, amount, false), calls.single())
     saved.complete(EconomyResult.Success(amount, amount))
@@ -39,18 +39,20 @@ class EconomyServiceTest {
           assertEquals("withdraw", method.name)
           EconomyOperation(true, CompletableFuture.completedFuture(EconomyResult.Failed("保存失敗")))
         } as OyasaiEconomyApi
-    assertIs<PayoutResult.Failed>(tokenPayout(api, UUID.randomUUID(), "Alice", 10, true).join())
+    assertIs<PayoutResult.Failed>(completePayout(api, UUID.randomUUID(), "token", 10, true).join())
   }
 
   @Test
   fun `invalid rewards fail and zero needs no provider`() {
-    assertIs<PayoutResult.Failed>(tokenPayout(null, UUID.randomUUID(), "Alice", -1, false).join())
+    assertIs<PayoutResult.Failed>(
+        completePayout(null, UUID.randomUUID(), "token", -1, false).join()
+    )
     assertEquals(
         PayoutResult.Success,
-        tokenPayout(null, UUID.randomUUID(), "Alice", 0, false).join(),
+        completePayout(null, UUID.randomUUID(), "token", 0, false).join(),
     )
     assertIs<PayoutResult.Unavailable>(
-        tokenPayout(null, UUID.randomUUID(), "Alice", 1, false).join()
+        completePayout(null, UUID.randomUUID(), "token", 1, false).join()
     )
   }
 }
