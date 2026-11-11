@@ -90,7 +90,7 @@ CarBuilder2 と AircraftBuilder で車両・航空機を作成、試乗、購入
 - GUI、Bukkit イベント、走行タスク、距離計測、パケット tick カウンターは Bukkit scheduler の同期タスクで動きます。走行・距離計測の主な周期は 1 tick、座席への自動搭乗確認は 10 tick ごとです。
 - 車両キャッシュ再読込は専用 `Thread` でフォルダと schematic を読み、完了時に scheduler 経由でメインスレッド上のキャッシュを差し替えます。管理コマンドの戻り値は「開始しました」で、完了を待ちません。既存車両の `val baseData` は交換せず、表示エンティティも再生成しません。変更を反映するには車両を終了し、再読込完了後に出し直します（`BaseVehicleEntityList.kt`、両 EntityData）。
 - ビルダーの保存コマンドは WorldEdit clipboard を `.schem` へ同期的に書いた後、schematic 読み直しを非同期タスクで行います。完了時にメインスレッドで owner/config を保存し、プレイヤーへ結果を返します。ファイル書き込み例外を囲う処理や、全経路での busy 状態解除はありません。
-- プレイヤー接続のパケット channel への handler 追加・削除は Netty event loop 上で実行します。送信済み `ClientboundSetEntityDataPacket` と Bundle 内の同 packet をモード別にフィルタします。
+- プレイヤー接続のパケット channel への handler 追加・削除は Netty event loop 上で実行します。`packet_handler` が存在しない場合は追加を見送り、接続中なら警告します。送信済み `ClientboundSetEntityDataPacket` と Bundle 内の同 packet をモード別にフィルタします。
 
 ### イベント
 

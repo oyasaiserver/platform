@@ -1,7 +1,9 @@
 package io.oyasai.anybuilder.network
 
 import io.netty.channel.ChannelDuplexHandler
+import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.ChannelPipeline
 import io.netty.channel.ChannelPromise
 import io.oyasai.VehicleMenuCommand
 import io.oyasai.anybuilder.runtime.EntityRuntime
@@ -51,7 +53,15 @@ object NmsMetadataFilterService : Listener {
 
     channel.eventLoop().execute {
       if (channel.pipeline().get(handlerName) == null) {
-        channel.pipeline().addBefore("packet_handler", handlerName, MetadataFilterHandler(uuid))
+        if (!addMetadataHandler(channel.pipeline(), handlerName, MetadataFilterHandler(uuid))) {
+          if (channel.isActive) {
+            Bukkit.getLogger()
+                .warning(
+                    "OyasaiVehicles: packet_handler is missing; metadata filter was not installed"
+                )
+          }
+          return@execute
+        }
       }
       injectedPlayers.add(uuid)
     }
@@ -136,4 +146,14 @@ object NmsMetadataFilterService : Listener {
     val str = packet.packedItems().toString()
     return str.length > 15 && (str[14] != '2' || str[15] != ',')
   }
+}
+
+internal fun addMetadataHandler(
+    pipeline: ChannelPipeline,
+    name: String,
+    handler: ChannelHandler,
+): Boolean {
+  if (pipeline.context("packet_handler") == null) return false
+  pipeline.addBefore("packet_handler", name, handler)
+  return true
 }
