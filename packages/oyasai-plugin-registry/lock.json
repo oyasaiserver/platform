@@ -53,8 +53,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.1/builds/1283/downloads/velocity",
-      "hash": "sha256-RtTZWZpZaxzjIjWfkzn/xLHUaA/0bofwDY7CL6ouYZQ="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.1/builds/1298/downloads/velocity",
+      "hash": "sha256-TKO3fQ9b/JBKXWpRajmzFkTeXnTS5EksrgrM+whTB9w="
     }
   },
   "luckperms": {
@@ -96,16 +96,16 @@
   "viaversion": {
     "paper": {
       "26.3": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/h2Bniign/ViaVersion-5.12.3-SNAPSHOT.jar",
-        "hash": "sha256-Nrgc/6cYYtDq5jrphg3sPEmkq/rKjjBDilnM2Wwa838="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/OKm4Zi14/ViaVersion-5.12.3-SNAPSHOT.jar",
+        "hash": "sha256-XQ7hm0VLoUhKb4d+QCghGsOXvEW0Wx1Zmqu3oHAzlfw="
       }
     }
   },
   "worldguard": {
     "paper": {
       "26.3": {
-        "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/9YdeGXiK/worldguard-bukkit-7.0.20.jar",
-        "hash": "sha256-h2ikm8vsu3pBOtE07nLZhxzflnt9k45rlrsMpyuxRns="
+        "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/fiHLM6oY/worldguard-bukkit-7.0.21.jar",
+        "hash": "sha256-BwIjxTVinz9dFfACOIweOuYVpfS6BR58z7XXFlQFR6k="
       }
     }
   }
