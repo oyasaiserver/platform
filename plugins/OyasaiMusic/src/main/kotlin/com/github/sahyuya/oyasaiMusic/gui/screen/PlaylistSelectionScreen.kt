@@ -1,8 +1,8 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
+import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.AddSongResult
 import com.github.sahyuya.oyasaiMusic.db.SocialRepository.FavoriteResult
-import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.model.Playlist
 import com.github.sahyuya.oyasaiMusic.model.Song
 import net.kyori.adventure.text.Component
@@ -145,19 +145,21 @@ class PlaylistSelectionScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val result = plugin.socialRepository.addFavorite(viewer.uniqueId, songId, targetSong.recordIdentity)
+              val result =
+                  plugin.socialRepository.addFavorite(
+                      viewer.uniqueId,
+                      songId,
+                      targetSong.recordIdentity,
+                  )
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
                         viewer.sendMessage(
                             when (result) {
-                              FavoriteResult.ADDED ->
-                                  "§aお気に入りに追加しました: ${targetSong.title}"
-                              FavoriteResult.ALREADY_ADDED ->
-                                  "§7既にお気に入り済みです。"
-                              FavoriteResult.STALE_SONG ->
-                                  "§c楽曲が変更または削除されました。画面を開き直してください。"
+                              FavoriteResult.ADDED -> "§aお気に入りに追加しました: ${targetSong.title}"
+                              FavoriteResult.ALREADY_ADDED -> "§7既にお気に入り済みです。"
+                              FavoriteResult.STALE_SONG -> "§c楽曲が変更または削除されました。画面を開き直してください。"
                             }
                         )
                         menuManager.openPrevious(viewer)
@@ -173,14 +175,21 @@ class PlaylistSelectionScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val result = plugin.playlistRepository.addSong(requireNotNull(playlist.id), viewer.uniqueId, songId, targetSong.recordIdentity)
+              val result =
+                  plugin.playlistRepository.addSong(
+                      requireNotNull(playlist.id),
+                      viewer.uniqueId,
+                      songId,
+                      targetSong.recordIdentity,
+                  )
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
                         viewer.sendMessage(
                             when (result) {
-                              AddSongResult.ADDED -> "§a「${playlist.name}」に追加しました: ${targetSong.title}"
+                              AddSongResult.ADDED ->
+                                  "§a「${playlist.name}」に追加しました: ${targetSong.title}"
                               AddSongResult.ALREADY_ADDED -> "§7既に追加済みです。"
                               AddSongResult.STALE_TARGET -> "§c楽曲またはプレイリストが変更・削除されました。"
                             }
@@ -200,7 +209,15 @@ class PlaylistSelectionScreen(
               Runnable {
                 val playlistId = plugin.playlistRepository.create(viewer.uniqueId, name)
                 val songId = targetSong.id
-                val result = songId?.let { plugin.playlistRepository.addSong(playlistId, viewer.uniqueId, it, targetSong.recordIdentity) }
+                val result =
+                    songId?.let {
+                      plugin.playlistRepository.addSong(
+                          playlistId,
+                          viewer.uniqueId,
+                          it,
+                          targetSong.recordIdentity,
+                      )
+                    }
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,

@@ -40,23 +40,26 @@ class OyasaiImportService(private val plugin: OyasaiMusic) {
     val audioFile = File(plugin.audioDirectory, relativeAudioName)
     try {
       SongAudioFile.write(audioFile, imported.notes)
-      val savedSong = plugin.databaseManager.transaction {
-          val songId =
-              plugin.songRepository.insertDraft(
-                  authorUuid = authorUuid,
-                  title = imported.title,
-                  bpm = imported.bpm,
-                  recordMaterial =
-                      plugin.config.getString("recording.default-record-material", "MUSIC_DISC_13")
-                          ?: "MUSIC_DISC_13",
-                  price = plugin.config.getInt("recording.default-price", 1000),
-                  fileName = relativeAudioName,
-                  supportsPositional = imported.notes.any { it.pan != 0 },
-              )
+      val savedSong =
+          plugin.databaseManager.transaction {
+            val songId =
+                plugin.songRepository.insertDraft(
+                    authorUuid = authorUuid,
+                    title = imported.title,
+                    bpm = imported.bpm,
+                    recordMaterial =
+                        plugin.config.getString(
+                            "recording.default-record-material",
+                            "MUSIC_DISC_13",
+                        ) ?: "MUSIC_DISC_13",
+                    price = plugin.config.getInt("recording.default-price", 1000),
+                    fileName = relativeAudioName,
+                    supportsPositional = imported.notes.any { it.pan != 0 },
+                )
 
-          plugin.songRepository.findById(songId)
-              ?: throw IllegalStateException("保存した楽曲を再取得できませんでした。")
-      }
+            plugin.songRepository.findById(songId)
+                ?: throw IllegalStateException("保存した楽曲を再取得できませんでした。")
+          }
       return ImportResult(savedSong, imported.notes.size, null)
     } catch (error: Exception) {
       runCatching { Files.deleteIfExists(audioFile.toPath()) }.onFailure(error::addSuppressed)

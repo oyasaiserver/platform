@@ -4,9 +4,9 @@ import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.audio.CircuitRecorder
 import com.github.sahyuya.oyasaiMusic.audio.GridRecorder
 import com.github.sahyuya.oyasaiMusic.audio.RecordingReplacementTarget
-import com.github.sahyuya.oyasaiMusic.audio.replaceRecordingAudio
 import com.github.sahyuya.oyasaiMusic.audio.RecordingSessionManager
 import com.github.sahyuya.oyasaiMusic.audio.SongAudioFile
+import com.github.sahyuya.oyasaiMusic.audio.replaceRecordingAudio
 import com.github.sahyuya.oyasaiMusic.db.SongRepository
 import com.github.sahyuya.oyasaiMusic.gui.MenuManager
 import com.github.sahyuya.oyasaiMusic.gui.SongSettingsScreen
@@ -275,7 +275,9 @@ class RecordCommand(
                               .runTask(plugin, Runnable { player.sendMessage("§c置換先の楽曲が見つかりません。") })
                           return@Runnable
                         }
-                check(song.recordIdentity == target.recordIdentity && song.fileName == target.fileName) {
+                check(
+                    song.recordIdentity == target.recordIdentity && song.fileName == target.fileName
+                ) {
                   "置換先の楽曲または音源が変更されました。"
                 }
                 plugin.replaceRecordingAudio(target, notes)

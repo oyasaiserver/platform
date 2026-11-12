@@ -82,32 +82,34 @@ class RankingCacheService(
 
   fun restoreSongVisibility(identity: String) {
     val hidden = hiddenIdentities[identity] ?: return
-    Bukkit.getScheduler().runTaskAsynchronously(
-        plugin,
-        Runnable {
-          val zone = ZoneId.systemDefault()
-          val today = LocalDate.now(zone)
-          recomputeDaily(today, zone)
-          recomputeWeekly(today.with(DayOfWeek.MONDAY), zone)
-          recomputeTotalSync()
-          save()
-          Bukkit.getScheduler().runTask(
-              plugin,
-              Runnable {
-                if (hiddenIdentities.remove(identity, hidden))
-                    plugin.menuManager.refreshRankings()
-              },
-          )
-        },
-    )
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              val zone = ZoneId.systemDefault()
+              val today = LocalDate.now(zone)
+              recomputeDaily(today, zone)
+              recomputeWeekly(today.with(DayOfWeek.MONDAY), zone)
+              recomputeTotalSync()
+              save()
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (hiddenIdentities.remove(identity, hidden))
+                            plugin.menuManager.refreshRankings()
+                      },
+                  )
+            },
+        )
   }
 
   fun visibleEntries(snapshot: RankingSnapshot?, metric: RankingMetric): List<RankingEntryDto> {
     val entries = snapshot?.entries?.get(metric).orEmpty()
     if (metric.isAuthorMetric) return entries
-    return entries.filter { entry ->
-      entry.recordIdentity?.let { !hiddenIdentities.containsKey(it) } == true
-    }.mapIndexed { index, entry -> entry.copy(rank = index + 1) }
+    return entries
+        .filter { entry -> entry.recordIdentity?.let { !hiddenIdentities.containsKey(it) } == true }
+        .mapIndexed { index, entry -> entry.copy(rank = index + 1) }
   }
 
   /** onEnableから一度だけ呼び出す。ロード→境界チェック→定期タスク登録を行う。 */
@@ -147,10 +149,11 @@ class RankingCacheService(
     dailySnapshot = state.daily
     weeklySnapshot = state.weekly
     totalSnapshot = state.total
-    Bukkit.getScheduler().runTaskAsynchronously(
-        plugin,
-        Runnable { checkBoundariesAndRecompute(forceTotal = true) },
-    )
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            Runnable { checkBoundariesAndRecompute(forceTotal = true) },
+        )
   }
 
   /** 管理コマンド用: 日間・週間ランキングを現在時刻基準で即時に再集計する。 */
@@ -263,7 +266,7 @@ class RankingCacheService(
                   authorName = name,
                   score = s.score,
                   recordMaterial = s.song.recordMaterial,
-                recordIdentity = s.song.recordIdentity,
+                  recordIdentity = s.song.recordIdentity,
               )
             }
           }
@@ -286,14 +289,13 @@ class RankingCacheService(
     try {
       if (cacheFile.exists()) {
         state =
-            gson.fromJson(cacheFile.readText(), RankingCacheFile::class.java)
-                ?.let { cached ->
-                  cached.copy(
-                      daily = cached.daily?.let(::authorEntriesOnly),
-                      weekly = cached.weekly?.let(::authorEntriesOnly),
-                      total = cached.total?.let(::authorEntriesOnly),
-                  )
-                } ?: RankingCacheFile()
+            gson.fromJson(cacheFile.readText(), RankingCacheFile::class.java)?.let { cached ->
+              cached.copy(
+                  daily = cached.daily?.let(::authorEntriesOnly),
+                  weekly = cached.weekly?.let(::authorEntriesOnly),
+                  total = cached.total?.let(::authorEntriesOnly),
+              )
+            } ?: RankingCacheFile()
       }
     } catch (e: Exception) {
       plugin.logger.warning("ranking_cache.jsonの読み込みに失敗しました。初期状態から再集計します: ${e.message}")

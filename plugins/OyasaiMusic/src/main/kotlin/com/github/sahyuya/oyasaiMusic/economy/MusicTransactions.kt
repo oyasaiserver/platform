@@ -142,24 +142,24 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
 
   fun advertise(player: Player, songId: Long, recordIdentity: String): CompletableFuture<String> =
       async {
-          plugin.databaseManager.transaction {
-            val song = requireNotNull(plugin.songRepository.findById(songId)) { "楽曲がありません" }
-            check(song.recordIdentity == recordIdentity) { "楽曲が変更されました。画面を開き直してください" }
-            check(song.published && !song.limitedPublication) { "通常公開中の楽曲だけ宣伝できます" }
-            journal.create(
-                player.uniqueId,
-                "ADVERTISE",
-                "token",
-                10,
-                encode(
-                    mapOf(
-                        "song" to songId.toString(),
-                        "identity" to song.recordIdentity,
-                        "title" to song.title,
-                    )
-                ),
-            )
-          }
+            plugin.databaseManager.transaction {
+              val song = requireNotNull(plugin.songRepository.findById(songId)) { "楽曲がありません" }
+              check(song.recordIdentity == recordIdentity) { "楽曲が変更されました。画面を開き直してください" }
+              check(song.published && !song.limitedPublication) { "通常公開中の楽曲だけ宣伝できます" }
+              journal.create(
+                  player.uniqueId,
+                  "ADVERTISE",
+                  "token",
+                  10,
+                  encode(
+                      mapOf(
+                          "song" to songId.toString(),
+                          "identity" to song.recordIdentity,
+                          "title" to song.title,
+                      )
+                  ),
+              )
+            }
           }
           .thenCompose { execute(it) }
 
@@ -184,23 +184,28 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
           .thenCompose { result -> settlePayment(e, result) }
           .exceptionallyCompose { error -> review(e, error) }
 
-  private fun settlePayment(e: EconomyJournal.Entry, result: PayoutResult): CompletableFuture<String> =
+  private fun settlePayment(
+      e: EconomyJournal.Entry,
+      result: PayoutResult,
+  ): CompletableFuture<String> =
       async {
-        when (result) {
-          PayoutResult.Success -> journal.transition(e.id, "SUBMITTED", "PAID", "SUCCESS")
-          is PayoutResult.Unknown ->
-              journal.transition(e.id, "SUBMITTED", "REVIEW", "UNKNOWN", result.reason)
-          is PayoutResult.Failed -> journal.fail(e, "SUBMITTED", result.reason)
-          is PayoutResult.Unavailable -> journal.fail(e, "SUBMITTED", result.reason)
-        }
-      }.thenCompose {
-        when (result) {
-          PayoutResult.Success -> effects(e)
-          is PayoutResult.Unknown -> CompletableFuture.completedFuture("要照合: ${e.id}（${result.reason}）")
-          is PayoutResult.Failed -> CompletableFuture.completedFuture(result.reason)
-          is PayoutResult.Unavailable -> CompletableFuture.completedFuture(result.reason)
-        }
-      }
+            when (result) {
+              PayoutResult.Success -> journal.transition(e.id, "SUBMITTED", "PAID", "SUCCESS")
+              is PayoutResult.Unknown ->
+                  journal.transition(e.id, "SUBMITTED", "REVIEW", "UNKNOWN", result.reason)
+              is PayoutResult.Failed -> journal.fail(e, "SUBMITTED", result.reason)
+              is PayoutResult.Unavailable -> journal.fail(e, "SUBMITTED", result.reason)
+            }
+          }
+          .thenCompose {
+            when (result) {
+              PayoutResult.Success -> effects(e)
+              is PayoutResult.Unknown ->
+                  CompletableFuture.completedFuture("要照合: ${e.id}（${result.reason}）")
+              is PayoutResult.Failed -> CompletableFuture.completedFuture(result.reason)
+              is PayoutResult.Unavailable -> CompletableFuture.completedFuture(result.reason)
+            }
+          }
 
   private fun review(e: EconomyJournal.Entry, error: Throwable): CompletableFuture<String> = async {
     val current = journal.get(e.id)
@@ -290,9 +295,7 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
             if (e.kind == "PURCHASE") "レコードを受け取りました。" else "10Pを消費して宣伝しました。"
           }
         }
-        .whenComplete { _, _ ->
-          if (guarded.get()) plugin.songRepository.endDeliveryGuard(songId)
-        }
+        .whenComplete { _, _ -> if (guarded.get()) plugin.songRepository.endDeliveryGuard(songId) }
   }
 
   /** Explicit operator confirmation of an unperformed effect, not an external payment retry. */

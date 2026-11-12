@@ -21,13 +21,16 @@ class SocialRepository(private val db: DatabaseManager) {
       recordIdentity: String,
   ): Boolean =
       db.transaction { conn ->
-        val matches = conn.prepareStatement(
-            "SELECT 1 FROM songs WHERE id = ? AND record_identity = ? AND published = 1"
-        ).use { ps ->
-          ps.setLong(1, songId)
-          ps.setString(2, recordIdentity)
-          ps.executeQuery().use { it.next() }
-        }
+        val matches =
+            conn
+                .prepareStatement(
+                    "SELECT 1 FROM songs WHERE id = ? AND record_identity = ? AND published = 1"
+                )
+                .use { ps ->
+                  ps.setLong(1, songId)
+                  ps.setString(2, recordIdentity)
+                  ps.executeQuery().use { it.next() }
+                }
         if (!matches) return@transaction false
         val added =
             conn
@@ -71,15 +74,21 @@ class SocialRepository(private val db: DatabaseManager) {
 
   // ---------- お気に入り ----------
 
-  enum class FavoriteResult { ADDED, ALREADY_ADDED, STALE_SONG }
+  enum class FavoriteResult {
+    ADDED,
+    ALREADY_ADDED,
+    STALE_SONG,
+  }
 
   fun addFavorite(userUuid: UUID, songId: Long, identity: String): FavoriteResult =
       db.transaction { conn ->
-        val matches = conn.prepareStatement("SELECT 1 FROM songs WHERE id = ? AND record_identity = ?").use { ps ->
-          ps.setLong(1, songId)
-          ps.setString(2, identity)
-          ps.executeQuery().use { it.next() }
-        }
+        val matches =
+            conn.prepareStatement("SELECT 1 FROM songs WHERE id = ? AND record_identity = ?").use {
+                ps ->
+              ps.setLong(1, songId)
+              ps.setString(2, identity)
+              ps.executeQuery().use { it.next() }
+            }
         if (!matches) return@transaction FavoriteResult.STALE_SONG
         conn
             .prepareStatement(
@@ -234,7 +243,9 @@ class SocialRepository(private val db: DatabaseManager) {
         }
         val totalViews =
             conn
-                .prepareStatement("UPDATE songs SET views = views + 1 WHERE id = ? AND record_identity = ? RETURNING views")
+                .prepareStatement(
+                    "UPDATE songs SET views = views + 1 WHERE id = ? AND record_identity = ? RETURNING views"
+                )
                 .use { ps ->
                   ps.setLong(1, songId)
                   ps.setString(2, recordIdentity)

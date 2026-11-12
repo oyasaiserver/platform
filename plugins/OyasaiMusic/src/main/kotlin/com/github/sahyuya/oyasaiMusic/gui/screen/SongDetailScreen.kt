@@ -1,8 +1,8 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
+import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.db.LikeService.Result
 import com.github.sahyuya.oyasaiMusic.db.likeFailureMessage
-import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.model.Song
 import com.github.sahyuya.oyasaiMusic.util.HeadTextureUtil
 import net.kyori.adventure.text.Component
@@ -189,8 +189,7 @@ class SongDetailScreen(
   }
 
   private fun authorHeadItem(
-      item: org.bukkit.inventory.ItemStack =
-          HeadTextureUtil.placeholderHead(song.authorUuid)
+      item: org.bukkit.inventory.ItemStack = HeadTextureUtil.placeholderHead(song.authorUuid)
   ): org.bukkit.inventory.ItemStack {
     val name = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     val stats = AuthorStatsCache.get(plugin, song.authorUuid) { render() }
@@ -411,8 +410,9 @@ class SongDetailScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val saved = plugin.playbackModeService.setPreference(viewer.uniqueId, selectedSong, next)
-    Bukkit.getScheduler()
+              val saved =
+                  plugin.playbackModeService.setPreference(viewer.uniqueId, selectedSong, next)
+              Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
@@ -466,10 +466,12 @@ class SongDetailScreen(
             Runnable {
               val result = plugin.likeService.like(viewer.uniqueId, selectedSong)
               val refreshed =
-                  if (result is Result.Added) plugin.songRepository.findById(requireNotNull(selectedSong.id))
-                      ?.takeIf { it.recordIdentity == selectedSong.recordIdentity }
+                  if (result is Result.Added)
+                      plugin.songRepository.findById(requireNotNull(selectedSong.id))?.takeIf {
+                        it.recordIdentity == selectedSong.recordIdentity
+                      }
                   else null
-    Bukkit.getScheduler()
+              Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {

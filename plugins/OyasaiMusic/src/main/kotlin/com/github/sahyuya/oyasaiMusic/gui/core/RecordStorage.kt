@@ -23,13 +23,15 @@ object RecordStorage {
       cache.getOrPut(player.uniqueId) {
         Array(MAX_PAGES) { page ->
           runCatching {
-            val bytes = player.persistentDataContainer.get(key(page), PersistentDataType.BYTE_ARRAY)
-                ?: return@runCatching arrayOfNulls<ItemStack>(PAGE_SIZE)
-            require(bytes.size <= MAX_BYTES) { "Storage page exceeds limit" }
-            val loaded = ItemStack.deserializeItemsFromBytes(bytes)
-            require(loaded.size == PAGE_SIZE) { "Invalid storage page size" }
-            Array(PAGE_SIZE) { loaded[it].takeUnless { item -> item.type.isAir } }
-          }.getOrNull()
+                val bytes =
+                    player.persistentDataContainer.get(key(page), PersistentDataType.BYTE_ARRAY)
+                        ?: return@runCatching arrayOfNulls<ItemStack>(PAGE_SIZE)
+                require(bytes.size <= MAX_BYTES) { "Storage page exceeds limit" }
+                val loaded = ItemStack.deserializeItemsFromBytes(bytes)
+                require(loaded.size == PAGE_SIZE) { "Invalid storage page size" }
+                Array(PAGE_SIZE) { loaded[it].takeUnless { item -> item.type.isAir } }
+              }
+              .getOrNull()
         }
       }
 
@@ -41,7 +43,8 @@ object RecordStorage {
     return items.map { it?.clone() }.toTypedArray()
   }
 
-  fun all(player: Player): List<ItemStack> = pages(player).filterNotNull().flatMap { it.filterNotNull() }
+  fun all(player: Player): List<ItemStack> =
+      pages(player).filterNotNull().flatMap { it.filterNotNull() }
 
   fun save(plugin: Plugin, player: Player, index: Int, items: Array<ItemStack?>) {
     require(index in 0 until MAX_PAGES && items.size == PAGE_SIZE)

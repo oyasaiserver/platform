@@ -1,7 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
-import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.AddSongResult
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.AddSongResult
 import com.github.sahyuya.oyasaiMusic.model.Playlist
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -275,10 +275,17 @@ class FavoritesPlaylistsScreen(
                               plugin.playlistRepository.listSongs(requireNotNull(playlist.id))
                           val newPlaylistId =
                               plugin.playlistRepository.create(target.uniqueId, playlist.name)
-                          val copied = songs.count { song ->
-                            song.id?.let { plugin.playlistRepository.addSong(newPlaylistId, target.uniqueId, it, song.recordIdentity) } ==
-                                AddSongResult.ADDED
-                          }
+                          val copied =
+                              songs.count { song ->
+                                song.id?.let {
+                                  plugin.playlistRepository.addSong(
+                                      newPlaylistId,
+                                      target.uniqueId,
+                                      it,
+                                      song.recordIdentity,
+                                  )
+                                } == AddSongResult.ADDED
+                              }
                           Bukkit.getScheduler()
                               .runTask(
                                   plugin,

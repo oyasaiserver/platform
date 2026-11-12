@@ -325,10 +325,7 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
 
       if (entry.session?.isCancelled == true) entry.session = null
       if (
-          entry.enabled &&
-              entry.session == null &&
-              entry.loadingTicket == null &&
-              !entry.completed
+          entry.enabled && entry.session == null && entry.loadingTicket == null && !entry.completed
       ) {
         startPlayback(k, nearby)
       }
@@ -417,9 +414,12 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
                             return@Runnable
                         val loaded =
                             audio.getOrElse {
-                              val cause = (it as? java.util.concurrent.ExecutionException)?.cause ?: it
+                              val cause =
+                                  (it as? java.util.concurrent.ExecutionException)?.cause ?: it
                               if (cause is java.util.concurrent.RejectedExecutionException) {
-                                entry.retryAfterNanos = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(1)
+                                entry.retryAfterNanos =
+                                    System.nanoTime() +
+                                        java.util.concurrent.TimeUnit.SECONDS.toNanos(1)
                                 return@Runnable
                               }
                               plugin.logger.warning(

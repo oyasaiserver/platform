@@ -6,7 +6,8 @@ import org.bukkit.entity.Player
 
 object SongPromotionService {
   fun promote(plugin: OyasaiMusic, viewer: Player, songId: Long, recordIdentity: String) {
-    plugin.musicTransactions.advertise(viewer, songId, recordIdentity).whenComplete { message, error ->
+    plugin.musicTransactions.advertise(viewer, songId, recordIdentity).whenComplete { message, error
+      ->
       if (!plugin.isEnabled) return@whenComplete
       Bukkit.getScheduler()
           .runTask(

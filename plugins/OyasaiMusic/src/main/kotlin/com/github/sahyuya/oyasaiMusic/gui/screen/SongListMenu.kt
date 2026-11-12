@@ -1,9 +1,9 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
-import com.github.sahyuya.oyasaiMusic.db.LikeService.Result
-import com.github.sahyuya.oyasaiMusic.db.likeFailureMessage
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.db.LikeService.Result
 import com.github.sahyuya.oyasaiMusic.db.SongSort
+import com.github.sahyuya.oyasaiMusic.db.likeFailureMessage
 import com.github.sahyuya.oyasaiMusic.model.Song
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor

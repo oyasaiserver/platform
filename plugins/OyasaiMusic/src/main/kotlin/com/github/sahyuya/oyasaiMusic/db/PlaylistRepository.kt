@@ -69,20 +69,27 @@ class PlaylistRepository(private val db: DatabaseManager) {
             }
       }
 
-  enum class AddSongResult { ADDED, ALREADY_ADDED, STALE_TARGET }
+  enum class AddSongResult {
+    ADDED,
+    ALREADY_ADDED,
+    STALE_TARGET,
+  }
 
   fun addSong(playlistId: Long, owner: UUID, songId: Long, identity: String): AddSongResult =
       db.transaction { conn ->
-        val valid = conn.prepareStatement(
-            "SELECT 1 FROM playlists p JOIN songs s ON s.id = ? AND s.record_identity = ? " +
-                "WHERE p.id = ? AND p.owner_uuid = ?"
-        ).use { ps ->
-          ps.setLong(1, songId)
-          ps.setString(2, identity)
-          ps.setLong(3, playlistId)
-          ps.setBytes(4, UuidUtil.toBytes(owner))
-          ps.executeQuery().use { it.next() }
-        }
+        val valid =
+            conn
+                .prepareStatement(
+                    "SELECT 1 FROM playlists p JOIN songs s ON s.id = ? AND s.record_identity = ? " +
+                        "WHERE p.id = ? AND p.owner_uuid = ?"
+                )
+                .use { ps ->
+                  ps.setLong(1, songId)
+                  ps.setString(2, identity)
+                  ps.setLong(3, playlistId)
+                  ps.setBytes(4, UuidUtil.toBytes(owner))
+                  ps.executeQuery().use { it.next() }
+                }
         if (!valid) return@transaction AddSongResult.STALE_TARGET
         val nextPosition =
             conn

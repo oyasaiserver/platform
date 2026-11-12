@@ -24,9 +24,15 @@ internal fun OyasaiMusic.replaceRecordingAudio(
   var switched = false
   try {
     SongAudioFile.write(output, notes)
-    switched = songRepository.replaceAudio(
-        target.songId, target.recordIdentity, target.fileName, replacement.path, supportsPositional, bpm,
-    )
+    switched =
+        songRepository.replaceAudio(
+            target.songId,
+            target.recordIdentity,
+            target.fileName,
+            replacement.path,
+            supportsPositional,
+            bpm,
+        )
     check(switched) { "置換先の楽曲または音源が変更されました。" }
   } finally {
     if (!switched && output.exists() && !output.delete())

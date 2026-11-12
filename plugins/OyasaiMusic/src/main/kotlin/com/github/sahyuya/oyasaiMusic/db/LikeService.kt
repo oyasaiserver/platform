@@ -22,7 +22,9 @@ class LikeService(
 
   sealed interface Result {
     data class Added(val senderReward: EconomyJournal.Entry?) : Result
+
     data object AlreadyAdded : Result
+
     data object StaleSong : Result
   }
 
@@ -60,5 +62,4 @@ class LikeService(
 }
 
 internal fun likeFailureMessage(result: LikeService.Result): String =
-    if (result == LikeService.Result.StaleSong) "§c楽曲が変更または削除されました。画面を開き直してください。"
-    else "既にいいね済みです。"
+    if (result == LikeService.Result.StaleSong) "§c楽曲が変更または削除されました。画面を開き直してください。" else "既にいいね済みです。"

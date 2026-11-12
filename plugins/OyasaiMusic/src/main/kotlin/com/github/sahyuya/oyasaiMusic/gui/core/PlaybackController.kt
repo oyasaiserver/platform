@@ -185,7 +185,8 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                             return@Runnable
                         if (
                             song == null ||
-                                (expectedIdentity != null && song.recordIdentity != expectedIdentity) ||
+                                (expectedIdentity != null &&
+                                    song.recordIdentity != expectedIdentity) ||
                                 !SongAccess.canListen(plugin, viewer, song)
                         ) {
                           lists.remove(id)
@@ -418,21 +419,23 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                             plugin,
                                             Runnable {
                                               if (!isCurrent()) return@Runnable
-                                              if (latest == null || latest.recordIdentity != song.recordIdentity ||
-                                                  latest.fileName != song.fileName) {
+                                              if (
+                                                  latest == null ||
+                                                      latest.recordIdentity !=
+                                                          song.recordIdentity ||
+                                                      latest.fileName != song.fileName
+                                              ) {
                                                 viewer.sendMessage("§c楽曲が変更されました。画面を開き直してください。")
                                                 return@Runnable
                                               }
                                               if (
                                                   (!(reviewPreview &&
-                                                          viewer.hasPermission(
-                                                              "oyasaimusic.admin"
-                                                          )) &&
-                                                          !SongAccess.canListen(
-                                                              plugin,
-                                                              viewer,
-                                                              latest,
-                                                          ))
+                                                      viewer.hasPermission("oyasaimusic.admin")) &&
+                                                      !SongAccess.canListen(
+                                                          plugin,
+                                                          viewer,
+                                                          latest,
+                                                      ))
                                               ) {
                                                 viewer.sendMessage("§cこの楽曲を再生する権限がありません。")
                                                 return@Runnable
@@ -572,7 +575,10 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     Bukkit.getOnlinePlayers().forEach { player ->
       val state = plugin.controllerStateService.stateFor(player.uniqueId)
       val currentSong = state.nowPlayingSong ?: return@forEach
-      if (currentSong.id != updatedSong.id || currentSong.recordIdentity != updatedSong.recordIdentity)
+      if (
+          currentSong.id != updatedSong.id ||
+              currentSong.recordIdentity != updatedSong.recordIdentity
+      )
           return@forEach
       state.nowPlayingSong = updatedSong
       nowPlayingBars[player.uniqueId]?.let { bar ->

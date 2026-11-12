@@ -266,12 +266,14 @@ class SongRepository(private val db: DatabaseManager) {
 
   fun updateStatus(id: Long, status: SongStatus, expectedIdentity: String): Boolean =
       db.transaction { conn ->
-        conn.prepareStatement("UPDATE songs SET status = ? WHERE id = ? AND record_identity = ?").use { ps ->
-          ps.setInt(1, status.code)
-          ps.setLong(2, id)
-          ps.setString(3, expectedIdentity)
-          ps.executeUpdate() == 1
-        }
+        conn
+            .prepareStatement("UPDATE songs SET status = ? WHERE id = ? AND record_identity = ?")
+            .use { ps ->
+              ps.setInt(1, status.code)
+              ps.setLong(2, id)
+              ps.setString(3, expectedIdentity)
+              ps.executeUpdate() == 1
+            }
       }
 
   /** 公開状態を更新し、初回公開時だけ true を返す。通知済み状態をDBへ永続化するため、 非公開→再公開やサーバー再起動後にも新曲通知が重複しない。 */
@@ -310,7 +312,11 @@ class SongRepository(private val db: DatabaseManager) {
         firstPublish
       }
 
-  fun togglePublication(id: Long, limitedClick: Boolean, expectedIdentity: String? = null): Pair<Song, Boolean> =
+  fun togglePublication(
+      id: Long,
+      limitedClick: Boolean,
+      expectedIdentity: String? = null,
+  ): Pair<Song, Boolean> =
       db.transaction {
         val current = requireNotNull(findById(id)) { "楽曲が削除されました。画面を開き直してください。" }
         check(expectedIdentity == null || current.recordIdentity == expectedIdentity) {
@@ -361,7 +367,8 @@ class SongRepository(private val db: DatabaseManager) {
           values += it
         }
         if (fields.isEmpty()) return@transaction false
-        val sql = "UPDATE songs SET ${fields.joinToString(", ")} WHERE id = ? AND record_identity = ?"
+        val sql =
+            "UPDATE songs SET ${fields.joinToString(", ")} WHERE id = ? AND record_identity = ?"
         conn.prepareStatement(sql).use { ps ->
           values.forEachIndexed { i, v -> ps.setObject(i + 1, v) }
           ps.setLong(values.size + 1, id)
@@ -371,31 +378,42 @@ class SongRepository(private val db: DatabaseManager) {
       }
 
   /** 音源を差し替えた際に、立体音響の可否を録音内容へ合わせる。 */
-  fun replaceAudio(id: Long, identity: String, previous: String, next: String, positional: Boolean, bpm: Int? = null): Boolean =
+  fun replaceAudio(
+      id: Long,
+      identity: String,
+      previous: String,
+      next: String,
+      positional: Boolean,
+      bpm: Int? = null,
+  ): Boolean =
       db.transaction { conn ->
-        conn.prepareStatement(
-            "UPDATE songs SET file_name = ?, supports_positional = ?, bpm = COALESCE(?, bpm) WHERE id = ? AND record_identity = ? AND file_name = ?"
-        ).use { ps ->
-          ps.setString(1, next)
-          ps.setInt(2, if (positional) 1 else 0)
-          ps.setObject(3, bpm)
-          ps.setLong(4, id)
-          ps.setString(5, identity)
-          ps.setString(6, previous)
-          ps.executeUpdate() == 1
-        }
+        conn
+            .prepareStatement(
+                "UPDATE songs SET file_name = ?, supports_positional = ?, bpm = COALESCE(?, bpm) WHERE id = ? AND record_identity = ? AND file_name = ?"
+            )
+            .use { ps ->
+              ps.setString(1, next)
+              ps.setInt(2, if (positional) 1 else 0)
+              ps.setObject(3, bpm)
+              ps.setLong(4, id)
+              ps.setString(5, identity)
+              ps.setString(6, previous)
+              ps.executeUpdate() == 1
+            }
       }
 
   fun deleteMatching(id: Long, recordIdentity: String): String? =
       db.transaction { conn ->
         checkDeliveryIdle(id)
-        conn.prepareStatement(
-            "DELETE FROM songs WHERE id = ? AND record_identity = ? RETURNING file_name"
-        ).use { ps ->
-          ps.setLong(1, id)
-          ps.setString(2, recordIdentity)
-          ps.executeQuery().use { rs -> if (rs.next()) rs.getString(1) else null }
-        }
+        conn
+            .prepareStatement(
+                "DELETE FROM songs WHERE id = ? AND record_identity = ? RETURNING file_name"
+            )
+            .use { ps ->
+              ps.setLong(1, id)
+              ps.setString(2, recordIdentity)
+              ps.executeQuery().use { rs -> if (rs.next()) rs.getString(1) else null }
+            }
       }
 
   private fun ResultSet.toSongList(): List<Song> {
