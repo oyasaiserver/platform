@@ -46,7 +46,7 @@ class RankingRepository(private val db: DatabaseManager) {
           RankingMetric.FOLLOWERS -> error("unreachable")
           RankingMetric.RECORD_SALES -> error("unreachable")
         }
-    val conditions = mutableListOf("s.published = 1")
+    val conditions = mutableListOf("s.published = 1", "s.limited_publication = 0")
     if (sinceEpochSec != null) conditions += "t.$timeColumn >= ?"
     if (untilEpochSec != null) conditions += "t.$timeColumn < ?"
     val sql =

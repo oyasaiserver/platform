@@ -316,6 +316,9 @@ class OyasaiMusic : JavaPlugin() {
 
   /** Propagates edited song metadata to playback and open menus. */
   fun applySongUpdate(updatedSong: Song) {
+    if (!updatedSong.published || updatedSong.limitedPublication)
+        rankingCacheService.hideSong(updatedSong.recordIdentity)
+    else rankingCacheService.restoreSongVisibility(updatedSong.recordIdentity)
     playbackPreparation.invalidate()
     playbackController.applySongMetadataUpdate(updatedSong)
     menuManager.refreshForSongUpdate(updatedSong)

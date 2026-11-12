@@ -2,6 +2,7 @@ package com.github.sahyuya.oyasaiMusic.item
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.gui.AmbientRecordSettingsMenu
+import io.papermc.paper.event.block.BlockPreDispenseEvent
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.event.EventHandler
@@ -9,6 +10,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockRedstoneEvent
+import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
@@ -18,11 +20,16 @@ import org.bukkit.inventory.EquipmentSlot
  */
 class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
 
-  @EventHandler
+  @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)
   fun onInteract(event: PlayerInteractEvent) {
-    if (event.hand != EquipmentSlot.HAND) return
     val player = event.player
     val clickedBlock = event.clickedBlock
+    if (
+        event.action == Action.RIGHT_CLICK_BLOCK &&
+            clickedBlock?.type == Material.JUKEBOX &&
+            event.useInteractedBlock() == org.bukkit.event.Event.Result.DENY
+    )
+        return
     if (
         clickedBlock?.type == Material.JUKEBOX &&
             plugin.ambientPlaybackRegistry.awaitingRestore(clickedBlock.location)
@@ -31,6 +38,27 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
       player.sendMessage("§7レコード情報を復元中です。少し待ってから操作してください。")
       return
     }
+
+    if (event.action == Action.RIGHT_CLICK_BLOCK && clickedBlock?.type == Material.JUKEBOX) {
+      val held = event.item
+      val custom = held != null && PhysicalRecordItem.isRecordItem(plugin, held)
+      val installed = plugin.ambientPlaybackRegistry.entryAt(clickedBlock.location)
+      val box = clickedBlock.state as? org.bukkit.block.Jukebox ?: return
+      if (
+          custom &&
+              (event.hand != EquipmentSlot.HAND || player.isSneaking || !box.record.type.isAir)
+      ) {
+        event.isCancelled = true
+        if (!box.record.type.isAir) player.sendMessage("§c先にバニラのレコードを取り出してください。")
+        return
+      }
+      if (!custom && installed != null && held != null && !held.type.isAir) {
+        event.isCancelled = true
+        player.sendMessage("§c先にOyasaiMusicのレコードを取り出してください。")
+        return
+      }
+    }
+    if (event.hand != EquipmentSlot.HAND) return
 
     // ジュークボックスからの取り出し（手ぶらで右クリック）。
     if (event.action == Action.RIGHT_CLICK_BLOCK && clickedBlock?.type == Material.JUKEBOX) {
@@ -167,6 +195,39 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
       )
     }
   }
+
+  @EventHandler(ignoreCancelled = true, priority = org.bukkit.event.EventPriority.HIGHEST)
+  fun onPreDispense(event: BlockPreDispenseEvent) {
+    if (event.block.type != Material.DISPENSER) return
+    val facing = event.block.blockData as? org.bukkit.block.data.Directional ?: return
+    val destination = event.block.getRelative(facing.facing)
+    if (
+        destination.type == Material.JUKEBOX &&
+            (event.itemStack.type.isRecord ||
+                PhysicalRecordItem.isRecordItem(plugin, event.itemStack)) &&
+            blocksAutomaticInsert(destination.location, event.itemStack)
+    ) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler(ignoreCancelled = true, priority = org.bukkit.event.EventPriority.HIGHEST)
+  fun onInventoryMove(event: InventoryMoveItemEvent) {
+    val destination = event.destination.location ?: return
+    if (
+        destination.block.type == Material.JUKEBOX && blocksAutomaticInsert(destination, event.item)
+    ) {
+      event.isCancelled = true
+    }
+  }
+
+  private fun blocksAutomaticInsert(
+      location: org.bukkit.Location,
+      item: org.bukkit.inventory.ItemStack,
+  ): Boolean =
+      PhysicalRecordItem.isRecordItem(plugin, item) ||
+          plugin.ambientPlaybackRegistry.entryAt(location) != null ||
+          plugin.ambientPlaybackRegistry.awaitingRestore(location)
 
   @EventHandler
   fun onRedstone(event: BlockRedstoneEvent) {

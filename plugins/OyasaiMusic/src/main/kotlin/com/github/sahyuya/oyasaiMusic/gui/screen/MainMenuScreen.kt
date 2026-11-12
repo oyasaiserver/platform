@@ -147,7 +147,7 @@ class MainMenuScreen(
           RankingMetric.FOLLOWERS -> "フォロワー数"
           RankingMetric.RECORD_SALES -> "レコード総売上"
         }
-    val entries: List<RankingEntryDto> = snapshot?.entries?.get(metric).orEmpty()
+    val entries: List<RankingEntryDto> = plugin.rankingCacheService.visibleEntries(snapshot, metric)
 
     val lore =
         mutableListOf(
@@ -197,7 +197,7 @@ class MainMenuScreen(
           }
       val head =
           if (topAuthorUuid != null) {
-            HeadTextureUtil.placeholderHead(topAuthorUuid, entries.first().authorName)
+            HeadTextureUtil.placeholderHead(topAuthorUuid)
           } else {
             ItemStack(Material.PLAYER_HEAD)
           }

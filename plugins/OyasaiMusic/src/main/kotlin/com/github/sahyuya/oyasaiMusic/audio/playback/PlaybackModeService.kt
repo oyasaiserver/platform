@@ -25,12 +25,11 @@ class PlaybackModeService(private val preferenceRepository: PlaybackPreferenceRe
   /**
    * 楽曲詳細GUIからの選択を保存する。楽曲が立体音響に対応していない場合は保存を拒否する （呼び出し側でボタン自体を非活性にすることを想定しつつ、防御的にもここで弾く）。
    *
-   * @return true = 保存できた / false = 楽曲が立体音響に対応していないため拒否した
+   * @return true = 保存できた / false = 対象曲が変更・削除されたか、選択した再生方式に対応していない
    */
   fun setPreference(listenerUuid: UUID, song: Song, mode: PlaybackMode): Boolean {
     if (mode == PlaybackMode.POSITIONAL && !song.supportsPositional) return false
     val songId = song.id ?: return false
-    preferenceRepository.setMode(listenerUuid, songId, mode)
-    return true
+    return preferenceRepository.setMode(listenerUuid, songId, song.recordIdentity, mode)
   }
 }

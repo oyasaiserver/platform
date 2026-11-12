@@ -6,6 +6,7 @@ import com.github.sahyuya.oyasaiMusic.audio.GridRecorder
 import com.github.sahyuya.oyasaiMusic.audio.RecordingReplacementTarget
 import com.github.sahyuya.oyasaiMusic.audio.RecordingSessionManager
 import com.github.sahyuya.oyasaiMusic.audio.SongAudioFile
+import com.github.sahyuya.oyasaiMusic.audio.replaceRecordingAudio
 import com.github.sahyuya.oyasaiMusic.db.SongRepository
 import com.github.sahyuya.oyasaiMusic.gui.MenuManager
 import com.github.sahyuya.oyasaiMusic.gui.SongSettingsScreen
@@ -274,14 +275,17 @@ class RecordCommand(
                               .runTask(plugin, Runnable { player.sendMessage("§c置換先の楽曲が見つかりません。") })
                           return@Runnable
                         }
-                SongAudioFile.write(File(audioDirectory, target.fileName), notes)
-                val supportsPositional = notes.any { it.pan != 0 }
-                songRepository.updateAudioProperties(target.songId, supportsPositional)
+                check(
+                    song.recordIdentity == target.recordIdentity && song.fileName == target.fileName
+                ) {
+                  "置換先の楽曲または音源が変更されました。"
+                }
+                plugin.replaceRecordingAudio(target, notes)
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
                         Runnable {
-                          plugin.applySongUpdate(song.copy(supportsPositional = supportsPositional))
+                          plugin.playbackPreparation.invalidate()
                           player.sendMessage("§a楽曲「${song.title}」の音源を${notes.size}音で更新しました。")
                         },
                     )

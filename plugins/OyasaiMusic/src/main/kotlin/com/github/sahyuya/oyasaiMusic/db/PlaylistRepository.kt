@@ -69,9 +69,28 @@ class PlaylistRepository(private val db: DatabaseManager) {
             }
       }
 
-  /** @return true = 新規追加できた / false = 既に登録済みだった */
-  fun addSong(playlistId: Long, songId: Long): Boolean =
+  enum class AddSongResult {
+    ADDED,
+    ALREADY_ADDED,
+    STALE_TARGET,
+  }
+
+  fun addSong(playlistId: Long, owner: UUID, songId: Long, identity: String): AddSongResult =
       db.transaction { conn ->
+        val valid =
+            conn
+                .prepareStatement(
+                    "SELECT 1 FROM playlists p JOIN songs s ON s.id = ? AND s.record_identity = ? " +
+                        "WHERE p.id = ? AND p.owner_uuid = ?"
+                )
+                .use { ps ->
+                  ps.setLong(1, songId)
+                  ps.setString(2, identity)
+                  ps.setLong(3, playlistId)
+                  ps.setBytes(4, UuidUtil.toBytes(owner))
+                  ps.executeQuery().use { it.next() }
+                }
+        if (!valid) return@transaction AddSongResult.STALE_TARGET
         val nextPosition =
             conn
                 .prepareStatement(
@@ -94,7 +113,7 @@ class PlaylistRepository(private val db: DatabaseManager) {
               ps.setLong(2, songId)
               ps.setInt(3, nextPosition)
               ps.setLong(4, System.currentTimeMillis() / 1000)
-              ps.executeUpdate() > 0
+              if (ps.executeUpdate() > 0) AddSongResult.ADDED else AddSongResult.ALREADY_ADDED
             }
       }
 

@@ -6,6 +6,7 @@ import com.github.sahyuya.oyasaiMusic.audio.GridRecorder
 import com.github.sahyuya.oyasaiMusic.audio.PluginSoundEffect
 import com.github.sahyuya.oyasaiMusic.audio.RecordingReplacementTarget
 import com.github.sahyuya.oyasaiMusic.audio.SongAudioFile
+import com.github.sahyuya.oyasaiMusic.audio.replaceRecordingAudio
 import com.github.sahyuya.oyasaiMusic.model.Song
 import com.github.sahyuya.oyasaiMusic.model.SongStatus
 import com.sk89q.worldedit.WorldEdit
@@ -92,7 +93,7 @@ class SongSettingsScreen(
   override fun refresh() = render()
 
   override fun onSongUpdated(updatedSong: Song) {
-    if (song.id == updatedSong.id) {
+    if (song.id == updatedSong.id && song.recordIdentity == updatedSong.recordIdentity) {
       song = updatedSong
       render()
     }
@@ -373,7 +374,20 @@ class SongSettingsScreen(
           .runTaskAsynchronously(
               plugin,
               Runnable {
-                plugin.songRepository.updateSettings(id = requireNotNull(song.id), title = newTitle)
+                if (
+                    !plugin.songRepository.updateSettings(
+                        id = requireNotNull(song.id),
+                        expectedIdentity = song.recordIdentity,
+                        title = newTitle,
+                    )
+                ) {
+                  Bukkit.getScheduler()
+                      .runTask(
+                          plugin,
+                          Runnable { viewer.sendMessage("§c楽曲が変更されました。画面を開き直してください。") },
+                      )
+                  return@Runnable
+                }
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
@@ -387,11 +401,18 @@ class SongSettingsScreen(
   }
 
   private fun editBpm() {
+    val selected = song
+    val target =
+        RecordingReplacementTarget(
+            requireNotNull(selected.id),
+            selected.fileName,
+            selected.recordIdentity,
+        )
     AnvilTextInputSession.open(
         plugin,
         viewer,
         Component.text("BPMを変更"),
-        initialText = song.bpm.toString(),
+        initialText = selected.bpm.toString(),
     ) { text ->
       val bpm = text.toIntOrNull()
       if (bpm == null || bpm <= 0) {
@@ -409,19 +430,29 @@ class SongSettingsScreen(
           .runTaskAsynchronously(
               plugin,
               Runnable {
-                // 音源ファイルの相対時刻も変更する。DBのBPMだけを更新しても、保存済みの
-                // NoteEvent時刻は変化しないため、実際の再生速度は変わらなかった。
-                val sourceFile = File(plugin.audioDirectory, song.fileName)
-                val audio = SongAudioFile.read(sourceFile)
-                val scale = song.bpm.toDouble() / bpm
-                val rescaled =
-                    audio.notes.map { note -> note.copy(timeMs = (note.timeMs * scale).toInt()) }
-                SongAudioFile.write(sourceFile, rescaled)
-                plugin.songRepository.updateSettings(id = requireNotNull(song.id), bpm = bpm)
+                val updated = runCatching {
+                  val audio = SongAudioFile.read(File(plugin.audioDirectory, target.fileName))
+                  val scale = selected.bpm.toDouble() / bpm
+                  val notes = audio.notes.map { it.copy(timeMs = (it.timeMs * scale).toInt()) }
+                  plugin.replaceRecordingAudio(target, notes, bpm)
+                  requireNotNull(plugin.songRepository.findById(target.songId)).takeIf {
+                    it.recordIdentity == target.recordIdentity
+                  }
+                }
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
-                        Runnable { applyUpdatedSong(song.copy(bpm = bpm), "BPMを変更しました: $bpm") },
+                        Runnable {
+                          val latest = updated.getOrNull()
+                          if (latest == null) {
+                            viewer.sendMessage("§cBPMを変更できませんでした。画面を開き直してください。")
+                          } else {
+                            plugin.playbackPreparation.invalidate()
+                            song = latest
+                            viewer.sendMessage("§aBPMを変更しました: $bpm")
+                            menuManager.open(viewer, this, rememberAsPrevious = false)
+                          }
+                        },
                     )
               },
           )
@@ -451,7 +482,20 @@ class SongSettingsScreen(
           .runTaskAsynchronously(
               plugin,
               Runnable {
-                plugin.songRepository.updateSettings(id = requireNotNull(song.id), price = price)
+                if (
+                    !plugin.songRepository.updateSettings(
+                        id = requireNotNull(song.id),
+                        expectedIdentity = song.recordIdentity,
+                        price = price,
+                    )
+                ) {
+                  Bukkit.getScheduler()
+                      .runTask(
+                          plugin,
+                          Runnable { viewer.sendMessage("§c楽曲が変更されました。画面を開き直してください。") },
+                      )
+                  return@Runnable
+                }
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
@@ -470,10 +514,20 @@ class SongSettingsScreen(
           .runTaskAsynchronously(
               plugin,
               Runnable {
-                plugin.songRepository.updateSettings(
-                    id = requireNotNull(song.id),
-                    referenceUrl = url,
-                )
+                if (
+                    !plugin.songRepository.updateSettings(
+                        id = requireNotNull(song.id),
+                        expectedIdentity = song.recordIdentity,
+                        referenceUrl = url,
+                    )
+                ) {
+                  Bukkit.getScheduler()
+                      .runTask(
+                          plugin,
+                          Runnable { viewer.sendMessage("§c楽曲が変更されました。画面を開き直してください。") },
+                      )
+                  return@Runnable
+                }
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
@@ -510,22 +564,21 @@ class SongSettingsScreen(
       viewer.sendMessage("§c録音対象のノートブロックが見つかりませんでした。")
       return
     }
+    val target =
+        RecordingReplacementTarget(requireNotNull(song.id), song.fileName, song.recordIdentity)
     val songId = requireNotNull(song.id)
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
               try {
-                SongAudioFile.write(File(plugin.audioDirectory, song.fileName), notes)
-                plugin.songRepository.updateAudioProperties(songId, notes.any { it.pan != 0 })
+                plugin.replaceRecordingAudio(target, notes)
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
                         Runnable {
-                          applyUpdatedSong(
-                              song.copy(supportsPositional = notes.any { it.pan != 0 }),
-                              "FAWEクリップボードから${notes.size}音を再読み込みしました。",
-                          )
+                          plugin.playbackPreparation.invalidate()
+                          viewer.sendMessage("§aFAWEクリップボードから${notes.size}音を再読み込みしました。")
                         },
                     )
               } catch (error: Exception) {
@@ -577,7 +630,7 @@ class SongSettingsScreen(
   }
 
   private fun replacementTarget(): RecordingReplacementTarget =
-      RecordingReplacementTarget(requireNotNull(song.id), song.fileName)
+      RecordingReplacementTarget(requireNotNull(song.id), song.fileName, song.recordIdentity)
 
   private fun currentClipboard(): Clipboard? =
       try {
@@ -602,10 +655,17 @@ class SongSettingsScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              plugin.songRepository.updateSettings(
-                  id = requireNotNull(song.id),
-                  recordMaterial = next,
-              )
+              if (
+                  !plugin.songRepository.updateSettings(
+                      id = requireNotNull(song.id),
+                      expectedIdentity = song.recordIdentity,
+                      recordMaterial = next,
+                  )
+              ) {
+                Bukkit.getScheduler()
+                    .runTask(plugin, Runnable { viewer.sendMessage("§c楽曲が変更されました。画面を開き直してください。") })
+                return@Runnable
+              }
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
@@ -620,13 +680,18 @@ class SongSettingsScreen(
 
   private fun togglePublish(limited: Boolean) {
     if (changingPublication) return
+    val selectedSong = song
     changingPublication = true
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
               val result = runCatching {
-                plugin.songRepository.togglePublication(requireNotNull(song.id), limited)
+                plugin.songRepository.togglePublication(
+                    requireNotNull(selectedSong.id),
+                    limited,
+                    selectedSong.recordIdentity,
+                )
               }
               if (!plugin.isEnabled) return@Runnable
               Bukkit.getScheduler()
@@ -658,6 +723,7 @@ class SongSettingsScreen(
 
   private fun toggleCollectible() {
     if (changingPublication) return
+    val selectedSong = song
     changingPublication = true
     val value = !song.collectible
     Bukkit.getScheduler()
@@ -665,7 +731,15 @@ class SongSettingsScreen(
             plugin,
             Runnable {
               val result = runCatching {
-                plugin.songRepository.updateSettings(requireNotNull(song.id), collectible = value)
+                check(
+                    plugin.songRepository.updateSettings(
+                        requireNotNull(song.id),
+                        song.recordIdentity,
+                        collectible = value,
+                    )
+                ) {
+                  "楽曲が変更されました。"
+                }
                 requireNotNull(plugin.songRepository.findById(requireNotNull(song.id)))
               }
               if (!plugin.isEnabled) return@Runnable
@@ -711,6 +785,7 @@ class SongSettingsScreen(
 
   private fun submitForReview() {
     val songId = song.id ?: return
+    val identity = song.recordIdentity
     val cancelling = song.status == SongStatus.TEMP_OK && song.reviewRequestedAt != null
     if (!song.released && !cancelling) {
       GuiFeedback.invalid(viewer, "公開後にオリジナル審査へ提出できます")
@@ -721,8 +796,8 @@ class SongSettingsScreen(
             plugin,
             Runnable {
               val changed =
-                  if (cancelling) plugin.songRepository.cancelReviewRequest(songId)
-                  else plugin.songRepository.requestReview(songId)
+                  if (cancelling) plugin.songRepository.cancelReviewRequest(songId, identity)
+                  else plugin.songRepository.requestReview(songId, identity)
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
@@ -765,17 +840,35 @@ class SongSettingsScreen(
       return
     }
     val songId = requireNotNull(song.id)
-    val fileName = song.fileName
+    val recordIdentity = song.recordIdentity
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              plugin.songRepository.delete(songId)
-              runCatching { File(plugin.audioDirectory, fileName).delete() }
+              val deleted = runCatching {
+                plugin.songRepository.deleteMatching(songId, recordIdentity)
+              }
+              val fileName = deleted.getOrNull()
+              if (fileName != null) runCatching { File(plugin.audioDirectory, fileName).delete() }
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
+                        if (fileName == null) {
+                          pendingDeleteConfirm = false
+                          viewer.sendMessage(
+                              "§c" +
+                                  (deleted
+                                      .exceptionOrNull()
+                                      ?.takeIf { it is IllegalStateException }
+                                      ?.message ?: "楽曲を削除できませんでした。画面を開き直してください。")
+                          )
+                          render()
+                          return@Runnable
+                        }
+                        plugin.rankingCacheService.hideSong(recordIdentity)
+                        plugin.playbackPreparation.invalidate()
+                        plugin.menuManager.refreshForSongUpdate(song)
                         viewer.sendMessage("§a楽曲を削除しました: ${song.title}")
                         menuManager.openPrevious(viewer)
                       },

@@ -1,6 +1,8 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.AddSongResult
+import com.github.sahyuya.oyasaiMusic.db.SocialRepository.FavoriteResult
 import com.github.sahyuya.oyasaiMusic.model.Playlist
 import com.github.sahyuya.oyasaiMusic.model.Song
 import net.kyori.adventure.text.Component
@@ -143,13 +145,22 @@ class PlaylistSelectionScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val added = plugin.socialRepository.addFavorite(viewer.uniqueId, songId)
+              val result =
+                  plugin.socialRepository.addFavorite(
+                      viewer.uniqueId,
+                      songId,
+                      targetSong.recordIdentity,
+                  )
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
                         viewer.sendMessage(
-                            if (added) "§aお気に入りに追加しました: ${targetSong.title}" else "§7既にお気に入り済みです。"
+                            when (result) {
+                              FavoriteResult.ADDED -> "§aお気に入りに追加しました: ${targetSong.title}"
+                              FavoriteResult.ALREADY_ADDED -> "§7既にお気に入り済みです。"
+                              FavoriteResult.STALE_SONG -> "§c楽曲が変更または削除されました。画面を開き直してください。"
+                            }
                         )
                         menuManager.openPrevious(viewer)
                       },
@@ -164,14 +175,24 @@ class PlaylistSelectionScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val added = plugin.playlistRepository.addSong(requireNotNull(playlist.id), songId)
+              val result =
+                  plugin.playlistRepository.addSong(
+                      requireNotNull(playlist.id),
+                      viewer.uniqueId,
+                      songId,
+                      targetSong.recordIdentity,
+                  )
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
                         viewer.sendMessage(
-                            if (added) "§a「${playlist.name}」に追加しました: ${targetSong.title}"
-                            else "§7既に追加済みです。"
+                            when (result) {
+                              AddSongResult.ADDED ->
+                                  "§a「${playlist.name}」に追加しました: ${targetSong.title}"
+                              AddSongResult.ALREADY_ADDED -> "§7既に追加済みです。"
+                              AddSongResult.STALE_TARGET -> "§c楽曲またはプレイリストが変更・削除されました。"
+                            }
                         )
                         menuManager.openPrevious(viewer)
                       },
@@ -188,12 +209,24 @@ class PlaylistSelectionScreen(
               Runnable {
                 val playlistId = plugin.playlistRepository.create(viewer.uniqueId, name)
                 val songId = targetSong.id
-                if (songId != null) plugin.playlistRepository.addSong(playlistId, songId)
+                val result =
+                    songId?.let {
+                      plugin.playlistRepository.addSong(
+                          playlistId,
+                          viewer.uniqueId,
+                          it,
+                          targetSong.recordIdentity,
+                      )
+                    }
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
                         Runnable {
-                          viewer.sendMessage("§aプレイリスト「$name」を作成し、「${targetSong.title}」を追加しました。")
+                          viewer.sendMessage(
+                              if (result == AddSongResult.ADDED)
+                                  "§aプレイリスト「$name」を作成し、「${targetSong.title}」を追加しました。"
+                              else "§eプレイリスト「$name」を作成しました。楽曲が変更・削除されたため追加できませんでした。"
+                          )
                           menuManager.openPrevious(viewer)
                         },
                     )

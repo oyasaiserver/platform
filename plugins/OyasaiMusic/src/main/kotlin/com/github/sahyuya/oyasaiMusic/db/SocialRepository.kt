@@ -18,8 +18,20 @@ class SocialRepository(private val db: DatabaseManager) {
       authorUuid: UUID,
       songId: Long,
       authorPointReward: Long,
+      recordIdentity: String,
   ): Boolean =
       db.transaction { conn ->
+        val matches =
+            conn
+                .prepareStatement(
+                    "SELECT 1 FROM songs WHERE id = ? AND record_identity = ? AND published = 1"
+                )
+                .use { ps ->
+                  ps.setLong(1, songId)
+                  ps.setString(2, recordIdentity)
+                  ps.executeQuery().use { it.next() }
+                }
+        if (!matches) return@transaction false
         val added =
             conn
                 .prepareStatement(
@@ -62,8 +74,22 @@ class SocialRepository(private val db: DatabaseManager) {
 
   // ---------- お気に入り ----------
 
-  fun addFavorite(userUuid: UUID, songId: Long): Boolean =
+  enum class FavoriteResult {
+    ADDED,
+    ALREADY_ADDED,
+    STALE_SONG,
+  }
+
+  fun addFavorite(userUuid: UUID, songId: Long, identity: String): FavoriteResult =
       db.transaction { conn ->
+        val matches =
+            conn.prepareStatement("SELECT 1 FROM songs WHERE id = ? AND record_identity = ?").use {
+                ps ->
+              ps.setLong(1, songId)
+              ps.setString(2, identity)
+              ps.executeQuery().use { it.next() }
+            }
+        if (!matches) return@transaction FavoriteResult.STALE_SONG
         conn
             .prepareStatement(
                 "INSERT INTO favorites (user_uuid, song_id, created_at) VALUES (?, ?, ?) " +
@@ -73,7 +99,7 @@ class SocialRepository(private val db: DatabaseManager) {
               ps.setBytes(1, UuidUtil.toBytes(userUuid))
               ps.setLong(2, songId)
               ps.setLong(3, System.currentTimeMillis() / 1000)
-              ps.executeUpdate() > 0
+              if (ps.executeUpdate() > 0) FavoriteResult.ADDED else FavoriteResult.ALREADY_ADDED
             }
       }
 
@@ -187,6 +213,7 @@ class SocialRepository(private val db: DatabaseManager) {
       listenerUuid: UUID,
       authorUuid: UUID,
       songId: Long,
+      recordIdentity: String,
       timestamp: Long,
       hourLimit: Int,
       dayLimit: Int,
@@ -214,6 +241,18 @@ class SocialRepository(private val db: DatabaseManager) {
         ) {
           return@transaction false
         }
+        val totalViews =
+            conn
+                .prepareStatement(
+                    "UPDATE songs SET views = views + 1 WHERE id = ? AND record_identity = ? RETURNING views"
+                )
+                .use { ps ->
+                  ps.setLong(1, songId)
+                  ps.setString(2, recordIdentity)
+                  ps.executeQuery().use { rs ->
+                    if (rs.next()) rs.getLong(1) else return@transaction false
+                  }
+                }
         conn
             .prepareStatement(
                 "INSERT INTO view_history (user_uuid, song_id, timestamp) VALUES (?, ?, ?)"
@@ -224,15 +263,6 @@ class SocialRepository(private val db: DatabaseManager) {
               ps.setLong(3, timestamp)
               ps.executeUpdate()
             }
-        val totalViews =
-            conn
-                .prepareStatement("UPDATE songs SET views = views + 1 WHERE id = ? RETURNING views")
-                .use { ps ->
-                  ps.setLong(1, songId)
-                  ps.executeQuery().use { rs ->
-                    if (rs.next()) rs.getLong(1) else return@transaction false
-                  }
-                }
         if (monetizationEligible && viewsPerPoint > 0 && totalViews % viewsPerPoint == 0L) {
           ensureUser(conn, authorUuid)
           conn

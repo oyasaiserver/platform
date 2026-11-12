@@ -1,6 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.AddSongResult
 import com.github.sahyuya.oyasaiMusic.model.Playlist
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -274,15 +275,23 @@ class FavoritesPlaylistsScreen(
                               plugin.playlistRepository.listSongs(requireNotNull(playlist.id))
                           val newPlaylistId =
                               plugin.playlistRepository.create(target.uniqueId, playlist.name)
-                          songs.forEach { song ->
-                            song.id?.let { plugin.playlistRepository.addSong(newPlaylistId, it) }
-                          }
+                          val copied =
+                              songs.count { song ->
+                                song.id?.let {
+                                  plugin.playlistRepository.addSong(
+                                      newPlaylistId,
+                                      target.uniqueId,
+                                      it,
+                                      song.recordIdentity,
+                                  )
+                                } == AddSongResult.ADDED
+                              }
                           Bukkit.getScheduler()
                               .runTask(
                                   plugin,
                                   Runnable {
                                     viewer.sendMessage(
-                                        "§a${target.name} にプレイリスト「${playlist.name}」(${songs.size}曲)を共有しました。"
+                                        "§a${target.name} にプレイリスト「${playlist.name}」(${copied}曲)を共有しました。"
                                     )
                                     target.sendMessage(
                                         "§d${viewer.name} からプレイリスト「${playlist.name}」が共有されました！ §7(ストレージ・お気に入り・プレイリストに追加されました)"

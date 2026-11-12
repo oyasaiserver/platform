@@ -240,11 +240,16 @@ class AdminReviewScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              plugin.songRepository.updateStatus(songId, status)
+              val changed = plugin.songRepository.updateStatus(songId, status, song.recordIdentity)
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
+                        if (!changed) {
+                          viewer.sendMessage("§c楽曲が変更されました。審査一覧を更新します。")
+                          reload()
+                          return@Runnable
+                        }
                         viewer.sendMessage("§a判定を更新しました: ${song.title} → ${statusLabel(status)}")
                         val author = Bukkit.getPlayer(song.authorUuid)
                         author?.sendMessage(

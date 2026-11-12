@@ -20,23 +20,33 @@ class LikeService(
   private val likerMoneyReward: Long = likeRewardMoney.coerceAtLeast(0)
   private val authorPointReward: Long = likeRewardPoints.coerceAtLeast(0)
 
-  data class Added(val senderReward: EconomyJournal.Entry?)
+  sealed interface Result {
+    data class Added(val senderReward: EconomyJournal.Entry?) : Result
+
+    data object AlreadyAdded : Result
+
+    data object StaleSong : Result
+  }
 
   /** Persist the like, author reward and sender's payment intent together. */
-  fun like(likerUuid: UUID, song: Song): Added? {
-    if (!song.released) return null
-    val songId = song.id ?: return null
+  fun like(likerUuid: UUID, song: Song): Result {
+    if (!song.released) return Result.StaleSong
+    val songId = song.id ?: return Result.StaleSong
     return database.transaction {
+      val current = SongRepository(database).findById(songId)
+      if (current == null || !current.released || current.recordIdentity != song.recordIdentity)
+          return@transaction Result.StaleSong
       if (
           !socialRepository.registerLikeWithAuthorReward(
               likerUuid,
               song.authorUuid,
               songId,
               authorPointReward,
+              song.recordIdentity,
           )
       )
-          return@transaction null
-      Added(
+          return@transaction Result.AlreadyAdded
+      Result.Added(
           if (likerMoneyReward > 0)
               journal.create(
                   likerUuid,
@@ -50,3 +60,6 @@ class LikeService(
     }
   }
 }
+
+internal fun likeFailureMessage(result: LikeService.Result): String =
+    if (result == LikeService.Result.StaleSong) "§c楽曲が変更または削除されました。画面を開き直してください。" else "既にいいね済みです。"

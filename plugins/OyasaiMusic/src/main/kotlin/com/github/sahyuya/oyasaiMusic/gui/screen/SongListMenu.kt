@@ -1,7 +1,9 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.db.LikeService.Result
 import com.github.sahyuya.oyasaiMusic.db.SongSort
+import com.github.sahyuya.oyasaiMusic.db.likeFailureMessage
 import com.github.sahyuya.oyasaiMusic.model.Song
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -251,14 +253,14 @@ class SongListMenu(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val added = plugin.likeService.like(viewer.uniqueId, song)
+              val result = plugin.likeService.like(viewer.uniqueId, song)
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
-                        if (added != null) {
+                        if (result is Result.Added) {
                           GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
-                          plugin.deliverLikeSenderReward(viewer, added.senderReward)
+                          plugin.deliverLikeSenderReward(viewer, result.senderReward)
                           Bukkit.getPlayer(song.authorUuid)?.let { author ->
                             plugin.toastNotificationService.showLikeReceived(
                                 author,
@@ -267,7 +269,7 @@ class SongListMenu(
                             )
                           }
                           reload()
-                        } else GuiFeedback.invalid(viewer, "既にいいね済みです。")
+                        } else GuiFeedback.invalid(viewer, likeFailureMessage(result))
                       },
                   )
             },

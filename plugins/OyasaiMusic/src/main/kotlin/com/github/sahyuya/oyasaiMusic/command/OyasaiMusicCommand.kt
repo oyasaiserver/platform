@@ -39,7 +39,6 @@ class OyasaiMusicCommand(private val plugin: OyasaiMusic) : CommandExecutor, Tab
       }
       "rp",
       "resourcepack" -> handleResourcePack(sender, args.drop(1))
-      "transactions" -> handleTransactions(sender, args.drop(1))
       "playbackstats" -> {
         if (plugin.config.getBoolean("playback.diagnostics")) {
           sender.sendMessage(plugin.playbackPreparation.diagnostics())
@@ -48,60 +47,9 @@ class OyasaiMusicCommand(private val plugin: OyasaiMusic) : CommandExecutor, Tab
           sender.sendMessage("§7playback.diagnostics が無効です。")
         }
       }
-      else -> sender.sendMessage("§e/oyasaimusic <reload|update|rp|transactions|playbackstats>")
+      else -> sender.sendMessage("§e/oyasaimusic <reload|update|rp|playbackstats>")
     }
     return true
-  }
-
-  private fun handleTransactions(sender: CommandSender, args: List<String>) {
-    val service = plugin.musicTransactions
-    val journal = service.journal
-    val actor = if (sender is Player) sender.uniqueId.toString() else sender.name
-    val action = args.firstOrNull()
-    val id = args.getOrNull(1)?.let { runCatching { UUID.fromString(it).toString() }.getOrNull() }
-    val reason = args.drop(if (action == "resolve") 3 else 2).joinToString(" ")
-    val result =
-        when {
-          action == "list" ->
-              service.async {
-                journal
-                    .unresolved()
-                    .map { "${it.id} ${it.kind} ${it.phase} ${it.amount} ${it.currency}" }
-                    .ifEmpty { listOf("未解決取引はありません。") }
-              }
-          action == "show" && id != null ->
-              service.async {
-                val entry = requireNotNull(journal.get(id)) { "取引がありません" }
-                listOf(
-                    "${entry.id} ${entry.owner} ${entry.kind} ${entry.phase} ${entry.external} ${entry.amount} ${entry.currency}",
-                    entry.note,
-                    entry.effect,
-                )
-              }
-          action == "resolve" && id != null && reason.isNotBlank() ->
-              service.async { listOf("記録済み ${journal.resolve(id, args[2], actor, reason).phase}") }
-          action == "resume" && id != null && reason.isNotBlank() ->
-              service.resume(id, actor, reason).thenApply { listOf(it) }
-          else -> {
-            sender.sendMessage(
-                "/oyasaimusic transactions list | show <id> | resolve <id> <failed|paid|delivered> <根拠> | resume <id> <未実施の確認根拠>"
-            )
-            return
-          }
-        }
-    result.whenComplete { lines, error ->
-      if (!plugin.isEnabled) return@whenComplete
-      Bukkit.getScheduler()
-          .runTask(
-              plugin,
-              Runnable {
-                if (sender.hasPermission("oyasaimusic.admin")) {
-                  if (error != null) sender.sendMessage((error.cause ?: error).message.orEmpty())
-                  else lines.forEach { sender.sendMessage(it) }
-                }
-              },
-          )
-    }
   }
 
   private fun handleResourcePack(sender: CommandSender, args: List<String>) {

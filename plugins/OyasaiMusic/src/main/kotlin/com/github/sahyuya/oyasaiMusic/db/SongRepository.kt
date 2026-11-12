@@ -9,6 +9,20 @@ import java.util.UUID
 
 /** songs テーブルへのアクセスを担当するリポジトリ。 呼び出しは必ず非同期スレッドから行うこと（[DatabaseManager.transaction] が同期化する）。 */
 class SongRepository(private val db: DatabaseManager) {
+  private val pendingDeliveries = java.util.concurrent.ConcurrentHashMap<Long, Int>()
+
+  // Called inside the transaction that validates the song and records delivery intent.
+  internal fun beginDeliveryGuard(id: Long) {
+    pendingDeliveries.merge(id, 1, Int::plus)
+  }
+
+  internal fun endDeliveryGuard(id: Long) {
+    pendingDeliveries.computeIfPresent(id) { _, count -> (count - 1).takeIf { it > 0 } }
+  }
+
+  private fun checkDeliveryIdle(id: Long) {
+    check(!pendingDeliveries.containsKey(id)) { "この楽曲の取引処理中です。完了後に再操作してください。" }
+  }
 
   /**
    * 新規楽曲を下書き(status=DRAFT, published=false)として登録する。 録音システム（グリッド型/回路型/動的録音）は録音完了後に必ずこれを呼び出す。
@@ -219,42 +233,47 @@ class SongRepository(private val db: DatabaseManager) {
 
   /** オリジナル審査の依頼を永続化し、提出時点で仮OKへ移す。 仮OKは「作者が申請済み」の暫定状態であり、OP審査画面では許可／未審査／却下へ変更できる。 */
   /** 公開済みの未申請楽曲だけを審査へ提出する。提出できた場合だけtrueを返す。 */
-  fun requestReview(id: Long): Boolean =
+  fun requestReview(id: Long, expectedIdentity: String): Boolean =
       db.transaction { conn ->
         conn
             .prepareStatement(
-                "UPDATE songs SET status = ?, review_requested_at = ? WHERE id = ? AND (published = 1 OR limited_publication = 1) AND review_requested_at IS NULL"
+                "UPDATE songs SET status = ?, review_requested_at = ? WHERE id = ? AND (published = 1 OR limited_publication = 1) AND review_requested_at IS NULL AND record_identity = ?"
             )
             .use { ps ->
               ps.setInt(1, SongStatus.TEMP_OK.code)
               ps.setLong(2, System.currentTimeMillis() / 1000)
               ps.setLong(3, id)
+              ps.setString(4, expectedIdentity)
               ps.executeUpdate() == 1
             }
       }
 
   /** OPが判定する前の申請を取り消し、下書き状態へ戻す。 */
-  fun cancelReviewRequest(id: Long): Boolean =
+  fun cancelReviewRequest(id: Long, expectedIdentity: String): Boolean =
       db.transaction { conn ->
         conn
             .prepareStatement(
-                "UPDATE songs SET status = ?, review_requested_at = NULL WHERE id = ? AND status = ? AND review_requested_at IS NOT NULL"
+                "UPDATE songs SET status = ?, review_requested_at = NULL WHERE id = ? AND status = ? AND review_requested_at IS NOT NULL AND record_identity = ?"
             )
             .use { ps ->
               ps.setInt(1, SongStatus.DRAFT.code)
               ps.setLong(2, id)
               ps.setInt(3, SongStatus.TEMP_OK.code)
+              ps.setString(4, expectedIdentity)
               ps.executeUpdate() == 1
             }
       }
 
-  fun updateStatus(id: Long, status: SongStatus) =
+  fun updateStatus(id: Long, status: SongStatus, expectedIdentity: String): Boolean =
       db.transaction { conn ->
-        conn.prepareStatement("UPDATE songs SET status = ? WHERE id = ?").use { ps ->
-          ps.setInt(1, status.code)
-          ps.setLong(2, id)
-          ps.executeUpdate()
-        }
+        conn
+            .prepareStatement("UPDATE songs SET status = ? WHERE id = ? AND record_identity = ?")
+            .use { ps ->
+              ps.setInt(1, status.code)
+              ps.setLong(2, id)
+              ps.setString(3, expectedIdentity)
+              ps.executeUpdate() == 1
+            }
       }
 
   /** 公開状態を更新し、初回公開時だけ true を返す。通知済み状態をDBへ永続化するため、 非公開→再公開やサーバー再起動後にも新曲通知が重複しない。 */
@@ -264,6 +283,7 @@ class SongRepository(private val db: DatabaseManager) {
       limited: Boolean = false,
   ): Boolean =
       db.transaction { conn ->
+        checkDeliveryIdle(id)
         if (!published) {
           conn
               .prepareStatement(
@@ -292,9 +312,16 @@ class SongRepository(private val db: DatabaseManager) {
         firstPublish
       }
 
-  fun togglePublication(id: Long, limitedClick: Boolean): Pair<Song, Boolean> =
+  fun togglePublication(
+      id: Long,
+      limitedClick: Boolean,
+      expectedIdentity: String? = null,
+  ): Pair<Song, Boolean> =
       db.transaction {
-        val current = requireNotNull(findById(id))
+        val current = requireNotNull(findById(id)) { "楽曲が削除されました。画面を開き直してください。" }
+        check(expectedIdentity == null || current.recordIdentity == expectedIdentity) {
+          "楽曲が変更されました。画面を開き直してください。"
+        }
         val publish = !current.released && !limitedClick
         val limited = !current.released && limitedClick
         val notify = setPublishedAndClaimFirstAnnouncement(id, publish, limited)
@@ -303,13 +330,14 @@ class SongRepository(private val db: DatabaseManager) {
 
   fun updateSettings(
       id: Long,
+      expectedIdentity: String,
       title: String? = null,
       bpm: Int? = null,
       recordMaterial: String? = null,
       price: Int? = null,
       referenceUrl: String? = null,
       collectible: Boolean? = null,
-  ) =
+  ): Boolean =
       db.transaction { conn ->
         val fields = mutableListOf<String>()
         val values = mutableListOf<Any?>()
@@ -338,31 +366,54 @@ class SongRepository(private val db: DatabaseManager) {
           fields += "reference_url = ?"
           values += it
         }
-        if (fields.isEmpty()) return@transaction
-        val sql = "UPDATE songs SET ${fields.joinToString(", ")} WHERE id = ?"
+        if (fields.isEmpty()) return@transaction false
+        val sql =
+            "UPDATE songs SET ${fields.joinToString(", ")} WHERE id = ? AND record_identity = ?"
         conn.prepareStatement(sql).use { ps ->
           values.forEachIndexed { i, v -> ps.setObject(i + 1, v) }
           ps.setLong(values.size + 1, id)
-          ps.executeUpdate()
+          ps.setString(values.size + 2, expectedIdentity)
+          ps.executeUpdate() == 1
         }
       }
 
   /** 音源を差し替えた際に、立体音響の可否を録音内容へ合わせる。 */
-  fun updateAudioProperties(id: Long, supportsPositional: Boolean) =
+  fun replaceAudio(
+      id: Long,
+      identity: String,
+      previous: String,
+      next: String,
+      positional: Boolean,
+      bpm: Int? = null,
+  ): Boolean =
       db.transaction { conn ->
-        conn.prepareStatement("UPDATE songs SET supports_positional = ? WHERE id = ?").use { ps ->
-          ps.setInt(1, if (supportsPositional) 1 else 0)
-          ps.setLong(2, id)
-          ps.executeUpdate()
-        }
+        conn
+            .prepareStatement(
+                "UPDATE songs SET file_name = ?, supports_positional = ?, bpm = COALESCE(?, bpm) WHERE id = ? AND record_identity = ? AND file_name = ?"
+            )
+            .use { ps ->
+              ps.setString(1, next)
+              ps.setInt(2, if (positional) 1 else 0)
+              ps.setObject(3, bpm)
+              ps.setLong(4, id)
+              ps.setString(5, identity)
+              ps.setString(6, previous)
+              ps.executeUpdate() == 1
+            }
       }
 
-  fun delete(id: Long) =
+  fun deleteMatching(id: Long, recordIdentity: String): String? =
       db.transaction { conn ->
-        conn.prepareStatement("DELETE FROM songs WHERE id = ?").use { ps ->
-          ps.setLong(1, id)
-          ps.executeUpdate()
-        }
+        checkDeliveryIdle(id)
+        conn
+            .prepareStatement(
+                "DELETE FROM songs WHERE id = ? AND record_identity = ? RETURNING file_name"
+            )
+            .use { ps ->
+              ps.setLong(1, id)
+              ps.setString(2, recordIdentity)
+              ps.executeQuery().use { rs -> if (rs.next()) rs.getString(1) else null }
+            }
       }
 
   private fun ResultSet.toSongList(): List<Song> {
