@@ -166,9 +166,10 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
       var session: PlaybackSession? = null,
       /** 音源読み込み中の二重起動を防ぐ。状態変更はメインスレッド上で行う。 */
       var loadingTicket: Any? = null,
+      var retryAfterNanos: Long? = null,
       /** 現在トリガーが再生を許可しているか。 */
       var enabled: Boolean = trigger == AmbientTrigger.JUKEBOX,
-      /** 非ループ曲が最後まで鳴り終えたか。トリガー再投入まで再生し直さない。 */
+      /** 非ループ曲が終了したか、音源を再生できなかったか。トリガー再投入まで再試行しない。 */
       var completed: Boolean = false,
       /** RS入力の立ち上がりだけを検知するための直前状態。 */
       var redstonePowered: Boolean = false,
@@ -327,7 +328,7 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
           entry.enabled &&
               entry.session == null &&
               entry.loadingTicket == null &&
-              !(entry.completed && !entry.loop)
+              !entry.completed
       ) {
         startPlayback(k, nearby)
       }
@@ -361,7 +362,8 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
         !entry.enabled ||
             entry.session != null ||
             entry.loadingTicket != null ||
-            (entry.completed && !entry.loop)
+            (entry.retryAfterNanos?.let { System.nanoTime() - it < 0 } == true) ||
+            entry.completed
     )
         return
     // リスナーがいない状態で空セッションを作ると、再生完了コールバックが発火せず
@@ -373,6 +375,7 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
       entry.completed = true
       return
     }
+    entry.retryAfterNanos = null
     val ticket = Any()
     val engine = plugin.playbackEngine
     entry.loadingTicket = ticket
@@ -414,6 +417,11 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
                             return@Runnable
                         val loaded =
                             audio.getOrElse {
+                              val cause = (it as? java.util.concurrent.ExecutionException)?.cause ?: it
+                              if (cause is java.util.concurrent.RejectedExecutionException) {
+                                entry.retryAfterNanos = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(1)
+                                return@Runnable
+                              }
                               plugin.logger.warning(
                                   "環境BGMの音源読み込みに失敗しました (${file.name}): ${it.message}"
                               )
@@ -449,6 +457,7 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) : org.bukkit.even
   private fun stopPlayback(key: String) {
     val entry = entries[key] ?: return
     entry.loadingTicket = null
+    entry.retryAfterNanos = null
     entry.session?.let { plugin.playbackEngine.stop(it) }
     entry.session = null
   }

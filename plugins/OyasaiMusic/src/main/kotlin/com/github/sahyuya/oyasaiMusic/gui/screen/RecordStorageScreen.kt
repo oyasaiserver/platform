@@ -27,7 +27,7 @@ class RecordStorageScreen(
   override fun refresh() {
     if (failed) return
     try {
-      val items = RecordStorage.page(viewer, page)
+      val readable = RecordStorage.isReadable(viewer, page)
       GuiChrome.render(
           inventory,
           NavTab.FAVORITES_PLAYLISTS,
@@ -36,7 +36,17 @@ class RecordStorageScreen(
           viewer,
           plugin,
       )
-      ContentGrid.SLOTS.forEachIndexed { index, slot -> inventory.setItem(slot, items[index]) }
+      val items = if (readable) RecordStorage.page(viewer, page) else null
+      ContentGrid.SLOTS.forEachIndexed { index, slot -> inventory.setItem(slot, items?.get(index)) }
+      if (!readable) {
+        inventory.setItem(
+            ContentGrid.SLOTS.first(),
+            GuiItemBuilder(Material.BARRIER)
+                .name(Component.text("このページを読み込めません", NamedTextColor.RED))
+                .lore(Component.text("保存データは保持されています", NamedTextColor.GRAY))
+                .build(),
+        )
+      }
       if (page == 0) inventory.setItem(ControllerSlots.PAGE_PREV, GuiChrome.backControllerButton())
       inventory.setItem(
           ControllerSlots.SORT,
@@ -90,6 +100,7 @@ class RecordStorageScreen(
       return
     }
     if (NavTabRouter.handle(raw, NavTab.FAVORITES_PLAYLISTS, null, plugin, menus, viewer)) return
+    if (!RecordStorage.isReadable(viewer, page)) return
     if (raw < 54 && raw !in ContentGrid.SLOTS) {
       plugin.playbackController.handleControllerClick(raw, viewer)
       return
@@ -159,7 +170,7 @@ class RecordStorageScreen(
   }
 
   fun onDrag(event: InventoryDragEvent) {
-    if (failed) return
+    if (failed || !RecordStorage.isReadable(viewer, page)) return
     if (event.rawSlots.all { it >= 54 }) {
       event.isCancelled = false
       return

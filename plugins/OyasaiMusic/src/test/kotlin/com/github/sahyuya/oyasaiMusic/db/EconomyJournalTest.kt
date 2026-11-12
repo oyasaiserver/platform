@@ -7,6 +7,7 @@ import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import org.junit.jupiter.api.io.TempDir
@@ -83,10 +84,10 @@ class EconomyJournalTest {
       val first = song("First")
       val second = song("Second")
       val likes = LikeService(db, SocialRepository(db), journal, 100, 2)
-      val firstReward = assertNotNull(likes.like(listener, first)?.senderReward)
+      val firstReward = assertNotNull(assertIs<LikeService.Result.Added>(likes.like(listener, first)).senderReward)
       journal.transition(firstReward.id, "PREPARED", "SUBMITTED")
-      val secondReward = assertNotNull(likes.like(listener, second)?.senderReward)
-      assertNull(likes.like(listener, first))
+      val secondReward = assertNotNull(assertIs<LikeService.Result.Added>(likes.like(listener, second)).senderReward)
+      assertEquals(LikeService.Result.AlreadyAdded, likes.like(listener, first))
       assertEquals(
           setOf(firstReward.id, secondReward.id),
           journal.unresolved().map { it.id }.toSet(),

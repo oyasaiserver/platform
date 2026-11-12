@@ -28,18 +28,21 @@ class PlaybackPreferenceRepository(private val db: DatabaseManager) {
             }
       }
 
-  fun setMode(userUuid: UUID, songId: Long, mode: PlaybackMode) =
+  fun setMode(userUuid: UUID, songId: Long, identity: String, mode: PlaybackMode): Boolean =
       db.transaction { conn ->
         conn
             .prepareStatement(
-                "INSERT INTO playback_preferences (user_uuid, song_id, mode) VALUES (?, ?, ?) " +
+                "INSERT INTO playback_preferences (user_uuid, song_id, mode) SELECT ?, id, ? FROM songs WHERE id = ? AND record_identity = ? AND (? = 0 OR supports_positional = 1) " +
                     "ON CONFLICT(user_uuid, song_id) DO UPDATE SET mode = excluded.mode"
             )
             .use { ps ->
               ps.setBytes(1, UuidUtil.toBytes(userUuid))
-              ps.setLong(2, songId)
-              ps.setInt(3, if (mode == PlaybackMode.POSITIONAL) 1 else 0)
-              ps.executeUpdate()
+              val positional = if (mode == PlaybackMode.POSITIONAL) 1 else 0
+              ps.setInt(2, positional)
+              ps.setLong(3, songId)
+              ps.setString(4, identity)
+              ps.setInt(5, positional)
+              ps.executeUpdate() == 1
             }
       }
 }

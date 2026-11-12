@@ -77,6 +77,10 @@ class MenuManager(private val plugin: OyasaiMusic) : Listener {
   }
 
   /** 楽曲設定が保存された直後に、開いている全GUIへ最新情報を配信する。 一覧系は再読込、詳細・設定画面は同一IDの曲だけをその場で差し替える。 */
+  fun refreshRankings() {
+    current.filterValues { it is MainMenuScreen }.keys.toList().forEach(::refreshCurrent)
+  }
+
   fun refreshForSongUpdate(updatedSong: Song) {
     current
         .filter { (id, menu) ->

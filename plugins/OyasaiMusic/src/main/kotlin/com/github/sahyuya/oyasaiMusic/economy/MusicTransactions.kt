@@ -140,9 +140,11 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
     return execute(entry)
   }
 
-  fun advertise(player: Player, songId: Long): CompletableFuture<String> =
+  fun advertise(player: Player, songId: Long, recordIdentity: String): CompletableFuture<String> =
       async {
+          plugin.databaseManager.transaction {
             val song = requireNotNull(plugin.songRepository.findById(songId)) { "楽曲がありません" }
+            check(song.recordIdentity == recordIdentity) { "楽曲が変更されました。画面を開き直してください" }
             check(song.published && !song.limitedPublication) { "通常公開中の楽曲だけ宣伝できます" }
             journal.create(
                 player.uniqueId,
@@ -157,6 +159,7 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
                     )
                 ),
             )
+          }
           }
           .thenCompose { execute(it) }
 
@@ -178,28 +181,26 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
                 }
                 .thenCompose { it }
           }
-          .thenCompose { result ->
-            async {
-              when (result) {
-                PayoutResult.Success -> journal.transition(e.id, "SUBMITTED", "PAID", "SUCCESS")
-                is PayoutResult.Unknown ->
-                    journal.transition(e.id, "SUBMITTED", "REVIEW", "UNKNOWN", result.reason)
-                is PayoutResult.Failed -> journal.fail(e, "SUBMITTED", result.reason)
-                is PayoutResult.Unavailable -> journal.fail(e, "SUBMITTED", result.reason)
-              }
-              result
-            }
-          }
-          .thenCompose { result ->
-            when (result) {
-              PayoutResult.Success -> effects(e)
-              is PayoutResult.Unknown ->
-                  CompletableFuture.completedFuture("要照合: ${e.id}（${result.reason}）")
-              is PayoutResult.Failed -> CompletableFuture.completedFuture(result.reason)
-              is PayoutResult.Unavailable -> CompletableFuture.completedFuture(result.reason)
-            }
-          }
+          .thenCompose { result -> settlePayment(e, result) }
           .exceptionallyCompose { error -> review(e, error) }
+
+  private fun settlePayment(e: EconomyJournal.Entry, result: PayoutResult): CompletableFuture<String> =
+      async {
+        when (result) {
+          PayoutResult.Success -> journal.transition(e.id, "SUBMITTED", "PAID", "SUCCESS")
+          is PayoutResult.Unknown ->
+              journal.transition(e.id, "SUBMITTED", "REVIEW", "UNKNOWN", result.reason)
+          is PayoutResult.Failed -> journal.fail(e, "SUBMITTED", result.reason)
+          is PayoutResult.Unavailable -> journal.fail(e, "SUBMITTED", result.reason)
+        }
+      }.thenCompose {
+        when (result) {
+          PayoutResult.Success -> effects(e)
+          is PayoutResult.Unknown -> CompletableFuture.completedFuture("要照合: ${e.id}（${result.reason}）")
+          is PayoutResult.Failed -> CompletableFuture.completedFuture(result.reason)
+          is PayoutResult.Unavailable -> CompletableFuture.completedFuture(result.reason)
+        }
+      }
 
   private fun review(e: EconomyJournal.Entry, error: Throwable): CompletableFuture<String> = async {
     val current = journal.get(e.id)
@@ -220,16 +221,26 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
           "${e.amount}${if(e.currency=="yen") "円" else "P"}を受け取りました。"
         }
     val data = decode(e.effect)
+    val songId = data.getProperty("song").toLong()
+    val guarded = java.util.concurrent.atomic.AtomicBoolean()
     return async {
-          journal.beginDelivery(e) {
-            plugin.recordSaleRepository.recordSale(
-                data.getProperty("song").toLong(),
-                e.owner,
-                UUID.fromString(data.getProperty("author")),
-                e.amount,
-                data.getProperty("share").toLong(),
-                data.getProperty("eligible").toBoolean(),
-            )
+          plugin.databaseManager.transaction {
+            val song = requireNotNull(plugin.songRepository.findById(songId)) { "楽曲がありません" }
+            check(song.recordIdentity == data.getProperty("identity")) { "楽曲が変更されました" }
+            if (e.kind == "ADVERTISE")
+                check(song.published && !song.limitedPublication) { "楽曲は通常公開されていません" }
+            plugin.songRepository.beginDeliveryGuard(songId)
+            guarded.set(true)
+            journal.beginDelivery(e) {
+              plugin.recordSaleRepository.recordSale(
+                  data.getProperty("song").toLong(),
+                  e.owner,
+                  UUID.fromString(data.getProperty("author")),
+                  e.amount,
+                  data.getProperty("share").toLong(),
+                  data.getProperty("eligible").toBoolean(),
+              )
+            }
           }
         }
         .thenCompose {
@@ -278,6 +289,9 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
             journal.transition(e.id, "EFFECTING", "DONE")
             if (e.kind == "PURCHASE") "レコードを受け取りました。" else "10Pを消費して宣伝しました。"
           }
+        }
+        .whenComplete { _, _ ->
+          if (guarded.get()) plugin.songRepository.endDeliveryGuard(songId)
         }
   }
 

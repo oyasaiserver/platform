@@ -41,8 +41,8 @@ object HeadTextureUtil {
   private val activeRequests = AtomicInteger()
 
   /** ローカルまたはこのセッション中のキャッシュを使い、利用できなければスティーブ頭を返す。 */
-  fun placeholderHead(uuid: UUID, name: String?): ItemStack =
-      headItem(cachedProfile(uuid) ?: Bukkit.createProfile(uuid, name))
+  fun placeholderHead(uuid: UUID): ItemStack =
+      cachedProfile(uuid)?.let(::headItem) ?: ItemStack(Material.PLAYER_HEAD)
 
   /**
    * すぐにキャッシュ済みヘッド（未取得時はスティーブ頭）を返し、Java版の未キャッシュ分だけを PlayerDBから非同期で補完する。同一UUIDの同時要求は1回のHTTP通信に集約する。
@@ -56,7 +56,7 @@ object HeadTextureUtil {
       return
     }
 
-    onReady(headItem(Bukkit.createProfile(uuid, name)))
+    onReady(ItemStack(Material.PLAYER_HEAD))
     val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
     if (prefix.isNotEmpty() && name?.startsWith(prefix) == true) return
 

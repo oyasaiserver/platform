@@ -15,30 +15,33 @@ object RecordStorage {
   const val PAGE_SIZE = 40
   const val MAX_PAGES = 20
   private const val MAX_BYTES = 1_048_576
-  private val cache = mutableMapOf<UUID, Array<Array<ItemStack?>>>()
+  private val cache = mutableMapOf<UUID, Array<Array<ItemStack?>?>>()
 
   private fun key(page: Int) = NamespacedKey("oyasaimusic", "record_storage_v1_$page")
 
-  private fun pages(player: Player): Array<Array<ItemStack?>> =
+  private fun pages(player: Player): Array<Array<ItemStack?>?> =
       cache.getOrPut(player.uniqueId) {
         Array(MAX_PAGES) { page ->
-          val bytes = player.persistentDataContainer.get(key(page), PersistentDataType.BYTE_ARRAY)
-          if (bytes == null) arrayOfNulls(PAGE_SIZE)
-          else {
+          runCatching {
+            val bytes = player.persistentDataContainer.get(key(page), PersistentDataType.BYTE_ARRAY)
+                ?: return@runCatching arrayOfNulls<ItemStack>(PAGE_SIZE)
             require(bytes.size <= MAX_BYTES) { "Storage page exceeds limit" }
             val loaded = ItemStack.deserializeItemsFromBytes(bytes)
             require(loaded.size == PAGE_SIZE) { "Invalid storage page size" }
             Array(PAGE_SIZE) { loaded[it].takeUnless { item -> item.type.isAir } }
-          }
+          }.getOrNull()
         }
       }
 
+  fun isReadable(player: Player, index: Int): Boolean = pages(player)[index] != null
+
   fun page(player: Player, index: Int): Array<ItemStack?> {
     require(index in 0 until MAX_PAGES)
-    return pages(player)[index].map { it?.clone() }.toTypedArray()
+    val items = checkNotNull(pages(player)[index]) { "Storage page is unreadable" }
+    return items.map { it?.clone() }.toTypedArray()
   }
 
-  fun all(player: Player): List<ItemStack> = pages(player).flatMap { it.filterNotNull() }
+  fun all(player: Player): List<ItemStack> = pages(player).filterNotNull().flatMap { it.filterNotNull() }
 
   fun save(plugin: Plugin, player: Player, index: Int, items: Array<ItemStack?>) {
     require(index in 0 until MAX_PAGES && items.size == PAGE_SIZE)
@@ -49,13 +52,15 @@ object RecordStorage {
     val bytes = ItemStack.serializeItemsAsBytes(proposed)
     require(bytes.size <= MAX_BYTES) { "Storage page exceeds limit" }
     val state = pages(player)
+    checkNotNull(state[index]) { "Storage page is unreadable" }
     player.persistentDataContainer.set(key(index), PersistentDataType.BYTE_ARRAY, bytes)
     state[index] = proposed
   }
 
   fun compact(player: Player) {
     val state = pages(player)
-    val occupied = compactRecordPages(state.toList()) { it != null && !it.type.isAir }
+    if (state.any { it == null }) return
+    val occupied = compactRecordPages(state.filterNotNull()) { it != null && !it.type.isAir }
     // Encode every surviving page before replacing anything, so encoding failures change nothing.
     val encoded =
         occupied.map {

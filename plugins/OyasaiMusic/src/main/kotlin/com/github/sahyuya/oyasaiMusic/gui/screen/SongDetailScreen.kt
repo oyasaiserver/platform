@@ -1,5 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
+import com.github.sahyuya.oyasaiMusic.db.LikeService.Result
+import com.github.sahyuya.oyasaiMusic.db.likeFailureMessage
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.model.Song
 import com.github.sahyuya.oyasaiMusic.util.HeadTextureUtil
@@ -46,7 +48,7 @@ class SongDetailScreen(
   override fun refresh() = render()
 
   override fun onSongUpdated(updatedSong: Song) {
-    if (song.id == updatedSong.id) {
+    if (song.id == updatedSong.id && song.recordIdentity == updatedSong.recordIdentity) {
       song = updatedSong
       render()
     }
@@ -177,7 +179,7 @@ class SongDetailScreen(
 
   private fun renderAuthorHead() {
     val authorUuid = song.authorUuid
-    val authorName = Bukkit.getOfflinePlayer(authorUuid).name ?: "不明"
+    val authorName = Bukkit.getOfflinePlayer(authorUuid).name
     inventory.setItem(authorHeadSlot, authorHeadItem())
     HeadTextureUtil.resolveAsync(plugin, authorUuid, authorName) { item ->
       if (song.authorUuid == authorUuid && viewer.isOnline) {
@@ -188,10 +190,7 @@ class SongDetailScreen(
 
   private fun authorHeadItem(
       item: org.bukkit.inventory.ItemStack =
-          HeadTextureUtil.placeholderHead(
-              song.authorUuid,
-              Bukkit.getOfflinePlayer(song.authorUuid).name,
-          )
+          HeadTextureUtil.placeholderHead(song.authorUuid)
   ): org.bukkit.inventory.ItemStack {
     val name = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     val stats = AuthorStatsCache.get(plugin, song.authorUuid) { render() }
@@ -280,7 +279,7 @@ class SongDetailScreen(
     if (plugin.playbackController.handleControllerClick(slot, viewer)) return
 
     when (slot) {
-      13 -> song.id?.let { SongPromotionService.promote(plugin, viewer, it) }
+      13 -> song.id?.let { SongPromotionService.promote(plugin, viewer, it, song.recordIdentity) }
       previewSlot -> playSong()
       authorHeadSlot -> openAuthorProfile()
       followSlot -> toggleFollow()
@@ -407,15 +406,21 @@ class SongDetailScreen(
         } else {
           com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL
         }
+    val selectedSong = song
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              plugin.playbackModeService.setPreference(viewer.uniqueId, song, next)
-              Bukkit.getScheduler()
+              val saved = plugin.playbackModeService.setPreference(viewer.uniqueId, selectedSong, next)
+    Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
+                        if (!saved) {
+                          viewer.sendMessage("§c楽曲が変更または削除されました。画面を開き直してください。")
+                          return@Runnable
+                        }
+                        if (song.recordIdentity != selectedSong.recordIdentity) return@Runnable
                         currentPlaybackMode = next
                         viewer.sendMessage(
                             "§a再生方式を変更しました: ${if (next == com.github.sahyuya.oyasaiMusic.audio.PlaybackMode.POSITIONAL) "立体音響再生" else "通常再生"}"
@@ -454,23 +459,25 @@ class SongDetailScreen(
       GuiFeedback.invalid(viewer, "既にいいね済みです。")
       return
     }
+    val selectedSong = song
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val added = plugin.likeService.like(viewer.uniqueId, song)
+              val result = plugin.likeService.like(viewer.uniqueId, selectedSong)
               val refreshed =
-                  if (added != null) plugin.songRepository.findById(requireNotNull(song.id))
+                  if (result is Result.Added) plugin.songRepository.findById(requireNotNull(selectedSong.id))
+                      ?.takeIf { it.recordIdentity == selectedSong.recordIdentity }
                   else null
-              Bukkit.getScheduler()
+    Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
-                        if (added != null) {
+                        if (result is Result.Added) {
                           hasLiked = true
                           if (refreshed != null) song = refreshed
                           GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
-                          plugin.deliverLikeSenderReward(viewer, added.senderReward)
+                          plugin.deliverLikeSenderReward(viewer, result.senderReward)
                           Bukkit.getPlayer(song.authorUuid)?.let { author ->
                             plugin.toastNotificationService.showLikeReceived(
                                 author,
@@ -480,7 +487,7 @@ class SongDetailScreen(
                           }
                           render()
                         } else {
-                          GuiFeedback.invalid(viewer, "既にいいね済みです。")
+                          GuiFeedback.invalid(viewer, likeFailureMessage(result))
                         }
                       },
                   )

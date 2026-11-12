@@ -55,6 +55,7 @@ class ViewCountService(
                       listenerUuid = player.uniqueId,
                       authorUuid = song.authorUuid,
                       songId = songId,
+                      recordIdentity = song.recordIdentity,
                       timestamp = nowSeconds,
                       hourLimit = hourLimit,
                       dayLimit = dayLimit,

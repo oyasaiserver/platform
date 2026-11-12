@@ -69,7 +69,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     val existing = lists[id]
     if (existing?.key == key && selected.id in existing.order.ids) {
       existing.order.select(requireNotNull(selected.id))
-      playListSong(viewer, existing, requireNotNull(selected.id))
+      playListSong(viewer, existing, requireNotNull(selected.id), selected.recordIdentity)
       return
     }
     val generation = beginRequest(id)
@@ -105,7 +105,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                               }
                         }
                         context.order.select(selectedId)
-                        playListSong(viewer, context, selectedId)
+                        playListSong(viewer, context, selectedId, selected.recordIdentity)
                       },
                   )
             },
@@ -163,7 +163,12 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     playListSong(viewer, context, next)
   }
 
-  private fun playListSong(viewer: Player, context: ListContext, songId: Long) {
+  private fun playListSong(
+      viewer: Player,
+      context: ListContext,
+      songId: Long,
+      expectedIdentity: String? = null,
+  ) {
     val id = viewer.uniqueId
     val generation = beginRequest(id)
     Bukkit.getScheduler()
@@ -178,9 +183,13 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                       Runnable {
                         if (!viewer.isOnline || requests[id] != generation || lists[id] !== context)
                             return@Runnable
-                        if (song == null || !SongAccess.canListen(plugin, viewer, song)) {
+                        if (
+                            song == null ||
+                                (expectedIdentity != null && song.recordIdentity != expectedIdentity) ||
+                                !SongAccess.canListen(plugin, viewer, song)
+                        ) {
                           lists.remove(id)
-                          viewer.sendMessage("§7楽曲が削除または非公開になったため、リスト再生を終了しました。")
+                          viewer.sendMessage("§7楽曲が削除・変更されたか、再生できなくなったため、リスト再生を終了しました。")
                           return@Runnable
                         }
                         play(viewer, song, onCompletion = context.completion)
@@ -241,7 +250,18 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val song = plugin.songRepository.findById(songId) ?: return@Runnable
+              val latestSong = plugin.songRepository.findById(songId)
+              if (latestSong == null || latestSong.recordIdentity != song.recordIdentity) {
+                Bukkit.getScheduler()
+                    .runTask(
+                        plugin,
+                        Runnable {
+                          if (isCurrent()) viewer.sendMessage("§c楽曲が変更されました。画面を開き直してください。")
+                        },
+                    )
+                return@Runnable
+              }
+              val song = latestSong
               val file = File(plugin.audioDirectory, song.fileName)
               if (!file.exists()) {
                 Bukkit.getScheduler()
@@ -398,11 +418,13 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                             plugin,
                                             Runnable {
                                               if (!isCurrent()) return@Runnable
+                                              if (latest == null || latest.recordIdentity != song.recordIdentity ||
+                                                  latest.fileName != song.fileName) {
+                                                viewer.sendMessage("§c楽曲が変更されました。画面を開き直してください。")
+                                                return@Runnable
+                                              }
                                               if (
-                                                  latest == null ||
-                                                      latest.recordIdentity !=
-                                                          song.recordIdentity ||
-                                                      (!(reviewPreview &&
+                                                  (!(reviewPreview &&
                                                           viewer.hasPermission(
                                                               "oyasaimusic.admin"
                                                           )) &&
@@ -443,7 +465,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       if (lastSong != null) {
         val context = lists[viewer.uniqueId]
         if (context != null && lastSong.id in context.order.ids) {
-          playListSong(viewer, context, requireNotNull(lastSong.id))
+          playListSong(viewer, context, requireNotNull(lastSong.id), lastSong.recordIdentity)
         } else play(viewer, lastSong)
       } else {
         viewer.sendMessage("§7再生中の曲がありません。曲を選んで再生してください。")
@@ -549,7 +571,9 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   fun applySongMetadataUpdate(updatedSong: Song) {
     Bukkit.getOnlinePlayers().forEach { player ->
       val state = plugin.controllerStateService.stateFor(player.uniqueId)
-      if (state.nowPlayingSong?.id != updatedSong.id) return@forEach
+      val currentSong = state.nowPlayingSong ?: return@forEach
+      if (currentSong.id != updatedSong.id || currentSong.recordIdentity != updatedSong.recordIdentity)
+          return@forEach
       state.nowPlayingSong = updatedSong
       nowPlayingBars[player.uniqueId]?.let { bar ->
         val style = bossBarStyle(updatedSong.recordMaterial)

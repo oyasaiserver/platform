@@ -55,7 +55,8 @@ object SongAccess {
     }
     // Storage can also contain records predating conversion to collectible publication.
     for (page in 0 until RecordStorage.MAX_PAGES) {
-      val items = runCatching { RecordStorage.page(viewer, page) }.getOrNull() ?: return
+      if (!RecordStorage.isReadable(viewer, page)) continue
+      val items = RecordStorage.page(viewer, page)
       var changed = false
       items.forEachIndexed { slot, item ->
         val song = valid[PhysicalRecordItem.songId(plugin, item)] ?: return@forEachIndexed
