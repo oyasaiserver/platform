@@ -1293,12 +1293,16 @@
   },
   "com.velocitypowered:velocity-brigadier:1.0.0-SNAPSHOT": {
     "velocity-brigadier-1.0.0-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20210613.082804-10.jar",
-      "hash": "sha256-LWZG7UbYBS/J8NUEMJoClNCKfHXVNP2E8R2whQzv3LI="
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20261110.144108-12.jar",
+      "hash": "sha256-cU9YCkKkI7HS64RLu0DeyVLEgQmqUoKFQvTqvl/Ffrc="
+    },
+    "velocity-brigadier-1.0.0-SNAPSHOT.module": {
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20261110.144108-12.module",
+      "hash": "sha256-KiNy68d9L0FYHy/RARMJeDQw+CZjQwTlHJQdRIlm2hA="
     },
     "velocity-brigadier-1.0.0-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20210613.082804-10.pom",
-      "hash": "sha256-BVrnovDZ13pawpqN9FM3RyX2Z0yx2FkwjNbaxVI3mQM="
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20261110.144108-12.pom",
+      "hash": "sha256-Rl70+G0lYH/5UveIfbEfSvsuEv2m2wZqUJ50oNbifN0="
     }
   },
   "com.velocitypowered:velocity-native:4.1.0": {
