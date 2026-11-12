@@ -46,7 +46,7 @@ class EconomyJournal(private val db: DatabaseManager) {
             "INSERT OR IGNORE INTO music_feature_schema(feature,version) VALUES('economy-journal',1)"
         )
         s.executeUpdate(
-            "UPDATE music_transactions SET phase='REVIEW', note='Interrupted by restart' WHERE phase NOT IN ('DONE','FAILED','REVIEW')"
+            "UPDATE music_transactions SET phase=CASE WHEN phase='REFUNDING' THEN 'REFUND_REVIEW' ELSE 'REVIEW' END, note=CASE WHEN phase='REFUNDING' THEN 'Refund interrupted by restart: ' || note ELSE 'Interrupted by restart (' || phase || ')' END WHERE phase NOT IN ('DONE','FAILED','REVIEW','REFUND_REVIEW')"
         )
       }
     }
@@ -209,39 +209,5 @@ class EconomyJournal(private val db: DatabaseManager) {
                   }
           if (firstAttempt && e.amount > 0) recordSale()
         }
-      }
-
-  /** Records an operator's evidence. This method never calls the external economy. */
-  fun resolve(id: String, action: String, actor: String, reason: String): Entry =
-      db.transaction { c ->
-        require(reason.isNotBlank() && reason.length <= 500)
-        val e = requireNotNull(get(id))
-        check(e.phase == "REVIEW") { "要照合の取引ではありません" }
-        when (action) {
-          "failed" -> {
-            check(e.external != "SUCCESS") { "支払成功が記録されています" }
-            fail(e, "REVIEW", reason)
-          }
-          "paid" -> transition(id, "REVIEW", "MANUAL_PAID", "SUCCESS", reason)
-          "delivered" -> {
-            check(e.kind in setOf("PURCHASE", "ADVERTISE") && e.external == "SUCCESS") {
-              "支払成功の確認が必要です"
-            }
-            transition(id, "REVIEW", "DONE", note = reason)
-          }
-          else -> error("結果は failed / paid / delivered で指定してください")
-        }
-        c.prepareStatement(
-                "INSERT INTO music_transaction_audit(transaction_id,actor,action,reason,created_at) VALUES(?,?,?,?,?)"
-            )
-            .use { p ->
-              p.setString(1, id)
-              p.setString(2, actor)
-              p.setString(3, action)
-              p.setString(4, reason)
-              p.setLong(5, System.currentTimeMillis())
-              p.executeUpdate()
-            }
-        requireNotNull(get(id))
       }
 }

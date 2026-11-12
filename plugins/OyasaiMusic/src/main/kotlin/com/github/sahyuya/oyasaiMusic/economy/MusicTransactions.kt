@@ -31,7 +31,14 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
       )
   @Volatile private var closed = false
 
-  fun initialize() = journal.initialize()
+  fun initialize() {
+    journal.initialize()
+    journal.unresolved().forEach {
+      plugin.logger.warning(
+          "Unresolved music transaction id=${it.id} kind=${it.kind} phase=${it.phase} external=${it.external}: ${it.note}"
+      )
+    }
+  }
 
   fun close(): Boolean {
     closed = true
@@ -200,8 +207,10 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
           .thenCompose {
             when (result) {
               PayoutResult.Success -> effects(e)
-              is PayoutResult.Unknown ->
-                  CompletableFuture.completedFuture("要照合: ${e.id}（${result.reason}）")
+              is PayoutResult.Unknown -> {
+                plugin.logger.warning("Music transaction ${e.id} (${e.kind}): ${result.reason}")
+                CompletableFuture.completedFuture("取引結果を確認できませんでした。")
+              }
               is PayoutResult.Failed -> CompletableFuture.completedFuture(result.reason)
               is PayoutResult.Unavailable -> CompletableFuture.completedFuture(result.reason)
             }
@@ -213,10 +222,14 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
         journal.transition(
             e.id,
             current.phase,
-            "REVIEW",
-            note = "Operation interrupted: ${error.javaClass.simpleName}",
+            if (current.phase == "REFUNDING") "REFUND_REVIEW" else "REVIEW",
+            note =
+                "Operation interrupted: ${(error.cause ?: error).message ?: error.javaClass.simpleName}",
         )
-    "処理結果の照合が必要です。取引ID: ${e.id}"
+    plugin.logger.warning(
+        "Music transaction ${e.id} (${e.kind}, phase=${current?.phase}): ${(error.cause ?: error).message}"
+    )
+    "取引を完了できませんでした。"
   }
 
   private fun effects(e: EconomyJournal.Entry): CompletableFuture<String> {
@@ -230,10 +243,19 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
     val guarded = java.util.concurrent.atomic.AtomicBoolean()
     return async {
           plugin.databaseManager.transaction {
-            val song = requireNotNull(plugin.songRepository.findById(songId)) { "楽曲がありません" }
-            check(song.recordIdentity == data.getProperty("identity")) { "楽曲が変更されました" }
-            if (e.kind == "ADVERTISE")
-                check(song.published && !song.limitedPublication) { "楽曲は通常公開されていません" }
+            val song = plugin.songRepository.findById(songId)
+            val reason =
+                when {
+                  song == null -> "Song was deleted"
+                  song.recordIdentity != data.getProperty("identity") -> "Song identity changed"
+                  e.kind == "ADVERTISE" && (!song.published || song.limitedPublication) ->
+                      "Song is no longer publicly listed"
+                  else -> null
+                }
+            if (reason != null) {
+              journal.transition(e.id, "PAID", "REFUNDING", note = reason)
+              return@transaction reason
+            }
             plugin.songRepository.beginDeliveryGuard(songId)
             guarded.set(true)
             journal.beginDelivery(e) {
@@ -246,78 +268,82 @@ class MusicTransactions(private val plugin: OyasaiMusic) {
                   data.getProperty("eligible").toBoolean(),
               )
             }
+            null
           }
         }
-        .thenCompose {
+        .thenCompose { reason ->
+          if (reason != null) return@thenCompose refund(e, reason)
           main {
-            if (e.kind == "PURCHASE") {
-              val player =
-                  requireNotNull(Bukkit.getPlayer(e.owner)?.takeIf { it.isOnline }) { "購入者が切断しました" }
-              val material =
-                  Material.matchMaterial(data.getProperty("material")) ?: Material.MUSIC_DISC_13
-              val author =
-                  Bukkit.getOfflinePlayer(UUID.fromString(data.getProperty("author"))).name ?: "不明"
-              val item =
-                  PhysicalRecordItem.create(
-                      plugin,
-                      material,
-                      data.getProperty("song").toLong(),
-                      data.getProperty("title"),
-                      author,
-                      data.getProperty("identity"),
-                  )
-              player.inventory.addItem(item).values.forEach {
-                player.world.dropItemNaturally(player.location, it)
-              }
-            } else {
-              val name = Bukkit.getOfflinePlayer(e.owner).name ?: "プレイヤー"
-              val message =
-                  Component.text("[OyasaiMusic] $name がリポスト: ", NamedTextColor.GRAY)
-                      .append(
-                          Component.text(
-                                  "「${data.getProperty("title")}」 [クリックで開く]",
-                                  NamedTextColor.AQUA,
-                              )
-                              .clickEvent(
-                                  ClickEvent.runCommand("/mm open ${data.getProperty("song")}")
-                              )
+                if (e.kind == "PURCHASE") {
+                  val player =
+                      requireNotNull(Bukkit.getPlayer(e.owner)?.takeIf { it.isOnline }) {
+                        "購入者が切断しました"
+                      }
+                  val material =
+                      Material.matchMaterial(data.getProperty("material")) ?: Material.MUSIC_DISC_13
+                  val author =
+                      Bukkit.getOfflinePlayer(UUID.fromString(data.getProperty("author"))).name
+                          ?: "不明"
+                  val item =
+                      PhysicalRecordItem.create(
+                          plugin,
+                          material,
+                          data.getProperty("song").toLong(),
+                          data.getProperty("title"),
+                          author,
+                          data.getProperty("identity"),
                       )
-              val recipients =
-                  Bukkit.getOnlinePlayers().filter { it.hasPermission("oyasaimusic.notify") }
-              recipients.forEach { it.sendMessage(message) }
-              plugin.soundEffectService.play(PluginSoundEffect.ADVERTISE, recipients)
-            }
-          }
-        }
-        .thenCompose {
-          async {
-            journal.transition(e.id, "EFFECTING", "DONE")
-            if (e.kind == "PURCHASE") "レコードを受け取りました。" else "10Pを消費して宣伝しました。"
-          }
+                  player.inventory.addItem(item).values.forEach {
+                    player.world.dropItemNaturally(player.location, it)
+                  }
+                } else {
+                  val name = Bukkit.getOfflinePlayer(e.owner).name ?: "プレイヤー"
+                  val message =
+                      Component.text("[OyasaiMusic] $name がリポスト: ", NamedTextColor.GRAY)
+                          .append(
+                              Component.text(
+                                      "「${data.getProperty("title")}」 [クリックで開く]",
+                                      NamedTextColor.AQUA,
+                                  )
+                                  .clickEvent(
+                                      ClickEvent.runCommand("/mm open ${data.getProperty("song")}")
+                                  )
+                          )
+                  val recipients =
+                      Bukkit.getOnlinePlayers().filter { it.hasPermission("oyasaimusic.notify") }
+                  recipients.forEach { it.sendMessage(message) }
+                  plugin.soundEffectService.play(PluginSoundEffect.ADVERTISE, recipients)
+                }
+              }
+              .thenCompose {
+                async {
+                  journal.transition(e.id, "EFFECTING", "DONE")
+                  if (e.kind == "PURCHASE") "レコードを受け取りました。" else "10Pを消費して宣伝しました。"
+                }
+              }
         }
         .whenComplete { _, _ -> if (guarded.get()) plugin.songRepository.endDeliveryGuard(songId) }
   }
 
-  /** Explicit operator confirmation of an unperformed effect, not an external payment retry. */
-  fun resume(id: String, actor: String, reason: String): CompletableFuture<String> =
-      async {
-            require(reason.isNotBlank() && reason.length <= 500)
-            val e = requireNotNull(journal.get(id))
-            check(e.phase == "MANUAL_PAID" && e.external == "SUCCESS") { "支払成功の確認済み取引ではありません" }
-            plugin.databaseManager.transaction { c ->
-              journal.transition(id, "MANUAL_PAID", "PAID")
-              c.prepareStatement(
-                      "INSERT INTO music_transaction_audit(transaction_id,actor,action,reason,created_at) VALUES(?,?,'resume-unperformed',?,?)"
-                  )
-                  .use { p ->
-                    p.setString(1, id)
-                    p.setString(2, actor)
-                    p.setString(3, reason)
-                    p.setLong(4, System.currentTimeMillis())
-                    p.executeUpdate()
-                  }
+  private fun refund(e: EconomyJournal.Entry, reason: String): CompletableFuture<String> =
+      main { plugin.economyService.transfer(e.owner, e.currency, e.amount, charge = false) }
+          .thenCompose { it }
+          .thenCompose { result ->
+            async {
+              if (result == PayoutResult.Success) {
+                journal.transition(e.id, "REFUNDING", "DONE", note = "Refunded: $reason")
+                plugin.logger.info("Refunded music transaction ${e.id}: $reason")
+                "対象曲が変更されたため、支払額を返金しました。"
+              } else {
+                journal.transition(
+                    e.id,
+                    "REFUNDING",
+                    "REFUND_REVIEW",
+                    note = "Refund $result: $reason",
+                )
+                plugin.logger.warning("Music transaction ${e.id}: refund $result ($reason)")
+                "返金の完了を確認できませんでした。"
+              }
             }
-            e
           }
-          .thenCompose { effects(it).exceptionallyCompose { error -> review(it, error) } }
 }

@@ -41,9 +41,9 @@ internal fun completePayout(
           }
         }
         .orTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-        .exceptionally { PayoutResult.Unknown("経済処理の結果を確認できません。管理者による照合が必要です") }
+        .exceptionally { PayoutResult.Unknown("経済処理の結果を確認できません") }
   } catch (error: Exception) {
-    CompletableFuture.completedFuture(PayoutResult.Unknown("経済APIの応答が不明です。管理者による照合が必要です"))
+    CompletableFuture.completedFuture(PayoutResult.Unknown("経済APIの応答が不明です"))
   }
 }
 

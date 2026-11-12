@@ -174,7 +174,7 @@ class EconomyJournalTest {
   }
 
   @Test
-  fun `purchase sale credit rolls back on failure and is not repeated on resume`() {
+  fun `purchase sale credit rolls back on failure and is not repeated after interruption`() {
     val buyer = UUID.randomUUID()
     val author = UUID.randomUUID()
     var id = ""
@@ -201,17 +201,14 @@ class EconomyJournalTest {
       val journal = EconomyJournal(db)
       journal.initialize()
       assertEquals("REVIEW", journal.get(id)?.phase)
-      val entry = journal.resolve(id, "paid", "test", "Paid, delivery confirmed unperformed")
-      journal.transition(id, "MANUAL_PAID", "PAID")
-      journal.beginDelivery(entry) { error("Sale credit would be duplicated") }
-      journal.transition(id, "EFFECTING", "DONE")
+      val entry = requireNotNull(journal.get(id))
       assertFailsWith<IllegalStateException> { journal.beginDelivery(entry) {} }
       assertEquals(50L, UserRepository(db).get(author).pendingMoney)
     }
   }
 
   @Test
-  fun `interrupted promotion can be marked delivered only once`() {
+  fun `interrupted refund remains unresolved without resubmission`() {
     val owner = UUID.randomUUID()
     var id = ""
     database { db ->
@@ -221,16 +218,15 @@ class EconomyJournalTest {
       id = entry.id
       journal.transition(id, "PREPARED", "SUBMITTED")
       journal.transition(id, "SUBMITTED", "PAID", "SUCCESS")
-      journal.beginDelivery(entry) { error("Promotion must not record a sale") }
+      journal.transition(id, "PAID", "REFUNDING", note = "Song changed")
     }
     database { db ->
       val journal = EconomyJournal(db)
-      journal.initialize()
-      assertEquals("REVIEW", journal.get(id)?.phase)
-      assertEquals("DONE", journal.resolve(id, "delivered", "test", "Notification verified").phase)
-      assertFailsWith<IllegalStateException> {
-        journal.resolve(id, "delivered", "test", "Duplicate resolution")
-      }
+      repeat(2) { journal.initialize() }
+      assertEquals("REFUND_REVIEW", journal.get(id)?.phase)
+      assertEquals("SUCCESS", journal.get(id)?.external)
+      assertEquals(id, journal.unresolved().single().id)
+      assertFailsWith<IllegalStateException> { journal.transition(id, "PAID", "REFUNDING") }
     }
   }
 
@@ -245,7 +241,7 @@ class EconomyJournalTest {
   }
 
   @Test
-  fun `interrupted claim holds reservation and can be released only once`() {
+  fun `interrupted claim holds reservation without automatic release`() {
     val owner = UUID.randomUUID()
     var id = ""
     database { db ->
@@ -268,11 +264,6 @@ class EconomyJournalTest {
         journal.create(owner, "CLAIM", "yen", 30, "yen", reserve = true)
       }
       assertEquals(30L, users.get(owner).pendingMoney)
-      journal.resolve(id, "failed", "test", "Verified external rejection")
-      assertFailsWith<IllegalStateException> {
-        journal.resolve(id, "failed", "test", "Duplicate resolution")
-      }
-      assertEquals(150L, users.get(owner).pendingMoney)
       assertEquals(0L, users.get(owner).totalMoney)
     }
     assertEquals(
@@ -282,7 +273,7 @@ class EconomyJournalTest {
   }
 
   @Test
-  fun `known successful claim cannot be reversed after restart or counted twice`() {
+  fun `known successful claim is not paid or counted again after restart`() {
     val owner = UUID.randomUUID()
     var id = ""
     database { db ->
@@ -296,15 +287,11 @@ class EconomyJournalTest {
     database { db ->
       val journal = EconomyJournal(db)
       journal.initialize()
-      assertFailsWith<IllegalStateException> {
-        journal.resolve(id, "failed", "test", "Contradicts recorded result")
-      }
-      val entry = journal.resolve(id, "paid", "test", "Confirmed payment")
-      journal.transition(id, "MANUAL_PAID", "PAID")
-      journal.completeReward(entry)
+      val entry = requireNotNull(journal.get(id))
+      assertEquals("REVIEW", entry.phase)
+      assertEquals("SUCCESS", entry.external)
       assertFailsWith<IllegalStateException> { journal.completeReward(entry) }
-      assertEquals(70L, UserRepository(db).get(owner).totalMoney)
-      assertEquals("DONE", journal.get(id)?.phase)
+      assertEquals(0L, UserRepository(db).get(owner).totalMoney)
     }
   }
 }
