@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_versions
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/worker_versions
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataCloudflareWorkerVersionsConfig extends cdktf.TerraformMetaA
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_versions#account_id DataCloudflareWorkerVersions#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/worker_versions#account_id DataCloudflareWorkerVersions#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_versions#max_items DataCloudflareWorkerVersions#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/worker_versions#max_items DataCloudflareWorkerVersions#max_items}
   */
   readonly maxItems?: number;
   /**
   * Identifier for the Worker, which can be ID or name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_versions#worker_id DataCloudflareWorkerVersions#worker_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/worker_versions#worker_id DataCloudflareWorkerVersions#worker_id}
   */
   readonly workerId: string;
 }
@@ -137,6 +137,11 @@ export class DataCloudflareWorkerVersionsResultAssetsConfigOutputReference exten
     else {
       this.isEmptyObject = Object.keys(value).length === 0;
     }
+  }
+
+  // base_path - computed: true, optional: false, required: false
+  public get basePath() {
+    return this.getStringAttribute('base_path');
   }
 
   // html_handling - computed: true, optional: false, required: false
@@ -714,6 +719,11 @@ export class DataCloudflareWorkerVersionsResultBindingsOutputReference extends c
   // store_id - computed: true, optional: false, required: false
   public get storeId() {
     return this.getStringAttribute('store_id');
+  }
+
+  // stream - computed: true, optional: false, required: false
+  public get stream() {
+    return this.getStringAttribute('stream');
   }
 
   // text - computed: true, optional: false, required: false
@@ -2028,6 +2038,16 @@ export class DataCloudflareWorkerVersionsResultOutputReference extends cdktf.Com
     return this._assets;
   }
 
+  // author_email - computed: true, optional: false, required: false
+  public get authorEmail() {
+    return this.getStringAttribute('author_email');
+  }
+
+  // author_id - computed: true, optional: false, required: false
+  public get authorId() {
+    return this.getStringAttribute('author_id');
+  }
+
   // bindings - computed: true, optional: false, required: false
   private _bindings = new DataCloudflareWorkerVersionsResultBindingsList(this, "bindings", false);
   public get bindings() {
@@ -2163,7 +2183,7 @@ export class DataCloudflareWorkerVersionsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_versions cloudflare_worker_versions}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/worker_versions cloudflare_worker_versions}
 */
 export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
 
@@ -2179,7 +2199,7 @@ export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorkerVersions resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkerVersions to import
-  * @param importFromId The id of the existing DataCloudflareWorkerVersions that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_versions#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkerVersions that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/worker_versions#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkerVersions to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -2191,7 +2211,7 @@ export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/worker_versions cloudflare_worker_versions} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/worker_versions cloudflare_worker_versions} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -2202,7 +2222,7 @@ export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_worker_versions',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

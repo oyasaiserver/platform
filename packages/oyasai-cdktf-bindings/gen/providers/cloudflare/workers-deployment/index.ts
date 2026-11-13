@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,27 +10,44 @@ export interface WorkersDeploymentConfig extends cdktf.TerraformMetaArguments {
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#account_id WorkersDeployment#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#account_id WorkersDeployment#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#annotations WorkersDeployment#annotations}
+  * Metadata attached to the deployment.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#annotations WorkersDeployment#annotations}
   */
   readonly annotations?: WorkersDeploymentAnnotations;
   /**
-  * Name of the script, used in URLs and route configuration.
+  * Choose whether to apply Durable Object code updates immediately or defer them. When omitted, the default strategy applies.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#script_name WorkersDeployment#script_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#code_update_strategy WorkersDeployment#code_update_strategy}
+  */
+  readonly codeUpdateStrategy?: WorkersDeploymentCodeUpdateStrategy;
+  /**
+  * If set to true, the deployment will be created even if normally blocked by something such rolling back to an older version when a secret has changed.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#force WorkersDeployment#force}
+  */
+  readonly force?: boolean | cdktf.IResolvable;
+  /**
+  * Name of the script.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#script_name WorkersDeployment#script_name}
   */
   readonly scriptName: string;
   /**
+  * Strategy for routing traffic across the listed versions. `percentage` splits traffic according to each version's `percentage`.
   * Available values: "percentage".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#strategy WorkersDeployment#strategy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#strategy WorkersDeployment#strategy}
   */
   readonly strategy: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#versions WorkersDeployment#versions}
+  * Worker versions included in this deployment. Each object must contain a `version_id` UUID and a `percentage`; percentages across all objects must total 100. In the `cf` CLI, pass the entire array as one JSON value to `--versions`, either inline, for example `--versions '[{"version_id":"023e105f-2a42-4f8b-a1c1-73f6a2a30c0f","percentage":100}]'`, or from a JSON file with `--versions @versions.json`.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#versions WorkersDeployment#versions}
   */
   readonly versions: WorkersDeploymentVersions[] | cdktf.IResolvable;
 }
@@ -38,7 +55,7 @@ export interface WorkersDeploymentAnnotations {
   /**
   * Human-readable message about the deployment. Truncated to 1000 bytes if longer.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#workers_message WorkersDeployment#workers_message}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#workers_message WorkersDeployment#workers_message}
   */
   readonly workersMessage?: string;
 }
@@ -135,13 +152,148 @@ export class WorkersDeploymentAnnotationsOutputReference extends cdktf.ComplexOb
     return this.getStringAttribute('workers_triggered_by');
   }
 }
+export interface WorkersDeploymentCodeUpdateStrategy {
+  /**
+  * For `mode: deferred`: Set the maximum number of seconds to wait before forcing the update. When omitted, the default maximum delay applies.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#max_delay WorkersDeployment#max_delay}
+  */
+  readonly maxDelay?: number;
+  /**
+  * For `mode: immediate`: Apply Durable Object code updates immediately.
+  * 
+  * For `mode: deferred`: Allow active Durable Objects to hibernate before updating their code.
+  * Available values: "immediate", "deferred".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#mode WorkersDeployment#mode}
+  */
+  readonly mode: string;
+}
+
+export function workersDeploymentCodeUpdateStrategyToTerraform(struct?: WorkersDeploymentCodeUpdateStrategy | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    max_delay: cdktf.numberToTerraform(struct!.maxDelay),
+    mode: cdktf.stringToTerraform(struct!.mode),
+  }
+}
+
+
+export function workersDeploymentCodeUpdateStrategyToHclTerraform(struct?: WorkersDeploymentCodeUpdateStrategy | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    max_delay: {
+      value: cdktf.numberToHclTerraform(struct!.maxDelay),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "number",
+    },
+    mode: {
+      value: cdktf.stringToHclTerraform(struct!.mode),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class WorkersDeploymentCodeUpdateStrategyOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): WorkersDeploymentCodeUpdateStrategy | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._maxDelay !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.maxDelay = this._maxDelay;
+    }
+    if (this._mode !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.mode = this._mode;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: WorkersDeploymentCodeUpdateStrategy | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._maxDelay = undefined;
+      this._mode = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._maxDelay = value.maxDelay;
+      this._mode = value.mode;
+    }
+  }
+
+  // max_delay - computed: false, optional: true, required: false
+  private _maxDelay?: number; 
+  public get maxDelay() {
+    return this.getNumberAttribute('max_delay');
+  }
+  public set maxDelay(value: number) {
+    this._maxDelay = value;
+  }
+  public resetMaxDelay() {
+    this._maxDelay = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get maxDelayInput() {
+    return this._maxDelay;
+  }
+
+  // mode - computed: false, optional: false, required: true
+  private _mode?: string; 
+  public get mode() {
+    return this.getStringAttribute('mode');
+  }
+  public set mode(value: string) {
+    this._mode = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get modeInput() {
+    return this._mode;
+  }
+}
 export interface WorkersDeploymentVersions {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#percentage WorkersDeployment#percentage}
+  * Percentage of traffic served by this version.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#percentage WorkersDeployment#percentage}
   */
   readonly percentage: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#version_id WorkersDeployment#version_id}
+  * Identifier of the Worker Version.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#version_id WorkersDeployment#version_id}
   */
   readonly versionId: string;
 }
@@ -280,7 +432,7 @@ export class WorkersDeploymentVersionsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment cloudflare_workers_deployment}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment cloudflare_workers_deployment}
 */
 export class WorkersDeployment extends cdktf.TerraformResource {
 
@@ -296,7 +448,7 @@ export class WorkersDeployment extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a WorkersDeployment resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the WorkersDeployment to import
-  * @param importFromId The id of the existing WorkersDeployment that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing WorkersDeployment that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the WorkersDeployment to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -308,7 +460,7 @@ export class WorkersDeployment extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_deployment cloudflare_workers_deployment} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_deployment cloudflare_workers_deployment} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -319,7 +471,7 @@ export class WorkersDeployment extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_workers_deployment',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -331,6 +483,8 @@ export class WorkersDeployment extends cdktf.TerraformResource {
     });
     this._accountId = config.accountId;
     this._annotations.internalValue = config.annotations;
+    this._codeUpdateStrategy.internalValue = config.codeUpdateStrategy;
+    this._force = config.force;
     this._scriptName = config.scriptName;
     this._strategy = config.strategy;
     this._versions.internalValue = config.versions;
@@ -374,9 +528,41 @@ export class WorkersDeployment extends cdktf.TerraformResource {
     return this.getStringAttribute('author_email');
   }
 
+  // code_update_strategy - computed: false, optional: true, required: false
+  private _codeUpdateStrategy = new WorkersDeploymentCodeUpdateStrategyOutputReference(this, "code_update_strategy");
+  public get codeUpdateStrategy() {
+    return this._codeUpdateStrategy;
+  }
+  public putCodeUpdateStrategy(value: WorkersDeploymentCodeUpdateStrategy) {
+    this._codeUpdateStrategy.internalValue = value;
+  }
+  public resetCodeUpdateStrategy() {
+    this._codeUpdateStrategy.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get codeUpdateStrategyInput() {
+    return this._codeUpdateStrategy.internalValue;
+  }
+
   // created_on - computed: true, optional: false, required: false
   public get createdOn() {
     return this.getStringAttribute('created_on');
+  }
+
+  // force - computed: false, optional: true, required: false
+  private _force?: boolean | cdktf.IResolvable; 
+  public get force() {
+    return this.getBooleanAttribute('force');
+  }
+  public set force(value: boolean | cdktf.IResolvable) {
+    this._force = value;
+  }
+  public resetForce() {
+    this._force = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get forceInput() {
+    return this._force;
   }
 
   // id - computed: true, optional: false, required: false
@@ -436,6 +622,8 @@ export class WorkersDeployment extends cdktf.TerraformResource {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
       annotations: workersDeploymentAnnotationsToTerraform(this._annotations.internalValue),
+      code_update_strategy: workersDeploymentCodeUpdateStrategyToTerraform(this._codeUpdateStrategy.internalValue),
+      force: cdktf.booleanToTerraform(this._force),
       script_name: cdktf.stringToTerraform(this._scriptName),
       strategy: cdktf.stringToTerraform(this._strategy),
       versions: cdktf.listMapper(workersDeploymentVersionsToTerraform, false)(this._versions.internalValue),
@@ -455,6 +643,18 @@ export class WorkersDeployment extends cdktf.TerraformResource {
         isBlock: true,
         type: "struct",
         storageClassType: "WorkersDeploymentAnnotations",
+      },
+      code_update_strategy: {
+        value: workersDeploymentCodeUpdateStrategyToHclTerraform(this._codeUpdateStrategy.internalValue),
+        isBlock: true,
+        type: "struct",
+        storageClassType: "WorkersDeploymentCodeUpdateStrategy",
+      },
+      force: {
+        value: cdktf.booleanToHclTerraform(this._force),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       script_name: {
         value: cdktf.stringToHclTerraform(this._scriptName),

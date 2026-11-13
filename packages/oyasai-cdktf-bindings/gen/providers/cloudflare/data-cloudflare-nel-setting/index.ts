@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/nel_setting
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/nel_setting
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface DataCloudflareNelSettingConfig extends cdktf.TerraformMetaArgum
   /**
   * Identifier of the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/nel_setting#zone_id DataCloudflareNelSetting#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/nel_setting#zone_id DataCloudflareNelSetting#zone_id}
   */
   readonly zoneId: string;
 }
@@ -70,7 +70,7 @@ export class DataCloudflareNelSettingValueOutputReference extends cdktf.ComplexO
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/nel_setting cloudflare_nel_setting}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/nel_setting cloudflare_nel_setting}
 */
 export class DataCloudflareNelSetting extends cdktf.TerraformDataSource {
 
@@ -86,7 +86,7 @@ export class DataCloudflareNelSetting extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareNelSetting resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareNelSetting to import
-  * @param importFromId The id of the existing DataCloudflareNelSetting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/nel_setting#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareNelSetting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/nel_setting#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareNelSetting to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -98,7 +98,7 @@ export class DataCloudflareNelSetting extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/nel_setting cloudflare_nel_setting} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/nel_setting cloudflare_nel_setting} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -109,7 +109,7 @@ export class DataCloudflareNelSetting extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_nel_setting',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

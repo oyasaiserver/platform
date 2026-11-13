@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,37 @@ export interface RateLimitConfig extends cdktf.TerraformMetaArguments {
   /**
   * The action to perform when the threshold of matched traffic within the configured period is exceeded.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#action RateLimit#action}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#action RateLimit#action}
   */
   readonly action: RateLimitAction;
   /**
   * Determines which traffic the rate limit counts towards the threshold.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#match RateLimit#match}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#match RateLimit#match}
   */
   readonly match: RateLimitMatch;
   /**
   * The time in seconds (an integer value) to count matching traffic. If the count exceeds the configured threshold within this period, Cloudflare will perform the configured action.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#period RateLimit#period}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#period RateLimit#period}
   */
   readonly period: number;
   /**
+  * Defines the unique identifier of the rate limit.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#rate_limit_id RateLimit#rate_limit_id}
+  */
+  readonly rateLimitId?: string;
+  /**
   * The threshold that will trigger the configured mitigation action. Configure this value along with the `period` property to establish a threshold per period.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#threshold RateLimit#threshold}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#threshold RateLimit#threshold}
   */
   readonly threshold: number;
   /**
   * Defines an identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#zone_id RateLimit#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#zone_id RateLimit#zone_id}
   */
   readonly zoneId: string;
 }
@@ -42,13 +48,13 @@ export interface RateLimitActionResponse {
   /**
   * The response body to return. The value must conform to the configured content type.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#body RateLimit#body}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#body RateLimit#body}
   */
   readonly body?: string;
   /**
   * The content type of the body. Must be one of the following: `text/plain`, `text/xml`, or `application/json`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#content_type RateLimit#content_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#content_type RateLimit#content_type}
   */
   readonly contentType?: string;
 }
@@ -174,21 +180,21 @@ export interface RateLimitAction {
   * The action to perform.
   * Available values: "simulate", "ban", "challenge", "js_challenge", "managed_challenge".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#mode RateLimit#mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#mode RateLimit#mode}
   */
   readonly mode?: string;
   /**
   * A custom content type and reponse to return when the threshold is exceeded. The custom response configured in this object will override the custom error for the zone. This object is optional.
   * Notes: If you omit this object, Cloudflare will use the default HTML error page. If "mode" is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the zone challenge pages and you should not provide the "response" object.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#response RateLimit#response}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#response RateLimit#response}
   */
   readonly response?: RateLimitActionResponse;
   /**
   * The time in seconds during which Cloudflare will perform the mitigation action. Must be an integer value greater than or equal to the period.
   * Notes: If "mode" is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the zone's Challenge Passage time and you should not provide this value.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#timeout RateLimit#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#timeout RateLimit#timeout}
   */
   readonly timeout?: number;
 }
@@ -338,104 +344,24 @@ export class RateLimitActionOutputReference extends cdktf.ComplexObject {
     return this._timeout;
   }
 }
-export interface RateLimitBypass {
-}
-
-export function rateLimitBypassToTerraform(struct?: RateLimitBypass): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  return {
-  }
-}
-
-
-export function rateLimitBypassToHclTerraform(struct?: RateLimitBypass): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  const attrs = {
-  };
-  return attrs;
-}
-
-export class RateLimitBypassOutputReference extends cdktf.ComplexObject {
-  private isEmptyObject = false;
-
-  /**
-  * @param terraformResource The parent resource
-  * @param terraformAttribute The attribute on the parent resource this class is referencing
-  * @param complexObjectIndex the index of this item in the list
-  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
-  */
-  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
-    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
-  }
-
-  public get internalValue(): RateLimitBypass | undefined {
-    let hasAnyValues = this.isEmptyObject;
-    const internalValueResult: any = {};
-    return hasAnyValues ? internalValueResult : undefined;
-  }
-
-  public set internalValue(value: RateLimitBypass | undefined) {
-    if (value === undefined) {
-      this.isEmptyObject = false;
-    }
-    else {
-      this.isEmptyObject = Object.keys(value).length === 0;
-    }
-  }
-
-  // name - computed: true, optional: false, required: false
-  public get name() {
-    return this.getStringAttribute('name');
-  }
-
-  // value - computed: true, optional: false, required: false
-  public get value() {
-    return this.getStringAttribute('value');
-  }
-}
-
-export class RateLimitBypassList extends cdktf.ComplexList {
-
-  /**
-  * @param terraformResource The parent resource
-  * @param terraformAttribute The attribute on the parent resource this class is referencing
-  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
-  */
-  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
-    super(terraformResource, terraformAttribute, wrapsSet)
-  }
-
-  /**
-  * @param index the index of the item to return
-  */
-  public get(index: number): RateLimitBypassOutputReference {
-    return new RateLimitBypassOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-  }
-}
 export interface RateLimitMatchHeaders {
   /**
   * The name of the response header to match.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#name RateLimit#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#name RateLimit#name}
   */
   readonly name?: string;
   /**
   * The operator used when matching: `eq` means "equal" and `ne` means "not equal".
   * Available values: "eq", "ne".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#op RateLimit#op}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#op RateLimit#op}
   */
   readonly op?: string;
   /**
   * The value of the response header, which must match exactly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#value RateLimit#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#value RateLimit#value}
   */
   readonly value?: string;
 }
@@ -611,19 +537,19 @@ export interface RateLimitMatchRequest {
   /**
   * The HTTP methods to match. You can specify a subset (for example, `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when creating a rate limit.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#methods RateLimit#methods}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#methods RateLimit#methods}
   */
   readonly methods?: string[];
   /**
   * The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is optional.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#schemes RateLimit#schemes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#schemes RateLimit#schemes}
   */
   readonly schemes?: string[];
   /**
   * The URL pattern to match, composed of a host and a path such as `example.org/path*`. Normalization is applied before the pattern is matched. `*` wildcards are expanded to match applicable traffic. Query strings are not matched. Set the value to `*` to match all traffic to your zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#url RateLimit#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#url RateLimit#url}
   */
   readonly url?: string;
 }
@@ -778,7 +704,7 @@ export interface RateLimitMatchResponse {
   * When true, only the uncached traffic served from your origin servers will count towards rate limiting. In this case, any cached traffic served by Cloudflare will not count towards rate limiting. This field is optional.
   * Notes: This field is deprecated. Instead, use response headers and set "origin_traffic" to "false" to avoid legacy behaviour interacting with the "response_headers" property.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#origin_traffic RateLimit#origin_traffic}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#origin_traffic RateLimit#origin_traffic}
   */
   readonly originTraffic?: boolean | cdktf.IResolvable;
 }
@@ -872,15 +798,15 @@ export class RateLimitMatchResponseOutputReference extends cdktf.ComplexObject {
 }
 export interface RateLimitMatch {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#headers RateLimit#headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#headers RateLimit#headers}
   */
   readonly headers?: RateLimitMatchHeaders[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#request RateLimit#request}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#request RateLimit#request}
   */
   readonly request?: RateLimitMatchRequest;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#response RateLimit#response}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#response RateLimit#response}
   */
   readonly response?: RateLimitMatchResponse;
 }
@@ -1032,7 +958,7 @@ export class RateLimitMatchOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit cloudflare_rate_limit}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit cloudflare_rate_limit}
 */
 export class RateLimit extends cdktf.TerraformResource {
 
@@ -1048,7 +974,7 @@ export class RateLimit extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a RateLimit resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the RateLimit to import
-  * @param importFromId The id of the existing RateLimit that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing RateLimit that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the RateLimit to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1060,7 +986,7 @@ export class RateLimit extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/rate_limit cloudflare_rate_limit} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/rate_limit cloudflare_rate_limit} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1071,7 +997,7 @@ export class RateLimit extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_rate_limit',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1084,6 +1010,7 @@ export class RateLimit extends cdktf.TerraformResource {
     this._action.internalValue = config.action;
     this._match.internalValue = config.match;
     this._period = config.period;
+    this._rateLimitId = config.rateLimitId;
     this._threshold = config.threshold;
     this._zoneId = config.zoneId;
   }
@@ -1103,27 +1030,6 @@ export class RateLimit extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get actionInput() {
     return this._action.internalValue;
-  }
-
-  // bypass - computed: true, optional: false, required: false
-  private _bypass = new RateLimitBypassList(this, "bypass", false);
-  public get bypass() {
-    return this._bypass;
-  }
-
-  // description - computed: true, optional: false, required: false
-  public get description() {
-    return this.getStringAttribute('description');
-  }
-
-  // disabled - computed: true, optional: false, required: false
-  public get disabled() {
-    return this.getBooleanAttribute('disabled');
-  }
-
-  // id - computed: true, optional: false, required: false
-  public get id() {
-    return this.getStringAttribute('id');
   }
 
   // match - computed: false, optional: false, required: true
@@ -1150,6 +1056,22 @@ export class RateLimit extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get periodInput() {
     return this._period;
+  }
+
+  // rate_limit_id - computed: false, optional: true, required: false
+  private _rateLimitId?: string; 
+  public get rateLimitId() {
+    return this.getStringAttribute('rate_limit_id');
+  }
+  public set rateLimitId(value: string) {
+    this._rateLimitId = value;
+  }
+  public resetRateLimitId() {
+    this._rateLimitId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get rateLimitIdInput() {
+    return this._rateLimitId;
   }
 
   // threshold - computed: false, optional: false, required: true
@@ -1187,6 +1109,7 @@ export class RateLimit extends cdktf.TerraformResource {
       action: rateLimitActionToTerraform(this._action.internalValue),
       match: rateLimitMatchToTerraform(this._match.internalValue),
       period: cdktf.numberToTerraform(this._period),
+      rate_limit_id: cdktf.stringToTerraform(this._rateLimitId),
       threshold: cdktf.numberToTerraform(this._threshold),
       zone_id: cdktf.stringToTerraform(this._zoneId),
     };
@@ -1211,6 +1134,12 @@ export class RateLimit extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "number",
+      },
+      rate_limit_id: {
+        value: cdktf.stringToHclTerraform(this._rateLimitId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
       threshold: {
         value: cdktf.numberToHclTerraform(this._threshold),

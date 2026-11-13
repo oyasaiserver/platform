@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,21 +10,29 @@ export interface EmailSecurityBlockSenderConfig extends cdktf.TerraformMetaArgum
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender#account_id EmailSecurityBlockSender#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender#account_id EmailSecurityBlockSender#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender#comments EmailSecurityBlockSender#comments}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender#comments EmailSecurityBlockSender#comments}
   */
   readonly comments?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender#is_regex EmailSecurityBlockSender#is_regex}
+  * Timestamp at which the pattern expires. After this time, Email Security ignores the pattern. The value must lie in the future. Send `null` to clear the expiration.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender#expires_at EmailSecurityBlockSender#expires_at}
+  */
+  readonly expiresAt?: string;
+  /**
+  * Whether `pattern` is a regular expression instead of a literal value.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender#is_regex EmailSecurityBlockSender#is_regex}
   */
   readonly isRegex: boolean | cdktf.IResolvable;
   /**
   * The pattern value to match. The format depends on `pattern_type`: a valid email address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g. `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the API rejects private or unique-local, loopback, link-local, unspecified, and IPv4 broadcast addresses, including their IPv4-mapped IPv6 equivalents.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender#pattern EmailSecurityBlockSender#pattern}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender#pattern EmailSecurityBlockSender#pattern}
   */
   readonly pattern: string;
   /**
@@ -35,13 +43,13 @@ export interface EmailSecurityBlockSenderConfig extends cdktf.TerraformMetaArgum
   * - UNKNOWN: deprecated; you cannot use this when creating or updating policies, but it may appear on existing entries.
   * Available values: "EMAIL", "DOMAIN", "IP", "UNKNOWN".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender#pattern_type EmailSecurityBlockSender#pattern_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender#pattern_type EmailSecurityBlockSender#pattern_type}
   */
   readonly patternType: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender cloudflare_email_security_block_sender}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender cloudflare_email_security_block_sender}
 */
 export class EmailSecurityBlockSender extends cdktf.TerraformResource {
 
@@ -57,7 +65,7 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a EmailSecurityBlockSender resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the EmailSecurityBlockSender to import
-  * @param importFromId The id of the existing EmailSecurityBlockSender that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing EmailSecurityBlockSender that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the EmailSecurityBlockSender to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -69,7 +77,7 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_block_sender cloudflare_email_security_block_sender} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_block_sender cloudflare_email_security_block_sender} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -80,7 +88,7 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_email_security_block_sender',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -92,6 +100,7 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
     });
     this._accountId = config.accountId;
     this._comments = config.comments;
+    this._expiresAt = config.expiresAt;
     this._isRegex = config.isRegex;
     this._pattern = config.pattern;
     this._patternType = config.patternType;
@@ -133,6 +142,22 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
   // created_at - computed: true, optional: false, required: false
   public get createdAt() {
     return this.getStringAttribute('created_at');
+  }
+
+  // expires_at - computed: false, optional: true, required: false
+  private _expiresAt?: string; 
+  public get expiresAt() {
+    return this.getStringAttribute('expires_at');
+  }
+  public set expiresAt(value: string) {
+    this._expiresAt = value;
+  }
+  public resetExpiresAt() {
+    this._expiresAt = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get expiresAtInput() {
+    return this._expiresAt;
   }
 
   // id - computed: true, optional: false, required: false
@@ -197,6 +222,7 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
       comments: cdktf.stringToTerraform(this._comments),
+      expires_at: cdktf.stringToTerraform(this._expiresAt),
       is_regex: cdktf.booleanToTerraform(this._isRegex),
       pattern: cdktf.stringToTerraform(this._pattern),
       pattern_type: cdktf.stringToTerraform(this._patternType),
@@ -213,6 +239,12 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
       },
       comments: {
         value: cdktf.stringToHclTerraform(this._comments),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      expires_at: {
+        value: cdktf.stringToHclTerraform(this._expiresAt),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

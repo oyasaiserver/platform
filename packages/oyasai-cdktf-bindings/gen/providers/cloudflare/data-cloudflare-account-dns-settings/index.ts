@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_dns_settings
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_dns_settings
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface DataCloudflareAccountDnsSettingsConfig extends cdktf.TerraformM
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_dns_settings#account_id DataCloudflareAccountDnsSettings#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_dns_settings#account_id DataCloudflareAccountDnsSettings#account_id}
   */
   readonly accountId?: string;
 }
@@ -260,11 +260,6 @@ export class DataCloudflareAccountDnsSettingsZoneDefaultsOutputReference extends
     return this.getBooleanAttribute('flatten_all_cnames');
   }
 
-  // foundation_dns - computed: true, optional: false, required: false
-  public get foundationDns() {
-    return this.getBooleanAttribute('foundation_dns');
-  }
-
   // internal_dns - computed: true, optional: false, required: false
   private _internalDns = new DataCloudflareAccountDnsSettingsZoneDefaultsInternalDnsOutputReference(this, "internal_dns");
   public get internalDns() {
@@ -305,7 +300,7 @@ export class DataCloudflareAccountDnsSettingsZoneDefaultsOutputReference extends
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_dns_settings cloudflare_account_dns_settings}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_dns_settings cloudflare_account_dns_settings}
 */
 export class DataCloudflareAccountDnsSettings extends cdktf.TerraformDataSource {
 
@@ -321,7 +316,7 @@ export class DataCloudflareAccountDnsSettings extends cdktf.TerraformDataSource 
   * Generates CDKTF code for importing a DataCloudflareAccountDnsSettings resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareAccountDnsSettings to import
-  * @param importFromId The id of the existing DataCloudflareAccountDnsSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_dns_settings#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareAccountDnsSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_dns_settings#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareAccountDnsSettings to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -333,7 +328,7 @@ export class DataCloudflareAccountDnsSettings extends cdktf.TerraformDataSource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_dns_settings cloudflare_account_dns_settings} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_dns_settings cloudflare_account_dns_settings} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -344,7 +339,7 @@ export class DataCloudflareAccountDnsSettings extends cdktf.TerraformDataSource 
       terraformResourceType: 'cloudflare_account_dns_settings',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

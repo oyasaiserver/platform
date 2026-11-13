@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,55 @@ export interface WorkersCustomDomainConfig extends cdktf.TerraformMetaArguments 
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain#account_id WorkersCustomDomain#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#account_id WorkersCustomDomain#account_id}
   */
   readonly accountId: string;
   /**
+  * Whether the configured hostname is routable for the domain. If disabled, then requests to the configured hostname will not be routed to the configured Worker. If disabled, then preview routing must be enabled, and only subdomains of the configured hostname will be routable.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#enabled WorkersCustomDomain#enabled}
+  */
+  readonly enabled?: boolean | cdktf.IResolvable;
+  /**
   * Worker environment associated with the domain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain#environment WorkersCustomDomain#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#environment WorkersCustomDomain#environment}
   */
   readonly environment?: string;
   /**
   * Hostname of the domain. Can be either the zone apex or a subdomain of the zone. Requests to this hostname will be routed to the configured Worker.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain#hostname WorkersCustomDomain#hostname}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#hostname WorkersCustomDomain#hostname}
   */
   readonly hostname: string;
   /**
+  * Whether previews are routable for the domain. If enabled, previews will be routable as subdomains of the configured hostname. For example, if the configured hostname is `app.example.com`, then requests to `my-feature.app.example.com` will be routed to the preview with slug `my-feature`, if such a preview exists. If preview routing is disabled, then hostname routing must be enabled.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#previews_enabled WorkersCustomDomain#previews_enabled}
+  */
+  readonly previewsEnabled?: boolean | cdktf.IResolvable;
+  /**
   * Name of the Worker associated with the domain. Requests to the configured hostname will be routed to this Worker.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain#service WorkersCustomDomain#service}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#service WorkersCustomDomain#service}
   */
   readonly service: string;
   /**
   * ID of the zone containing the domain hostname.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain#zone_id WorkersCustomDomain#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#zone_id WorkersCustomDomain#zone_id}
   */
   readonly zoneId?: string;
   /**
   * Name of the zone containing the domain hostname.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain#zone_name WorkersCustomDomain#zone_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#zone_name WorkersCustomDomain#zone_name}
   */
   readonly zoneName?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain cloudflare_workers_custom_domain}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain cloudflare_workers_custom_domain}
 */
 export class WorkersCustomDomain extends cdktf.TerraformResource {
 
@@ -62,7 +74,7 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a WorkersCustomDomain resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the WorkersCustomDomain to import
-  * @param importFromId The id of the existing WorkersCustomDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing WorkersCustomDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the WorkersCustomDomain to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +86,7 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/workers_custom_domain cloudflare_workers_custom_domain} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/workers_custom_domain cloudflare_workers_custom_domain} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +97,7 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_workers_custom_domain',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -96,8 +108,10 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
       forEach: config.forEach
     });
     this._accountId = config.accountId;
+    this._enabled = config.enabled;
     this._environment = config.environment;
     this._hostname = config.hostname;
+    this._previewsEnabled = config.previewsEnabled;
     this._service = config.service;
     this._zoneId = config.zoneId;
     this._zoneName = config.zoneName;
@@ -123,6 +137,22 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
   // cert_id - computed: true, optional: false, required: false
   public get certId() {
     return this.getStringAttribute('cert_id');
+  }
+
+  // enabled - computed: true, optional: true, required: false
+  private _enabled?: boolean | cdktf.IResolvable; 
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+  public set enabled(value: boolean | cdktf.IResolvable) {
+    this._enabled = value;
+  }
+  public resetEnabled() {
+    this._enabled = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get enabledInput() {
+    return this._enabled;
   }
 
   // environment - computed: true, optional: true, required: false
@@ -157,6 +187,22 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // previews_enabled - computed: true, optional: true, required: false
+  private _previewsEnabled?: boolean | cdktf.IResolvable; 
+  public get previewsEnabled() {
+    return this.getBooleanAttribute('previews_enabled');
+  }
+  public set previewsEnabled(value: boolean | cdktf.IResolvable) {
+    this._previewsEnabled = value;
+  }
+  public resetPreviewsEnabled() {
+    this._previewsEnabled = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get previewsEnabledInput() {
+    return this._previewsEnabled;
   }
 
   // service - computed: false, optional: false, required: true
@@ -211,8 +257,10 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
+      enabled: cdktf.booleanToTerraform(this._enabled),
       environment: cdktf.stringToTerraform(this._environment),
       hostname: cdktf.stringToTerraform(this._hostname),
+      previews_enabled: cdktf.booleanToTerraform(this._previewsEnabled),
       service: cdktf.stringToTerraform(this._service),
       zone_id: cdktf.stringToTerraform(this._zoneId),
       zone_name: cdktf.stringToTerraform(this._zoneName),
@@ -227,6 +275,12 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
         type: "simple",
         storageClassType: "string",
       },
+      enabled: {
+        value: cdktf.booleanToHclTerraform(this._enabled),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
+      },
       environment: {
         value: cdktf.stringToHclTerraform(this._environment),
         isBlock: false,
@@ -238,6 +292,12 @@ export class WorkersCustomDomain extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      previews_enabled: {
+        value: cdktf.booleanToHclTerraform(this._previewsEnabled),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       service: {
         value: cdktf.stringToHclTerraform(this._service),

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_streams
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,39 @@ export interface DataCloudflarePipelineStreamsConfig extends cdktf.TerraformMeta
   /**
   * Specifies the public ID of the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_streams#account_id DataCloudflarePipelineStreams#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams#account_id DataCloudflarePipelineStreams#account_id}
   */
   readonly accountId?: string;
   /**
+  * Sort direction.
+  * Available values: "asc", "desc".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams#direction DataCloudflarePipelineStreams#direction}
+  */
+  readonly direction?: string;
+  /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_streams#max_items DataCloudflarePipelineStreams#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams#max_items DataCloudflarePipelineStreams#max_items}
   */
   readonly maxItems?: number;
   /**
   * Filters streams by name (case-insensitive substring).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_streams#name DataCloudflarePipelineStreams#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams#name DataCloudflarePipelineStreams#name}
   */
   readonly name?: string;
   /**
+  * Sorts streams by this field. Defaults to `created_at`.
+  * Available values: "name", "created_at".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams#order_by DataCloudflarePipelineStreams#order_by}
+  */
+  readonly orderBy?: string;
+  /**
   * Specifies the public ID of the pipeline.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_streams#pipeline_id DataCloudflarePipelineStreams#pipeline_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams#pipeline_id DataCloudflarePipelineStreams#pipeline_id}
   */
   readonly pipelineId?: string;
 }
@@ -570,7 +584,7 @@ export class DataCloudflarePipelineStreamsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_streams cloudflare_pipeline_streams}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams cloudflare_pipeline_streams}
 */
 export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
 
@@ -586,7 +600,7 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflarePipelineStreams resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflarePipelineStreams to import
-  * @param importFromId The id of the existing DataCloudflarePipelineStreams that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_streams#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflarePipelineStreams that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflarePipelineStreams to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -598,7 +612,7 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/pipeline_streams cloudflare_pipeline_streams} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/pipeline_streams cloudflare_pipeline_streams} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -609,7 +623,7 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_pipeline_streams',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -620,8 +634,10 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
       forEach: config.forEach
     });
     this._accountId = config.accountId;
+    this._direction = config.direction;
     this._maxItems = config.maxItems;
     this._name = config.name;
+    this._orderBy = config.orderBy;
     this._pipelineId = config.pipelineId;
   }
 
@@ -643,6 +659,22 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {
     return this._accountId;
+  }
+
+  // direction - computed: true, optional: true, required: false
+  private _direction?: string; 
+  public get direction() {
+    return this.getStringAttribute('direction');
+  }
+  public set direction(value: string) {
+    this._direction = value;
+  }
+  public resetDirection() {
+    this._direction = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get directionInput() {
+    return this._direction;
   }
 
   // max_items - computed: false, optional: true, required: false
@@ -677,6 +709,22 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
     return this._name;
   }
 
+  // order_by - computed: false, optional: true, required: false
+  private _orderBy?: string; 
+  public get orderBy() {
+    return this.getStringAttribute('order_by');
+  }
+  public set orderBy(value: string) {
+    this._orderBy = value;
+  }
+  public resetOrderBy() {
+    this._orderBy = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orderByInput() {
+    return this._orderBy;
+  }
+
   // pipeline_id - computed: false, optional: true, required: false
   private _pipelineId?: string; 
   public get pipelineId() {
@@ -706,8 +754,10 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
+      direction: cdktf.stringToTerraform(this._direction),
       max_items: cdktf.numberToTerraform(this._maxItems),
       name: cdktf.stringToTerraform(this._name),
+      order_by: cdktf.stringToTerraform(this._orderBy),
       pipeline_id: cdktf.stringToTerraform(this._pipelineId),
     };
   }
@@ -720,6 +770,12 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
         type: "simple",
         storageClassType: "string",
       },
+      direction: {
+        value: cdktf.stringToHclTerraform(this._direction),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
       max_items: {
         value: cdktf.numberToHclTerraform(this._maxItems),
         isBlock: false,
@@ -728,6 +784,12 @@ export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      order_by: {
+        value: cdktf.stringToHclTerraform(this._orderBy),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

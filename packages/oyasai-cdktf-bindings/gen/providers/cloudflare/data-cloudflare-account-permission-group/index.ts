@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_permission_group
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_permission_group
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareAccountPermissionGroupConfig extends cdktf.Terraf
   /**
   * Account identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_permission_group#account_id DataCloudflareAccountPermissionGroup#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_permission_group#account_id DataCloudflareAccountPermissionGroup#account_id}
   */
   readonly accountId: string;
   /**
   * Permission Group identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_permission_group#permission_group_id DataCloudflareAccountPermissionGroup#permission_group_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_permission_group#permission_group_id DataCloudflareAccountPermissionGroup#permission_group_id}
   */
   readonly permissionGroupId: string;
 }
@@ -69,19 +69,49 @@ export class DataCloudflareAccountPermissionGroupMetaOutputReference extends cdk
     }
   }
 
-  // key - computed: true, optional: false, required: false
-  public get key() {
-    return this.getStringAttribute('key');
+  // category - computed: true, optional: false, required: false
+  public get category() {
+    return this.getStringAttribute('category');
   }
 
-  // value - computed: true, optional: false, required: false
-  public get value() {
-    return this.getStringAttribute('value');
+  // deprecated - computed: true, optional: false, required: false
+  public get deprecated() {
+    return this.getStringAttribute('deprecated');
+  }
+
+  // description - computed: true, optional: false, required: false
+  public get description() {
+    return this.getStringAttribute('description');
+  }
+
+  // editable - computed: true, optional: false, required: false
+  public get editable() {
+    return this.getStringAttribute('editable');
+  }
+
+  // eol_at - computed: true, optional: false, required: false
+  public get eolAt() {
+    return this.getStringAttribute('eol_at');
+  }
+
+  // label - computed: true, optional: false, required: false
+  public get label() {
+    return this.getStringAttribute('label');
+  }
+
+  // scopes - computed: true, optional: false, required: false
+  public get scopes() {
+    return this.getStringAttribute('scopes');
+  }
+
+  // visibility - computed: true, optional: false, required: false
+  public get visibility() {
+    return this.getStringAttribute('visibility');
   }
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_permission_group cloudflare_account_permission_group}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_permission_group cloudflare_account_permission_group}
 */
 export class DataCloudflareAccountPermissionGroup extends cdktf.TerraformDataSource {
 
@@ -97,7 +127,7 @@ export class DataCloudflareAccountPermissionGroup extends cdktf.TerraformDataSou
   * Generates CDKTF code for importing a DataCloudflareAccountPermissionGroup resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareAccountPermissionGroup to import
-  * @param importFromId The id of the existing DataCloudflareAccountPermissionGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_permission_group#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareAccountPermissionGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_permission_group#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareAccountPermissionGroup to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -109,7 +139,7 @@ export class DataCloudflareAccountPermissionGroup extends cdktf.TerraformDataSou
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_permission_group cloudflare_account_permission_group} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_permission_group cloudflare_account_permission_group} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -120,7 +150,7 @@ export class DataCloudflareAccountPermissionGroup extends cdktf.TerraformDataSou
       terraformResourceType: 'cloudflare_account_permission_group',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

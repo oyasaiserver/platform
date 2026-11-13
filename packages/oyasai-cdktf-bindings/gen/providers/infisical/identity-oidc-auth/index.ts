@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,79 +10,85 @@ export interface IdentityOidcAuthConfig extends cdktf.TerraformMetaArguments {
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#access_token_max_ttl IdentityOidcAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#access_token_max_ttl IdentityOidcAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#access_token_num_uses_limit IdentityOidcAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#access_token_num_uses_limit IdentityOidcAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address...
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#access_token_trusted_ips IdentityOidcAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#access_token_trusted_ips IdentityOidcAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityOidcAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#access_token_ttl IdentityOidcAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#access_token_ttl IdentityOidcAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * The comma-separated list of intended recipients.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#bound_audiences IdentityOidcAuth#bound_audiences}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#bound_audiences IdentityOidcAuth#bound_audiences}
   */
   readonly boundAudiences?: string[];
   /**
   * The attributes that should be present in the JWT for it to be valid. The provided values can be a glob pattern.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#bound_claims IdentityOidcAuth#bound_claims}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#bound_claims IdentityOidcAuth#bound_claims}
   */
   readonly boundClaims?: { [key: string]: string };
   /**
-  * The unique identifier of the identity provider issuing the OIDC tokens.
+  * The unique identifier of the identity provider issuing the OIDC tokens. Required unless `template_id` is set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#bound_issuer IdentityOidcAuth#bound_issuer}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#bound_issuer IdentityOidcAuth#bound_issuer}
   */
-  readonly boundIssuer: string;
+  readonly boundIssuer?: string;
   /**
   * The expected principal that is the subject of the JWT.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#bound_subject IdentityOidcAuth#bound_subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#bound_subject IdentityOidcAuth#bound_subject}
   */
   readonly boundSubject?: string;
   /**
   * Map OIDC token claims to metadata fields. Example: {"role": "token.groups"}, this would become identity.metadata.oidc.claims.role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#claim_metadata_mapping IdentityOidcAuth#claim_metadata_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#claim_metadata_mapping IdentityOidcAuth#claim_metadata_mapping}
   */
   readonly claimMetadataMapping?: { [key: string]: string };
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#identity_id IdentityOidcAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#identity_id IdentityOidcAuth#identity_id}
   */
   readonly identityId: string;
   /**
   * The PEM-encoded CA cert for establishing secure communication with the Identity Provider endpoints
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#oidc_ca_certificate IdentityOidcAuth#oidc_ca_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#oidc_ca_certificate IdentityOidcAuth#oidc_ca_certificate}
   */
   readonly oidcCaCertificate?: string;
   /**
-  * The URL used to retrieve the OpenID Connect configuration from the identity provider.
+  * The URL used to retrieve the OpenID Connect configuration from the identity provider. Required unless `template_id` is set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#oidc_discovery_url IdentityOidcAuth#oidc_discovery_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#oidc_discovery_url IdentityOidcAuth#oidc_discovery_url}
   */
-  readonly oidcDiscoveryUrl: string;
+  readonly oidcDiscoveryUrl?: string;
+  /**
+  * The ID of an `infisical_identity_oidc_auth_template` to take the identity provider settings from. When set, `oidc_discovery_url`, `bound_issuer`, `bound_audiences` and `oidc_ca_certificate` come from the template and must not be set here, later edits to the template propagate to this identity, and `bound_subject` or `bound_claims` must restrict which workloads can authenticate. Removing it unlinks the template and applies the settings in this configuration instead: `bound_audiences` and `oidc_ca_certificate` are cleared when the configuration leaves them out, and the plan shows it. To unlink and keep the template's settings, set them here to the template's values (for example from the `infisical_identity_oidc_auth_template` data source); an unlink that changes nothing else then only needs the `unlink-templates` permission on auth templates, or `edit-auth` on the identity.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#template_id IdentityOidcAuth#template_id}
+  */
+  readonly templateId?: string;
 }
 export interface IdentityOidcAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#ip_address IdentityOidcAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#ip_address IdentityOidcAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -198,7 +204,7 @@ export class IdentityOidcAuthAccessTokenTrustedIpsList extends cdktf.ComplexList
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth infisical_identity_oidc_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth infisical_identity_oidc_auth}
 */
 export class IdentityOidcAuth extends cdktf.TerraformResource {
 
@@ -214,7 +220,7 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityOidcAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityOidcAuth to import
-  * @param importFromId The id of the existing IdentityOidcAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityOidcAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityOidcAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -226,7 +232,7 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_oidc_auth infisical_identity_oidc_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_oidc_auth infisical_identity_oidc_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -237,7 +243,7 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_oidc_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.32'
+        providerVersion: '0.20.14'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -259,6 +265,7 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
     this._identityId = config.identityId;
     this._oidcCaCertificate = config.oidcCaCertificate;
     this._oidcDiscoveryUrl = config.oidcDiscoveryUrl;
+    this._templateId = config.templateId;
   }
 
   // ==========
@@ -361,13 +368,16 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
     return this._boundClaims;
   }
 
-  // bound_issuer - computed: false, optional: false, required: true
+  // bound_issuer - computed: true, optional: true, required: false
   private _boundIssuer?: string; 
   public get boundIssuer() {
     return this.getStringAttribute('bound_issuer');
   }
   public set boundIssuer(value: string) {
     this._boundIssuer = value;
+  }
+  public resetBoundIssuer() {
+    this._boundIssuer = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get boundIssuerInput() {
@@ -440,7 +450,7 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
     return this._oidcCaCertificate;
   }
 
-  // oidc_discovery_url - computed: false, optional: false, required: true
+  // oidc_discovery_url - computed: true, optional: true, required: false
   private _oidcDiscoveryUrl?: string; 
   public get oidcDiscoveryUrl() {
     return this.getStringAttribute('oidc_discovery_url');
@@ -448,9 +458,28 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
   public set oidcDiscoveryUrl(value: string) {
     this._oidcDiscoveryUrl = value;
   }
+  public resetOidcDiscoveryUrl() {
+    this._oidcDiscoveryUrl = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get oidcDiscoveryUrlInput() {
     return this._oidcDiscoveryUrl;
+  }
+
+  // template_id - computed: false, optional: true, required: false
+  private _templateId?: string; 
+  public get templateId() {
+    return this.getStringAttribute('template_id');
+  }
+  public set templateId(value: string) {
+    this._templateId = value;
+  }
+  public resetTemplateId() {
+    this._templateId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get templateIdInput() {
+    return this._templateId;
   }
 
   // =========
@@ -471,6 +500,7 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
       identity_id: cdktf.stringToTerraform(this._identityId),
       oidc_ca_certificate: cdktf.stringToTerraform(this._oidcCaCertificate),
       oidc_discovery_url: cdktf.stringToTerraform(this._oidcDiscoveryUrl),
+      template_id: cdktf.stringToTerraform(this._templateId),
     };
   }
 
@@ -544,6 +574,12 @@ export class IdentityOidcAuth extends cdktf.TerraformResource {
       },
       oidc_discovery_url: {
         value: cdktf.stringToHclTerraform(this._oidcDiscoveryUrl),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      template_id: {
+        value: cdktf.stringToHclTerraform(this._templateId),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

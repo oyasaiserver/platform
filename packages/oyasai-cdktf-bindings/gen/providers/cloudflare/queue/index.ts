@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,15 +10,21 @@ export interface QueueConfig extends cdktf.TerraformMetaArguments {
   /**
   * A Resource identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue#account_id Queue#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue#account_id Queue#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue#queue_name Queue#queue_name}
+  * Available values: "eu", "us", "fedramp".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue#jurisdiction Queue#jurisdiction}
+  */
+  readonly jurisdiction?: string;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue#queue_name Queue#queue_name}
   */
   readonly queueName: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue#settings Queue#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue#settings Queue#settings}
   */
   readonly settings?: QueueSettings;
 }
@@ -296,19 +302,19 @@ export interface QueueSettings {
   /**
   * Number of seconds to delay delivery of all messages to consumers.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue#delivery_delay Queue#delivery_delay}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue#delivery_delay Queue#delivery_delay}
   */
   readonly deliveryDelay?: number;
   /**
   * Indicates if message delivery to consumers is currently paused.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue#delivery_paused Queue#delivery_paused}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue#delivery_paused Queue#delivery_paused}
   */
   readonly deliveryPaused?: boolean | cdktf.IResolvable;
   /**
   * Number of seconds after which an unconsumed message will be delayed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue#message_retention_period Queue#message_retention_period}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue#message_retention_period Queue#message_retention_period}
   */
   readonly messageRetentionPeriod?: number;
 }
@@ -460,7 +466,7 @@ export class QueueSettingsOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue cloudflare_queue}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue cloudflare_queue}
 */
 export class Queue extends cdktf.TerraformResource {
 
@@ -476,7 +482,7 @@ export class Queue extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Queue resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Queue to import
-  * @param importFromId The id of the existing Queue that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Queue that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Queue to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -488,7 +494,7 @@ export class Queue extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/queue cloudflare_queue} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/queue cloudflare_queue} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -499,7 +505,7 @@ export class Queue extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_queue',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -510,6 +516,7 @@ export class Queue extends cdktf.TerraformResource {
       forEach: config.forEach
     });
     this._accountId = config.accountId;
+    this._jurisdiction = config.jurisdiction;
     this._queueName = config.queueName;
     this._settings.internalValue = config.settings;
   }
@@ -550,6 +557,22 @@ export class Queue extends cdktf.TerraformResource {
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // jurisdiction - computed: false, optional: true, required: false
+  private _jurisdiction?: string; 
+  public get jurisdiction() {
+    return this.getStringAttribute('jurisdiction');
+  }
+  public set jurisdiction(value: string) {
+    this._jurisdiction = value;
+  }
+  public resetJurisdiction() {
+    this._jurisdiction = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get jurisdictionInput() {
+    return this._jurisdiction;
   }
 
   // modified_on - computed: true, optional: false, required: false
@@ -609,6 +632,7 @@ export class Queue extends cdktf.TerraformResource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
+      jurisdiction: cdktf.stringToTerraform(this._jurisdiction),
       queue_name: cdktf.stringToTerraform(this._queueName),
       settings: queueSettingsToTerraform(this._settings.internalValue),
     };
@@ -618,6 +642,12 @@ export class Queue extends cdktf.TerraformResource {
     const attrs = {
       account_id: {
         value: cdktf.stringToHclTerraform(this._accountId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      jurisdiction: {
+        value: cdktf.stringToHclTerraform(this._jurisdiction),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

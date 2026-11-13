@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dns_locations
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,15 +8,65 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustDnsLocationsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dns_locations#account_id DataCloudflareZeroTrustDnsLocations#account_id}
+  * Specify the Cloudflare account identifier.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations#account_id DataCloudflareZeroTrustDnsLocations#account_id}
   */
   readonly accountId?: string;
   /**
+  * Sort direction. Only takes effect when `order_by` is also provided; it
+  * is ignored otherwise. When `direction` is omitted the effective
+  * direction is field-specific: `created_at` and `updated_at` default to
+  * descending (newest first); `name` defaults to ascending.
+  *   * `asc` — ascending.
+  *   * `desc` — descending.
+  * Available values: "asc", "desc".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations#direction DataCloudflareZeroTrustDnsLocations#direction}
+  */
+  readonly direction?: string;
+  /**
+  * Filter the returned locations by one or more `field:value` pairs.
+  * Repeat the parameter to apply multiple filters; they are combined with
+  * logical AND (a location must satisfy every filter to be returned).
+  * 
+  * Supported fields and their matching behaviour:
+  *   * `name` — case-insensitive substring match on the location name.
+  *   * `id` — substring match on the location ID (UUID), with or without dashes.
+  *   * `is_default` — whether it is the default for the account.
+  * 
+  * Each entry must match one of the per-field patterns below:
+  *   * the field must be one of `name`, `id`, or `is_default`;
+  *   * `name`/`id` accept any value;
+  *   * `is_default` only accepts `true` or `false`; any other value returns `400`
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations#filter DataCloudflareZeroTrustDnsLocations#filter}
+  */
+  readonly filter?: string[];
+  /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dns_locations#max_items DataCloudflareZeroTrustDnsLocations#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations#max_items DataCloudflareZeroTrustDnsLocations#max_items}
   */
   readonly maxItems?: number;
+  /**
+  * Field to sort the returned locations by. When omitted, the order of
+  * results is unspecified. Supported values:
+  *   * `name` — sort alphabetically by location name.
+  *   * `created_at` — sort by creation time; defaults to descending unless `direction` is set.
+  *   * `updated_at` — sort by last-modified time; defaults to descending unless `direction` is set.
+  * Available values: "name", "created_at", "updated_at".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations#order_by DataCloudflareZeroTrustDnsLocations#order_by}
+  */
+  readonly orderBy?: string;
+  /**
+  * Case-insensitive substring match on the location name. When combined
+  * with `filter`, both must match (logical AND).
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations#search DataCloudflareZeroTrustDnsLocations#search}
+  */
+  readonly search?: string;
 }
 export interface DataCloudflareZeroTrustDnsLocationsResultEndpointsDohNetworks {
 }
@@ -750,6 +800,11 @@ export class DataCloudflareZeroTrustDnsLocationsResultOutputReference extends cd
     return this.getStringAttribute('created_at');
   }
 
+  // dns64_enabled - computed: true, optional: false, required: false
+  public get dns64Enabled() {
+    return this.getBooleanAttribute('dns64_enabled');
+  }
+
   // dns_destination_ips_id - computed: true, optional: false, required: false
   public get dnsDestinationIpsId() {
     return this.getStringAttribute('dns_destination_ips_id');
@@ -839,7 +894,7 @@ export class DataCloudflareZeroTrustDnsLocationsResultList extends cdktf.Complex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dns_locations cloudflare_zero_trust_dns_locations}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations cloudflare_zero_trust_dns_locations}
 */
 export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSource {
 
@@ -855,7 +910,7 @@ export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSour
   * Generates CDKTF code for importing a DataCloudflareZeroTrustDnsLocations resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDnsLocations to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustDnsLocations that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dns_locations#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustDnsLocations that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDnsLocations to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -867,7 +922,7 @@ export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSour
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dns_locations cloudflare_zero_trust_dns_locations} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dns_locations cloudflare_zero_trust_dns_locations} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -878,7 +933,7 @@ export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSour
       terraformResourceType: 'cloudflare_zero_trust_dns_locations',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -889,7 +944,11 @@ export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSour
       forEach: config.forEach
     });
     this._accountId = config.accountId;
+    this._direction = config.direction;
+    this._filter = config.filter;
     this._maxItems = config.maxItems;
+    this._orderBy = config.orderBy;
+    this._search = config.search;
   }
 
   // ==========
@@ -912,6 +971,38 @@ export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSour
     return this._accountId;
   }
 
+  // direction - computed: false, optional: true, required: false
+  private _direction?: string; 
+  public get direction() {
+    return this.getStringAttribute('direction');
+  }
+  public set direction(value: string) {
+    this._direction = value;
+  }
+  public resetDirection() {
+    this._direction = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get directionInput() {
+    return this._direction;
+  }
+
+  // filter - computed: false, optional: true, required: false
+  private _filter?: string[]; 
+  public get filter() {
+    return this.getListAttribute('filter');
+  }
+  public set filter(value: string[]) {
+    this._filter = value;
+  }
+  public resetFilter() {
+    this._filter = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get filterInput() {
+    return this._filter;
+  }
+
   // max_items - computed: false, optional: true, required: false
   private _maxItems?: number; 
   public get maxItems() {
@@ -928,10 +1019,42 @@ export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSour
     return this._maxItems;
   }
 
+  // order_by - computed: false, optional: true, required: false
+  private _orderBy?: string; 
+  public get orderBy() {
+    return this.getStringAttribute('order_by');
+  }
+  public set orderBy(value: string) {
+    this._orderBy = value;
+  }
+  public resetOrderBy() {
+    this._orderBy = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orderByInput() {
+    return this._orderBy;
+  }
+
   // result - computed: true, optional: false, required: false
   private _result = new DataCloudflareZeroTrustDnsLocationsResultList(this, "result", false);
   public get result() {
     return this._result;
+  }
+
+  // search - computed: false, optional: true, required: false
+  private _search?: string; 
+  public get search() {
+    return this.getStringAttribute('search');
+  }
+  public set search(value: string) {
+    this._search = value;
+  }
+  public resetSearch() {
+    this._search = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get searchInput() {
+    return this._search;
   }
 
   // =========
@@ -941,7 +1064,11 @@ export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSour
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
+      direction: cdktf.stringToTerraform(this._direction),
+      filter: cdktf.listMapper(cdktf.stringToTerraform, false)(this._filter),
       max_items: cdktf.numberToTerraform(this._maxItems),
+      order_by: cdktf.stringToTerraform(this._orderBy),
+      search: cdktf.stringToTerraform(this._search),
     };
   }
 
@@ -953,11 +1080,35 @@ export class DataCloudflareZeroTrustDnsLocations extends cdktf.TerraformDataSour
         type: "simple",
         storageClassType: "string",
       },
+      direction: {
+        value: cdktf.stringToHclTerraform(this._direction),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      filter: {
+        value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(this._filter),
+        isBlock: false,
+        type: "list",
+        storageClassType: "stringList",
+      },
       max_items: {
         value: cdktf.numberToHclTerraform(this._maxItems),
         isBlock: false,
         type: "simple",
         storageClassType: "number",
+      },
+      order_by: {
+        value: cdktf.stringToHclTerraform(this._orderBy),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      search: {
+        value: cdktf.stringToHclTerraform(this._search),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
     };
 

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,47 +10,62 @@ export interface EmailSecurityImpersonationRegistryConfig extends cdktf.Terrafor
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#account_id EmailSecurityImpersonationRegistry#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#account_id EmailSecurityImpersonationRegistry#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#comments EmailSecurityImpersonationRegistry#comments}
+  * Optional note describing the entry.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#comments EmailSecurityImpersonationRegistry#comments}
   */
   readonly comments?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#directory_id EmailSecurityImpersonationRegistry#directory_id}
+  * Identifier of the directory the entry was synced from, when directory-synced.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#directory_id EmailSecurityImpersonationRegistry#directory_id}
   */
   readonly directoryId?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#directory_node_id EmailSecurityImpersonationRegistry#directory_node_id}
+  * Identifier of the directory node the entry was synced from, when directory-synced.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#directory_node_id EmailSecurityImpersonationRegistry#directory_node_id}
   */
   readonly directoryNodeId?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#email EmailSecurityImpersonationRegistry#email}
+  * Email address (or pattern) of the protected identity.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#email EmailSecurityImpersonationRegistry#email}
   */
   readonly email: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#external_directory_node_id EmailSecurityImpersonationRegistry#external_directory_node_id}
+  * Deprecated. External identifier of the directory node.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#external_directory_node_id EmailSecurityImpersonationRegistry#external_directory_node_id}
   */
   readonly externalDirectoryNodeId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#is_email_regex EmailSecurityImpersonationRegistry#is_email_regex}
+  * Whether `email` is a regular expression instead of a literal address.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#is_email_regex EmailSecurityImpersonationRegistry#is_email_regex}
   */
   readonly isEmailRegex: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#name EmailSecurityImpersonationRegistry#name}
+  * Display name of the protected identity.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#name EmailSecurityImpersonationRegistry#name}
   */
   readonly name: string;
   /**
+  * Source the entry was created from.
   * Available values: "A1S_INTERNAL", "SNOOPY-CASB_OFFICE_365", "SNOOPY-OFFICE_365", "SNOOPY-GOOGLE_DIRECTORY".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#provenance EmailSecurityImpersonationRegistry#provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#provenance EmailSecurityImpersonationRegistry#provenance}
   */
   readonly provenance?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry cloudflare_email_security_impersonation_registry}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry cloudflare_email_security_impersonation_registry}
 */
 export class EmailSecurityImpersonationRegistry extends cdktf.TerraformResource {
 
@@ -66,7 +81,7 @@ export class EmailSecurityImpersonationRegistry extends cdktf.TerraformResource 
   * Generates CDKTF code for importing a EmailSecurityImpersonationRegistry resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the EmailSecurityImpersonationRegistry to import
-  * @param importFromId The id of the existing EmailSecurityImpersonationRegistry that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing EmailSecurityImpersonationRegistry that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the EmailSecurityImpersonationRegistry to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -78,7 +93,7 @@ export class EmailSecurityImpersonationRegistry extends cdktf.TerraformResource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_impersonation_registry cloudflare_email_security_impersonation_registry} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_impersonation_registry cloudflare_email_security_impersonation_registry} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -89,7 +104,7 @@ export class EmailSecurityImpersonationRegistry extends cdktf.TerraformResource 
       terraformResourceType: 'cloudflare_email_security_impersonation_registry',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

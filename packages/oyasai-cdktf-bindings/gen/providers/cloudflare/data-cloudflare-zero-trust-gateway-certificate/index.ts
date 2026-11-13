@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_gateway_certificate
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_gateway_certificate
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,19 +8,21 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustGatewayCertificateConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_gateway_certificate#account_id DataCloudflareZeroTrustGatewayCertificate#account_id}
+  * Specify the Cloudflare account identifier.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_gateway_certificate#account_id DataCloudflareZeroTrustGatewayCertificate#account_id}
   */
   readonly accountId?: string;
   /**
   * Identify the certificate with a UUID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_gateway_certificate#certificate_id DataCloudflareZeroTrustGatewayCertificate#certificate_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_gateway_certificate#certificate_id DataCloudflareZeroTrustGatewayCertificate#certificate_id}
   */
   readonly certificateId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_gateway_certificate cloudflare_zero_trust_gateway_certificate}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_gateway_certificate cloudflare_zero_trust_gateway_certificate}
 */
 export class DataCloudflareZeroTrustGatewayCertificate extends cdktf.TerraformDataSource {
 
@@ -36,7 +38,7 @@ export class DataCloudflareZeroTrustGatewayCertificate extends cdktf.TerraformDa
   * Generates CDKTF code for importing a DataCloudflareZeroTrustGatewayCertificate resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustGatewayCertificate to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustGatewayCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_gateway_certificate#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustGatewayCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_gateway_certificate#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustGatewayCertificate to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -48,7 +50,7 @@ export class DataCloudflareZeroTrustGatewayCertificate extends cdktf.TerraformDa
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_gateway_certificate cloudflare_zero_trust_gateway_certificate} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_gateway_certificate cloudflare_zero_trust_gateway_certificate} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -59,7 +61,7 @@ export class DataCloudflareZeroTrustGatewayCertificate extends cdktf.TerraformDa
       terraformResourceType: 'cloudflare_zero_trust_gateway_certificate',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -149,6 +151,11 @@ export class DataCloudflareZeroTrustGatewayCertificate extends cdktf.TerraformDa
   // issuer_raw - computed: true, optional: false, required: false
   public get issuerRaw() {
     return this.getStringAttribute('issuer_raw');
+  }
+
+  // region - computed: true, optional: false, required: false
+  public get region() {
+    return this.getStringAttribute('region');
   }
 
   // type - computed: true, optional: false, required: false

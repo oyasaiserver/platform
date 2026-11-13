@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield_discovery_operation
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield_discovery_operation
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,28 +10,28 @@ export interface ApiShieldDiscoveryOperationConfig extends cdktf.TerraformMetaAr
   /**
   * UUID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield_discovery_operation#operation_id ApiShieldDiscoveryOperation#operation_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield_discovery_operation#discovery_id ApiShieldDiscoveryOperation#discovery_id}
   */
-  readonly operationId: string;
+  readonly discoveryId: string;
   /**
   * Mark state of operation in API Discovery
   *   * `review` - Mark operation as for review
   *   * `ignored` - Mark operation as ignored
   * Available values: "review", "ignored".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield_discovery_operation#state ApiShieldDiscoveryOperation#state}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield_discovery_operation#state ApiShieldDiscoveryOperation#state}
   */
   readonly state?: string;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield_discovery_operation#zone_id ApiShieldDiscoveryOperation#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield_discovery_operation#zone_id ApiShieldDiscoveryOperation#zone_id}
   */
-  readonly zoneId?: string;
+  readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield_discovery_operation cloudflare_api_shield_discovery_operation}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield_discovery_operation cloudflare_api_shield_discovery_operation}
 */
 export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
 
@@ -47,7 +47,7 @@ export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ApiShieldDiscoveryOperation resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ApiShieldDiscoveryOperation to import
-  * @param importFromId The id of the existing ApiShieldDiscoveryOperation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield_discovery_operation#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ApiShieldDiscoveryOperation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield_discovery_operation#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ApiShieldDiscoveryOperation to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -59,7 +59,7 @@ export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield_discovery_operation cloudflare_api_shield_discovery_operation} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield_discovery_operation cloudflare_api_shield_discovery_operation} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -70,7 +70,7 @@ export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_api_shield_discovery_operation',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -80,7 +80,7 @@ export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
       connection: config.connection,
       forEach: config.forEach
     });
-    this._operationId = config.operationId;
+    this._discoveryId = config.discoveryId;
     this._state = config.state;
     this._zoneId = config.zoneId;
   }
@@ -89,22 +89,17 @@ export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
   // ATTRIBUTES
   // ==========
 
-  // id - computed: true, optional: false, required: false
-  public get id() {
-    return this.getStringAttribute('id');
+  // discovery_id - computed: false, optional: false, required: true
+  private _discoveryId?: string; 
+  public get discoveryId() {
+    return this.getStringAttribute('discovery_id');
   }
-
-  // operation_id - computed: false, optional: false, required: true
-  private _operationId?: string; 
-  public get operationId() {
-    return this.getStringAttribute('operation_id');
-  }
-  public set operationId(value: string) {
-    this._operationId = value;
+  public set discoveryId(value: string) {
+    this._discoveryId = value;
   }
   // Temporarily expose input value. Use with caution.
-  public get operationIdInput() {
-    return this._operationId;
+  public get discoveryIdInput() {
+    return this._discoveryId;
   }
 
   // state - computed: false, optional: true, required: false
@@ -123,16 +118,13 @@ export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
     return this._state;
   }
 
-  // zone_id - computed: false, optional: true, required: false
+  // zone_id - computed: false, optional: false, required: true
   private _zoneId?: string; 
   public get zoneId() {
     return this.getStringAttribute('zone_id');
   }
   public set zoneId(value: string) {
     this._zoneId = value;
-  }
-  public resetZoneId() {
-    this._zoneId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get zoneIdInput() {
@@ -145,7 +137,7 @@ export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
 
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
-      operation_id: cdktf.stringToTerraform(this._operationId),
+      discovery_id: cdktf.stringToTerraform(this._discoveryId),
       state: cdktf.stringToTerraform(this._state),
       zone_id: cdktf.stringToTerraform(this._zoneId),
     };
@@ -153,8 +145,8 @@ export class ApiShieldDiscoveryOperation extends cdktf.TerraformResource {
 
   protected synthesizeHclAttributes(): { [name: string]: any } {
     const attrs = {
-      operation_id: {
-        value: cdktf.stringToHclTerraform(this._operationId),
+      discovery_id: {
+        value: cdktf.stringToHclTerraform(this._discoveryId),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

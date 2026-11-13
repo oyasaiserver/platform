@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1
+// https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsDashboardDashboardV1Beta1Config extends cdktf.TerraformMeta
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#metadata AppsDashboardDashboardV1Beta1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#metadata AppsDashboardDashboardV1Beta1#metadata}
   */
   readonly metadata?: AppsDashboardDashboardV1Beta1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#options AppsDashboardDashboardV1Beta1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#options AppsDashboardDashboardV1Beta1#options}
   */
   readonly options?: AppsDashboardDashboardV1Beta1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#spec AppsDashboardDashboardV1Beta1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#spec AppsDashboardDashboardV1Beta1#spec}
   */
   readonly spec?: AppsDashboardDashboardV1Beta1Spec;
 }
@@ -30,13 +30,19 @@ export interface AppsDashboardDashboardV1Beta1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#folder_uid AppsDashboardDashboardV1Beta1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#folder_uid AppsDashboardDashboardV1Beta1#folder_uid}
   */
   readonly folderUid?: string;
   /**
+  * The Grafana organization ID this resource belongs to, for self-hosted OSS or Enterprise Grafana. When set, it overrides the provider's `org_id` for this resource only, so a single provider configuration can manage App Platform resources across multiple organizations. Not supported on Grafana Cloud (configure a stack with `stack_id` instead). Changing this value forces the resource to be recreated in the new organization.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#org_id AppsDashboardDashboardV1Beta1#org_id}
+  */
+  readonly orgId?: number;
+  /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#uid AppsDashboardDashboardV1Beta1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#uid AppsDashboardDashboardV1Beta1#uid}
   */
   readonly uid: string;
 }
@@ -48,6 +54,7 @@ export function appsDashboardDashboardV1Beta1MetadataToTerraform(struct?: AppsDa
   }
   return {
     folder_uid: cdktf.stringToTerraform(struct!.folderUid),
+    org_id: cdktf.numberToTerraform(struct!.orgId),
     uid: cdktf.stringToTerraform(struct!.uid),
   }
 }
@@ -64,6 +71,12 @@ export function appsDashboardDashboardV1Beta1MetadataToHclTerraform(struct?: App
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    org_id: {
+      value: cdktf.numberToHclTerraform(struct!.orgId),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "number",
     },
     uid: {
       value: cdktf.stringToHclTerraform(struct!.uid),
@@ -99,6 +112,10 @@ export class AppsDashboardDashboardV1Beta1MetadataOutputReference extends cdktf.
       hasAnyValues = true;
       internalValueResult.folderUid = this._folderUid;
     }
+    if (this._orgId !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.orgId = this._orgId;
+    }
     if (this._uid !== undefined) {
       hasAnyValues = true;
       internalValueResult.uid = this._uid;
@@ -111,6 +128,7 @@ export class AppsDashboardDashboardV1Beta1MetadataOutputReference extends cdktf.
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._folderUid = undefined;
+      this._orgId = undefined;
       this._uid = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
@@ -121,6 +139,7 @@ export class AppsDashboardDashboardV1Beta1MetadataOutputReference extends cdktf.
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._folderUid = value.folderUid;
+      this._orgId = value.orgId;
       this._uid = value.uid;
     }
   }
@@ -145,6 +164,22 @@ export class AppsDashboardDashboardV1Beta1MetadataOutputReference extends cdktf.
   // Temporarily expose input value. Use with caution.
   public get folderUidInput() {
     return this._folderUid;
+  }
+
+  // org_id - computed: false, optional: true, required: false
+  private _orgId?: number; 
+  public get orgId() {
+    return this.getNumberAttribute('org_id');
+  }
+  public set orgId(value: number) {
+    this._orgId = value;
+  }
+  public resetOrgId() {
+    this._orgId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orgIdInput() {
+    return this._orgId;
   }
 
   // uid - computed: false, optional: false, required: true
@@ -179,19 +214,19 @@ export interface AppsDashboardDashboardV1Beta1Options {
   /**
   * Set to true to allow editing the resource from the Grafana UI. By default, resources managed by Terraform cannot be edited in the UI. Enabling this option will cause divergence between the Terraform configuration and the resource in Grafana.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#allow_ui_updates AppsDashboardDashboardV1Beta1#allow_ui_updates}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#allow_ui_updates AppsDashboardDashboardV1Beta1#allow_ui_updates}
   */
   readonly allowUiUpdates?: boolean | cdktf.IResolvable;
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#manager_identity AppsDashboardDashboardV1Beta1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#manager_identity AppsDashboardDashboardV1Beta1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#overwrite AppsDashboardDashboardV1Beta1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#overwrite AppsDashboardDashboardV1Beta1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -345,19 +380,19 @@ export interface AppsDashboardDashboardV1Beta1Spec {
   /**
   * The JSON representation of the dashboard spec.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#json AppsDashboardDashboardV1Beta1#json}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#json AppsDashboardDashboardV1Beta1#json}
   */
   readonly json: string;
   /**
   * The tags of the dashboard. If not set, the tags will be derived from the JSON spec.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#tags AppsDashboardDashboardV1Beta1#tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#tags AppsDashboardDashboardV1Beta1#tags}
   */
   readonly tags?: string[];
   /**
   * The title of the dashboard. If not set, the title will be derived from the JSON spec.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#title AppsDashboardDashboardV1Beta1#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#title AppsDashboardDashboardV1Beta1#title}
   */
   readonly title?: string;
 }
@@ -506,7 +541,7 @@ export class AppsDashboardDashboardV1Beta1SpecOutputReference extends cdktf.Comp
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1 grafana_apps_dashboard_dashboard_v1beta1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1 grafana_apps_dashboard_dashboard_v1beta1}
 */
 export class AppsDashboardDashboardV1Beta1 extends cdktf.TerraformResource {
 
@@ -522,7 +557,7 @@ export class AppsDashboardDashboardV1Beta1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsDashboardDashboardV1Beta1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsDashboardDashboardV1Beta1 to import
-  * @param importFromId The id of the existing AppsDashboardDashboardV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsDashboardDashboardV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsDashboardDashboardV1Beta1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -534,7 +569,7 @@ export class AppsDashboardDashboardV1Beta1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_dashboard_dashboard_v1beta1 grafana_apps_dashboard_dashboard_v1beta1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_dashboard_dashboard_v1beta1 grafana_apps_dashboard_dashboard_v1beta1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -545,7 +580,7 @@ export class AppsDashboardDashboardV1Beta1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_dashboard_dashboard_v1beta1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.46.0'
+        providerVersion: '4.54.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

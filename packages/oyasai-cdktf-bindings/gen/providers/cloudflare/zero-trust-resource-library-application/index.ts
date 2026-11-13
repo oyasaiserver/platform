@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,55 +8,55 @@ import * as cdktf from 'cdktf';
 
 export interface ZeroTrustResourceLibraryApplicationConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#account_id ZeroTrustResourceLibraryApplication#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#account_id ZeroTrustResourceLibraryApplication#account_id}
   */
   readonly accountId: string;
   /**
-  * Returns the category ID.
+  * Numeric identifier for an application category.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#category_id ZeroTrustResourceLibraryApplication#category_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#category_id ZeroTrustResourceLibraryApplication#category_id}
   */
-  readonly categoryId: number;
+  readonly categoryId?: number;
   /**
   * Hostnames matched by the application.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#hostnames ZeroTrustResourceLibraryApplication#hostnames}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#hostnames ZeroTrustResourceLibraryApplication#hostnames}
   */
   readonly hostnames?: string[];
   /**
-  * Returns the human readable ID.
+  * Human-readable identifier for the application.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#human_id ZeroTrustResourceLibraryApplication#human_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#human_id ZeroTrustResourceLibraryApplication#human_id}
   */
-  readonly humanId: string;
+  readonly humanId?: string;
   /**
-  * IP subnets matched by the application.
+  * IP subnets for this application. Custom application create and update requests accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through /128.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#ip_subnets ZeroTrustResourceLibraryApplication#ip_subnets}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#ip_subnets ZeroTrustResourceLibraryApplication#ip_subnets}
   */
   readonly ipSubnets?: string[];
   /**
-  * Returns the application name.
+  * Application name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#name ZeroTrustResourceLibraryApplication#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#name ZeroTrustResourceLibraryApplication#name}
   */
-  readonly name: string;
+  readonly name?: string;
   /**
-  * Port and protocol pairs matched by the application.
+  * Ports matched by the application, in `protocol/port` or inclusive `protocol/start-end` format (for example, `tcp/443` or `udp/10000-20000`). TCP and UDP ports must be between 0 and 65535.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#port_protocols ZeroTrustResourceLibraryApplication#port_protocols}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#port_protocols ZeroTrustResourceLibraryApplication#port_protocols}
   */
   readonly portProtocols?: string[];
   /**
   * Support domains matched by the application.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#support_domains ZeroTrustResourceLibraryApplication#support_domains}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#support_domains ZeroTrustResourceLibraryApplication#support_domains}
   */
   readonly supportDomains?: string[];
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application cloudflare_zero_trust_resource_library_application}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application cloudflare_zero_trust_resource_library_application}
 */
 export class ZeroTrustResourceLibraryApplication extends cdktf.TerraformResource {
 
@@ -72,7 +72,7 @@ export class ZeroTrustResourceLibraryApplication extends cdktf.TerraformResource
   * Generates CDKTF code for importing a ZeroTrustResourceLibraryApplication resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ZeroTrustResourceLibraryApplication to import
-  * @param importFromId The id of the existing ZeroTrustResourceLibraryApplication that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ZeroTrustResourceLibraryApplication that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ZeroTrustResourceLibraryApplication to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -84,7 +84,7 @@ export class ZeroTrustResourceLibraryApplication extends cdktf.TerraformResource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/zero_trust_resource_library_application cloudflare_zero_trust_resource_library_application} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/zero_trust_resource_library_application cloudflare_zero_trust_resource_library_application} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -95,7 +95,7 @@ export class ZeroTrustResourceLibraryApplication extends cdktf.TerraformResource
       terraformResourceType: 'cloudflare_zero_trust_resource_library_application',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -157,13 +157,16 @@ export class ZeroTrustResourceLibraryApplication extends cdktf.TerraformResource
     return this.getStringAttribute('application_type_description');
   }
 
-  // category_id - computed: false, optional: false, required: true
+  // category_id - computed: false, optional: true, required: false
   private _categoryId?: number; 
   public get categoryId() {
     return this.getNumberAttribute('category_id');
   }
   public set categoryId(value: number) {
     this._categoryId = value;
+  }
+  public resetCategoryId() {
+    this._categoryId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get categoryIdInput() {
@@ -196,13 +199,16 @@ export class ZeroTrustResourceLibraryApplication extends cdktf.TerraformResource
     return this._hostnames;
   }
 
-  // human_id - computed: false, optional: false, required: true
+  // human_id - computed: false, optional: true, required: false
   private _humanId?: string; 
   public get humanId() {
     return this.getStringAttribute('human_id');
   }
   public set humanId(value: string) {
     this._humanId = value;
+  }
+  public resetHumanId() {
+    this._humanId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get humanIdInput() {
@@ -230,13 +236,16 @@ export class ZeroTrustResourceLibraryApplication extends cdktf.TerraformResource
     return this._ipSubnets;
   }
 
-  // name - computed: false, optional: false, required: true
+  // name - computed: false, optional: true, required: false
   private _name?: string; 
   public get name() {
     return this.getStringAttribute('name');
   }
   public set name(value: string) {
     this._name = value;
+  }
+  public resetName() {
+    this._name = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get nameInput() {

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,49 +10,61 @@ export interface DataCloudflareWorkersCustomDomainConfig extends cdktf.Terraform
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#account_id DataCloudflareWorkersCustomDomain#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#account_id DataCloudflareWorkersCustomDomain#account_id}
   */
-  readonly accountId?: string;
+  readonly accountId: string;
   /**
   * ID of the domain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#domain_id DataCloudflareWorkersCustomDomain#domain_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#domain_id DataCloudflareWorkersCustomDomain#domain_id}
   */
   readonly domainId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#filter DataCloudflareWorkersCustomDomain#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#filter DataCloudflareWorkersCustomDomain#filter}
   */
   readonly filter?: DataCloudflareWorkersCustomDomainFilter;
 }
 export interface DataCloudflareWorkersCustomDomainFilter {
   /**
+  * Whether the configured hostname is routable for the domain.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#enabled DataCloudflareWorkersCustomDomain#enabled}
+  */
+  readonly enabled?: boolean | cdktf.IResolvable;
+  /**
   * Worker environment associated with the domain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#environment DataCloudflareWorkersCustomDomain#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#environment DataCloudflareWorkersCustomDomain#environment}
   */
   readonly environment?: string;
   /**
   * Hostname of the domain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#hostname DataCloudflareWorkersCustomDomain#hostname}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#hostname DataCloudflareWorkersCustomDomain#hostname}
   */
   readonly hostname?: string;
   /**
+  * Whether previews are routable for the domain.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#previews_enabled DataCloudflareWorkersCustomDomain#previews_enabled}
+  */
+  readonly previewsEnabled?: boolean | cdktf.IResolvable;
+  /**
   * Name of the Worker associated with the domain.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#service DataCloudflareWorkersCustomDomain#service}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#service DataCloudflareWorkersCustomDomain#service}
   */
   readonly service?: string;
   /**
   * ID of the zone containing the domain hostname.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#zone_id DataCloudflareWorkersCustomDomain#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#zone_id DataCloudflareWorkersCustomDomain#zone_id}
   */
   readonly zoneId?: string;
   /**
   * Name of the zone containing the domain hostname.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#zone_name DataCloudflareWorkersCustomDomain#zone_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#zone_name DataCloudflareWorkersCustomDomain#zone_name}
   */
   readonly zoneName?: string;
 }
@@ -63,8 +75,10 @@ export function dataCloudflareWorkersCustomDomainFilterToTerraform(struct?: Data
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   return {
+    enabled: cdktf.booleanToTerraform(struct!.enabled),
     environment: cdktf.stringToTerraform(struct!.environment),
     hostname: cdktf.stringToTerraform(struct!.hostname),
+    previews_enabled: cdktf.booleanToTerraform(struct!.previewsEnabled),
     service: cdktf.stringToTerraform(struct!.service),
     zone_id: cdktf.stringToTerraform(struct!.zoneId),
     zone_name: cdktf.stringToTerraform(struct!.zoneName),
@@ -78,6 +92,12 @@ export function dataCloudflareWorkersCustomDomainFilterToHclTerraform(struct?: D
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   const attrs = {
+    enabled: {
+      value: cdktf.booleanToHclTerraform(struct!.enabled),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "boolean",
+    },
     environment: {
       value: cdktf.stringToHclTerraform(struct!.environment),
       isBlock: false,
@@ -89,6 +109,12 @@ export function dataCloudflareWorkersCustomDomainFilterToHclTerraform(struct?: D
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    previews_enabled: {
+      value: cdktf.booleanToHclTerraform(struct!.previewsEnabled),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "boolean",
     },
     service: {
       value: cdktf.stringToHclTerraform(struct!.service),
@@ -132,6 +158,10 @@ export class DataCloudflareWorkersCustomDomainFilterOutputReference extends cdkt
     }
     let hasAnyValues = this.isEmptyObject;
     const internalValueResult: any = {};
+    if (this._enabled !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.enabled = this._enabled;
+    }
     if (this._environment !== undefined) {
       hasAnyValues = true;
       internalValueResult.environment = this._environment;
@@ -139,6 +169,10 @@ export class DataCloudflareWorkersCustomDomainFilterOutputReference extends cdkt
     if (this._hostname !== undefined) {
       hasAnyValues = true;
       internalValueResult.hostname = this._hostname;
+    }
+    if (this._previewsEnabled !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.previewsEnabled = this._previewsEnabled;
     }
     if (this._service !== undefined) {
       hasAnyValues = true;
@@ -159,8 +193,10 @@ export class DataCloudflareWorkersCustomDomainFilterOutputReference extends cdkt
     if (value === undefined) {
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
+      this._enabled = undefined;
       this._environment = undefined;
       this._hostname = undefined;
+      this._previewsEnabled = undefined;
       this._service = undefined;
       this._zoneId = undefined;
       this._zoneName = undefined;
@@ -172,12 +208,30 @@ export class DataCloudflareWorkersCustomDomainFilterOutputReference extends cdkt
     else {
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
+      this._enabled = value.enabled;
       this._environment = value.environment;
       this._hostname = value.hostname;
+      this._previewsEnabled = value.previewsEnabled;
       this._service = value.service;
       this._zoneId = value.zoneId;
       this._zoneName = value.zoneName;
     }
+  }
+
+  // enabled - computed: false, optional: true, required: false
+  private _enabled?: boolean | cdktf.IResolvable; 
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+  public set enabled(value: boolean | cdktf.IResolvable) {
+    this._enabled = value;
+  }
+  public resetEnabled() {
+    this._enabled = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get enabledInput() {
+    return this._enabled;
   }
 
   // environment - computed: false, optional: true, required: false
@@ -210,6 +264,22 @@ export class DataCloudflareWorkersCustomDomainFilterOutputReference extends cdkt
   // Temporarily expose input value. Use with caution.
   public get hostnameInput() {
     return this._hostname;
+  }
+
+  // previews_enabled - computed: false, optional: true, required: false
+  private _previewsEnabled?: boolean | cdktf.IResolvable; 
+  public get previewsEnabled() {
+    return this.getBooleanAttribute('previews_enabled');
+  }
+  public set previewsEnabled(value: boolean | cdktf.IResolvable) {
+    this._previewsEnabled = value;
+  }
+  public resetPreviewsEnabled() {
+    this._previewsEnabled = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get previewsEnabledInput() {
+    return this._previewsEnabled;
   }
 
   // service - computed: false, optional: true, required: false
@@ -262,7 +332,7 @@ export class DataCloudflareWorkersCustomDomainFilterOutputReference extends cdkt
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain cloudflare_workers_custom_domain}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain cloudflare_workers_custom_domain}
 */
 export class DataCloudflareWorkersCustomDomain extends cdktf.TerraformDataSource {
 
@@ -278,7 +348,7 @@ export class DataCloudflareWorkersCustomDomain extends cdktf.TerraformDataSource
   * Generates CDKTF code for importing a DataCloudflareWorkersCustomDomain resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkersCustomDomain to import
-  * @param importFromId The id of the existing DataCloudflareWorkersCustomDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkersCustomDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkersCustomDomain to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -290,18 +360,18 @@ export class DataCloudflareWorkersCustomDomain extends cdktf.TerraformDataSource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_custom_domain cloudflare_workers_custom_domain} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_custom_domain cloudflare_workers_custom_domain} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareWorkersCustomDomainConfig = {}
+  * @param options DataCloudflareWorkersCustomDomainConfig
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareWorkersCustomDomainConfig = {}) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareWorkersCustomDomainConfig) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_workers_custom_domain',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -320,16 +390,13 @@ export class DataCloudflareWorkersCustomDomain extends cdktf.TerraformDataSource
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: true, required: false
+  // account_id - computed: false, optional: false, required: true
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
-  }
-  public resetAccountId() {
-    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {
@@ -355,6 +422,11 @@ export class DataCloudflareWorkersCustomDomain extends cdktf.TerraformDataSource
   // Temporarily expose input value. Use with caution.
   public get domainIdInput() {
     return this._domainId;
+  }
+
+  // enabled - computed: true, optional: false, required: false
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
   }
 
   // environment - computed: true, optional: false, required: false
@@ -386,6 +458,11 @@ export class DataCloudflareWorkersCustomDomain extends cdktf.TerraformDataSource
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // previews_enabled - computed: true, optional: false, required: false
+  public get previewsEnabled() {
+    return this.getBooleanAttribute('previews_enabled');
   }
 
   // service - computed: true, optional: false, required: false

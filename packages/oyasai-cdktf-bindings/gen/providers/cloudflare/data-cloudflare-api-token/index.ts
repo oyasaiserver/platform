@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/api_token
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/api_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,13 +8,13 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareApiTokenConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/api_token#filter DataCloudflareApiToken#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/api_token#filter DataCloudflareApiToken#filter}
   */
   readonly filter?: DataCloudflareApiTokenFilter;
   /**
   * Token identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/api_token#token_id DataCloudflareApiToken#token_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/api_token#token_id DataCloudflareApiToken#token_id}
   */
   readonly tokenId?: string;
 }
@@ -137,13 +137,13 @@ export interface DataCloudflareApiTokenFilter {
   * Direction to order results.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/api_token#direction DataCloudflareApiToken#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/api_token#direction DataCloudflareApiToken#direction}
   */
   readonly direction?: string;
   /**
   * When true, includes recently-expired tokens in the response.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/api_token#include_expired DataCloudflareApiToken#include_expired}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/api_token#include_expired DataCloudflareApiToken#include_expired}
   */
   readonly includeExpired?: boolean | cdktf.IResolvable;
 }
@@ -313,14 +313,44 @@ export class DataCloudflareApiTokenPoliciesPermissionGroupsMetaOutputReference e
     }
   }
 
-  // key - computed: true, optional: false, required: false
-  public get key() {
-    return this.getStringAttribute('key');
+  // category - computed: true, optional: false, required: false
+  public get category() {
+    return this.getStringAttribute('category');
   }
 
-  // value - computed: true, optional: false, required: false
-  public get value() {
-    return this.getStringAttribute('value');
+  // deprecated - computed: true, optional: false, required: false
+  public get deprecated() {
+    return this.getStringAttribute('deprecated');
+  }
+
+  // description - computed: true, optional: false, required: false
+  public get description() {
+    return this.getStringAttribute('description');
+  }
+
+  // editable - computed: true, optional: false, required: false
+  public get editable() {
+    return this.getStringAttribute('editable');
+  }
+
+  // eol_at - computed: true, optional: false, required: false
+  public get eolAt() {
+    return this.getStringAttribute('eol_at');
+  }
+
+  // label - computed: true, optional: false, required: false
+  public get label() {
+    return this.getStringAttribute('label');
+  }
+
+  // scopes - computed: true, optional: false, required: false
+  public get scopes() {
+    return this.getStringAttribute('scopes');
+  }
+
+  // visibility - computed: true, optional: false, required: false
+  public get visibility() {
+    return this.getStringAttribute('visibility');
   }
 }
 export interface DataCloudflareApiTokenPoliciesPermissionGroups {
@@ -503,7 +533,7 @@ export class DataCloudflareApiTokenPoliciesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/api_token cloudflare_api_token}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/api_token cloudflare_api_token}
 */
 export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
 
@@ -519,7 +549,7 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareApiToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareApiToken to import
-  * @param importFromId The id of the existing DataCloudflareApiToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/api_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareApiToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/api_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareApiToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -531,7 +561,7 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/api_token cloudflare_api_token} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/api_token cloudflare_api_token} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -542,7 +572,7 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_api_token',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -564,6 +594,11 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
   private _condition = new DataCloudflareApiTokenConditionOutputReference(this, "condition");
   public get condition() {
     return this._condition;
+  }
+
+  // creator_email_at_creation - computed: true, optional: false, required: false
+  public get creatorEmailAtCreation() {
+    return this.getStringAttribute('creator_email_at_creation');
   }
 
   // expires_on - computed: true, optional: false, required: false
@@ -623,6 +658,16 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
     return this._policies;
   }
 
+  // provisioner_id - computed: true, optional: false, required: false
+  public get provisionerId() {
+    return this.getStringAttribute('provisioner_id');
+  }
+
+  // provisioner_type - computed: true, optional: false, required: false
+  public get provisionerType() {
+    return this.getStringAttribute('provisioner_type');
+  }
+
   // status - computed: true, optional: false, required: false
   public get status() {
     return this.getStringAttribute('status');
@@ -642,6 +687,16 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
   // Temporarily expose input value. Use with caution.
   public get tokenIdInput() {
     return this._tokenId;
+  }
+
+  // token_prefix - computed: true, optional: false, required: false
+  public get tokenPrefix() {
+    return this.getStringAttribute('token_prefix');
+  }
+
+  // token_suffix - computed: true, optional: false, required: false
+  public get tokenSuffix() {
+    return this.getStringAttribute('token_suffix');
   }
 
   // =========

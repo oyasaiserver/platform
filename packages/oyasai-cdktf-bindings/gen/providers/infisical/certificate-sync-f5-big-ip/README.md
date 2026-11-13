@@ -1,0 +1,3 @@
+# `infisical_certificate_sync_f5_big_ip`
+
+Refer to the Terraform Registry for docs: [`infisical_certificate_sync_f5_big_ip`](https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/certificate_sync_f5_big_ip).

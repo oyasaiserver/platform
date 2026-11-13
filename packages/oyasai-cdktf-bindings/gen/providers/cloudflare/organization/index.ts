@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,15 +8,25 @@ import * as cdktf from 'cdktf';
 
 export interface OrganizationConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#name Organization#name}
+  * The Organization name, limited to 65 UTF-8 bytes.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#name Organization#name}
   */
   readonly name: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#parent Organization#parent}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#parent Organization#parent}
   */
   readonly parent?: OrganizationParent;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#profile Organization#profile}
+  * The current parent Organization ID. A different value is rejected; this endpoint cannot move an Organization.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#parent_id Organization#parent_id}
+  */
+  readonly parentId?: string;
+  /**
+  * Optional profile fields, each limited to 1,000 UTF-8 bytes. An empty profile is ignored.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#profile Organization#profile}
   */
   readonly profile?: OrganizationProfile;
 }
@@ -158,6 +168,11 @@ export class OrganizationMetaOutputReference extends cdktf.ComplexObject {
     }
   }
 
+  // are_child_accounts_accessible_by_org_members - computed: true, optional: false, required: false
+  public get areChildAccountsAccessibleByOrgMembers() {
+    return this.getBooleanAttribute('are_child_accounts_accessible_by_org_members');
+  }
+
   // hierarchy_tags - computed: true, optional: false, required: false
   public get hierarchyTags() {
     return this.getListAttribute('hierarchy_tags');
@@ -173,10 +188,15 @@ export class OrganizationMetaOutputReference extends cdktf.ComplexObject {
   public get tenantFlags() {
     return this._tenantFlags;
   }
+
+  // tenant_type - computed: true, optional: false, required: false
+  public get tenantType() {
+    return this.getStringAttribute('tenant_type');
+  }
 }
 export interface OrganizationParent {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#id Organization#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#id Organization#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -255,7 +275,7 @@ export class OrganizationParentOutputReference extends cdktf.ComplexObject {
     }
   }
 
-  // id - computed: true, optional: false, required: true
+  // id - computed: false, optional: false, required: true
   private _id?: string; 
   public get id() {
     return this.getStringAttribute('id');
@@ -267,33 +287,28 @@ export class OrganizationParentOutputReference extends cdktf.ComplexObject {
   public get idInput() {
     return this._id;
   }
-
-  // name - computed: true, optional: false, required: false
-  public get name() {
-    return this.getStringAttribute('name');
-  }
 }
 export interface OrganizationProfile {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#business_address Organization#business_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#business_address Organization#business_address}
   */
-  readonly businessAddress: string;
+  readonly businessAddress?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#business_email Organization#business_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#business_email Organization#business_email}
   */
-  readonly businessEmail: string;
+  readonly businessEmail?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#business_name Organization#business_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#business_name Organization#business_name}
   */
-  readonly businessName: string;
+  readonly businessName?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#business_phone Organization#business_phone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#business_phone Organization#business_phone}
   */
-  readonly businessPhone: string;
+  readonly businessPhone?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#external_metadata Organization#external_metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#external_metadata Organization#external_metadata}
   */
-  readonly externalMetadata: string;
+  readonly externalMetadata?: string;
 }
 
 export function organizationProfileToTerraform(struct?: OrganizationProfile | cdktf.IResolvable): any {
@@ -419,7 +434,7 @@ export class OrganizationProfileOutputReference extends cdktf.ComplexObject {
     }
   }
 
-  // business_address - computed: false, optional: false, required: true
+  // business_address - computed: false, optional: true, required: false
   private _businessAddress?: string; 
   public get businessAddress() {
     return this.getStringAttribute('business_address');
@@ -427,12 +442,15 @@ export class OrganizationProfileOutputReference extends cdktf.ComplexObject {
   public set businessAddress(value: string) {
     this._businessAddress = value;
   }
+  public resetBusinessAddress() {
+    this._businessAddress = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get businessAddressInput() {
     return this._businessAddress;
   }
 
-  // business_email - computed: false, optional: false, required: true
+  // business_email - computed: false, optional: true, required: false
   private _businessEmail?: string; 
   public get businessEmail() {
     return this.getStringAttribute('business_email');
@@ -440,12 +458,15 @@ export class OrganizationProfileOutputReference extends cdktf.ComplexObject {
   public set businessEmail(value: string) {
     this._businessEmail = value;
   }
+  public resetBusinessEmail() {
+    this._businessEmail = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get businessEmailInput() {
     return this._businessEmail;
   }
 
-  // business_name - computed: false, optional: false, required: true
+  // business_name - computed: false, optional: true, required: false
   private _businessName?: string; 
   public get businessName() {
     return this.getStringAttribute('business_name');
@@ -453,12 +474,15 @@ export class OrganizationProfileOutputReference extends cdktf.ComplexObject {
   public set businessName(value: string) {
     this._businessName = value;
   }
+  public resetBusinessName() {
+    this._businessName = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get businessNameInput() {
     return this._businessName;
   }
 
-  // business_phone - computed: false, optional: false, required: true
+  // business_phone - computed: false, optional: true, required: false
   private _businessPhone?: string; 
   public get businessPhone() {
     return this.getStringAttribute('business_phone');
@@ -466,18 +490,24 @@ export class OrganizationProfileOutputReference extends cdktf.ComplexObject {
   public set businessPhone(value: string) {
     this._businessPhone = value;
   }
+  public resetBusinessPhone() {
+    this._businessPhone = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get businessPhoneInput() {
     return this._businessPhone;
   }
 
-  // external_metadata - computed: false, optional: false, required: true
+  // external_metadata - computed: false, optional: true, required: false
   private _externalMetadata?: string; 
   public get externalMetadata() {
     return this.getStringAttribute('external_metadata');
   }
   public set externalMetadata(value: string) {
     this._externalMetadata = value;
+  }
+  public resetExternalMetadata() {
+    this._externalMetadata = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get externalMetadataInput() {
@@ -486,7 +516,7 @@ export class OrganizationProfileOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization cloudflare_organization}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization cloudflare_organization}
 */
 export class Organization extends cdktf.TerraformResource {
 
@@ -502,7 +532,7 @@ export class Organization extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Organization resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Organization to import
-  * @param importFromId The id of the existing Organization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Organization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Organization to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -514,7 +544,7 @@ export class Organization extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization cloudflare_organization} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization cloudflare_organization} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -525,7 +555,7 @@ export class Organization extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_organization',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -537,6 +567,7 @@ export class Organization extends cdktf.TerraformResource {
     });
     this._name = config.name;
     this._parent.internalValue = config.parent;
+    this._parentId = config.parentId;
     this._profile.internalValue = config.profile;
   }
 
@@ -573,7 +604,7 @@ export class Organization extends cdktf.TerraformResource {
     return this._name;
   }
 
-  // parent - computed: true, optional: true, required: false
+  // parent - computed: false, optional: true, required: false
   private _parent = new OrganizationParentOutputReference(this, "parent");
   public get parent() {
     return this._parent;
@@ -587,6 +618,22 @@ export class Organization extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get parentInput() {
     return this._parent.internalValue;
+  }
+
+  // parent_id - computed: false, optional: true, required: false
+  private _parentId?: string; 
+  public get parentId() {
+    return this.getStringAttribute('parent_id');
+  }
+  public set parentId(value: string) {
+    this._parentId = value;
+  }
+  public resetParentId() {
+    this._parentId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get parentIdInput() {
+    return this._parentId;
   }
 
   // profile - computed: false, optional: true, required: false
@@ -613,6 +660,7 @@ export class Organization extends cdktf.TerraformResource {
     return {
       name: cdktf.stringToTerraform(this._name),
       parent: organizationParentToTerraform(this._parent.internalValue),
+      parent_id: cdktf.stringToTerraform(this._parentId),
       profile: organizationProfileToTerraform(this._profile.internalValue),
     };
   }
@@ -630,6 +678,12 @@ export class Organization extends cdktf.TerraformResource {
         isBlock: true,
         type: "struct",
         storageClassType: "OrganizationParent",
+      },
+      parent_id: {
+        value: cdktf.stringToHclTerraform(this._parentId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
       profile: {
         value: organizationProfileToHclTerraform(this._profile.internalValue),

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket
+// https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,61 @@ export interface SecretSyncBitbucketConfig extends cdktf.TerraformMetaArguments 
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#auto_sync_enabled SecretSyncBitbucket#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#auto_sync_enabled SecretSyncBitbucket#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the bitbucket Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#connection_id SecretSyncBitbucket#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#connection_id SecretSyncBitbucket#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the Bitbucket sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#description SecretSyncBitbucket#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#description SecretSyncBitbucket#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#destination_config SecretSyncBitbucket#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#destination_config SecretSyncBitbucket#destination_config}
   */
   readonly destinationConfig: SecretSyncBitbucketDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#environment SecretSyncBitbucket#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#environment SecretSyncBitbucket#environment}
   */
   readonly environment: string;
   /**
+  * Whether to sync secrets from folders beneath the source path as well. Requires initial_sync_behavior to be 'overwrite-destination'.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#include_all_sub_folders SecretSyncBitbucket#include_all_sub_folders}
+  */
+  readonly includeAllSubFolders?: boolean | cdktf.IResolvable;
+  /**
   * The name of the Bitbucket sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#name SecretSyncBitbucket#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#name SecretSyncBitbucket#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#project_id SecretSyncBitbucket#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#project_id SecretSyncBitbucket#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#secret_path SecretSyncBitbucket#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#secret_path SecretSyncBitbucket#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#sync_options SecretSyncBitbucket#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#sync_options SecretSyncBitbucket#sync_options}
   */
   readonly syncOptions: SecretSyncBitbucketSyncOptions;
 }
@@ -66,19 +72,19 @@ export interface SecretSyncBitbucketDestinationConfig {
   /**
   * The Bitbucket deployment environment ID (optional).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#environment_id SecretSyncBitbucket#environment_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#environment_id SecretSyncBitbucket#environment_id}
   */
   readonly environmentId?: string;
   /**
   * The Bitbucket repository slug to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#repository_slug SecretSyncBitbucket#repository_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#repository_slug SecretSyncBitbucket#repository_slug}
   */
   readonly repositorySlug: string;
   /**
   * The Bitbucket workspace slug.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#workspace_slug SecretSyncBitbucket#workspace_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#workspace_slug SecretSyncBitbucket#workspace_slug}
   */
   readonly workspaceSlug: string;
 }
@@ -226,19 +232,19 @@ export interface SecretSyncBitbucketSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from Bitbucket. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#disable_secret_deletion SecretSyncBitbucket#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#disable_secret_deletion SecretSyncBitbucket#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#initial_sync_behavior SecretSyncBitbucket#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#initial_sync_behavior SecretSyncBitbucket#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the Bitbucket destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#key_schema SecretSyncBitbucket#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#key_schema SecretSyncBitbucket#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -387,7 +393,7 @@ export class SecretSyncBitbucketSyncOptionsOutputReference extends cdktf.Complex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket infisical_secret_sync_bitbucket}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket infisical_secret_sync_bitbucket}
 */
 export class SecretSyncBitbucket extends cdktf.TerraformResource {
 
@@ -403,7 +409,7 @@ export class SecretSyncBitbucket extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncBitbucket resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncBitbucket to import
-  * @param importFromId The id of the existing SecretSyncBitbucket that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncBitbucket that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncBitbucket to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -415,7 +421,7 @@ export class SecretSyncBitbucket extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/secret_sync_bitbucket infisical_secret_sync_bitbucket} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/secret_sync_bitbucket infisical_secret_sync_bitbucket} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -426,7 +432,7 @@ export class SecretSyncBitbucket extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_bitbucket',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.32'
+        providerVersion: '0.20.14'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -441,6 +447,7 @@ export class SecretSyncBitbucket extends cdktf.TerraformResource {
     this._description = config.description;
     this._destinationConfig.internalValue = config.destinationConfig;
     this._environment = config.environment;
+    this._includeAllSubFolders = config.includeAllSubFolders;
     this._name = config.name;
     this._projectId = config.projectId;
     this._secretPath = config.secretPath;
@@ -527,6 +534,22 @@ export class SecretSyncBitbucket extends cdktf.TerraformResource {
     return this.getStringAttribute('id');
   }
 
+  // include_all_sub_folders - computed: true, optional: true, required: false
+  private _includeAllSubFolders?: boolean | cdktf.IResolvable; 
+  public get includeAllSubFolders() {
+    return this.getBooleanAttribute('include_all_sub_folders');
+  }
+  public set includeAllSubFolders(value: boolean | cdktf.IResolvable) {
+    this._includeAllSubFolders = value;
+  }
+  public resetIncludeAllSubFolders() {
+    this._includeAllSubFolders = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get includeAllSubFoldersInput() {
+    return this._includeAllSubFolders;
+  }
+
   // name - computed: false, optional: false, required: true
   private _name?: string; 
   public get name() {
@@ -590,6 +613,7 @@ export class SecretSyncBitbucket extends cdktf.TerraformResource {
       description: cdktf.stringToTerraform(this._description),
       destination_config: secretSyncBitbucketDestinationConfigToTerraform(this._destinationConfig.internalValue),
       environment: cdktf.stringToTerraform(this._environment),
+      include_all_sub_folders: cdktf.booleanToTerraform(this._includeAllSubFolders),
       name: cdktf.stringToTerraform(this._name),
       project_id: cdktf.stringToTerraform(this._projectId),
       secret_path: cdktf.stringToTerraform(this._secretPath),
@@ -628,6 +652,12 @@ export class SecretSyncBitbucket extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      include_all_sub_folders: {
+        value: cdktf.booleanToHclTerraform(this._includeAllSubFolders),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),

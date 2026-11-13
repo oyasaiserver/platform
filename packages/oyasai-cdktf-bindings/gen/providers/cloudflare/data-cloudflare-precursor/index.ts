@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/precursor
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/precursor
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,14 +10,14 @@ export interface DataCloudflarePrecursorConfig extends cdktf.TerraformMetaArgume
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/precursor#zone_id DataCloudflarePrecursor#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/precursor#zone_id DataCloudflarePrecursor#zone_id}
   */
   readonly zoneId: string;
 }
-export interface DataCloudflarePrecursorEnforcementRules {
+export interface DataCloudflarePrecursorRules {
 }
 
-export function dataCloudflarePrecursorEnforcementRulesToTerraform(struct?: DataCloudflarePrecursorEnforcementRules): any {
+export function dataCloudflarePrecursorRulesToTerraform(struct?: DataCloudflarePrecursorRules): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
@@ -27,7 +27,7 @@ export function dataCloudflarePrecursorEnforcementRulesToTerraform(struct?: Data
 }
 
 
-export function dataCloudflarePrecursorEnforcementRulesToHclTerraform(struct?: DataCloudflarePrecursorEnforcementRules): any {
+export function dataCloudflarePrecursorRulesToHclTerraform(struct?: DataCloudflarePrecursorRules): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
@@ -37,7 +37,7 @@ export function dataCloudflarePrecursorEnforcementRulesToHclTerraform(struct?: D
   return attrs;
 }
 
-export class DataCloudflarePrecursorEnforcementRulesOutputReference extends cdktf.ComplexObject {
+export class DataCloudflarePrecursorRulesOutputReference extends cdktf.ComplexObject {
   private isEmptyObject = false;
 
   /**
@@ -50,13 +50,13 @@ export class DataCloudflarePrecursorEnforcementRulesOutputReference extends cdkt
     super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
   }
 
-  public get internalValue(): DataCloudflarePrecursorEnforcementRules | undefined {
+  public get internalValue(): DataCloudflarePrecursorRules | undefined {
     let hasAnyValues = this.isEmptyObject;
     const internalValueResult: any = {};
     return hasAnyValues ? internalValueResult : undefined;
   }
 
-  public set internalValue(value: DataCloudflarePrecursorEnforcementRules | undefined) {
+  public set internalValue(value: DataCloudflarePrecursorRules | undefined) {
     if (value === undefined) {
       this.isEmptyObject = false;
     }
@@ -85,13 +85,13 @@ export class DataCloudflarePrecursorEnforcementRulesOutputReference extends cdkt
     return this.getStringAttribute('id');
   }
 
-  // mode - computed: true, optional: false, required: false
-  public get mode() {
-    return this.getStringAttribute('mode');
+  // show_interstitial - computed: true, optional: false, required: false
+  public get showInterstitial() {
+    return this.getBooleanAttribute('show_interstitial');
   }
 }
 
-export class DataCloudflarePrecursorEnforcementRulesList extends cdktf.ComplexList {
+export class DataCloudflarePrecursorRulesList extends cdktf.ComplexList {
 
   /**
   * @param terraformResource The parent resource
@@ -105,13 +105,13 @@ export class DataCloudflarePrecursorEnforcementRulesList extends cdktf.ComplexLi
   /**
   * @param index the index of the item to return
   */
-  public get(index: number): DataCloudflarePrecursorEnforcementRulesOutputReference {
-    return new DataCloudflarePrecursorEnforcementRulesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  public get(index: number): DataCloudflarePrecursorRulesOutputReference {
+    return new DataCloudflarePrecursorRulesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/precursor cloudflare_precursor}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/precursor cloudflare_precursor}
 */
 export class DataCloudflarePrecursor extends cdktf.TerraformDataSource {
 
@@ -127,7 +127,7 @@ export class DataCloudflarePrecursor extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflarePrecursor resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflarePrecursor to import
-  * @param importFromId The id of the existing DataCloudflarePrecursor that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/precursor#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflarePrecursor that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/precursor#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflarePrecursor to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -139,7 +139,7 @@ export class DataCloudflarePrecursor extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/precursor cloudflare_precursor} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/precursor cloudflare_precursor} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -150,7 +150,7 @@ export class DataCloudflarePrecursor extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_precursor',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -167,20 +167,25 @@ export class DataCloudflarePrecursor extends cdktf.TerraformDataSource {
   // ATTRIBUTES
   // ==========
 
-  // default_mode - computed: true, optional: false, required: false
-  public get defaultMode() {
-    return this.getStringAttribute('default_mode');
-  }
-
-  // enforcement_rules - computed: true, optional: false, required: false
-  private _enforcementRules = new DataCloudflarePrecursorEnforcementRulesList(this, "enforcement_rules", false);
-  public get enforcementRules() {
-    return this._enforcementRules;
-  }
-
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // mode - computed: true, optional: false, required: false
+  public get mode() {
+    return this.getStringAttribute('mode');
+  }
+
+  // rules - computed: true, optional: false, required: false
+  private _rules = new DataCloudflarePrecursorRulesList(this, "rules", false);
+  public get rules() {
+    return this._rules;
+  }
+
+  // show_interstitial - computed: true, optional: false, required: false
+  public get showInterstitial() {
+    return this.getBooleanAttribute('show_interstitial');
   }
 
   // zone_id - computed: false, optional: false, required: true

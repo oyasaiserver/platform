@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workflows
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workflows
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,19 +8,19 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareWorkflowsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workflows#account_id DataCloudflareWorkflows#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workflows#account_id DataCloudflareWorkflows#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workflows#max_items DataCloudflareWorkflows#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workflows#max_items DataCloudflareWorkflows#max_items}
   */
   readonly maxItems?: number;
   /**
   * Allows filtering workflows` name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workflows#search DataCloudflareWorkflows#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workflows#search DataCloudflareWorkflows#search}
   */
   readonly search?: string;
 }
@@ -176,6 +176,11 @@ export class DataCloudflareWorkflowsResultOutputReference extends cdktf.ComplexO
     return this._instances;
   }
 
+  // jurisdiction - computed: true, optional: false, required: false
+  public get jurisdiction() {
+    return this.getStringAttribute('jurisdiction');
+  }
+
   // modified_on - computed: true, optional: false, required: false
   public get modifiedOn() {
     return this.getStringAttribute('modified_on');
@@ -190,6 +195,11 @@ export class DataCloudflareWorkflowsResultOutputReference extends cdktf.ComplexO
   private _schedules = new DataCloudflareWorkflowsResultSchedulesList(this, "schedules", false);
   public get schedules() {
     return this._schedules;
+  }
+
+  // script_deleted - computed: true, optional: false, required: false
+  public get scriptDeleted() {
+    return this.getBooleanAttribute('script_deleted');
   }
 
   // script_name - computed: true, optional: false, required: false
@@ -223,7 +233,7 @@ export class DataCloudflareWorkflowsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workflows cloudflare_workflows}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workflows cloudflare_workflows}
 */
 export class DataCloudflareWorkflows extends cdktf.TerraformDataSource {
 
@@ -239,7 +249,7 @@ export class DataCloudflareWorkflows extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorkflows resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkflows to import
-  * @param importFromId The id of the existing DataCloudflareWorkflows that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workflows#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkflows that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workflows#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkflows to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -251,7 +261,7 @@ export class DataCloudflareWorkflows extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workflows cloudflare_workflows} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workflows cloudflare_workflows} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -262,7 +272,7 @@ export class DataCloudflareWorkflows extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_workflows',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

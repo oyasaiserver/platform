@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_device_custom_profiles
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_device_custom_profiles
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,15 +8,81 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustDeviceCustomProfilesConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_device_custom_profiles#account_id DataCloudflareZeroTrustDeviceCustomProfiles#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_device_custom_profiles#account_id DataCloudflareZeroTrustDeviceCustomProfiles#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_device_custom_profiles#max_items DataCloudflareZeroTrustDeviceCustomProfiles#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_device_custom_profiles#max_items DataCloudflareZeroTrustDeviceCustomProfiles#max_items}
   */
   readonly maxItems?: number;
+  /**
+  * Filter profiles by client type. When omitted, only WARP profiles are returned.
+  * Available values: "warp", "browser_extension".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_device_custom_profiles#profile_type DataCloudflareZeroTrustDeviceCustomProfiles#profile_type}
+  */
+  readonly profileType?: string;
+}
+export interface DataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfig {
+}
+
+export function dataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfigToTerraform(struct?: DataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfig): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfigToHclTerraform(struct?: DataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfig): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfigOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfig | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfig | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // proxy_control - computed: true, optional: false, required: false
+  public get proxyControl() {
+    return this.getStringAttribute('proxy_control');
+  }
+
+  // proxy_enabled - computed: true, optional: false, required: false
+  public get proxyEnabled() {
+    return this.getBooleanAttribute('proxy_enabled');
+  }
 }
 export interface DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixes {
 }
@@ -622,6 +688,12 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultOutputReference ex
     return this.getNumberAttribute('auto_connect');
   }
 
+  // browser_extension_config - computed: true, optional: false, required: false
+  private _browserExtensionConfig = new DataCloudflareZeroTrustDeviceCustomProfilesResultBrowserExtensionConfigOutputReference(this, "browser_extension_config");
+  public get browserExtensionConfig() {
+    return this._browserExtensionConfig;
+  }
+
   // captive_portal - computed: true, optional: false, required: false
   public get captivePortal() {
     return this.getNumberAttribute('captive_portal');
@@ -646,6 +718,11 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultOutputReference ex
   private _dnsSearchSuffixes = new DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixesList(this, "dns_search_suffixes", false);
   public get dnsSearchSuffixes() {
     return this._dnsSearchSuffixes;
+  }
+
+  // enable_device_credential_authentication - computed: true, optional: false, required: false
+  public get enableDeviceCredentialAuthentication() {
+    return this.getBooleanAttribute('enable_device_credential_authentication');
   }
 
   // enabled - computed: true, optional: false, required: false
@@ -716,6 +793,11 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultOutputReference ex
     return this.getNumberAttribute('precedence');
   }
 
+  // profile_type - computed: true, optional: false, required: false
+  public get profileType() {
+    return this.getStringAttribute('profile_type');
+  }
+
   // register_interface_ip_with_dns - computed: true, optional: false, required: false
   public get registerInterfaceIpWithDns() {
     return this.getBooleanAttribute('register_interface_ip_with_dns');
@@ -753,6 +835,11 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultOutputReference ex
     return this.getStringAttribute('tunnel_protocol');
   }
 
+  // uninstall_protection - computed: true, optional: false, required: false
+  public get uninstallProtection() {
+    return this.getBooleanAttribute('uninstall_protection');
+  }
+
   // virtual_networks - computed: true, optional: false, required: false
   private _virtualNetworks = new DataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworksOutputReference(this, "virtual_networks");
   public get virtualNetworks() {
@@ -780,7 +867,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultList extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_device_custom_profiles cloudflare_zero_trust_device_custom_profiles}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_device_custom_profiles cloudflare_zero_trust_device_custom_profiles}
 */
 export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.TerraformDataSource {
 
@@ -796,7 +883,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
   * Generates CDKTF code for importing a DataCloudflareZeroTrustDeviceCustomProfiles resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDeviceCustomProfiles to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceCustomProfiles that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_device_custom_profiles#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceCustomProfiles that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_device_custom_profiles#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDeviceCustomProfiles to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -808,7 +895,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_device_custom_profiles cloudflare_zero_trust_device_custom_profiles} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_device_custom_profiles cloudflare_zero_trust_device_custom_profiles} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -819,7 +906,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
       terraformResourceType: 'cloudflare_zero_trust_device_custom_profiles',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -831,6 +918,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
     });
     this._accountId = config.accountId;
     this._maxItems = config.maxItems;
+    this._profileType = config.profileType;
   }
 
   // ==========
@@ -869,6 +957,22 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
     return this._maxItems;
   }
 
+  // profile_type - computed: true, optional: true, required: false
+  private _profileType?: string; 
+  public get profileType() {
+    return this.getStringAttribute('profile_type');
+  }
+  public set profileType(value: string) {
+    this._profileType = value;
+  }
+  public resetProfileType() {
+    this._profileType = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get profileTypeInput() {
+    return this._profileType;
+  }
+
   // result - computed: true, optional: false, required: false
   private _result = new DataCloudflareZeroTrustDeviceCustomProfilesResultList(this, "result", false);
   public get result() {
@@ -883,6 +987,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
       max_items: cdktf.numberToTerraform(this._maxItems),
+      profile_type: cdktf.stringToTerraform(this._profileType),
     };
   }
 
@@ -899,6 +1004,12 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
         isBlock: false,
         type: "simple",
         storageClassType: "number",
+      },
+      profile_type: {
+        value: cdktf.stringToHclTerraform(this._profileType),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
     };
 

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_list
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,26 +8,83 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustListConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_list#account_id DataCloudflareZeroTrustList#account_id}
+  * Specify the Cloudflare account identifier.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#account_id DataCloudflareZeroTrustList#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_list#filter DataCloudflareZeroTrustList#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#filter DataCloudflareZeroTrustList#filter}
   */
   readonly filter?: DataCloudflareZeroTrustListFilter;
   /**
   * Identify the API resource with a UUID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_list#list_id DataCloudflareZeroTrustList#list_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#list_id DataCloudflareZeroTrustList#list_id}
   */
   readonly listId?: string;
 }
 export interface DataCloudflareZeroTrustListFilter {
   /**
+  * Sort direction. Applies to the field named in `order_by`; when `order_by`
+  * is omitted it applies to the default `created_at` ordering. When
+  * `direction` is omitted the default is field-specific: explicitly choosing
+  * `created_at` or `updated_at` defaults to descending (newest first); `name`
+  * and `item_count` default to ascending; and the default `created_at`
+  * ordering used when `order_by` is omitted is ascending (for backwards
+  * compatibility).
+  *   * `asc` — ascending.
+  *   * `desc` — descending.
+  * Available values: "asc", "desc".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#direction DataCloudflareZeroTrustList#direction}
+  */
+  readonly direction?: string;
+  /**
+  * Filter the returned lists by one or more `field:value` pairs.
+  * Repeat the parameter to apply multiple filters; they are combined with
+  * logical AND (a list must satisfy every filter to be returned).
+  * 
+  * Supported fields and their matching behaviour:
+  *   * `name` — case-insensitive substring match on the list name.
+  *   * `id` — substring match on the list ID (UUID), with or without dashes.
+  *   * `type` — exact match on the list type. Supersedes the legacy `type` query
+  *     parameter when both are supplied. Must be one of the valid type values.
+  *   * `item_count` — exact integer match on the number of items in the list.
+  * 
+  * Each entry must match one of the per-field patterns below: the field must be
+  * one of `name`, `id`, `type`, or `item_count`; `name`/`id` accept any value,
+  * `type` is restricted to the valid list type values, and `item_count` must be
+  * a non-negative integer.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#filter DataCloudflareZeroTrustList#filter}
+  */
+  readonly filter?: string[];
+  /**
+  * Field to sort the returned lists by. When omitted, results are ordered by
+  * `created_at` in ascending order (i.e. creation order) for backwards
+  * compatibility. Supported values:
+  *   * `name` — sort alphabetically by list name.
+  *   * `created_at` — sort by creation time; defaults to descending unless `direction` is set.
+  *   * `updated_at` — sort by last-modified time; defaults to descending unless `direction` is set.
+  *   * `item_count` — sort by number of items in the list.
+  * Available values: "name", "created_at", "updated_at", "item_count".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#order_by DataCloudflareZeroTrustList#order_by}
+  */
+  readonly orderBy?: string;
+  /**
+  * Case-insensitive substring match on the list name or description. When
+  * combined with `filter`, both must match (logical AND).
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#search DataCloudflareZeroTrustList#search}
+  */
+  readonly search?: string;
+  /**
   * Specify the list type.
   * Available values: "SERIAL", "URL", "DOMAIN", "EMAIL", "IP", "CATEGORY", "LOCATION", "DEVICE", "AAGUID".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_list#type DataCloudflareZeroTrustList#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#type DataCloudflareZeroTrustList#type}
   */
   readonly type?: string;
 }
@@ -38,6 +95,10 @@ export function dataCloudflareZeroTrustListFilterToTerraform(struct?: DataCloudf
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   return {
+    direction: cdktf.stringToTerraform(struct!.direction),
+    filter: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.filter),
+    order_by: cdktf.stringToTerraform(struct!.orderBy),
+    search: cdktf.stringToTerraform(struct!.search),
     type: cdktf.stringToTerraform(struct!.type),
   }
 }
@@ -49,6 +110,30 @@ export function dataCloudflareZeroTrustListFilterToHclTerraform(struct?: DataClo
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   const attrs = {
+    direction: {
+      value: cdktf.stringToHclTerraform(struct!.direction),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    filter: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.filter),
+      isBlock: false,
+      type: "list",
+      storageClassType: "stringList",
+    },
+    order_by: {
+      value: cdktf.stringToHclTerraform(struct!.orderBy),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    search: {
+      value: cdktf.stringToHclTerraform(struct!.search),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
     type: {
       value: cdktf.stringToHclTerraform(struct!.type),
       isBlock: false,
@@ -79,6 +164,22 @@ export class DataCloudflareZeroTrustListFilterOutputReference extends cdktf.Comp
     }
     let hasAnyValues = this.isEmptyObject;
     const internalValueResult: any = {};
+    if (this._direction !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.direction = this._direction;
+    }
+    if (this._filter !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.filter = this._filter;
+    }
+    if (this._orderBy !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.orderBy = this._orderBy;
+    }
+    if (this._search !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.search = this._search;
+    }
     if (this._type !== undefined) {
       hasAnyValues = true;
       internalValueResult.type = this._type;
@@ -90,6 +191,10 @@ export class DataCloudflareZeroTrustListFilterOutputReference extends cdktf.Comp
     if (value === undefined) {
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
+      this._direction = undefined;
+      this._filter = undefined;
+      this._orderBy = undefined;
+      this._search = undefined;
       this._type = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
@@ -99,8 +204,76 @@ export class DataCloudflareZeroTrustListFilterOutputReference extends cdktf.Comp
     else {
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
+      this._direction = value.direction;
+      this._filter = value.filter;
+      this._orderBy = value.orderBy;
+      this._search = value.search;
       this._type = value.type;
     }
+  }
+
+  // direction - computed: false, optional: true, required: false
+  private _direction?: string; 
+  public get direction() {
+    return this.getStringAttribute('direction');
+  }
+  public set direction(value: string) {
+    this._direction = value;
+  }
+  public resetDirection() {
+    this._direction = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get directionInput() {
+    return this._direction;
+  }
+
+  // filter - computed: false, optional: true, required: false
+  private _filter?: string[]; 
+  public get filter() {
+    return this.getListAttribute('filter');
+  }
+  public set filter(value: string[]) {
+    this._filter = value;
+  }
+  public resetFilter() {
+    this._filter = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get filterInput() {
+    return this._filter;
+  }
+
+  // order_by - computed: false, optional: true, required: false
+  private _orderBy?: string; 
+  public get orderBy() {
+    return this.getStringAttribute('order_by');
+  }
+  public set orderBy(value: string) {
+    this._orderBy = value;
+  }
+  public resetOrderBy() {
+    this._orderBy = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orderByInput() {
+    return this._orderBy;
+  }
+
+  // search - computed: false, optional: true, required: false
+  private _search?: string; 
+  public get search() {
+    return this.getStringAttribute('search');
+  }
+  public set search(value: string) {
+    this._search = value;
+  }
+  public resetSearch() {
+    this._search = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get searchInput() {
+    return this._search;
   }
 
   // type - computed: false, optional: true, required: false
@@ -206,7 +379,7 @@ export class DataCloudflareZeroTrustListItemsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_list cloudflare_zero_trust_list}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list cloudflare_zero_trust_list}
 */
 export class DataCloudflareZeroTrustList extends cdktf.TerraformDataSource {
 
@@ -222,7 +395,7 @@ export class DataCloudflareZeroTrustList extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareZeroTrustList resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustList to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustList that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_list#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustList that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustList to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -234,7 +407,7 @@ export class DataCloudflareZeroTrustList extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_list cloudflare_zero_trust_list} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_list cloudflare_zero_trust_list} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -245,7 +418,7 @@ export class DataCloudflareZeroTrustList extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_zero_trust_list',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

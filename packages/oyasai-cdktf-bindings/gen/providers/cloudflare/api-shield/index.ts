@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,28 +8,40 @@ import * as cdktf from 'cdktf';
 
 export interface ApiShieldConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield#auth_id_characteristics ApiShield#auth_id_characteristics}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield#auth_id_characteristics ApiShield#auth_id_characteristics}
   */
   readonly authIdCharacteristics: ApiShieldAuthIdCharacteristics[] | cdktf.IResolvable;
   /**
+  * Ensures that the configuration is written or retrieved in normalized fashion
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield#normalize ApiShield#normalize}
+  */
+  readonly normalize?: boolean | cdktf.IResolvable;
+  /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield#zone_id ApiShield#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield#zone_id ApiShield#zone_id}
   */
   readonly zoneId: string;
 }
 export interface ApiShieldAuthIdCharacteristics {
   /**
-  * The name of the characteristic field, i.e., the header or cookie name.
+  * For `type: header` or `type: cookie`: The name of the characteristic field, i.e., the header or cookie name.
+  * 
+  * For `type: jwt`: Claim location expressed as `$(token_config_id):$(json_path)`, where `token_config_id` 
+  * is the ID of the token configuration used in validating the JWT, and `json_path` is a RFC 9535 
+  * JSONPath (https://goessner.net/articles/JsonPath/, https://www.rfc-editor.org/rfc/rfc9535.html).
+  * The JSONPath expression may be in dot or bracket notation, may only specify literal keys
+  * or array indexes, and must return a singleton value, which will be interpreted as a string.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield#name ApiShield#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield#name ApiShield#name}
   */
   readonly name: string;
   /**
   * The type of characteristic.
   * Available values: "header", "cookie", "jwt".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield#type ApiShield#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield#type ApiShield#type}
   */
   readonly type: string;
 }
@@ -168,7 +180,7 @@ export class ApiShieldAuthIdCharacteristicsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield cloudflare_api_shield}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield cloudflare_api_shield}
 */
 export class ApiShield extends cdktf.TerraformResource {
 
@@ -184,7 +196,7 @@ export class ApiShield extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ApiShield resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ApiShield to import
-  * @param importFromId The id of the existing ApiShield that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ApiShield that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ApiShield to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -196,7 +208,7 @@ export class ApiShield extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/api_shield cloudflare_api_shield} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/api_shield cloudflare_api_shield} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -207,7 +219,7 @@ export class ApiShield extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_api_shield',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -218,6 +230,7 @@ export class ApiShield extends cdktf.TerraformResource {
       forEach: config.forEach
     });
     this._authIdCharacteristics.internalValue = config.authIdCharacteristics;
+    this._normalize = config.normalize;
     this._zoneId = config.zoneId;
   }
 
@@ -243,6 +256,22 @@ export class ApiShield extends cdktf.TerraformResource {
     return this.getStringAttribute('id');
   }
 
+  // normalize - computed: false, optional: true, required: false
+  private _normalize?: boolean | cdktf.IResolvable; 
+  public get normalize() {
+    return this.getBooleanAttribute('normalize');
+  }
+  public set normalize(value: boolean | cdktf.IResolvable) {
+    this._normalize = value;
+  }
+  public resetNormalize() {
+    this._normalize = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get normalizeInput() {
+    return this._normalize;
+  }
+
   // zone_id - computed: false, optional: false, required: true
   private _zoneId?: string; 
   public get zoneId() {
@@ -263,6 +292,7 @@ export class ApiShield extends cdktf.TerraformResource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       auth_id_characteristics: cdktf.listMapper(apiShieldAuthIdCharacteristicsToTerraform, false)(this._authIdCharacteristics.internalValue),
+      normalize: cdktf.booleanToTerraform(this._normalize),
       zone_id: cdktf.stringToTerraform(this._zoneId),
     };
   }
@@ -274,6 +304,12 @@ export class ApiShield extends cdktf.TerraformResource {
         isBlock: true,
         type: "list",
         storageClassType: "ApiShieldAuthIdCharacteristicsList",
+      },
+      normalize: {
+        value: cdktf.booleanToHclTerraform(this._normalize),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       zone_id: {
         value: cdktf.stringToHclTerraform(this._zoneId),

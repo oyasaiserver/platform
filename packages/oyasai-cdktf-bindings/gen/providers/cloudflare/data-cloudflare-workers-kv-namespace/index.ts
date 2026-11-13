@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,35 +8,35 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareWorkersKvNamespaceConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Identifier.
+  * ID of the Cloudflare account that owns the Workers KV namespaces.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace#account_id DataCloudflareWorkersKvNamespace#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace#account_id DataCloudflareWorkersKvNamespace#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace#filter DataCloudflareWorkersKvNamespace#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace#filter DataCloudflareWorkersKvNamespace#filter}
   */
   readonly filter?: DataCloudflareWorkersKvNamespaceFilter;
   /**
-  * Namespace identifier tag.
+  * ID of the Workers KV namespace.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace#namespace_id DataCloudflareWorkersKvNamespace#namespace_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace#namespace_id DataCloudflareWorkersKvNamespace#namespace_id}
   */
   readonly namespaceId?: string;
 }
 export interface DataCloudflareWorkersKvNamespaceFilter {
   /**
-  * Direction to order namespaces.
+  * Sort namespaces in ascending (`asc`) or descending (`desc`) order.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace#direction DataCloudflareWorkersKvNamespace#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace#direction DataCloudflareWorkersKvNamespace#direction}
   */
   readonly direction?: string;
   /**
-  * Field to order results by.
+  * Namespace field to sort by (`id` or `title`).
   * Available values: "id", "title".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace#order DataCloudflareWorkersKvNamespace#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace#order DataCloudflareWorkersKvNamespace#order}
   */
   readonly order?: string;
 }
@@ -159,7 +159,7 @@ export class DataCloudflareWorkersKvNamespaceFilterOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace cloudflare_workers_kv_namespace}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace cloudflare_workers_kv_namespace}
 */
 export class DataCloudflareWorkersKvNamespace extends cdktf.TerraformDataSource {
 
@@ -175,7 +175,7 @@ export class DataCloudflareWorkersKvNamespace extends cdktf.TerraformDataSource 
   * Generates CDKTF code for importing a DataCloudflareWorkersKvNamespace resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkersKvNamespace to import
-  * @param importFromId The id of the existing DataCloudflareWorkersKvNamespace that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkersKvNamespace that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkersKvNamespace to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -187,7 +187,7 @@ export class DataCloudflareWorkersKvNamespace extends cdktf.TerraformDataSource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_kv_namespace cloudflare_workers_kv_namespace} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_kv_namespace cloudflare_workers_kv_namespace} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -198,7 +198,7 @@ export class DataCloudflareWorkersKvNamespace extends cdktf.TerraformDataSource 
       terraformResourceType: 'cloudflare_workers_kv_namespace',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -257,6 +257,11 @@ export class DataCloudflareWorkersKvNamespace extends cdktf.TerraformDataSource 
   // jurisdiction - computed: true, optional: false, required: false
   public get jurisdiction() {
     return this.getStringAttribute('jurisdiction');
+  }
+
+  // mode - computed: true, optional: false, required: false
+  public get mode() {
+    return this.getStringAttribute('mode');
   }
 
   // namespace_id - computed: false, optional: true, required: false

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,60 @@ export interface MagicTransitSiteWanConfig extends cdktf.TerraformMetaArguments 
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#account_id MagicTransitSiteWan#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#account_id MagicTransitSiteWan#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#name MagicTransitSiteWan#name}
+  * Magic WAN health check rate for tunnels created on this link. The default value is `mid`.
+  * Available values: "low", "mid", "high".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#health_check_rate MagicTransitSiteWan#health_check_rate}
+  */
+  readonly healthCheckRate?: string;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#load_balance_inner_flows MagicTransitSiteWan#load_balance_inner_flows}
+  */
+  readonly loadBalanceInnerFlows?: boolean | cdktf.IResolvable;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#name MagicTransitSiteWan#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#physport MagicTransitSiteWan#physport}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#physport MagicTransitSiteWan#physport}
   */
   readonly physport: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#priority MagicTransitSiteWan#priority}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#priority MagicTransitSiteWan#priority}
   */
   readonly priority?: number;
   /**
+  * Provisioned download rate of the WAN circuit in kilobits per second.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#provisioned_download_kbps MagicTransitSiteWan#provisioned_download_kbps}
+  */
+  readonly provisionedDownloadKbps?: number;
+  /**
+  * Provisioned upload rate of the WAN circuit in kilobits per second.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#provisioned_upload_kbps MagicTransitSiteWan#provisioned_upload_kbps}
+  */
+  readonly provisionedUploadKbps?: number;
+  /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#site_id MagicTransitSiteWan#site_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#site_id MagicTransitSiteWan#site_id}
   */
   readonly siteId: string;
   /**
-  * (optional) if omitted, use DHCP. Submit secondary_address when site is in high availability mode.
+  * Static addressing configuration for a WAN. Omit to use DHCP. Submit secondary_address when the site is in high availability mode.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#static_addressing MagicTransitSiteWan#static_addressing}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#static_addressing MagicTransitSiteWan#static_addressing}
   */
   readonly staticAddressing?: MagicTransitSiteWanStaticAddressing;
   /**
   * VLAN ID. Use zero for untagged.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#vlan_tag MagicTransitSiteWan#vlan_tag}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#vlan_tag MagicTransitSiteWan#vlan_tag}
   */
   readonly vlanTag?: number;
 }
@@ -48,21 +71,27 @@ export interface MagicTransitSiteWanStaticAddressing {
   /**
   * A valid CIDR notation representing an IP range.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#address MagicTransitSiteWan#address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#address MagicTransitSiteWan#address}
   */
   readonly address: string;
   /**
   * A valid IPv4 address.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#gateway_address MagicTransitSiteWan#gateway_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#gateway_address MagicTransitSiteWan#gateway_address}
   */
   readonly gatewayAddress: string;
   /**
   * A valid CIDR notation representing an IP range.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#secondary_address MagicTransitSiteWan#secondary_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#secondary_address MagicTransitSiteWan#secondary_address}
   */
   readonly secondaryAddress?: string;
+  /**
+  * Gateway address for the secondary connector of a high availability site.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#secondary_gateway_address MagicTransitSiteWan#secondary_gateway_address}
+  */
+  readonly secondaryGatewayAddress?: string;
 }
 
 export function magicTransitSiteWanStaticAddressingToTerraform(struct?: MagicTransitSiteWanStaticAddressing | cdktf.IResolvable): any {
@@ -74,6 +103,7 @@ export function magicTransitSiteWanStaticAddressingToTerraform(struct?: MagicTra
     address: cdktf.stringToTerraform(struct!.address),
     gateway_address: cdktf.stringToTerraform(struct!.gatewayAddress),
     secondary_address: cdktf.stringToTerraform(struct!.secondaryAddress),
+    secondary_gateway_address: cdktf.stringToTerraform(struct!.secondaryGatewayAddress),
   }
 }
 
@@ -98,6 +128,12 @@ export function magicTransitSiteWanStaticAddressingToHclTerraform(struct?: Magic
     },
     secondary_address: {
       value: cdktf.stringToHclTerraform(struct!.secondaryAddress),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    secondary_gateway_address: {
+      value: cdktf.stringToHclTerraform(struct!.secondaryGatewayAddress),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -138,6 +174,10 @@ export class MagicTransitSiteWanStaticAddressingOutputReference extends cdktf.Co
       hasAnyValues = true;
       internalValueResult.secondaryAddress = this._secondaryAddress;
     }
+    if (this._secondaryGatewayAddress !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.secondaryGatewayAddress = this._secondaryGatewayAddress;
+    }
     return hasAnyValues ? internalValueResult : undefined;
   }
 
@@ -148,6 +188,7 @@ export class MagicTransitSiteWanStaticAddressingOutputReference extends cdktf.Co
       this._address = undefined;
       this._gatewayAddress = undefined;
       this._secondaryAddress = undefined;
+      this._secondaryGatewayAddress = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
       this.isEmptyObject = false;
@@ -159,6 +200,7 @@ export class MagicTransitSiteWanStaticAddressingOutputReference extends cdktf.Co
       this._address = value.address;
       this._gatewayAddress = value.gatewayAddress;
       this._secondaryAddress = value.secondaryAddress;
+      this._secondaryGatewayAddress = value.secondaryGatewayAddress;
     }
   }
 
@@ -203,10 +245,26 @@ export class MagicTransitSiteWanStaticAddressingOutputReference extends cdktf.Co
   public get secondaryAddressInput() {
     return this._secondaryAddress;
   }
+
+  // secondary_gateway_address - computed: false, optional: true, required: false
+  private _secondaryGatewayAddress?: string; 
+  public get secondaryGatewayAddress() {
+    return this.getStringAttribute('secondary_gateway_address');
+  }
+  public set secondaryGatewayAddress(value: string) {
+    this._secondaryGatewayAddress = value;
+  }
+  public resetSecondaryGatewayAddress() {
+    this._secondaryGatewayAddress = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get secondaryGatewayAddressInput() {
+    return this._secondaryGatewayAddress;
+  }
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan cloudflare_magic_transit_site_wan}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan cloudflare_magic_transit_site_wan}
 */
 export class MagicTransitSiteWan extends cdktf.TerraformResource {
 
@@ -222,7 +280,7 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a MagicTransitSiteWan resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the MagicTransitSiteWan to import
-  * @param importFromId The id of the existing MagicTransitSiteWan that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing MagicTransitSiteWan that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the MagicTransitSiteWan to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -234,7 +292,7 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/magic_transit_site_wan cloudflare_magic_transit_site_wan} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/magic_transit_site_wan cloudflare_magic_transit_site_wan} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -245,7 +303,7 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_magic_transit_site_wan',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -256,9 +314,13 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
       forEach: config.forEach
     });
     this._accountId = config.accountId;
+    this._healthCheckRate = config.healthCheckRate;
+    this._loadBalanceInnerFlows = config.loadBalanceInnerFlows;
     this._name = config.name;
     this._physport = config.physport;
     this._priority = config.priority;
+    this._provisionedDownloadKbps = config.provisionedDownloadKbps;
+    this._provisionedUploadKbps = config.provisionedUploadKbps;
     this._siteId = config.siteId;
     this._staticAddressing.internalValue = config.staticAddressing;
     this._vlanTag = config.vlanTag;
@@ -281,14 +343,41 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
     return this._accountId;
   }
 
-  // health_check_rate - computed: true, optional: false, required: false
+  // health_check_rate - computed: true, optional: true, required: false
+  private _healthCheckRate?: string; 
   public get healthCheckRate() {
     return this.getStringAttribute('health_check_rate');
+  }
+  public set healthCheckRate(value: string) {
+    this._healthCheckRate = value;
+  }
+  public resetHealthCheckRate() {
+    this._healthCheckRate = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get healthCheckRateInput() {
+    return this._healthCheckRate;
   }
 
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // load_balance_inner_flows - computed: true, optional: true, required: false
+  private _loadBalanceInnerFlows?: boolean | cdktf.IResolvable; 
+  public get loadBalanceInnerFlows() {
+    return this.getBooleanAttribute('load_balance_inner_flows');
+  }
+  public set loadBalanceInnerFlows(value: boolean | cdktf.IResolvable) {
+    this._loadBalanceInnerFlows = value;
+  }
+  public resetLoadBalanceInnerFlows() {
+    this._loadBalanceInnerFlows = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get loadBalanceInnerFlowsInput() {
+    return this._loadBalanceInnerFlows;
   }
 
   // name - computed: false, optional: true, required: false
@@ -334,6 +423,38 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get priorityInput() {
     return this._priority;
+  }
+
+  // provisioned_download_kbps - computed: false, optional: true, required: false
+  private _provisionedDownloadKbps?: number; 
+  public get provisionedDownloadKbps() {
+    return this.getNumberAttribute('provisioned_download_kbps');
+  }
+  public set provisionedDownloadKbps(value: number) {
+    this._provisionedDownloadKbps = value;
+  }
+  public resetProvisionedDownloadKbps() {
+    this._provisionedDownloadKbps = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get provisionedDownloadKbpsInput() {
+    return this._provisionedDownloadKbps;
+  }
+
+  // provisioned_upload_kbps - computed: false, optional: true, required: false
+  private _provisionedUploadKbps?: number; 
+  public get provisionedUploadKbps() {
+    return this.getNumberAttribute('provisioned_upload_kbps');
+  }
+  public set provisionedUploadKbps(value: number) {
+    this._provisionedUploadKbps = value;
+  }
+  public resetProvisionedUploadKbps() {
+    this._provisionedUploadKbps = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get provisionedUploadKbpsInput() {
+    return this._provisionedUploadKbps;
   }
 
   // site_id - computed: false, optional: false, required: true
@@ -388,9 +509,13 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
+      health_check_rate: cdktf.stringToTerraform(this._healthCheckRate),
+      load_balance_inner_flows: cdktf.booleanToTerraform(this._loadBalanceInnerFlows),
       name: cdktf.stringToTerraform(this._name),
       physport: cdktf.numberToTerraform(this._physport),
       priority: cdktf.numberToTerraform(this._priority),
+      provisioned_download_kbps: cdktf.numberToTerraform(this._provisionedDownloadKbps),
+      provisioned_upload_kbps: cdktf.numberToTerraform(this._provisionedUploadKbps),
       site_id: cdktf.stringToTerraform(this._siteId),
       static_addressing: magicTransitSiteWanStaticAddressingToTerraform(this._staticAddressing.internalValue),
       vlan_tag: cdktf.numberToTerraform(this._vlanTag),
@@ -404,6 +529,18 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      health_check_rate: {
+        value: cdktf.stringToHclTerraform(this._healthCheckRate),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      load_balance_inner_flows: {
+        value: cdktf.booleanToHclTerraform(this._loadBalanceInnerFlows),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),
@@ -419,6 +556,18 @@ export class MagicTransitSiteWan extends cdktf.TerraformResource {
       },
       priority: {
         value: cdktf.numberToHclTerraform(this._priority),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "number",
+      },
+      provisioned_download_kbps: {
+        value: cdktf.numberToHclTerraform(this._provisionedDownloadKbps),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "number",
+      },
+      provisioned_upload_kbps: {
+        value: cdktf.numberToHclTerraform(this._provisionedUploadKbps),
         isBlock: false,
         type: "simple",
         storageClassType: "number",

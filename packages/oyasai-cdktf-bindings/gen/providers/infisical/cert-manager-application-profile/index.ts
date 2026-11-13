@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile
+// https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface CertManagerApplicationProfileConfig extends cdktf.TerraformMeta
   /**
   * Enable the ACME enrollment method. Omit the block to disable ACME enrollment.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#acme_config CertManagerApplicationProfile#acme_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#acme_config CertManagerApplicationProfile#acme_config}
   */
   readonly acmeConfig?: CertManagerApplicationProfileAcmeConfig;
   /**
   * Enable the API enrollment method. Omit the block to disable API enrollment.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#api_config CertManagerApplicationProfile#api_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#api_config CertManagerApplicationProfile#api_config}
   */
   readonly apiConfig?: CertManagerApplicationProfileApiConfig;
   /**
   * The ID of the Certificate Manager application
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#application_id CertManagerApplicationProfile#application_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#application_id CertManagerApplicationProfile#application_id}
   */
   readonly applicationId: string;
   /**
   * Enable the EST enrollment method. Omit the block to disable EST enrollment.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#est_config CertManagerApplicationProfile#est_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#est_config CertManagerApplicationProfile#est_config}
   */
   readonly estConfig?: CertManagerApplicationProfileEstConfig;
   /**
   * The ID of the certificate profile to attach
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#profile_id CertManagerApplicationProfile#profile_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#profile_id CertManagerApplicationProfile#profile_id}
   */
   readonly profileId: string;
   /**
   * Enable the SCEP enrollment method. Omit the block to disable SCEP enrollment.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#scep_config CertManagerApplicationProfile#scep_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#scep_config CertManagerApplicationProfile#scep_config}
   */
   readonly scepConfig?: CertManagerApplicationProfileScepConfig;
 }
@@ -48,13 +48,13 @@ export interface CertManagerApplicationProfileAcmeConfig {
   /**
   * Skip DNS ownership verification. Defaults to false.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#skip_dns_ownership_verification CertManagerApplicationProfile#skip_dns_ownership_verification}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#skip_dns_ownership_verification CertManagerApplicationProfile#skip_dns_ownership_verification}
   */
   readonly skipDnsOwnershipVerification?: boolean | cdktf.IResolvable;
   /**
   * Skip External Account Binding. Defaults to false. Cannot be set to true at the same time as skip_dns_ownership_verification.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#skip_eab_binding CertManagerApplicationProfile#skip_eab_binding}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#skip_eab_binding CertManagerApplicationProfile#skip_eab_binding}
   */
   readonly skipEabBinding?: boolean | cdktf.IResolvable;
 }
@@ -194,13 +194,13 @@ export interface CertManagerApplicationProfileApiConfig {
   /**
   * Whether to automatically renew certificates. Defaults to false when omitted.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#auto_renew CertManagerApplicationProfile#auto_renew}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#auto_renew CertManagerApplicationProfile#auto_renew}
   */
   readonly autoRenew?: boolean | cdktf.IResolvable;
   /**
   * Number of days before expiration to renew (1-30). Defaults to 7 when omitted.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#renew_before_days CertManagerApplicationProfile#renew_before_days}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#renew_before_days CertManagerApplicationProfile#renew_before_days}
   */
   readonly renewBeforeDays?: number;
 }
@@ -325,19 +325,19 @@ export interface CertManagerApplicationProfileEstConfig {
   /**
   * PEM-encoded CA chain used for bootstrap CA validation (only honored when disable_bootstrap_ca_validation is false).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#ca_chain CertManagerApplicationProfile#ca_chain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#ca_chain CertManagerApplicationProfile#ca_chain}
   */
   readonly caChain?: string;
   /**
   * Whether to disable bootstrap CA validation. Defaults to false.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#disable_bootstrap_ca_validation CertManagerApplicationProfile#disable_bootstrap_ca_validation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#disable_bootstrap_ca_validation CertManagerApplicationProfile#disable_bootstrap_ca_validation}
   */
   readonly disableBootstrapCaValidation?: boolean | cdktf.IResolvable;
   /**
   * EST passphrase used to authorize certificate requests.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#passphrase CertManagerApplicationProfile#passphrase}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#passphrase CertManagerApplicationProfile#passphrase}
   */
   readonly passphrase: string;
 }
@@ -493,39 +493,45 @@ export interface CertManagerApplicationProfileScepConfig {
   /**
   * Allow certificate-based renewal. Defaults to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#allow_cert_based_renewal CertManagerApplicationProfile#allow_cert_based_renewal}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#allow_cert_based_renewal CertManagerApplicationProfile#allow_cert_based_renewal}
   */
   readonly allowCertBasedRenewal?: boolean | cdktf.IResolvable;
   /**
   * Static-mode SCEP challenge password (min 8 chars). Required when challenge_type is static.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#challenge_password CertManagerApplicationProfile#challenge_password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#challenge_password CertManagerApplicationProfile#challenge_password}
   */
   readonly challengePassword?: string;
   /**
   * SCEP challenge type. Supported values: static, dynamic. Defaults to static.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#challenge_type CertManagerApplicationProfile#challenge_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#challenge_type CertManagerApplicationProfile#challenge_type}
   */
   readonly challengeType?: string;
   /**
   * Expiry of a dynamic challenge in minutes (1-1440). Only used when challenge_type is dynamic.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#dynamic_challenge_expiry_minutes CertManagerApplicationProfile#dynamic_challenge_expiry_minutes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#dynamic_challenge_expiry_minutes CertManagerApplicationProfile#dynamic_challenge_expiry_minutes}
   */
   readonly dynamicChallengeExpiryMinutes?: number;
   /**
   * Maximum pending dynamic challenges (1-1000). Only used when challenge_type is dynamic.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#dynamic_challenge_max_pending CertManagerApplicationProfile#dynamic_challenge_max_pending}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#dynamic_challenge_max_pending CertManagerApplicationProfile#dynamic_challenge_max_pending}
   */
   readonly dynamicChallengeMaxPending?: number;
   /**
   * Include the issuing CA certificate in SCEP responses. Defaults to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#include_ca_cert_in_response CertManagerApplicationProfile#include_ca_cert_in_response}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#include_ca_cert_in_response CertManagerApplicationProfile#include_ca_cert_in_response}
   */
   readonly includeCaCertInResponse?: boolean | cdktf.IResolvable;
+  /**
+  * Sign the RA certificate with the profile's CA instead of self-signing it, so it chains to the CA root. Required by strict clients such as Apple and Microsoft Intune. Only supported for internal CAs. Cannot be changed once SCEP enrollment is configured. To change it, remove scep_config (or the whole resource) to disable SCEP enrollment in one apply, then add scep_config back with the new value in a subsequent apply. Defaults to false.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#sign_ra_with_ca CertManagerApplicationProfile#sign_ra_with_ca}
+  */
+  readonly signRaWithCa?: boolean | cdktf.IResolvable;
 }
 
 export function certManagerApplicationProfileScepConfigToTerraform(struct?: CertManagerApplicationProfileScepConfig | cdktf.IResolvable): any {
@@ -540,6 +546,7 @@ export function certManagerApplicationProfileScepConfigToTerraform(struct?: Cert
     dynamic_challenge_expiry_minutes: cdktf.numberToTerraform(struct!.dynamicChallengeExpiryMinutes),
     dynamic_challenge_max_pending: cdktf.numberToTerraform(struct!.dynamicChallengeMaxPending),
     include_ca_cert_in_response: cdktf.booleanToTerraform(struct!.includeCaCertInResponse),
+    sign_ra_with_ca: cdktf.booleanToTerraform(struct!.signRaWithCa),
   }
 }
 
@@ -582,6 +589,12 @@ export function certManagerApplicationProfileScepConfigToHclTerraform(struct?: C
     },
     include_ca_cert_in_response: {
       value: cdktf.booleanToHclTerraform(struct!.includeCaCertInResponse),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "boolean",
+    },
+    sign_ra_with_ca: {
+      value: cdktf.booleanToHclTerraform(struct!.signRaWithCa),
       isBlock: false,
       type: "simple",
       storageClassType: "boolean",
@@ -634,6 +647,10 @@ export class CertManagerApplicationProfileScepConfigOutputReference extends cdkt
       hasAnyValues = true;
       internalValueResult.includeCaCertInResponse = this._includeCaCertInResponse;
     }
+    if (this._signRaWithCa !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.signRaWithCa = this._signRaWithCa;
+    }
     return hasAnyValues ? internalValueResult : undefined;
   }
 
@@ -647,6 +664,7 @@ export class CertManagerApplicationProfileScepConfigOutputReference extends cdkt
       this._dynamicChallengeExpiryMinutes = undefined;
       this._dynamicChallengeMaxPending = undefined;
       this._includeCaCertInResponse = undefined;
+      this._signRaWithCa = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
       this.isEmptyObject = false;
@@ -661,6 +679,7 @@ export class CertManagerApplicationProfileScepConfigOutputReference extends cdkt
       this._dynamicChallengeExpiryMinutes = value.dynamicChallengeExpiryMinutes;
       this._dynamicChallengeMaxPending = value.dynamicChallengeMaxPending;
       this._includeCaCertInResponse = value.includeCaCertInResponse;
+      this._signRaWithCa = value.signRaWithCa;
     }
   }
 
@@ -779,10 +798,26 @@ export class CertManagerApplicationProfileScepConfigOutputReference extends cdkt
   public get scepEndpointUrl() {
     return this.getStringAttribute('scep_endpoint_url');
   }
+
+  // sign_ra_with_ca - computed: true, optional: true, required: false
+  private _signRaWithCa?: boolean | cdktf.IResolvable; 
+  public get signRaWithCa() {
+    return this.getBooleanAttribute('sign_ra_with_ca');
+  }
+  public set signRaWithCa(value: boolean | cdktf.IResolvable) {
+    this._signRaWithCa = value;
+  }
+  public resetSignRaWithCa() {
+    this._signRaWithCa = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get signRaWithCaInput() {
+    return this._signRaWithCa;
+  }
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile infisical_cert_manager_application_profile}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile infisical_cert_manager_application_profile}
 */
 export class CertManagerApplicationProfile extends cdktf.TerraformResource {
 
@@ -798,7 +833,7 @@ export class CertManagerApplicationProfile extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerApplicationProfile resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerApplicationProfile to import
-  * @param importFromId The id of the existing CertManagerApplicationProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerApplicationProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerApplicationProfile to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -810,7 +845,7 @@ export class CertManagerApplicationProfile extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/cert_manager_application_profile infisical_cert_manager_application_profile} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/cert_manager_application_profile infisical_cert_manager_application_profile} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -821,7 +856,7 @@ export class CertManagerApplicationProfile extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_application_profile',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.32'
+        providerVersion: '0.20.14'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

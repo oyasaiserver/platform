@@ -1,0 +1,461 @@
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes
+// generated from terraform resource schema
+
+import { Construct } from 'constructs';
+import * as cdktf from 'cdktf';
+
+// Configuration
+
+export interface DataCloudflareZeroTrustCwsTenantStructureNodesConfig extends cdktf.TerraformMetaArguments {
+  /**
+  * Cloudflare account ID (32-character hexadecimal string)
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#account_id DataCloudflareZeroTrustCwsTenantStructureNodes#account_id}
+  */
+  readonly accountId: string;
+  /**
+  * Sort direction (default: asc)
+  * Available values: "asc", "desc".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#direction DataCloudflareZeroTrustCwsTenantStructureNodes#direction}
+  */
+  readonly direction?: string;
+  /**
+  * Max items to fetch, default: 1000
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#max_items DataCloudflareZeroTrustCwsTenantStructureNodes#max_items}
+  */
+  readonly maxItems?: number;
+  /**
+  * Filter by node name (case-insensitive substring match)
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#name DataCloudflareZeroTrustCwsTenantStructureNodes#name}
+  */
+  readonly name?: string;
+  /**
+  * Filter by exact cloud-native identifier
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#native_id DataCloudflareZeroTrustCwsTenantStructureNodes#native_id}
+  */
+  readonly nativeId?: string;
+  /**
+  * Filter by exact node kind
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#node_kind DataCloudflareZeroTrustCwsTenantStructureNodes#node_kind}
+  */
+  readonly nodeKind?: string;
+  /**
+  * Field to order results by (default: created_at)
+  * Available values: "name", "created_at", "updated_at".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#order DataCloudflareZeroTrustCwsTenantStructureNodes#order}
+  */
+  readonly order?: string;
+  /**
+  * Filter by exact parent native ID
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#parent DataCloudflareZeroTrustCwsTenantStructureNodes#parent}
+  */
+  readonly parent?: string;
+  /**
+  * ID of the parent tenant structure
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#structure_id DataCloudflareZeroTrustCwsTenantStructureNodes#structure_id}
+  */
+  readonly structureId: string;
+}
+export interface DataCloudflareZeroTrustCwsTenantStructureNodesResult {
+}
+
+export function dataCloudflareZeroTrustCwsTenantStructureNodesResultToTerraform(struct?: DataCloudflareZeroTrustCwsTenantStructureNodesResult): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustCwsTenantStructureNodesResultToHclTerraform(struct?: DataCloudflareZeroTrustCwsTenantStructureNodesResult): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustCwsTenantStructureNodesResultOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustCwsTenantStructureNodesResult | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustCwsTenantStructureNodesResult | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // created_at - computed: true, optional: false, required: false
+  public get createdAt() {
+    return this.getStringAttribute('created_at');
+  }
+
+  // id - computed: true, optional: false, required: false
+  public get id() {
+    return this.getStringAttribute('id');
+  }
+
+  // name - computed: true, optional: false, required: false
+  public get name() {
+    return this.getStringAttribute('name');
+  }
+
+  // native_id - computed: true, optional: false, required: false
+  public get nativeId() {
+    return this.getStringAttribute('native_id');
+  }
+
+  // node_kind - computed: true, optional: false, required: false
+  public get nodeKind() {
+    return this.getStringAttribute('node_kind');
+  }
+
+  // parent - computed: true, optional: false, required: false
+  public get parent() {
+    return this.getStringAttribute('parent');
+  }
+
+  // updated_at - computed: true, optional: false, required: false
+  public get updatedAt() {
+    return this.getStringAttribute('updated_at');
+  }
+}
+
+export class DataCloudflareZeroTrustCwsTenantStructureNodesResultList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareZeroTrustCwsTenantStructureNodesResultOutputReference {
+    return new DataCloudflareZeroTrustCwsTenantStructureNodesResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
+
+/**
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes cloudflare_zero_trust_cws_tenant_structure_nodes}
+*/
+export class DataCloudflareZeroTrustCwsTenantStructureNodes extends cdktf.TerraformDataSource {
+
+  // =================
+  // STATIC PROPERTIES
+  // =================
+  public static readonly tfResourceType = "cloudflare_zero_trust_cws_tenant_structure_nodes";
+
+  // ==============
+  // STATIC Methods
+  // ==============
+  /**
+  * Generates CDKTF code for importing a DataCloudflareZeroTrustCwsTenantStructureNodes resource upon running "cdktf plan <stack-name>"
+  * @param scope The scope in which to define this construct
+  * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustCwsTenantStructureNodes to import
+  * @param importFromId The id of the existing DataCloudflareZeroTrustCwsTenantStructureNodes that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes#import import section} in the documentation of this resource for the id to use
+  * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustCwsTenantStructureNodes to import is found
+  */
+  public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_cws_tenant_structure_nodes", importId: importFromId, provider });
+      }
+
+  // ===========
+  // INITIALIZER
+  // ===========
+
+  /**
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_cws_tenant_structure_nodes cloudflare_zero_trust_cws_tenant_structure_nodes} Data Source
+  *
+  * @param scope The scope in which to define this construct
+  * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
+  * @param options DataCloudflareZeroTrustCwsTenantStructureNodesConfig
+  */
+  public constructor(scope: Construct, id: string, config: DataCloudflareZeroTrustCwsTenantStructureNodesConfig) {
+    super(scope, id, {
+      terraformResourceType: 'cloudflare_zero_trust_cws_tenant_structure_nodes',
+      terraformGeneratorMetadata: {
+        providerName: 'cloudflare',
+        providerVersion: '5.29.0'
+      },
+      provider: config.provider,
+      dependsOn: config.dependsOn,
+      count: config.count,
+      lifecycle: config.lifecycle,
+      provisioners: config.provisioners,
+      connection: config.connection,
+      forEach: config.forEach
+    });
+    this._accountId = config.accountId;
+    this._direction = config.direction;
+    this._maxItems = config.maxItems;
+    this._name = config.name;
+    this._nativeId = config.nativeId;
+    this._nodeKind = config.nodeKind;
+    this._order = config.order;
+    this._parent = config.parent;
+    this._structureId = config.structureId;
+  }
+
+  // ==========
+  // ATTRIBUTES
+  // ==========
+
+  // account_id - computed: false, optional: false, required: true
+  private _accountId?: string; 
+  public get accountId() {
+    return this.getStringAttribute('account_id');
+  }
+  public set accountId(value: string) {
+    this._accountId = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get accountIdInput() {
+    return this._accountId;
+  }
+
+  // direction - computed: true, optional: true, required: false
+  private _direction?: string; 
+  public get direction() {
+    return this.getStringAttribute('direction');
+  }
+  public set direction(value: string) {
+    this._direction = value;
+  }
+  public resetDirection() {
+    this._direction = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get directionInput() {
+    return this._direction;
+  }
+
+  // max_items - computed: false, optional: true, required: false
+  private _maxItems?: number; 
+  public get maxItems() {
+    return this.getNumberAttribute('max_items');
+  }
+  public set maxItems(value: number) {
+    this._maxItems = value;
+  }
+  public resetMaxItems() {
+    this._maxItems = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get maxItemsInput() {
+    return this._maxItems;
+  }
+
+  // name - computed: false, optional: true, required: false
+  private _name?: string; 
+  public get name() {
+    return this.getStringAttribute('name');
+  }
+  public set name(value: string) {
+    this._name = value;
+  }
+  public resetName() {
+    this._name = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get nameInput() {
+    return this._name;
+  }
+
+  // native_id - computed: false, optional: true, required: false
+  private _nativeId?: string; 
+  public get nativeId() {
+    return this.getStringAttribute('native_id');
+  }
+  public set nativeId(value: string) {
+    this._nativeId = value;
+  }
+  public resetNativeId() {
+    this._nativeId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get nativeIdInput() {
+    return this._nativeId;
+  }
+
+  // node_kind - computed: false, optional: true, required: false
+  private _nodeKind?: string; 
+  public get nodeKind() {
+    return this.getStringAttribute('node_kind');
+  }
+  public set nodeKind(value: string) {
+    this._nodeKind = value;
+  }
+  public resetNodeKind() {
+    this._nodeKind = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get nodeKindInput() {
+    return this._nodeKind;
+  }
+
+  // order - computed: true, optional: true, required: false
+  private _order?: string; 
+  public get order() {
+    return this.getStringAttribute('order');
+  }
+  public set order(value: string) {
+    this._order = value;
+  }
+  public resetOrder() {
+    this._order = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orderInput() {
+    return this._order;
+  }
+
+  // parent - computed: false, optional: true, required: false
+  private _parent?: string; 
+  public get parent() {
+    return this.getStringAttribute('parent');
+  }
+  public set parent(value: string) {
+    this._parent = value;
+  }
+  public resetParent() {
+    this._parent = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get parentInput() {
+    return this._parent;
+  }
+
+  // result - computed: true, optional: false, required: false
+  private _result = new DataCloudflareZeroTrustCwsTenantStructureNodesResultList(this, "result", false);
+  public get result() {
+    return this._result;
+  }
+
+  // structure_id - computed: false, optional: false, required: true
+  private _structureId?: string; 
+  public get structureId() {
+    return this.getStringAttribute('structure_id');
+  }
+  public set structureId(value: string) {
+    this._structureId = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get structureIdInput() {
+    return this._structureId;
+  }
+
+  // =========
+  // SYNTHESIS
+  // =========
+
+  protected synthesizeAttributes(): { [name: string]: any } {
+    return {
+      account_id: cdktf.stringToTerraform(this._accountId),
+      direction: cdktf.stringToTerraform(this._direction),
+      max_items: cdktf.numberToTerraform(this._maxItems),
+      name: cdktf.stringToTerraform(this._name),
+      native_id: cdktf.stringToTerraform(this._nativeId),
+      node_kind: cdktf.stringToTerraform(this._nodeKind),
+      order: cdktf.stringToTerraform(this._order),
+      parent: cdktf.stringToTerraform(this._parent),
+      structure_id: cdktf.stringToTerraform(this._structureId),
+    };
+  }
+
+  protected synthesizeHclAttributes(): { [name: string]: any } {
+    const attrs = {
+      account_id: {
+        value: cdktf.stringToHclTerraform(this._accountId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      direction: {
+        value: cdktf.stringToHclTerraform(this._direction),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      max_items: {
+        value: cdktf.numberToHclTerraform(this._maxItems),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "number",
+      },
+      name: {
+        value: cdktf.stringToHclTerraform(this._name),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      native_id: {
+        value: cdktf.stringToHclTerraform(this._nativeId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      node_kind: {
+        value: cdktf.stringToHclTerraform(this._nodeKind),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      order: {
+        value: cdktf.stringToHclTerraform(this._order),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      parent: {
+        value: cdktf.stringToHclTerraform(this._parent),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      structure_id: {
+        value: cdktf.stringToHclTerraform(this._structureId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+    };
+
+    // remove undefined attributes
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined ))
+  }
+}
