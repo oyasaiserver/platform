@@ -18,23 +18,25 @@ object CsmEditSession {
       edit: (EditSession) -> Boolean,
   ): Result {
     var changed = false
-    var undoRecorded = false
-    WorldEdit.getInstance()
-        .newEditSessionBuilder()
-        .apply {
-          world(BukkitAdapter.adapt(world))
-          if (player != null) {
-            actor(BukkitAdapter.adapt(player))
-          }
-        }
-        .build()
-        .use { editSession ->
-          changed = edit(editSession)
-          if (changed) {
-            undoRecorded = player?.let { FaweUndo.remember(it, editSession, logger) } ?: false
-            Operations.complete(editSession.commit())
-          }
-        }
+    val editSession =
+        WorldEdit.getInstance()
+            .newEditSessionBuilder()
+            .apply {
+              world(BukkitAdapter.adapt(world))
+              if (player != null) {
+                actor(BukkitAdapter.adapt(player))
+              }
+            }
+            .build()
+    editSession.use {
+      changed = edit(editSession)
+      if (changed) {
+        Operations.complete(editSession.commit())
+      }
+    }
+    // Match FAWE's command lifecycle: close the edit session before remembering it.
+    val undoRecorded =
+        if (changed && player != null) FaweUndo.remember(player, editSession, logger) else false
     return Result(changed, undoRecorded)
   }
 
