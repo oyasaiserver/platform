@@ -139,12 +139,3 @@ jobs:
   push-to-ghcr:
     uses: ./.github/workflows/push-to-ghcr.yaml
     secrets: inherit
-
-  deploy:
-    # TODO: enable merge deploy
-    if: github.event_name == 'pull_request'
-    secrets: inherit
-    needs: push-to-ghcr
-    uses: ./.github/workflows/deploy-platform.yaml
-    with:
-      environment: pr-${{ github.event.pull_request.number }}
