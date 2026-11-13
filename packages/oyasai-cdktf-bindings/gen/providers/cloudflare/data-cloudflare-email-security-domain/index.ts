@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface DataCloudflareEmailSecurityDomainConfig extends cdktf.Terraform
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#account_id DataCloudflareEmailSecurityDomain#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#account_id DataCloudflareEmailSecurityDomain#account_id}
   */
   readonly accountId: string;
   /**
   * Domain identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#domain_id DataCloudflareEmailSecurityDomain#domain_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#domain_id DataCloudflareEmailSecurityDomain#domain_id}
   */
   readonly domainId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#filter DataCloudflareEmailSecurityDomain#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#filter DataCloudflareEmailSecurityDomain#filter}
   */
   readonly filter?: DataCloudflareEmailSecurityDomainFilter;
 }
@@ -157,53 +157,53 @@ export interface DataCloudflareEmailSecurityDomainFilter {
   * Currently active delivery mode to filter by.
   * Available values: "DIRECT", "BCC", "JOURNAL", "API", "RETRO_SCAN".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#active_delivery_mode DataCloudflareEmailSecurityDomain#active_delivery_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#active_delivery_mode DataCloudflareEmailSecurityDomain#active_delivery_mode}
   */
   readonly activeDeliveryMode?: string;
   /**
   * Delivery mode to filter by.
   * Available values: "DIRECT", "BCC", "JOURNAL", "API", "RETRO_SCAN".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#allowed_delivery_mode DataCloudflareEmailSecurityDomain#allowed_delivery_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#allowed_delivery_mode DataCloudflareEmailSecurityDomain#allowed_delivery_mode}
   */
   readonly allowedDeliveryMode?: string;
   /**
   * The sorting direction.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#direction DataCloudflareEmailSecurityDomain#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#direction DataCloudflareEmailSecurityDomain#direction}
   */
   readonly direction?: string;
   /**
   * Domain names to filter by.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#domain DataCloudflareEmailSecurityDomain#domain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#domain DataCloudflareEmailSecurityDomain#domain}
   */
   readonly domain?: string[];
   /**
   * Integration ID to filter by.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#integration_id DataCloudflareEmailSecurityDomain#integration_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#integration_id DataCloudflareEmailSecurityDomain#integration_id}
   */
   readonly integrationId?: string;
   /**
   * Field to sort by.
   * Available values: "domain", "created_at".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#order DataCloudflareEmailSecurityDomain#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#order DataCloudflareEmailSecurityDomain#order}
   */
   readonly order?: string;
   /**
   * Search term for filtering records. Behavior may change.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#search DataCloudflareEmailSecurityDomain#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#search DataCloudflareEmailSecurityDomain#search}
   */
   readonly search?: string;
   /**
   * Filters response to domains with the provided status.
   * Available values: "PENDING", "ACTIVE", "FAILED", "TIMEOUT".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#status DataCloudflareEmailSecurityDomain#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#status DataCloudflareEmailSecurityDomain#status}
   */
   readonly status?: string;
 }
@@ -500,7 +500,7 @@ export class DataCloudflareEmailSecurityDomainFilterOutputReference extends cdkt
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain cloudflare_email_security_domain}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain cloudflare_email_security_domain}
 */
 export class DataCloudflareEmailSecurityDomain extends cdktf.TerraformDataSource {
 
@@ -516,7 +516,7 @@ export class DataCloudflareEmailSecurityDomain extends cdktf.TerraformDataSource
   * Generates CDKTF code for importing a DataCloudflareEmailSecurityDomain resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareEmailSecurityDomain to import
-  * @param importFromId The id of the existing DataCloudflareEmailSecurityDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareEmailSecurityDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareEmailSecurityDomain to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -528,7 +528,7 @@ export class DataCloudflareEmailSecurityDomain extends cdktf.TerraformDataSource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_security_domain cloudflare_email_security_domain} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_security_domain cloudflare_email_security_domain} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -539,7 +539,7 @@ export class DataCloudflareEmailSecurityDomain extends cdktf.TerraformDataSource
       terraformResourceType: 'cloudflare_email_security_domain',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

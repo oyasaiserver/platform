@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,33 +10,159 @@ export interface AccountConfig extends cdktf.TerraformMetaArguments {
   /**
   * Parent container details
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#managed_by Account#managed_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#managed_by Account#managed_by}
   */
   readonly managedBy?: AccountManagedBy;
   /**
-  * Account name
+  * Account name, limited to 65 UTF-8 bytes.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#name Account#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#name Account#name}
   */
   readonly name: string;
   /**
   * Account settings
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#settings Account#settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#settings Account#settings}
   */
   readonly settings?: AccountSettings;
   /**
+  * Set to `true` and omit `unit` to create a standalone Free Account. If provided, this field must be `true`.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#standalone Account#standalone}
+  */
+  readonly standalone?: boolean | cdktf.IResolvable;
+  /**
+  * the type of account being created. For self-serve customers, use standard. for enterprise customers, use enterprise.
   * Available values: "standard", "enterprise".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#type Account#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#type Account#type}
   */
   readonly type?: string;
   /**
-  * information related to the tenant unit, and optionally, an id of the unit to create the account on. see https://developers.cloudflare.com/tenant/how-to/manage-accounts/
+  * Information related to the tenant unit. Provide its ID and omit `standalone` to create the Account within an Organization. See https://developers.cloudflare.com/tenant/how-to/manage-accounts/.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#unit Account#unit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#unit Account#unit}
   */
   readonly unit?: AccountUnit;
+}
+export interface AccountLegacyFlagsEnterpriseZoneQuota {
+}
+
+export function accountLegacyFlagsEnterpriseZoneQuotaToTerraform(struct?: AccountLegacyFlagsEnterpriseZoneQuota): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function accountLegacyFlagsEnterpriseZoneQuotaToHclTerraform(struct?: AccountLegacyFlagsEnterpriseZoneQuota): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class AccountLegacyFlagsEnterpriseZoneQuotaOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): AccountLegacyFlagsEnterpriseZoneQuota | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: AccountLegacyFlagsEnterpriseZoneQuota | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // available - computed: true, optional: false, required: false
+  public get available() {
+    return this.getNumberAttribute('available');
+  }
+
+  // current - computed: true, optional: false, required: false
+  public get current() {
+    return this.getNumberAttribute('current');
+  }
+
+  // maximum - computed: true, optional: false, required: false
+  public get maximum() {
+    return this.getNumberAttribute('maximum');
+  }
+}
+export interface AccountLegacyFlags {
+}
+
+export function accountLegacyFlagsToTerraform(struct?: AccountLegacyFlags): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function accountLegacyFlagsToHclTerraform(struct?: AccountLegacyFlags): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class AccountLegacyFlagsOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): AccountLegacyFlags | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: AccountLegacyFlags | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // enterprise_zone_quota - computed: true, optional: false, required: false
+  private _enterpriseZoneQuota = new AccountLegacyFlagsEnterpriseZoneQuotaOutputReference(this, "enterprise_zone_quota");
+  public get enterpriseZoneQuota() {
+    return this._enterpriseZoneQuota;
+  }
 }
 export interface AccountManagedBy {
 }
@@ -106,19 +232,29 @@ export class AccountManagedByOutputReference extends cdktf.ComplexObject {
   public get parentOrgName() {
     return this.getStringAttribute('parent_org_name');
   }
+
+  // root_org_id - computed: true, optional: false, required: false
+  public get rootOrgId() {
+    return this.getStringAttribute('root_org_id');
+  }
+
+  // should_display_parent_orgs - computed: true, optional: false, required: false
+  public get shouldDisplayParentOrgs() {
+    return this.getBooleanAttribute('should_display_parent_orgs');
+  }
 }
 export interface AccountSettings {
   /**
   * Sets an abuse contact email to notify for abuse reports.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#abuse_contact_email Account#abuse_contact_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#abuse_contact_email Account#abuse_contact_email}
   */
   readonly abuseContactEmail?: string;
   /**
   * Indicates whether membership in this account requires that
   * Two-Factor Authentication is enabled
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#enforce_twofactor Account#enforce_twofactor}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#enforce_twofactor Account#enforce_twofactor}
   */
   readonly enforceTwofactor?: boolean | cdktf.IResolvable;
 }
@@ -243,7 +379,7 @@ export interface AccountUnit {
   /**
   * Tenant unit ID
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#id Account#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#id Account#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -340,7 +476,7 @@ export class AccountUnitOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account cloudflare_account}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account cloudflare_account}
 */
 export class Account extends cdktf.TerraformResource {
 
@@ -356,7 +492,7 @@ export class Account extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Account resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Account to import
-  * @param importFromId The id of the existing Account that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Account that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Account to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -368,7 +504,7 @@ export class Account extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/account cloudflare_account} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/account cloudflare_account} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -379,7 +515,7 @@ export class Account extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_account',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -392,6 +528,7 @@ export class Account extends cdktf.TerraformResource {
     this._managedBy.internalValue = config.managedBy;
     this._name = config.name;
     this._settings.internalValue = config.settings;
+    this._standalone = config.standalone;
     this._type = config.type;
     this._unit.internalValue = config.unit;
   }
@@ -408,6 +545,12 @@ export class Account extends cdktf.TerraformResource {
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // legacy_flags - computed: true, optional: false, required: false
+  private _legacyFlags = new AccountLegacyFlagsOutputReference(this, "legacy_flags");
+  public get legacyFlags() {
+    return this._legacyFlags;
   }
 
   // managed_by - computed: true, optional: true, required: false
@@ -455,6 +598,22 @@ export class Account extends cdktf.TerraformResource {
     return this._settings.internalValue;
   }
 
+  // standalone - computed: true, optional: true, required: false
+  private _standalone?: boolean | cdktf.IResolvable; 
+  public get standalone() {
+    return this.getBooleanAttribute('standalone');
+  }
+  public set standalone(value: boolean | cdktf.IResolvable) {
+    this._standalone = value;
+  }
+  public resetStandalone() {
+    this._standalone = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get standaloneInput() {
+    return this._standalone;
+  }
+
   // type - computed: true, optional: true, required: false
   private _type?: string; 
   public get type() {
@@ -496,6 +655,7 @@ export class Account extends cdktf.TerraformResource {
       managed_by: accountManagedByToTerraform(this._managedBy.internalValue),
       name: cdktf.stringToTerraform(this._name),
       settings: accountSettingsToTerraform(this._settings.internalValue),
+      standalone: cdktf.booleanToTerraform(this._standalone),
       type: cdktf.stringToTerraform(this._type),
       unit: accountUnitToTerraform(this._unit.internalValue),
     };
@@ -520,6 +680,12 @@ export class Account extends cdktf.TerraformResource {
         isBlock: true,
         type: "struct",
         storageClassType: "AccountSettings",
+      },
+      standalone: {
+        value: cdktf.booleanToHclTerraform(this._standalone),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       type: {
         value: cdktf.stringToHclTerraform(this._type),

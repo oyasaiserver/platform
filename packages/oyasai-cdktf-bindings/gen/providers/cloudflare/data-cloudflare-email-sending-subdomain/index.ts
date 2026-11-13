@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomain
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomain
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataCloudflareEmailSendingSubdomainConfig extends cdktf.Terrafo
   /**
   * Sending subdomain identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomain#subdomain_id DataCloudflareEmailSendingSubdomain#subdomain_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomain#subdomain_id DataCloudflareEmailSendingSubdomain#subdomain_id}
   */
   readonly subdomainId: string;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomain#zone_id DataCloudflareEmailSendingSubdomain#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomain#zone_id DataCloudflareEmailSendingSubdomain#zone_id}
   */
   readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomain cloudflare_email_sending_subdomain}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomain cloudflare_email_sending_subdomain}
 */
 export class DataCloudflareEmailSendingSubdomain extends cdktf.TerraformDataSource {
 
@@ -38,7 +38,7 @@ export class DataCloudflareEmailSendingSubdomain extends cdktf.TerraformDataSour
   * Generates CDKTF code for importing a DataCloudflareEmailSendingSubdomain resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareEmailSendingSubdomain to import
-  * @param importFromId The id of the existing DataCloudflareEmailSendingSubdomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomain#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareEmailSendingSubdomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomain#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareEmailSendingSubdomain to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class DataCloudflareEmailSendingSubdomain extends cdktf.TerraformDataSour
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomain cloudflare_email_sending_subdomain} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomain cloudflare_email_sending_subdomain} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class DataCloudflareEmailSendingSubdomain extends cdktf.TerraformDataSour
       terraformResourceType: 'cloudflare_email_sending_subdomain',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

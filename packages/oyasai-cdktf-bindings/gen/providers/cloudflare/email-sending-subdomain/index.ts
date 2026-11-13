@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_sending_subdomain
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_sending_subdomain
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -12,31 +12,31 @@ export interface EmailSendingSubdomainConfig extends cdktf.TerraformMetaArgument
   * this subdomain drops that recipient and still delivers to the
   * rest, instead of failing the entire request.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_sending_subdomain#drop_suppressed_recipients EmailSendingSubdomain#drop_suppressed_recipients}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_sending_subdomain#drop_suppressed_recipients EmailSendingSubdomain#drop_suppressed_recipients}
   */
   readonly dropSuppressedRecipients?: boolean | cdktf.IResolvable;
   /**
-  * The domain name within the zone. A wildcard is allowed only as the complete leftmost label (`*.example.com`) and requires the account wildcard Email Sending entitlement.
+  * The domain name within the zone. A wildcard is allowed only as the complete leftmost label (`*.example.com`) and requires the account wildcard Email Sending entitlement. The derived Return-Path hostname, including its bounce prefix, must be at most 201 characters after ASCII conversion; wildcards use the base hostname.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_sending_subdomain#name EmailSendingSubdomain#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_sending_subdomain#name EmailSendingSubdomain#name}
   */
   readonly name: string;
   /**
   * Whether sent messages from this subdomain can be previewed in the activity log.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_sending_subdomain#preview_enabled EmailSendingSubdomain#preview_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_sending_subdomain#preview_enabled EmailSendingSubdomain#preview_enabled}
   */
   readonly previewEnabled?: boolean | cdktf.IResolvable;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_sending_subdomain#zone_id EmailSendingSubdomain#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_sending_subdomain#zone_id EmailSendingSubdomain#zone_id}
   */
   readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_sending_subdomain cloudflare_email_sending_subdomain}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_sending_subdomain cloudflare_email_sending_subdomain}
 */
 export class EmailSendingSubdomain extends cdktf.TerraformResource {
 
@@ -52,7 +52,7 @@ export class EmailSendingSubdomain extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a EmailSendingSubdomain resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the EmailSendingSubdomain to import
-  * @param importFromId The id of the existing EmailSendingSubdomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_sending_subdomain#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing EmailSendingSubdomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_sending_subdomain#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the EmailSendingSubdomain to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -64,7 +64,7 @@ export class EmailSendingSubdomain extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_sending_subdomain cloudflare_email_sending_subdomain} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_sending_subdomain cloudflare_email_sending_subdomain} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -75,7 +75,7 @@ export class EmailSendingSubdomain extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_email_sending_subdomain',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

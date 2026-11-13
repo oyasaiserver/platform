@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_label
+// https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/oncall_label
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,21 +8,21 @@ import * as cdktf from 'cdktf';
 
 export interface DataGrafanaOncallLabelConfig extends cdktf.TerraformMetaArguments {
   /**
-  * The key for the label.
+  * The key for the label. Keys are 1-63 characters, can only contain alphanumeric characters or underscores, and must start and end with a letter.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_label#key DataGrafanaOncallLabel#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/oncall_label#key DataGrafanaOncallLabel#key}
   */
   readonly key: string;
   /**
-  * The value of the label.
+  * The value of the label. When the label is used as a static label, values are 1-63 characters, can only contain alphanumeric characters, hyphens, underscores and periods, must start with a letter and must end with a letter or digit. When the label is used as a dynamic label, the value is a Jinja2 template evaluated when an alert is received, and is not restricted.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_label#value DataGrafanaOncallLabel#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/oncall_label#value DataGrafanaOncallLabel#value}
   */
   readonly value: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_label grafana_oncall_label}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/oncall_label grafana_oncall_label}
 */
 export class DataGrafanaOncallLabel extends cdktf.TerraformDataSource {
 
@@ -38,7 +38,7 @@ export class DataGrafanaOncallLabel extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataGrafanaOncallLabel resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaOncallLabel to import
-  * @param importFromId The id of the existing DataGrafanaOncallLabel that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_label#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaOncallLabel that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/oncall_label#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaOncallLabel to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class DataGrafanaOncallLabel extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/oncall_label grafana_oncall_label} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/oncall_label grafana_oncall_label} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class DataGrafanaOncallLabel extends cdktf.TerraformDataSource {
       terraformResourceType: 'grafana_oncall_label',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.46.0'
+        providerVersion: '4.54.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

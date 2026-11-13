@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_lock
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_lock
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,15 +8,15 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareR2BucketLockConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Account ID.
+  * Cloudflare account ID that owns the R2 resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_lock#account_id DataCloudflareR2BucketLock#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_lock#account_id DataCloudflareR2BucketLock#account_id}
   */
   readonly accountId: string;
   /**
   * Name of the bucket.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_lock#bucket_name DataCloudflareR2BucketLock#bucket_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_lock#bucket_name DataCloudflareR2BucketLock#bucket_name}
   */
   readonly bucketName: string;
 }
@@ -177,7 +177,7 @@ export class DataCloudflareR2BucketLockRulesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_lock cloudflare_r2_bucket_lock}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_lock cloudflare_r2_bucket_lock}
 */
 export class DataCloudflareR2BucketLock extends cdktf.TerraformDataSource {
 
@@ -193,7 +193,7 @@ export class DataCloudflareR2BucketLock extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareR2BucketLock resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareR2BucketLock to import
-  * @param importFromId The id of the existing DataCloudflareR2BucketLock that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_lock#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareR2BucketLock that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_lock#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareR2BucketLock to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -205,7 +205,7 @@ export class DataCloudflareR2BucketLock extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_lock cloudflare_r2_bucket_lock} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_lock cloudflare_r2_bucket_lock} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -216,7 +216,7 @@ export class DataCloudflareR2BucketLock extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_r2_bucket_lock',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

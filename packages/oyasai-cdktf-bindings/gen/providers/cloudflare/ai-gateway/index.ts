@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,122 +8,132 @@ import * as cdktf from 'cdktf';
 
 export interface AiGatewayConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#account_id AiGateway#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#account_id AiGateway#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#authentication AiGateway#authentication}
+  * Require authentication for gateway access. New gateways must have authentication enabled. Once enabled, authentication cannot be disabled.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#authentication AiGateway#authentication}
   */
   readonly authentication?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#cache_invalidate_on_update AiGateway#cache_invalidate_on_update}
+  * Requires customer-provided provider credentials and prevents fallback to Unified Billing.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#byok_only AiGateway#byok_only}
+  */
+  readonly byokOnly?: boolean | cdktf.IResolvable;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#cache_invalidate_on_update AiGateway#cache_invalidate_on_update}
   */
   readonly cacheInvalidateOnUpdate: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#cache_ttl AiGateway#cache_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#cache_ttl AiGateway#cache_ttl}
   */
   readonly cacheTtl: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#collect_logs AiGateway#collect_logs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#collect_logs AiGateway#collect_logs}
   */
   readonly collectLogs: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#dlp AiGateway#dlp}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#dlp AiGateway#dlp}
   */
   readonly dlp?: AiGatewayDlp;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#guardrails AiGateway#guardrails}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#guardrails AiGateway#guardrails}
   */
   readonly guardrails?: AiGatewayGuardrails;
   /**
-  * gateway id
+  * Unique identifier of the AI Gateway within the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#id AiGateway#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#id AiGateway#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
   readonly id: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#log_classification AiGateway#log_classification}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#log_classification AiGateway#log_classification}
   */
   readonly logClassification?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#log_management AiGateway#log_management}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#log_management AiGateway#log_management}
   */
   readonly logManagement?: number;
   /**
   * Available values: "STOP_INSERTING", "DELETE_OLDEST".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#log_management_strategy AiGateway#log_management_strategy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#log_management_strategy AiGateway#log_management_strategy}
   */
   readonly logManagementStrategy?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#logpush AiGateway#logpush}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#logpush AiGateway#logpush}
   */
   readonly logpush?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#logpush_public_key AiGateway#logpush_public_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#logpush_public_key AiGateway#logpush_public_key}
   */
   readonly logpushPublicKey?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#otel AiGateway#otel}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#otel AiGateway#otel}
   */
   readonly otel?: AiGatewayOtel[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#rate_limiting_interval AiGateway#rate_limiting_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#rate_limiting_interval AiGateway#rate_limiting_interval}
   */
   readonly rateLimitingInterval: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#rate_limiting_limit AiGateway#rate_limiting_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#rate_limiting_limit AiGateway#rate_limiting_limit}
   */
   readonly rateLimitingLimit: number;
   /**
   * Available values: "fixed", "sliding".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#rate_limiting_technique AiGateway#rate_limiting_technique}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#rate_limiting_technique AiGateway#rate_limiting_technique}
   */
   readonly rateLimitingTechnique?: string;
   /**
   * Backoff strategy for retry delays
   * Available values: "constant", "linear", "exponential".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#retry_backoff AiGateway#retry_backoff}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#retry_backoff AiGateway#retry_backoff}
   */
   readonly retryBackoff?: string;
   /**
-  * Delay between retry attempts in milliseconds (0-5000)
+  * Delay between retry attempts in milliseconds (0-60000)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#retry_delay AiGateway#retry_delay}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#retry_delay AiGateway#retry_delay}
   */
   readonly retryDelay?: number;
   /**
   * Maximum number of retry attempts for failed requests (1-5)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#retry_max_attempts AiGateway#retry_max_attempts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#retry_max_attempts AiGateway#retry_max_attempts}
   */
   readonly retryMaxAttempts?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#spend_limits AiGateway#spend_limits}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#spend_limits AiGateway#spend_limits}
   */
   readonly spendLimits?: AiGatewaySpendLimits;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#store_id AiGateway#store_id}
+  * Secrets Store used by this gateway. Omit on update to keep the current store. Cannot be cleared while stored keys or secret references depend on it.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#store_id AiGateway#store_id}
   */
   readonly storeId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#stripe AiGateway#stripe}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#stripe AiGateway#stripe}
   */
   readonly stripe?: AiGatewayStripe;
   /**
   * Controls how Workers AI inference calls routed through this gateway are billed. 'postpaid' bills the account directly through Workers AI; 'unified' deducts credits via AI Gateway using neuron-based pricing and delegates billing to AI Gateway.
   * Available values: "postpaid", "unified".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#workers_ai_billing_mode AiGateway#workers_ai_billing_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#workers_ai_billing_mode AiGateway#workers_ai_billing_mode}
   */
   readonly workersAiBillingMode?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#zdr AiGateway#zdr}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#zdr AiGateway#zdr}
   */
   readonly zdr?: boolean | cdktf.IResolvable;
 }
@@ -131,26 +141,26 @@ export interface AiGatewayDlpPolicies {
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#action AiGateway#action}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#action AiGateway#action}
   */
   readonly action: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#check AiGateway#check}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#check AiGateway#check}
   */
   readonly check: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#enabled AiGateway#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#enabled AiGateway#enabled}
   */
   readonly enabled: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#id AiGateway#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#id AiGateway#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
   readonly id: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#profiles AiGateway#profiles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#profiles AiGateway#profiles}
   */
   readonly profiles: string[];
 }
@@ -369,19 +379,19 @@ export interface AiGatewayDlp {
   /**
   * Available values: "BLOCK", "FLAG".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#action AiGateway#action}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#action AiGateway#action}
   */
   readonly action?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#enabled AiGateway#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#enabled AiGateway#enabled}
   */
   readonly enabled: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#policies AiGateway#policies}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#policies AiGateway#policies}
   */
   readonly policies?: AiGatewayDlpPolicies[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#profiles AiGateway#profiles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#profiles AiGateway#profiles}
   */
   readonly profiles?: string[];
 }
@@ -561,85 +571,91 @@ export interface AiGatewayGuardrailsPrompt {
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#p1 AiGateway#p1}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#p1 AiGateway#p1}
   */
   readonly p1?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s1 AiGateway#s1}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s1 AiGateway#s1}
   */
   readonly s1?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s10 AiGateway#s10}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s10 AiGateway#s10}
   */
   readonly s10?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s11 AiGateway#s11}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s11 AiGateway#s11}
   */
   readonly s11?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s12 AiGateway#s12}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s12 AiGateway#s12}
   */
   readonly s12?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s13 AiGateway#s13}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s13 AiGateway#s13}
   */
   readonly s13?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s2 AiGateway#s2}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s14 AiGateway#s14}
+  */
+  readonly s14?: string;
+  /**
+  * Available values: "FLAG", "BLOCK".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s2 AiGateway#s2}
   */
   readonly s2?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s3 AiGateway#s3}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s3 AiGateway#s3}
   */
   readonly s3?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s4 AiGateway#s4}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s4 AiGateway#s4}
   */
   readonly s4?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s5 AiGateway#s5}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s5 AiGateway#s5}
   */
   readonly s5?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s6 AiGateway#s6}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s6 AiGateway#s6}
   */
   readonly s6?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s7 AiGateway#s7}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s7 AiGateway#s7}
   */
   readonly s7?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s8 AiGateway#s8}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s8 AiGateway#s8}
   */
   readonly s8?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s9 AiGateway#s9}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s9 AiGateway#s9}
   */
   readonly s9?: string;
 }
@@ -656,6 +672,7 @@ export function aiGatewayGuardrailsPromptToTerraform(struct?: AiGatewayGuardrail
     s11: cdktf.stringToTerraform(struct!.s11),
     s12: cdktf.stringToTerraform(struct!.s12),
     s13: cdktf.stringToTerraform(struct!.s13),
+    s14: cdktf.stringToTerraform(struct!.s14),
     s2: cdktf.stringToTerraform(struct!.s2),
     s3: cdktf.stringToTerraform(struct!.s3),
     s4: cdktf.stringToTerraform(struct!.s4),
@@ -706,6 +723,12 @@ export function aiGatewayGuardrailsPromptToHclTerraform(struct?: AiGatewayGuardr
     },
     s13: {
       value: cdktf.stringToHclTerraform(struct!.s13),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    s14: {
+      value: cdktf.stringToHclTerraform(struct!.s14),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -806,6 +829,10 @@ export class AiGatewayGuardrailsPromptOutputReference extends cdktf.ComplexObjec
       hasAnyValues = true;
       internalValueResult.s13 = this._s13;
     }
+    if (this._s14 !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.s14 = this._s14;
+    }
     if (this._s2 !== undefined) {
       hasAnyValues = true;
       internalValueResult.s2 = this._s2;
@@ -851,6 +878,7 @@ export class AiGatewayGuardrailsPromptOutputReference extends cdktf.ComplexObjec
       this._s11 = undefined;
       this._s12 = undefined;
       this._s13 = undefined;
+      this._s14 = undefined;
       this._s2 = undefined;
       this._s3 = undefined;
       this._s4 = undefined;
@@ -873,6 +901,7 @@ export class AiGatewayGuardrailsPromptOutputReference extends cdktf.ComplexObjec
       this._s11 = value.s11;
       this._s12 = value.s12;
       this._s13 = value.s13;
+      this._s14 = value.s14;
       this._s2 = value.s2;
       this._s3 = value.s3;
       this._s4 = value.s4;
@@ -978,6 +1007,22 @@ export class AiGatewayGuardrailsPromptOutputReference extends cdktf.ComplexObjec
   // Temporarily expose input value. Use with caution.
   public get s13Input() {
     return this._s13;
+  }
+
+  // s14 - computed: false, optional: true, required: false
+  private _s14?: string; 
+  public get s14() {
+    return this.getStringAttribute('s14');
+  }
+  public set s14(value: string) {
+    this._s14 = value;
+  }
+  public resetS14() {
+    this._s14 = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get s14Input() {
+    return this._s14;
   }
 
   // s2 - computed: false, optional: true, required: false
@@ -1112,85 +1157,91 @@ export interface AiGatewayGuardrailsResponse {
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#p1 AiGateway#p1}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#p1 AiGateway#p1}
   */
   readonly p1?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s1 AiGateway#s1}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s1 AiGateway#s1}
   */
   readonly s1?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s10 AiGateway#s10}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s10 AiGateway#s10}
   */
   readonly s10?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s11 AiGateway#s11}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s11 AiGateway#s11}
   */
   readonly s11?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s12 AiGateway#s12}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s12 AiGateway#s12}
   */
   readonly s12?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s13 AiGateway#s13}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s13 AiGateway#s13}
   */
   readonly s13?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s2 AiGateway#s2}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s14 AiGateway#s14}
+  */
+  readonly s14?: string;
+  /**
+  * Available values: "FLAG", "BLOCK".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s2 AiGateway#s2}
   */
   readonly s2?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s3 AiGateway#s3}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s3 AiGateway#s3}
   */
   readonly s3?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s4 AiGateway#s4}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s4 AiGateway#s4}
   */
   readonly s4?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s5 AiGateway#s5}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s5 AiGateway#s5}
   */
   readonly s5?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s6 AiGateway#s6}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s6 AiGateway#s6}
   */
   readonly s6?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s7 AiGateway#s7}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s7 AiGateway#s7}
   */
   readonly s7?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s8 AiGateway#s8}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s8 AiGateway#s8}
   */
   readonly s8?: string;
   /**
   * Available values: "FLAG", "BLOCK".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#s9 AiGateway#s9}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#s9 AiGateway#s9}
   */
   readonly s9?: string;
 }
@@ -1207,6 +1258,7 @@ export function aiGatewayGuardrailsResponseToTerraform(struct?: AiGatewayGuardra
     s11: cdktf.stringToTerraform(struct!.s11),
     s12: cdktf.stringToTerraform(struct!.s12),
     s13: cdktf.stringToTerraform(struct!.s13),
+    s14: cdktf.stringToTerraform(struct!.s14),
     s2: cdktf.stringToTerraform(struct!.s2),
     s3: cdktf.stringToTerraform(struct!.s3),
     s4: cdktf.stringToTerraform(struct!.s4),
@@ -1257,6 +1309,12 @@ export function aiGatewayGuardrailsResponseToHclTerraform(struct?: AiGatewayGuar
     },
     s13: {
       value: cdktf.stringToHclTerraform(struct!.s13),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    s14: {
+      value: cdktf.stringToHclTerraform(struct!.s14),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -1357,6 +1415,10 @@ export class AiGatewayGuardrailsResponseOutputReference extends cdktf.ComplexObj
       hasAnyValues = true;
       internalValueResult.s13 = this._s13;
     }
+    if (this._s14 !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.s14 = this._s14;
+    }
     if (this._s2 !== undefined) {
       hasAnyValues = true;
       internalValueResult.s2 = this._s2;
@@ -1402,6 +1464,7 @@ export class AiGatewayGuardrailsResponseOutputReference extends cdktf.ComplexObj
       this._s11 = undefined;
       this._s12 = undefined;
       this._s13 = undefined;
+      this._s14 = undefined;
       this._s2 = undefined;
       this._s3 = undefined;
       this._s4 = undefined;
@@ -1424,6 +1487,7 @@ export class AiGatewayGuardrailsResponseOutputReference extends cdktf.ComplexObj
       this._s11 = value.s11;
       this._s12 = value.s12;
       this._s13 = value.s13;
+      this._s14 = value.s14;
       this._s2 = value.s2;
       this._s3 = value.s3;
       this._s4 = value.s4;
@@ -1529,6 +1593,22 @@ export class AiGatewayGuardrailsResponseOutputReference extends cdktf.ComplexObj
   // Temporarily expose input value. Use with caution.
   public get s13Input() {
     return this._s13;
+  }
+
+  // s14 - computed: false, optional: true, required: false
+  private _s14?: string; 
+  public get s14() {
+    return this.getStringAttribute('s14');
+  }
+  public set s14(value: string) {
+    this._s14 = value;
+  }
+  public resetS14() {
+    this._s14 = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get s14Input() {
+    return this._s14;
   }
 
   // s2 - computed: false, optional: true, required: false
@@ -1661,11 +1741,11 @@ export class AiGatewayGuardrailsResponseOutputReference extends cdktf.ComplexObj
 }
 export interface AiGatewayGuardrails {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#prompt AiGateway#prompt}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#prompt AiGateway#prompt}
   */
   readonly prompt: AiGatewayGuardrailsPrompt;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#response AiGateway#response}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#response AiGateway#response}
   */
   readonly response: AiGatewayGuardrailsResponse;
 }
@@ -1782,21 +1862,21 @@ export class AiGatewayGuardrailsOutputReference extends cdktf.ComplexObject {
 }
 export interface AiGatewayOtel {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#authorization AiGateway#authorization}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#authorization AiGateway#authorization}
   */
   readonly authorization?: string;
   /**
   * Available values: "json", "protobuf".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#content_type AiGateway#content_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#content_type AiGateway#content_type}
   */
   readonly contentType?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#headers AiGateway#headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#headers AiGateway#headers}
   */
   readonly headers: { [key: string]: string };
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#url AiGateway#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#url AiGateway#url}
   */
   readonly url: string;
 }
@@ -1995,11 +2075,11 @@ export interface AiGatewaySpendLimitsRulesAiGatewayProvider {
   /**
   * Available values: "filter".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#mode AiGateway#mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#mode AiGateway#mode}
   */
   readonly mode: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#values AiGateway#values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#values AiGateway#values}
   */
   readonly values: string[];
 }
@@ -2118,11 +2198,11 @@ export interface AiGatewaySpendLimitsRulesMetadata {
   /**
   * Available values: "partition", "filter".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#mode AiGateway#mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#mode AiGateway#mode}
   */
   readonly mode: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#values AiGateway#values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#values AiGateway#values}
   */
   readonly values?: string[];
 }
@@ -2264,11 +2344,11 @@ export interface AiGatewaySpendLimitsRulesModel {
   /**
   * Available values: "filter".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#mode AiGateway#mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#mode AiGateway#mode}
   */
   readonly mode: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#values AiGateway#values}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#values AiGateway#values}
   */
   readonly values: string[];
 }
@@ -2385,46 +2465,46 @@ export class AiGatewaySpendLimitsRulesModelOutputReference extends cdktf.Complex
 }
 export interface AiGatewaySpendLimitsRules {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#ai_gateway_provider AiGateway#ai_gateway_provider}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#ai_gateway_provider AiGateway#ai_gateway_provider}
   */
   readonly aiGatewayProvider?: AiGatewaySpendLimitsRulesAiGatewayProvider;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#enabled AiGateway#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#enabled AiGateway#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#id AiGateway#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#id AiGateway#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
   readonly id?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#limit AiGateway#limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#limit AiGateway#limit}
   */
   readonly limit: number;
   /**
   * Available values: "cost".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#limit_type AiGateway#limit_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#limit_type AiGateway#limit_type}
   */
   readonly limitType: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#metadata AiGateway#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#metadata AiGateway#metadata}
   */
   readonly metadata?: { [key: string]: AiGatewaySpendLimitsRulesMetadata } | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#model AiGateway#model}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#model AiGateway#model}
   */
   readonly model?: AiGatewaySpendLimitsRulesModel;
   /**
   * Available values: "fixed", "sliding".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#technique AiGateway#technique}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#technique AiGateway#technique}
   */
   readonly technique?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#window AiGateway#window}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#window AiGateway#window}
   */
   readonly window: number;
 }
@@ -2763,11 +2843,11 @@ export class AiGatewaySpendLimitsRulesList extends cdktf.ComplexList {
 }
 export interface AiGatewaySpendLimits {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#enabled AiGateway#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#enabled AiGateway#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#rules AiGateway#rules}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#rules AiGateway#rules}
   */
   readonly rules?: AiGatewaySpendLimitsRules[] | cdktf.IResolvable;
 }
@@ -2890,7 +2970,7 @@ export class AiGatewaySpendLimitsOutputReference extends cdktf.ComplexObject {
 }
 export interface AiGatewayStripeUsageEvents {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#payload AiGateway#payload}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#payload AiGateway#payload}
   */
   readonly payload: string;
 }
@@ -3003,11 +3083,11 @@ export class AiGatewayStripeUsageEventsList extends cdktf.ComplexList {
 }
 export interface AiGatewayStripe {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#authorization AiGateway#authorization}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#authorization AiGateway#authorization}
   */
   readonly authorization: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#usage_events AiGateway#usage_events}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#usage_events AiGateway#usage_events}
   */
   readonly usageEvents: AiGatewayStripeUsageEvents[] | cdktf.IResolvable;
 }
@@ -3124,7 +3204,7 @@ export class AiGatewayStripeOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway cloudflare_ai_gateway}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway cloudflare_ai_gateway}
 */
 export class AiGateway extends cdktf.TerraformResource {
 
@@ -3140,7 +3220,7 @@ export class AiGateway extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AiGateway resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AiGateway to import
-  * @param importFromId The id of the existing AiGateway that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AiGateway that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AiGateway to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -3152,7 +3232,7 @@ export class AiGateway extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_gateway cloudflare_ai_gateway} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_gateway cloudflare_ai_gateway} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -3163,7 +3243,7 @@ export class AiGateway extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_ai_gateway',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -3175,6 +3255,7 @@ export class AiGateway extends cdktf.TerraformResource {
     });
     this._accountId = config.accountId;
     this._authentication = config.authentication;
+    this._byokOnly = config.byokOnly;
     this._cacheInvalidateOnUpdate = config.cacheInvalidateOnUpdate;
     this._cacheTtl = config.cacheTtl;
     this._collectLogs = config.collectLogs;
@@ -3217,7 +3298,7 @@ export class AiGateway extends cdktf.TerraformResource {
     return this._accountId;
   }
 
-  // authentication - computed: false, optional: true, required: false
+  // authentication - computed: true, optional: true, required: false
   private _authentication?: boolean | cdktf.IResolvable; 
   public get authentication() {
     return this.getBooleanAttribute('authentication');
@@ -3231,6 +3312,22 @@ export class AiGateway extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get authenticationInput() {
     return this._authentication;
+  }
+
+  // byok_only - computed: true, optional: true, required: false
+  private _byokOnly?: boolean | cdktf.IResolvable; 
+  public get byokOnly() {
+    return this.getBooleanAttribute('byok_only');
+  }
+  public set byokOnly(value: boolean | cdktf.IResolvable) {
+    this._byokOnly = value;
+  }
+  public resetByokOnly() {
+    this._byokOnly = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get byokOnlyInput() {
+    return this._byokOnly;
   }
 
   // cache_invalidate_on_update - computed: false, optional: false, required: true
@@ -3293,6 +3390,16 @@ export class AiGateway extends cdktf.TerraformResource {
     return this._dlp.internalValue;
   }
 
+  // fedramp_level - computed: true, optional: false, required: false
+  public get fedrampLevel() {
+    return this.getStringAttribute('fedramp_level');
+  }
+
+  // fedramp_mode - computed: true, optional: false, required: false
+  public get fedrampMode() {
+    return this.getStringAttribute('fedramp_mode');
+  }
+
   // guardrails - computed: false, optional: true, required: false
   private _guardrails = new AiGatewayGuardrailsOutputReference(this, "guardrails");
   public get guardrails() {
@@ -3327,7 +3434,7 @@ export class AiGateway extends cdktf.TerraformResource {
     return this.getBooleanAttribute('is_default');
   }
 
-  // log_classification - computed: false, optional: true, required: false
+  // log_classification - computed: true, optional: true, required: false
   private _logClassification?: boolean | cdktf.IResolvable; 
   public get logClassification() {
     return this.getBooleanAttribute('log_classification');
@@ -3343,7 +3450,7 @@ export class AiGateway extends cdktf.TerraformResource {
     return this._logClassification;
   }
 
-  // log_management - computed: false, optional: true, required: false
+  // log_management - computed: true, optional: true, required: false
   private _logManagement?: number; 
   public get logManagement() {
     return this.getNumberAttribute('log_management');
@@ -3359,7 +3466,7 @@ export class AiGateway extends cdktf.TerraformResource {
     return this._logManagement;
   }
 
-  // log_management_strategy - computed: false, optional: true, required: false
+  // log_management_strategy - computed: true, optional: true, required: false
   private _logManagementStrategy?: string; 
   public get logManagementStrategy() {
     return this.getStringAttribute('log_management_strategy');
@@ -3375,7 +3482,7 @@ export class AiGateway extends cdktf.TerraformResource {
     return this._logManagementStrategy;
   }
 
-  // logpush - computed: false, optional: true, required: false
+  // logpush - computed: true, optional: true, required: false
   private _logpush?: boolean | cdktf.IResolvable; 
   public get logpush() {
     return this.getBooleanAttribute('logpush');
@@ -3534,7 +3641,7 @@ export class AiGateway extends cdktf.TerraformResource {
     return this._spendLimits.internalValue;
   }
 
-  // store_id - computed: false, optional: true, required: false
+  // store_id - computed: true, optional: true, required: false
   private _storeId?: string; 
   public get storeId() {
     return this.getStringAttribute('store_id');
@@ -3582,7 +3689,7 @@ export class AiGateway extends cdktf.TerraformResource {
     return this._workersAiBillingMode;
   }
 
-  // zdr - computed: false, optional: true, required: false
+  // zdr - computed: true, optional: true, required: false
   private _zdr?: boolean | cdktf.IResolvable; 
   public get zdr() {
     return this.getBooleanAttribute('zdr');
@@ -3606,6 +3713,7 @@ export class AiGateway extends cdktf.TerraformResource {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
       authentication: cdktf.booleanToTerraform(this._authentication),
+      byok_only: cdktf.booleanToTerraform(this._byokOnly),
       cache_invalidate_on_update: cdktf.booleanToTerraform(this._cacheInvalidateOnUpdate),
       cache_ttl: cdktf.numberToTerraform(this._cacheTtl),
       collect_logs: cdktf.booleanToTerraform(this._collectLogs),
@@ -3642,6 +3750,12 @@ export class AiGateway extends cdktf.TerraformResource {
       },
       authentication: {
         value: cdktf.booleanToHclTerraform(this._authentication),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
+      },
+      byok_only: {
+        value: cdktf.booleanToHclTerraform(this._byokOnly),
         isBlock: false,
         type: "simple",
         storageClassType: "boolean",

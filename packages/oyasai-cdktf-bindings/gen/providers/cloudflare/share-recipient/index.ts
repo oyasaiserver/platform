@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/share_recipient
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/share_recipient
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface ShareRecipientConfig extends cdktf.TerraformMetaArguments {
   /**
   * Account identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/share_recipient#account_id ShareRecipient#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/share_recipient#account_id ShareRecipient#account_id}
   */
   readonly accountId: string;
   /**
-  * Organization identifier.
+  * Include resources in the response.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/share_recipient#organization_id ShareRecipient#organization_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/share_recipient#include_resources ShareRecipient#include_resources}
   */
-  readonly organizationId?: string;
+  readonly includeResources?: boolean | cdktf.IResolvable;
   /**
   * The account that will receive the share.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/share_recipient#recipient_account_id ShareRecipient#recipient_account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/share_recipient#recipient_account_id ShareRecipient#recipient_account_id}
   */
   readonly recipientAccountId?: string;
   /**
   * Share identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/share_recipient#share_id ShareRecipient#share_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/share_recipient#share_id ShareRecipient#share_id}
   */
   readonly shareId: string;
 }
@@ -124,7 +124,7 @@ export class ShareRecipientResourcesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/share_recipient cloudflare_share_recipient}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/share_recipient cloudflare_share_recipient}
 */
 export class ShareRecipient extends cdktf.TerraformResource {
 
@@ -140,7 +140,7 @@ export class ShareRecipient extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ShareRecipient resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ShareRecipient to import
-  * @param importFromId The id of the existing ShareRecipient that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/share_recipient#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ShareRecipient that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/share_recipient#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ShareRecipient to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -152,7 +152,7 @@ export class ShareRecipient extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/share_recipient cloudflare_share_recipient} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/share_recipient cloudflare_share_recipient} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -163,7 +163,7 @@ export class ShareRecipient extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_share_recipient',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -174,7 +174,7 @@ export class ShareRecipient extends cdktf.TerraformResource {
       forEach: config.forEach
     });
     this._accountId = config.accountId;
-    this._organizationId = config.organizationId;
+    this._includeResources = config.includeResources;
     this._recipientAccountId = config.recipientAccountId;
     this._shareId = config.shareId;
   }
@@ -211,25 +211,25 @@ export class ShareRecipient extends cdktf.TerraformResource {
     return this.getStringAttribute('id');
   }
 
+  // include_resources - computed: false, optional: true, required: false
+  private _includeResources?: boolean | cdktf.IResolvable; 
+  public get includeResources() {
+    return this.getBooleanAttribute('include_resources');
+  }
+  public set includeResources(value: boolean | cdktf.IResolvable) {
+    this._includeResources = value;
+  }
+  public resetIncludeResources() {
+    this._includeResources = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get includeResourcesInput() {
+    return this._includeResources;
+  }
+
   // modified - computed: true, optional: false, required: false
   public get modified() {
     return this.getStringAttribute('modified');
-  }
-
-  // organization_id - computed: false, optional: true, required: false
-  private _organizationId?: string; 
-  public get organizationId() {
-    return this.getStringAttribute('organization_id');
-  }
-  public set organizationId(value: string) {
-    this._organizationId = value;
-  }
-  public resetOrganizationId() {
-    this._organizationId = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get organizationIdInput() {
-    return this._organizationId;
   }
 
   // recipient_account_id - computed: false, optional: true, required: false
@@ -274,7 +274,7 @@ export class ShareRecipient extends cdktf.TerraformResource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
-      organization_id: cdktf.stringToTerraform(this._organizationId),
+      include_resources: cdktf.booleanToTerraform(this._includeResources),
       recipient_account_id: cdktf.stringToTerraform(this._recipientAccountId),
       share_id: cdktf.stringToTerraform(this._shareId),
     };
@@ -288,11 +288,11 @@ export class ShareRecipient extends cdktf.TerraformResource {
         type: "simple",
         storageClassType: "string",
       },
-      organization_id: {
-        value: cdktf.stringToHclTerraform(this._organizationId),
+      include_resources: {
+        value: cdktf.booleanToHclTerraform(this._includeResources),
         isBlock: false,
         type: "simple",
-        storageClassType: "string",
+        storageClassType: "boolean",
       },
       recipient_account_id: {
         value: cdktf.stringToHclTerraform(this._recipientAccountId),

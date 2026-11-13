@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,47 +10,63 @@ export interface AccessRuleConfig extends cdktf.TerraformMetaArguments {
   /**
   * The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule#account_id AccessRule#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule#account_id AccessRule#account_id}
   */
   readonly accountId?: string;
   /**
   * The rule configuration.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule#configuration AccessRule#configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule#configuration AccessRule#configuration}
   */
   readonly configuration: AccessRuleConfiguration;
   /**
   * The action to apply to a matched request.
   * Available values: "block", "challenge", "whitelist", "js_challenge", "managed_challenge".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule#mode AccessRule#mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule#mode AccessRule#mode}
   */
   readonly mode: string;
   /**
   * An informative summary of the rule, typically used as a reminder or explanation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule#notes AccessRule#notes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule#notes AccessRule#notes}
   */
   readonly notes?: string;
   /**
   * The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule#zone_id AccessRule#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule#zone_id AccessRule#zone_id}
   */
   readonly zoneId?: string;
 }
 export interface AccessRuleConfiguration {
   /**
-  * The configuration target. You must set the target to `ip` when specifying an IP address in the rule.
+  * For `target: ip`: The configuration target. You must set the target to `ip` when specifying an IP address in the rule.
+  * 
+  * For `target: ip6`: The configuration target. You must set the target to `ip6` when specifying an IPv6 address in the rule.
+  * 
+  * For `target: ip_range`: The configuration target. You must set the target to `ip_range` when specifying an IP address range in the rule.
+  * 
+  * For `target: asn`: The configuration target. You must set the target to `asn` when specifying an Autonomous System Number (ASN) in the rule.
+  * 
+  * For `target: country`: The configuration target. You must set the target to `country` when specifying a country code in the rule.
   * Available values: "ip", "ip6", "ip_range", "asn", "country".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule#target AccessRule#target}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule#target AccessRule#target}
   */
   readonly target?: string;
   /**
-  * The IP address to match. This address will be compared to the IP address of incoming requests.
+  * For `target: ip`: The IP address to match. This address will be compared to the IP address of incoming requests.
+  * 
+  * For `target: ip6`: The IPv6 address to match.
+  * 
+  * For `target: ip_range`: The IP address range to match. You can only use prefix lengths `/16` and `/24` for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
+  * 
+  * For `target: asn`: The AS number to match.
+  * 
+  * For `target: country`: The two-letter ISO-3166-1 alpha-2 code to match. For more information, refer to [IP Access rules: Parameters](https://developers.cloudflare.com/waf/tools/ip-access-rules/parameters/#country).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule#value AccessRule#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule#value AccessRule#value}
   */
   readonly value?: string;
 }
@@ -237,7 +253,7 @@ export class AccessRuleScopeOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule cloudflare_access_rule}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule cloudflare_access_rule}
 */
 export class AccessRule extends cdktf.TerraformResource {
 
@@ -253,7 +269,7 @@ export class AccessRule extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AccessRule resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AccessRule to import
-  * @param importFromId The id of the existing AccessRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AccessRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AccessRule to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -265,7 +281,7 @@ export class AccessRule extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/access_rule cloudflare_access_rule} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/access_rule cloudflare_access_rule} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -276,7 +292,7 @@ export class AccessRule extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_access_rule',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

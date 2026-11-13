@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface DataCloudflareUserGroupConfig extends cdktf.TerraformMetaArgume
   /**
   * Account identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group#account_id DataCloudflareUserGroup#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group#account_id DataCloudflareUserGroup#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group#filter DataCloudflareUserGroup#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group#filter DataCloudflareUserGroup#filter}
   */
   readonly filter?: DataCloudflareUserGroupFilter;
   /**
   * User Group identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group#user_group_id DataCloudflareUserGroup#user_group_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group#user_group_id DataCloudflareUserGroup#user_group_id}
   */
   readonly userGroupId?: string;
 }
@@ -29,19 +29,19 @@ export interface DataCloudflareUserGroupFilter {
   * The sort order of returned user groups by name (ascending or descending).
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group#direction DataCloudflareUserGroup#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group#direction DataCloudflareUserGroup#direction}
   */
   readonly direction?: string;
   /**
   * A string used for searching for user groups containing that substring.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group#fuzzy_name DataCloudflareUserGroup#fuzzy_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group#fuzzy_name DataCloudflareUserGroup#fuzzy_name}
   */
   readonly fuzzyName?: string;
   /**
   * ID of the user group to be fetched.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group#id DataCloudflareUserGroup#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group#id DataCloudflareUserGroup#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -50,7 +50,7 @@ export interface DataCloudflareUserGroupFilter {
   /**
   * Name of the user group to be fetched.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group#name DataCloudflareUserGroup#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group#name DataCloudflareUserGroup#name}
   */
   readonly name?: string;
 }
@@ -278,14 +278,44 @@ export class DataCloudflareUserGroupPoliciesPermissionGroupsMetaOutputReference 
     }
   }
 
-  // key - computed: true, optional: false, required: false
-  public get key() {
-    return this.getStringAttribute('key');
+  // category - computed: true, optional: false, required: false
+  public get category() {
+    return this.getStringAttribute('category');
   }
 
-  // value - computed: true, optional: false, required: false
-  public get value() {
-    return this.getStringAttribute('value');
+  // deprecated - computed: true, optional: false, required: false
+  public get deprecated() {
+    return this.getStringAttribute('deprecated');
+  }
+
+  // description - computed: true, optional: false, required: false
+  public get description() {
+    return this.getStringAttribute('description');
+  }
+
+  // editable - computed: true, optional: false, required: false
+  public get editable() {
+    return this.getStringAttribute('editable');
+  }
+
+  // eol_at - computed: true, optional: false, required: false
+  public get eolAt() {
+    return this.getStringAttribute('eol_at');
+  }
+
+  // label - computed: true, optional: false, required: false
+  public get label() {
+    return this.getStringAttribute('label');
+  }
+
+  // scopes - computed: true, optional: false, required: false
+  public get scopes() {
+    return this.getStringAttribute('scopes');
+  }
+
+  // visibility - computed: true, optional: false, required: false
+  public get visibility() {
+    return this.getStringAttribute('visibility');
   }
 }
 export interface DataCloudflareUserGroupPoliciesPermissionGroups {
@@ -775,7 +805,7 @@ export class DataCloudflareUserGroupPoliciesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group cloudflare_user_group}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group cloudflare_user_group}
 */
 export class DataCloudflareUserGroup extends cdktf.TerraformDataSource {
 
@@ -791,7 +821,7 @@ export class DataCloudflareUserGroup extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareUserGroup resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareUserGroup to import
-  * @param importFromId The id of the existing DataCloudflareUserGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareUserGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareUserGroup to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -803,7 +833,7 @@ export class DataCloudflareUserGroup extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/user_group cloudflare_user_group} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/user_group cloudflare_user_group} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -814,7 +844,7 @@ export class DataCloudflareUserGroup extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_user_group',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

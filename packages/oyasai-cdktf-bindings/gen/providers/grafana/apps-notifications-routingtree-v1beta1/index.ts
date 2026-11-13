@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1
+// https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface AppsNotificationsRoutingtreeV1Beta1Config extends cdktf.Terrafo
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#metadata AppsNotificationsRoutingtreeV1Beta1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#metadata AppsNotificationsRoutingtreeV1Beta1#metadata}
   */
   readonly metadata?: AppsNotificationsRoutingtreeV1Beta1Metadata;
   /**
   * options block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#options AppsNotificationsRoutingtreeV1Beta1#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#options AppsNotificationsRoutingtreeV1Beta1#options}
   */
   readonly options?: AppsNotificationsRoutingtreeV1Beta1Options;
   /**
   * spec block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#spec AppsNotificationsRoutingtreeV1Beta1#spec}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#spec AppsNotificationsRoutingtreeV1Beta1#spec}
   */
   readonly spec?: AppsNotificationsRoutingtreeV1Beta1Spec;
 }
@@ -30,13 +30,19 @@ export interface AppsNotificationsRoutingtreeV1Beta1Metadata {
   /**
   * The UID of the folder to save the resource in. For example, it's supported for dashboards and folders. To know if it's supported for the specific resource you're using check the documentation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#folder_uid AppsNotificationsRoutingtreeV1Beta1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#folder_uid AppsNotificationsRoutingtreeV1Beta1#folder_uid}
   */
   readonly folderUid?: string;
   /**
+  * The Grafana organization ID this resource belongs to, for self-hosted OSS or Enterprise Grafana. When set, it overrides the provider's `org_id` for this resource only, so a single provider configuration can manage App Platform resources across multiple organizations. Not supported on Grafana Cloud (configure a stack with `stack_id` instead). Changing this value forces the resource to be recreated in the new organization.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#org_id AppsNotificationsRoutingtreeV1Beta1#org_id}
+  */
+  readonly orgId?: number;
+  /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#uid AppsNotificationsRoutingtreeV1Beta1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#uid AppsNotificationsRoutingtreeV1Beta1#uid}
   */
   readonly uid: string;
 }
@@ -48,6 +54,7 @@ export function appsNotificationsRoutingtreeV1Beta1MetadataToTerraform(struct?: 
   }
   return {
     folder_uid: cdktf.stringToTerraform(struct!.folderUid),
+    org_id: cdktf.numberToTerraform(struct!.orgId),
     uid: cdktf.stringToTerraform(struct!.uid),
   }
 }
@@ -64,6 +71,12 @@ export function appsNotificationsRoutingtreeV1Beta1MetadataToHclTerraform(struct
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    org_id: {
+      value: cdktf.numberToHclTerraform(struct!.orgId),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "number",
     },
     uid: {
       value: cdktf.stringToHclTerraform(struct!.uid),
@@ -99,6 +112,10 @@ export class AppsNotificationsRoutingtreeV1Beta1MetadataOutputReference extends 
       hasAnyValues = true;
       internalValueResult.folderUid = this._folderUid;
     }
+    if (this._orgId !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.orgId = this._orgId;
+    }
     if (this._uid !== undefined) {
       hasAnyValues = true;
       internalValueResult.uid = this._uid;
@@ -111,6 +128,7 @@ export class AppsNotificationsRoutingtreeV1Beta1MetadataOutputReference extends 
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._folderUid = undefined;
+      this._orgId = undefined;
       this._uid = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
@@ -121,6 +139,7 @@ export class AppsNotificationsRoutingtreeV1Beta1MetadataOutputReference extends 
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._folderUid = value.folderUid;
+      this._orgId = value.orgId;
       this._uid = value.uid;
     }
   }
@@ -145,6 +164,22 @@ export class AppsNotificationsRoutingtreeV1Beta1MetadataOutputReference extends 
   // Temporarily expose input value. Use with caution.
   public get folderUidInput() {
     return this._folderUid;
+  }
+
+  // org_id - computed: false, optional: true, required: false
+  private _orgId?: number; 
+  public get orgId() {
+    return this.getNumberAttribute('org_id');
+  }
+  public set orgId(value: number) {
+    this._orgId = value;
+  }
+  public resetOrgId() {
+    this._orgId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orgIdInput() {
+    return this._orgId;
   }
 
   // uid - computed: false, optional: false, required: true
@@ -179,13 +214,13 @@ export interface AppsNotificationsRoutingtreeV1Beta1Options {
   /**
   * Override the identity stamped on this resource's manager metadata. Defaults to "grafana-terraform-provider". Use this to distinguish resources managed by different Terraform workspaces targeting the same Grafana instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#manager_identity AppsNotificationsRoutingtreeV1Beta1#manager_identity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#manager_identity AppsNotificationsRoutingtreeV1Beta1#manager_identity}
   */
   readonly managerIdentity?: string;
   /**
   * Set to true if you want to overwrite existing resource with newer version, same resource title in folder or same resource uid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#overwrite AppsNotificationsRoutingtreeV1Beta1#overwrite}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#overwrite AppsNotificationsRoutingtreeV1Beta1#overwrite}
   */
   readonly overwrite?: boolean | cdktf.IResolvable;
 }
@@ -310,31 +345,31 @@ export interface AppsNotificationsRoutingtreeV1Beta1SpecDefaults {
   /**
   * A list of alert labels to group alerts into notifications by. Use the special label `...` to group by all labels.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#group_by AppsNotificationsRoutingtreeV1Beta1#group_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#group_by AppsNotificationsRoutingtreeV1Beta1#group_by}
   */
   readonly groupBy?: string[];
   /**
   * Minimum time interval between two notifications for the same group. Default is 5 minutes.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#group_interval AppsNotificationsRoutingtreeV1Beta1#group_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#group_interval AppsNotificationsRoutingtreeV1Beta1#group_interval}
   */
   readonly groupInterval?: string;
   /**
   * Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#group_wait AppsNotificationsRoutingtreeV1Beta1#group_wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#group_wait AppsNotificationsRoutingtreeV1Beta1#group_wait}
   */
   readonly groupWait?: string;
   /**
   * The default contact point to route all unmatched notifications to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#receiver AppsNotificationsRoutingtreeV1Beta1#receiver}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#receiver AppsNotificationsRoutingtreeV1Beta1#receiver}
   */
   readonly receiver: string;
   /**
   * Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#repeat_interval AppsNotificationsRoutingtreeV1Beta1#repeat_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#repeat_interval AppsNotificationsRoutingtreeV1Beta1#repeat_interval}
   */
   readonly repeatInterval?: string;
 }
@@ -541,15 +576,15 @@ export class AppsNotificationsRoutingtreeV1Beta1SpecDefaultsOutputReference exte
 }
 export interface AppsNotificationsRoutingtreeV1Beta1SpecRoutesMatchers {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#label AppsNotificationsRoutingtreeV1Beta1#label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#label AppsNotificationsRoutingtreeV1Beta1#label}
   */
   readonly label?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#type AppsNotificationsRoutingtreeV1Beta1#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#type AppsNotificationsRoutingtreeV1Beta1#type}
   */
   readonly type?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#value AppsNotificationsRoutingtreeV1Beta1#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#value AppsNotificationsRoutingtreeV1Beta1#value}
   */
   readonly value?: string;
 }
@@ -725,61 +760,61 @@ export interface AppsNotificationsRoutingtreeV1Beta1SpecRoutes {
   /**
   * A list of time interval names that activate this route only during the specified times.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#active_time_intervals AppsNotificationsRoutingtreeV1Beta1#active_time_intervals}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#active_time_intervals AppsNotificationsRoutingtreeV1Beta1#active_time_intervals}
   */
   readonly activeTimeIntervals?: string[];
   /**
   * Whether to continue matching subsequent sibling routes if an alert matches this route. Defaults to false.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#continue AppsNotificationsRoutingtreeV1Beta1#continue}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#continue AppsNotificationsRoutingtreeV1Beta1#continue}
   */
   readonly continue?: boolean | cdktf.IResolvable;
   /**
   * A list of alert labels to group alerts into notifications by. Use the special label `...` to group by all labels. If not set, inherits from the nearest ancestor route that has it configured, ultimately falling back to `spec.defaults`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#group_by AppsNotificationsRoutingtreeV1Beta1#group_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#group_by AppsNotificationsRoutingtreeV1Beta1#group_by}
   */
   readonly groupBy?: string[];
   /**
   * Minimum time interval between two notifications for the same group. If not set, inherits from the nearest ancestor route that has it configured, ultimately falling back to `spec.defaults`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#group_interval AppsNotificationsRoutingtreeV1Beta1#group_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#group_interval AppsNotificationsRoutingtreeV1Beta1#group_interval}
   */
   readonly groupInterval?: string;
   /**
   * Time to wait to buffer alerts of the same group before sending a notification. If not set, inherits from the nearest ancestor route that has it configured, ultimately falling back to `spec.defaults`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#group_wait AppsNotificationsRoutingtreeV1Beta1#group_wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#group_wait AppsNotificationsRoutingtreeV1Beta1#group_wait}
   */
   readonly groupWait?: string;
   /**
   * Matchers that an alert has to fulfill to match this route. When multiple matchers are supplied, an alert must match ALL of them.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#matchers AppsNotificationsRoutingtreeV1Beta1#matchers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#matchers AppsNotificationsRoutingtreeV1Beta1#matchers}
   */
   readonly matchers?: AppsNotificationsRoutingtreeV1Beta1SpecRoutesMatchers[] | cdktf.IResolvable;
   /**
   * A list of time interval names that mute this route during the specified times.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#mute_time_intervals AppsNotificationsRoutingtreeV1Beta1#mute_time_intervals}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#mute_time_intervals AppsNotificationsRoutingtreeV1Beta1#mute_time_intervals}
   */
   readonly muteTimeIntervals?: string[];
   /**
   * The contact point to route notifications that match this rule to. If not set, inherits from the nearest ancestor route that has it configured, ultimately falling back to `spec.defaults`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#receiver AppsNotificationsRoutingtreeV1Beta1#receiver}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#receiver AppsNotificationsRoutingtreeV1Beta1#receiver}
   */
   readonly receiver?: string;
   /**
   * Minimum time interval for re-sending a notification if an alert is still firing. If not set, inherits from the nearest ancestor route that has it configured, ultimately falling back to `spec.defaults`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#repeat_interval AppsNotificationsRoutingtreeV1Beta1#repeat_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#repeat_interval AppsNotificationsRoutingtreeV1Beta1#repeat_interval}
   */
   readonly repeatInterval?: string;
   /**
   * routes block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#routes AppsNotificationsRoutingtreeV1Beta1#routes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#routes AppsNotificationsRoutingtreeV1Beta1#routes}
   */
   readonly routes?: AppsNotificationsRoutingtreeV1Beta1SpecRoutes[] | cdktf.IResolvable;
 }
@@ -1158,19 +1193,19 @@ export interface AppsNotificationsRoutingtreeV1Beta1Spec {
   /**
   * Set to `true` to allow editing this resource from other sources (UI, API). Defaults to `false`, which locks the resource to Terraform management only.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#disable_provenance AppsNotificationsRoutingtreeV1Beta1#disable_provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#disable_provenance AppsNotificationsRoutingtreeV1Beta1#disable_provenance}
   */
   readonly disableProvenance?: boolean | cdktf.IResolvable;
   /**
   * defaults block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#defaults AppsNotificationsRoutingtreeV1Beta1#defaults}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#defaults AppsNotificationsRoutingtreeV1Beta1#defaults}
   */
   readonly defaults?: AppsNotificationsRoutingtreeV1Beta1SpecDefaults;
   /**
   * routes block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#routes AppsNotificationsRoutingtreeV1Beta1#routes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#routes AppsNotificationsRoutingtreeV1Beta1#routes}
   */
   readonly routes?: AppsNotificationsRoutingtreeV1Beta1SpecRoutes[] | cdktf.IResolvable;
 }
@@ -1322,7 +1357,7 @@ export class AppsNotificationsRoutingtreeV1Beta1SpecOutputReference extends cdkt
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1 grafana_apps_notifications_routingtree_v1beta1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1 grafana_apps_notifications_routingtree_v1beta1}
 */
 export class AppsNotificationsRoutingtreeV1Beta1 extends cdktf.TerraformResource {
 
@@ -1338,7 +1373,7 @@ export class AppsNotificationsRoutingtreeV1Beta1 extends cdktf.TerraformResource
   * Generates CDKTF code for importing a AppsNotificationsRoutingtreeV1Beta1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsNotificationsRoutingtreeV1Beta1 to import
-  * @param importFromId The id of the existing AppsNotificationsRoutingtreeV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsNotificationsRoutingtreeV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsNotificationsRoutingtreeV1Beta1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1350,7 +1385,7 @@ export class AppsNotificationsRoutingtreeV1Beta1 extends cdktf.TerraformResource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_notifications_routingtree_v1beta1 grafana_apps_notifications_routingtree_v1beta1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_notifications_routingtree_v1beta1 grafana_apps_notifications_routingtree_v1beta1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1361,7 +1396,7 @@ export class AppsNotificationsRoutingtreeV1Beta1 extends cdktf.TerraformResource
       terraformResourceType: 'grafana_apps_notifications_routingtree_v1beta1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.46.0'
+        providerVersion: '4.54.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

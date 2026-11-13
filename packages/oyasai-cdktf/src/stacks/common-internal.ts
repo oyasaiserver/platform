@@ -70,7 +70,7 @@ export class CommonInternal extends OyasaiTerraformStack {
     new R2CustomDomain(this, "nix-cache-r2-custom-domain", {
       accountId: commonInfra.cloudflareAccountId,
       bucketName: nixCacheBucket.name,
-      domain: `nix-cache.${oyasaiIoRegistrarDomain.domainName}`,
+      domain: `nix-cache.${oyasaiIoRegistrarDomain}`,
       enabled: true,
       zoneId: oyasaiIoZone.id,
     });

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,53 +10,51 @@ export interface ConnectivityDirectoryServiceConfig extends cdktf.TerraformMetaA
   /**
   * Account identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#account_id ConnectivityDirectoryService#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#account_id ConnectivityDirectoryService#account_id}
   */
   readonly accountId: string;
   /**
   * Available values: "postgresql", "mysql".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#app_protocol ConnectivityDirectoryService#app_protocol}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#app_protocol ConnectivityDirectoryService#app_protocol}
   */
   readonly appProtocol?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#host ConnectivityDirectoryService#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#host ConnectivityDirectoryService#host}
   */
   readonly host: ConnectivityDirectoryServiceHost;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#http_port ConnectivityDirectoryService#http_port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#http_port ConnectivityDirectoryService#http_port}
   */
   readonly httpPort?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#https_port ConnectivityDirectoryService#https_port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#https_port ConnectivityDirectoryService#https_port}
   */
   readonly httpsPort?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#name ConnectivityDirectoryService#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#name ConnectivityDirectoryService#name}
   */
   readonly name: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#tcp_port ConnectivityDirectoryService#tcp_port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#tcp_port ConnectivityDirectoryService#tcp_port}
   */
   readonly tcpPort?: number;
   /**
   * TLS settings for a connectivity service.
-  * 
-  * If omitted, the default mode (`verify_full`) is used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#tls_settings ConnectivityDirectoryService#tls_settings}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#tls_settings ConnectivityDirectoryService#tls_settings}
   */
   readonly tlsSettings?: ConnectivityDirectoryServiceTlsSettings;
   /**
   * Available values: "tcp", "http".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#type ConnectivityDirectoryService#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#type ConnectivityDirectoryService#type}
   */
   readonly type: string;
 }
 export interface ConnectivityDirectoryServiceHostNetwork {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#tunnel_id ConnectivityDirectoryService#tunnel_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#tunnel_id ConnectivityDirectoryService#tunnel_id}
   */
   readonly tunnelId: string;
 }
@@ -147,11 +145,11 @@ export class ConnectivityDirectoryServiceHostNetworkOutputReference extends cdkt
 }
 export interface ConnectivityDirectoryServiceHostResolverNetwork {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#resolver_ips ConnectivityDirectoryService#resolver_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#resolver_ips ConnectivityDirectoryService#resolver_ips}
   */
   readonly resolverIps?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#tunnel_id ConnectivityDirectoryService#tunnel_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#tunnel_id ConnectivityDirectoryService#tunnel_id}
   */
   readonly tunnelId: string;
 }
@@ -271,23 +269,23 @@ export class ConnectivityDirectoryServiceHostResolverNetworkOutputReference exte
 }
 export interface ConnectivityDirectoryServiceHost {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#hostname ConnectivityDirectoryService#hostname}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#hostname ConnectivityDirectoryService#hostname}
   */
   readonly hostname?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#ipv4 ConnectivityDirectoryService#ipv4}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#ipv4 ConnectivityDirectoryService#ipv4}
   */
   readonly ipv4?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#ipv6 ConnectivityDirectoryService#ipv6}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#ipv6 ConnectivityDirectoryService#ipv6}
   */
   readonly ipv6?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#network ConnectivityDirectoryService#network}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#network ConnectivityDirectoryService#network}
   */
   readonly network?: ConnectivityDirectoryServiceHostNetwork;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#resolver_network ConnectivityDirectoryService#resolver_network}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#resolver_network ConnectivityDirectoryService#resolver_network}
   */
   readonly resolverNetwork?: ConnectivityDirectoryServiceHostResolverNetwork;
 }
@@ -502,10 +500,25 @@ export interface ConnectivityDirectoryServiceTlsSettings {
   * - `"verify_full"` — verify certificate chain and hostname (default)
   * - `"verify_ca"` — verify certificate chain only, skip hostname check
   * - `"disabled"` — do not verify the server certificate at all
+  * 
+  * `disabled` cannot be combined with `certificate_authority`: a custom CA is
+  * only used to verify the server certificate.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#cert_verification_mode ConnectivityDirectoryService#cert_verification_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#cert_verification_mode ConnectivityDirectoryService#cert_verification_mode}
   */
   readonly certVerificationMode: string;
+  /**
+  * UUID of the custom CA certificate or chain.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#certificate_authority ConnectivityDirectoryService#certificate_authority}
+  */
+  readonly certificateAuthority?: string;
+  /**
+  * UUID of the mTLS client certificate and private key.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#client_certificate ConnectivityDirectoryService#client_certificate}
+  */
+  readonly clientCertificate?: string;
 }
 
 export function connectivityDirectoryServiceTlsSettingsToTerraform(struct?: ConnectivityDirectoryServiceTlsSettings | cdktf.IResolvable): any {
@@ -515,6 +528,8 @@ export function connectivityDirectoryServiceTlsSettingsToTerraform(struct?: Conn
   }
   return {
     cert_verification_mode: cdktf.stringToTerraform(struct!.certVerificationMode),
+    certificate_authority: cdktf.stringToTerraform(struct!.certificateAuthority),
+    client_certificate: cdktf.stringToTerraform(struct!.clientCertificate),
   }
 }
 
@@ -527,6 +542,18 @@ export function connectivityDirectoryServiceTlsSettingsToHclTerraform(struct?: C
   const attrs = {
     cert_verification_mode: {
       value: cdktf.stringToHclTerraform(struct!.certVerificationMode),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    certificate_authority: {
+      value: cdktf.stringToHclTerraform(struct!.certificateAuthority),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    client_certificate: {
+      value: cdktf.stringToHclTerraform(struct!.clientCertificate),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -559,6 +586,14 @@ export class ConnectivityDirectoryServiceTlsSettingsOutputReference extends cdkt
       hasAnyValues = true;
       internalValueResult.certVerificationMode = this._certVerificationMode;
     }
+    if (this._certificateAuthority !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.certificateAuthority = this._certificateAuthority;
+    }
+    if (this._clientCertificate !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.clientCertificate = this._clientCertificate;
+    }
     return hasAnyValues ? internalValueResult : undefined;
   }
 
@@ -567,6 +602,8 @@ export class ConnectivityDirectoryServiceTlsSettingsOutputReference extends cdkt
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._certVerificationMode = undefined;
+      this._certificateAuthority = undefined;
+      this._clientCertificate = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
       this.isEmptyObject = false;
@@ -576,6 +613,8 @@ export class ConnectivityDirectoryServiceTlsSettingsOutputReference extends cdkt
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._certVerificationMode = value.certVerificationMode;
+      this._certificateAuthority = value.certificateAuthority;
+      this._clientCertificate = value.clientCertificate;
     }
   }
 
@@ -591,10 +630,42 @@ export class ConnectivityDirectoryServiceTlsSettingsOutputReference extends cdkt
   public get certVerificationModeInput() {
     return this._certVerificationMode;
   }
+
+  // certificate_authority - computed: false, optional: true, required: false
+  private _certificateAuthority?: string; 
+  public get certificateAuthority() {
+    return this.getStringAttribute('certificate_authority');
+  }
+  public set certificateAuthority(value: string) {
+    this._certificateAuthority = value;
+  }
+  public resetCertificateAuthority() {
+    this._certificateAuthority = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get certificateAuthorityInput() {
+    return this._certificateAuthority;
+  }
+
+  // client_certificate - computed: false, optional: true, required: false
+  private _clientCertificate?: string; 
+  public get clientCertificate() {
+    return this.getStringAttribute('client_certificate');
+  }
+  public set clientCertificate(value: string) {
+    this._clientCertificate = value;
+  }
+  public resetClientCertificate() {
+    this._clientCertificate = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get clientCertificateInput() {
+    return this._clientCertificate;
+  }
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service cloudflare_connectivity_directory_service}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service cloudflare_connectivity_directory_service}
 */
 export class ConnectivityDirectoryService extends cdktf.TerraformResource {
 
@@ -610,7 +681,7 @@ export class ConnectivityDirectoryService extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ConnectivityDirectoryService resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ConnectivityDirectoryService to import
-  * @param importFromId The id of the existing ConnectivityDirectoryService that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ConnectivityDirectoryService that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ConnectivityDirectoryService to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -622,7 +693,7 @@ export class ConnectivityDirectoryService extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/connectivity_directory_service cloudflare_connectivity_directory_service} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/connectivity_directory_service cloudflare_connectivity_directory_service} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -633,7 +704,7 @@ export class ConnectivityDirectoryService extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_connectivity_directory_service',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

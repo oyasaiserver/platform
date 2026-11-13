@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_data_catalog
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_data_catalog
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareR2DataCatalogConfig extends cdktf.TerraformMetaAr
   /**
   * Use this to identify the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_data_catalog#account_id DataCloudflareR2DataCatalog#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_data_catalog#account_id DataCloudflareR2DataCatalog#account_id}
   */
   readonly accountId?: string;
   /**
   * Specifies the R2 bucket name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_data_catalog#bucket_name DataCloudflareR2DataCatalog#bucket_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_data_catalog#bucket_name DataCloudflareR2DataCatalog#bucket_name}
   */
   readonly bucketName: string;
 }
@@ -198,6 +198,11 @@ export class DataCloudflareR2DataCatalogMaintenanceConfigOutputReference extends
     return this._compaction;
   }
 
+  // interval - computed: true, optional: false, required: false
+  public get interval() {
+    return this.getStringAttribute('interval');
+  }
+
   // snapshot_expiration - computed: true, optional: false, required: false
   private _snapshotExpiration = new DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference(this, "snapshot_expiration");
   public get snapshotExpiration() {
@@ -206,7 +211,7 @@ export class DataCloudflareR2DataCatalogMaintenanceConfigOutputReference extends
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_data_catalog cloudflare_r2_data_catalog}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_data_catalog cloudflare_r2_data_catalog}
 */
 export class DataCloudflareR2DataCatalog extends cdktf.TerraformDataSource {
 
@@ -222,7 +227,7 @@ export class DataCloudflareR2DataCatalog extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareR2DataCatalog resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareR2DataCatalog to import
-  * @param importFromId The id of the existing DataCloudflareR2DataCatalog that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_data_catalog#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareR2DataCatalog that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_data_catalog#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareR2DataCatalog to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -234,7 +239,7 @@ export class DataCloudflareR2DataCatalog extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_data_catalog cloudflare_r2_data_catalog} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_data_catalog cloudflare_r2_data_catalog} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -245,7 +250,7 @@ export class DataCloudflareR2DataCatalog extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_r2_data_catalog',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -305,6 +310,11 @@ export class DataCloudflareR2DataCatalog extends cdktf.TerraformDataSource {
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // jurisdiction - computed: true, optional: false, required: false
+  public get jurisdiction() {
+    return this.getStringAttribute('jurisdiction');
   }
 
   // maintenance_config - computed: true, optional: false, required: false

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,20 +8,24 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareAiSearchInstanceConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance#account_id DataCloudflareAiSearchInstance#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#account_id DataCloudflareAiSearchInstance#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance#filter DataCloudflareAiSearchInstance#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#filter DataCloudflareAiSearchInstance#filter}
   */
   readonly filter?: DataCloudflareAiSearchInstanceFilter;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance#id DataCloudflareAiSearchInstance#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#id DataCloudflareAiSearchInstance#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
   readonly id?: string;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#namespace DataCloudflareAiSearchInstance#namespace}
+  */
+  readonly namespace?: string;
 }
 export interface DataCloudflareAiSearchInstanceCustomMetadata {
 }
@@ -105,29 +109,29 @@ export class DataCloudflareAiSearchInstanceCustomMetadataList extends cdktf.Comp
 }
 export interface DataCloudflareAiSearchInstanceFilter {
   /**
-  * Filter by namespace.
+  * Return only instances with this exact Search for Agents hostname (case-insensitive).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance#namespace DataCloudflareAiSearchInstance#namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#hostname DataCloudflareAiSearchInstance#hostname}
   */
-  readonly namespace?: string;
+  readonly hostname?: string;
   /**
   * Field to order results by.
   * Available values: "created_at".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance#order_by DataCloudflareAiSearchInstance#order_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#order_by DataCloudflareAiSearchInstance#order_by}
   */
   readonly orderBy?: string;
   /**
   * Order direction.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance#order_by_direction DataCloudflareAiSearchInstance#order_by_direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#order_by_direction DataCloudflareAiSearchInstance#order_by_direction}
   */
   readonly orderByDirection?: string;
   /**
   * Filter instances whose id contains this string (case-insensitive).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance#search DataCloudflareAiSearchInstance#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#search DataCloudflareAiSearchInstance#search}
   */
   readonly search?: string;
 }
@@ -138,7 +142,7 @@ export function dataCloudflareAiSearchInstanceFilterToTerraform(struct?: DataClo
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   return {
-    namespace: cdktf.stringToTerraform(struct!.namespace),
+    hostname: cdktf.stringToTerraform(struct!.hostname),
     order_by: cdktf.stringToTerraform(struct!.orderBy),
     order_by_direction: cdktf.stringToTerraform(struct!.orderByDirection),
     search: cdktf.stringToTerraform(struct!.search),
@@ -152,8 +156,8 @@ export function dataCloudflareAiSearchInstanceFilterToHclTerraform(struct?: Data
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   const attrs = {
-    namespace: {
-      value: cdktf.stringToHclTerraform(struct!.namespace),
+    hostname: {
+      value: cdktf.stringToHclTerraform(struct!.hostname),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -200,9 +204,9 @@ export class DataCloudflareAiSearchInstanceFilterOutputReference extends cdktf.C
     }
     let hasAnyValues = this.isEmptyObject;
     const internalValueResult: any = {};
-    if (this._namespace !== undefined) {
+    if (this._hostname !== undefined) {
       hasAnyValues = true;
-      internalValueResult.namespace = this._namespace;
+      internalValueResult.hostname = this._hostname;
     }
     if (this._orderBy !== undefined) {
       hasAnyValues = true;
@@ -223,7 +227,7 @@ export class DataCloudflareAiSearchInstanceFilterOutputReference extends cdktf.C
     if (value === undefined) {
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
-      this._namespace = undefined;
+      this._hostname = undefined;
       this._orderBy = undefined;
       this._orderByDirection = undefined;
       this._search = undefined;
@@ -235,27 +239,27 @@ export class DataCloudflareAiSearchInstanceFilterOutputReference extends cdktf.C
     else {
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
-      this._namespace = value.namespace;
+      this._hostname = value.hostname;
       this._orderBy = value.orderBy;
       this._orderByDirection = value.orderByDirection;
       this._search = value.search;
     }
   }
 
-  // namespace - computed: false, optional: true, required: false
-  private _namespace?: string; 
-  public get namespace() {
-    return this.getStringAttribute('namespace');
+  // hostname - computed: false, optional: true, required: false
+  private _hostname?: string; 
+  public get hostname() {
+    return this.getStringAttribute('hostname');
   }
-  public set namespace(value: string) {
-    this._namespace = value;
+  public set hostname(value: string) {
+    this._hostname = value;
   }
-  public resetNamespace() {
-    this._namespace = undefined;
+  public resetHostname() {
+    this._hostname = undefined;
   }
   // Temporarily expose input value. Use with caution.
-  public get namespaceInput() {
-    return this._namespace;
+  public get hostnameInput() {
+    return this._hostname;
   }
 
   // order_by - computed: true, optional: true, required: false
@@ -418,6 +422,70 @@ export class DataCloudflareAiSearchInstanceIndexingOptionsOutputReference extend
   public get keywordTokenizer() {
     return this.getStringAttribute('keyword_tokenizer');
   }
+
+  // use_ocr - computed: true, optional: false, required: false
+  public get useOcr() {
+    return this.getBooleanAttribute('use_ocr');
+  }
+}
+export interface DataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPlugin {
+}
+
+export function dataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPluginToTerraform(struct?: DataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPlugin): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPluginToHclTerraform(struct?: DataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPlugin): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPluginOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPlugin | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPlugin | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // type - computed: true, optional: false, required: false
+  public get type() {
+    return this.getStringAttribute('type');
+  }
+
+  // version - computed: true, optional: false, required: false
+  public get version() {
+    return this.getStringAttribute('version');
+  }
 }
 export interface DataCloudflareAiSearchInstanceMetadata {
 }
@@ -471,6 +539,12 @@ export class DataCloudflareAiSearchInstanceMetadataOutputReference extends cdktf
   // created_from_aisearch_wizard - computed: true, optional: false, required: false
   public get createdFromAisearchWizard() {
     return this.getBooleanAttribute('created_from_aisearch_wizard');
+  }
+
+  // created_from_emdash_plugin - computed: true, optional: false, required: false
+  private _createdFromEmdashPlugin = new DataCloudflareAiSearchInstanceMetadataCreatedFromEmdashPluginOutputReference(this, "created_from_emdash_plugin");
+  public get createdFromEmdashPlugin() {
+    return this._createdFromEmdashPlugin;
   }
 
   // worker_domain - computed: true, optional: false, required: false
@@ -1177,70 +1251,6 @@ export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOut
     return this.getBooleanAttribute('use_browser_rendering');
   }
 }
-export interface DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptions {
-}
-
-export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform(struct?: DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptions): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  return {
-  }
-}
-
-
-export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform(struct?: DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptions): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  const attrs = {
-  };
-  return attrs;
-}
-
-export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference extends cdktf.ComplexObject {
-  private isEmptyObject = false;
-
-  /**
-  * @param terraformResource The parent resource
-  * @param terraformAttribute The attribute on the parent resource this class is referencing
-  */
-  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
-    super(terraformResource, terraformAttribute, false);
-  }
-
-  public get internalValue(): DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptions | undefined {
-    let hasAnyValues = this.isEmptyObject;
-    const internalValueResult: any = {};
-    return hasAnyValues ? internalValueResult : undefined;
-  }
-
-  public set internalValue(value: DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptions | undefined) {
-    if (value === undefined) {
-      this.isEmptyObject = false;
-    }
-    else {
-      this.isEmptyObject = Object.keys(value).length === 0;
-    }
-  }
-
-  // r2_jurisdiction - computed: true, optional: false, required: false
-  public get r2Jurisdiction() {
-    return this.getStringAttribute('r2_jurisdiction');
-  }
-
-  // storage_id - computed: true, optional: false, required: false
-  public get storageId() {
-    return this.getStringAttribute('storage_id');
-  }
-
-  // storage_type - computed: true, optional: false, required: false
-  public get storageType() {
-    return this.getStringAttribute('storage_type');
-  }
-}
 export interface DataCloudflareAiSearchInstanceSourceParamsWebCrawler {
 }
 
@@ -1305,12 +1315,6 @@ export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference
   // parse_type - computed: true, optional: false, required: false
   public get parseType() {
     return this.getStringAttribute('parse_type');
-  }
-
-  // store_options - computed: true, optional: false, required: false
-  private _storeOptions = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference(this, "store_options");
-  public get storeOptions() {
-    return this._storeOptions;
   }
 }
 export interface DataCloudflareAiSearchInstanceSourceParams {
@@ -1390,7 +1394,7 @@ export class DataCloudflareAiSearchInstanceSourceParamsOutputReference extends c
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance cloudflare_ai_search_instance}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance cloudflare_ai_search_instance}
 */
 export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
 
@@ -1406,7 +1410,7 @@ export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareAiSearchInstance resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareAiSearchInstance to import
-  * @param importFromId The id of the existing DataCloudflareAiSearchInstance that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareAiSearchInstance that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareAiSearchInstance to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1418,7 +1422,7 @@ export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_search_instance cloudflare_ai_search_instance} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_search_instance cloudflare_ai_search_instance} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1429,7 +1433,7 @@ export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_ai_search_instance',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1442,6 +1446,7 @@ export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
     this._accountId = config.accountId;
     this._filter.internalValue = config.filter;
     this._id = config.id;
+    this._namespace = config.namespace;
   }
 
   // ==========
@@ -1610,9 +1615,20 @@ export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
     return this.getStringAttribute('modified_by');
   }
 
-  // namespace - computed: true, optional: false, required: false
+  // namespace - computed: true, optional: true, required: false
+  private _namespace?: string; 
   public get namespace() {
     return this.getStringAttribute('namespace');
+  }
+  public set namespace(value: string) {
+    this._namespace = value;
+  }
+  public resetNamespace() {
+    this._namespace = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get namespaceInput() {
+    return this._namespace;
   }
 
   // paused - computed: true, optional: false, required: false
@@ -1702,6 +1718,7 @@ export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
       account_id: cdktf.stringToTerraform(this._accountId),
       filter: dataCloudflareAiSearchInstanceFilterToTerraform(this._filter.internalValue),
       id: cdktf.stringToTerraform(this._id),
+      namespace: cdktf.stringToTerraform(this._namespace),
     };
   }
 
@@ -1721,6 +1738,12 @@ export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
       },
       id: {
         value: cdktf.stringToHclTerraform(this._id),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      namespace: {
+        value: cdktf.stringToHclTerraform(this._namespace),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

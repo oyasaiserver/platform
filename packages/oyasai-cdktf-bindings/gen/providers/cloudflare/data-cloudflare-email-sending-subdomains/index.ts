@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomains
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomains
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareEmailSendingSubdomainsConfig extends cdktf.Terraf
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomains#max_items DataCloudflareEmailSendingSubdomains#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomains#max_items DataCloudflareEmailSendingSubdomains#max_items}
   */
   readonly maxItems?: number;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomains#zone_id DataCloudflareEmailSendingSubdomains#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomains#zone_id DataCloudflareEmailSendingSubdomains#zone_id}
   */
   readonly zoneId: string;
 }
@@ -142,7 +142,7 @@ export class DataCloudflareEmailSendingSubdomainsResultList extends cdktf.Comple
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomains cloudflare_email_sending_subdomains}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomains cloudflare_email_sending_subdomains}
 */
 export class DataCloudflareEmailSendingSubdomains extends cdktf.TerraformDataSource {
 
@@ -158,7 +158,7 @@ export class DataCloudflareEmailSendingSubdomains extends cdktf.TerraformDataSou
   * Generates CDKTF code for importing a DataCloudflareEmailSendingSubdomains resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareEmailSendingSubdomains to import
-  * @param importFromId The id of the existing DataCloudflareEmailSendingSubdomains that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomains#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareEmailSendingSubdomains that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomains#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareEmailSendingSubdomains to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -170,7 +170,7 @@ export class DataCloudflareEmailSendingSubdomains extends cdktf.TerraformDataSou
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/email_sending_subdomains cloudflare_email_sending_subdomains} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/email_sending_subdomains cloudflare_email_sending_subdomains} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -181,7 +181,7 @@ export class DataCloudflareEmailSendingSubdomains extends cdktf.TerraformDataSou
       terraformResourceType: 'cloudflare_email_sending_subdomains',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

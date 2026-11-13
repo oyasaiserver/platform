@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs
+// https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsConfig extends c
   /**
   * The Stack ID of the Grafana Cloud instance. Part of the Terraform Resource ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#stack_id DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#stack_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#stack_id DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#stack_id}
   */
   readonly stackId: string;
   /**
   * scrape_job block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#scrape_job DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#scrape_job}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#scrape_job DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#scrape_job}
   */
   readonly scrapeJob?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJob[] | cdktf.IResolvable;
 }
@@ -115,7 +115,7 @@ export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomN
   /**
   * metric block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#metric}
   */
   readonly metric?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomNamespaceMetric[] | cdktf.IResolvable;
 }
@@ -237,6 +237,92 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomNames
   */
   public get(index: number): DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomNamespaceOutputReference {
     return new DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomNamespaceOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
+export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetric {
+}
+
+export function dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricToTerraform(struct?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetric | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricToHclTerraform(struct?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetric | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetric | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetric | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+    }
+  }
+
+  // name - computed: true, optional: false, required: false
+  public get name() {
+    return this.getStringAttribute('name');
+  }
+}
+
+export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricList extends cdktf.ComplexList {
+  public internalValue? : DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetric[] | cdktf.IResolvable
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricOutputReference {
+    return new DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
 export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceMetric {
@@ -423,15 +509,21 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceReso
 }
 export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobService {
   /**
+  * enhanced_metric block
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#enhanced_metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#enhanced_metric}
+  */
+  readonly enhancedMetric?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetric[] | cdktf.IResolvable;
+  /**
   * metric block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#metric}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#metric DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#metric}
   */
   readonly metric?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceMetric[] | cdktf.IResolvable;
   /**
   * resource_discovery_tag_filter block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#resource_discovery_tag_filter DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#resource_discovery_tag_filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#resource_discovery_tag_filter DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#resource_discovery_tag_filter}
   */
   readonly resourceDiscoveryTagFilter?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceResourceDiscoveryTagFilter[] | cdktf.IResolvable;
 }
@@ -442,6 +534,7 @@ export function dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceT
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   return {
+    enhanced_metric: cdktf.listMapper(dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricToTerraform, true)(struct!.enhancedMetric),
     metric: cdktf.listMapper(dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceMetricToTerraform, true)(struct!.metric),
     resource_discovery_tag_filter: cdktf.listMapper(dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceResourceDiscoveryTagFilterToTerraform, true)(struct!.resourceDiscoveryTagFilter),
   }
@@ -454,6 +547,12 @@ export function dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceT
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   const attrs = {
+    enhanced_metric: {
+      value: cdktf.listMapperHcl(dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricToHclTerraform, true)(struct!.enhancedMetric),
+      isBlock: true,
+      type: "list",
+      storageClassType: "DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricList",
+    },
     metric: {
       value: cdktf.listMapperHcl(dataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceMetricToHclTerraform, true)(struct!.metric),
       isBlock: true,
@@ -492,6 +591,10 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceOutp
     }
     let hasAnyValues = this.isEmptyObject;
     const internalValueResult: any = {};
+    if (this._enhancedMetric?.internalValue !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.enhancedMetric = this._enhancedMetric?.internalValue;
+    }
     if (this._metric?.internalValue !== undefined) {
       hasAnyValues = true;
       internalValueResult.metric = this._metric?.internalValue;
@@ -507,6 +610,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceOutp
     if (value === undefined) {
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
+      this._enhancedMetric.internalValue = undefined;
       this._metric.internalValue = undefined;
       this._resourceDiscoveryTagFilter.internalValue = undefined;
     }
@@ -517,6 +621,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceOutp
     else {
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
+      this._enhancedMetric.internalValue = value.enhancedMetric;
       this._metric.internalValue = value.metric;
       this._resourceDiscoveryTagFilter.internalValue = value.resourceDiscoveryTagFilter;
     }
@@ -535,6 +640,22 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceOutp
   // tags_to_add_to_metrics - computed: true, optional: false, required: false
   public get tagsToAddToMetrics() {
     return cdktf.Fn.tolist(this.getListAttribute('tags_to_add_to_metrics'));
+  }
+
+  // enhanced_metric - computed: false, optional: true, required: false
+  private _enhancedMetric = new DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetricList(this, "enhanced_metric", false);
+  public get enhancedMetric() {
+    return this._enhancedMetric;
+  }
+  public putEnhancedMetric(value: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobServiceEnhancedMetric[] | cdktf.IResolvable) {
+    this._enhancedMetric.internalValue = value;
+  }
+  public resetEnhancedMetric() {
+    this._enhancedMetric.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get enhancedMetricInput() {
+    return this._enhancedMetric.internalValue;
   }
 
   // metric - computed: false, optional: true, required: false
@@ -593,13 +714,13 @@ export interface DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJob {
   /**
   * custom_namespace block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#custom_namespace DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#custom_namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#custom_namespace DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#custom_namespace}
   */
   readonly customNamespace?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobCustomNamespace[] | cdktf.IResolvable;
   /**
   * service block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#service DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#service}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#service DataGrafanaCloudProviderAwsCloudwatchScrapeJobs#service}
   */
   readonly service?: DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobService[] | cdktf.IResolvable;
 }
@@ -800,7 +921,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobsScrapeJobList extend
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs grafana_cloud_provider_aws_cloudwatch_scrape_jobs}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs grafana_cloud_provider_aws_cloudwatch_scrape_jobs}
 */
 export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobs extends cdktf.TerraformDataSource {
 
@@ -816,7 +937,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobs extends cdktf.Terra
   * Generates CDKTF code for importing a DataGrafanaCloudProviderAwsCloudwatchScrapeJobs resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataGrafanaCloudProviderAwsCloudwatchScrapeJobs to import
-  * @param importFromId The id of the existing DataGrafanaCloudProviderAwsCloudwatchScrapeJobs that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataGrafanaCloudProviderAwsCloudwatchScrapeJobs that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataGrafanaCloudProviderAwsCloudwatchScrapeJobs to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -828,7 +949,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobs extends cdktf.Terra
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs grafana_cloud_provider_aws_cloudwatch_scrape_jobs} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/data-sources/cloud_provider_aws_cloudwatch_scrape_jobs grafana_cloud_provider_aws_cloudwatch_scrape_jobs} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -839,7 +960,7 @@ export class DataGrafanaCloudProviderAwsCloudwatchScrapeJobs extends cdktf.Terra
       terraformResourceType: 'grafana_cloud_provider_aws_cloudwatch_scrape_jobs',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.46.0'
+        providerVersion: '4.54.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

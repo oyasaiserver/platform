@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_keeper_activation_v1beta1
+// https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_secret_keeper_activation_v1beta1
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface AppsSecretKeeperActivationV1Beta1Config extends cdktf.Terraform
   /**
   * metadata block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_keeper_activation_v1beta1#metadata AppsSecretKeeperActivationV1Beta1#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_secret_keeper_activation_v1beta1#metadata AppsSecretKeeperActivationV1Beta1#metadata}
   */
   readonly metadata?: AppsSecretKeeperActivationV1Beta1Metadata;
 }
@@ -18,13 +18,19 @@ export interface AppsSecretKeeperActivationV1Beta1Metadata {
   /**
   * The UID of the folder to save the resource in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_keeper_activation_v1beta1#folder_uid AppsSecretKeeperActivationV1Beta1#folder_uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_secret_keeper_activation_v1beta1#folder_uid AppsSecretKeeperActivationV1Beta1#folder_uid}
   */
   readonly folderUid?: string;
   /**
+  * The Grafana organization ID this resource belongs to, for self-hosted OSS or Enterprise Grafana. When set, it overrides the provider's `org_id` for this resource only, so a single provider configuration can manage resources across multiple organizations. Not supported on Grafana Cloud (configure a stack with `stack_id` instead). Changing this value forces the resource to be recreated in the new organization.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_secret_keeper_activation_v1beta1#org_id AppsSecretKeeperActivationV1Beta1#org_id}
+  */
+  readonly orgId?: number;
+  /**
   * The unique identifier of the resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_keeper_activation_v1beta1#uid AppsSecretKeeperActivationV1Beta1#uid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_secret_keeper_activation_v1beta1#uid AppsSecretKeeperActivationV1Beta1#uid}
   */
   readonly uid: string;
 }
@@ -36,6 +42,7 @@ export function appsSecretKeeperActivationV1Beta1MetadataToTerraform(struct?: Ap
   }
   return {
     folder_uid: cdktf.stringToTerraform(struct!.folderUid),
+    org_id: cdktf.numberToTerraform(struct!.orgId),
     uid: cdktf.stringToTerraform(struct!.uid),
   }
 }
@@ -52,6 +59,12 @@ export function appsSecretKeeperActivationV1Beta1MetadataToHclTerraform(struct?:
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    org_id: {
+      value: cdktf.numberToHclTerraform(struct!.orgId),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "number",
     },
     uid: {
       value: cdktf.stringToHclTerraform(struct!.uid),
@@ -87,6 +100,10 @@ export class AppsSecretKeeperActivationV1Beta1MetadataOutputReference extends cd
       hasAnyValues = true;
       internalValueResult.folderUid = this._folderUid;
     }
+    if (this._orgId !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.orgId = this._orgId;
+    }
     if (this._uid !== undefined) {
       hasAnyValues = true;
       internalValueResult.uid = this._uid;
@@ -99,6 +116,7 @@ export class AppsSecretKeeperActivationV1Beta1MetadataOutputReference extends cd
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._folderUid = undefined;
+      this._orgId = undefined;
       this._uid = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
@@ -109,6 +127,7 @@ export class AppsSecretKeeperActivationV1Beta1MetadataOutputReference extends cd
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._folderUid = value.folderUid;
+      this._orgId = value.orgId;
       this._uid = value.uid;
     }
   }
@@ -133,6 +152,22 @@ export class AppsSecretKeeperActivationV1Beta1MetadataOutputReference extends cd
   // Temporarily expose input value. Use with caution.
   public get folderUidInput() {
     return this._folderUid;
+  }
+
+  // org_id - computed: false, optional: true, required: false
+  private _orgId?: number; 
+  public get orgId() {
+    return this.getNumberAttribute('org_id');
+  }
+  public set orgId(value: number) {
+    this._orgId = value;
+  }
+  public resetOrgId() {
+    this._orgId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orgIdInput() {
+    return this._orgId;
   }
 
   // uid - computed: false, optional: false, required: true
@@ -165,7 +200,7 @@ export class AppsSecretKeeperActivationV1Beta1MetadataOutputReference extends cd
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_keeper_activation_v1beta1 grafana_apps_secret_keeper_activation_v1beta1}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_secret_keeper_activation_v1beta1 grafana_apps_secret_keeper_activation_v1beta1}
 */
 export class AppsSecretKeeperActivationV1Beta1 extends cdktf.TerraformResource {
 
@@ -181,7 +216,7 @@ export class AppsSecretKeeperActivationV1Beta1 extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppsSecretKeeperActivationV1Beta1 resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppsSecretKeeperActivationV1Beta1 to import
-  * @param importFromId The id of the existing AppsSecretKeeperActivationV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_keeper_activation_v1beta1#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppsSecretKeeperActivationV1Beta1 that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_secret_keeper_activation_v1beta1#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppsSecretKeeperActivationV1Beta1 to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -193,7 +228,7 @@ export class AppsSecretKeeperActivationV1Beta1 extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/apps_secret_keeper_activation_v1beta1 grafana_apps_secret_keeper_activation_v1beta1} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/apps_secret_keeper_activation_v1beta1 grafana_apps_secret_keeper_activation_v1beta1} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -204,7 +239,7 @@ export class AppsSecretKeeperActivationV1Beta1 extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_apps_secret_keeper_activation_v1beta1',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.46.0'
+        providerVersion: '4.54.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

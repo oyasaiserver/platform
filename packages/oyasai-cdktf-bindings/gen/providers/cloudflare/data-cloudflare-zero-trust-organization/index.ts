@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_organization
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_organization
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareZeroTrustOrganizationConfig extends cdktf.Terrafo
   /**
   * The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_organization#account_id DataCloudflareZeroTrustOrganization#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_organization#account_id DataCloudflareZeroTrustOrganization#account_id}
   */
   readonly accountId?: string;
   /**
   * The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_organization#zone_id DataCloudflareZeroTrustOrganization#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_organization#zone_id DataCloudflareZeroTrustOrganization#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -222,10 +222,10 @@ export class DataCloudflareZeroTrustOrganizationMfaConfigOutputReference extends
     return this.getStringAttribute('session_duration');
   }
 }
-export interface DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirements {
+export interface DataCloudflareZeroTrustOrganizationMfaPivKeyRequirements {
 }
 
-export function dataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirementsToTerraform(struct?: DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirements): any {
+export function dataCloudflareZeroTrustOrganizationMfaPivKeyRequirementsToTerraform(struct?: DataCloudflareZeroTrustOrganizationMfaPivKeyRequirements): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
@@ -235,7 +235,7 @@ export function dataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirementsToTer
 }
 
 
-export function dataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirementsToHclTerraform(struct?: DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirements): any {
+export function dataCloudflareZeroTrustOrganizationMfaPivKeyRequirementsToHclTerraform(struct?: DataCloudflareZeroTrustOrganizationMfaPivKeyRequirements): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
@@ -245,7 +245,7 @@ export function dataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirementsToHcl
   return attrs;
 }
 
-export class DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference extends cdktf.ComplexObject {
+export class DataCloudflareZeroTrustOrganizationMfaPivKeyRequirementsOutputReference extends cdktf.ComplexObject {
   private isEmptyObject = false;
 
   /**
@@ -256,13 +256,13 @@ export class DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirementsOutputRe
     super(terraformResource, terraformAttribute, false);
   }
 
-  public get internalValue(): DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirements | undefined {
+  public get internalValue(): DataCloudflareZeroTrustOrganizationMfaPivKeyRequirements | undefined {
     let hasAnyValues = this.isEmptyObject;
     const internalValueResult: any = {};
     return hasAnyValues ? internalValueResult : undefined;
   }
 
-  public set internalValue(value: DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirements | undefined) {
+  public set internalValue(value: DataCloudflareZeroTrustOrganizationMfaPivKeyRequirements | undefined) {
     if (value === undefined) {
       this.isEmptyObject = false;
     }
@@ -296,9 +296,73 @@ export class DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirementsOutputRe
     return this.getStringAttribute('touch_policy');
   }
 }
+export interface DataCloudflareZeroTrustOrganizationServiceTokenInactivity {
+}
+
+export function dataCloudflareZeroTrustOrganizationServiceTokenInactivityToTerraform(struct?: DataCloudflareZeroTrustOrganizationServiceTokenInactivity): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustOrganizationServiceTokenInactivityToHclTerraform(struct?: DataCloudflareZeroTrustOrganizationServiceTokenInactivity): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustOrganizationServiceTokenInactivityOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustOrganizationServiceTokenInactivity | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustOrganizationServiceTokenInactivity | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // action - computed: true, optional: false, required: false
+  public get action() {
+    return this.getStringAttribute('action');
+  }
+
+  // enabled - computed: true, optional: false, required: false
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+
+  // inactivity_threshold_days - computed: true, optional: false, required: false
+  public get inactivityThresholdDays() {
+    return this.getNumberAttribute('inactivity_threshold_days');
+  }
+}
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_organization cloudflare_zero_trust_organization}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_organization cloudflare_zero_trust_organization}
 */
 export class DataCloudflareZeroTrustOrganization extends cdktf.TerraformDataSource {
 
@@ -314,7 +378,7 @@ export class DataCloudflareZeroTrustOrganization extends cdktf.TerraformDataSour
   * Generates CDKTF code for importing a DataCloudflareZeroTrustOrganization resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustOrganization to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_organization#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_organization#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustOrganization to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -326,7 +390,7 @@ export class DataCloudflareZeroTrustOrganization extends cdktf.TerraformDataSour
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_organization cloudflare_zero_trust_organization} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_organization cloudflare_zero_trust_organization} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -337,7 +401,7 @@ export class DataCloudflareZeroTrustOrganization extends cdktf.TerraformDataSour
       terraformResourceType: 'cloudflare_zero_trust_organization',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -402,6 +466,11 @@ export class DataCloudflareZeroTrustOrganization extends cdktf.TerraformDataSour
     return this.getListAttribute('deny_unmatched_requests_exempted_zone_names');
   }
 
+  // disable_end_user_app_creation - computed: true, optional: false, required: false
+  public get disableEndUserAppCreation() {
+    return this.getBooleanAttribute('disable_end_user_app_creation');
+  }
+
   // is_ui_read_only - computed: true, optional: false, required: false
   public get isUiReadOnly() {
     return this.getBooleanAttribute('is_ui_read_only');
@@ -419,15 +488,15 @@ export class DataCloudflareZeroTrustOrganization extends cdktf.TerraformDataSour
     return this._mfaConfig;
   }
 
+  // mfa_piv_key_requirements - computed: true, optional: false, required: false
+  private _mfaPivKeyRequirements = new DataCloudflareZeroTrustOrganizationMfaPivKeyRequirementsOutputReference(this, "mfa_piv_key_requirements");
+  public get mfaPivKeyRequirements() {
+    return this._mfaPivKeyRequirements;
+  }
+
   // mfa_required_for_all_apps - computed: true, optional: false, required: false
   public get mfaRequiredForAllApps() {
     return this.getBooleanAttribute('mfa_required_for_all_apps');
-  }
-
-  // mfa_ssh_piv_key_requirements - computed: true, optional: false, required: false
-  private _mfaSshPivKeyRequirements = new DataCloudflareZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference(this, "mfa_ssh_piv_key_requirements");
-  public get mfaSshPivKeyRequirements() {
-    return this._mfaSshPivKeyRequirements;
   }
 
   // name - computed: true, optional: false, required: false
@@ -435,9 +504,25 @@ export class DataCloudflareZeroTrustOrganization extends cdktf.TerraformDataSour
     return this.getStringAttribute('name');
   }
 
+  // service_token_inactivity - computed: true, optional: false, required: false
+  private _serviceTokenInactivity = new DataCloudflareZeroTrustOrganizationServiceTokenInactivityOutputReference(this, "service_token_inactivity");
+  public get serviceTokenInactivity() {
+    return this._serviceTokenInactivity;
+  }
+
   // session_duration - computed: true, optional: false, required: false
   public get sessionDuration() {
     return this.getStringAttribute('session_duration');
+  }
+
+  // strict_service_token_auth - computed: true, optional: false, required: false
+  public get strictServiceTokenAuth() {
+    return this.getBooleanAttribute('strict_service_token_auth');
+  }
+
+  // trusted_accounts - computed: true, optional: false, required: false
+  public get trustedAccounts() {
+    return this.getListAttribute('trusted_accounts');
   }
 
   // ui_read_only_toggle_reason - computed: true, optional: false, required: false

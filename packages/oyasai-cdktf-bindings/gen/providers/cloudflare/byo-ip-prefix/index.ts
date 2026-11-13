@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface ByoIpPrefixConfig extends cdktf.TerraformMetaArguments {
   /**
   * Identifier of a Cloudflare account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix#account_id ByoIpPrefix#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix#account_id ByoIpPrefix#account_id}
   */
   readonly accountId: string;
   /**
-  * Autonomous System Number (ASN) the prefix will be advertised under.
+  * Autonomous System Number (ASN) the prefix will be advertised under. Use 13335 for Cloudflare's ASN, or your own ASN as an integer without the AS prefix. The IRR route and RPKI ROA must authorize this ASN.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix#asn ByoIpPrefix#asn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix#asn ByoIpPrefix#asn}
   */
   readonly asn: number;
   /**
   * IP Prefix in Classless Inter-Domain Routing format.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix#cidr ByoIpPrefix#cidr}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix#cidr ByoIpPrefix#cidr}
   */
   readonly cidr: string;
   /**
   * Whether Cloudflare is allowed to generate the LOA document on behalf of the prefix owner.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix#delegate_loa_creation ByoIpPrefix#delegate_loa_creation}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix#delegate_loa_creation ByoIpPrefix#delegate_loa_creation}
   */
   readonly delegateLoaCreation?: boolean | cdktf.IResolvable;
   /**
   * Description of the prefix.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix#description ByoIpPrefix#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix#description ByoIpPrefix#description}
   */
   readonly description?: string;
   /**
   * Identifier for the uploaded LOA document.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix#loa_document_id ByoIpPrefix#loa_document_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix#loa_document_id ByoIpPrefix#loa_document_id}
   */
   readonly loaDocumentId?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix cloudflare_byo_ip_prefix}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix cloudflare_byo_ip_prefix}
 */
 export class ByoIpPrefix extends cdktf.TerraformResource {
 
@@ -62,7 +62,7 @@ export class ByoIpPrefix extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ByoIpPrefix resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ByoIpPrefix to import
-  * @param importFromId The id of the existing ByoIpPrefix that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ByoIpPrefix that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ByoIpPrefix to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +74,7 @@ export class ByoIpPrefix extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/byo_ip_prefix cloudflare_byo_ip_prefix} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/byo_ip_prefix cloudflare_byo_ip_prefix} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +85,7 @@ export class ByoIpPrefix extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_byo_ip_prefix',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -146,6 +146,16 @@ export class ByoIpPrefix extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get asnInput() {
     return this._asn;
+  }
+
+  // asn_ownership_validation_state - computed: true, optional: false, required: false
+  public get asnOwnershipValidationState() {
+    return this.getStringAttribute('asn_ownership_validation_state');
+  }
+
+  // aspa_validation_state - computed: true, optional: false, required: false
+  public get aspaValidationState() {
+    return this.getStringAttribute('aspa_validation_state');
   }
 
   // cidr - computed: false, optional: false, required: true

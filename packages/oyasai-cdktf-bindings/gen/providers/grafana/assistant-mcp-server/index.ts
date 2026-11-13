@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server
+// https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,69 +10,75 @@ export interface AssistantMcpServerConfig extends cdktf.TerraformMetaArguments {
   /**
   * Applications where this resource applies. Valid values: `assistant`, `loop`, `all`. Defaults to all applications when unset.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#applications AssistantMcpServer#applications}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#applications AssistantMcpServer#applications}
   */
   readonly applications?: string[];
   /**
   * Custom HTTP headers sent to the MCP server. Values are write-only and not returned by the API.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#custom_headers AssistantMcpServer#custom_headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#custom_headers AssistantMcpServer#custom_headers}
   */
   readonly customHeaders?: { [key: string]: string };
   /**
   * Optional description.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#description AssistantMcpServer#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#description AssistantMcpServer#description}
   */
   readonly description?: string;
   /**
   * Whether the resource is enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#enabled AssistantMcpServer#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#enabled AssistantMcpServer#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The MCP server integration name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#name AssistantMcpServer#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#name AssistantMcpServer#name}
   */
   readonly name: string;
   /**
   * Whether the resource is visible to the whole tenant (`tenant`) or only the creating user (`user`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#scope AssistantMcpServer#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#scope AssistantMcpServer#scope}
   */
   readonly scope: string;
   /**
   * configuration block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#configuration AssistantMcpServer#configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#configuration AssistantMcpServer#configuration}
   */
   readonly configuration?: AssistantMcpServerConfiguration;
+  /**
+  * github_app block
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#github_app AssistantMcpServer#github_app}
+  */
+  readonly githubApp?: AssistantMcpServerGithubApp;
 }
 export interface AssistantMcpServerConfiguration {
   /**
   * Built-in provider ID (e.g. cursor). When set, tools are provided locally.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#builtin_id AssistantMcpServer#builtin_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#builtin_id AssistantMcpServer#builtin_id}
   */
   readonly builtinId?: string;
   /**
   * Tool approval policies keyed by tool name (`auto_approve`, `always_ask`, or empty for default).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#tool_approval_policies AssistantMcpServer#tool_approval_policies}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#tool_approval_policies AssistantMcpServer#tool_approval_policies}
   */
   readonly toolApprovalPolicies?: { [key: string]: string };
   /**
   * Tool preferences keyed by tool name (`enabled` or `disabled`).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#tool_preferences AssistantMcpServer#tool_preferences}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#tool_preferences AssistantMcpServer#tool_preferences}
   */
   readonly toolPreferences?: { [key: string]: string };
   /**
   * MCP server URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#url AssistantMcpServer#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#url AssistantMcpServer#url}
   */
   readonly url?: string;
 }
@@ -251,9 +257,180 @@ export class AssistantMcpServerConfigurationOutputReference extends cdktf.Comple
     return this._url;
   }
 }
+export interface AssistantMcpServerGithubApp {
+  /**
+  * The GitHub App ID.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#app_id AssistantMcpServer#app_id}
+  */
+  readonly appId?: number;
+  /**
+  * The ID of the GitHub App installation on your organization.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#installation_id AssistantMcpServer#installation_id}
+  */
+  readonly installationId?: number;
+  /**
+  * The GitHub App private key in PEM format. Terraform sends it to the API but never stores it in state.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#private_key AssistantMcpServer#private_key}
+  */
+  readonly privateKey?: string;
+}
+
+export function assistantMcpServerGithubAppToTerraform(struct?: AssistantMcpServerGithubApp | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    app_id: cdktf.numberToTerraform(struct!.appId),
+    installation_id: cdktf.numberToTerraform(struct!.installationId),
+    private_key: cdktf.stringToTerraform(struct!.privateKey),
+  }
+}
+
+
+export function assistantMcpServerGithubAppToHclTerraform(struct?: AssistantMcpServerGithubApp | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    app_id: {
+      value: cdktf.numberToHclTerraform(struct!.appId),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "number",
+    },
+    installation_id: {
+      value: cdktf.numberToHclTerraform(struct!.installationId),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "number",
+    },
+    private_key: {
+      value: cdktf.stringToHclTerraform(struct!.privateKey),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class AssistantMcpServerGithubAppOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): AssistantMcpServerGithubApp | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._appId !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.appId = this._appId;
+    }
+    if (this._installationId !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.installationId = this._installationId;
+    }
+    if (this._privateKey !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.privateKey = this._privateKey;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: AssistantMcpServerGithubApp | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._appId = undefined;
+      this._installationId = undefined;
+      this._privateKey = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._appId = value.appId;
+      this._installationId = value.installationId;
+      this._privateKey = value.privateKey;
+    }
+  }
+
+  // app_id - computed: false, optional: true, required: false
+  private _appId?: number; 
+  public get appId() {
+    return this.getNumberAttribute('app_id');
+  }
+  public set appId(value: number) {
+    this._appId = value;
+  }
+  public resetAppId() {
+    this._appId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get appIdInput() {
+    return this._appId;
+  }
+
+  // installation_id - computed: false, optional: true, required: false
+  private _installationId?: number; 
+  public get installationId() {
+    return this.getNumberAttribute('installation_id');
+  }
+  public set installationId(value: number) {
+    this._installationId = value;
+  }
+  public resetInstallationId() {
+    this._installationId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get installationIdInput() {
+    return this._installationId;
+  }
+
+  // private_key - computed: false, optional: true, required: false
+  private _privateKey?: string; 
+  public get privateKey() {
+    return this.getStringAttribute('private_key');
+  }
+  public set privateKey(value: string) {
+    this._privateKey = value;
+  }
+  public resetPrivateKey() {
+    this._privateKey = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get privateKeyInput() {
+    return this._privateKey;
+  }
+
+  // private_key_hash - computed: true, optional: false, required: false
+  public get privateKeyHash() {
+    return this.getStringAttribute('private_key_hash');
+  }
+}
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server grafana_assistant_mcp_server}
+* Represents a {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server grafana_assistant_mcp_server}
 */
 export class AssistantMcpServer extends cdktf.TerraformResource {
 
@@ -269,7 +446,7 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AssistantMcpServer resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AssistantMcpServer to import
-  * @param importFromId The id of the existing AssistantMcpServer that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AssistantMcpServer that should be imported. Refer to the {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AssistantMcpServer to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -281,7 +458,7 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.46.0/docs/resources/assistant_mcp_server grafana_assistant_mcp_server} Resource
+  * Create a new {@link https://registry.terraform.io/providers/grafana/grafana/4.54.0/docs/resources/assistant_mcp_server grafana_assistant_mcp_server} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -292,7 +469,7 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
       terraformResourceType: 'grafana_assistant_mcp_server',
       terraformGeneratorMetadata: {
         providerName: 'grafana',
-        providerVersion: '4.46.0'
+        providerVersion: '4.54.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -309,6 +486,7 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
     this._name = config.name;
     this._scope = config.scope;
     this._configuration.internalValue = config.configuration;
+    this._githubApp.internalValue = config.githubApp;
   }
 
   // ==========
@@ -426,6 +604,22 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
     return this._configuration.internalValue;
   }
 
+  // github_app - computed: false, optional: true, required: false
+  private _githubApp = new AssistantMcpServerGithubAppOutputReference(this, "github_app");
+  public get githubApp() {
+    return this._githubApp;
+  }
+  public putGithubApp(value: AssistantMcpServerGithubApp) {
+    this._githubApp.internalValue = value;
+  }
+  public resetGithubApp() {
+    this._githubApp.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get githubAppInput() {
+    return this._githubApp.internalValue;
+  }
+
   // =========
   // SYNTHESIS
   // =========
@@ -439,6 +633,7 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
       name: cdktf.stringToTerraform(this._name),
       scope: cdktf.stringToTerraform(this._scope),
       configuration: assistantMcpServerConfigurationToTerraform(this._configuration.internalValue),
+      github_app: assistantMcpServerGithubAppToTerraform(this._githubApp.internalValue),
     };
   }
 
@@ -485,6 +680,12 @@ export class AssistantMcpServer extends cdktf.TerraformResource {
         isBlock: true,
         type: "struct",
         storageClassType: "AssistantMcpServerConfiguration",
+      },
+      github_app: {
+        value: assistantMcpServerGithubAppToHclTerraform(this._githubApp.internalValue),
+        isBlock: true,
+        type: "struct",
+        storageClassType: "AssistantMcpServerGithubApp",
       },
     };
 

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,172 +8,179 @@ import * as cdktf from 'cdktf';
 
 export interface AiSearchInstanceConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#account_id AiSearchInstance#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#account_id AiSearchInstance#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#ai_gateway_id AiSearchInstance#ai_gateway_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#ai_gateway_id AiSearchInstance#ai_gateway_id}
   */
   readonly aiGatewayId?: string;
   /**
   * A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat Completions API. An empty string uses the configured or default model.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#aisearch_model AiSearchInstance#aisearch_model}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#aisearch_model AiSearchInstance#aisearch_model}
   */
   readonly aisearchModel?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#cache AiSearchInstance#cache}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#cache AiSearchInstance#cache}
   */
   readonly cache?: boolean | cdktf.IResolvable;
   /**
   * Available values: "super_strict_match", "close_enough", "flexible_friend", "anything_goes".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#cache_threshold AiSearchInstance#cache_threshold}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#cache_threshold AiSearchInstance#cache_threshold}
   */
   readonly cacheThreshold?: string;
   /**
   * Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600 (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200 (72h), 518400 (6d).
   * Available values: 600, 1800, 3600, 7200, 21600, 43200, 86400, 172800, 259200, 518400.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#cache_ttl AiSearchInstance#cache_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#cache_ttl AiSearchInstance#cache_ttl}
   */
   readonly cacheTtl?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#chunk AiSearchInstance#chunk}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#chunk AiSearchInstance#chunk}
   */
   readonly chunk?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#chunk_overlap AiSearchInstance#chunk_overlap}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#chunk_overlap AiSearchInstance#chunk_overlap}
   */
   readonly chunkOverlap?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#chunk_size AiSearchInstance#chunk_size}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#chunk_size AiSearchInstance#chunk_size}
   */
   readonly chunkSize?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#custom_metadata AiSearchInstance#custom_metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#custom_metadata AiSearchInstance#custom_metadata}
   */
   readonly customMetadata?: AiSearchInstanceCustomMetadata[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#embedding_model AiSearchInstance#embedding_model}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#embedding_model AiSearchInstance#embedding_model}
   */
   readonly embeddingModel?: string;
   /**
   * Available values: "max", "rrf".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#fusion_method AiSearchInstance#fusion_method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#fusion_method AiSearchInstance#fusion_method}
   */
   readonly fusionMethod?: string;
   /**
-  * Deprecated — use index_method instead.
+  * Deprecated — use index_method instead. Defaults to true for new instances; set false to create a vector-only instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#hybrid_search_enabled AiSearchInstance#hybrid_search_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#hybrid_search_enabled AiSearchInstance#hybrid_search_enabled}
   */
   readonly hybridSearchEnabled?: boolean | cdktf.IResolvable;
   /**
   * AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#id AiSearchInstance#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#id AiSearchInstance#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
   readonly id: string;
   /**
-  * Controls which storage backends are used during indexing. Defaults to vector-only.
+  * Controls which storage backends indexing uses. Defaults to vector and keyword indexing for new instances. When set, both vector and keyword are required.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#index_method AiSearchInstance#index_method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#index_method AiSearchInstance#index_method}
   */
   readonly indexMethod?: AiSearchInstanceIndexMethod;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#indexing_options AiSearchInstance#indexing_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#indexing_options AiSearchInstance#indexing_options}
   */
   readonly indexingOptions?: AiSearchInstanceIndexingOptions;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#max_num_results AiSearchInstance#max_num_results}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#max_num_results AiSearchInstance#max_num_results}
   */
   readonly maxNumResults?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#metadata AiSearchInstance#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#metadata AiSearchInstance#metadata}
   */
   readonly metadata?: AiSearchInstanceMetadata;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#paused AiSearchInstance#paused}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#namespace AiSearchInstance#namespace}
+  */
+  readonly namespace?: string;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#paused AiSearchInstance#paused}
   */
   readonly paused?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#public_endpoint_params AiSearchInstance#public_endpoint_params}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#public_endpoint_params AiSearchInstance#public_endpoint_params}
   */
   readonly publicEndpointParams?: AiSearchInstancePublicEndpointParams;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#reranking AiSearchInstance#reranking}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#reranking AiSearchInstance#reranking}
   */
   readonly reranking?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#reranking_model AiSearchInstance#reranking_model}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#reranking_model AiSearchInstance#reranking_model}
   */
   readonly rerankingModel?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#retrieval_options AiSearchInstance#retrieval_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#retrieval_options AiSearchInstance#retrieval_options}
   */
   readonly retrievalOptions?: AiSearchInstanceRetrievalOptions;
   /**
   * A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat Completions API. An empty string uses the configured or default model.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#rewrite_model AiSearchInstance#rewrite_model}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#rewrite_model AiSearchInstance#rewrite_model}
   */
   readonly rewriteModel?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#rewrite_query AiSearchInstance#rewrite_query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#rewrite_query AiSearchInstance#rewrite_query}
   */
   readonly rewriteQuery?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#score_threshold AiSearchInstance#score_threshold}
+  * Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#score_threshold AiSearchInstance#score_threshold}
   */
   readonly scoreThreshold?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#source AiSearchInstance#source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#source AiSearchInstance#source}
   */
   readonly source?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#source_params AiSearchInstance#source_params}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#source_params AiSearchInstance#source_params}
   */
   readonly sourceParams?: AiSearchInstanceSourceParams;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#summarization AiSearchInstance#summarization}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#summarization AiSearchInstance#summarization}
   */
   readonly summarization?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#summarization_model AiSearchInstance#summarization_model}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#summarization_model AiSearchInstance#summarization_model}
   */
   readonly summarizationModel?: string;
   /**
-  * Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800 (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+  * Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800 (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h). Defaults to 86400 (24h).
   * Available values: 900, 1800, 3600, 7200, 14400, 21600, 43200, 86400.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#sync_interval AiSearchInstance#sync_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#sync_interval AiSearchInstance#sync_interval}
   */
   readonly syncInterval?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#system_prompt_aisearch AiSearchInstance#system_prompt_aisearch}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#system_prompt_aisearch AiSearchInstance#system_prompt_aisearch}
   */
   readonly systemPromptAisearch?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#system_prompt_index_summarization AiSearchInstance#system_prompt_index_summarization}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#system_prompt_index_summarization AiSearchInstance#system_prompt_index_summarization}
   */
   readonly systemPromptIndexSummarization?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#system_prompt_rewrite_query AiSearchInstance#system_prompt_rewrite_query}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#system_prompt_rewrite_query AiSearchInstance#system_prompt_rewrite_query}
   */
   readonly systemPromptRewriteQuery?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#token_id AiSearchInstance#token_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#token_id AiSearchInstance#token_id}
   */
   readonly tokenId?: string;
   /**
+  * Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer web-crawler and existing R2 bucket names infer r2. A missing or blank source without a type uses managed upload-only storage.
   * Available values: "r2", "web-crawler".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#type AiSearchInstance#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#type AiSearchInstance#type}
   */
   readonly type?: string;
 }
@@ -181,11 +188,11 @@ export interface AiSearchInstanceCustomMetadata {
   /**
   * Available values: "text", "number", "boolean", "datetime".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#data_type AiSearchInstance#data_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#data_type AiSearchInstance#data_type}
   */
   readonly dataType: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#field_name AiSearchInstance#field_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#field_name AiSearchInstance#field_name}
   */
   readonly fieldName: string;
 }
@@ -326,15 +333,15 @@ export interface AiSearchInstanceIndexMethod {
   /**
   * Enable keyword (BM25) storage backend.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#keyword AiSearchInstance#keyword}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#keyword AiSearchInstance#keyword}
   */
-  readonly keyword: boolean | cdktf.IResolvable;
+  readonly keyword?: boolean | cdktf.IResolvable;
   /**
   * Enable vector (embedding) storage backend.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#vector AiSearchInstance#vector}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#vector AiSearchInstance#vector}
   */
-  readonly vector: boolean | cdktf.IResolvable;
+  readonly vector?: boolean | cdktf.IResolvable;
 }
 
 export function aiSearchInstanceIndexMethodToTerraform(struct?: AiSearchInstanceIndexMethod | cdktf.IResolvable): any {
@@ -421,7 +428,7 @@ export class AiSearchInstanceIndexMethodOutputReference extends cdktf.ComplexObj
     }
   }
 
-  // keyword - computed: true, optional: false, required: true
+  // keyword - computed: true, optional: true, required: false
   private _keyword?: boolean | cdktf.IResolvable; 
   public get keyword() {
     return this.getBooleanAttribute('keyword');
@@ -429,18 +436,24 @@ export class AiSearchInstanceIndexMethodOutputReference extends cdktf.ComplexObj
   public set keyword(value: boolean | cdktf.IResolvable) {
     this._keyword = value;
   }
+  public resetKeyword() {
+    this._keyword = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get keywordInput() {
     return this._keyword;
   }
 
-  // vector - computed: true, optional: false, required: true
+  // vector - computed: true, optional: true, required: false
   private _vector?: boolean | cdktf.IResolvable; 
   public get vector() {
     return this.getBooleanAttribute('vector');
   }
   public set vector(value: boolean | cdktf.IResolvable) {
     this._vector = value;
+  }
+  public resetVector() {
+    this._vector = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get vectorInput() {
@@ -452,9 +465,15 @@ export interface AiSearchInstanceIndexingOptions {
   * Tokenizer used for keyword search indexing. porter provides word-level tokenization with Porter stemming (good for natural language queries). trigram enables character-level substring matching (good for partial matches, code, identifiers). Changing this triggers a full re-index. Defaults to porter.
   * Available values: "porter", "trigram".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#keyword_tokenizer AiSearchInstance#keyword_tokenizer}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#keyword_tokenizer AiSearchInstance#keyword_tokenizer}
   */
   readonly keywordTokenizer?: string;
+  /**
+  * Enables OCR ingestion for PDFs and images. Changing this triggers a full re-index. Defaults to false.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#use_ocr AiSearchInstance#use_ocr}
+  */
+  readonly useOcr?: boolean | cdktf.IResolvable;
 }
 
 export function aiSearchInstanceIndexingOptionsToTerraform(struct?: AiSearchInstanceIndexingOptions | cdktf.IResolvable): any {
@@ -464,6 +483,7 @@ export function aiSearchInstanceIndexingOptionsToTerraform(struct?: AiSearchInst
   }
   return {
     keyword_tokenizer: cdktf.stringToTerraform(struct!.keywordTokenizer),
+    use_ocr: cdktf.booleanToTerraform(struct!.useOcr),
   }
 }
 
@@ -479,6 +499,12 @@ export function aiSearchInstanceIndexingOptionsToHclTerraform(struct?: AiSearchI
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    use_ocr: {
+      value: cdktf.booleanToHclTerraform(struct!.useOcr),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "boolean",
     },
   };
 
@@ -508,6 +534,10 @@ export class AiSearchInstanceIndexingOptionsOutputReference extends cdktf.Comple
       hasAnyValues = true;
       internalValueResult.keywordTokenizer = this._keywordTokenizer;
     }
+    if (this._useOcr !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.useOcr = this._useOcr;
+    }
     return hasAnyValues ? internalValueResult : undefined;
   }
 
@@ -516,6 +546,7 @@ export class AiSearchInstanceIndexingOptionsOutputReference extends cdktf.Comple
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._keywordTokenizer = undefined;
+      this._useOcr = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
       this.isEmptyObject = false;
@@ -525,6 +556,7 @@ export class AiSearchInstanceIndexingOptionsOutputReference extends cdktf.Comple
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._keywordTokenizer = value.keywordTokenizer;
+      this._useOcr = value.useOcr;
     }
   }
 
@@ -543,14 +575,157 @@ export class AiSearchInstanceIndexingOptionsOutputReference extends cdktf.Comple
   public get keywordTokenizerInput() {
     return this._keywordTokenizer;
   }
+
+  // use_ocr - computed: true, optional: true, required: false
+  private _useOcr?: boolean | cdktf.IResolvable; 
+  public get useOcr() {
+    return this.getBooleanAttribute('use_ocr');
+  }
+  public set useOcr(value: boolean | cdktf.IResolvable) {
+    this._useOcr = value;
+  }
+  public resetUseOcr() {
+    this._useOcr = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get useOcrInput() {
+    return this._useOcr;
+  }
+}
+export interface AiSearchInstanceMetadataCreatedFromEmdashPlugin {
+  /**
+  * Available values: "native", "rest".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#type AiSearchInstance#type}
+  */
+  readonly type: string;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#version AiSearchInstance#version}
+  */
+  readonly version: string;
+}
+
+export function aiSearchInstanceMetadataCreatedFromEmdashPluginToTerraform(struct?: AiSearchInstanceMetadataCreatedFromEmdashPlugin | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    type: cdktf.stringToTerraform(struct!.type),
+    version: cdktf.stringToTerraform(struct!.version),
+  }
+}
+
+
+export function aiSearchInstanceMetadataCreatedFromEmdashPluginToHclTerraform(struct?: AiSearchInstanceMetadataCreatedFromEmdashPlugin | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    type: {
+      value: cdktf.stringToHclTerraform(struct!.type),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    version: {
+      value: cdktf.stringToHclTerraform(struct!.version),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class AiSearchInstanceMetadataCreatedFromEmdashPluginOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): AiSearchInstanceMetadataCreatedFromEmdashPlugin | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._type !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.type = this._type;
+    }
+    if (this._version !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.version = this._version;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: AiSearchInstanceMetadataCreatedFromEmdashPlugin | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._type = undefined;
+      this._version = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._type = value.type;
+      this._version = value.version;
+    }
+  }
+
+  // type - computed: false, optional: false, required: true
+  private _type?: string; 
+  public get type() {
+    return this.getStringAttribute('type');
+  }
+  public set type(value: string) {
+    this._type = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get typeInput() {
+    return this._type;
+  }
+
+  // version - computed: false, optional: false, required: true
+  private _version?: string; 
+  public get version() {
+    return this.getStringAttribute('version');
+  }
+  public set version(value: string) {
+    this._version = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get versionInput() {
+    return this._version;
+  }
 }
 export interface AiSearchInstanceMetadata {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#created_from_aisearch_wizard AiSearchInstance#created_from_aisearch_wizard}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#created_from_aisearch_wizard AiSearchInstance#created_from_aisearch_wizard}
   */
   readonly createdFromAisearchWizard?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#worker_domain AiSearchInstance#worker_domain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#created_from_emdash_plugin AiSearchInstance#created_from_emdash_plugin}
+  */
+  readonly createdFromEmdashPlugin?: AiSearchInstanceMetadataCreatedFromEmdashPlugin;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#worker_domain AiSearchInstance#worker_domain}
   */
   readonly workerDomain?: string;
 }
@@ -562,6 +737,7 @@ export function aiSearchInstanceMetadataToTerraform(struct?: AiSearchInstanceMet
   }
   return {
     created_from_aisearch_wizard: cdktf.booleanToTerraform(struct!.createdFromAisearchWizard),
+    created_from_emdash_plugin: aiSearchInstanceMetadataCreatedFromEmdashPluginToTerraform(struct!.createdFromEmdashPlugin),
     worker_domain: cdktf.stringToTerraform(struct!.workerDomain),
   }
 }
@@ -578,6 +754,12 @@ export function aiSearchInstanceMetadataToHclTerraform(struct?: AiSearchInstance
       isBlock: false,
       type: "simple",
       storageClassType: "boolean",
+    },
+    created_from_emdash_plugin: {
+      value: aiSearchInstanceMetadataCreatedFromEmdashPluginToHclTerraform(struct!.createdFromEmdashPlugin),
+      isBlock: true,
+      type: "struct",
+      storageClassType: "AiSearchInstanceMetadataCreatedFromEmdashPlugin",
     },
     worker_domain: {
       value: cdktf.stringToHclTerraform(struct!.workerDomain),
@@ -613,6 +795,10 @@ export class AiSearchInstanceMetadataOutputReference extends cdktf.ComplexObject
       hasAnyValues = true;
       internalValueResult.createdFromAisearchWizard = this._createdFromAisearchWizard;
     }
+    if (this._createdFromEmdashPlugin?.internalValue !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.createdFromEmdashPlugin = this._createdFromEmdashPlugin?.internalValue;
+    }
     if (this._workerDomain !== undefined) {
       hasAnyValues = true;
       internalValueResult.workerDomain = this._workerDomain;
@@ -625,6 +811,7 @@ export class AiSearchInstanceMetadataOutputReference extends cdktf.ComplexObject
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._createdFromAisearchWizard = undefined;
+      this._createdFromEmdashPlugin.internalValue = undefined;
       this._workerDomain = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
@@ -635,6 +822,7 @@ export class AiSearchInstanceMetadataOutputReference extends cdktf.ComplexObject
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._createdFromAisearchWizard = value.createdFromAisearchWizard;
+      this._createdFromEmdashPlugin.internalValue = value.createdFromEmdashPlugin;
       this._workerDomain = value.workerDomain;
     }
   }
@@ -655,6 +843,22 @@ export class AiSearchInstanceMetadataOutputReference extends cdktf.ComplexObject
     return this._createdFromAisearchWizard;
   }
 
+  // created_from_emdash_plugin - computed: false, optional: true, required: false
+  private _createdFromEmdashPlugin = new AiSearchInstanceMetadataCreatedFromEmdashPluginOutputReference(this, "created_from_emdash_plugin");
+  public get createdFromEmdashPlugin() {
+    return this._createdFromEmdashPlugin;
+  }
+  public putCreatedFromEmdashPlugin(value: AiSearchInstanceMetadataCreatedFromEmdashPlugin) {
+    this._createdFromEmdashPlugin.internalValue = value;
+  }
+  public resetCreatedFromEmdashPlugin() {
+    this._createdFromEmdashPlugin.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get createdFromEmdashPluginInput() {
+    return this._createdFromEmdashPlugin.internalValue;
+  }
+
   // worker_domain - computed: false, optional: true, required: false
   private _workerDomain?: string; 
   public get workerDomain() {
@@ -673,9 +877,9 @@ export class AiSearchInstanceMetadataOutputReference extends cdktf.ComplexObject
 }
 export interface AiSearchInstancePublicEndpointParamsChatCompletionsEndpoint {
   /**
-  * Disable chat completions endpoint for this public endpoint
+  * Disable chat completions endpoint for this public endpoint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#disabled AiSearchInstance#disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#disabled AiSearchInstance#disabled}
   */
   readonly disabled?: boolean | cdktf.IResolvable;
 }
@@ -769,13 +973,13 @@ export class AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputRe
 }
 export interface AiSearchInstancePublicEndpointParamsMcp {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#description AiSearchInstance#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#description AiSearchInstance#description}
   */
   readonly description?: string;
   /**
-  * Disable MCP endpoint for this public endpoint
+  * Disable MCP endpoint for this public endpoint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#disabled AiSearchInstance#disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#disabled AiSearchInstance#disabled}
   */
   readonly disabled?: boolean | cdktf.IResolvable;
 }
@@ -898,17 +1102,17 @@ export class AiSearchInstancePublicEndpointParamsMcpOutputReference extends cdkt
 }
 export interface AiSearchInstancePublicEndpointParamsRateLimit {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#period_ms AiSearchInstance#period_ms}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#period_ms AiSearchInstance#period_ms}
   */
   readonly periodMs?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#requests AiSearchInstance#requests}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#requests AiSearchInstance#requests}
   */
   readonly requests?: number;
   /**
   * Available values: "fixed", "sliding".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#technique AiSearchInstance#technique}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#technique AiSearchInstance#technique}
   */
   readonly technique?: string;
 }
@@ -1060,9 +1264,9 @@ export class AiSearchInstancePublicEndpointParamsRateLimitOutputReference extend
 }
 export interface AiSearchInstancePublicEndpointParamsSearchEndpoint {
   /**
-  * Disable search endpoint for this public endpoint
+  * Disable search endpoint for this public endpoint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#disabled AiSearchInstance#disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#disabled AiSearchInstance#disabled}
   */
   readonly disabled?: boolean | cdktf.IResolvable;
 }
@@ -1156,39 +1360,39 @@ export class AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference e
 }
 export interface AiSearchInstancePublicEndpointParams {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#authorized_hosts AiSearchInstance#authorized_hosts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#authorized_hosts AiSearchInstance#authorized_hosts}
   */
   readonly authorizedHosts?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#chat_completions_endpoint AiSearchInstance#chat_completions_endpoint}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#chat_completions_endpoint AiSearchInstance#chat_completions_endpoint}
   */
   readonly chatCompletionsEndpoint?: AiSearchInstancePublicEndpointParamsChatCompletionsEndpoint;
   /**
   * Custom domain hostnames that alias this public endpoint. GET and create responses return the current set; on update (PUT) this field is only echoed back when supplied in the request body, otherwise it is null (omit it to leave domains unchanged).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#custom_domains AiSearchInstance#custom_domains}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#custom_domains AiSearchInstance#custom_domains}
   */
   readonly customDomains?: string[];
   /**
   * When false, the instance is reachable only via a registered custom domain and the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404. Requires at least one custom domain. Defaults to true. public_endpoint_params is replaced wholesale on update, so resend default_domain_enabled on every update to keep the default host off — omitting it resets to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#default_domain_enabled AiSearchInstance#default_domain_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#default_domain_enabled AiSearchInstance#default_domain_enabled}
   */
   readonly defaultDomainEnabled?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#enabled AiSearchInstance#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#enabled AiSearchInstance#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#mcp AiSearchInstance#mcp}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#mcp AiSearchInstance#mcp}
   */
   readonly mcp?: AiSearchInstancePublicEndpointParamsMcp;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#rate_limit AiSearchInstance#rate_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#rate_limit AiSearchInstance#rate_limit}
   */
   readonly rateLimit?: AiSearchInstancePublicEndpointParamsRateLimit;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#search_endpoint AiSearchInstance#search_endpoint}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#search_endpoint AiSearchInstance#search_endpoint}
   */
   readonly searchEndpoint?: AiSearchInstancePublicEndpointParamsSearchEndpoint;
 }
@@ -1488,13 +1692,13 @@ export interface AiSearchInstanceRetrievalOptionsBoostBy {
   * Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps). 'asc' = lower values rank higher. 'exists' = boost chunks that have the field. 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc' for numeric/datetime fields, 'exists' for text/boolean fields.
   * Available values: "asc", "desc", "exists", "not_exists".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#direction AiSearchInstance#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#direction AiSearchInstance#direction}
   */
   readonly direction?: string;
   /**
   * Metadata field name to boost by. Use 'timestamp' for document freshness, or any custom_metadata field. Numeric and datetime fields support all four directions (asc, desc, exists, not_exists); text/boolean fields only support exists/not_exists.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#field AiSearchInstance#field}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#field AiSearchInstance#field}
   */
   readonly field: string;
 }
@@ -1585,7 +1789,7 @@ export class AiSearchInstanceRetrievalOptionsBoostByOutputReference extends cdkt
     }
   }
 
-  // direction - computed: false, optional: true, required: false
+  // direction - computed: true, optional: true, required: false
   private _direction?: string; 
   public get direction() {
     return this.getStringAttribute('direction');
@@ -1601,7 +1805,7 @@ export class AiSearchInstanceRetrievalOptionsBoostByOutputReference extends cdkt
     return this._direction;
   }
 
-  // field - computed: false, optional: false, required: true
+  // field - computed: true, optional: false, required: true
   private _field?: string; 
   public get field() {
     return this.getStringAttribute('field');
@@ -1638,14 +1842,14 @@ export interface AiSearchInstanceRetrievalOptions {
   /**
   * Metadata fields to boost search results by. Each entry specifies a metadata field and an optional direction. Direction defaults to 'asc' for numeric/datetime fields and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined custom_metadata field.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#boost_by AiSearchInstance#boost_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#boost_by AiSearchInstance#boost_by}
   */
   readonly boostBy?: AiSearchInstanceRetrievalOptionsBoostBy[] | cdktf.IResolvable;
   /**
-  * Controls which documents are candidates for BM25 scoring. 'and' restricts candidates to documents containing all query terms; 'or' includes any document containing at least one term, ranked by BM25 relevance. When omitted on an update, the existing stored value is preserved; when never set, search falls back to 'and'.
+  * Controls which documents become candidates for BM25 scoring. 'and' restricts candidates to documents containing all query terms; 'or' includes any document containing at least one term and ranks results according to BM25 relevance. When omitted on an update, the existing stored value stays unchanged; when never set, search falls back to 'and'.
   * Available values: "and", "or".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#keyword_match_mode AiSearchInstance#keyword_match_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#keyword_match_mode AiSearchInstance#keyword_match_mode}
   */
   readonly keywordMatchMode?: string;
 }
@@ -1734,7 +1938,7 @@ export class AiSearchInstanceRetrievalOptionsOutputReference extends cdktf.Compl
     }
   }
 
-  // boost_by - computed: false, optional: true, required: false
+  // boost_by - computed: true, optional: true, required: false
   private _boostBy = new AiSearchInstanceRetrievalOptionsBoostByList(this, "boost_by", false);
   public get boostBy() {
     return this._boostBy;
@@ -1750,7 +1954,7 @@ export class AiSearchInstanceRetrievalOptionsOutputReference extends cdktf.Compl
     return this._boostBy.internalValue;
   }
 
-  // keyword_match_mode - computed: false, optional: true, required: false
+  // keyword_match_mode - computed: true, optional: true, required: false
   private _keywordMatchMode?: string; 
   public get keywordMatchMode() {
     return this.getStringAttribute('keyword_match_mode');
@@ -1770,38 +1974,38 @@ export interface AiSearchInstanceSourceParamsWebCrawlerDiscoverOptions {
   /**
   * Maximum link-follow depth from the seed URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#depth AiSearchInstance#depth}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#depth AiSearchInstance#depth}
   */
   readonly depth?: number;
   /**
-  * Follow links that point outside the source domain. Must stay `false` — discover crawls are restricted to the zone you own.
+  * Follow links that point outside the source domain. Must stay `false` because discover crawls only cover the zone you own.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#include_external_links AiSearchInstance#include_external_links}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#include_external_links AiSearchInstance#include_external_links}
   */
   readonly includeExternalLinks?: boolean | cdktf.IResolvable;
   /**
   * Follow links to subdomains of the source host.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#include_subdomains AiSearchInstance#include_subdomains}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#include_subdomains AiSearchInstance#include_subdomains}
   */
   readonly includeSubdomains?: boolean | cdktf.IResolvable;
   /**
   * Maximum number of pages to crawl (1-100000).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#limit AiSearchInstance#limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#limit AiSearchInstance#limit}
   */
   readonly limit?: number;
   /**
   * Maximum content age in seconds to accept (0–604800).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#max_age AiSearchInstance#max_age}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#max_age AiSearchInstance#max_age}
   */
   readonly maxAge?: number;
   /**
   * Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links' follows page links only, 'all' does both.
   * Available values: "all", "sitemaps", "links".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#source AiSearchInstance#source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#source AiSearchInstance#source}
   */
   readonly source?: string;
 }
@@ -2042,13 +2246,13 @@ export interface AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelect
   /**
   * Glob pattern to match against the page URL path. Uses standard glob syntax: * matches within a segment, ** crosses directories.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#path AiSearchInstance#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#path AiSearchInstance#path}
   */
   readonly path: string;
   /**
-  * CSS selector to extract content from pages matching the path pattern. Must not contain disallowed characters (;, `, $, {, }, \). Must target a single element; if multiple elements match, the selector is ignored and the full page is used.
+  * CSS selector to extract content from pages matching the path pattern. Disallowed characters: ;, `, $, {, }, \. Must target a single element; if multiple elements match, the crawler ignores the selector and uses the full page.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#selector AiSearchInstance#selector}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#selector AiSearchInstance#selector}
   */
   readonly selector: string;
 }
@@ -2187,29 +2391,29 @@ export class AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorLi
 }
 export interface AiSearchInstanceSourceParamsWebCrawlerParseOptions {
   /**
-  * List of path-to-selector mappings for extracting specific content from crawled pages. Each entry pairs a URL glob pattern with a CSS selector. The first matching path wins. Only the matched HTML fragment is stored and indexed. Omit the field to disable content selection — empty arrays are rejected.
+  * List of path-to-selector mappings for extracting specific content from crawled pages. Each entry pairs a URL glob pattern with a CSS selector. The first matching path wins. The crawler stores and indexes only the matched HTML fragment. Omit the field to disable content selection; the API rejects empty arrays.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#content_selector AiSearchInstance#content_selector}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#content_selector AiSearchInstance#content_selector}
   */
   readonly contentSelector?: AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelector[] | cdktf.IResolvable;
   /**
-  * Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230 token characters (no spaces, colons, or control characters); values must be HTAB + printable ASCII (no CR/LF).
+  * Up to 5 custom HTTP headers sent with each crawl request. Names must use RFC-7230 token characters, excluding spaces, colons, and control characters. Values must use HTAB and printable ASCII only, excluding CR and LF.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#include_headers AiSearchInstance#include_headers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#include_headers AiSearchInstance#include_headers}
   */
   readonly includeHeaders?: { [key: string]: string };
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#include_images AiSearchInstance#include_images}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#include_images AiSearchInstance#include_images}
   */
   readonly includeImages?: boolean | cdktf.IResolvable;
   /**
   * List of specific sitemap URLs to use for crawling. Only valid when parse_type is 'sitemap'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#specific_sitemaps AiSearchInstance#specific_sitemaps}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#specific_sitemaps AiSearchInstance#specific_sitemaps}
   */
   readonly specificSitemaps?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#use_browser_rendering AiSearchInstance#use_browser_rendering}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#use_browser_rendering AiSearchInstance#use_browser_rendering}
   */
   readonly useBrowserRendering?: boolean | cdktf.IResolvable;
 }
@@ -2419,20 +2623,20 @@ export class AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference e
 }
 export interface AiSearchInstanceSourceParamsWebCrawler {
   /**
-  * Options for parse_type 'discover', where Browser Run discovers URLs by link following and sitemaps. Ignored for 'sitemap'.
+  * Options for parse_type 'discover', where Browser Run discovers URLs through link following and sitemaps. Ignored for 'sitemap'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#discover_options AiSearchInstance#discover_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#discover_options AiSearchInstance#discover_options}
   */
   readonly discoverOptions?: AiSearchInstanceSourceParamsWebCrawlerDiscoverOptions;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#parse_options AiSearchInstance#parse_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#parse_options AiSearchInstance#parse_options}
   */
   readonly parseOptions?: AiSearchInstanceSourceParamsWebCrawlerParseOptions;
   /**
-  * How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links recursively and requires the source to be a Verified zone on this account.
+  * How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows links recursively and requires the source to belong to a Verified zone on this account.
   * Available values: "sitemap", "discover".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#parse_type AiSearchInstance#parse_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#parse_type AiSearchInstance#parse_type}
   */
   readonly parseType?: string;
 }
@@ -2584,27 +2788,27 @@ export class AiSearchInstanceSourceParamsWebCrawlerOutputReference extends cdktf
 }
 export interface AiSearchInstanceSourceParams {
   /**
-  * List of path patterns to exclude. Uses micromatch glob syntax: * matches within a path segment, ** matches across path segments (e.g., /admin/** matches /admin/users and /admin/settings/advanced). Most accounts are limited to 10 rules; contact support to raise it.
+  * List of path patterns to exclude. Uses micromatch glob syntax: * matches within a path segment, ** matches across path segments (e.g., /admin/** matches /admin/users and /admin/settings/advanced). Most accounts have a limit of 10 rules; contact support to raise it.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#exclude_items AiSearchInstance#exclude_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#exclude_items AiSearchInstance#exclude_items}
   */
   readonly excludeItems?: string[];
   /**
-  * List of path patterns to include. Uses micromatch glob syntax: * matches within a path segment, ** matches across path segments (e.g., /blog/** matches /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact support to raise it.
+  * List of path patterns to include. Uses micromatch glob syntax: * matches within a path segment, ** matches across path segments (e.g., /blog/** matches /blog/post and /blog/2024/post). Most accounts have a limit of 10 rules; contact support to raise it.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#include_items AiSearchInstance#include_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#include_items AiSearchInstance#include_items}
   */
   readonly includeItems?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#prefix AiSearchInstance#prefix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#prefix AiSearchInstance#prefix}
   */
   readonly prefix?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#r2_jurisdiction AiSearchInstance#r2_jurisdiction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#r2_jurisdiction AiSearchInstance#r2_jurisdiction}
   */
   readonly r2Jurisdiction?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#web_crawler AiSearchInstance#web_crawler}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#web_crawler AiSearchInstance#web_crawler}
   */
   readonly webCrawler?: AiSearchInstanceSourceParamsWebCrawler;
 }
@@ -2814,7 +3018,7 @@ export class AiSearchInstanceSourceParamsOutputReference extends cdktf.ComplexOb
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance cloudflare_ai_search_instance}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance cloudflare_ai_search_instance}
 */
 export class AiSearchInstance extends cdktf.TerraformResource {
 
@@ -2830,7 +3034,7 @@ export class AiSearchInstance extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AiSearchInstance resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AiSearchInstance to import
-  * @param importFromId The id of the existing AiSearchInstance that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AiSearchInstance that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AiSearchInstance to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -2842,7 +3046,7 @@ export class AiSearchInstance extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/ai_search_instance cloudflare_ai_search_instance} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/ai_search_instance cloudflare_ai_search_instance} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -2853,7 +3057,7 @@ export class AiSearchInstance extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_ai_search_instance',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -2881,6 +3085,7 @@ export class AiSearchInstance extends cdktf.TerraformResource {
     this._indexingOptions.internalValue = config.indexingOptions;
     this._maxNumResults = config.maxNumResults;
     this._metadata.internalValue = config.metadata;
+    this._namespace = config.namespace;
     this._paused = config.paused;
     this._publicEndpointParams.internalValue = config.publicEndpointParams;
     this._reranking = config.reranking;
@@ -3222,9 +3427,20 @@ export class AiSearchInstance extends cdktf.TerraformResource {
     return this.getStringAttribute('modified_by');
   }
 
-  // namespace - computed: true, optional: false, required: false
+  // namespace - computed: true, optional: true, required: false
+  private _namespace?: string; 
   public get namespace() {
     return this.getStringAttribute('namespace');
+  }
+  public set namespace(value: string) {
+    this._namespace = value;
+  }
+  public resetNamespace() {
+    this._namespace = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get namespaceInput() {
+    return this._namespace;
   }
 
   // paused - computed: true, optional: true, required: false
@@ -3296,7 +3512,7 @@ export class AiSearchInstance extends cdktf.TerraformResource {
     return this._rerankingModel;
   }
 
-  // retrieval_options - computed: false, optional: true, required: false
+  // retrieval_options - computed: true, optional: true, required: false
   private _retrievalOptions = new AiSearchInstanceRetrievalOptionsOutputReference(this, "retrieval_options");
   public get retrievalOptions() {
     return this._retrievalOptions;
@@ -3493,7 +3709,7 @@ export class AiSearchInstance extends cdktf.TerraformResource {
     return this._systemPromptRewriteQuery;
   }
 
-  // token_id - computed: false, optional: true, required: false
+  // token_id - computed: true, optional: true, required: false
   private _tokenId?: string; 
   public get tokenId() {
     return this.getStringAttribute('token_id');
@@ -3509,7 +3725,7 @@ export class AiSearchInstance extends cdktf.TerraformResource {
     return this._tokenId;
   }
 
-  // type - computed: false, optional: true, required: false
+  // type - computed: true, optional: true, required: false
   private _type?: string; 
   public get type() {
     return this.getStringAttribute('type');
@@ -3549,6 +3765,7 @@ export class AiSearchInstance extends cdktf.TerraformResource {
       indexing_options: aiSearchInstanceIndexingOptionsToTerraform(this._indexingOptions.internalValue),
       max_num_results: cdktf.numberToTerraform(this._maxNumResults),
       metadata: aiSearchInstanceMetadataToTerraform(this._metadata.internalValue),
+      namespace: cdktf.stringToTerraform(this._namespace),
       paused: cdktf.booleanToTerraform(this._paused),
       public_endpoint_params: aiSearchInstancePublicEndpointParamsToTerraform(this._publicEndpointParams.internalValue),
       reranking: cdktf.booleanToTerraform(this._reranking),
@@ -3679,6 +3896,12 @@ export class AiSearchInstance extends cdktf.TerraformResource {
         isBlock: true,
         type: "struct",
         storageClassType: "AiSearchInstanceMetadata",
+      },
+      namespace: {
+        value: cdktf.stringToHclTerraform(this._namespace),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
       paused: {
         value: cdktf.booleanToHclTerraform(this._paused),

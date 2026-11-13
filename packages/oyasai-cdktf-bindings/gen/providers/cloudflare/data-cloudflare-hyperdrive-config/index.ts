@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/hyperdrive_config
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/hyperdrive_config
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareHyperdriveConfigConfig extends cdktf.TerraformMet
   /**
   * Define configurations using a unique string identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/hyperdrive_config#account_id DataCloudflareHyperdriveConfig#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/hyperdrive_config#account_id DataCloudflareHyperdriveConfig#account_id}
   */
   readonly accountId?: string;
   /**
   * Define configurations using a unique string identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/hyperdrive_config#hyperdrive_id DataCloudflareHyperdriveConfig#hyperdrive_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/hyperdrive_config#hyperdrive_id DataCloudflareHyperdriveConfig#hyperdrive_id}
   */
   readonly hyperdriveId: string;
 }
@@ -82,6 +82,85 @@ export class DataCloudflareHyperdriveConfigCachingOutputReference extends cdktf.
   // stale_while_revalidate - computed: true, optional: false, required: false
   public get staleWhileRevalidate() {
     return this.getNumberAttribute('stale_while_revalidate');
+  }
+}
+export interface DataCloudflareHyperdriveConfigIntegration {
+}
+
+export function dataCloudflareHyperdriveConfigIntegrationToTerraform(struct?: DataCloudflareHyperdriveConfigIntegration): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareHyperdriveConfigIntegrationToHclTerraform(struct?: DataCloudflareHyperdriveConfigIntegration): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareHyperdriveConfigIntegrationOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareHyperdriveConfigIntegration | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareHyperdriveConfigIntegration | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // custom_database_name - computed: true, optional: false, required: false
+  public get customDatabaseName() {
+    return this.getStringAttribute('custom_database_name');
+  }
+
+  // database_branch_name - computed: true, optional: false, required: false
+  public get databaseBranchName() {
+    return this.getStringAttribute('database_branch_name');
+  }
+
+  // database_name - computed: true, optional: false, required: false
+  public get databaseName() {
+    return this.getStringAttribute('database_name');
+  }
+
+  // hyperdrive_config_provider - computed: true, optional: false, required: false
+  public get hyperdriveConfigProvider() {
+    return this.getStringAttribute('hyperdrive_config_provider');
+  }
+
+  // organization_name - computed: true, optional: false, required: false
+  public get organizationName() {
+    return this.getStringAttribute('organization_name');
+  }
+
+  // scheme - computed: true, optional: false, required: false
+  public get scheme() {
+    return this.getStringAttribute('scheme');
   }
 }
 export interface DataCloudflareHyperdriveConfigMtls {
@@ -244,7 +323,7 @@ export class DataCloudflareHyperdriveConfigOriginOutputReference extends cdktf.C
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/hyperdrive_config cloudflare_hyperdrive_config}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/hyperdrive_config cloudflare_hyperdrive_config}
 */
 export class DataCloudflareHyperdriveConfig extends cdktf.TerraformDataSource {
 
@@ -260,7 +339,7 @@ export class DataCloudflareHyperdriveConfig extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareHyperdriveConfig resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareHyperdriveConfig to import
-  * @param importFromId The id of the existing DataCloudflareHyperdriveConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/hyperdrive_config#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareHyperdriveConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/hyperdrive_config#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareHyperdriveConfig to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -272,7 +351,7 @@ export class DataCloudflareHyperdriveConfig extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/hyperdrive_config cloudflare_hyperdrive_config} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/hyperdrive_config cloudflare_hyperdrive_config} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -283,7 +362,7 @@ export class DataCloudflareHyperdriveConfig extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_hyperdrive_config',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -344,6 +423,12 @@ export class DataCloudflareHyperdriveConfig extends cdktf.TerraformDataSource {
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // integration - computed: true, optional: false, required: false
+  private _integration = new DataCloudflareHyperdriveConfigIntegrationOutputReference(this, "integration");
+  public get integration() {
+    return this._integration;
   }
 
   // modified_on - computed: true, optional: false, required: false

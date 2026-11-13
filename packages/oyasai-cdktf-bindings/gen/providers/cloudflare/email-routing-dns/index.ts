@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_routing_dns
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_routing_dns
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,25 @@ export interface EmailRoutingDnsConfig extends cdktf.TerraformMetaArguments {
   /**
   * Domain of your zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_routing_dns#name EmailRoutingDns#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_routing_dns#name EmailRoutingDns#name}
   */
   readonly name?: string;
   /**
+  * Deprecated. When supplied, the response shape differs from the documented default and is not modeled in generated SDKs. Do not rely on this parameter.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_routing_dns#subdomain EmailRoutingDns#subdomain}
+  */
+  readonly subdomain?: string;
+  /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_routing_dns#zone_id EmailRoutingDns#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_routing_dns#zone_id EmailRoutingDns#zone_id}
   */
   readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_routing_dns cloudflare_email_routing_dns}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_routing_dns cloudflare_email_routing_dns}
 */
 export class EmailRoutingDns extends cdktf.TerraformResource {
 
@@ -38,7 +44,7 @@ export class EmailRoutingDns extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a EmailRoutingDns resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the EmailRoutingDns to import
-  * @param importFromId The id of the existing EmailRoutingDns that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_routing_dns#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing EmailRoutingDns that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_routing_dns#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the EmailRoutingDns to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +56,7 @@ export class EmailRoutingDns extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_routing_dns cloudflare_email_routing_dns} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_routing_dns cloudflare_email_routing_dns} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +67,7 @@ export class EmailRoutingDns extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_email_routing_dns',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -72,6 +78,7 @@ export class EmailRoutingDns extends cdktf.TerraformResource {
       forEach: config.forEach
     });
     this._name = config.name;
+    this._subdomain = config.subdomain;
     this._zoneId = config.zoneId;
   }
 
@@ -125,6 +132,22 @@ export class EmailRoutingDns extends cdktf.TerraformResource {
     return this.getStringAttribute('status');
   }
 
+  // subdomain - computed: false, optional: true, required: false
+  private _subdomain?: string; 
+  public get subdomain() {
+    return this.getStringAttribute('subdomain');
+  }
+  public set subdomain(value: string) {
+    this._subdomain = value;
+  }
+  public resetSubdomain() {
+    this._subdomain = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get subdomainInput() {
+    return this._subdomain;
+  }
+
   // support_subaddress - computed: true, optional: false, required: false
   public get supportSubaddress() {
     return this.getBooleanAttribute('support_subaddress');
@@ -155,6 +178,7 @@ export class EmailRoutingDns extends cdktf.TerraformResource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       name: cdktf.stringToTerraform(this._name),
+      subdomain: cdktf.stringToTerraform(this._subdomain),
       zone_id: cdktf.stringToTerraform(this._zoneId),
     };
   }
@@ -163,6 +187,12 @@ export class EmailRoutingDns extends cdktf.TerraformResource {
     const attrs = {
       name: {
         value: cdktf.stringToHclTerraform(this._name),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      subdomain: {
+        value: cdktf.stringToHclTerraform(this._subdomain),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

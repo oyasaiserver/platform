@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,34 +10,34 @@ export interface DataCloudflareAccountMembersConfig extends cdktf.TerraformMetaA
   /**
   * Account identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members#account_id DataCloudflareAccountMembers#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members#account_id DataCloudflareAccountMembers#account_id}
   */
   readonly accountId?: string;
   /**
   * Direction to order results.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members#direction DataCloudflareAccountMembers#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members#direction DataCloudflareAccountMembers#direction}
   */
   readonly direction?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members#max_items DataCloudflareAccountMembers#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members#max_items DataCloudflareAccountMembers#max_items}
   */
   readonly maxItems?: number;
   /**
   * Field to order results by.
   * Available values: "user.first_name", "user.last_name", "user.email", "status".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members#order DataCloudflareAccountMembers#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members#order DataCloudflareAccountMembers#order}
   */
   readonly order?: string;
   /**
   * A member's status in the account.
   * Available values: "accepted", "pending", "rejected".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members#status DataCloudflareAccountMembers#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members#status DataCloudflareAccountMembers#status}
   */
   readonly status?: string;
 }
@@ -90,14 +90,44 @@ export class DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutpu
     }
   }
 
-  // key - computed: true, optional: false, required: false
-  public get key() {
-    return this.getStringAttribute('key');
+  // category - computed: true, optional: false, required: false
+  public get category() {
+    return this.getStringAttribute('category');
   }
 
-  // value - computed: true, optional: false, required: false
-  public get value() {
-    return this.getStringAttribute('value');
+  // deprecated - computed: true, optional: false, required: false
+  public get deprecated() {
+    return this.getStringAttribute('deprecated');
+  }
+
+  // description - computed: true, optional: false, required: false
+  public get description() {
+    return this.getStringAttribute('description');
+  }
+
+  // editable - computed: true, optional: false, required: false
+  public get editable() {
+    return this.getStringAttribute('editable');
+  }
+
+  // eol_at - computed: true, optional: false, required: false
+  public get eolAt() {
+    return this.getStringAttribute('eol_at');
+  }
+
+  // label - computed: true, optional: false, required: false
+  public get label() {
+    return this.getStringAttribute('label');
+  }
+
+  // scopes - computed: true, optional: false, required: false
+  public get scopes() {
+    return this.getStringAttribute('scopes');
+  }
+
+  // visibility - computed: true, optional: false, required: false
+  public get visibility() {
+    return this.getStringAttribute('visibility');
   }
 }
 export interface DataCloudflareAccountMembersResultPoliciesPermissionGroups {
@@ -1684,7 +1714,7 @@ export class DataCloudflareAccountMembersResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members cloudflare_account_members}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members cloudflare_account_members}
 */
 export class DataCloudflareAccountMembers extends cdktf.TerraformDataSource {
 
@@ -1700,7 +1730,7 @@ export class DataCloudflareAccountMembers extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareAccountMembers resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareAccountMembers to import
-  * @param importFromId The id of the existing DataCloudflareAccountMembers that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareAccountMembers that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareAccountMembers to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1712,7 +1742,7 @@ export class DataCloudflareAccountMembers extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/account_members cloudflare_account_members} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/account_members cloudflare_account_members} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1723,7 +1753,7 @@ export class DataCloudflareAccountMembers extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_account_members',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

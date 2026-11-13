@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/nel_setting
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/nel_setting
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface NelSettingConfig extends cdktf.TerraformMetaArguments {
   /**
   * The NEL configuration value.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/nel_setting#value NelSetting#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/nel_setting#value NelSetting#value}
   */
   readonly value: NelSettingValue;
   /**
   * Identifier of the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/nel_setting#zone_id NelSetting#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/nel_setting#zone_id NelSetting#zone_id}
   */
   readonly zoneId: string;
 }
@@ -24,7 +24,7 @@ export interface NelSettingValue {
   /**
   * Whether Network Error Logging is enabled for the zone. When enabled, browsers report network errors to Cloudflare's NEL endpoint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/nel_setting#enabled NelSetting#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/nel_setting#enabled NelSetting#enabled}
   */
   readonly enabled: boolean | cdktf.IResolvable;
 }
@@ -115,7 +115,7 @@ export class NelSettingValueOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/nel_setting cloudflare_nel_setting}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/nel_setting cloudflare_nel_setting}
 */
 export class NelSetting extends cdktf.TerraformResource {
 
@@ -131,7 +131,7 @@ export class NelSetting extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a NelSetting resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the NelSetting to import
-  * @param importFromId The id of the existing NelSetting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/nel_setting#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing NelSetting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/nel_setting#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the NelSetting to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -143,7 +143,7 @@ export class NelSetting extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/nel_setting cloudflare_nel_setting} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/nel_setting cloudflare_nel_setting} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -154,7 +154,7 @@ export class NelSetting extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_nel_setting',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

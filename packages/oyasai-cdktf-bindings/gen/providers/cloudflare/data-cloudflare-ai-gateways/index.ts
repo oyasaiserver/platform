@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_gateways
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_gateways
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,19 +8,19 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareAiGatewaysConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_gateways#account_id DataCloudflareAiGateways#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_gateways#account_id DataCloudflareAiGateways#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_gateways#max_items DataCloudflareAiGateways#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_gateways#max_items DataCloudflareAiGateways#max_items}
   */
   readonly maxItems?: number;
   /**
   * Search by id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_gateways#search DataCloudflareAiGateways#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_gateways#search DataCloudflareAiGateways#search}
   */
   readonly search?: string;
 }
@@ -268,6 +268,11 @@ export class DataCloudflareAiGatewaysResultGuardrailsPromptOutputReference exten
     return this.getStringAttribute('s13');
   }
 
+  // s14 - computed: true, optional: false, required: false
+  public get s14() {
+    return this.getStringAttribute('s14');
+  }
+
   // s2 - computed: true, optional: false, required: false
   public get s2() {
     return this.getStringAttribute('s2');
@@ -385,6 +390,11 @@ export class DataCloudflareAiGatewaysResultGuardrailsResponseOutputReference ext
   // s13 - computed: true, optional: false, required: false
   public get s13() {
     return this.getStringAttribute('s13');
+  }
+
+  // s14 - computed: true, optional: false, required: false
+  public get s14() {
+    return this.getStringAttribute('s14');
   }
 
   // s2 - computed: true, optional: false, required: false
@@ -1144,6 +1154,11 @@ export class DataCloudflareAiGatewaysResultOutputReference extends cdktf.Complex
     return this.getBooleanAttribute('authentication');
   }
 
+  // byok_only - computed: true, optional: false, required: false
+  public get byokOnly() {
+    return this.getBooleanAttribute('byok_only');
+  }
+
   // cache_invalidate_on_update - computed: true, optional: false, required: false
   public get cacheInvalidateOnUpdate() {
     return this.getBooleanAttribute('cache_invalidate_on_update');
@@ -1168,6 +1183,16 @@ export class DataCloudflareAiGatewaysResultOutputReference extends cdktf.Complex
   private _dlp = new DataCloudflareAiGatewaysResultDlpOutputReference(this, "dlp");
   public get dlp() {
     return this._dlp;
+  }
+
+  // fedramp_level - computed: true, optional: false, required: false
+  public get fedrampLevel() {
+    return this.getStringAttribute('fedramp_level');
+  }
+
+  // fedramp_mode - computed: true, optional: false, required: false
+  public get fedrampMode() {
+    return this.getStringAttribute('fedramp_mode');
   }
 
   // guardrails - computed: true, optional: false, required: false
@@ -1300,7 +1325,7 @@ export class DataCloudflareAiGatewaysResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_gateways cloudflare_ai_gateways}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_gateways cloudflare_ai_gateways}
 */
 export class DataCloudflareAiGateways extends cdktf.TerraformDataSource {
 
@@ -1316,7 +1341,7 @@ export class DataCloudflareAiGateways extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareAiGateways resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareAiGateways to import
-  * @param importFromId The id of the existing DataCloudflareAiGateways that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_gateways#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareAiGateways that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_gateways#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareAiGateways to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1328,7 +1353,7 @@ export class DataCloudflareAiGateways extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/ai_gateways cloudflare_ai_gateways} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/ai_gateways cloudflare_ai_gateways} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1339,7 +1364,7 @@ export class DataCloudflareAiGateways extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_ai_gateways',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

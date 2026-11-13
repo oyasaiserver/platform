@@ -47,8 +47,8 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
       ttl: 1, // automatic
       zoneId: oyasaiIoZone.id,
       name: this.isMaster
-        ? oyasaiIoRegistrarDomain.domainName
-        : `${this.environment}.${oyasaiIoRegistrarDomain.domainName}`,
+        ? oyasaiIoRegistrarDomain
+        : `${this.environment}.${oyasaiIoRegistrarDomain}`,
       type: "A",
       proxied: false,
       content: this.ipv4,

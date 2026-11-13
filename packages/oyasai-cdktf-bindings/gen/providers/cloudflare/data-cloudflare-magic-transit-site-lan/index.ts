@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/magic_transit_site_lan
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/magic_transit_site_lan
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataCloudflareMagicTransitSiteLanConfig extends cdktf.Terraform
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/magic_transit_site_lan#account_id DataCloudflareMagicTransitSiteLan#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/magic_transit_site_lan#account_id DataCloudflareMagicTransitSiteLan#account_id}
   */
   readonly accountId: string;
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/magic_transit_site_lan#lan_id DataCloudflareMagicTransitSiteLan#lan_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/magic_transit_site_lan#lan_id DataCloudflareMagicTransitSiteLan#lan_id}
   */
   readonly lanId: string;
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/magic_transit_site_lan#site_id DataCloudflareMagicTransitSiteLan#site_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/magic_transit_site_lan#site_id DataCloudflareMagicTransitSiteLan#site_id}
   */
   readonly siteId: string;
 }
@@ -78,6 +78,86 @@ export class DataCloudflareMagicTransitSiteLanNatOutputReference extends cdktf.C
   // static_prefix - computed: true, optional: false, required: false
   public get staticPrefix() {
     return this.getStringAttribute('static_prefix');
+  }
+}
+export interface DataCloudflareMagicTransitSiteLanRemoteSubnets {
+}
+
+export function dataCloudflareMagicTransitSiteLanRemoteSubnetsToTerraform(struct?: DataCloudflareMagicTransitSiteLanRemoteSubnets): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareMagicTransitSiteLanRemoteSubnetsToHclTerraform(struct?: DataCloudflareMagicTransitSiteLanRemoteSubnets): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareMagicTransitSiteLanRemoteSubnetsOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareMagicTransitSiteLanRemoteSubnets | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareMagicTransitSiteLanRemoteSubnets | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // local_alias_prefix - computed: true, optional: false, required: false
+  public get localAliasPrefix() {
+    return this.getStringAttribute('local_alias_prefix');
+  }
+
+  // remote_prefix - computed: true, optional: false, required: false
+  public get remotePrefix() {
+    return this.getStringAttribute('remote_prefix');
+  }
+}
+
+export class DataCloudflareMagicTransitSiteLanRemoteSubnetsList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareMagicTransitSiteLanRemoteSubnetsOutputReference {
+    return new DataCloudflareMagicTransitSiteLanRemoteSubnetsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
 export interface DataCloudflareMagicTransitSiteLanRoutedSubnetsNat {
@@ -518,7 +598,7 @@ export class DataCloudflareMagicTransitSiteLanStaticAddressingOutputReference ex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/magic_transit_site_lan cloudflare_magic_transit_site_lan}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/magic_transit_site_lan cloudflare_magic_transit_site_lan}
 */
 export class DataCloudflareMagicTransitSiteLan extends cdktf.TerraformDataSource {
 
@@ -534,7 +614,7 @@ export class DataCloudflareMagicTransitSiteLan extends cdktf.TerraformDataSource
   * Generates CDKTF code for importing a DataCloudflareMagicTransitSiteLan resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareMagicTransitSiteLan to import
-  * @param importFromId The id of the existing DataCloudflareMagicTransitSiteLan that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/magic_transit_site_lan#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareMagicTransitSiteLan that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/magic_transit_site_lan#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareMagicTransitSiteLan to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -546,7 +626,7 @@ export class DataCloudflareMagicTransitSiteLan extends cdktf.TerraformDataSource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/magic_transit_site_lan cloudflare_magic_transit_site_lan} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/magic_transit_site_lan cloudflare_magic_transit_site_lan} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -557,7 +637,7 @@ export class DataCloudflareMagicTransitSiteLan extends cdktf.TerraformDataSource
       terraformResourceType: 'cloudflare_magic_transit_site_lan',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -641,6 +721,12 @@ export class DataCloudflareMagicTransitSiteLan extends cdktf.TerraformDataSource
   // physport - computed: true, optional: false, required: false
   public get physport() {
     return this.getNumberAttribute('physport');
+  }
+
+  // remote_subnets - computed: true, optional: false, required: false
+  private _remoteSubnets = new DataCloudflareMagicTransitSiteLanRemoteSubnetsList(this, "remote_subnets", false);
+  public get remoteSubnets() {
+    return this._remoteSubnets;
   }
 
   // routed_subnets - computed: true, optional: false, required: false

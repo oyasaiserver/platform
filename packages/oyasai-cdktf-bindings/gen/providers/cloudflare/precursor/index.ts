@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,56 +8,63 @@ import * as cdktf from 'cdktf';
 
 export interface PrecursorConfig extends cdktf.TerraformMetaArguments {
   /**
-  * The zone-level Precursor enforcement mode applied to requests that do
-  * not match a more specific enforcement rule.
-  * Available values: "off", "min-friction", "max-security".
+  * Controls Precursor detection for the zone. `off` disables detection,
+  * `monitor` records detections without affecting bot scores, and `arm`
+  * allows detections to affect bot scores.
+  * Available values: "off", "monitor", "arm".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor#default_mode Precursor#default_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#mode Precursor#mode}
   */
-  readonly defaultMode?: string;
+  readonly mode?: string;
   /**
-  * The ordered list of enforcement rules for the zone.
+  * The ordered list of Precursor rules for the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor#enforcement_rules Precursor#enforcement_rules}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#rules Precursor#rules}
   */
-  readonly enforcementRules?: PrecursorEnforcementRules[] | cdktf.IResolvable;
+  readonly rules?: PrecursorRules[] | cdktf.IResolvable;
+  /**
+  * Whether Precursor shows an interstitial when it takes action on a
+  * request.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#show_interstitial Precursor#show_interstitial}
+  */
+  readonly showInterstitial?: boolean | cdktf.IResolvable;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor#zone_id Precursor#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#zone_id Precursor#zone_id}
   */
   readonly zoneId: string;
 }
-export interface PrecursorEnforcementRules {
+export interface PrecursorRules {
   /**
   * An informative description of the rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor#description Precursor#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#description Precursor#description}
   */
   readonly description?: string;
   /**
   * Whether the rule is active.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor#enabled Precursor#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#enabled Precursor#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The filter expression that determines which requests the rule matches.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor#expression Precursor#expression}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#expression Precursor#expression}
   */
   readonly expression: string;
   /**
-  * The override mode Precursor applies to requests matching an enforcement
-  * rule. Unlike `default_mode`, this cannot be `off`.
-  * Available values: "min-friction", "max-security".
+  * Whether Precursor shows an interstitial when it takes action on a
+  * request.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor#mode Precursor#mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#show_interstitial Precursor#show_interstitial}
   */
-  readonly mode: string;
+  readonly showInterstitial: boolean | cdktf.IResolvable;
 }
 
-export function precursorEnforcementRulesToTerraform(struct?: PrecursorEnforcementRules | cdktf.IResolvable): any {
+export function precursorRulesToTerraform(struct?: PrecursorRules | cdktf.IResolvable): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
@@ -66,12 +73,12 @@ export function precursorEnforcementRulesToTerraform(struct?: PrecursorEnforceme
     description: cdktf.stringToTerraform(struct!.description),
     enabled: cdktf.booleanToTerraform(struct!.enabled),
     expression: cdktf.stringToTerraform(struct!.expression),
-    mode: cdktf.stringToTerraform(struct!.mode),
+    show_interstitial: cdktf.booleanToTerraform(struct!.showInterstitial),
   }
 }
 
 
-export function precursorEnforcementRulesToHclTerraform(struct?: PrecursorEnforcementRules | cdktf.IResolvable): any {
+export function precursorRulesToHclTerraform(struct?: PrecursorRules | cdktf.IResolvable): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
@@ -95,11 +102,11 @@ export function precursorEnforcementRulesToHclTerraform(struct?: PrecursorEnforc
       type: "simple",
       storageClassType: "string",
     },
-    mode: {
-      value: cdktf.stringToHclTerraform(struct!.mode),
+    show_interstitial: {
+      value: cdktf.booleanToHclTerraform(struct!.showInterstitial),
       isBlock: false,
       type: "simple",
-      storageClassType: "string",
+      storageClassType: "boolean",
     },
   };
 
@@ -107,7 +114,7 @@ export function precursorEnforcementRulesToHclTerraform(struct?: PrecursorEnforc
   return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
 
-export class PrecursorEnforcementRulesOutputReference extends cdktf.ComplexObject {
+export class PrecursorRulesOutputReference extends cdktf.ComplexObject {
   private isEmptyObject = false;
   private resolvableValue?: cdktf.IResolvable;
 
@@ -121,7 +128,7 @@ export class PrecursorEnforcementRulesOutputReference extends cdktf.ComplexObjec
     super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
   }
 
-  public get internalValue(): PrecursorEnforcementRules | cdktf.IResolvable | undefined {
+  public get internalValue(): PrecursorRules | cdktf.IResolvable | undefined {
     if (this.resolvableValue) {
       return this.resolvableValue;
     }
@@ -139,21 +146,21 @@ export class PrecursorEnforcementRulesOutputReference extends cdktf.ComplexObjec
       hasAnyValues = true;
       internalValueResult.expression = this._expression;
     }
-    if (this._mode !== undefined) {
+    if (this._showInterstitial !== undefined) {
       hasAnyValues = true;
-      internalValueResult.mode = this._mode;
+      internalValueResult.showInterstitial = this._showInterstitial;
     }
     return hasAnyValues ? internalValueResult : undefined;
   }
 
-  public set internalValue(value: PrecursorEnforcementRules | cdktf.IResolvable | undefined) {
+  public set internalValue(value: PrecursorRules | cdktf.IResolvable | undefined) {
     if (value === undefined) {
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._description = undefined;
       this._enabled = undefined;
       this._expression = undefined;
-      this._mode = undefined;
+      this._showInterstitial = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
       this.isEmptyObject = false;
@@ -165,7 +172,7 @@ export class PrecursorEnforcementRulesOutputReference extends cdktf.ComplexObjec
       this._description = value.description;
       this._enabled = value.enabled;
       this._expression = value.expression;
-      this._mode = value.mode;
+      this._showInterstitial = value.showInterstitial;
     }
   }
 
@@ -219,22 +226,22 @@ export class PrecursorEnforcementRulesOutputReference extends cdktf.ComplexObjec
     return this.getStringAttribute('id');
   }
 
-  // mode - computed: true, optional: false, required: true
-  private _mode?: string; 
-  public get mode() {
-    return this.getStringAttribute('mode');
+  // show_interstitial - computed: true, optional: false, required: true
+  private _showInterstitial?: boolean | cdktf.IResolvable; 
+  public get showInterstitial() {
+    return this.getBooleanAttribute('show_interstitial');
   }
-  public set mode(value: string) {
-    this._mode = value;
+  public set showInterstitial(value: boolean | cdktf.IResolvable) {
+    this._showInterstitial = value;
   }
   // Temporarily expose input value. Use with caution.
-  public get modeInput() {
-    return this._mode;
+  public get showInterstitialInput() {
+    return this._showInterstitial;
   }
 }
 
-export class PrecursorEnforcementRulesList extends cdktf.ComplexList {
-  public internalValue? : PrecursorEnforcementRules[] | cdktf.IResolvable
+export class PrecursorRulesList extends cdktf.ComplexList {
+  public internalValue? : PrecursorRules[] | cdktf.IResolvable
 
   /**
   * @param terraformResource The parent resource
@@ -248,13 +255,13 @@ export class PrecursorEnforcementRulesList extends cdktf.ComplexList {
   /**
   * @param index the index of the item to return
   */
-  public get(index: number): PrecursorEnforcementRulesOutputReference {
-    return new PrecursorEnforcementRulesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  public get(index: number): PrecursorRulesOutputReference {
+    return new PrecursorRulesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor cloudflare_precursor}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor cloudflare_precursor}
 */
 export class Precursor extends cdktf.TerraformResource {
 
@@ -270,7 +277,7 @@ export class Precursor extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Precursor resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Precursor to import
-  * @param importFromId The id of the existing Precursor that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Precursor that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Precursor to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -282,7 +289,7 @@ export class Precursor extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/precursor cloudflare_precursor} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/precursor cloudflare_precursor} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -293,7 +300,7 @@ export class Precursor extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_precursor',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -303,8 +310,9 @@ export class Precursor extends cdktf.TerraformResource {
       connection: config.connection,
       forEach: config.forEach
     });
-    this._defaultMode = config.defaultMode;
-    this._enforcementRules.internalValue = config.enforcementRules;
+    this._mode = config.mode;
+    this._rules.internalValue = config.rules;
+    this._showInterstitial = config.showInterstitial;
     this._zoneId = config.zoneId;
   }
 
@@ -312,41 +320,57 @@ export class Precursor extends cdktf.TerraformResource {
   // ATTRIBUTES
   // ==========
 
-  // default_mode - computed: true, optional: true, required: false
-  private _defaultMode?: string; 
-  public get defaultMode() {
-    return this.getStringAttribute('default_mode');
-  }
-  public set defaultMode(value: string) {
-    this._defaultMode = value;
-  }
-  public resetDefaultMode() {
-    this._defaultMode = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get defaultModeInput() {
-    return this._defaultMode;
-  }
-
-  // enforcement_rules - computed: true, optional: true, required: false
-  private _enforcementRules = new PrecursorEnforcementRulesList(this, "enforcement_rules", false);
-  public get enforcementRules() {
-    return this._enforcementRules;
-  }
-  public putEnforcementRules(value: PrecursorEnforcementRules[] | cdktf.IResolvable) {
-    this._enforcementRules.internalValue = value;
-  }
-  public resetEnforcementRules() {
-    this._enforcementRules.internalValue = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get enforcementRulesInput() {
-    return this._enforcementRules.internalValue;
-  }
-
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // mode - computed: true, optional: true, required: false
+  private _mode?: string; 
+  public get mode() {
+    return this.getStringAttribute('mode');
+  }
+  public set mode(value: string) {
+    this._mode = value;
+  }
+  public resetMode() {
+    this._mode = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get modeInput() {
+    return this._mode;
+  }
+
+  // rules - computed: true, optional: true, required: false
+  private _rules = new PrecursorRulesList(this, "rules", false);
+  public get rules() {
+    return this._rules;
+  }
+  public putRules(value: PrecursorRules[] | cdktf.IResolvable) {
+    this._rules.internalValue = value;
+  }
+  public resetRules() {
+    this._rules.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get rulesInput() {
+    return this._rules.internalValue;
+  }
+
+  // show_interstitial - computed: false, optional: true, required: false
+  private _showInterstitial?: boolean | cdktf.IResolvable; 
+  public get showInterstitial() {
+    return this.getBooleanAttribute('show_interstitial');
+  }
+  public set showInterstitial(value: boolean | cdktf.IResolvable) {
+    this._showInterstitial = value;
+  }
+  public resetShowInterstitial() {
+    this._showInterstitial = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get showInterstitialInput() {
+    return this._showInterstitial;
   }
 
   // zone_id - computed: false, optional: false, required: true
@@ -368,25 +392,32 @@ export class Precursor extends cdktf.TerraformResource {
 
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
-      default_mode: cdktf.stringToTerraform(this._defaultMode),
-      enforcement_rules: cdktf.listMapper(precursorEnforcementRulesToTerraform, false)(this._enforcementRules.internalValue),
+      mode: cdktf.stringToTerraform(this._mode),
+      rules: cdktf.listMapper(precursorRulesToTerraform, false)(this._rules.internalValue),
+      show_interstitial: cdktf.booleanToTerraform(this._showInterstitial),
       zone_id: cdktf.stringToTerraform(this._zoneId),
     };
   }
 
   protected synthesizeHclAttributes(): { [name: string]: any } {
     const attrs = {
-      default_mode: {
-        value: cdktf.stringToHclTerraform(this._defaultMode),
+      mode: {
+        value: cdktf.stringToHclTerraform(this._mode),
         isBlock: false,
         type: "simple",
         storageClassType: "string",
       },
-      enforcement_rules: {
-        value: cdktf.listMapperHcl(precursorEnforcementRulesToHclTerraform, false)(this._enforcementRules.internalValue),
+      rules: {
+        value: cdktf.listMapperHcl(precursorRulesToHclTerraform, false)(this._rules.internalValue),
         isBlock: true,
         type: "list",
-        storageClassType: "PrecursorEnforcementRulesList",
+        storageClassType: "PrecursorRulesList",
+      },
+      show_interstitial: {
+        value: cdktf.booleanToHclTerraform(this._showInterstitial),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       zone_id: {
         value: cdktf.stringToHclTerraform(this._zoneId),

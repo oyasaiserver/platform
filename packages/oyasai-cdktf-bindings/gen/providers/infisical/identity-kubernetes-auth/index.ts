@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,85 +10,103 @@ export interface IdentityKubernetesAuthConfig extends cdktf.TerraformMetaArgumen
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#access_token_max_ttl IdentityKubernetesAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#access_token_max_ttl IdentityKubernetesAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#access_token_num_uses_limit IdentityKubernetesAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#access_token_num_uses_limit IdentityKubernetesAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address..
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#access_token_trusted_ips IdentityKubernetesAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#access_token_trusted_ips IdentityKubernetesAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityKubernetesAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#access_token_ttl IdentityKubernetesAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#access_token_ttl IdentityKubernetesAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * An optional audience claim that the service account JWT token must have to authenticate with Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#allowed_audience IdentityKubernetesAuth#allowed_audience}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#allowed_audience IdentityKubernetesAuth#allowed_audience}
   */
   readonly allowedAudience?: string;
   /**
   * List of trusted namespaces that service accounts must belong to authenticate with Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#allowed_namespaces IdentityKubernetesAuth#allowed_namespaces}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#allowed_namespaces IdentityKubernetesAuth#allowed_namespaces}
   */
   readonly allowedNamespaces?: string[];
   /**
   * List of trusted service account names that are allowed to authenticate with Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#allowed_service_account_names IdentityKubernetesAuth#allowed_service_account_names}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#allowed_service_account_names IdentityKubernetesAuth#allowed_service_account_names}
   */
   readonly allowedServiceAccountNames?: string[];
   /**
   * Select a gateway for private cluster access. If not specified, the Internet Gateway will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#gateway_id IdentityKubernetesAuth#gateway_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#gateway_id IdentityKubernetesAuth#gateway_id}
   */
   readonly gatewayId?: string;
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#identity_id IdentityKubernetesAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#identity_id IdentityKubernetesAuth#identity_id}
   */
   readonly identityId: string;
   /**
   * The PEM-encoded CA cert for the Kubernetes API server. This is used by the TLS client for secure communication with the Kubernetes API server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#kubernetes_ca_certificate IdentityKubernetesAuth#kubernetes_ca_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#kubernetes_ca_certificate IdentityKubernetesAuth#kubernetes_ca_certificate}
   */
   readonly kubernetesCaCertificate?: string;
   /**
   * The host string, host:port pair, or URL to the base of the Kubernetes API server. This can usually be obtained by running `kubectl cluster-info`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#kubernetes_host IdentityKubernetesAuth#kubernetes_host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#kubernetes_host IdentityKubernetesAuth#kubernetes_host}
   */
   readonly kubernetesHost?: string;
   /**
-  * A long-lived service account JWT token for Infisical to access the [TokenReview API](https://kubernetes.io/docs/reference/kubernetes-api/authentication-resources/token-review-v1/) to validate other service account JWT tokens submitted by applications/pods. This is the JWT token obtained from step 1.5.
+  * The ID of an `infisical_identity_kubernetes_auth_template` to take the Kubernetes connection settings from. When set, `kubernetes_host`, `kubernetes_ca_certificate`, `token_reviewer_jwt` (or `token_reviewer_jwt_wo` and `token_reviewer_jwt_wo_version`), `token_reviewer_mode`, `gateway_id` and `allowed_audience` come from the template and must not be set here, and later edits to the template propagate to this identity. Removing it unlinks the template and applies the settings in this configuration instead: a connection setting the configuration leaves out is cleared, and the plan shows it. To unlink and keep the template's settings, set them here to the template's values (for example from the `infisical_identity_kubernetes_auth_template` data source); an unlink that changes nothing else then only needs the `unlink-templates` permission on auth templates, or `edit-auth` on the identity. A token reviewer JWT copied from the template is kept unless `token_reviewer_jwt` or `token_reviewer_jwt_wo` supplies a new one, or `token_reviewer_jwt` is set to `""` to remove it.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#token_reviewer_jwt IdentityKubernetesAuth#token_reviewer_jwt}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#template_id IdentityKubernetesAuth#template_id}
+  */
+  readonly templateId?: string;
+  /**
+  * A long-lived service account JWT token for Infisical to access the [TokenReview API](https://kubernetes.io/docs/reference/kubernetes-api/authentication-resources/token-review-v1/) to validate other service account JWT tokens submitted by applications/pods. This is the JWT token obtained from step 1.5. Infisical never returns it, so a change made outside Terraform is not detected; prefer `token_reviewer_jwt_wo`, which also keeps the JWT out of state. Set it to `""`, or leave both unset, to remove the stored JWT.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#token_reviewer_jwt IdentityKubernetesAuth#token_reviewer_jwt}
   */
   readonly tokenReviewerJwt?: string;
   /**
-  * Choose between Token ('api') or 'gateway' authentication. If using Gateway, the Gateway must be deployed in your Kubernetes cluster.
+  * The token reviewer JWT as a [write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) value: it is sent to Infisical but never stored in the plan or state. It is sent on every update, so it must stay set for as long as the JWT should be kept. Changing it alone is not detected, so increment `token_reviewer_jwt_wo_version` to rotate it. Requires Terraform 1.11.0 or higher.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#token_reviewer_mode IdentityKubernetesAuth#token_reviewer_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#token_reviewer_jwt_wo IdentityKubernetesAuth#token_reviewer_jwt_wo}
+  */
+  readonly tokenReviewerJwtWo?: string;
+  /**
+  * Used with `token_reviewer_jwt_wo` to roll out a new JWT. Increment it whenever `token_reviewer_jwt_wo` changes, and the next apply sends the new JWT in an update; the auth method is not recreated and issued access tokens stay valid.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#token_reviewer_jwt_wo_version IdentityKubernetesAuth#token_reviewer_jwt_wo_version}
+  */
+  readonly tokenReviewerJwtWoVersion?: number;
+  /**
+  * Choose between Token ('api') or 'gateway' authentication. If using Gateway, the Gateway must be deployed in your Kubernetes cluster. Defaults to `api`, or to the linked template's mode when `template_id` is set.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#token_reviewer_mode IdentityKubernetesAuth#token_reviewer_mode}
   */
   readonly tokenReviewerMode?: string;
 }
 export interface IdentityKubernetesAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#ip_address IdentityKubernetesAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#ip_address IdentityKubernetesAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -204,7 +222,7 @@ export class IdentityKubernetesAuthAccessTokenTrustedIpsList extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth}
 */
 export class IdentityKubernetesAuth extends cdktf.TerraformResource {
 
@@ -220,7 +238,7 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityKubernetesAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityKubernetesAuth to import
-  * @param importFromId The id of the existing IdentityKubernetesAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityKubernetesAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityKubernetesAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -232,7 +250,7 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -243,7 +261,7 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_kubernetes_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.32'
+        providerVersion: '0.20.14'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -264,7 +282,10 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
     this._identityId = config.identityId;
     this._kubernetesCaCertificate = config.kubernetesCaCertificate;
     this._kubernetesHost = config.kubernetesHost;
+    this._templateId = config.templateId;
     this._tokenReviewerJwt = config.tokenReviewerJwt;
+    this._tokenReviewerJwtWo = config.tokenReviewerJwtWo;
+    this._tokenReviewerJwtWoVersion = config.tokenReviewerJwtWoVersion;
     this._tokenReviewerMode = config.tokenReviewerMode;
   }
 
@@ -384,7 +405,7 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
     return this._allowedServiceAccountNames;
   }
 
-  // gateway_id - computed: false, optional: true, required: false
+  // gateway_id - computed: true, optional: true, required: false
   private _gatewayId?: string; 
   public get gatewayId() {
     return this.getStringAttribute('gateway_id');
@@ -398,6 +419,16 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get gatewayIdInput() {
     return this._gatewayId;
+  }
+
+  // has_template_sourced_token_reviewer_jwt - computed: true, optional: false, required: false
+  public get hasTemplateSourcedTokenReviewerJwt() {
+    return this.getBooleanAttribute('has_template_sourced_token_reviewer_jwt');
+  }
+
+  // has_token_reviewer_jwt - computed: true, optional: false, required: false
+  public get hasTokenReviewerJwt() {
+    return this.getBooleanAttribute('has_token_reviewer_jwt');
   }
 
   // id - computed: true, optional: false, required: false
@@ -434,7 +465,7 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
     return this._kubernetesCaCertificate;
   }
 
-  // kubernetes_host - computed: false, optional: true, required: false
+  // kubernetes_host - computed: true, optional: true, required: false
   private _kubernetesHost?: string; 
   public get kubernetesHost() {
     return this.getStringAttribute('kubernetes_host');
@@ -448,6 +479,22 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get kubernetesHostInput() {
     return this._kubernetesHost;
+  }
+
+  // template_id - computed: false, optional: true, required: false
+  private _templateId?: string; 
+  public get templateId() {
+    return this.getStringAttribute('template_id');
+  }
+  public set templateId(value: string) {
+    this._templateId = value;
+  }
+  public resetTemplateId() {
+    this._templateId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get templateIdInput() {
+    return this._templateId;
   }
 
   // token_reviewer_jwt - computed: false, optional: true, required: false
@@ -464,6 +511,38 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get tokenReviewerJwtInput() {
     return this._tokenReviewerJwt;
+  }
+
+  // token_reviewer_jwt_wo - computed: false, optional: true, required: false
+  private _tokenReviewerJwtWo?: string; 
+  public get tokenReviewerJwtWo() {
+    return this.getStringAttribute('token_reviewer_jwt_wo');
+  }
+  public set tokenReviewerJwtWo(value: string) {
+    this._tokenReviewerJwtWo = value;
+  }
+  public resetTokenReviewerJwtWo() {
+    this._tokenReviewerJwtWo = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get tokenReviewerJwtWoInput() {
+    return this._tokenReviewerJwtWo;
+  }
+
+  // token_reviewer_jwt_wo_version - computed: false, optional: true, required: false
+  private _tokenReviewerJwtWoVersion?: number; 
+  public get tokenReviewerJwtWoVersion() {
+    return this.getNumberAttribute('token_reviewer_jwt_wo_version');
+  }
+  public set tokenReviewerJwtWoVersion(value: number) {
+    this._tokenReviewerJwtWoVersion = value;
+  }
+  public resetTokenReviewerJwtWoVersion() {
+    this._tokenReviewerJwtWoVersion = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get tokenReviewerJwtWoVersionInput() {
+    return this._tokenReviewerJwtWoVersion;
   }
 
   // token_reviewer_mode - computed: true, optional: true, required: false
@@ -499,7 +578,10 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
       identity_id: cdktf.stringToTerraform(this._identityId),
       kubernetes_ca_certificate: cdktf.stringToTerraform(this._kubernetesCaCertificate),
       kubernetes_host: cdktf.stringToTerraform(this._kubernetesHost),
+      template_id: cdktf.stringToTerraform(this._templateId),
       token_reviewer_jwt: cdktf.stringToTerraform(this._tokenReviewerJwt),
+      token_reviewer_jwt_wo: cdktf.stringToTerraform(this._tokenReviewerJwtWo),
+      token_reviewer_jwt_wo_version: cdktf.numberToTerraform(this._tokenReviewerJwtWoVersion),
       token_reviewer_mode: cdktf.stringToTerraform(this._tokenReviewerMode),
     };
   }
@@ -572,11 +654,29 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
         type: "simple",
         storageClassType: "string",
       },
+      template_id: {
+        value: cdktf.stringToHclTerraform(this._templateId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
       token_reviewer_jwt: {
         value: cdktf.stringToHclTerraform(this._tokenReviewerJwt),
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      token_reviewer_jwt_wo: {
+        value: cdktf.stringToHclTerraform(this._tokenReviewerJwtWo),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      token_reviewer_jwt_wo_version: {
+        value: cdktf.numberToHclTerraform(this._tokenReviewerJwtWoVersion),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "number",
       },
       token_reviewer_mode: {
         value: cdktf.stringToHclTerraform(this._tokenReviewerMode),

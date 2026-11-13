@@ -1,5 +1,4 @@
 import { CloudflareProvider } from "@oyasaiserver/cdktf-bindings/providers/cloudflare/provider";
-import { RegistrarDomain } from "@oyasaiserver/cdktf-bindings/providers/cloudflare/registrar-domain";
 import { Zone } from "@oyasaiserver/cdktf-bindings/providers/cloudflare/zone";
 import { Identity } from "@oyasaiserver/cdktf-bindings/providers/infisical/identity";
 import { IdentityOidcAuth } from "@oyasaiserver/cdktf-bindings/providers/infisical/identity-oidc-auth";
@@ -24,7 +23,7 @@ export class CommonInfra extends OyasaiTerraformStack {
 
   readonly cloudflareAccountId = "7befe273c79e6f7993c1cd4534d6afff";
 
-  readonly oyasaiIoRegistrarDomain: RegistrarDomain;
+  readonly oyasaiIoRegistrarDomain = "oyasai.io" as string;
   readonly oyasaiIoZone: Zone;
 
   readonly platformInfisicalProject: Project;
@@ -93,21 +92,11 @@ export class CommonInfra extends OyasaiTerraformStack {
       },
     );
 
-    this.oyasaiIoRegistrarDomain = new RegistrarDomain(
-      this,
-      this.t("oyasai-io-registrar-domain"),
-      {
-        accountId: this.cloudflareAccountId,
-        domainName: "oyasai.io",
-        privacy: true,
-      },
-    );
-
     this.oyasaiIoZone = new Zone(this, "oyasai-io-zone", {
       account: {
         id: this.cloudflareAccountId,
       },
-      name: this.oyasaiIoRegistrarDomain.domainName,
+      name: this.oyasaiIoRegistrarDomain,
       type: "full",
     });
 

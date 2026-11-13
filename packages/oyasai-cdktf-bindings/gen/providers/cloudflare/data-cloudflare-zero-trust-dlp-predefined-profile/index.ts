@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_predefined_profile
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dlp_predefined_profile
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,11 +8,11 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustDlpPredefinedProfileConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_predefined_profile#account_id DataCloudflareZeroTrustDlpPredefinedProfile#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dlp_predefined_profile#account_id DataCloudflareZeroTrustDlpPredefinedProfile#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_predefined_profile#profile_id DataCloudflareZeroTrustDlpPredefinedProfile#profile_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dlp_predefined_profile#profile_id DataCloudflareZeroTrustDlpPredefinedProfile#profile_id}
   */
   readonly profileId: string;
 }
@@ -316,6 +316,11 @@ export class DataCloudflareZeroTrustDlpPredefinedProfileEntriesOutputReference e
     return this.getStringAttribute('updated_at');
   }
 
+  // validator_ids - computed: true, optional: false, required: false
+  public get validatorIds() {
+    return cdktf.Fn.tolist(this.getListAttribute('validator_ids'));
+  }
+
   // variant - computed: true, optional: false, required: false
   private _variant = new DataCloudflareZeroTrustDlpPredefinedProfileEntriesVariantOutputReference(this, "variant");
   public get variant() {
@@ -324,7 +329,7 @@ export class DataCloudflareZeroTrustDlpPredefinedProfileEntriesOutputReference e
 
   // word_list - computed: true, optional: false, required: false
   public get wordList() {
-    return this.getStringAttribute('word_list');
+    return this.getListAttribute('word_list');
   }
 }
 
@@ -348,7 +353,7 @@ export class DataCloudflareZeroTrustDlpPredefinedProfileEntriesList extends cdkt
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_predefined_profile cloudflare_zero_trust_dlp_predefined_profile}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dlp_predefined_profile cloudflare_zero_trust_dlp_predefined_profile}
 */
 export class DataCloudflareZeroTrustDlpPredefinedProfile extends cdktf.TerraformDataSource {
 
@@ -364,7 +369,7 @@ export class DataCloudflareZeroTrustDlpPredefinedProfile extends cdktf.Terraform
   * Generates CDKTF code for importing a DataCloudflareZeroTrustDlpPredefinedProfile resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDlpPredefinedProfile to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustDlpPredefinedProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_predefined_profile#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustDlpPredefinedProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dlp_predefined_profile#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDlpPredefinedProfile to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -376,7 +381,7 @@ export class DataCloudflareZeroTrustDlpPredefinedProfile extends cdktf.Terraform
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/zero_trust_dlp_predefined_profile cloudflare_zero_trust_dlp_predefined_profile} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/zero_trust_dlp_predefined_profile cloudflare_zero_trust_dlp_predefined_profile} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -387,7 +392,7 @@ export class DataCloudflareZeroTrustDlpPredefinedProfile extends cdktf.Terraform
       terraformResourceType: 'cloudflare_zero_trust_dlp_predefined_profile',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

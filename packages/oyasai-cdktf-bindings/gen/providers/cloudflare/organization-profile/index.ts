@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,33 +8,33 @@ import * as cdktf from 'cdktf';
 
 export interface OrganizationProfileAConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile#business_address OrganizationProfileA#business_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile#business_address OrganizationProfileA#business_address}
   */
-  readonly businessAddress: string;
+  readonly businessAddress?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile#business_email OrganizationProfileA#business_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile#business_email OrganizationProfileA#business_email}
   */
-  readonly businessEmail: string;
+  readonly businessEmail?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile#business_name OrganizationProfileA#business_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile#business_name OrganizationProfileA#business_name}
   */
-  readonly businessName: string;
+  readonly businessName?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile#business_phone OrganizationProfileA#business_phone}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile#business_phone OrganizationProfileA#business_phone}
   */
-  readonly businessPhone: string;
+  readonly businessPhone?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile#external_metadata OrganizationProfileA#external_metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile#external_metadata OrganizationProfileA#external_metadata}
   */
-  readonly externalMetadata: string;
+  readonly externalMetadata?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile#organization_id OrganizationProfileA#organization_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile#organization_id OrganizationProfileA#organization_id}
   */
   readonly organizationId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile cloudflare_organization_profile}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile cloudflare_organization_profile}
 */
 export class OrganizationProfileA extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class OrganizationProfileA extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OrganizationProfileA resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OrganizationProfileA to import
-  * @param importFromId The id of the existing OrganizationProfileA that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OrganizationProfileA that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OrganizationProfileA to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class OrganizationProfileA extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/organization_profile cloudflare_organization_profile} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/organization_profile cloudflare_organization_profile} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class OrganizationProfileA extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_organization_profile',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -95,7 +95,7 @@ export class OrganizationProfileA extends cdktf.TerraformResource {
   // ATTRIBUTES
   // ==========
 
-  // business_address - computed: false, optional: false, required: true
+  // business_address - computed: false, optional: true, required: false
   private _businessAddress?: string; 
   public get businessAddress() {
     return this.getStringAttribute('business_address');
@@ -103,12 +103,15 @@ export class OrganizationProfileA extends cdktf.TerraformResource {
   public set businessAddress(value: string) {
     this._businessAddress = value;
   }
+  public resetBusinessAddress() {
+    this._businessAddress = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get businessAddressInput() {
     return this._businessAddress;
   }
 
-  // business_email - computed: false, optional: false, required: true
+  // business_email - computed: false, optional: true, required: false
   private _businessEmail?: string; 
   public get businessEmail() {
     return this.getStringAttribute('business_email');
@@ -116,12 +119,15 @@ export class OrganizationProfileA extends cdktf.TerraformResource {
   public set businessEmail(value: string) {
     this._businessEmail = value;
   }
+  public resetBusinessEmail() {
+    this._businessEmail = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get businessEmailInput() {
     return this._businessEmail;
   }
 
-  // business_name - computed: false, optional: false, required: true
+  // business_name - computed: false, optional: true, required: false
   private _businessName?: string; 
   public get businessName() {
     return this.getStringAttribute('business_name');
@@ -129,12 +135,15 @@ export class OrganizationProfileA extends cdktf.TerraformResource {
   public set businessName(value: string) {
     this._businessName = value;
   }
+  public resetBusinessName() {
+    this._businessName = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get businessNameInput() {
     return this._businessName;
   }
 
-  // business_phone - computed: false, optional: false, required: true
+  // business_phone - computed: false, optional: true, required: false
   private _businessPhone?: string; 
   public get businessPhone() {
     return this.getStringAttribute('business_phone');
@@ -142,18 +151,24 @@ export class OrganizationProfileA extends cdktf.TerraformResource {
   public set businessPhone(value: string) {
     this._businessPhone = value;
   }
+  public resetBusinessPhone() {
+    this._businessPhone = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get businessPhoneInput() {
     return this._businessPhone;
   }
 
-  // external_metadata - computed: false, optional: false, required: true
+  // external_metadata - computed: false, optional: true, required: false
   private _externalMetadata?: string; 
   public get externalMetadata() {
     return this.getStringAttribute('external_metadata');
   }
   public set externalMetadata(value: string) {
     this._externalMetadata = value;
+  }
+  public resetExternalMetadata() {
+    this._externalMetadata = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get externalMetadataInput() {

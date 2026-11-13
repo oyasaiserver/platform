@@ -21,8 +21,11 @@ Object.defineProperty(exports, 'appsProvisioningConnectionV0Alpha1', { get: func
 Object.defineProperty(exports, 'appsProvisioningRepositoryV0Alpha1', { get: function () { return require('./apps-provisioning-repository-v0alpha1'); } });
 Object.defineProperty(exports, 'appsQueriesQueryV1', { get: function () { return require('./apps-queries-query-v1'); } });
 Object.defineProperty(exports, 'appsRulesAlertruleV0Alpha1', { get: function () { return require('./apps-rules-alertrule-v0alpha1'); } });
+Object.defineProperty(exports, 'appsRulesAlertruleV1Beta1', { get: function () { return require('./apps-rules-alertrule-v1beta1'); } });
 Object.defineProperty(exports, 'appsRulesRecordingruleV0Alpha1', { get: function () { return require('./apps-rules-recordingrule-v0alpha1'); } });
+Object.defineProperty(exports, 'appsRulesRecordingruleV1Beta1', { get: function () { return require('./apps-rules-recordingrule-v1beta1'); } });
 Object.defineProperty(exports, 'appsRulesRulesequenceV0Alpha1', { get: function () { return require('./apps-rules-rulesequence-v0alpha1'); } });
+Object.defineProperty(exports, 'appsRulesRulesequenceV1Beta1', { get: function () { return require('./apps-rules-rulesequence-v1beta1'); } });
 Object.defineProperty(exports, 'appsSecretKeeperActivationV1Beta1', { get: function () { return require('./apps-secret-keeper-activation-v1beta1'); } });
 Object.defineProperty(exports, 'appsSecretKeeperV1Beta1', { get: function () { return require('./apps-secret-keeper-v1beta1'); } });
 Object.defineProperty(exports, 'appsSecretSecurevalueV1Beta1', { get: function () { return require('./apps-secret-securevalue-v1beta1'); } });
@@ -36,6 +39,7 @@ Object.defineProperty(exports, 'assertsStack', { get: function () { return requi
 Object.defineProperty(exports, 'assertsSuppressedAssertionsConfig', { get: function () { return require('./asserts-suppressed-assertions-config'); } });
 Object.defineProperty(exports, 'assertsThresholds', { get: function () { return require('./asserts-thresholds'); } });
 Object.defineProperty(exports, 'assertsTraceConfig', { get: function () { return require('./asserts-trace-config'); } });
+Object.defineProperty(exports, 'assistantAutomation', { get: function () { return require('./assistant-automation'); } });
 Object.defineProperty(exports, 'assistantMcpServer', { get: function () { return require('./assistant-mcp-server'); } });
 Object.defineProperty(exports, 'assistantQuickstart', { get: function () { return require('./assistant-quickstart'); } });
 Object.defineProperty(exports, 'assistantRule', { get: function () { return require('./assistant-rule'); } });
@@ -75,6 +79,8 @@ Object.defineProperty(exports, 'folder', { get: function () { return require('./
 Object.defineProperty(exports, 'folderPermission', { get: function () { return require('./folder-permission'); } });
 Object.defineProperty(exports, 'folderPermissionItem', { get: function () { return require('./folder-permission-item'); } });
 Object.defineProperty(exports, 'frontendO11YApp', { get: function () { return require('./frontend-o11y-app'); } });
+Object.defineProperty(exports, 'incidentRole', { get: function () { return require('./incident-role'); } });
+Object.defineProperty(exports, 'incidentSeverity', { get: function () { return require('./incident-severity'); } });
 Object.defineProperty(exports, 'k6Installation', { get: function () { return require('./k6-installation'); } });
 Object.defineProperty(exports, 'k6LoadTest', { get: function () { return require('./k6-load-test'); } });
 Object.defineProperty(exports, 'k6Project', { get: function () { return require('./k6-project'); } });
@@ -96,6 +102,7 @@ Object.defineProperty(exports, 'oncallOnCallShift', { get: function () { return 
 Object.defineProperty(exports, 'oncallOutgoingWebhook', { get: function () { return require('./oncall-outgoing-webhook'); } });
 Object.defineProperty(exports, 'oncallRoute', { get: function () { return require('./oncall-route'); } });
 Object.defineProperty(exports, 'oncallSchedule', { get: function () { return require('./oncall-schedule'); } });
+Object.defineProperty(exports, 'oncallTeamAccessManagement', { get: function () { return require('./oncall-team-access-management'); } });
 Object.defineProperty(exports, 'oncallUserNotificationRule', { get: function () { return require('./oncall-user-notification-rule'); } });
 Object.defineProperty(exports, 'organization', { get: function () { return require('./organization'); } });
 Object.defineProperty(exports, 'organizationPreferences', { get: function () { return require('./organization-preferences'); } });

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_cors
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_cors
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,15 +8,15 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareR2BucketCorsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Account ID.
+  * Cloudflare account ID that owns the R2 resource.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_cors#account_id DataCloudflareR2BucketCors#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_cors#account_id DataCloudflareR2BucketCors#account_id}
   */
   readonly accountId: string;
   /**
   * Name of the bucket.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_cors#bucket_name DataCloudflareR2BucketCors#bucket_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_cors#bucket_name DataCloudflareR2BucketCors#bucket_name}
   */
   readonly bucketName: string;
 }
@@ -177,7 +177,7 @@ export class DataCloudflareR2BucketCorsRulesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_cors cloudflare_r2_bucket_cors}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_cors cloudflare_r2_bucket_cors}
 */
 export class DataCloudflareR2BucketCors extends cdktf.TerraformDataSource {
 
@@ -193,7 +193,7 @@ export class DataCloudflareR2BucketCors extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareR2BucketCors resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareR2BucketCors to import
-  * @param importFromId The id of the existing DataCloudflareR2BucketCors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_cors#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareR2BucketCors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_cors#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareR2BucketCors to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -205,7 +205,7 @@ export class DataCloudflareR2BucketCors extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/r2_bucket_cors cloudflare_r2_bucket_cors} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/r2_bucket_cors cloudflare_r2_bucket_cors} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -216,7 +216,7 @@ export class DataCloudflareR2BucketCors extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_r2_bucket_cors',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

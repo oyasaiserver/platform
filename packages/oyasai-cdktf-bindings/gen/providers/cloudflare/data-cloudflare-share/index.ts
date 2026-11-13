@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,29 +10,36 @@ export interface DataCloudflareShareConfig extends cdktf.TerraformMetaArguments 
   /**
   * Account identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#account_id DataCloudflareShare#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#account_id DataCloudflareShare#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#filter DataCloudflareShare#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#filter DataCloudflareShare#filter}
   */
   readonly filter?: DataCloudflareShareFilter;
   /**
   * Include recipient counts in the response.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#include_recipient_counts DataCloudflareShare#include_recipient_counts}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#include_recipient_counts DataCloudflareShare#include_recipient_counts}
   */
   readonly includeRecipientCounts?: boolean | cdktf.IResolvable;
   /**
   * Include resources in the response.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#include_resources DataCloudflareShare#include_resources}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#include_resources DataCloudflareShare#include_resources}
   */
   readonly includeResources?: boolean | cdktf.IResolvable;
   /**
+  * Include share tags in the response. `api` reads tags from the tag service; `mirror` reads a local, eventually consistent replica. If the tag lookup fails, the response omits `tags`.
+  * Available values: "api", "mirror".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#include_tags_from DataCloudflareShare#include_tags_from}
+  */
+  readonly includeTagsFrom?: string;
+  /**
   * Share identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#share_id DataCloudflareShare#share_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#share_id DataCloudflareShare#share_id}
   */
   readonly shareId?: string;
 }
@@ -41,47 +48,54 @@ export interface DataCloudflareShareFilter {
   * Direction to sort objects.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#direction DataCloudflareShare#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#direction DataCloudflareShare#direction}
   */
   readonly direction?: string;
+  /**
+  * Include share tags in the response. `api` reads tags from the tag service; `mirror` reads a local, eventually consistent replica. If the tag lookup fails, the response omits `tags`.
+  * Available values: "api", "mirror".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#include_tags_from DataCloudflareShare#include_tags_from}
+  */
+  readonly includeTagsFrom?: string;
   /**
   * Filter shares by kind.
   * Available values: "sent", "received".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#kind DataCloudflareShare#kind}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#kind DataCloudflareShare#kind}
   */
   readonly kind?: string;
   /**
   * Order shares by values in the given field.
   * Available values: "name", "created".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#order DataCloudflareShare#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#order DataCloudflareShare#order}
   */
   readonly order?: string;
   /**
   * Filter share resources by resource_types.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#resource_types DataCloudflareShare#resource_types}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#resource_types DataCloudflareShare#resource_types}
   */
   readonly resourceTypes?: string[];
   /**
   * Filter shares by status.
   * Available values: "active", "deleting", "deleted".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#status DataCloudflareShare#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#status DataCloudflareShare#status}
   */
   readonly status?: string;
   /**
   * Filter shares by tag. Each value is either `key=value` (matches shares whose tags contain that key/value pair) or `key` alone (matches shares that have any value for that key). May be repeated; multiple `tag` parameters are ANDed together. Maximum 20 `tag` parameters per request.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#tag DataCloudflareShare#tag}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#tag DataCloudflareShare#tag}
   */
   readonly tag?: string[];
   /**
   * Filter shares by target_type.
   * Available values: "account", "organization".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#target_type DataCloudflareShare#target_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#target_type DataCloudflareShare#target_type}
   */
   readonly targetType?: string;
 }
@@ -93,6 +107,7 @@ export function dataCloudflareShareFilterToTerraform(struct?: DataCloudflareShar
   }
   return {
     direction: cdktf.stringToTerraform(struct!.direction),
+    include_tags_from: cdktf.stringToTerraform(struct!.includeTagsFrom),
     kind: cdktf.stringToTerraform(struct!.kind),
     order: cdktf.stringToTerraform(struct!.order),
     resource_types: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.resourceTypes),
@@ -111,6 +126,12 @@ export function dataCloudflareShareFilterToHclTerraform(struct?: DataCloudflareS
   const attrs = {
     direction: {
       value: cdktf.stringToHclTerraform(struct!.direction),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    include_tags_from: {
+      value: cdktf.stringToHclTerraform(struct!.includeTagsFrom),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -179,6 +200,10 @@ export class DataCloudflareShareFilterOutputReference extends cdktf.ComplexObjec
       hasAnyValues = true;
       internalValueResult.direction = this._direction;
     }
+    if (this._includeTagsFrom !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.includeTagsFrom = this._includeTagsFrom;
+    }
     if (this._kind !== undefined) {
       hasAnyValues = true;
       internalValueResult.kind = this._kind;
@@ -211,6 +236,7 @@ export class DataCloudflareShareFilterOutputReference extends cdktf.ComplexObjec
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._direction = undefined;
+      this._includeTagsFrom = undefined;
       this._kind = undefined;
       this._order = undefined;
       this._resourceTypes = undefined;
@@ -226,6 +252,7 @@ export class DataCloudflareShareFilterOutputReference extends cdktf.ComplexObjec
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._direction = value.direction;
+      this._includeTagsFrom = value.includeTagsFrom;
       this._kind = value.kind;
       this._order = value.order;
       this._resourceTypes = value.resourceTypes;
@@ -249,6 +276,22 @@ export class DataCloudflareShareFilterOutputReference extends cdktf.ComplexObjec
   // Temporarily expose input value. Use with caution.
   public get directionInput() {
     return this._direction;
+  }
+
+  // include_tags_from - computed: false, optional: true, required: false
+  private _includeTagsFrom?: string; 
+  public get includeTagsFrom() {
+    return this.getStringAttribute('include_tags_from');
+  }
+  public set includeTagsFrom(value: string) {
+    this._includeTagsFrom = value;
+  }
+  public resetIncludeTagsFrom() {
+    this._includeTagsFrom = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get includeTagsFromInput() {
+    return this._includeTagsFrom;
   }
 
   // kind - computed: false, optional: true, required: false
@@ -464,7 +507,7 @@ export class DataCloudflareShareResourcesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share cloudflare_share}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share cloudflare_share}
 */
 export class DataCloudflareShare extends cdktf.TerraformDataSource {
 
@@ -480,7 +523,7 @@ export class DataCloudflareShare extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareShare resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareShare to import
-  * @param importFromId The id of the existing DataCloudflareShare that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareShare that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareShare to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -492,7 +535,7 @@ export class DataCloudflareShare extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/share cloudflare_share} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/share cloudflare_share} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -503,7 +546,7 @@ export class DataCloudflareShare extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_share',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -517,6 +560,7 @@ export class DataCloudflareShare extends cdktf.TerraformDataSource {
     this._filter.internalValue = config.filter;
     this._includeRecipientCounts = config.includeRecipientCounts;
     this._includeResources = config.includeResources;
+    this._includeTagsFrom = config.includeTagsFrom;
     this._shareId = config.shareId;
   }
 
@@ -620,6 +664,22 @@ export class DataCloudflareShare extends cdktf.TerraformDataSource {
     return this._includeResources;
   }
 
+  // include_tags_from - computed: false, optional: true, required: false
+  private _includeTagsFrom?: string; 
+  public get includeTagsFrom() {
+    return this.getStringAttribute('include_tags_from');
+  }
+  public set includeTagsFrom(value: string) {
+    this._includeTagsFrom = value;
+  }
+  public resetIncludeTagsFrom() {
+    this._includeTagsFrom = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get includeTagsFromInput() {
+    return this._includeTagsFrom;
+  }
+
   // kind - computed: true, optional: false, required: false
   public get kind() {
     return this.getStringAttribute('kind');
@@ -667,6 +727,12 @@ export class DataCloudflareShare extends cdktf.TerraformDataSource {
     return this.getStringAttribute('status');
   }
 
+  // tags - computed: true, optional: false, required: false
+  private _tags = new cdktf.StringMap(this, "tags");
+  public get tags() {
+    return this._tags;
+  }
+
   // target_type - computed: true, optional: false, required: false
   public get targetType() {
     return this.getStringAttribute('target_type');
@@ -682,6 +748,7 @@ export class DataCloudflareShare extends cdktf.TerraformDataSource {
       filter: dataCloudflareShareFilterToTerraform(this._filter.internalValue),
       include_recipient_counts: cdktf.booleanToTerraform(this._includeRecipientCounts),
       include_resources: cdktf.booleanToTerraform(this._includeResources),
+      include_tags_from: cdktf.stringToTerraform(this._includeTagsFrom),
       share_id: cdktf.stringToTerraform(this._shareId),
     };
   }
@@ -711,6 +778,12 @@ export class DataCloudflareShare extends cdktf.TerraformDataSource {
         isBlock: false,
         type: "simple",
         storageClassType: "boolean",
+      },
+      include_tags_from: {
+        value: cdktf.stringToHclTerraform(this._includeTagsFrom),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
       share_id: {
         value: cdktf.stringToHclTerraform(this._shareId),

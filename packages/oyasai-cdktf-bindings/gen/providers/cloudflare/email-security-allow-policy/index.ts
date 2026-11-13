@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,57 +10,63 @@ export interface EmailSecurityAllowPolicyConfig extends cdktf.TerraformMetaArgum
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#account_id EmailSecurityAllowPolicy#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#account_id EmailSecurityAllowPolicy#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#comments EmailSecurityAllowPolicy#comments}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#comments EmailSecurityAllowPolicy#comments}
   */
   readonly comments?: string;
   /**
+  * Timestamp at which the policy expires. After this time, Email Security ignores the policy. The value must lie in the future. Send `null` to clear the expiration.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#expires_at EmailSecurityAllowPolicy#expires_at}
+  */
+  readonly expiresAt?: string;
+  /**
   * Exempts messages from this sender from Spam, Spoof and Bulk dispositions only; Malicious and Suspicious dispositions still apply.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#is_acceptable_sender EmailSecurityAllowPolicy#is_acceptable_sender}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#is_acceptable_sender EmailSecurityAllowPolicy#is_acceptable_sender}
   */
   readonly isAcceptableSender: boolean | cdktf.IResolvable;
   /**
   * Bypasses all detections for messages to this recipient.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#is_exempt_recipient EmailSecurityAllowPolicy#is_exempt_recipient}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#is_exempt_recipient EmailSecurityAllowPolicy#is_exempt_recipient}
   */
   readonly isExemptRecipient: boolean | cdktf.IResolvable;
   /**
   * Deprecated as of July 1, 2025. Use `is_exempt_recipient` instead. End of life: July 1, 2026.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#is_recipient EmailSecurityAllowPolicy#is_recipient}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#is_recipient EmailSecurityAllowPolicy#is_recipient}
   */
   readonly isRecipient?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#is_regex EmailSecurityAllowPolicy#is_regex}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#is_regex EmailSecurityAllowPolicy#is_regex}
   */
   readonly isRegex: boolean | cdktf.IResolvable;
   /**
   * Deprecated as of July 1, 2025. Use `is_trusted_sender` instead. End of life: July 1, 2026.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#is_sender EmailSecurityAllowPolicy#is_sender}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#is_sender EmailSecurityAllowPolicy#is_sender}
   */
   readonly isSender?: boolean | cdktf.IResolvable;
   /**
   * Deprecated as of July 1, 2025. Use `is_acceptable_sender` instead. End of life: July 1, 2026.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#is_spoof EmailSecurityAllowPolicy#is_spoof}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#is_spoof EmailSecurityAllowPolicy#is_spoof}
   */
   readonly isSpoof?: boolean | cdktf.IResolvable;
   /**
   * Bypasses all detections and link following for messages from this sender.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#is_trusted_sender EmailSecurityAllowPolicy#is_trusted_sender}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#is_trusted_sender EmailSecurityAllowPolicy#is_trusted_sender}
   */
   readonly isTrustedSender: boolean | cdktf.IResolvable;
   /**
-  * The pattern value to match. The format depends on `pattern_type`: a valid email address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g. `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the API rejects private or unique-local, loopback, link-local, unspecified, and IPv4 broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+  * The pattern value to match. The format depends on `pattern_type`: a valid email address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g. `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the API rejects private or unique-local, loopback, link-local, unspecified, and IPv4 broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also rejects a pattern that equals a domain onboarded to the account, ignoring case.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#pattern EmailSecurityAllowPolicy#pattern}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#pattern EmailSecurityAllowPolicy#pattern}
   */
   readonly pattern: string;
   /**
@@ -71,19 +77,19 @@ export interface EmailSecurityAllowPolicyConfig extends cdktf.TerraformMetaArgum
   * - UNKNOWN: deprecated; you cannot use this when creating or updating policies, but it may appear on existing entries.
   * Available values: "EMAIL", "DOMAIN", "IP", "UNKNOWN".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#pattern_type EmailSecurityAllowPolicy#pattern_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#pattern_type EmailSecurityAllowPolicy#pattern_type}
   */
   readonly patternType: string;
   /**
   * Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors policies that pass authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#verify_sender EmailSecurityAllowPolicy#verify_sender}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#verify_sender EmailSecurityAllowPolicy#verify_sender}
   */
   readonly verifySender: boolean | cdktf.IResolvable;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy cloudflare_email_security_allow_policy}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy cloudflare_email_security_allow_policy}
 */
 export class EmailSecurityAllowPolicy extends cdktf.TerraformResource {
 
@@ -99,7 +105,7 @@ export class EmailSecurityAllowPolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a EmailSecurityAllowPolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the EmailSecurityAllowPolicy to import
-  * @param importFromId The id of the existing EmailSecurityAllowPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing EmailSecurityAllowPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the EmailSecurityAllowPolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -111,7 +117,7 @@ export class EmailSecurityAllowPolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/resources/email_security_allow_policy cloudflare_email_security_allow_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/resources/email_security_allow_policy cloudflare_email_security_allow_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -122,7 +128,7 @@ export class EmailSecurityAllowPolicy extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_email_security_allow_policy',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -134,6 +140,7 @@ export class EmailSecurityAllowPolicy extends cdktf.TerraformResource {
     });
     this._accountId = config.accountId;
     this._comments = config.comments;
+    this._expiresAt = config.expiresAt;
     this._isAcceptableSender = config.isAcceptableSender;
     this._isExemptRecipient = config.isExemptRecipient;
     this._isRecipient = config.isRecipient;
@@ -182,6 +189,22 @@ export class EmailSecurityAllowPolicy extends cdktf.TerraformResource {
   // created_at - computed: true, optional: false, required: false
   public get createdAt() {
     return this.getStringAttribute('created_at');
+  }
+
+  // expires_at - computed: false, optional: true, required: false
+  private _expiresAt?: string; 
+  public get expiresAt() {
+    return this.getStringAttribute('expires_at');
+  }
+  public set expiresAt(value: string) {
+    this._expiresAt = value;
+  }
+  public resetExpiresAt() {
+    this._expiresAt = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get expiresAtInput() {
+    return this._expiresAt;
   }
 
   // id - computed: true, optional: false, required: false
@@ -346,6 +369,7 @@ export class EmailSecurityAllowPolicy extends cdktf.TerraformResource {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
       comments: cdktf.stringToTerraform(this._comments),
+      expires_at: cdktf.stringToTerraform(this._expiresAt),
       is_acceptable_sender: cdktf.booleanToTerraform(this._isAcceptableSender),
       is_exempt_recipient: cdktf.booleanToTerraform(this._isExemptRecipient),
       is_recipient: cdktf.booleanToTerraform(this._isRecipient),
@@ -369,6 +393,12 @@ export class EmailSecurityAllowPolicy extends cdktf.TerraformResource {
       },
       comments: {
         value: cdktf.stringToHclTerraform(this._comments),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      expires_at: {
+        value: cdktf.stringToHclTerraform(this._expiresAt),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

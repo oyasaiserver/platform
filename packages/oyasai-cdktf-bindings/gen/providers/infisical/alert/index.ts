@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert
+// https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,66 +10,78 @@ export interface AlertConfig extends cdktf.TerraformMetaArguments {
   /**
   * The channels the alert is delivered to, keyed by a name of your choosing. The key is what identifies a channel to Terraform and is never sent to Infisical, so renaming a channel updates it in place and it keeps the deliveries it has already made. Changing a key, on the other hand, deletes the channel and creates a new one, so the new channel notifies about everything that is still expiring, even if the old one already did. Each channel carries exactly one configuration block, and that block is what gives the channel its type. At least one and at most 10 channels are allowed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#channels Alert#channels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#channels Alert#channels}
   */
   readonly channels: { [key: string]: AlertChannels } | cdktf.IResolvable;
   /**
+  * The settings of the event the alert fires on. Which ones apply depends on event_type, and events without settings take no condition.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#condition Alert#condition}
+  */
+  readonly condition?: AlertCondition;
+  /**
   * An optional description of the alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#description Alert#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#description Alert#description}
   */
   readonly description?: string;
   /**
   * Whether the alert is evaluated. Defaults to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#enabled Alert#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#enabled Alert#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
-  * Fires before the watched resource expires. Only for alerts on these resource types: identity.authentication.
+  * The event the alert fires on, written in full, such as `cert-manager.application.certificate.expiry`, or without the resource_type prefix, such as `certificate.expiry`. See [Event types](#event-types) for every event and the condition it takes. Changing the event creates a new alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#expiry Alert#expiry}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#event_type Alert#event_type}
+  */
+  readonly eventType?: string;
+  /**
+  * Fires before the watched resource expires. Only for identity.authentication alerts. Deprecated: use event_type and condition instead.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#expiry Alert#expiry}
   */
   readonly expiry?: AlertExpiry;
   /**
   * The name of the alert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#name Alert#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#name Alert#name}
   */
   readonly name: string;
   /**
-  * The ID of the project the resource belongs to. Required for project level resources, and must be omitted for organization level ones.
+  * The ID of the project the resource belongs to. Required for project level resources, and must be omitted for organization level ones. Not used by these resource types, so leave it out: cert-manager, cert-manager.application, cert-manager.signer, secret.rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#project_id Alert#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#project_id Alert#project_id}
   */
   readonly projectId?: string;
   /**
-  * The ID of the resource to watch. For the identity.authentication resource type this is a machine identity's ID.
+  * The ID of the resource to watch, of the kind resource_type names. Required, except for resource types that watch a whole scope, where it must be omitted: cert-manager, cert-manager.signer.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#resource_id Alert#resource_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#resource_id Alert#resource_id}
   */
-  readonly resourceId: string;
+  readonly resourceId?: string;
   /**
-  * The type of the resource to watch. Options: identity.authentication.
+  * The type of the resource to watch. Options: cert-manager, cert-manager.application, cert-manager.signer, identity.authentication, secret.rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#resource_type Alert#resource_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#resource_type Alert#resource_type}
   */
   readonly resourceType: string;
 }
 export interface AlertChannelsEmailRecipients {
   /**
-  * The ID of the recipient user or group. The principal must belong to the scope the alert is created in.
+  * The ID of the recipient user or group, which must belong to the scope the alert is created in. For an email recipient this is the email address, which must be on one of your organization's verified email domains. For a project-admins or project-members recipient this is the ID of the project the resource belongs to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#id Alert#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#id Alert#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
   readonly id: string;
   /**
-  * The type of the recipient. Options: user, group.
+  * The type of the recipient. Options: user, group, email, project-admins, project-members. The email type is only for cert-manager, cert-manager.application, cert-manager.signer alerts. The project-admins type notifies the members who have the admin role directly on the project, the project-members type notifies everyone in the project, directly or through a group, and both are only for secret.rotation alerts.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#type Alert#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#type Alert#type}
   */
   readonly type: string;
 }
@@ -210,7 +222,7 @@ export interface AlertChannelsEmail {
   /**
   * The principals to notify. At least one and at most 20 are allowed.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#recipients Alert#recipients}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#recipients Alert#recipients}
   */
   readonly recipients: AlertChannelsEmailRecipients[] | cdktf.IResolvable;
 }
@@ -303,7 +315,7 @@ export interface AlertChannelsPagerduty {
   /**
   * The PagerDuty Events API v2 integration key incidents are created with, a 32 character hex string. Write-only: it is never returned by the API, so it cannot be imported.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#integration_key Alert#integration_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#integration_key Alert#integration_key}
   */
   readonly integrationKey: string;
 }
@@ -396,7 +408,7 @@ export interface AlertChannelsSlack {
   /**
   * The Slack incoming webhook URL notifications are posted to. Must be a https://hooks.slack.com URL. Write-only: it is never returned by the API, so it cannot be imported.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#webhook_url Alert#webhook_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#webhook_url Alert#webhook_url}
   */
   readonly webhookUrl: string;
 }
@@ -489,13 +501,13 @@ export interface AlertChannelsWebhook {
   /**
   * The secret used to sign the payload so the receiver can verify it. Write-only: it is never returned by the API, so an imported channel keeps the secret it was created with until one is set here.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#signing_secret Alert#signing_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#signing_secret Alert#signing_secret}
   */
   readonly signingSecret?: string;
   /**
   * The HTTPS URL the CloudEvents payload is sent to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#url Alert#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#url Alert#url}
   */
   readonly url: string;
 }
@@ -617,37 +629,37 @@ export interface AlertChannels {
   /**
   * Notifies principals of your organization or project by email.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#email Alert#email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#email Alert#email}
   */
   readonly email?: AlertChannelsEmail;
   /**
   * Whether the channel delivers notifications. Defaults to true.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#enabled Alert#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#enabled Alert#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * The name the channel is shown under in Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#name Alert#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#name Alert#name}
   */
   readonly name: string;
   /**
   * Creates PagerDuty incidents through the Events API v2.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#pagerduty Alert#pagerduty}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#pagerduty Alert#pagerduty}
   */
   readonly pagerduty?: AlertChannelsPagerduty;
   /**
   * Posts notifications to a Slack channel through an incoming webhook.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#slack Alert#slack}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#slack Alert#slack}
   */
   readonly slack?: AlertChannelsSlack;
   /**
   * Sends notifications to an HTTPS endpoint as a CloudEvents payload.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#webhook Alert#webhook}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#webhook Alert#webhook}
   */
   readonly webhook?: AlertChannelsWebhook;
 }
@@ -906,17 +918,288 @@ export class AlertChannelsMap extends cdktf.ComplexMap {
     return new AlertChannelsOutputReference(this.terraformResource, this.terraformAttribute, key);
   }
 }
+export interface AlertCondition {
+  /**
+  * How many days before expiry the alert fires. Required for these events, and not used by the others: identity.authentication.expiry, cert-manager.application.certificate.expiry, cert-manager.certificate.expiry, cert-manager.signer.certificate.expiry. Must be at least 1, and at most 90 for identity.authentication; 365 for cert-manager, cert-manager.application, cert-manager.signer.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#alert_before_days Alert#alert_before_days}
+  */
+  readonly alertBeforeDays?: number;
+  /**
+  * Only certificates in these Certificate Manager applications. Only for these events: cert-manager.certificate.expiry, cert-manager.certificate.issuance, cert-manager.certificate.renewal, cert-manager.certificate.revocation. Leave it out to cover all of them. At most 100.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#application_ids Alert#application_ids}
+  */
+  readonly applicationIds?: string[];
+  /**
+  * When true, sends a reminder every day until expiry. Defaults to false. Only for the events that take alert_before_days.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#daily_reminder Alert#daily_reminder}
+  */
+  readonly dailyReminder?: boolean | cdktf.IResolvable;
+  /**
+  * Only certificates issued from these certificate profiles. Only for these events: cert-manager.certificate.expiry, cert-manager.certificate.issuance, cert-manager.certificate.renewal, cert-manager.certificate.revocation. Leave it out to cover all of them. At most 100.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#profile_ids Alert#profile_ids}
+  */
+  readonly profileIds?: string[];
+  /**
+  * Only certificates of these code signing signers, by ID. To get a signer's ID, open it under Code Signing > Signers in Certificate Manager and select Options > Copy Signer ID. Only for these events: cert-manager.signer.certificate.expiry. Leave it out to cover all of them. At most 100.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#signer_ids Alert#signer_ids}
+  */
+  readonly signerIds?: string[];
+  /**
+  * Only certificates with these sources. Options: issued, discovered, imported. Leave it out to cover every source. Only for these events: cert-manager.certificate.expiry, cert-manager.certificate.issuance, cert-manager.certificate.renewal, cert-manager.certificate.revocation.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#sources Alert#sources}
+  */
+  readonly sources?: string[];
+}
+
+export function alertConditionToTerraform(struct?: AlertCondition | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    alert_before_days: cdktf.numberToTerraform(struct!.alertBeforeDays),
+    application_ids: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.applicationIds),
+    daily_reminder: cdktf.booleanToTerraform(struct!.dailyReminder),
+    profile_ids: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.profileIds),
+    signer_ids: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.signerIds),
+    sources: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.sources),
+  }
+}
+
+
+export function alertConditionToHclTerraform(struct?: AlertCondition | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    alert_before_days: {
+      value: cdktf.numberToHclTerraform(struct!.alertBeforeDays),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "number",
+    },
+    application_ids: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.applicationIds),
+      isBlock: false,
+      type: "set",
+      storageClassType: "stringList",
+    },
+    daily_reminder: {
+      value: cdktf.booleanToHclTerraform(struct!.dailyReminder),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "boolean",
+    },
+    profile_ids: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.profileIds),
+      isBlock: false,
+      type: "set",
+      storageClassType: "stringList",
+    },
+    signer_ids: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.signerIds),
+      isBlock: false,
+      type: "set",
+      storageClassType: "stringList",
+    },
+    sources: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.sources),
+      isBlock: false,
+      type: "set",
+      storageClassType: "stringList",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class AlertConditionOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): AlertCondition | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._alertBeforeDays !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.alertBeforeDays = this._alertBeforeDays;
+    }
+    if (this._applicationIds !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.applicationIds = this._applicationIds;
+    }
+    if (this._dailyReminder !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.dailyReminder = this._dailyReminder;
+    }
+    if (this._profileIds !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.profileIds = this._profileIds;
+    }
+    if (this._signerIds !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.signerIds = this._signerIds;
+    }
+    if (this._sources !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.sources = this._sources;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: AlertCondition | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._alertBeforeDays = undefined;
+      this._applicationIds = undefined;
+      this._dailyReminder = undefined;
+      this._profileIds = undefined;
+      this._signerIds = undefined;
+      this._sources = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._alertBeforeDays = value.alertBeforeDays;
+      this._applicationIds = value.applicationIds;
+      this._dailyReminder = value.dailyReminder;
+      this._profileIds = value.profileIds;
+      this._signerIds = value.signerIds;
+      this._sources = value.sources;
+    }
+  }
+
+  // alert_before_days - computed: false, optional: true, required: false
+  private _alertBeforeDays?: number; 
+  public get alertBeforeDays() {
+    return this.getNumberAttribute('alert_before_days');
+  }
+  public set alertBeforeDays(value: number) {
+    this._alertBeforeDays = value;
+  }
+  public resetAlertBeforeDays() {
+    this._alertBeforeDays = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get alertBeforeDaysInput() {
+    return this._alertBeforeDays;
+  }
+
+  // application_ids - computed: false, optional: true, required: false
+  private _applicationIds?: string[]; 
+  public get applicationIds() {
+    return cdktf.Fn.tolist(this.getListAttribute('application_ids'));
+  }
+  public set applicationIds(value: string[]) {
+    this._applicationIds = value;
+  }
+  public resetApplicationIds() {
+    this._applicationIds = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get applicationIdsInput() {
+    return this._applicationIds;
+  }
+
+  // daily_reminder - computed: false, optional: true, required: false
+  private _dailyReminder?: boolean | cdktf.IResolvable; 
+  public get dailyReminder() {
+    return this.getBooleanAttribute('daily_reminder');
+  }
+  public set dailyReminder(value: boolean | cdktf.IResolvable) {
+    this._dailyReminder = value;
+  }
+  public resetDailyReminder() {
+    this._dailyReminder = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get dailyReminderInput() {
+    return this._dailyReminder;
+  }
+
+  // profile_ids - computed: false, optional: true, required: false
+  private _profileIds?: string[]; 
+  public get profileIds() {
+    return cdktf.Fn.tolist(this.getListAttribute('profile_ids'));
+  }
+  public set profileIds(value: string[]) {
+    this._profileIds = value;
+  }
+  public resetProfileIds() {
+    this._profileIds = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get profileIdsInput() {
+    return this._profileIds;
+  }
+
+  // signer_ids - computed: false, optional: true, required: false
+  private _signerIds?: string[]; 
+  public get signerIds() {
+    return cdktf.Fn.tolist(this.getListAttribute('signer_ids'));
+  }
+  public set signerIds(value: string[]) {
+    this._signerIds = value;
+  }
+  public resetSignerIds() {
+    this._signerIds = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get signerIdsInput() {
+    return this._signerIds;
+  }
+
+  // sources - computed: false, optional: true, required: false
+  private _sources?: string[]; 
+  public get sources() {
+    return cdktf.Fn.tolist(this.getListAttribute('sources'));
+  }
+  public set sources(value: string[]) {
+    this._sources = value;
+  }
+  public resetSources() {
+    this._sources = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get sourcesInput() {
+    return this._sources;
+  }
+}
 export interface AlertExpiry {
   /**
   * How many days before the watched resource expires the alert fires. Must be between 1 and 90.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#alert_before_days Alert#alert_before_days}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#alert_before_days Alert#alert_before_days}
   */
   readonly alertBeforeDays: number;
   /**
   * Whether to keep notifying once a day until the watched resource expires, instead of notifying once. Defaults to false.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#daily_reminder Alert#daily_reminder}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#daily_reminder Alert#daily_reminder}
   */
   readonly dailyReminder?: boolean | cdktf.IResolvable;
 }
@@ -1036,7 +1319,7 @@ export class AlertExpiryOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert infisical_alert}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert infisical_alert}
 */
 export class Alert extends cdktf.TerraformResource {
 
@@ -1052,7 +1335,7 @@ export class Alert extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Alert resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Alert to import
-  * @param importFromId The id of the existing Alert that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Alert that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Alert to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1064,7 +1347,7 @@ export class Alert extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.32/docs/resources/alert infisical_alert} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.20.14/docs/resources/alert infisical_alert} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1075,7 +1358,7 @@ export class Alert extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_alert',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.32'
+        providerVersion: '0.20.14'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1086,8 +1369,10 @@ export class Alert extends cdktf.TerraformResource {
       forEach: config.forEach
     });
     this._channels.internalValue = config.channels;
+    this._condition.internalValue = config.condition;
     this._description = config.description;
     this._enabled = config.enabled;
+    this._eventType = config.eventType;
     this._expiry.internalValue = config.expiry;
     this._name = config.name;
     this._projectId = config.projectId;
@@ -1110,6 +1395,22 @@ export class Alert extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get channelsInput() {
     return this._channels.internalValue;
+  }
+
+  // condition - computed: false, optional: true, required: false
+  private _condition = new AlertConditionOutputReference(this, "condition");
+  public get condition() {
+    return this._condition;
+  }
+  public putCondition(value: AlertCondition) {
+    this._condition.internalValue = value;
+  }
+  public resetCondition() {
+    this._condition.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get conditionInput() {
+    return this._condition.internalValue;
   }
 
   // description - computed: false, optional: true, required: false
@@ -1142,6 +1443,22 @@ export class Alert extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get enabledInput() {
     return this._enabled;
+  }
+
+  // event_type - computed: false, optional: true, required: false
+  private _eventType?: string; 
+  public get eventType() {
+    return this.getStringAttribute('event_type');
+  }
+  public set eventType(value: string) {
+    this._eventType = value;
+  }
+  public resetEventType() {
+    this._eventType = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get eventTypeInput() {
+    return this._eventType;
   }
 
   // expiry - computed: false, optional: true, required: false
@@ -1199,13 +1516,16 @@ export class Alert extends cdktf.TerraformResource {
     return this._projectId;
   }
 
-  // resource_id - computed: false, optional: false, required: true
+  // resource_id - computed: false, optional: true, required: false
   private _resourceId?: string; 
   public get resourceId() {
     return this.getStringAttribute('resource_id');
   }
   public set resourceId(value: string) {
     this._resourceId = value;
+  }
+  public resetResourceId() {
+    this._resourceId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get resourceIdInput() {
@@ -1232,8 +1552,10 @@ export class Alert extends cdktf.TerraformResource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       channels: cdktf.hashMapper(alertChannelsToTerraform)(this._channels.internalValue),
+      condition: alertConditionToTerraform(this._condition.internalValue),
       description: cdktf.stringToTerraform(this._description),
       enabled: cdktf.booleanToTerraform(this._enabled),
+      event_type: cdktf.stringToTerraform(this._eventType),
       expiry: alertExpiryToTerraform(this._expiry.internalValue),
       name: cdktf.stringToTerraform(this._name),
       project_id: cdktf.stringToTerraform(this._projectId),
@@ -1250,6 +1572,12 @@ export class Alert extends cdktf.TerraformResource {
         type: "map",
         storageClassType: "AlertChannelsMap",
       },
+      condition: {
+        value: alertConditionToHclTerraform(this._condition.internalValue),
+        isBlock: true,
+        type: "struct",
+        storageClassType: "AlertCondition",
+      },
       description: {
         value: cdktf.stringToHclTerraform(this._description),
         isBlock: false,
@@ -1261,6 +1589,12 @@ export class Alert extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "boolean",
+      },
+      event_type: {
+        value: cdktf.stringToHclTerraform(this._eventType),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
       expiry: {
         value: alertExpiryToHclTerraform(this._expiry.internalValue),

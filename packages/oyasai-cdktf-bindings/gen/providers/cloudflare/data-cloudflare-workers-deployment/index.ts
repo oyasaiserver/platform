@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_deployment
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_deployment
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface DataCloudflareWorkersDeploymentConfig extends cdktf.TerraformMe
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_deployment#account_id DataCloudflareWorkersDeployment#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_deployment#account_id DataCloudflareWorkersDeployment#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_deployment#deployment_id DataCloudflareWorkersDeployment#deployment_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_deployment#deployment_id DataCloudflareWorkersDeployment#deployment_id}
   */
   readonly deploymentId: string;
   /**
-  * Name of the script, used in URLs and route configuration.
+  * Name of the script.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_deployment#script_name DataCloudflareWorkersDeployment#script_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_deployment#script_name DataCloudflareWorkersDeployment#script_name}
   */
   readonly scriptName: string;
 }
@@ -81,6 +81,65 @@ export class DataCloudflareWorkersDeploymentAnnotationsOutputReference extends c
   // workers_triggered_by - computed: true, optional: false, required: false
   public get workersTriggeredBy() {
     return this.getStringAttribute('workers_triggered_by');
+  }
+}
+export interface DataCloudflareWorkersDeploymentCodeUpdateStrategy {
+}
+
+export function dataCloudflareWorkersDeploymentCodeUpdateStrategyToTerraform(struct?: DataCloudflareWorkersDeploymentCodeUpdateStrategy): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareWorkersDeploymentCodeUpdateStrategyToHclTerraform(struct?: DataCloudflareWorkersDeploymentCodeUpdateStrategy): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareWorkersDeploymentCodeUpdateStrategyOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareWorkersDeploymentCodeUpdateStrategy | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareWorkersDeploymentCodeUpdateStrategy | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // max_delay - computed: true, optional: false, required: false
+  public get maxDelay() {
+    return this.getNumberAttribute('max_delay');
+  }
+
+  // mode - computed: true, optional: false, required: false
+  public get mode() {
+    return this.getStringAttribute('mode');
   }
 }
 export interface DataCloudflareWorkersDeploymentVersions {
@@ -165,7 +224,7 @@ export class DataCloudflareWorkersDeploymentVersionsList extends cdktf.ComplexLi
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_deployment cloudflare_workers_deployment}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_deployment cloudflare_workers_deployment}
 */
 export class DataCloudflareWorkersDeployment extends cdktf.TerraformDataSource {
 
@@ -181,7 +240,7 @@ export class DataCloudflareWorkersDeployment extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorkersDeployment resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkersDeployment to import
-  * @param importFromId The id of the existing DataCloudflareWorkersDeployment that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_deployment#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkersDeployment that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_deployment#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkersDeployment to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -193,7 +252,7 @@ export class DataCloudflareWorkersDeployment extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.25.0/docs/data-sources/workers_deployment cloudflare_workers_deployment} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.29.0/docs/data-sources/workers_deployment cloudflare_workers_deployment} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -204,7 +263,7 @@ export class DataCloudflareWorkersDeployment extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_workers_deployment',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.25.0'
+        providerVersion: '5.29.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -245,6 +304,12 @@ export class DataCloudflareWorkersDeployment extends cdktf.TerraformDataSource {
   // author_email - computed: true, optional: false, required: false
   public get authorEmail() {
     return this.getStringAttribute('author_email');
+  }
+
+  // code_update_strategy - computed: true, optional: false, required: false
+  private _codeUpdateStrategy = new DataCloudflareWorkersDeploymentCodeUpdateStrategyOutputReference(this, "code_update_strategy");
+  public get codeUpdateStrategy() {
+    return this._codeUpdateStrategy;
   }
 
   // created_on - computed: true, optional: false, required: false
