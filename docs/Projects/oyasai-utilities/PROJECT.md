@@ -65,6 +65,7 @@ Paper API 1.21 向けの複合ユーティリティプラグイン。移動・�
 - TPA 申請はメモリ上に保持し、期限・ログアウト・再起動で失われる。承認時に申請者の権限と受取人の TPswitch を再確認する。申請はテレポートの開始前に消費され、移動失敗後に戻さない。
 - PlayerState は Bukkit イベントとコマンドの両方で状態を更新する。Essentials が有効な場合のみ互換 bridge を作り、通常名/別名を置き換える際も Essentials・バニラ以外が所有する同名コマンドは奪わない。
 - DebugOnBE は対象ブロックをメインスレッドで走査し、プレイヤーごとのパケット表示を作る。ワールドのブロック状態を置き換えない。Veinminer は隣接鉱石を読み込み済みチャンク内で探索し、各ブロックを `Player.breakBlock` で破壊する。
+- PlayerSit でプレイヤーに乗ると、乗った人の当たり判定（立ち姿勢の高さ）が下の人の目の高さにかかり、クライアントの照準が常に上の人へ向く。そのため下の人からだけ `hideEntity` で直上の乗り手を隠し、降りるときに `showEntity` で戻す。/lay・/spin・/bellyflop の Mannequin には本人の `SCALE` を写す。姿勢中の透明化前の状態は PDC（`sit_hidden_was_invisible`）にも残し、サーバーが落ちた後の再参加で戻す。
 - PlayerSit・ホログラム・帽子・Red Bull などはそれぞれ専用 listener / scheduler を持つ。機能間で一括トランザクションや一括設定再読込は提供しない。
 
 ### Schematics
