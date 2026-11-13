@@ -55,6 +55,22 @@ internal fun autoClass(value: String, team: String): String {
       ?.substringAfter(':') ?: entries.firstOrNull { ':' !in it }.orEmpty()
 }
 
+internal fun autoReadyJoin(
+    battlefieldJoin: Boolean,
+    standardLounge: Boolean,
+    quickLounge: Boolean,
+): Boolean = quickLounge || battlefieldJoin && !standardLounge
+
+internal fun joinSpawnKind(
+    phase: String,
+    battlefieldJoin: Boolean,
+    standardLounge: Boolean,
+    quickLounge: Boolean,
+): String {
+  val direct = battlefieldJoin && !standardLounge && !quickLounge
+  return if (direct || phase == "running" && quickLounge) "fight" else "lounge"
+}
+
 internal fun readyToStart(
     teams: Boolean,
     members: List<Pair<String, Boolean>>,

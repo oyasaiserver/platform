@@ -161,6 +161,68 @@ class PvpRulesTest {
   }
 
   @Test
+  fun `standard lounge joins during a running match still route through lounge`() {
+    assertFalse(autoReadyJoin(battlefieldJoin = false, standardLounge = true, quickLounge = false))
+    assertEquals(
+        "lounge",
+        joinSpawnKind(
+            "running",
+            battlefieldJoin = false,
+            standardLounge = true,
+            quickLounge = false,
+        ),
+    )
+    assertFalse(autoReadyJoin(battlefieldJoin = true, standardLounge = true, quickLounge = false))
+    assertEquals(
+        "lounge",
+        joinSpawnKind(
+            "running",
+            battlefieldJoin = true,
+            standardLounge = true,
+            quickLounge = false,
+        ),
+    )
+    assertTrue(autoReadyJoin(battlefieldJoin = false, standardLounge = false, quickLounge = true))
+    assertEquals(
+        "lounge",
+        joinSpawnKind(
+            "waiting",
+            battlefieldJoin = false,
+            standardLounge = false,
+            quickLounge = true,
+        ),
+    )
+    assertEquals(
+        "fight",
+        joinSpawnKind(
+            "running",
+            battlefieldJoin = false,
+            standardLounge = false,
+            quickLounge = true,
+        ),
+    )
+    assertTrue(autoReadyJoin(battlefieldJoin = true, standardLounge = false, quickLounge = false))
+    assertEquals(
+        "fight",
+        joinSpawnKind(
+            "waiting",
+            battlefieldJoin = true,
+            standardLounge = false,
+            quickLounge = false,
+        ),
+    )
+    assertEquals(
+        "fight",
+        joinSpawnKind(
+            "running",
+            battlefieldJoin = true,
+            standardLounge = false,
+            quickLounge = false,
+        ),
+    )
+  }
+
+  @Test
   fun `metadata conversion preserves modifiers names lore and custom data without changing input`() {
     val modifiers = listOf(mapOf("amount" to 1.5, "operation" to 0, "key" to "example:fictional"))
     val input =

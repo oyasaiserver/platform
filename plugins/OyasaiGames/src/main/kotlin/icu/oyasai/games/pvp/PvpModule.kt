@@ -49,6 +49,15 @@ internal class Participant(
   var charge: String? = null
   var lastAttacker: Player? = null
   var lastHit = 0L
+  val fighting: Boolean
+    get() =
+        !spectator && arena.phase == "running" && player.uniqueId.toString() in arena.rules.fighters
+
+  val inLounge: Boolean
+    get() =
+        !spectator &&
+            (arena.phase in setOf("waiting", "countdown") ||
+                arena.phase == "running" && player.uniqueId.toString() !in arena.rules.fighters)
 }
 
 internal data class Bet(val target: String, val amount: Long, val charge: String)
@@ -409,10 +418,17 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     ) {
       "チームが満員です"
     }
-    val direct = c.has("BattlefieldJoin") && !c.has("StandardLounge") && !c.has("QuickLounge")
+    val autoReady =
+        autoReadyJoin(c.has("BattlefieldJoin"), c.has("StandardLounge"), c.has("QuickLounge"))
+    val spawnKind =
+        joinSpawnKind(
+            arena.phase,
+            c.has("BattlefieldJoin"),
+            c.has("StandardLounge"),
+            c.has("QuickLounge"),
+        )
     val location =
-        if (spectator) c.spawns["spectator"] ?: error("観戦地点がありません")
-        else c.spawn(team, if (arena.phase == "running" || direct) "fight" else "lounge")
+        if (spectator) c.spawns["spectator"] ?: error("観戦地点がありません") else c.spawn(team, spawnKind)
     val target = location.location()
     val fee =
         if (!spectator && (c.has("Economy") || c.has("EconomyRefund")))
@@ -449,14 +465,12 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
           else GameMode.valueOf(c.text("general.gamemode", "SURVIVAL"))
       if (kit != null && !spectator) chooseClass(member, kit)
       resetHealth(member)
-      if (arena.phase == "running" && !spectator) {
-        arena.rules.add(player.uniqueId.toString(), team)
-        arena.played.add(player.uniqueId)
-        economy?.consume(member.charge)
-      }
-      if ((c.has("QuickLounge") || direct) && !spectator) {
+      if (autoReady && !spectator) {
         check(member.kit != null) { "QuickLounge の autoClass がありません" }
         member.ready = true
+      }
+      if (arena.phase == "running" && member.ready && !spectator) {
+        enterMatch(member)
       }
       player.sendMessage(
           if (spectator) "観戦を開始しました。/pa leave で戻ります。"
@@ -481,7 +495,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     check(!p.spectator) { "観戦中です" }
     val c = p.arena.config
     val kit = resolveName(input, c.classes) ?: error("クラスが見つからないか曖昧です")
-    check(p.arena.phase != "running" || c.bool("uses.ingameClassSwitch")) { "試合中は変更できません" }
+    check(!p.fighting || c.bool("uses.ingameClassSwitch")) { "試合中は変更できません" }
     if (c.has("BetterClasses")) {
       val path = "modules.betterclasses.$kit"
       check(p.player.level >= c.int("$path.neededEXPLevel")) { "経験値が不足しています" }
@@ -498,7 +512,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     }
     validateKit(c, kit)
     p.switches++
-    if (p.arena.phase == "running" && c.bool("general.classSwitchAfterRespawn")) {
+    if (p.fighting && c.bool("general.classSwitchAfterRespawn")) {
       p.nextKit = kit
       p.player.sendMessage("次のリスポーンからクラス: $kit")
       return
@@ -607,11 +621,31 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   }
 
   private fun ready(p: Participant) {
-    check(!p.spectator && p.arena.phase in setOf("waiting", "countdown"))
+    check(p.inLounge)
     check(p.kit != null) { "先にクラスを選んでください" }
-    p.ready = true
-    p.player.sendMessage("準備完了です。")
-    tryCountdown(p.arena)
+    if (p.arena.phase == "running") {
+      val spawn =
+          if (p.arena.after) p.arena.config.spawns["after"] ?: error("AfterMatch spawn is missing")
+          else p.arena.config.spawn(p.team, "fight")
+      check(p.player.teleport(spawn.location())) { "テレポートできませんでした" }
+      p.ready = true
+      equip(p)
+      resetHealth(p)
+      enterMatch(p)
+      if (p.arena.after) p.arena.rules.fighters[p.player.uniqueId.toString()]?.lives = 1
+      p.player.sendMessage("準備完了です。")
+    } else {
+      p.ready = true
+      p.player.sendMessage("準備完了です。")
+      tryCountdown(p.arena)
+    }
+  }
+
+  private fun enterMatch(p: Participant) {
+    p.arena.rules.add(p.player.uniqueId.toString(), p.team)
+    p.arena.played.add(p.player.uniqueId)
+    economy?.consume(p.charge)
+    scoreboard(p.arena)
   }
 
   private fun canStart(arena: ArenaMatch): Boolean {
@@ -622,7 +656,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
         members.map { it.team to it.ready },
         members.all { it.kit != null },
         c.int("ready.minPlayers", 2),
-        c.has("QuickLounge") || c.has("BattlefieldJoin") && !c.has("StandardLounge"),
+        autoReadyJoin(c.has("BattlefieldJoin"), c.has("StandardLounge"), c.has("QuickLounge")),
         c.bool("ready.checkEachPlayer"),
         c.bool("ready.checkEachTeam", true),
         c.number("ready.neededRatio", 0.5),
@@ -663,7 +697,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
             val location =
                 arena.config.spawns["after"]?.location() ?: error("AfterMatch spawn is missing")
             arena.members.values
-                .filter { !it.spectator }
+                .filter { it.fighting }
                 .forEach { p ->
                   arena.rules.fighters[p.player.uniqueId.toString()]?.lives = 1
                   check(p.player.teleport(location))
@@ -705,6 +739,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     arena.members.values
         .filter { !it.spectator }
         .forEach { p ->
+          p.ready = true
           arena.rules.add(p.player.uniqueId.toString(), p.team)
           arena.played.add(p.player.uniqueId)
           economy?.consume(p.charge)
@@ -725,7 +760,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
 
   private fun death(p: Participant, attacker: Player?, eliminate: Boolean = false) {
     val arena = p.arena
-    if (p.spectator || p.pendingDeath || arena.phase != "running") return
+    if (!p.fighting || p.pendingDeath) return
     p.pendingDeath = true
     arena.rules.death(p.player.uniqueId.toString(), attacker?.uniqueId?.toString())
     if (arena.after || eliminate) arena.rules.fighters[p.player.uniqueId.toString()]?.active = false
@@ -895,12 +930,14 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
             ?.let { (arena.config.spawns[it] ?: error("Return spawn is missing")).location() }
     if (!store.restore(player, destination)) return
     player.scoreboard = p.board
-    if (arena.phase in setOf("waiting", "countdown")) economy?.refund(p.charge)
+    if (arena.phase in setOf("waiting", "countdown") || p.player.uniqueId !in arena.played)
+        economy?.refund(p.charge)
     players.remove(player.uniqueId)
     arena.members.remove(player.uniqueId)
+    val wasFighter = arena.rules.fighters[player.uniqueId.toString()] != null
     arena.rules.fighters[player.uniqueId.toString()]?.active = false
     if (arena.phase == "countdown" && !canStart(arena)) arena.phase = "waiting"
-    if (arena.phase == "running") arena.rules.winners()?.let { finish(arena, it) }
+    if (arena.phase == "running" && wasFighter) arena.rules.winners()?.let { finish(arena, it) }
   }
 
   private fun reset(arena: ArenaMatch) {
@@ -966,9 +1003,10 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
         }
     if (member != null && players.remove(e.player.uniqueId) != null) {
       member.arena.members.remove(e.player.uniqueId)
+      val wasFighter = member.arena.rules.fighters[e.player.uniqueId.toString()] != null
       member.arena.rules.fighters[e.player.uniqueId.toString()]?.active = false
       isolated(member.arena) {
-        if (member.arena.phase == "running")
+        if (member.arena.phase == "running" && wasFighter)
             member.arena.rules.winners()?.let { finish(member.arena, it) }
       }
     }
@@ -994,9 +1032,8 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     }
     val c = p.arena.config
     if (
-        p.spectator ||
+        !p.fighting ||
             p.pendingDeath ||
-            p.arena.phase != "running" ||
             System.currentTimeMillis() < p.protectedUntil ||
             c.regions.any { it.contains(victim.location) && "NODAMAGE" in it.flags } ||
             attacker != null &&
@@ -1016,7 +1053,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
                     } ||
             attacker != null &&
                 (a?.arena !== p.arena ||
-                    a.spectator ||
+                    !a.fighting ||
                     c.goal.teams && a.team == p.team && !c.bool("perms.teamkill"))
     ) {
       e.isCancelled = true
@@ -1051,9 +1088,8 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     val c = p.arena.config
     if (
         a.arena !== p.arena ||
-            p.spectator ||
-            a.spectator ||
-            p.arena.phase != "running" ||
+            !p.fighting ||
+            !a.fighting ||
             !c.has("Projectiles") ||
             c.goal.teams && a.team == p.team && !c.bool("perms.teamkill")
     )
@@ -1088,7 +1124,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
     if (p != null)
         e.respawnLocation =
             (if (p.spectator) p.arena.config.spawns["spectator"]
-                else p.arena.config.spawn(p.team, "fight"))
+                else p.arena.config.spawn(p.team, if (p.fighting) "fight" else "lounge"))
                 ?.location() ?: e.respawnLocation
     Bukkit.getScheduler()
         .runTask(
@@ -1103,8 +1139,11 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
                       p.spectator = true
                       e.player.gameMode = GameMode.SPECTATOR
                       e.player.inventory.clear()
-                    } else if (p.arena.phase == "running") {
+                    } else if (p.fighting) {
                       equip(p, true)
+                      resetHealth(p)
+                    } else if (p.inLounge) {
+                      if (p.kit != null) equip(p)
                       resetHealth(p)
                     } else leave(e.player)
                   }
@@ -1115,7 +1154,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   @EventHandler(ignoreCancelled = true)
   fun onMove(e: PlayerMoveEvent) {
     val p = players[e.player.uniqueId] ?: return
-    if (p.spectator || p.arena.phase != "running" || p.pendingDeath) return
+    if (!p.fighting || p.pendingDeath) return
     if (
         p.arena.config.bool("general.leavedeath") &&
             p.arena.config.regions.any { it.type == "BATTLE" } &&
@@ -1138,12 +1177,12 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   fun onInteract(e: PlayerInteractEvent) {
     val p = players[e.player.uniqueId] ?: return
     val block = e.clickedBlock ?: return
-    if (!p.spectator && p.arena.phase in setOf("waiting", "countdown")) {
-      if (block.type.name == p.arena.config.text("ready.block", "IRON_BLOCK")) {
-        e.isCancelled = true
-        runCatching { ready(p) }.onFailure { e.player.sendMessage(it.message ?: "準備できません") }
-        return
-      }
+    if (p.inLounge && block.type.name == p.arena.config.text("ready.block", "IRON_BLOCK")) {
+      e.isCancelled = true
+      runCatching { ready(p) }.onFailure { e.player.sendMessage(it.message ?: "準備できません") }
+      return
+    }
+    if (p.inLounge || p.fighting && p.arena.config.bool("uses.ingameClassSwitch")) {
       val sign = block.state as? Sign
       if (sign != null) {
         val kit =
@@ -1161,8 +1200,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
       }
     }
     if (
-        p.spectator ||
-            p.arena.phase != "running" ||
+        !p.fighting ||
             (block.state is org.bukkit.block.Container &&
                 (protected(block.location, "INVENTORY") ||
                     p.arena.config.regions.none { it.contains(block.location) }))
@@ -1180,7 +1218,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   fun onBreak(e: BlockBreakEvent) {
     val p = players[e.player.uniqueId]
     if (
-        p != null && (p.spectator || p.arena.phase != "running") ||
+        p != null && !p.fighting ||
             protected(e.block.location, "BREAK") ||
             p?.arena
                 ?.config
@@ -1202,10 +1240,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun onPlace(e: BlockPlaceEvent) {
     val p = players[e.player.uniqueId]
-    if (
-        p != null && (p.spectator || p.arena.phase != "running") ||
-            protected(e.block.location, "PLACE")
-    ) {
+    if (p != null && !p.fighting || protected(e.block.location, "PLACE")) {
       e.isCancelled = true
       return
     }
@@ -1248,29 +1283,20 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   @EventHandler(ignoreCancelled = true)
   fun onDrop(e: PlayerDropItemEvent) {
     val p = players[e.player.uniqueId]
-    if (
-        p != null && (p.spectator || p.arena.phase != "running") ||
-            protected(e.player.location, "DROP")
-    )
-        e.isCancelled = true
+    if (p != null && !p.fighting || protected(e.player.location, "DROP")) e.isCancelled = true
   }
 
   @EventHandler(ignoreCancelled = true)
   fun onPickup(e: EntityPickupItemEvent) {
     val p = players[e.entity.uniqueId]
-    if (
-        p != null && (p.spectator || p.arena.phase != "running") ||
-            protected(e.entity.location, "PICKUP")
-    )
-        e.isCancelled = true
+    if (p != null && !p.fighting || protected(e.entity.location, "PICKUP")) e.isCancelled = true
   }
 
   @EventHandler(ignoreCancelled = true)
   fun onClick(e: InventoryClickEvent) {
     val p = players[e.whoClicked.uniqueId] ?: return
     if (
-        p.spectator ||
-            p.arena.phase != "running" ||
+        !p.fighting ||
             e.view.topInventory.location?.let { location ->
               protected(location, "INVENTORY") ||
                   p.arena.config.regions.none { it.contains(location) }
@@ -1285,8 +1311,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   fun onDrag(e: InventoryDragEvent) {
     val p = players[e.whoClicked.uniqueId] ?: return
     if (
-        p.spectator ||
-            p.arena.phase != "running" ||
+        !p.fighting ||
             e.view.topInventory.location?.let { location ->
               protected(location, "INVENTORY") ||
                   p.arena.config.regions.none { it.contains(location) }
@@ -1310,8 +1335,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   @EventHandler(ignoreCancelled = true)
   fun onFood(e: FoodLevelChangeEvent) {
     val p = players[e.entity.uniqueId] ?: return
-    if (p.spectator || p.arena.phase != "running" || !p.arena.config.bool("player.hunger", true))
-        e.isCancelled = true
+    if (!p.fighting || !p.arena.config.bool("player.hunger", true)) e.isCancelled = true
   }
 
   @EventHandler(ignoreCancelled = true)
@@ -1406,8 +1430,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   fun onTeleport(e: PlayerTeleportEvent) {
     if (e.cause == PlayerTeleportEvent.TeleportCause.PLUGIN) return
     val p = players[e.player.uniqueId]
-    if (p != null && (p.spectator || p.arena.phase != "running" || protected(e.from, "TELEPORT")))
-        e.isCancelled = true
+    if (p != null && (!p.fighting || protected(e.from, "TELEPORT"))) e.isCancelled = true
   }
 }
 
