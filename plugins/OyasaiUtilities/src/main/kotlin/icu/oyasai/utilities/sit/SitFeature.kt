@@ -72,6 +72,8 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   )
 
   private val seatKey = NamespacedKey(plugin, "sit_seat")
+  // サーバーが落ちても、再参加のときに透明化を元へ戻す。
+  private val hiddenKey = NamespacedKey(plugin, "sit_hidden_was_invisible")
   private val states = mutableMapOf<UUID, State>()
   private val playerRides = mutableMapOf<UUID, UUID>()
   private var playerMode = PlayerSitMode.RANK
@@ -264,6 +266,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
               it.isInvulnerable = true
               it.isSilent = true
               it.isPersistent = false
+              it.getAttribute(Attribute.SCALE)?.baseValue = scale
               it.persistentDataContainer.set(seatKey, PersistentDataType.BYTE, 1)
               it.customName = player.name
               it.isCustomNameVisible = true
@@ -301,6 +304,11 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
         )
     states[player.uniqueId] = state
     if (mannequin != null) {
+      player.persistentDataContainer.set(
+          hiddenKey,
+          PersistentDataType.BYTE,
+          if (player.isInvisible) 1.toByte() else 0.toByte(),
+      )
       player.isInvisible = true
       Bukkit.getOnlinePlayers().filter { it != player }.forEach { it.hideEntity(plugin, player) }
       if (mode == Mode.LAY) {
@@ -323,6 +331,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
     state.mannequin?.remove()
     if (state.mannequin != null) {
       player.isInvisible = state.wasInvisible
+      player.persistentDataContainer.remove(hiddenKey)
       player.isSleepingIgnored = state.wasSleepingIgnored
       Bukkit.getOnlinePlayers().filter { it != player }.forEach { it.showEntity(plugin, player) }
     }
@@ -344,6 +353,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   private fun releasePlayerRides(id: UUID) {
     PlayerSitRules.detach(playerRides, id).forEach { (riderId, carrierId) ->
       val rider = Bukkit.getPlayer(riderId) ?: return@forEach
+      Bukkit.getPlayer(carrierId)?.showEntity(plugin, rider)
       rider.vehicle?.takeIf { it.uniqueId == carrierId }?.removePassenger(rider)
     }
   }
@@ -403,6 +413,9 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
     }
     if (target.addPassenger(rider)) {
       playerRides[rider.uniqueId] = target.uniqueId
+      // 乗った人の当たり判定は下の人の目の高さにかかり、下の人の照準を奪う。
+      // 下の人の画面からだけ消して、ブロックの設置や操作をできるようにする。
+      target.hideEntity(plugin, rider)
       event.isCancelled = true
       rider.sendActionBar(Component.text("スニークで戻る"))
     }
@@ -521,6 +534,10 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
 
   @EventHandler
   fun onJoin(event: PlayerJoinEvent) {
+    event.player.persistentDataContainer.get(hiddenKey, PersistentDataType.BYTE)?.let {
+      event.player.isInvisible = it != 0.toByte()
+      event.player.persistentDataContainer.remove(hiddenKey)
+    }
     event.player.vehicle?.let { vehicle ->
       if (vehicle.persistentDataContainer.has(seatKey, PersistentDataType.BYTE)) {
         vehicle.removePassenger(event.player)
