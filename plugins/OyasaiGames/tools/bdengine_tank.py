@@ -9,6 +9,7 @@
 - 各部品を形から 車体（HULL）・砲塔（TURRET）・砲身（BARREL）に分け、砲塔の回転中心・砲身の付け根・砲身長・座席の高さを求める。
   分け方は推定なので、--preview の色分け図（車体 灰、砲塔 青、砲身 赤）で確かめる。
   砲塔の範囲は、車体の上面から 0.3 m 以上上にある部品（天板・キューポラなど）の広がりで決める。天板が砲塔全体を覆っている前提。
+  転輪は --spin に番号を渡すと、進んだ距離に合わせて回る。
   外れた部品は --list で番号（ファイル内の順、0 から）を調べ、--turret / --hull / --barrel に番号をカンマ区切りで渡して直す。
 
 出力した JSON をサーバーの plugins/OyasaiGames/tank-models/<車種>.json に置くと、その車種の見た目になる。
@@ -90,7 +91,7 @@ def bounds(points):
     return [min(p[i] for p in points) for i in range(3)], [max(p[i] for p in points) for i in range(3)]
 
 
-def classify(parts):
+def classify(parts, given=None):
     """部品を HULL / TURRET / BARREL に分け、砲塔の中心・砲身の位置を返す（座標は前が +z に回した後）。"""
     boxes = [bounds(corners(p["m"], p["kind"])) for p in parts]
     lo_all, hi_all = bounds([c for b in boxes for c in b])
@@ -102,11 +103,11 @@ def classify(parts):
         center = [(lo[k] + hi[k]) / 2 for k in range(3)]
         if size[2] > 0.3 and size[2] > 3 * max(size[0], size[1]) and center[1] > lo_all[1] + height * 0.5:
             candidates.append(i)
-    if not candidates:
+    if not candidates and not given:
         raise SystemExit("砲身が見つからない（--front を確かめる）")
-    front = max(boxes[i][1][2] for i in candidates)
-    axis_x = sorted((boxes[i][0][0] + boxes[i][1][0]) / 2 for i in candidates)[len(candidates) // 2]
-    axis_y = sorted((boxes[i][0][1] + boxes[i][1][1]) / 2 for i in candidates)[len(candidates) // 2]
+    front = max((boxes[i][1][2] for i in candidates), default=0.0)
+    axis_x = sorted((boxes[i][0][0] + boxes[i][1][0]) / 2 for i in candidates)[len(candidates) // 2] if candidates else 0.0
+    axis_y = sorted((boxes[i][0][1] + boxes[i][1][1]) / 2 for i in candidates)[len(candidates) // 2] if candidates else 0.0
     # 砲身の付け根: 砲口から後ろへ、砲の軸の近くの細い部品が途切れず続く所まで（砲塔後部の箱などを拾わない）。
     near_axis = []
     for i, (lo, hi) in enumerate(boxes):
@@ -121,6 +122,12 @@ def classify(parts):
             break
         barrel.add(i)
         reach = min(reach, boxes[i][0][2])
+    if not barrel and given:
+        # 形から砲身が見つからないときは、番号で指定された部品から砲の軸と砲口を求める。
+        barrel = set(given)
+        front = max(boxes[i][1][2] for i in barrel)
+        axis_x = sum(boxes[i][0][0] + boxes[i][1][0] for i in barrel) / 2 / len(barrel)
+        axis_y = sum(boxes[i][0][1] + boxes[i][1][1] for i in barrel) / 2 / len(barrel)
     root_z = min(boxes[i][0][2] for i in barrel)
     rest = [i for i in range(len(parts)) if i not in barrel]
     hull_lo, hull_hi = bounds([c for i in rest for c in boxes[i]])
@@ -160,7 +167,7 @@ def convert(text, front, length, overrides=None, listing=False):
     orient = ORIENT[front]
     for p in parts:
         p["m"] = mul(orient, p["m"])
-    groups, g = classify(parts)
+    groups, g = classify(parts, (overrides or {}).get("BARREL"))
     for group, indices in (overrides or {}).items():
         for i in indices:
             groups[i] = group
@@ -291,6 +298,7 @@ def main():
     parser.add_argument("--list", action="store_true", help="上面より上の部品の番号・分類・位置を出す")
     for group in ("turret", "hull", "barrel"):
         parser.add_argument("--" + group, default="", help="この分類にする部品の番号（カンマ区切り）")
+    parser.add_argument("--spin", default="", help="進んだ距離に合わせて横向きの軸まわりに回る転輪の部品の番号（カンマ区切り）")
     args = parser.parse_args()
     overrides = {
         group.upper(): [int(i) for i in getattr(args, group).split(",") if i.strip()]
@@ -298,6 +306,8 @@ def main():
     }
     with open(args.source, encoding="utf-8") as f:
         model = convert(f.read(), args.front, args.length, overrides, args.list)
+    for i in (int(i) for i in args.spin.split(",") if i.strip()):
+        model["parts"][i]["spin"] = True
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump(model, f, separators=(",", ":"))
     if args.preview:
