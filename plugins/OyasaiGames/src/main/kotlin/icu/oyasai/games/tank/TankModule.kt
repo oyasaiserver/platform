@@ -54,6 +54,8 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
   private val shells = mutableListOf<Shell>()
   private var task: BukkitTask? = null
   private var tickCount = 0
+  /** 最高速のときの転輪の毎分回転数。/tank rpm で変え、config.yml の tank.wheel-rpm に残す。 */
+  private var wheelRpm = plugin.config.getDouble("tank.wheel-rpm", TankRules.WHEEL_RPM)
   private val legacy = LegacyComponentSerializer.legacySection()
   private val tracer = Particle.DustOptions(Color.fromRGB(255, 150, 40), 1.3f)
   private val controlKey = NamespacedKey(plugin, "tank_control")
@@ -79,12 +81,22 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       label: String,
       args: Array<out String>,
   ): Boolean {
-    val player = sender as? Player ?: return true.also { sender.sendMessage("プレイヤーのみ使えます。") }
-    if (!player.hasPermission("oyasaigames.tank.use")) {
-      player.sendMessage("§cYou don't have the required permission to use this command")
+    if (sender is Player && !sender.hasPermission("oyasaigames.tank.use")) {
+      sender.sendMessage("§cYou don't have the required permission to use this command")
       return true
     }
     val action = args.firstOrNull()?.lowercase()
+    if (action == "rpm") {
+      val rpm = args.getOrNull(1)?.toDoubleOrNull()
+      if (rpm != null && rpm in 0.0..2000.0) {
+        wheelRpm = rpm
+        plugin.config.set("tank.wheel-rpm", rpm)
+        plugin.saveConfig()
+      }
+      sender.sendMessage("最高速のときの転輪の回転数: ${wheelRpm} rpm（/tank rpm <0〜2000> で変更）")
+      return true
+    }
+    val player = sender as? Player ?: return true.also { sender.sendMessage("プレイヤーのみ使えます。") }
     if (action == "clear") {
       if (player.hasPermission("oyasaigames.admin")) {
         tanks.toList().forEach(::destroy)
@@ -99,7 +111,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     when {
       action != "spawn" && action != "dummy" ->
           player.sendMessage(
-              "/tank spawn [${TankRules.SPECS.joinToString("|") { it.key }}]（乗る） | /tank dummy [種類]（標的） | /tank clear"
+              "/tank spawn [${TankRules.SPECS.joinToString("|") { it.key }}]（乗る） | /tank dummy [種類]（標的） | /tank clear | /tank rpm [数]"
           )
       spec == null ->
           player.sendMessage(
@@ -117,7 +129,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
       args: Array<out String>,
   ): List<String> =
       when (args.size) {
-        1 -> listOf("spawn", "dummy", "clear").filter { it.startsWith(args[0]) }
+        1 -> listOf("spawn", "dummy", "clear", "rpm").filter { it.startsWith(args[0]) }
         2 -> TankRules.SPECS.map { it.key }.filter { it.startsWith(args[1]) }
         else -> emptyList()
       }
@@ -255,7 +267,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     tank.reload = (tank.spec.reloadSeconds * 20).toInt()
     tank.ammo--
     val origin = tank.muzzle()
-    val dir = tank.gunDirection()
+    val dir = aim(tank, origin)
     shells += Shell(origin, dir.multiply(tank.spec.muzzleVelocity / 20.0), tank, tank.world)
     val at = origin.toLocation(tank.world)
     tank.world.playSound(at, Sound.ENTITY_GENERIC_EXPLODE, 3.0f, 1.3f)
@@ -270,7 +282,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
         destroy(tank)
         continue
       }
-      tank.tick()
+      tank.tick(wheelRpm)
       engineSound(tank)
       if (tank.mgUntil >= tickCount) machineGun(tank)
       tank.driver?.let { hud(it, tank) }
@@ -315,6 +327,23 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     )
   }
 
+  /**
+   * [from] から、運転手の目から砲の向きに見た先へ向かう向き。目は砲より上にあるので、砲の向きのまま撃つとクロスヘアより下へ飛ぶ。
+   * 砲塔が視線に追いついていれば、見た先はクロスヘアの先と同じ。
+   */
+  private fun aim(tank: Tank, from: Vector): Vector {
+    val dir = tank.gunDirection()
+    val eye = tank.driver?.eyeLocation ?: return dir
+    val start = eye.toVector()
+    val hit =
+        tank.world.rayTrace(eye, dir, TankRules.AIM_RANGE, FluidCollisionMode.NEVER, true, 0.1) {
+          it is LivingEntity && it != tank.driver
+        }
+    var distance = hit?.hitPosition?.distance(start) ?: TankRules.AIM_RANGE
+    nearestTank(tank.world, start, dir, distance, tank)?.let { distance = it.second.distance }
+    return start.add(dir.multiply(distance)).subtract(from).normalize()
+  }
+
   /** 射線上で最も近い戦車（[except] を除く）。 */
   private fun nearestTank(
       world: World,
@@ -335,7 +364,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
     while (tank.mgCarry >= 1.0) {
       tank.mgCarry -= 1.0
       val start = tank.coaxialMuzzle()
-      val dir = tank.gunDirection()
+      val dir = aim(tank, start)
       val hit =
           tank.world.rayTrace(
               start.toLocation(tank.world),
@@ -395,12 +424,29 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
             true,
         )
     if (block != null) best = block.hitPosition.distance(shell.pos)
+    // 戦車に乗っている人は装甲が守るので、生き物の判定から外す。
+    val living =
+        world.rayTraceEntities(shell.pos.toLocation(world), dir, best, 0.2) { e ->
+          e is LivingEntity && tanks.none { it.driver == e }
+        }
+    if (living != null) best = living.hitPosition.distance(shell.pos)
     val target = nearestTank(world, shell.pos, dir, best, shell.shooter)
     if (target != null) best = target.second.distance
     trail(world, shell.pos, dir, best)
-    if (target != null || block != null) {
+    val mob = if (target == null) living?.hitEntity as? LivingEntity else null
+    if (target != null || block != null || mob != null) {
       val at = shell.pos.clone().add(dir.clone().multiply(best))
       val pierced = target?.let { (tank, hit) -> hit(tank, hit, shell, shell.travelled + best) }
+      mob?.damage(shell.shooter.spec.damage, shell.shooter.driver)
+      // 地面・生き物への着弾は、ブロックを壊さない爆発で周りにもダメージを与える。戦車への命中は装甲の計算だけ。
+      if (target == null)
+          world.createExplosion(
+              at.toLocation(world),
+              TankRules.splashPower(shell.shooter.spec.caliberMm),
+              false,
+              false,
+              shell.shooter.driver,
+          )
       impact(
           world,
           at,
@@ -481,7 +527,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
 
   /** 当たった面の装甲を、傾斜と入射角で実質の厚さにして貫通力と比べる。貫通したら true。 */
   private fun hit(target: Tank, hit: TankHit, shell: Shell, distance: Double): Boolean {
-    val armor = target.spec.armor
+    val armor = hit.box.armor
     val cos =
         TankRules.impactCos(
             hit.localDir.x,
@@ -503,7 +549,7 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
         }
     val message =
         legacy.deserialize(
-            "$result §f${hit.face.label} ${plate.toInt()}mm（実質 ${effective.toInt()}mm）/ 貫通力 ${penetration.toInt()}mm・${distance.toInt()}m"
+            "$result §f${hit.box.label}${hit.face.label} ${plate.toInt()}mm（実質 ${effective.toInt()}mm）/ 貫通力 ${penetration.toInt()}mm・${distance.toInt()}m"
         )
     // アクションバーは毎 tick の表示で上書きされるので、命中結果はチャットへ出す。
     shell.shooter.driver?.sendMessage(message)

@@ -30,7 +30,7 @@ commands:
     description: PvP アリーナへの参加・観戦・管理
     aliases: [pvparena, ogpa]
   tank:
-    description: 戦車（試作）。spawn [light|medium|heavy] で乗る、dummy [種類] で標的、clear で片付ける
+    description: 戦車（試作）。spawn [light|medium|heavy|pz3|chiha|hago|type90|type10|sherman|t34|tiger] で乗る、dummy [種類] で標的、clear で片付ける、rpm [数] で転輪の回転数
     permission: oyasaigames.tank.use
   oyasaigames:
     description: おやさいゲームズのメニューを開きます

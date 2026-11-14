@@ -30,14 +30,17 @@ internal class Part(
 /**
  * 表示 1 枚。[local] はグループの原点（HULL は車体の原点、TURRET は砲塔の回転中心、BARREL は砲身の付け根）からの変換。 [block]
  * （`minecraft:stone` などのブロック状態の文字列。作るのにサーバーが要るので表示を出すときに変換する）があれば BlockDisplay、なければ [item] の
- * ItemDisplay。
+ * ItemDisplay。[spin] は転輪の一部で、箱の中心（[axle]）を通る横向きの軸まわりに回る。
  */
 internal class ModelPart(
     val group: Group,
     val local: Matrix4f,
     val block: String?,
     val item: ItemStack?,
-)
+    val spin: Boolean = false,
+) {
+  val axle: Vector3f? = if (spin) local.transformPosition(Vector3f(0.5f, 0.5f, 0.5f)) else null
+}
 
 /** 箱（中心・大きさ・中心まわりの回転）を、原点が角の 1 ブロックへの変換にする。 */
 private fun Part.toModelPart(): ModelPart =
@@ -206,6 +209,7 @@ internal object TankModels {
               Matrix4f().set(values).transpose(),
               part.get("block")?.asString,
               if (part.has("block")) null else item(part),
+              part.get("spin")?.asBoolean == true,
           )
         }
     return TankModel(
