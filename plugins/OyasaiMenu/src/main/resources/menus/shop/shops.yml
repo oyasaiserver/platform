@@ -1,6 +1,6 @@
 blocks:
   name: "&1ブロック"
-  command: "blocks"
+  command: blocks
   items:
     - oak_log 5 1
     - oak_wood 5 1
@@ -65,6 +65,13 @@ blocks:
     - pale_oak_planks 5 1
     - pale_oak_stairs 5 1
     - pale_oak_slab 5 1
+    - poplar_log 5 1
+    - poplar_wood 5 1
+    - stripped_poplar_log 5 1
+    - stripped_poplar_wood 5 1
+    - poplar_planks 5 1
+    - poplar_stairs 5 1
+    - poplar_slab 5 1
     - crimson_stem 5 1
     - crimson_hyphae 5 1
     - stripped_crimson_stem 5 1
@@ -266,21 +273,53 @@ blocks:
     - waxed_oxidized_cut_copper_slab 5 1
     - waxed_oxidized_copper_bulb 5 1
     - white_wool 5 1
+    - white_wool_stairs 5 1
+    - white_wool_slab 5 1
     - light_gray_wool 5 1
+    - light_gray_wool_stairs 5 1
+    - light_gray_wool_slab 5 1
     - gray_wool 5 1
+    - gray_wool_stairs 5 1
+    - gray_wool_slab 5 1
     - black_wool 5 1
+    - black_wool_stairs 5 1
+    - black_wool_slab 5 1
     - brown_wool 5 1
+    - brown_wool_stairs 5 1
+    - brown_wool_slab 5 1
     - red_wool 5 1
+    - red_wool_stairs 5 1
+    - red_wool_slab 5 1
     - orange_wool 5 1
+    - orange_wool_stairs 5 1
+    - orange_wool_slab 5 1
     - yellow_wool 5 1
+    - yellow_wool_stairs 5 1
+    - yellow_wool_slab 5 1
     - lime_wool 5 1
+    - lime_wool_stairs 5 1
+    - lime_wool_slab 5 1
     - green_wool 5 1
+    - green_wool_stairs 5 1
+    - green_wool_slab 5 1
     - cyan_wool 5 1
+    - cyan_wool_stairs 5 1
+    - cyan_wool_slab 5 1
     - light_blue_wool 5 1
+    - light_blue_wool_stairs 5 1
+    - light_blue_wool_slab 5 1
     - blue_wool 5 1
+    - blue_wool_stairs 5 1
+    - blue_wool_slab 5 1
     - purple_wool 5 1
+    - purple_wool_stairs 5 1
+    - purple_wool_slab 5 1
     - magenta_wool 5 1
+    - magenta_wool_stairs 5 1
+    - magenta_wool_slab 5 1
     - pink_wool 5 1
+    - pink_wool_stairs 5 1
+    - pink_wool_slab 5 1
     - terracotta 5 1
     - white_terracotta 5 1
     - light_gray_terracotta 5 1
@@ -299,21 +338,53 @@ blocks:
     - magenta_terracotta 5 1
     - pink_terracotta 5 1
     - white_concrete 5 1
+    - white_concrete_stairs 5 1
+    - white_concrete_slab 5 1
     - light_gray_concrete 5 1
+    - light_gray_concrete_stairs 5 1
+    - light_gray_concrete_slab 5 1
     - gray_concrete 5 1
+    - gray_concrete_stairs 5 1
+    - gray_concrete_slab 5 1
     - black_concrete 5 1
+    - black_concrete_stairs 5 1
+    - black_concrete_slab 5 1
     - brown_concrete 5 1
+    - brown_concrete_stairs 5 1
+    - brown_concrete_slab 5 1
     - red_concrete 5 1
+    - red_concrete_stairs 5 1
+    - red_concrete_slab 5 1
     - orange_concrete 5 1
+    - orange_concrete_stairs 5 1
+    - orange_concrete_slab 5 1
     - yellow_concrete 5 1
+    - yellow_concrete_stairs 5 1
+    - yellow_concrete_slab 5 1
     - lime_concrete 5 1
+    - lime_concrete_stairs 5 1
+    - lime_concrete_slab 5 1
     - green_concrete 5 1
+    - green_concrete_stairs 5 1
+    - green_concrete_slab 5 1
     - cyan_concrete 5 1
+    - cyan_concrete_stairs 5 1
+    - cyan_concrete_slab 5 1
     - light_blue_concrete 5 1
+    - light_blue_concrete_stairs 5 1
+    - light_blue_concrete_slab 5 1
     - blue_concrete 5 1
+    - blue_concrete_stairs 5 1
+    - blue_concrete_slab 5 1
     - purple_concrete 5 1
+    - purple_concrete_stairs 5 1
+    - purple_concrete_slab 5 1
     - magenta_concrete 5 1
+    - magenta_concrete_stairs 5 1
+    - magenta_concrete_slab 5 1
     - pink_concrete 5 1
+    - pink_concrete_stairs 5 1
+    - pink_concrete_slab 5 1
     - white_concrete_powder 5 1
     - light_gray_concrete_powder 5 1
     - gray_concrete_powder 5 1
@@ -424,6 +495,27 @@ blocks:
     - glowstone 5 1
     - mushroom_stem 10 1
     - budding_amethyst 10 1
+    - sulfur 5 1
+    - sulfur_stairs 5 1
+    - sulfur_slab 5 1
+    - chiseled_sulfur 5 1
+    - polished_sulfur 5 1
+    - polished_sulfur_stairs 5 1
+    - polished_sulfur_slab 5 1
+    - sulfur_bricks 5 1
+    - sulfur_brick_stairs 5 1
+    - sulfur_brick_slab 5 1
+    - cinnabar 5 1
+    - cinnabar_stairs 5 1
+    - cinnabar_slab 5 1
+    - chiseled_cinnabar 5 1
+    - polished_cinnabar 5 1
+    - polished_cinnabar_stairs 5 1
+    - polished_cinnabar_slab 5 1
+    - cinnabar_bricks 5 1
+    - cinnabar_brick_stairs 5 1
+    - cinnabar_brick_slab 5 1
+    - potent_sulfur 5 1
 
 decorations:
   name: "&1装飾"
@@ -437,6 +529,7 @@ decorations:
     - mangrove_sign 10 1
     - cherry_sign 10 1
     - pale_oak_sign 10 1
+    - poplar_sign 10 1
     - crimson_sign 10 1
     - warped_sign 10 1
     - bamboo_sign 10 1
@@ -449,6 +542,7 @@ decorations:
     - mangrove_hanging_sign 10 1
     - cherry_hanging_sign 10 1
     - pale_oak_hanging_sign 10 1
+    - poplar_hanging_sign 10 1
     - crimson_hanging_sign 10 1
     - warped_hanging_sign 10 1
     - bamboo_hanging_sign 10 1
@@ -461,6 +555,7 @@ decorations:
     - mangrove_shelf 10 1
     - cherry_shelf 10 1
     - pale_oak_shelf 10 1
+    - poplar_shelf 10 1
     - bamboo_shelf 10 1
     - crimson_shelf 10 1
     - warped_shelf 10 1
@@ -473,6 +568,7 @@ decorations:
     - mangrove_fence 10 1
     - cherry_fence 10 1
     - pale_oak_fence 10 1
+    - poplar_fence 10 1
     - crimson_fence 10 1
     - warped_fence 10 1
     - bamboo_fence 10 1
@@ -486,6 +582,7 @@ decorations:
     - mangrove_fence_gate 10 1
     - cherry_fence_gate 10 1
     - pale_oak_fence_gate 10 1
+    - poplar_fence_gate 10 1
     - crimson_fence_gate 10 1
     - warped_fence_gate 10 1
     - bamboo_fence_gate 10 1
@@ -498,6 +595,7 @@ decorations:
     - mangrove_door 10 1
     - cherry_door 10 1
     - pale_oak_door 10 1
+    - poplar_door 10 1
     - crimson_door 10 1
     - warped_door 10 1
     - bamboo_door 10 1
@@ -510,6 +608,7 @@ decorations:
     - mangrove_trapdoor 10 1
     - cherry_trapdoor 10 1
     - pale_oak_trapdoor 10 1
+    - poplar_trapdoor 10 1
     - crimson_trapdoor 10 1
     - warped_trapdoor 10 1
     - bamboo_trapdoor 10 1
@@ -543,6 +642,12 @@ decorations:
     - polished_blackstone_brick_wall 10 1
     - end_stone_brick_wall 10 1
     - resin_brick_wall 10 1
+    - sulfur_wall 10 1
+    - polished_sulfur_wall 10 1
+    - sulfur_brick_wall 10 1
+    - cinnabar_wall 10 1
+    - polished_cinnabar_wall 10 1
+    - cinnabar_brick_wall 10 1
     - iron_bars 10 1
     - iron_door 10 1
     - iron_trapdoor 10 1
@@ -599,6 +704,7 @@ decorations:
     - magenta_carpet 10 1
     - pink_carpet 10 1
     - pointed_dripstone 10 1
+    - sulfur_spike 10 1
     - snow 10 1
     - moss_carpet 10 1
     - pale_moss_carpet 10 1
@@ -656,6 +762,7 @@ decorations:
     - purple_bed 10 1
     - magenta_bed 10 1
     - pink_bed 10 1
+    - straw_bed 10 1
     - candle 10 1
     - white_candle 10 1
     - light_gray_candle 10 1
@@ -689,6 +796,22 @@ decorations:
     - purple_banner 10 1
     - magenta_banner 10 1
     - pink_banner 10 1
+    - white_cushion 10 1
+    - light_gray_cushion 10 1
+    - gray_cushion 10 1
+    - black_cushion 10 1
+    - brown_cushion 10 1
+    - red_cushion 10 1
+    - orange_cushion 10 1
+    - yellow_cushion 10 1
+    - lime_cushion 10 1
+    - green_cushion 10 1
+    - cyan_cushion 10 1
+    - light_blue_cushion 10 1
+    - blue_cushion 10 1
+    - purple_cushion 10 1
+    - magenta_cushion 10 1
+    - pink_cushion 10 1
     - oak_leaves 10 1
     - spruce_leaves 10 1
     - birch_leaves 10 1
@@ -700,6 +823,9 @@ decorations:
     - azalea_leaves 10 1
     - flowering_azalea_leaves 10 1
     - pale_oak_leaves 10 1
+    - red_poplar_leaves 10 1
+    - orange_poplar_leaves 10 1
+    - yellow_poplar_leaves 10 1
     - oak_sapling 10 1
     - spruce_sapling 10 1
     - birch_sapling 10 1
@@ -709,9 +835,11 @@ decorations:
     - mangrove_propagule 10 1
     - cherry_sapling 10 1
     - pale_oak_sapling 10 1
+    - poplar_sapling 10 1
     - azalea 10 1
     - flowering_azalea 10 1
     - bush 10 1
+    - red_shrub 10 1
     - dead_bush 10 1
     - short_dry_grass 10 1
     - tall_dry_grass 10 1
@@ -722,9 +850,11 @@ decorations:
     - crimson_fungus 10 1
     - red_mushroom 10 1
     - brown_mushroom 10 1
+    - shelf_mushroom 10 1
     - fern 10 1
     - large_fern 10 1
     - dandelion 10 1
+    - golden_dandelion 10 1
     - poppy 10 1
     - blue_orchid 10 1
     - allium 10 1
@@ -893,6 +1023,7 @@ decorations:
     - trapped_chest 10 1
     - ender_chest 10 1
     - cake 10 1
+    - turtle_egg 10 1
 
 ores:
   name: "&1鉱石"
@@ -955,3 +1086,7 @@ tools:
     - cooked_beef 4 0
     - carrot 3 0
     - golden_carrot 20 0
+    - diamond_shovel 50 0
+    - diamond_pickaxe 150 0
+    - diamond_axe 150 0
+    - diamond_hoe 100 0

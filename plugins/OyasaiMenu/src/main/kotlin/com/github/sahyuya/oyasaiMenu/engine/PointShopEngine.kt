@@ -239,7 +239,9 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
         dispatchPointShopCommands(item.commands) { cmd ->
           Bukkit.dispatchCommand(
               Bukkit.getConsoleSender(),
-              cmd.replace("%player%", player.name).replace("%price%", item.cost.toString()),
+              cmd.replace("%player%", player.name)
+                  .replace("%uuid%", player.uniqueId.toString())
+                  .replace("%price%", item.cost.toString()),
           )
         }
     if (failed != null) {

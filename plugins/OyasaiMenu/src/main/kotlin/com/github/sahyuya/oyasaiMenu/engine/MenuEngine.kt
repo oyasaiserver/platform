@@ -131,6 +131,8 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     if (text.isEmpty()) return text
 
     var result = text
+    if (result.contains("%uuid%"))
+        result = result.replace("%uuid%", context.player.uniqueId.toString())
     if (result.contains("%player%")) result = result.replace("%player%", context.player.name)
     if (result.contains("%player_name%"))
         result = result.replace("%player_name%", context.player.name)
