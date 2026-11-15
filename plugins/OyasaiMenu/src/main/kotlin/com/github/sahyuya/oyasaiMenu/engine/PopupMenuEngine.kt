@@ -365,18 +365,21 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  private fun applyCommandPlaceholders(command: String, player: Player): String =
+      command.replace("%player%", player.name).replace("%uuid%", player.uniqueId.toString())
+
   private fun dispatchDeferred(player: Player, actions: List<PopupAction>) {
     for (action in actions) {
       when (action.type) {
         PopupActionType.PLAYER_CMD ->
-            player.performCommand(action.value.replace("%player%", player.name))
+            player.performCommand(applyCommandPlaceholders(action.value, player))
         PopupActionType.CONSOLE_CMD ->
             Bukkit.dispatchCommand(
                 Bukkit.getConsoleSender(),
-                action.value.replace("%player%", player.name),
+                applyCommandPlaceholders(action.value, player),
             )
         PopupActionType.OP_PLAYER_CMD -> {
-          val cmd = action.value.replace("%player%", player.name)
+          val cmd = applyCommandPlaceholders(action.value, player)
           if (cmd.isNotEmpty()) {
             if (player.isOp) {
               player.performCommand(cmd.removePrefix("/"))
@@ -387,7 +390,7 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
           }
         }
         PopupActionType.SUGGEST_COMMAND -> {
-          val cmd = action.value.replace("%player%", player.name)
+          val cmd = applyCommandPlaceholders(action.value, player)
           val msg = GuiUtil.buildSuggestCommandComponent(cmd, "クリックでチャット欄に入力されます")
           player.sendMessage(msg)
         }

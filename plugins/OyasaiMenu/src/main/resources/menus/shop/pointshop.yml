@@ -137,20 +137,6 @@ point1:
         - "minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={mending:1}] 1"
 
     "10":
-      icon: FEATHER
-      name: "&c&l１日FLY券"
-      lore:
-        - "&b僥倖・・・！"
-        - "１日FLY券・・・！！"
-        - ""
-        - "&d所持:&3%tokens%&fP"
-        - "&a価格:&3%price%&fP"
-      cost: 20
-      message: "&bTM &8» &3%price%&fP&7使用しました・・・！"
-      commands:
-        - "lp user %player% permission settemp essentials.fly true 1d"
-
-    "11":
       icon: GRASS_BLOCK
       name: "&c&l永久クリエイティブモード"
       lore:
@@ -161,11 +147,11 @@ point1:
       cost: 3643
       message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - "lp user %player% permission set essentials.gamemode true"
-        - "lp user %player% permission set essentials.gamemode.survival true"
-        - "lp user %player% permission set essentials.gamemode.creative true"
+        - "lp user %uuid% permission set essentials.gamemode true"
+        - "lp user %uuid% permission set essentials.gamemode.survival true"
+        - "lp user %uuid% permission set essentials.gamemode.creative true"
 
-    "12":
+    "11":
       icon: MAP
       name: "&c&l表現の自由"
       lore:
@@ -181,12 +167,12 @@ point1:
         - "painttools canvas %player%"
         - "painttools dye %player%"
         - "give %player% item_frame 1"
-        - "lp user %player% permission set painttools.canvas.use true"
-        - "lp user %player% permission set painttools.command.painttools.canvas true"
-        - "lp user %player% permission set painttools.command.painttools.dye true"
+        - "lp user %uuid% permission set painttools.canvas.use true"
+        - "lp user %uuid% permission set painttools.command.painttools.canvas true"
+        - "lp user %uuid% permission set painttools.command.painttools.dye true"
       close-on-purchase: true # シュルカーボックスを開くためGUIを閉じる
 
-    "13":
+    "12":
       icon: EMERALD
       name: "&c&l¥100,000"
       lore:
@@ -195,9 +181,9 @@ point1:
       cost: 98
       message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - "oyasaieconomy:eco give %player% 100000"
+        - "eco give %player% 100000"
 
-    "14":
+    "13":
       icon: COOKED_BEEF
       name: "&6★ 魔法のペットフード"
       lore:
@@ -210,7 +196,7 @@ point1:
       commands:
         - 'minecraft:give %player% minecraft:cooked_beef[minecraft:custom_name={text:"★ 魔法のペットフード",color:"gold"},minecraft:lore=[{text:"右クリックで与える",color:"yellow"}],minecraft:enchantments={"minecraft:unbreaking":1},minecraft:tooltip_display={hidden_components:["minecraft:enchantments"]}] 1'
 
-    "15":
+    "14":
       icon: CUSTOM_HEAD
       texture: "766844d5e84f649451a87dacca7a73beaa04eea847d438de26c2d44d1e949de"
       name: "&6&lRed Bull"
@@ -221,12 +207,12 @@ point1:
         - "&7(上級者以上は消費しません)"
         - ""
         - "&d所持:&6%balance%"
-        - "&a価格:&3213&f円"
+        - "&a価格:&6¥213"
       cost: 0
       commands:
         - "buyredbull %player%"
 
-    "16":
+    "15":
       icon: BLUE_SHULKER_BOX
       name: "&6&lRed Bull ✧12本詰め合わせ✧"
       lore:
@@ -236,7 +222,7 @@ point1:
         - "&7(上級者以上は消費しません)"
         - ""
         - "&d所持:&6%balance%"
-        - "&a価格:&32,480&f円"
+        - "&a価格:&6¥2,480"
       cost: 0
       commands:
         - "buyredbullset %player%"
