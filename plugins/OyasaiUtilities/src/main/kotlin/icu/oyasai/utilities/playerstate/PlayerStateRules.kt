@@ -137,6 +137,14 @@ object PlayerStateRules {
     return (18000 + h * 1000 + m / 60.0 * 1000).toLong() % 24000
   }
 
+  fun weatherTicks(input: String): Int {
+    val seconds = input.toIntOrNull()
+    require(seconds != null && seconds in 0..Int.MAX_VALUE / 20) {
+      "秒数は 0〜${Int.MAX_VALUE / 20} の整数で指定してください。"
+    }
+    return seconds * 20
+  }
+
   fun plain(input: String): String = ChatColor.stripColor(input) ?: ""
 
   fun unformat(input: String): String =
