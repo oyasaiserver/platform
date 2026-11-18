@@ -128,6 +128,28 @@ class PlayerStateRulesTest {
   }
 
   @Test
+  fun `weather duration accepts the tick range and rejects invalid seconds`() {
+    assertEquals(0, PlayerStateRules.weatherTicks("0"))
+    assertEquals(1200, PlayerStateRules.weatherTicks("60"))
+    assertEquals(2147483640, PlayerStateRules.weatherTicks("107374182"))
+    listOf(
+            "107374183",
+            "2147483647",
+            "2147483648",
+            "999999999999999999999",
+            "-1",
+            "1.5",
+            "rain",
+            "",
+        )
+        .forEach {
+          val error =
+              assertFailsWith<IllegalArgumentException>(it) { PlayerStateRules.weatherTicks(it) }
+          assertEquals("秒数は 0〜107374182 の整数で指定してください。", error.message)
+        }
+  }
+
+  @Test
   fun `nickname formatting honors individual denies and separate color format rgb permissions`() {
     assertEquals("&aName", PlayerStateRules.formatNick("&aName", { false }, { null }))
     assertEquals(
