@@ -65,6 +65,7 @@ object SLSignSetting {
           SignMaterialOption(Material.PALE_OAK_SIGN, "PALE_OAK", "ペールオーク", "ペールオーク", 3, 1),
           SignMaterialOption(Material.CRIMSON_SIGN, "CRIMSON", "真紅", "真紅", 4, 1),
           SignMaterialOption(Material.WARPED_SIGN, "WARPED", "歪んだ", "歪んだ木材", 5, 1),
+          SignMaterialOption(Material.POPLAR_SIGN, "POPLAR", "ポプラ", "ポプラ", 6, 0),
       )
 
   private fun shapeSuffix(material: Material): String {

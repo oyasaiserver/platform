@@ -67,6 +67,8 @@ last_validated: "2026-10-13"
 
 **移動・再入手:** 再入手アイテムは建築IDと世代2をBlockStateMetaとアイテムPDCへ持つ。設置後1tickで看板の両面・色・発光・waxを可能なら復元する。登録位置は変更しない。slupdateは保存と別の `moved` イベントログを積み、元座標の看板をID照合せずAIRにする。材質名は保存するが、向き・壁付き位置・吊り形状の完全なスナップショットを建築DBに保存しない。
 
+**材質変更の選択肢:** 設定GUIの材質一覧は `SLSignSetting.signMaterialOptions` に手書きしている（26.3 時点で13種、ポプラまで）。新しい木材の看板が増えたらここへ足す。再入手（`/slsignget`）は材質名から組み立てるので変更不要。
+
 ### データ形式と永続化
 
 `SLData` は建築ID、Locationと別のworldName、作成LocalDateTime、所有UUID、タイトル、likesのUUIDリスト、likesWithTimestampのUUID→epoch ms、check、コメント、DiscordメッセージID、deletedAt/deletedBy、signMaterialを持つ。
