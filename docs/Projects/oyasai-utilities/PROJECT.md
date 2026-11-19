@@ -152,6 +152,7 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 - **TPswitch:** `ready=false` では `accepts()` が OP を含め false。プレイヤーの受付判定を通る移動・申請が拒否されるが、自分への座標 tp とコンソール tp は通らない。前処理は正規表現に合う通常ラベル `/tp 名前` だけで、完全一致オンライン名を解決できなければ無言取消（`tpswitch/TpSwitchFeature.kt`, `teleport/TeleportFeature.kt`）。
 - **TPA 世界権限:** 申請は sender の移動先世界を worldPermission で検査するが、承認は承認者と申請者の現在世界が異なる場合だけ承認者のノードを直接検査。tpa は申請者の世界、tpahere は承認者自身の世界で、worldAllowed を使わない。オフライン釈放は returnLocation を消した後にオンライン者だけ戻すので、次回参加で復帰地点へ移動しない（`teleport/TeleportFeature.kt`）。
 - **履歴と Pita:** `tpath/TeleportListener.kt` は原因・取消を絞らず記録するが、ignoreNext を消費したイベントは除外。`tpath/BackForwardCmd.kt` は履歴移動前にこの印を付ける。`pita/Pita.kt` も慣性停止で event.to を変更する際に印を付け、そこでテレポートを発火させないため、次のテレポートが履歴から抜ける可能性がある。`TeleportManager.clear()` の呼出しはなく、履歴は退出しても残る。実機のイベント順は未確認。
+- **天気の期間:** `/weather` の秒数は `PlayerStateRules.weatherTicks` で 0〜107374182 の整数に検証してから20倍する。範囲外・非整数は天気を変更せず入力エラーを返す。秒数省略時は従来どおり期間を明示設定しない。
 - **速度とジャンプ:** `/speed 数値` は isFlying で種別を選んだ後、speedType で種別権限による補正を受ける。jump は共通 TeleportSafety を使わず、照準ブロック・頭上の通過可否・危険素材・境界を独自検査する（`playerstate/PlayerStateCommands.kt`, `playerstate/PlayerStateRules.kt`）。
 - **クリエ制限:** `creative_management/GetEvent.kt` の容器クリックは SURVIVAL とそれ以外を分ける（ブロック操作・拾得の判定とは異なる）。ホッパー移動・InventoryDrag・落下ブロックの印の座標追従・他プラグインの直接生成/移動の全経路を封鎖する handler はない。スポーンエッグは cm.bypass の早期 return または cm.bypass.spawn_egg で免除される。
 - **DebugOnBE:** 設定 GUI のクリック・ドラッグと自動起動アイテムの保持更新で権限を再検査しない（`debugonbe/gui/TogoGui.kt`, `debugonbe/listener/TogoAutoItemListener.kt`）。ワールド移動時の専用 cleanup はなく、解除は現在世界を基準にする。移動をまたぐ表示復元は未確認。

@@ -318,7 +318,7 @@ class PlayerStateCommands(private val feature: PlayerStateFeature) : TabExecutor
       storm = args[1].equals("storm", true)
       duration = args.getOrNull(2)
     }
-    val ticks = duration?.toInt()?.let { Math.multiplyExact(it, 20) }
+    val ticks = duration?.let(PlayerStateRules::weatherTicks)
     world.setStorm(storm)
     if (ticks != null) world.weatherDuration = ticks
     sender.sendMessage(
