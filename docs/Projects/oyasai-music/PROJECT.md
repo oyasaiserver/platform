@@ -47,7 +47,7 @@ last_validated: "2026-11-11"
 ### 構成と依存
 
 - Paperの入口は `OyasaiMusic`、Velocityは `OyasaiMusicVelocity`。plugin.ymlはFAWEをdepend、OyasaiEconomy・OyasaiUtilities・Floodgateをsoftdependとする。Geyser APIはVelocity側で使う。
-- `build.gradle.kts` はPurpur開発バンドルを使い、Kotlin stdlib・SQLite JDBCを同梱しrelocateする。SQLiteはminimizeの除外対象。OyasaiEconomy、FAWE、Velocity、GeyserはcompileOnly。Gsonはサーバー環境のものを使う。
+- `build.gradle.kts` はPurpur開発バンドルを使い、Kotlin stdlib と SQLite JDBC を同梱する。Kotlin の relocate はルートの `build.gradle.kts`、SQLite の relocate と minimize の除外はモジュール側で設定する。OyasaiEconomy、FAWE、Velocity、GeyserはcompileOnly。Gsonはサーバー環境のものを使う。
 - 依存カタログはPurpur `26.3.build.2655-stable`、FAWE `2.16.1`、Velocity `4.3.0`、Geyser `2.11.2-SNAPSHOT`、SQLite JDBC `3.53.4.0`、OyasaiEconomy API。隔離Purpur 26.3 build2655とFAWE 2.16.1、OyasaiEconomyで起動・停止・購入・受取・宣伝を確認した。Velocity・Geyserの実行試験は未実施。
 - ディレクトリ名とKotlin packageが一致しない部分がある。`audio/playback/` と `audio/recording/` はpackage `audio`、`gui/core/` と `gui/screen/` はpackage `gui`。
 

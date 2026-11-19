@@ -80,7 +80,7 @@ plugin.yml の名前は CitiesSkyMine、main は `icu.oyasai.citiesskymine.Main`
 
 ### Kotlin のリロケート
 
-shadowJar で `kotlin` を `icu.oyasai.citiesskymine.libs.kotlin` へ移している。移さないと、同じサーバーの別プラグインが同梱する Kotlin と `kotlin.jvm.functions.Function1` が食い違い、`CsmEditSession.run`（FAWE の編集を伴う全コマンド）が `LinkageError: loader constraint violation` で失敗することがある（検証サーバーで再現）。
+ルートの `build.gradle.kts` で、配備用 `shadowJar` の `kotlin` を `icu.oyasai.citiesskymine.libs.kotlin` へ移している。移さないと、同じサーバーの別プラグインが同梱する Kotlin と `kotlin.jvm.functions.Function1` が食い違い、`CsmEditSession.run`（FAWE の編集を伴う全コマンド）が `LinkageError: loader constraint violation` で失敗することがある（検証サーバーで再現）。
 
 ### データ形式と永続化
 

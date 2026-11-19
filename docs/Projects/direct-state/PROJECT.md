@@ -96,7 +96,7 @@ last_validated: "2026-10-13"
 ### 外部 API・依存
 
 - `plugin.yml` は CoreProtect、WorldGuard、FastAsyncWorldEdit を `softdepend` とし、SQLite JDBC `org.xerial:sqlite-jdbc:3.53.2.1` をサーバーライブラリに宣言する。
-- `build.gradle.kts`: Purpur API、FAWE Bukkit、CoreProtect API、WorldGuard Bukkit/Core を `compileOnly`、Kotlin stdlib を `implementation` とする。CoreProtect と WorldGuard API の依存は transitive ではない。
+- `build.gradle.kts`: Purpur API、FAWE Bukkit、CoreProtect API、WorldGuard Bukkit/Core を `compileOnly`、Kotlin stdlib を `implementation` とし、配備用 JAR ではルートの `build.gradle.kts` の設定で relocate する。CoreProtect と WorldGuard API の依存は transitive ではない。
 - **CoreProtect:** API v10 以上を確認する。各 DirectState 直接編集を removal、placement、`DirectState` interaction の3ログとして記録する。記録失敗は最初の一度だけ警告し、編集結果は戻さない。
 - **WorldGuard:** `onLoad` で `directstate-no-updates` StateFlag（既定 deny）を登録し、領域ルールから更新抑制の可否だけを受け取る。同名で別種のフラグがある場合は利用できない。登録時の `IllegalStateException` は完全再起動を促す。
 - **FastAsyncWorldEdit:** soft dependency と compileOnly API はあるが、DirectState コードから FAWE API を呼び出していない。
