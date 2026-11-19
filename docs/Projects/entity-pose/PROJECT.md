@@ -26,7 +26,7 @@ last_validated: "2026-10-13"
 | 実装の正本 | `plugins/EntityPose/` |
 | 主要コード | `EntityPose.kt`（初期化・イベント登録）、`EntityCommands.kt`（`/ep`）、`EntityClick.kt`（エンティティ棒と設定画面）、`EntityCopyClick.kt`（範囲選択）、`commands/EntityCopy.kt`・`commands/EntityPaste.kt`（コピー形式と複製） |
 | テスト | `src/test/kotlin/me/ankokunsan/entityPose/EntityTeamEntryCleanupListenerTest.kt`。スコアボードのエントリをエンティティ削除時に消すかどうかの判定だけをテストする |
-| ビルド | `nix develop --command gradle :plugins:EntityPose:build`。`plugins/EntityPose/build.gradle.kts` は Purpur API をコンパイル時とテスト時に使う |
+| ビルド | `nix develop --command gradle :plugins:EntityPose:build`。`plugins/EntityPose/build.gradle.kts` は Purpur API をコンパイル時とテスト時に使う。配備用 JAR の Kotlin はルートの `build.gradle.kts` の設定で relocate する |
 | Nix package | `packages/oyasai-plugins.nix` が Gradle ビルド済みプラグインを集め、ディレクトリ名を小文字にした `entitypose` 属性を公開する。`packages/oyasai-plugin-registry/package.nix` がその属性をregistryへ加え、`packages/oyasai-minecraft-main.nix` がPaper向け一覧で選択する |
 
 ## 技術仕様

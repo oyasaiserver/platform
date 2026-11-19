@@ -79,7 +79,7 @@ OyasaiGames は、ミニゲーム・武器・生活アイテムをまとめた B
 ### イベントと外部 API
 
 - `plugin.yml` は Bukkit/Paper のプラグイン記述子です。`api-version` は `1.21` です。
-- `build.gradle.kts` のコンパイル時依存は Purpur API、FAWE Bukkit API、Floodgate API。実装に Kotlin 標準ライブラリと SQLite JDBC を同梱します。テストには Purpur API と OyasaiEconomy API を使います。
+- `build.gradle.kts` のコンパイル時依存は Purpur API、FAWE Bukkit API、Floodgate API。Kotlin 標準ライブラリと SQLite JDBC を同梱します。配備用 JAR の Kotlin はルートの `build.gradle.kts` の設定で relocate します。テストには Purpur API と OyasaiEconomy API を使います。
 - `plugin.yml` の softdepend は OyasaiEconomy、SlotMachine、CrackShot、pvparena、WorldEdit、FastAsyncWorldEdit、BedWars、ScreamingBedWars、SBA、TNTRun_reloaded、Multiverse-Core、floodgate です。
 - OyasaiEconomy は Slot の経済決済、PvP/BedWars/TNTRun の有効化された支払い・報酬で使います。WorldEdit/FAWE は PvP schematic の貼り戻し、Floodgate は Dice の Bedrock クライアント判定に使います。
 - SlotMachine、CrackShot、BedWars/ScreamingBedWars、TNTRun_reloaded は同名機能との競合時に内蔵機能を停止します。PvP は起動時に有効な PvPArena を検出して停止します。後から有効になったプラグインを監視するかどうかは機能ごとに異なります。

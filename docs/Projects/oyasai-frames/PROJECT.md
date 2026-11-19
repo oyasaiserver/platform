@@ -112,7 +112,7 @@ last_validated: "2026-10-13"
 
 - 実行 API は Purpur/Paper Bukkit API。ビルドは Purpur API を compileOnly として使います。
 - WorldGuard Bukkit/Core と FastAsyncWorldEdit は compileOnly、plugin.yml の softdepend です。WorldGuard API はポスター配置の建築判定に使用します。FAWE の API は直接呼ばず、旧 PDC を持つ額縁を EntitySpawnEvent 後に記録します。
-- SQLite JDBC、zstd-jni、WebP ImageIO、AnvilGUI は implementation 依存です。build.gradle.kts の shadowJar 設定で不要なネイティブライブラリ対象を除外します。WebP Reader は起動時に ImageIO registry へ登録し、停止時に解除します。
+- SQLite JDBC、zstd-jni、WebP ImageIO、AnvilGUI は implementation 依存です。build.gradle.kts の shadowJar 設定で不要なネイティブライブラリ対象を除外します。配備用 JAR の Kotlin はルートの `build.gradle.kts` の設定で relocate します。WebP Reader は起動時に ImageIO registry へ登録し、停止時に解除します。
 - CoreProtect は runtime dependency ではありません。移行時の CSV を外部で準備する場合のみ使います。
 - 互換を目的にした公開 LWC API や ImageOnMap Bukkit API を宣言する実装はありません。
 

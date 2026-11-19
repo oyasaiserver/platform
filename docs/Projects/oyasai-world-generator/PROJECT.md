@@ -96,7 +96,7 @@ source: plugins/OyasaiWorldGenerator/（コードから作成。ゲーム内で�
 
 ### 外部 API・依存
 
-- プラグイン固有 `build.gradle.kts` は Paperweight Userdev と Purpur development bundle を使い、FAWE Bukkit API を `compileOnly`、テストの Purpur API を `testImplementation` にします。ルート `build.gradle.kts` は `:plugins:` 配下へ Kotlin JVM・Shadow・Java Library を適用し、通常 jar を無効化して `build` を `shadowJar` に依存させます。成果物は `OyasaiWorldGenerator.jar`（version/classifier なし）です。
+- プラグイン固有 `build.gradle.kts` は Paperweight Userdev と Purpur development bundle を使い、FAWE Bukkit API を `compileOnly`、テストの Purpur API を `testImplementation` にします。ルート `build.gradle.kts` は `:plugins:` 配下へ Kotlin JVM・Shadow・Java Library を適用し、通常 jar を無効化して `build` を `shadowJar` に依存させます。成果物は `OyasaiWorldGenerator.jar`（version/classifier なし）です。Kotlin の relocate は配備用 `shadowJar` に適用し、障害注入用 `failureTestShadowJar` は元の Kotlin パッケージを使います。
 - `PortalSelection` は FAWE が有効なときだけ WorldEdit の選択範囲 API を呼びます。FAWE 未導入でポータル範囲選択が必要な操作は `[MVP] FAWE が必要です` を返します。
 - Multiverse API は依存していません。プラグイン名の有無を調べ、旧形式 YAML を直接読み取るだけです。CustomWorldHeight も実行時依存ではありません。
 - 高さ Provider は `org.bukkit.craftbukkit.CraftWorld`、Minecraft の `MappedRegistry` / `ServerLevel` / `DimensionType`、Moonrise/Starlight、リフレクションと JDK `Unsafe` を使用します。対応判定は Minecraft `26.3` かつサーバー名に `Purpur` を含む場合のみです。OWG のサービス API 登録はありません。

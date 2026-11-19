@@ -26,7 +26,7 @@ last_validated: "2026-10-13"
 | 実装の正本 | `plugins/SocialVotes/` |
 | 主要コード | `src/main/kotlin/com/github/sahyuya/socialvotes/SocialVotes.kt`（初期化・登録）、`data/DataManager.kt`・`data/Models.kt`（データと保存）、`listeners/SignCreateListener.kt`・`SignClickListener.kt`・`ProtectListener.kt`（看板イベント・投票）、`gui/`・`ChatInput.kt`（GUI・入力）、`commands/`（コマンド） |
 | テスト | `src/test/` はなく、今回確認した SocialVotes ツリーに自動テストはありません。 |
-| ビルド | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:SocialVotes:build`。ルート Gradle は `build` に `shadowJar` を含めます。 |
+| ビルド | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:SocialVotes:build`。ルート Gradle は `build` に `shadowJar` を含め、配備用 JAR の Kotlin を relocate します。 |
 | Nix package | `packages/oyasai-plugins.nix` が `SocialVotes.jar` を生成して小文字の `socialvotes` 属性を公開し、`packages/oyasai-plugin-registry/package.nix` がレジストリへ統合します。`packages/oyasai-minecraft-main.nix` の Paper プラグイン一覧が `socialvotes` を選択します。 |
 
 ## 技術仕様

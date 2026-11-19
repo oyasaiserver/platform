@@ -53,6 +53,20 @@ allprojects {
   }
 }
 
+// Keep bundled Kotlin isolated for plugins whose shaded JARs have been verified.
+val kotlinRelocationTargets =
+    mapOf(
+        "CitiesSkyMine" to "icu.oyasai.citiesskymine.libs.kotlin",
+        "DirectState" to "io.oyasai.directstate.libs.kotlin",
+        "EntityPose" to "me.ankokunsan.entityPose.libs.kotlin",
+        "OyasaiFrames" to "icu.oyasai.frames.libs.kotlin",
+        "OyasaiGames" to "icu.oyasai.games.libs.kotlin",
+        "OyasaiMusic" to "com.oyasai.music.libs.kotlin",
+        "OyasaiVehicles" to "io.oyasai.vehicles.libs.kotlin",
+        "OyasaiWorldGenerator" to "io.oyasai.worldgen.libs.kotlin",
+        "SocialVotes" to "com.github.sahyuya.socialvotes.libs.kotlin",
+    )
+
 subprojects {
   if (!project.path.startsWith(":plugins:")) {
     return@subprojects
@@ -61,6 +75,10 @@ subprojects {
   apply(plugin = "org.jetbrains.kotlin.jvm")
   apply(plugin = "com.gradleup.shadow")
   apply(plugin = "java-library")
+
+  kotlinRelocationTargets[project.name]?.let { target ->
+    tasks.named<ShadowJar>("shadowJar") { relocate("kotlin", target) }
+  }
 
   dependencies {
     add("testImplementation", rootProject.libs.kotlin.test.junit5)

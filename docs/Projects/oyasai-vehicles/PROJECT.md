@@ -103,7 +103,7 @@ CarBuilder2 と AircraftBuilder で車両・航空機を作成、試乗、購入
 
 ### 外部 API・依存
 
-- ビルドは Paperweight Userdev の Purpur development bundle、Kotlin stdlib、FAWE Bukkit API (`compileOnly`) を使います。plugin.yml は `FastAsyncWorldEdit` を `softdepend` として宣言します。
+- ビルドは Paperweight Userdev の Purpur development bundle、Kotlin stdlib、FAWE Bukkit API (`compileOnly`) を使います。配備用 JAR の Kotlin はルートの `build.gradle.kts` の設定で relocate します。plugin.yml は `FastAsyncWorldEdit` を `softdepend` として宣言します。
 - schematic の保存・読込で WorldEdit API を使います。`WorldEdit.getInstance()` が null の場合にロードの警告・保存の `WorldEdit読み込み失敗` を表示します。WorldEdit クラス自体がない場合のクラス解決エラーは捕捉しておらず、未導入時の警告到達は保証されません。
 - CraftBukkit/NMS の `CraftPlayer`、`CraftWorld`、Netty、Minecraft packet を直接使用します。車両の搭乗者同期、ArmorStand の bounding box、表示 packet 制御が対象です。
 - OyasaiEconomy などの経済 API や公開 Java API は使いません。ポイント処理は同梱の `MileagePoint` に閉じています。

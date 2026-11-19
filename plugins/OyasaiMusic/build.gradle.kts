@@ -17,7 +17,6 @@ tasks {
   shadowJar {
     minimize { exclude(dependency(libs.sqlite.jdbc.get())) }
     relocate("org.sqlite", "com.oyasai.music.libs.sqlite")
-    relocate("kotlin", "com.oyasai.music.libs.kotlin")
   }
 
   processResources {
