@@ -81,8 +81,8 @@
   },
   "worldguard": {
     "paper": {
-      "slug": "worldguard",
-      "type": "modrinth"
+      "type": "url",
+      "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/9YdeGXiK/worldguard-bukkit-7.0.20.jar"
     }
   }
 }
