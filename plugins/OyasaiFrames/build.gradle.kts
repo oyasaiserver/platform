@@ -2,6 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 version = "6.0.0"
 
+repositories { maven("https://mvn.wesjd.net/") { content { includeGroup("net.wesjd") } } }
+
 dependencies {
   compileOnly(libs.purpur.api)
   compileOnly(libs.worldguard.bukkit) { isTransitive = false }
