@@ -4,7 +4,8 @@
     "noCheck": true,
     "noEmit": false,
     "outDir": "dist",
-    "rootDir": "gen"
+    "rootDir": "gen",
+    "verbatimModuleSyntax": false
   },
   "extends": "../../tsconfig.json",
   "include": ["gen/**/*"]
