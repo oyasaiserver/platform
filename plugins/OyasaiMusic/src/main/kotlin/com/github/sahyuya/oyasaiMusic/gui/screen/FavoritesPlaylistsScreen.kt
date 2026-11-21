@@ -24,18 +24,20 @@ class FavoritesPlaylistsScreen(
     // サヒュヤ氏の指示: 5×8フル(40スロット)、slot1(左上)から詰めて表示する。
     val SLOTS: List<Int> = ContentGrid.SLOTS
     private const val FAVORITES_INDEX = 1 // SLOTS[0] は常に「お気に入り」固定
+    val MAX_PLAYLISTS: Int = SLOTS.size - FAVORITES_INDEX - 1
   }
 
   private var playlists: List<Playlist> = emptyList()
   private var pendingDeletePlaylistId: Long? = null
 
   init {
+    render()
     reload()
   }
 
   override fun refresh() = reload()
 
-  private fun reload() {
+  private fun reload(reopen: Boolean = false) {
     Bukkit.getScheduler()
         .runTaskAsynchronously(
             plugin,
@@ -46,10 +48,17 @@ class FavoritesPlaylistsScreen(
                   .runTask(
                       plugin,
                       Runnable {
+                        if (!viewer.isOnline) return@Runnable
                         playlists = list
                         render(favoriteCount)
-                        // Anvil入力等を経由してGUIが一旦閉じられていた場合でも確実に再表示する。
-                        menuManager.open(viewer, this, rememberAsPrevious = false)
+                        // Anvil入力等を経由してGUIが一旦閉じられていた場合のみ、別画面へ遷移していなければ再表示する。
+                        if (
+                            reopen &&
+                                menuManager.lastKnownMenu(viewer.uniqueId) === this &&
+                                viewer.openInventory.topInventory !== inventory
+                        ) {
+                          menuManager.open(viewer, this, rememberAsPrevious = false)
+                        }
                       },
                   )
             },
@@ -67,6 +76,7 @@ class FavoritesPlaylistsScreen(
         plugin = plugin,
         actionModeCategory = ActionModeCategory.PLAYLIST_LIST,
     )
+    SLOTS.forEach { inventory.setItem(it, null) }
 
     inventory.setItem(
         SLOTS[0],
@@ -83,7 +93,7 @@ class FavoritesPlaylistsScreen(
     }
 
     val createIndex = FAVORITES_INDEX + 1 + playlists.size
-    if (createIndex < SLOTS.size) {
+    if (createIndex < SLOTS.size && playlists.size < MAX_PLAYLISTS) {
       inventory.setItem(
           SLOTS[createIndex],
           GuiItemBuilder(Material.WRITABLE_BOOK)
@@ -178,18 +188,33 @@ class FavoritesPlaylistsScreen(
   }
 
   private fun createPlaylist() {
+    if (playlists.size >= MAX_PLAYLISTS) {
+      GuiFeedback.invalid(viewer, "プレイリストは最大${MAX_PLAYLISTS}個まで作成できます")
+      return
+    }
     AnvilTextInputSession.open(plugin, viewer, Component.text("新しいプレイリスト名")) { name ->
       Bukkit.getScheduler()
           .runTaskAsynchronously(
               plugin,
               Runnable {
+                if (plugin.playlistRepository.listByOwner(viewer.uniqueId).size >= MAX_PLAYLISTS) {
+                  Bukkit.getScheduler()
+                      .runTask(
+                          plugin,
+                          Runnable {
+                            viewer.sendMessage("§cプレイリストは最大${MAX_PLAYLISTS}個まで作成できます。")
+                            reload(reopen = true)
+                          },
+                      )
+                  return@Runnable
+                }
                 plugin.playlistRepository.create(viewer.uniqueId, name)
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
                         Runnable {
                           viewer.sendMessage("§aプレイリスト「$name」を作成しました。")
-                          reload()
+                          reload(reopen = true)
                         },
                     )
               },
@@ -214,7 +239,7 @@ class FavoritesPlaylistsScreen(
                         plugin,
                         Runnable {
                           viewer.sendMessage("§aプレイリスト名を変更しました: $newName")
-                          reload()
+                          reload(reopen = true)
                         },
                     )
               },
@@ -259,18 +284,34 @@ class FavoritesPlaylistsScreen(
                 val target = Bukkit.getPlayerExact(targetName)
                 if (target == null) {
                   viewer.sendMessage("§cオンラインのプレイヤーが見つかりません: $targetName")
-                  reload()
+                  reload(reopen = true)
                   return@Runnable
                 }
                 if (target.uniqueId == viewer.uniqueId) {
                   viewer.sendMessage("§c自分自身には共有できません。")
-                  reload()
+                  reload(reopen = true)
                   return@Runnable
                 }
                 Bukkit.getScheduler()
                     .runTaskAsynchronously(
                         plugin,
                         Runnable {
+                          if (
+                              plugin.playlistRepository.listByOwner(target.uniqueId).size >=
+                                  MAX_PLAYLISTS
+                          ) {
+                            Bukkit.getScheduler()
+                                .runTask(
+                                    plugin,
+                                    Runnable {
+                                      viewer.sendMessage(
+                                          "§c${target.name} のプレイリストが上限（${MAX_PLAYLISTS}個）に達しているため共有できません。"
+                                      )
+                                      reload(reopen = true)
+                                    },
+                                )
+                            return@Runnable
+                          }
                           val songs =
                               plugin.playlistRepository.listSongs(requireNotNull(playlist.id))
                           val newPlaylistId =
@@ -296,7 +337,7 @@ class FavoritesPlaylistsScreen(
                                     target.sendMessage(
                                         "§d${viewer.name} からプレイリスト「${playlist.name}」が共有されました！ §7(ストレージ・お気に入り・プレイリストに追加されました)"
                                     )
-                                    reload()
+                                    reload(reopen = true)
                                   },
                               )
                         },

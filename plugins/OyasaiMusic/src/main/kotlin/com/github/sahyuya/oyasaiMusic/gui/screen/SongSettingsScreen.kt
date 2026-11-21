@@ -467,7 +467,7 @@ class SongSettingsScreen(
         initialText = song.price.toString(),
     ) { text ->
       val price = text.toIntOrNull()
-      if (price == null || price < 0) {
+      if (price == null || price < -1) {
         Bukkit.getScheduler()
             .runTask(
                 plugin,
