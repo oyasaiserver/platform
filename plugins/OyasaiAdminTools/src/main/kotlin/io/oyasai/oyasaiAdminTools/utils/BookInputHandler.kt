@@ -13,7 +13,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerEditBookEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.persistence.PersistentDataType
@@ -76,6 +78,10 @@ object BookInputHandler : Listener {
     if (!event.isSigning) return
 
     val player = event.player
+    if (!sessionId.startsWith("${player.uniqueId}:")) {
+      event.isCancelled = true
+      return
+    }
     val callback = sessions.remove(sessionId) ?: return
 
     // Join pages starting from the second page (index 1)
@@ -92,16 +98,53 @@ object BookInputHandler : Listener {
         .runTask(
             plugin,
             Runnable {
-              val item = player.inventory.itemInMainHand
+              val mainItem = player.inventory.itemInMainHand
               if (
-                  item.itemMeta
+                  mainItem.itemMeta
                       ?.persistentDataContainer
                       ?.get(sessionIdKey, PersistentDataType.STRING) == sessionId
               ) {
                 player.inventory.setItemInMainHand(null)
               }
+              val offItem = player.inventory.itemInOffHand
+              if (
+                  offItem.itemMeta
+                      ?.persistentDataContainer
+                      ?.get(sessionIdKey, PersistentDataType.STRING) == sessionId
+              ) {
+                player.inventory.setItemInOffHand(null)
+              }
+              val slot = event.slot
+              if (slot in 0 until player.inventory.size) {
+                val slotItem = player.inventory.getItem(slot)
+                if (
+                    slotItem
+                        ?.itemMeta
+                        ?.persistentDataContainer
+                        ?.get(sessionIdKey, PersistentDataType.STRING) == sessionId
+                ) {
+                  player.inventory.setItem(slot, null)
+                }
+              }
               callback(content)
             },
         )
+  }
+
+  @EventHandler
+  fun onPlayerQuit(event: PlayerQuitEvent) {
+    val prefix = "${event.player.uniqueId}:"
+    sessions.keys.removeIf { it.startsWith(prefix) }
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onBookDrop(event: PlayerDropItemEvent) {
+    val meta = event.itemDrop.itemStack.itemMeta ?: return
+    if (!meta.persistentDataContainer.has(editorKey, PersistentDataType.BYTE)) return
+    val sessionId = meta.persistentDataContainer.get(sessionIdKey, PersistentDataType.STRING)
+    if (sessionId != null && sessionId.startsWith("${event.player.uniqueId}:")) {
+      sessions.remove(sessionId)
+    }
+    event.itemDrop.remove()
   }
 }

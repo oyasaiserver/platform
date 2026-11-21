@@ -54,13 +54,11 @@ object SurveyExporter {
                 // Generate CSV using utility
                 val csvContent = CSVUtils.createCsv(headers, rows)
 
-                val client = WebhookClient.withUrl(webhookUrl)
-
-                // Send as CSV file
-                client.send("📊 **アンケート結果エクスポート (CSV): ${survey.title}**")
-                client.send(csvContent.toByteArray(), "results_${surveyId}.csv")
-
-                client.close()
+                WebhookClient.withUrl(webhookUrl).use { client ->
+                  // Send as CSV file
+                  client.send("📊 **アンケート結果エクスポート (CSV): ${survey.title}**")
+                  client.send(csvContent.toByteArray(), "results_${surveyId}.csv")
+                }
                 player.sendMessage("<green>データをCSV形式でDiscordに送信しました。</green>".mm())
               } catch (e: Exception) {
                 player.sendMessage("<red>Discordへの送信に失敗しました: ${e.message}</red>".mm())
@@ -82,20 +80,20 @@ object SurveyExporter {
             plugin,
             Runnable {
               try {
-                val client = WebhookClient.withUrl(webhookUrl)
-                val embed =
-                    WebhookEmbedBuilder()
-                        .setTitle(WebhookEmbed.EmbedTitle(survey.title, null))
-                        .setDescription("プレイヤー **${player.name}** がアンケートに回答しました。")
-                        .setColor(0x00FF00)
+                WebhookClient.withUrl(webhookUrl).use { client ->
+                  val embed =
+                      WebhookEmbedBuilder()
+                          .setTitle(WebhookEmbed.EmbedTitle(survey.title, null))
+                          .setDescription("プレイヤー **${player.name}** がアンケートに回答しました。")
+                          .setColor(0x00FF00)
 
-                survey.questions.forEachIndexed { i, q ->
-                  val answer = answers.getOrNull(i) ?: "未回答"
-                  embed.addField(WebhookEmbed.EmbedField(true, q.text, answer))
+                  survey.questions.forEachIndexed { i, q ->
+                    val answer = answers.getOrNull(i) ?: "未回答"
+                    embed.addField(WebhookEmbed.EmbedField(true, q.text, answer))
+                  }
+
+                  client.send(embed.build())
                 }
-
-                client.send(embed.build())
-                client.close()
               } catch (e: Exception) {
                 plugin.logger.warning(
                     "Failed to send discord notification for survey ${survey.id}: ${e.message}"
