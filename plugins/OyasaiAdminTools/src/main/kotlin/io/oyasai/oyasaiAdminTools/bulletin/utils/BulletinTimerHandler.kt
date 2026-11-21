@@ -18,7 +18,8 @@ object BulletinTimerHandler {
       onExpire: (() -> Unit)? = null,
       onTick: (() -> Unit)? = null,
       playerFilter: ((Player) -> Boolean)? = null,
-  ): BukkitTask {
+  ): BukkitTask? {
+    if (interval <= 0L) return null
     val taskWrapper =
         object : Runnable {
           var task: BukkitTask? = null

@@ -119,7 +119,12 @@ object WorldBorderCommandExecutor : CommandExecutor, TabCompleter {
       return true
     }
     val radiusZ = parseRadiusToken(radiusArgs.getOrNull(1)) ?: radiusX
-    if (radiusX < WorldBorderManager.knockBack || radiusZ < WorldBorderManager.knockBack) {
+    if (
+        radiusX <= 0 ||
+            radiusZ <= 0 ||
+            radiusX < WorldBorderManager.knockBack ||
+            radiusZ < WorldBorderManager.knockBack
+    ) {
       sender.sendMessage("§c半径はノックバック距離 (${WorldBorderManager.knockBack}) より大きくしてください。")
       return true
     }
@@ -177,6 +182,15 @@ object WorldBorderCommandExecutor : CommandExecutor, TabCompleter {
         if (radiusArgs.size >= 2) parseRelativeRadius(radiusArgs[1], current.radiusZ) else radiusX
     if (radiusX == null || radiusZ == null) {
       sender.sendMessage("§c半径は整数、または +50 / -50 のように指定してください。")
+      return true
+    }
+    if (
+        radiusX <= 0 ||
+            radiusZ <= 0 ||
+            radiusX < WorldBorderManager.knockBack ||
+            radiusZ < WorldBorderManager.knockBack
+    ) {
+      sender.sendMessage("§c半径はノックバック距離 (${WorldBorderManager.knockBack}) より大きくしてください。")
       return true
     }
     WorldBorderManager.setRadii(worldName, radiusX, radiusZ)
@@ -276,9 +290,16 @@ object WorldBorderCommandExecutor : CommandExecutor, TabCompleter {
 
   private fun parseRelativeRadius(raw: String, current: Int): Int? {
     return when {
-      raw.startsWith("+") -> raw.substring(1).toIntOrNull()?.let { current + it }
+      raw.startsWith("+") ->
+          raw.substring(1).toLongOrNull()?.let {
+            val sum = current.toLong() + it
+            if (sum in Int.MIN_VALUE..Int.MAX_VALUE) sum.toInt() else null
+          }
       raw.startsWith("-") && raw.length > 1 && raw[1].isDigit() ->
-          raw.substring(1).toIntOrNull()?.let { current - it }
+          raw.substring(1).toLongOrNull()?.let {
+            val diff = current.toLong() - it
+            if (diff in Int.MIN_VALUE..Int.MAX_VALUE) diff.toInt() else null
+          }
       else -> raw.toIntOrNull()
     }
   }
