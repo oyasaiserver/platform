@@ -15,10 +15,15 @@ import kotlin.math.floor
 import kotlin.math.roundToLong
 import net.kyori.adventure.text.Component
 import org.bukkit.FluidCollisionMode
+import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
+import org.bukkit.block.BlockState
+import org.bukkit.block.BrushableBlock
+import org.bukkit.block.Campfire
+import org.bukkit.block.Container
 import org.bukkit.block.TileState
 import org.bukkit.block.data.type.Door
 import org.bukkit.entity.Cushion
@@ -36,6 +41,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.InventoryHolder
 
 /**
  * Bukkitの操作イベントを、Hand編集・シンプル棒・ホールド棒・素材置換の各処理へ振り分ける。 この層を挟むことで、各EditorはBukkitイベントのキャンセル規則を知らずに済む。
@@ -179,6 +185,33 @@ internal class EditInteractionListener(
     }
   }
 
+  private fun isIgnoredBlock(block: Block?): Boolean {
+    if (block == null || ignoredBlockPdcKeys.isEmpty()) return false
+    val state = block.state
+    return state is TileState && ignoredBlockPdcKeys.any { state.persistentDataContainer.has(it) }
+  }
+
+  private fun isItemHolder(state: BlockState): Boolean =
+      state is Container || state is InventoryHolder || state is Campfire || state is BrushableBlock
+
+  private fun isSpawnProtected(player: Player, location: Location): Boolean {
+    val world = location.world ?: return false
+    val server = player.server
+    if (player.isOp || server.operators.isEmpty() || world != server.worlds.firstOrNull()) {
+      return false
+    }
+    val spawn = world.spawnLocation ?: return false
+    val radius = server.spawnRadius
+    return radius > 0 &&
+        kotlin.math.max(
+            kotlin.math.abs(location.blockX - spawn.blockX),
+            kotlin.math.abs(location.blockZ - spawn.blockZ),
+        ) <= radius
+  }
+
+  private fun canModifyBlock(player: Player, block: Block): Boolean =
+      !isSpawnProtected(player, block.location) && canEditEntity(player, block.location)
+
   /** DirectStateが扱う操作だけを受理し、バニラ操作と他プラグインの拒否を尊重して振り分ける。 */
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun interact(event: PlayerInteractEvent) {
@@ -186,14 +219,10 @@ internal class EditInteractionListener(
     val item = event.item
     val handTool = tools.isHandTool(item)
     val emptyHandEditing = wantsHandEditing(event)
-    if (emptyHandEditing && ignoredBlockPdcKeys.isNotEmpty()) {
-      val state = event.clickedBlock?.state
-      if (state is TileState && ignoredBlockPdcKeys.any { state.persistentDataContainer.has(it) })
-          return
-    }
     val handEditing = handTool || emptyHandEditing
     val directReplacement = wantsDirectReplacement(event)
     if (!tools.isTool(item) && !handEditing && !directReplacement) return
+    if (isIgnoredBlock(event.clickedBlock)) return
 
     val leftClick = event.action == Action.LEFT_CLICK_BLOCK
     val holdTool = tools.isHoldTool(item)
@@ -220,6 +249,7 @@ internal class EditInteractionListener(
 
     // 未対応ブロックではイベントを消費せず、チェスト等の通常操作を残す。
     val clickedBlock = event.clickedBlock
+    if (clickedBlock != null && !canModifyBlock(player, clickedBlock)) return
     if (handEditing && (clickedBlock == null || !handEditor.supports(clickedBlock.blockData)))
         return
     if (event.clickedBlock != null && event.useInteractedBlock() == Event.Result.DENY) return
@@ -248,11 +278,12 @@ internal class EditInteractionListener(
         bothHandsEmpty
   }
 
-  /** 手持ちブロックによる置換を選ぶ条件。編集棒は置換用ブロックとして扱わない。 */
+  /** 手持ちブロックによる置換を選ぶ条件。編集棒は置換用ブロックとして扱わない。クリエイティブのみ有効。 */
   private fun wantsDirectReplacement(event: PlayerInteractEvent): Boolean {
     val item = event.item ?: return false
     val configured = playerSettings.get(event.player.uniqueId)
-    return configured.replacementEnabled &&
+    return event.player.gameMode == GameMode.CREATIVE &&
+        configured.replacementEnabled &&
         !configured.itemlessModesDisabled &&
         !event.player.isSneaking &&
         event.action == Action.RIGHT_CLICK_BLOCK &&
@@ -319,19 +350,36 @@ internal class EditInteractionListener(
     }
   }
 
-  /** ロック確認後に置換計画を適用し、最終材質をプレイヤーへ表示する。 */
+  /** ロック・保護・コンテナ確認後に置換計画を適用し、最終材質をプレイヤーへ表示する。 */
   private fun replace(
       player: Player,
       block: Block,
       sampled: Material,
       typeReplace: TypeReplaceMode,
   ) {
+    if (player.gameMode != GameMode.CREATIVE) return
     if (holdEditor.isLocked(block, player.uniqueId)) {
       player.sendActionBar(Component.text("他のプレイヤーが編集中です"))
       return
     }
 
     val plan = blockReplacement.plan(block, sampled, typeReplace) ?: return
+    if (plan.changes.any { holdEditor.isLocked(it.block, player.uniqueId) }) {
+      player.sendActionBar(Component.text("他のプレイヤーが編集中です"))
+      return
+    }
+    if (plan.changes.any { isIgnoredBlock(it.block) || !canModifyBlock(player, it.block) }) {
+      return
+    }
+    if (plan.changes.any { isItemHolder(it.block.state) }) {
+      player.sendActionBar(Component.text("コンテナブロックは置換できません"))
+      return
+    }
+    for (change in plan.changes) {
+      val breakEvent = BlockBreakEvent(change.block, player).apply { isDropItems = false }
+      player.server.pluginManager.callEvent(breakEvent)
+      if (breakEvent.isCancelled) return
+    }
     holdEditor.stop(player.uniqueId)
     edits.apply(player, plan.changes)
     player.sendActionBar(Component.text("素材置換: ${plan.target.key.key}"))
@@ -348,7 +396,7 @@ internal class EditInteractionListener(
     val changedBlocks = mutableListOf(BlockEdit(block, data, result.blockEntityPresent))
     if (data is Door && (block.blockData as? Door)?.isOpen != data.isOpen) {
       val other = blockReplacement.counterpart(block)
-      if (other != null) {
+      if (other != null && !isIgnoredBlock(other) && canModifyBlock(player, other)) {
         val otherData = other.blockData
         if (otherData is Door)
             changedBlocks += BlockEdit(other, otherData.apply { isOpen = data.isOpen })
