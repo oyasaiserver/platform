@@ -39,6 +39,7 @@ import org.bukkit.event.entity.EntityMountEvent
 import org.bukkit.event.entity.EntityTeleportEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
@@ -783,6 +784,7 @@ object BigWolfKeys {
   // v3: 性質（定型/非定型）関連
   lateinit var TEMPERAMENT: NamespacedKey
   lateinit var STORED_TEMPERAMENT: NamespacedKey
+  lateinit var STORED_RECOVER_VERSION: NamespacedKey
 
   // PCDバージョン定数
   const val CURRENT_PCD_VERSION = 3
@@ -854,6 +856,7 @@ object BigWolfKeys {
     // v3: 性質（定型/非定型）関連
     TEMPERAMENT = NamespacedKey(plugin, "temperament")
     STORED_TEMPERAMENT = NamespacedKey(plugin, "stored_temperament")
+    STORED_RECOVER_VERSION = NamespacedKey(plugin, "stored_recover_version")
   }
 }
 
@@ -1268,6 +1271,7 @@ data class PetData(
     var particleType: Int = 0,
     var isHovering: Boolean = false,
     var temperament: String = "typical",
+    var recoverVersion: Int = 0,
 )
 
 data class LocationData(val world: String, val x: Double, val y: Double, val z: Double)
@@ -4130,6 +4134,15 @@ class PetListGuiListener(private val guiManager: GuiManager) : Listener {
   }
 
   @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val inv = event.view.topInventory
+    if (!guiManager.openedPetListGuis.containsKey(inv)) return
+    if (event.rawSlots.any { it < inv.size }) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler
   fun onInventoryClose(event: InventoryCloseEvent) {
     guiManager.openedPetListGuis.remove(event.view.topInventory)
   }
@@ -4204,6 +4217,15 @@ class PetDetailGuiListener(
   }
 
   @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val inv = event.view.topInventory
+    if (!guiManager.openedPetDetailGuis.containsKey(inv)) return
+    if (event.rawSlots.any { it < inv.size }) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler
   fun onInventoryClose(event: InventoryCloseEvent) {
     guiManager.openedPetDetailGuis.remove(event.view.topInventory)
   }
@@ -4237,6 +4259,15 @@ class AbandonConfirmGuiListener(
         player.closeInventory()
         executePetAbandonFn(player, pet)
       }
+    }
+  }
+
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val inv = event.view.topInventory
+    if (!guiManager.openedAbandonConfirmGuis.containsKey(inv)) return
+    if (event.rawSlots.any { it < inv.size }) {
+      event.isCancelled = true
     }
   }
 
@@ -4656,11 +4687,12 @@ class BreedGuiListener(
     if (titlePlain != "★ 交配するペットを選択") return
 
     event.isCancelled = true
+    val slot = event.rawSlot
+    if (slot < 0 || slot >= event.view.topInventory.size) return
 
     val clickedItem = event.currentItem ?: return
     if (clickedItem.type == Material.AIR) return
 
-    val slot = event.slot
     val pets = guiPets[player.uniqueId] ?: emptyList()
 
     when {
@@ -4841,6 +4873,16 @@ class BreedGuiListener(
       return
     }
 
+    if (parent1.breedCount >= BigWolfConfig.maxBreedCount) {
+      player.sendMessage(Component.text("親1は交配回数の上限(${BigWolfConfig.maxBreedCount}回)に達しています", RED))
+      return
+    }
+
+    if (parent2.breedCount >= BigWolfConfig.maxBreedCount) {
+      player.sendMessage(Component.text("親2は交配回数の上限(${BigWolfConfig.maxBreedCount}回)に達しています", RED))
+      return
+    }
+
     player.closeInventory()
 
     // 交配実行
@@ -4849,6 +4891,15 @@ class BreedGuiListener(
     // 選択をクリア
     petCommandService.clearSelection(player)
     guiPets.remove(player.uniqueId)
+  }
+
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val titlePlain = PLAIN_TEXT.serialize(event.view.title())
+    if (titlePlain != "★ 交配するペットを選択") return
+    if (event.rawSlots.any { it < event.view.topInventory.size }) {
+      event.isCancelled = true
+    }
   }
 
   /** 交配GUIが閉じられた時 */
@@ -4935,8 +4986,7 @@ class PetInteractionListener(
     checkAndMigrateOwnerFn(entity, player)
     val isOwner = isOwnerFn(entity, player)
 
-    val plainName = entity.customName()?.let { PLAIN_TEXT.serialize(it) } ?: ""
-    if (entity.ownerId == null && !plainName.containsDefaultPetMarker()) return
+    if (entity.ownerId == null) return
 
     event.isCancelled = true
 
@@ -5039,12 +5089,15 @@ class PetInventoryListener(
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent) {
     val player = event.whoClicked as? Player ?: return
-    val item = event.currentItem ?: return
+    val topInv = event.view.topInventory
+    val isTopSlot = event.rawSlot in 0 until topInv.size
 
     // パーティクル選択GUI
     if (event.view.title() == Component.text("パーティクル選択", GOLD)) {
       event.isCancelled = true
-      val entity = openedGuis[event.view.topInventory] ?: return
+      if (!isTopSlot) return
+      val item = event.currentItem ?: return
+      val entity = openedGuis[topInv] ?: return
 
       when (item.type) {
         Material.BARRIER,
@@ -5060,7 +5113,7 @@ class PetInventoryListener(
         Material.SLIME_BALL -> {
           // パーティクルを選択
           val particleId =
-              when (event.slot) {
+              when (event.rawSlot) {
                 0 -> 0 // なし
                 1 -> 1 // 電気
                 2 -> 2 // 炎
@@ -5106,7 +5159,9 @@ class PetInventoryListener(
     // メインメニューGUI
     if (event.view.title() == mainMenuTitle) {
       event.isCancelled = true
-      if (!openedMainMenus.contains(event.view.topInventory)) return
+      if (!isTopSlot) return
+      if (!openedMainMenus.contains(topInv)) return
+      val item = event.currentItem ?: return
 
       when (item.type) {
         Material.WRITTEN_BOOK -> {
@@ -5141,7 +5196,9 @@ class PetInventoryListener(
     // 購入GUI
     if (event.view.title() == shopGuiTitle) {
       event.isCancelled = true
-      val ctx = openedShopGuis[event.view.topInventory] ?: return player.closeInventory()
+      if (!isTopSlot) return
+      val item = event.currentItem ?: return
+      val ctx = openedShopGuis[topInv] ?: return player.closeInventory()
 
       when (item.type) {
         Material.EMERALD_BLOCK -> {
@@ -5214,9 +5271,11 @@ class PetInventoryListener(
     // 既存のペット情報GUI
     if (event.view.title() != guiTitle) return
     event.isCancelled = true
+    if (!isTopSlot) return
+    val item = event.currentItem ?: return
 
     val entity =
-        openedGuis[event.view.topInventory]
+        openedGuis[topInv]
             ?: return player.closeInventory().also {
               player.sendMessage(Component.text("操作対象のペットが見つかりません。", RED))
             }
@@ -5283,9 +5342,9 @@ class PetInventoryListener(
       }
 
       Material.BARRIER -> {
-        if (event.slot == 3) {
+        if (event.rawSlot == 3) {
           player.sendMessage(Component.text("スキルが未解放です。スキル強化の本を与えてください。", RED))
-        } else if (event.slot == 7) { // 閉じるボタン
+        } else if (event.rawSlot == 7) { // 閉じるボタン
           player.closeInventory()
         }
       }
@@ -5355,6 +5414,7 @@ class PetInventoryListener(
     val player = event.whoClicked as? Player ?: return
     if (event.view.title() != breedGuiTitle) return
     event.isCancelled = true
+    if (event.rawSlot < 0 || event.rawSlot >= event.view.topInventory.size) return
 
     val item = event.currentItem ?: return
     if (!item.hasItemMeta()) return
@@ -5374,6 +5434,25 @@ class PetInventoryListener(
     // BreedGuiListenerで処理される
     player.closeInventory()
     player.sendMessage(Component.text("交配システムが更新されました。/bigwolf breed を使用してください。", YELLOW))
+  }
+
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val topInv = event.view.topInventory
+    val title = event.view.title()
+    val isManaged =
+        openedGuis.containsKey(topInv) ||
+            openedShopGuis.containsKey(topInv) ||
+            openedMainMenus.contains(topInv) ||
+            title == Component.text("パーティクル選択", GOLD) ||
+            title == mainMenuTitle ||
+            title == shopGuiTitle ||
+            title == guiTitle ||
+            title == breedGuiTitle
+    if (!isManaged) return
+    if (event.rawSlots.any { it < topInv.size }) {
+      event.isCancelled = true
+    }
   }
 
   @EventHandler
@@ -5535,10 +5614,12 @@ class PetShopGuiListener(
     val player = event.whoClicked as? Player ?: return
     val title = event.view.title()
     val titlePlain = PLAIN_TEXT.serialize(title)
+    val isTopSlot = event.rawSlot in 0 until event.view.topInventory.size
 
     // メイン購入GUI
     if (titlePlain == "★ ペットショップ") {
       event.isCancelled = true
+      if (!isTopSlot) return
 
       val clickedItem = event.currentItem ?: return
       if (clickedItem.type == Material.AIR || clickedItem.type == Material.EMERALD) return
@@ -5586,6 +5667,7 @@ class PetShopGuiListener(
     // アイテムショップ カテゴリ選択GUI
     if (title == petShopGuiService.itemShopTitle) {
       event.isCancelled = true
+      if (!isTopSlot) return
       val clickedItem = event.currentItem ?: return
       when (clickedItem.type) {
         Material.ARROW -> {
@@ -5616,26 +5698,29 @@ class PetShopGuiListener(
     // ケア用品ショップ
     if (title == petShopGuiService.careShopTitle) {
       event.isCancelled = true
+      if (!isTopSlot) return
       val clickedItem = event.currentItem ?: return
       if (clickedItem.type == Material.ARROW) {
         player.closeInventory()
         petShopGuiService.openItemShopGui(player)
         return
       }
-      val cost =
+      val (cost, buyItem) =
           when {
-            PetItemFactory.isPetFood(clickedItem) -> BigWolfConfig.itemShopPetFoodCost
-            PetItemFactory.isPetBrush(clickedItem) -> BigWolfConfig.itemShopPetBrushCost
-            PetItemFactory.isPetTreat(clickedItem) -> BigWolfConfig.itemShopPetTreatCost
-            PetItemFactory.isPetHeal(clickedItem) -> BigWolfConfig.itemShopHealPotionCost
+            PetItemFactory.isPetFood(clickedItem) ->
+                BigWolfConfig.itemShopPetFoodCost to PetItemFactory.createPetFoodItem()
+            PetItemFactory.isPetBrush(clickedItem) ->
+                BigWolfConfig.itemShopPetBrushCost to PetItemFactory.createPetBrushItem()
+            PetItemFactory.isPetTreat(clickedItem) ->
+                BigWolfConfig.itemShopPetTreatCost to PetItemFactory.createPetTreatItem()
+            PetItemFactory.isPetHeal(clickedItem) ->
+                BigWolfConfig.itemShopHealPotionCost to PetItemFactory.createPetHealItem()
             else -> return
           }
       if (!consumeTokensFn(player, cost)) {
         player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
         return
       }
-      val buyItem = clickedItem.clone().apply { amount = 1 }
-      // loreから価格行を除いた元アイテムを渡すため、単純にcloneして支給
       player.inventory.addItem(buyItem).values.forEach {
         player.world.dropItem(player.location, it)
       }
@@ -5647,6 +5732,7 @@ class PetShopGuiListener(
     // スキルブックショップ
     if (title == petShopGuiService.skillShopTitle) {
       event.isCancelled = true
+      if (!isTopSlot) return
       val clickedItem = event.currentItem ?: return
       if (clickedItem.type == Material.ARROW) {
         player.closeInventory()
@@ -5671,6 +5757,7 @@ class PetShopGuiListener(
     // パーティクルショップ
     if (title == petShopGuiService.particleShopTitle) {
       event.isCancelled = true
+      if (!isTopSlot) return
       val clickedItem = event.currentItem ?: return
       if (clickedItem.type == Material.ARROW) {
         player.closeInventory()
@@ -5695,6 +5782,7 @@ class PetShopGuiListener(
     // おもちゃショップ
     if (title == petShopGuiService.toyShopTitle) {
       event.isCancelled = true
+      if (!isTopSlot) return
       val clickedItem = event.currentItem ?: return
       if (clickedItem.type == Material.ARROW) {
         player.closeInventory()
@@ -5718,6 +5806,7 @@ class PetShopGuiListener(
     // バリアント選択GUI
     if (titlePlain.endsWith("のバリアント選択")) {
       event.isCancelled = true
+      if (!isTopSlot) return
 
       val type = openedVariantGuis[player.uniqueId] ?: return
       val clickedItem = event.currentItem ?: return
@@ -5763,6 +5852,24 @@ class PetShopGuiListener(
       }
 
       return
+    }
+  }
+
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val title = event.view.title()
+    val titlePlain = PLAIN_TEXT.serialize(title)
+    val isShop =
+        titlePlain == "★ ペットショップ" ||
+            titlePlain.endsWith("のバリアント選択") ||
+            title == petShopGuiService.itemShopTitle ||
+            title == petShopGuiService.careShopTitle ||
+            title == petShopGuiService.skillShopTitle ||
+            title == petShopGuiService.particleShopTitle ||
+            title == petShopGuiService.toyShopTitle
+    if (!isShop) return
+    if (event.rawSlots.any { it < event.view.topInventory.size }) {
+      event.isCancelled = true
     }
   }
 
@@ -6154,10 +6261,24 @@ class PetInteractionService {
     entity.getAttribute(Attribute.SCALE)?.baseValue = scale
   }
 
+  private fun hasPetPdcMarker(entity: LivingEntity): Boolean {
+    val pdc = entity.persistentDataContainer
+    return pdc.has(BigWolfKeys.PET_ID, PersistentDataType.STRING) ||
+        pdc.has(BigWolfKeys.OWNER, PersistentDataType.STRING) ||
+        pdc.has(BigWolfKeys.FOOD, PersistentDataType.INTEGER)
+  }
+
   /** オーナーの移行チェック（古いペットの互換性） */
   fun checkAndMigrateOwner(entity: LivingEntity, player: Player) {
+    if (entity.ownerId != null) return
+    if (!hasPetPdcMarker(entity)) return
+    val petId = entity.petId
+    if (petId != null && PetDataManager.getPetData(player.uniqueId, petId) == null) return
+    if (entity is Tameable && entity.owner != null && entity.owner?.uniqueId != player.uniqueId) {
+      return
+    }
     val plainName = entity.customName()?.let { PLAIN_TEXT.serialize(it) } ?: ""
-    if (entity.ownerId == null && plainName.startsWithDefaultPetName(player.name)) {
+    if (plainName.startsWithDefaultPetName(player.name)) {
       entity.ownerId = player.uniqueId.toString()
     }
   }
@@ -6210,14 +6331,14 @@ class PetInteractionService {
   }
 
   fun healPet(player: Player, entity: LivingEntity) {
-    val item = player.inventory.itemInMainHand
-    if (item.amount > 0) {
-      item.amount -= 1
-    }
     val maxHealth = entity.getAttribute(Attribute.MAX_HEALTH)?.value ?: entity.health
     if (entity.health >= maxHealth) {
       player.sendMessage(Component.text("ペットの体力はすでに満タンです。", GRAY))
       return
+    }
+    val item = player.inventory.itemInMainHand
+    if (item.amount > 0) {
+      item.amount -= 1
     }
     entity.health =
         (entity.health + BigWolfConfig.healItemAmount.toDouble()).coerceAtMost(maxHealth)
@@ -6541,12 +6662,12 @@ class PetQueryService(
       return
     }
 
-    val hasEgg =
-        (player.inventory.contents.asSequence() + player.enderChest.contents.asSequence()).any {
-          it?.itemMeta
-              ?.persistentDataContainer
-              ?.get(BigWolfKeys.STORED_ID, PersistentDataType.STRING) == petData.petId
-        }
+    if (ActivePetRegistry.findByPetId(petData.petId) != null) {
+      player.sendMessage(Component.text("このペットは現在召喚中です。", RED))
+      return
+    }
+
+    val hasEgg = hasStoredEggInPossessionOrWorld(player, petData.petId)
     if (hasEgg) {
       player.sendMessage(Component.text("このペットのスポーンエッグはインベントリかエンダーチェストにあります。", RED))
       return
@@ -6557,6 +6678,10 @@ class PetQueryService(
     if (!economySystem.consumeTokens(player, cost)) {
       return
     }
+
+    // 旧エッグを無効化するため再取得世代を更新
+    petData.recoverVersion += 1
+    PetDataManager.savePet(player.uniqueId, petData)
 
     // スポーンエッグを生成して付与
     val type = runCatching { EntityType.valueOf(petData.type) }.getOrNull() ?: EntityType.WOLF
@@ -6571,6 +6696,46 @@ class PetQueryService(
 
     player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
     player.sendMessage(Component.text("ペット #${petNumber} のスポーンエッグを再取得しました！ (-${cost}pt)", GREEN))
+  }
+
+  private fun hasStoredEggInPossessionOrWorld(player: Player, targetPetId: String): Boolean {
+    fun matchesItem(stack: ItemStack?): Boolean {
+      if (stack == null || stack.type == Material.AIR || !stack.hasItemMeta()) return false
+      val meta = stack.itemMeta ?: return false
+      if (
+          meta.persistentDataContainer.get(BigWolfKeys.STORED_ID, PersistentDataType.STRING) ==
+              targetPetId
+      ) {
+        return true
+      }
+      if (meta is org.bukkit.inventory.meta.BlockStateMeta && meta.hasBlockState()) {
+        val holder = meta.blockState as? InventoryHolder
+        if (holder != null && holder.inventory.contents.any(::matchesItem)) {
+          return true
+        }
+      }
+      if (meta is org.bukkit.inventory.meta.BundleMeta) {
+        if (meta.items.any(::matchesItem)) {
+          return true
+        }
+      }
+      return false
+    }
+
+    val directItems =
+        player.inventory.contents.asSequence() +
+            player.enderChest.contents.asSequence() +
+            sequenceOf(player.itemOnCursor)
+    if (directItems.any(::matchesItem)) return true
+
+    val worldDrops =
+        runCatching {
+              player.world.entities.asSequence().filterIsInstance<Item>().any {
+                matchesItem(it.itemStack)
+              }
+            }
+            .getOrDefault(false)
+    return worldDrops
   }
 
   /** ペット詳細情報を表示 */
@@ -7410,6 +7575,12 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
     // v3: 性質を保存
     pdc.set(BigWolfKeys.STORED_TEMPERAMENT, PersistentDataType.STRING, entity.temperament)
 
+    val currentRecoverVersion =
+        ownerId
+            ?.let { runCatching { UUID.fromString(it) }.getOrNull() }
+            ?.let { PetDataManager.getPetData(it, pid)?.recoverVersion } ?: 0
+    pdc.set(BigWolfKeys.STORED_RECOVER_VERSION, PersistentDataType.INTEGER, currentRecoverVersion)
+
     val variantName = VariantHandler.getVariantNameFromEntity(entity)
     if (variantName != null) {
       pdc.set(BigWolfKeys.STORED_VARIANT, PersistentDataType.STRING, variantName)
@@ -7487,12 +7658,31 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
     }
 
     val leftovers = player.inventory.addItem(*itemsToGive.toTypedArray())
-    leftovers.values.forEach { item -> player.world.dropItem(player.location, item) }
+    var storedToEnderChest = 0
+    var unplacedCount = 0
+    leftovers.values.forEach { item ->
+      val ecLeftovers = runCatching { player.enderChest.addItem(item) }.getOrNull()
+      if (ecLeftovers != null && ecLeftovers.isEmpty()) {
+        storedToEnderChest++
+      } else {
+        unplacedCount += ecLeftovers?.values?.sumOf { it.amount } ?: item.amount
+      }
+    }
 
     player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f)
     player.sendMessage(Component.text("$count 匹のペットを収納しました！", GREEN))
-    if (leftovers.isNotEmpty()) {
-      player.sendMessage(Component.text("インベントリに入り切らなかった分を足元にドロップしました。", YELLOW))
+    if (storedToEnderChest > 0) {
+      player.sendMessage(
+          Component.text("インベントリがいっぱいのため $storedToEnderChest 個のエッグをエンダーチェストに収納しました。", YELLOW)
+      )
+    }
+    if (unplacedCount > 0) {
+      player.sendMessage(
+          Component.text(
+              "インベントリとエンダーチェストがいっぱいのため $unplacedCount 匹はデータに保管されました（/bigwolf recover で再取得可能）。",
+              YELLOW,
+          )
+      )
     }
   }
 
@@ -7514,9 +7704,13 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
     val meta = item.itemMeta
     val pdc = meta.persistentDataContainer
 
-    // オーナーチェック（譲渡防止）
+    // オーナーチェック（無主卵拒否・譲渡防止）
     val storedOwner = pdc.get(BigWolfKeys.STORED_OWNER, PersistentDataType.STRING)
-    if (storedOwner != null && storedOwner != player.uniqueId.toString()) {
+    if (storedOwner == null) {
+      player.sendMessage(Component.text("このペットエッグにはオーナー情報がないため使用できません。", RED))
+      return
+    }
+    if (storedOwner != player.uniqueId.toString()) {
       val ownerName =
           runCatching { Bukkit.getOfflinePlayer(UUID.fromString(storedOwner)).name }.getOrNull()
               ?: "Unknown"
@@ -7528,6 +7722,24 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
     if (storedId != null && ActivePetRegistry.findByPetId(storedId) != null) {
       player.sendMessage(Component.text("このペットは既に召喚されています！(コピー禁止)", RED))
       return
+    }
+    if (storedId != null) {
+      val tracked = PetDataManager.getPetData(player.uniqueId, storedId)
+      if (tracked != null) {
+        val eggVer = pdc.get(BigWolfKeys.STORED_RECOVER_VERSION, PersistentDataType.INTEGER) ?: 0
+        if (eggVer != tracked.recoverVersion) {
+          player.sendMessage(Component.text("このペットエッグは再取得されたため無効です。", RED))
+          item.amount -= 1
+          return
+        }
+        if (tracked.status != PetStatus.STORED) {
+          player.sendMessage(Component.text("このペットは収納状態ではありません！(コピー禁止)", RED))
+          if (tracked.status == PetStatus.ALIVE) {
+            item.amount -= 1
+          }
+          return
+        }
+      }
     }
 
     val typeStr = pdc.get(BigWolfKeys.STORED_TYPE, PersistentDataType.STRING) ?: "WOLF"
@@ -7701,6 +7913,14 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
         BigWolfKeys.STORED_PARTICLE_UNLOCKED,
         PersistentDataType.STRING,
         petData.particleUnlocked,
+    )
+    pdc.set(BigWolfKeys.STORED_TEMPERAMENT, PersistentDataType.STRING, petData.temperament)
+    pdc.set(BigWolfKeys.STORED_SPEED_MULTIPLIER, PersistentDataType.DOUBLE, petData.speedMultiplier)
+    pdc.set(BigWolfKeys.STORED_JUMP_MULTIPLIER, PersistentDataType.DOUBLE, petData.jumpMultiplier)
+    pdc.set(
+        BigWolfKeys.STORED_RECOVER_VERSION,
+        PersistentDataType.INTEGER,
+        petData.recoverVersion,
     )
 
     meta.addEnchant(Enchantment.UNBREAKING, 1, true)
@@ -7915,6 +8135,7 @@ class TransferService(
       petData = PetDataManager.getPetData(senderUuid, petId) ?: petData
 
       // 3. エンティティを削除
+      ActivePetRegistry.unregister(petEntity.uniqueId)
       petEntity.remove()
 
       // 4. 元のデータファイルを削除
@@ -8025,7 +8246,7 @@ class BreedingSystem(
   fun getBreedablePets(player: Player): List<LivingEntity> {
     val playerUuidStr = player.uniqueId.toString()
     return ActivePetRegistry.getByOwner(playerUuidStr).filter {
-      it.foodLevel >= BigWolfConfig.breedMinLevel
+      it.foodLevel >= BigWolfConfig.breedMinLevel && it.breedCount < BigWolfConfig.maxBreedCount
     }
   }
 
@@ -8144,6 +8365,26 @@ class BreedingSystem(
 
   /** 交配を実行 */
   fun executeBreeding(player: Player, parent1: LivingEntity, parent2: LivingEntity) {
+    // レベル・交配回数上限チェック
+    if (
+        parent1.foodLevel < BigWolfConfig.breedMinLevel ||
+            parent2.foodLevel < BigWolfConfig.breedMinLevel
+    ) {
+      player.sendMessage(
+          Component.text("交配には親のレベルが Lv.${BigWolfConfig.breedMinLevel} 以上必要です！", RED)
+      )
+      return
+    }
+    if (
+        parent1.breedCount >= BigWolfConfig.maxBreedCount ||
+            parent2.breedCount >= BigWolfConfig.maxBreedCount
+    ) {
+      player.sendMessage(
+          Component.text("交配回数の上限(${BigWolfConfig.maxBreedCount}回)に達しているペットは交配できません！", RED)
+      )
+      return
+    }
+
     // ペット数制限チェック
     if (countActivePets(player) >= BigWolfConfig.MAX_PET_COUNT) {
       player.sendMessage(Component.text("ペットは同時に${BigWolfConfig.MAX_PET_COUNT}匹までしか召喚できません！", RED))
@@ -9289,6 +9530,9 @@ class PetControlSystem(
   private val dashEndTimes = ConcurrentHashMap<UUID, Long>()
   // 飛行MOBのイナーシャ用XZ速度キャッシュ（entity UUID → 前ティックのXZベクトル）
   private val flyingVelocities = ConcurrentHashMap<UUID, Vector>()
+  // 再騎乗時に0.0を上書き保存しないための元速度キャッシュ
+  private val savedMovementSpeeds = ConcurrentHashMap<UUID, Double>()
+  private val savedFlyingSpeeds = ConcurrentHashMap<UUID, Double>()
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
@@ -9305,16 +9549,55 @@ class PetControlSystem(
     activeControlTasks.clear()
     dashEndTimes.clear()
     flyingVelocities.clear()
+    savedMovementSpeeds.clear()
+    savedFlyingSpeeds.clear()
   }
 
   fun startControlTask(player: Player, entity: LivingEntity) {
-    activeControlTasks[entity.uniqueId]?.cancel()
+    activeControlTasks.remove(entity.uniqueId)?.cancel()
     val spec = PetRegistry.get(entity.type)
 
     // 騎乗開始時にAIの移動速度を0にする（勝手に動かないように）
     // ※ setAI(false) は velocity が無視されるため使用不可。属性ゼロで AI 駆動移動を抑制する
-    val originalSpeed = entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue ?: 0.0
-    val originalFlyingSpeed = entity.getAttribute(Attribute.FLYING_SPEED)?.baseValue
+    // 旧タスクがまだ0.0から復元していない場合は保存済みの元速度を引き継ぐ
+    val currentMoveSpeed = entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue ?: 0.0
+    val originalSpeed =
+        savedMovementSpeeds.compute(entity.uniqueId) { _, existing ->
+          when {
+            existing != null && existing > 0.0 -> existing
+            currentMoveSpeed > 0.0 -> currentMoveSpeed
+            else -> {
+              val defaultVal = entity.getAttribute(Attribute.MOVEMENT_SPEED)?.defaultValue ?: 0.2
+              val mul =
+                  when (spec.category) {
+                    PetCategory.WATER -> 1.0
+                    PetCategory.FLYING -> BigWolfConfig.freeRoamFlyingSpeedMultiplier
+                    else -> BigWolfConfig.freeRoamSpeedMultiplier
+                  }
+              defaultVal * mul
+            }
+          }
+        }!!
+    val currentFlySpeed = entity.getAttribute(Attribute.FLYING_SPEED)?.baseValue
+    val originalFlyingSpeed =
+        if (currentFlySpeed != null) {
+          savedFlyingSpeeds.compute(entity.uniqueId) { _, existing ->
+            when {
+              existing != null && existing > 0.0 -> existing
+              currentFlySpeed > 0.0 -> currentFlySpeed
+              else -> {
+                val defaultVal = entity.getAttribute(Attribute.FLYING_SPEED)?.defaultValue ?: 0.1
+                val flyMul =
+                    if (spec.category == PetCategory.FLYING)
+                        BigWolfConfig.freeRoamFlyingSpeedMultiplier
+                    else 1.0
+                defaultVal * flyMul
+              }
+            }
+          }
+        } else {
+          null
+        }
     entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = 0.0
     entity.getAttribute(Attribute.FLYING_SPEED)?.baseValue = 0.0
 
@@ -9337,11 +9620,14 @@ class PetControlSystem(
 
           override fun run() {
             if (!entity.isValid || !player.isOnline || player !in entity.passengers) {
+              val restoredMoveSpeed = savedMovementSpeeds.remove(entity.uniqueId) ?: originalSpeed
+              val restoredFlySpeed =
+                  savedFlyingSpeeds.remove(entity.uniqueId) ?: originalFlyingSpeed
               if (entity.isValid) {
                 entity.isSilent = false
                 // 降車時に速度属性を復元
-                entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = originalSpeed
-                originalFlyingSpeed?.let {
+                entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = restoredMoveSpeed
+                restoredFlySpeed?.let {
                   entity.getAttribute(Attribute.FLYING_SPEED)?.baseValue = it
                 }
                 // LAND/WATER はAIを無効化していないので何もしない
@@ -9820,19 +10106,38 @@ class SkillSystem {
     entity.getNearbyEntities(8.0, 4.0, 8.0).forEach { target ->
       if (
           target is LivingEntity &&
+              target !is ArmorStand &&
               target != player &&
               target != entity &&
-              target !in entity.passengers
+              target !in entity.passengers &&
+              !target.isInvulnerable &&
+              target.ownerId == null &&
+              target.petId == null &&
+              !target.persistentDataContainer.has(
+                  BigWolfKeys.SHOP_FLAG,
+                  PersistentDataType.BYTE,
+              ) &&
+              (target as? Tameable)?.owner == null &&
+              !(target is Player && target.world?.pvp == false)
       ) {
-        val vec =
-            target.location
-                .toVector()
-                .subtract(entity.location.toVector())
-                .normalize()
-                .multiply(1.5)
-                .setY(0.8)
-        target.velocity = vec
-        target.damage(2.0, entity)
+        val healthBefore = target.health
+        val absorptionBefore = target.absorptionAmount
+        target.damage(2.0, player)
+        val damageCancelled =
+            target.lastDamageCause?.isCancelled == true ||
+                (healthBefore > 0.0 &&
+                    target.health >= healthBefore &&
+                    target.absorptionAmount >= absorptionBefore)
+        if (!damageCancelled) {
+          val diff = target.location.toVector().subtract(entity.location.toVector())
+          val vec =
+              if (diff.lengthSquared() > 1.0e-6) {
+                diff.normalize().multiply(1.5).setY(0.8)
+              } else {
+                Vector(0.0, 0.8, 0.0)
+              }
+          target.velocity = vec
+        }
       }
     }
     player.sendActionBar(Component.text(">>> 咆哮スキル発動！! <<<", GOLD))
