@@ -24,6 +24,7 @@ object AdminBP : Listener {
 
   @EventHandler
   fun quitPlayer(e: PlayerQuitEvent) {
+    AdminBPGui.onQuit(e.player.uniqueId)
     removePlayerCache(e.player)
   }
 
@@ -50,6 +51,9 @@ object AdminBP : Listener {
   }
 
   fun getItemList(uuid: UUID): MutableMap<Int, MutableList<ItemStack?>>? {
+    if (!itemCache.containsKey(uuid)) {
+      Bukkit.getPlayer(uuid)?.takeIf { it.isOp }?.let(::loadPlayerCache)
+    }
     return itemCache[uuid]
   }
 

@@ -27,6 +27,24 @@ object TeleportManager {
     return ignoreNext.remove(player.uniqueId)
   }
 
+  fun peekBack(player: Player): Location? {
+    return back[player.uniqueId]?.peekFirst()
+  }
+
+  fun peekForward(player: Player): Location? {
+    return forward[player.uniqueId]?.peekFirst()
+  }
+
+  fun clear(player: Player) {
+    clear(player.uniqueId)
+  }
+
+  fun clear(uuid: UUID) {
+    back.remove(uuid)
+    forward.remove(uuid)
+    ignoreNext.remove(uuid)
+  }
+
   fun getBack(player: Player): Location? {
     val b = back[player.uniqueId] ?: return null
     if (b.isEmpty()) return null

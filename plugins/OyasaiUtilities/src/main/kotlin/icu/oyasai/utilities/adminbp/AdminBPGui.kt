@@ -17,10 +17,15 @@ object AdminBPGui : Listener {
   private val invItemList = mutableMapOf<InventoryView, MutableMap<Int, MutableList<ItemStack?>>>()
 
   fun disableFix() {
-    userInvList.forEach { (uuid, view) ->
+    userInvList.toMap().forEach { (uuid, view) ->
       closeTask(view, uuid)
       view.close()
     }
+  }
+
+  fun onQuit(uuid: UUID) {
+    val view = userInvList[uuid] ?: return
+    closeTask(view, uuid)
   }
 
   fun openInventoryGUI(player: Player) {
@@ -76,13 +81,13 @@ object AdminBPGui : Listener {
   }
 
   private fun closeTask(view: InventoryView, uuid: UUID) {
-    val nowPage = view.title.replace("&6Admin Backpack #".color(), "").toIntOrNull() ?: return
-    val itemList = invItemList[view] ?: return
-    itemList[nowPage]?.clear()
-    itemList[nowPage]?.addAll(view.topInventory.contents.toList())
-    invItemList[view] = itemList
-    AdminBP.save(uuid, invItemList[view]!!)
     userInvList.remove(uuid)
-    invItemList.remove(view)
+    val itemList = invItemList.remove(view) ?: return
+    val nowPage = view.title.replace("&6Admin Backpack #".color(), "").toIntOrNull()
+    if (nowPage != null) {
+      itemList[nowPage]?.clear()
+      itemList[nowPage]?.addAll(view.topInventory.contents.toList())
+    }
+    AdminBP.save(uuid, itemList)
   }
 }

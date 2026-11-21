@@ -255,9 +255,13 @@ commands:
   back:
     description: "前回TPした場所に戻る"
     aliases: [bk]
+    permission: oyasaiutilities.back
+    permission-message: "§cこのコマンドを使用する権限がありません。"
   forward:
     description: "これ以降にTPした場所に戻る"
     aliases: [fow, fw]
+    permission: oyasaiutilities.forward
+    permission-message: "§cこのコマンドを使用する権限がありません。"
   tpdata:
     description: "全てのプレイヤーのTP履歴を表示"
     permission: oyasaiutilities.tpdata
@@ -523,6 +527,12 @@ permissions:
     description: "TimerBarコマンドの使用権限"
   oyasaiutilities.tpdata:
     default: op
+  oyasaiutilities.back:
+    description: "前回TPした場所に戻る"
+    default: true
+  oyasaiutilities.forward:
+    description: "これ以降にTPした場所に戻る"
+    default: true
   oyasaiutilities.hologram:
     description: "ホログラムコマンド"
     default: op

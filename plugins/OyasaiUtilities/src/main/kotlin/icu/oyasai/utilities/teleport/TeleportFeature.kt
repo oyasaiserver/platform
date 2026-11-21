@@ -168,6 +168,13 @@ class TeleportFeature(private val plugin: Main) : Listener, CommandExecutor, Tab
 
   fun isJailed(player: Player): Boolean = store.get(player.uniqueId).jailed
 
+  fun isWorldTeleportAllowed(player: Player, to: Location): Boolean {
+    val toWorld = to.world ?: return false
+    val fromWorld = player.world
+    if (!settings.getBoolean("world-teleport-permissions", true)) return true
+    return TeleportRules.worldAllowed(fromWorld.name, toWorld.name, player::hasPermission)
+  }
+
   fun jailLocation(player: Player): Location? =
       store.get(player.uniqueId).jail?.let { locations.jails[it.lowercase()]?.resolve() }
 

@@ -12,5 +12,6 @@ object CreativeManagement {
 
   fun onDisable() {
     CreativeBlockStore.clearCache()
+    InventoryEvent.clearCache()
   }
 }

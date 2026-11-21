@@ -4,7 +4,9 @@ import icu.oyasai.utilities.OyasaiUtilities.plugin
 import io.papermc.paper.event.player.PlayerItemFrameChangeEvent
 import kotlin.random.Random
 import org.bukkit.*
+import org.bukkit.block.Block
 import org.bukkit.block.DoubleChest
+import org.bukkit.entity.Entity
 import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -15,11 +17,17 @@ import org.bukkit.event.block.*
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.ItemMergeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
+import org.bukkit.event.inventory.InventoryMoveItemEvent
+import org.bukkit.event.inventory.InventoryPickupItemEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.BlockInventoryHolder
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.meta.SpawnEggMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.util.Vector
@@ -74,12 +82,25 @@ object GetEvent : Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun blockExplodeEvent(e: BlockExplodeEvent) {
-    e.blockList().forEach(CreativeBlockStore::remove)
+    handleExplosion(e.blockList())
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun entityExplodeEvent(e: EntityExplodeEvent) {
-    e.blockList().forEach(CreativeBlockStore::remove)
+    handleExplosion(e.blockList())
+  }
+
+  private fun handleExplosion(blocks: MutableList<Block>) {
+    val iterator = blocks.iterator()
+    while (iterator.hasNext()) {
+      val block = iterator.next()
+      if (CreativeBlockStore.isMarked(block)) {
+        CreativeBlockStore.remove(block)
+        (block.state as? InventoryHolder)?.inventory?.clear()
+        block.type = Material.AIR
+        iterator.remove()
+      }
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -138,39 +159,93 @@ object GetEvent : Listener {
   @EventHandler(priority = EventPriority.HIGH)
   fun containerEvent(e: InventoryClickEvent) {
     if (e.isCancelled) return
-    if (e.whoClicked.hasPermission("cm.bypass")) return
-    val loc = e.inventory.location ?: return
-    val holder = e.inventory.holder ?: return
-    if (holder is Player) return
-    val isSurvival = e.whoClicked.gameMode == GameMode.SURVIVAL
+    if (shouldDenyContainerAccess(e.whoClicked, e.inventory)) {
+      e.isCancelled = true
+      e.whoClicked.missSound()
+    }
+  }
+
+  /** ドラッグ操作によるコンテナ出し入れ制御 */
+  @EventHandler(priority = EventPriority.HIGH)
+  fun containerDragEvent(e: InventoryDragEvent) {
+    if (e.isCancelled) return
+    if (shouldDenyContainerAccess(e.whoClicked, e.inventory)) {
+      e.isCancelled = true
+      e.whoClicked.missSound()
+    }
+  }
+
+  /** ホッパー等によるクリエ設置コンテナからのアイテム移動遮断 */
+  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+  fun hopperMoveEvent(e: InventoryMoveItemEvent) {
+    if (
+        e.item.persistentDataContainer.has(NAMESPACE) ||
+            isInventoryCreativeBlock(e.source) ||
+            isInventoryCreativeBlock(e.destination)
+    ) {
+      e.isCancelled = true
+    }
+  }
+
+  /** ホッパー等によるクリエ印付きドロップアイテムの回収遮断 */
+  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+  fun hopperPickupEvent(e: InventoryPickupItemEvent) {
+    if (
+        e.item.persistentDataContainer.has(NAMESPACE) ||
+            e.item.itemStack.persistentDataContainer.has(NAMESPACE) ||
+            isInventoryCreativeBlock(e.inventory)
+    ) {
+      e.isCancelled = true
+    }
+  }
+
+  private fun shouldDenyContainerAccess(who: HumanEntity, inventory: Inventory): Boolean {
+    if (who.hasPermission("cm.bypass")) return false
+    val isSurvival = who.gameMode == GameMode.SURVIVAL
+    if (inventory.type == InventoryType.ENDER_CHEST) {
+      return !isSurvival
+    }
+    val loc = inventory.location ?: return false
+    val holder = inventory.holder ?: return false
+    if (holder is Player) return false
     val isBlockHolder = holder is BlockInventoryHolder
     val isDoubleChest = holder is DoubleChest
 
-    if (isBlockHolder || isDoubleChest) {
-      // ブロックにあるインベントリの場合
-      if (CreativeBlockStore.isMarked(loc.block)) {
-        // クリエブロックのインベントリ
-        if (isSurvival) {
-          // クリエじゃないので弄れない
-          e.isCancelled = true
-          e.whoClicked.missSound()
-        }
+    return if (isBlockHolder || isDoubleChest) {
+      if (isInventoryCreativeBlock(inventory, loc.block)) {
+        // クリエブロックのインベントリはサバイバルから弄れない
+        isSurvival
       } else {
-        // サバイバルブロックのインベントリ
-        if (!isSurvival) {
-          // サバイバルじゃないのでいじれない
-          e.isCancelled = true
-          e.whoClicked.missSound()
-        }
+        // サバイバルブロックのインベントリはクリエ等から弄れない
+        !isSurvival
       }
     } else {
-      // ブロック以外のインベントリの場合
-      if (!isSurvival) {
-        // クリエなので弄れない
-        e.isCancelled = true
-        e.whoClicked.missSound()
+      // ブロック以外のインベントリはサバイバル以外から弄れない
+      !isSurvival
+    }
+  }
+
+  private fun isInventoryCreativeBlock(
+      inventory: Inventory,
+      fallbackBlock: Block? = null,
+  ): Boolean {
+    val holder = inventory.holder
+    if (holder is DoubleChest) {
+      val left = (holder.leftSide as? BlockInventoryHolder)?.block
+      val right = (holder.rightSide as? BlockInventoryHolder)?.block
+      if (left != null || right != null) {
+        return (left != null && CreativeBlockStore.isMarked(left)) ||
+            (right != null && CreativeBlockStore.isMarked(right))
       }
     }
+    if (holder is BlockInventoryHolder) {
+      return CreativeBlockStore.isMarked(holder.block)
+    }
+    if (holder is Entity) {
+      return false
+    }
+    val block = fallbackBlock ?: inventory.location?.block ?: return false
+    return CreativeBlockStore.isMarked(block)
   }
 
   /** クリエで設置したディスペンサー系の制御 */

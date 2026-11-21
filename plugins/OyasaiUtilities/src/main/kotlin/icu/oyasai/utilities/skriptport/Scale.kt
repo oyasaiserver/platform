@@ -12,7 +12,23 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-internal fun scaleMultiplier(number: Double): Double = if (number < 0) 1 / abs(number) else number
+internal const val MIN_SCALE_INPUT = -16.0
+internal const val MAX_SCALE_INPUT = 16.0
+internal const val MIN_SCALE_MULTIPLIER = 1.0 / MAX_SCALE_INPUT
+internal const val MAX_SCALE_MULTIPLIER = MAX_SCALE_INPUT
+
+internal fun isValidScaleInput(number: Double): Boolean {
+  if (!number.isFinite() || number == 0.0) return false
+  if (number < MIN_SCALE_INPUT || number > MAX_SCALE_INPUT) return false
+  val raw = if (number < 0) 1.0 / abs(number) else number
+  return raw in MIN_SCALE_MULTIPLIER..MAX_SCALE_MULTIPLIER
+}
+
+internal fun scaleMultiplier(number: Double): Double {
+  if (!number.isFinite() || number == 0.0) return 0.0
+  val raw = if (number < 0) 1.0 / abs(number) else number
+  return raw.coerceIn(MIN_SCALE_MULTIPLIER, MAX_SCALE_MULTIPLIER)
+}
 
 class Scale(private val plugin: Main) : CommandExecutor, Listener {
   fun enable() {
@@ -65,6 +81,10 @@ class Scale(private val plugin: Main) : CommandExecutor, Listener {
     }
     if (number > 16) {
       sender.sendMessage("§c16 以下の数字を入力してください。（最大: 16）")
+      return true
+    }
+    if (!isValidScaleInput(number)) {
+      sender.sendMessage("§c0 以外の有効な数字（-16 〜 -0.0625 または 0.0625 〜 16）を入力してください。")
       return true
     }
     val scale = scaleMultiplier(number)
