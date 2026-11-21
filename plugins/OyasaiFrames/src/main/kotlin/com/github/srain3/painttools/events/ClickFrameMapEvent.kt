@@ -26,7 +26,10 @@ object ClickFrameMapEvent : Listener {
     if (event.isCancelled) return
     if (event.rightClicked !is ItemFrame) return
     val frame = event.rightClicked as ItemFrame
-    if (!ToolBox.canModify(frame, event.player)) return
+    if (!ToolBox.canModify(frame, event.player)) {
+      event.isCancelled = true
+      return
+    }
     if (frame.item.type != Material.FILLED_MAP) return
     val mapMeta = frame.item.itemMeta as MapMeta
     val id =
@@ -63,7 +66,10 @@ object ClickFrameMapEvent : Listener {
     if (event.entity !is ItemFrame) return
     if (event.damager !is Player) return
     val frame = event.entity as ItemFrame
-    if (!ToolBox.canModify(frame, event.damager as Player)) return
+    if (!ToolBox.canModify(frame, event.damager as Player)) {
+      event.isCancelled = true
+      return
+    }
     if (frame.item.type != Material.FILLED_MAP) return
     val mapMeta = frame.item.itemMeta as MapMeta
     val id =

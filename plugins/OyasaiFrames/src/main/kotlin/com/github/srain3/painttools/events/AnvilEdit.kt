@@ -39,16 +39,21 @@ object AnvilEdit : Listener {
               )
             }
           }
-          val handItem = stateSnapshot.player.inventory.itemInMainHand
-          val handMeta = handItem.itemMeta
-          if (
-              handItem.type == Material.FEATHER &&
-                  handMeta != null &&
-                  handMeta.hasCustomModelData() &&
-                  handMeta.customModelData == 831
-          ) {
-            handMeta.setDisplayName(stateSnapshot.text)
-            handItem.itemMeta = handMeta
+          val inv = stateSnapshot.player.inventory
+          val handItem =
+              listOf(inv.itemInMainHand, inv.itemInOffHand).firstOrNull { item ->
+                val itemMeta = item.itemMeta
+                item.type == Material.FEATHER &&
+                    itemMeta != null &&
+                    itemMeta.hasCustomModelData() &&
+                    itemMeta.customModelData == 831
+              }
+          if (handItem != null) {
+            val handMeta = handItem.itemMeta
+            if (handMeta != null) {
+              handMeta.setDisplayName(stateSnapshot.text)
+              handItem.itemMeta = handMeta
+            }
           }
           return@onClick listOf(AnvilGUI.ResponseAction.close())
         }

@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.hanging.HangingBreakEvent
@@ -92,6 +93,16 @@ class FrameEventListener(
     }
   }
 
+  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+  fun onEnvironmentalDamage(event: EntityDamageEvent) {
+    if (event is EntityDamageByEntityEvent) return
+    val frame = event.entity as? ItemFrame ?: return
+    checkAndLockFromPdc(frame)
+    if (plugin.db.isLocked(frame.uniqueId)) {
+      event.isCancelled = true
+    }
+  }
+
   // =====================================================
   // 右クリック: ロック / アンロック操作 & アイテム出し入れ・回転防止
   // =====================================================
@@ -118,6 +129,11 @@ class FrameEventListener(
 
         if (plugin.db.isLocked(frame.uniqueId)) {
           player.sendMessage("§c[Gakubuchi] §fこの額縁はすでにロックされています。")
+          return
+        }
+
+        if (!plugin.plugin.canModify(frame, player)) {
+          player.sendMessage("§c[Gakubuchi] §fこの額縁はロックできません。")
           return
         }
 

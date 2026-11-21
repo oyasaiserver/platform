@@ -44,9 +44,16 @@ object PaintToolsCmd : CommandExecutor {
           if (args.size == 2) {
             Bukkit.getServer().onlinePlayers.forEach {
               if (it.name == args[1]) {
+                if (it.inventory.firstEmpty() == -1) {
+                  sender.sendMessage(
+                      ToolBox.colorMessage("[PaintTools] &c${it.name}のインベントリに空きがありません!")
+                  )
+                  return true
+                }
                 val mapView = Bukkit.createMap(it.world)
                 val id = getID()
-                it.inventory.addItem(createMap(mapView, id))
+                val leftovers = it.inventory.addItem(createMap(mapView, id))
+                leftovers.values.forEach { item -> it.world.dropItemNaturally(it.location, item) }
                 saveID(id)
                 return true
               }
@@ -56,6 +63,7 @@ object PaintToolsCmd : CommandExecutor {
         } else {
           if (!sender.hasPermission("painttools.command.painttools.canvas")) return false
           var id = getID()
+          var isNewId = true
           if (args.size == 2) {
             val requestedId = args[1].toIntOrNull()
             if (requestedId != null) {
@@ -68,14 +76,19 @@ object PaintToolsCmd : CommandExecutor {
                 return true
               }
               id = requestedId
-            } else {
-              saveID(id)
+              isNewId = false
             }
-          } else {
+          }
+          if (sender.inventory.firstEmpty() == -1) {
+            sender.sendMessage(ToolBox.colorMessage("[PaintTools] &cインベントリに空きがありません!"))
+            return true
+          }
+          if (isNewId) {
             saveID(id)
           }
           val mapView = Bukkit.createMap(sender.world)
-          sender.inventory.addItem(createMap(mapView, id))
+          val leftovers = sender.inventory.addItem(createMap(mapView, id))
+          leftovers.values.forEach { item -> sender.world.dropItemNaturally(sender.location, item) }
         }
 
         return true
@@ -153,6 +166,7 @@ object PaintToolsCmd : CommandExecutor {
             sender.openInventory(giveDyeInv() ?: return true)
             sender.sendMessage(ToolBox.colorMessage("[PaintTools] &aDyeBoxを開きました"))
           }
+          return true
         } else {
           if (args.size == 2) {
             Bukkit.getServer().onlinePlayers.forEach {
@@ -179,6 +193,7 @@ object PaintToolsCmd : CommandExecutor {
           } else {
             sender.sendMessage(ToolBox.colorMessage("[PaintTools] &c0~20で指定して下さい!"))
           }
+          return true
         }
       }
       // 1~3分前の状態にキャンバスを戻す
