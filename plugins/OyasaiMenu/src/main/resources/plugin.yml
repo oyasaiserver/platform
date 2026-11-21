@@ -10,7 +10,9 @@ softdepend:
 
 commands:
   getmenu:
+    description: メニュー本を取得する
     usage: /getmenu
+    permission: oyasaimenu.use
   menu:
     description: メニューを開く
     aliases: [mn]

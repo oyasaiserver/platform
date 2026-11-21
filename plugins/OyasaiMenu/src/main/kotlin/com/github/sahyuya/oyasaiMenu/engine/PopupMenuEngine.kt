@@ -16,7 +16,9 @@ import org.bukkit.Registry
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemFlag
@@ -288,7 +290,9 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
     val player = event.whoClicked as? Player ?: return
     val popupId = (event.view.topInventory.holder as? PopupMenuHolder)?.popupId ?: return
     if (event.clickedInventory == player.inventory) {
-      if (event.isShiftClick) event.isCancelled = true
+      if (event.isShiftClick || event.action == InventoryAction.COLLECT_TO_CURSOR) {
+        event.isCancelled = true
+      }
       return
     }
     event.isCancelled = true
@@ -315,6 +319,15 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
         }
         executeActions(player, item.actions)
       }
+    }
+  }
+
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val top = event.view.topInventory
+    if (top.holder !is PopupMenuHolder) return
+    if (event.rawSlots.any { it < top.size }) {
+      event.isCancelled = true
     }
   }
 

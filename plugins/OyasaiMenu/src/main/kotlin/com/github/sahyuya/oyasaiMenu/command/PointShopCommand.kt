@@ -22,6 +22,10 @@ class PointShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCom
               sender.sendMessage("§cゲーム内から実行してください。")
               return false
             }
+    if (player.gameMode == org.bukkit.GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではポイントショップを使用できません。"))
+      return false
+    }
     val cats = plugin.pointShopLoader.getAllCategories()
     if (cats.isEmpty()) {
       player.sendMessage(c("&cポイントショップが設定されていません。"))

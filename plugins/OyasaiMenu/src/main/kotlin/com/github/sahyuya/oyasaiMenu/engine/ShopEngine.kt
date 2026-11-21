@@ -12,11 +12,14 @@ import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.makeItem
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemFlag
@@ -89,18 +92,24 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     val lore = mutableListOf<Component>()
     item.customLore.forEach { lore += comp(it) }
     if (item.customLore.isNotEmpty()) lore += comp("")
-    if (item.canBuy)
-        lore +=
-            comp(
-                "&a購入: &f${EconomyManager.format(item.buyPrice)} &7× $quantity = &f${EconomyManager.format(item.buyPrice * quantity)}"
-            )
-    else lore += comp("&7購入: &c不可")
-    if (item.canSell)
-        lore +=
-            comp(
-                "&b売却: &f${EconomyManager.format(item.sellPrice)} &7× $quantity = &f${EconomyManager.format(item.sellPrice * quantity)}"
-            )
-    else lore += comp("&7売却: &c不可")
+    if (item.canBuy) {
+      val totalBuy =
+          runCatching { Math.multiplyExact(item.buyPrice, quantity.toLong()) }
+              .getOrDefault(Long.MAX_VALUE)
+      lore +=
+          comp(
+              "&a購入: &f${EconomyManager.format(item.buyPrice)} &7× $quantity = &f${EconomyManager.format(totalBuy)}"
+          )
+    } else lore += comp("&7購入: &c不可")
+    if (item.canSell) {
+      val totalSell =
+          runCatching { Math.multiplyExact(item.sellPrice, quantity.toLong()) }
+              .getOrDefault(Long.MAX_VALUE)
+      lore +=
+          comp(
+              "&b売却: &f${EconomyManager.format(item.sellPrice)} &7× $quantity = &f${EconomyManager.format(totalSell)}"
+          )
+    } else lore += comp("&7売却: &c不可")
     lore += comp("")
     if (item.enchantments.isEmpty()) {
       // 通常アイテム: 反転モードを反映
@@ -217,10 +226,17 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     val player = event.whoClicked as? Player ?: return
     val state = (event.view.topInventory.holder as? ShopMenuHolder)?.state ?: return
     if (event.clickedInventory == player.inventory) {
-      if (event.isShiftClick) event.isCancelled = true
+      if (event.isShiftClick || event.action == InventoryAction.COLLECT_TO_CURSOR) {
+        event.isCancelled = true
+      }
       return
     }
     event.isCancelled = true
+    if (player.gameMode == GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではショップを使用できません。"))
+      player.closeInventory()
+      return
+    }
     if (CooldownManager.isClickOnCooldown(player.uniqueId)) return
     val slot = event.rawSlot
     val category = plugin.shopLoader.getCategory(state.categoryId) ?: return
@@ -252,13 +268,34 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val top = event.view.topInventory
+    if (top.holder !is ShopMenuHolder) return
+    if (event.rawSlots.any { it < top.size }) {
+      event.isCancelled = true
+    }
+  }
+
   private fun handleBuy(player: Player, item: ShopItem, quantity: Int) {
+    if (player.gameMode == GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではショップを使用できません。"))
+      return
+    }
     if (!item.canBuy) {
       player.sendMessage(c("&cこのアイテムは購入できません。"))
       return
     }
     val actualQty = if (item.enchantments.isNotEmpty()) 1 else quantity
-    val err = EconomyManager.withdraw(player, item.buyPrice * actualQty)
+    if (actualQty <= 0) return
+    val totalCost =
+        try {
+          Math.multiplyExact(item.buyPrice, actualQty.toLong())
+        } catch (_: ArithmeticException) {
+          player.sendMessage(c("&c購入金額が上限を超えています。"))
+          return
+        }
+    val err = EconomyManager.withdraw(player, totalCost)
     if (err != null) {
       player.sendMessage(c(err))
       return
@@ -276,17 +313,39 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
   }
 
   private fun handleSell(player: Player, item: ShopItem, quantity: Int) {
+    if (player.gameMode == GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではショップを使用できません。"))
+      return
+    }
     if (!item.canSell) {
       player.sendMessage(c("&cこのアイテムは売却できません。"))
       return
     }
     val removed = minOf(countInInventory(player, item), quantity)
-    if (removed == 0) {
+    if (removed <= 0) {
       player.sendMessage(c("&c${item.materialId} を持っていません。"))
       return
     }
+    try {
+      Math.multiplyExact(item.sellPrice, removed.toLong())
+    } catch (_: ArithmeticException) {
+      player.sendMessage(c("&c売却金額が上限を超えています。"))
+      return
+    }
     val removedItems = removeFromInventory(player, item, removed)
-    val error = EconomyManager.deposit(player, item.sellPrice * removedItems.sumOf { it.amount })
+    val totalEarned =
+        try {
+          Math.multiplyExact(item.sellPrice, removedItems.sumOf { it.amount }.toLong())
+        } catch (_: ArithmeticException) {
+          removedItems.forEach { stack ->
+            player.inventory.addItem(stack).values.forEach {
+              player.world.dropItemNaturally(player.location, it)
+            }
+          }
+          player.sendMessage(c("&c売却金額が上限を超えています。"))
+          return
+        }
+    val error = EconomyManager.deposit(player, totalEarned)
     if (error != null) {
       removedItems.forEach { stack ->
         player.inventory.addItem(stack).values.forEach {
@@ -305,17 +364,39 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
   }
 
   private fun handleSellAll(player: Player, item: ShopItem) {
+    if (player.gameMode == GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではショップを使用できません。"))
+      return
+    }
     if (!item.canSell) {
       player.sendMessage(c("&cこのアイテムは売却できません。"))
       return
     }
     val total = countInInventory(player, item)
-    if (total == 0) {
+    if (total <= 0) {
       player.sendMessage(c("&c${item.materialId} を持っていません。"))
       return
     }
+    try {
+      Math.multiplyExact(item.sellPrice, total.toLong())
+    } catch (_: ArithmeticException) {
+      player.sendMessage(c("&c売却金額が上限を超えています。"))
+      return
+    }
     val removedItems = removeFromInventory(player, item, total)
-    val error = EconomyManager.deposit(player, item.sellPrice * removedItems.sumOf { it.amount })
+    val totalEarned =
+        try {
+          Math.multiplyExact(item.sellPrice, removedItems.sumOf { it.amount }.toLong())
+        } catch (_: ArithmeticException) {
+          removedItems.forEach { stack ->
+            player.inventory.addItem(stack).values.forEach {
+              player.world.dropItemNaturally(player.location, it)
+            }
+          }
+          player.sendMessage(c("&c売却金額が上限を超えています。"))
+          return
+        }
+    val error = EconomyManager.deposit(player, totalEarned)
     if (error != null) {
       removedItems.forEach { stack ->
         player.inventory.addItem(stack).values.forEach {

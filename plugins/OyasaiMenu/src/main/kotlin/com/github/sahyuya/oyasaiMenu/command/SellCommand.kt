@@ -48,6 +48,10 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
   }
 
   private fun sellHand(player: Player) {
+    if (player.gameMode == org.bukkit.GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードでは売却できません。"))
+      return
+    }
     if (!EconomyManager.isAvailable) {
       player.sendMessage(c("&c経済プラグインが見つかりません。"))
       return
@@ -70,7 +74,13 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       return
     }
 
-    val total = price * item.amount
+    val total =
+        try {
+          Math.multiplyExact(price, item.amount.toLong())
+        } catch (_: ArithmeticException) {
+          player.sendMessage(c("&c売却金額が上限を超えています。"))
+          return
+        }
     val error = EconomyManager.deposit(player, total)
     if (error != null) {
       player.sendMessage(c(error))
@@ -84,6 +94,10 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
   }
 
   private fun sellAll(player: Player) {
+    if (player.gameMode == org.bukkit.GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードでは売却できません。"))
+      return
+    }
     if (!EconomyManager.isAvailable) {
       player.sendMessage(c("&c経済プラグインが見つかりません。"))
       return

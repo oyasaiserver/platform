@@ -6,10 +6,12 @@ import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.makeItem
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
@@ -93,6 +95,18 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
     val inv = event.view.topInventory.takeIf { it.holder is SellMenuHolder } ?: return
     val slot = event.rawSlot
 
+    if (player.gameMode == GameMode.CREATIVE) {
+      event.isCancelled = true
+      player.sendMessage(c("&cクリエイティブモードでは売却できません。"))
+      player.closeInventory()
+      return
+    }
+
+    if (event.action == InventoryAction.COLLECT_TO_CURSOR) {
+      event.isCancelled = true
+      return
+    }
+
     if (event.clickedInventory == player.inventory) {
       if (event.isShiftClick) {
         event.isCancelled = true
@@ -122,6 +136,11 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   @EventHandler
   fun onInventoryDrag(event: InventoryDragEvent) {
     event.view.topInventory.takeIf { it.holder is SellMenuHolder } ?: return
+    val player = event.whoClicked as? Player
+    if (player?.gameMode == GameMode.CREATIVE) {
+      event.isCancelled = true
+      return
+    }
     if (event.rawSlots.any { it in 45..53 }) event.isCancelled = true
   }
 
@@ -137,6 +156,10 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   // ============================
 
   private fun handleSell(player: Player, inv: Inventory) {
+    if (player.gameMode == GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードでは売却できません。"))
+      return
+    }
     if (!EconomyManager.isAvailable) {
       player.sendMessage(c("&c経済プラグインが見つかりません。"))
       return
@@ -194,10 +217,28 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
     val soldSlots = mutableListOf<Int>()
     items.forEach { (slot, stack) ->
       val price = getSellPrice(stack)
-      if (price != null && price > 0) {
-        earned += price * stack.amount
-        count += stack.amount
-        soldSlots += slot
+      if (price != null && price > 0 && stack.amount > 0) {
+        val lineTotal =
+            try {
+              Math.multiplyExact(price, stack.amount.toLong())
+            } catch (_: ArithmeticException) {
+              null
+            }
+        val nextEarned =
+            if (lineTotal != null) {
+              try {
+                Math.addExact(earned, lineTotal)
+              } catch (_: ArithmeticException) {
+                null
+              }
+            } else null
+        if (nextEarned != null) {
+          earned = nextEarned
+          count += stack.amount
+          soldSlots += slot
+        } else {
+          unsellable++
+        }
       } else {
         unsellable++
       }
