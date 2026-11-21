@@ -257,6 +257,7 @@ class OyasaiEconomyPlugin : JavaPlugin(), OyasaiEconomyApi, Listener {
           }
           unregisterCommands()
           registerCommandsAndPermissions()
+          runCatching { server.javaClass.getMethod("syncCommands").invoke(server) }
           server.onlinePlayers.forEach(::join)
           tab?.disable()
           tab =
