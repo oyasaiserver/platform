@@ -30,8 +30,11 @@ final class WarehouseLock implements Listener {
     private final Map<UUID, Inventory> emergency = new HashMap<>();
     WarehouseLock(SurvivalPull plugin, WarehouseIndex index) { this.plugin = plugin; this.index = index; }
     Warehouse protectedAt(Location l) {
-        if (!WarehouseContainers.eligible(l.getBlock().getState(false))) return null;
-        return index.warehouse(l);
+        var state = l.getBlock().getState(false);
+        if (!WarehouseContainers.eligible(state)) return null;
+        var wh = index.warehouse(l);
+        if (wh != null && !WarehouseContainers.canWarehouseControl(plugin.getServer(), null, wh.owner(), (Container) state)) return null;
+        return wh;
     }
     private boolean locked(Block b) { return protectedAt(b.getLocation()) != null; }
     private boolean locked(Inventory inv) { return WarehouseContainers.locations(inv).stream().anyMatch(l -> protectedAt(l) != null); }

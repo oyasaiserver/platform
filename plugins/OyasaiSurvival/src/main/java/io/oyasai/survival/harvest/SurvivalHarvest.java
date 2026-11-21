@@ -54,7 +54,6 @@ public final class SurvivalHarvest extends SurvivalFeature implements Listener {
                 || event.getHand() != EquipmentSlot.HAND) {
             return;
         }
-        // Vanilla can deny block use alone; explicit cancellation denies item use too.
         if (event.useItemInHand() == Event.Result.DENY) {
             return;
         }

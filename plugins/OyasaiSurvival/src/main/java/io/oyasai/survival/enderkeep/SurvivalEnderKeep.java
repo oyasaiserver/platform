@@ -46,6 +46,7 @@ public final class SurvivalEnderKeep extends SurvivalFeature implements Listener
         UUID id = event.getUniqueId();
         prepared.remove(id);
         if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
+        if (store == null || files.isShutdown()) return;
         try {
             // Queue reads behind pending logout saves, including rapid reconnects.
             var snapshot = files.submit(() -> store.read(id)).get();
@@ -109,10 +110,14 @@ public final class SurvivalEnderKeep extends SurvivalFeature implements Listener
     }
 
     private void enqueue(UUID id, PlayerStore.Snapshot snapshot) {
-        files.execute(() -> {
-            try { store.write(id, snapshot); }
-            catch (Exception e) { warn(id, "cannot save; previous file retained", e); }
-        });
+        try {
+            files.execute(() -> {
+                try { store.write(id, snapshot); }
+                catch (Exception e) { warn(id, "cannot save; previous file retained", e); }
+            });
+        } catch (RejectedExecutionException e) {
+            warn(id, "cannot save; previous file retained", e);
+        }
     }
 
     @Override public void onDisable() {
@@ -142,19 +147,29 @@ public final class SurvivalEnderKeep extends SurvivalFeature implements Listener
             return true;
         }
         UUID id = target.getUniqueId();
-        files.execute(() -> {
-            String message;
-            try {
-                var snapshot = store.read(id);
-                message = snapshot == null ? args[1] + ": 保存なし" : args[1] + ": 保存あり / ワールド "
-                        + snapshot.world() + " / アイテム数 " + snapshot.count();
-            } catch (Exception e) {
-                warn(id, "cannot read info; file retained", e);
-                message = args[1] + ": 保存ファイルを読み込めません（ログを確認してください）。";
-            }
-            String reply = message;
-            if (isEnabled()) Bukkit.getScheduler().runTask(owner(), () -> sender.sendMessage(reply));
-        });
+        try {
+            files.execute(() -> {
+                String message;
+                try {
+                    var snapshot = store.read(id);
+                    message = snapshot == null ? args[1] + ": 保存なし" : args[1] + ": 保存あり / ワールド "
+                            + snapshot.world() + " / アイテム数 " + snapshot.count();
+                } catch (Exception e) {
+                    warn(id, "cannot read info; file retained", e);
+                    message = args[1] + ": 保存ファイルを読み込めません（ログを確認してください）。";
+                }
+                String reply = message;
+                if (isEnabled()) {
+                    try {
+                        Bukkit.getScheduler().runTask(owner(), () -> sender.sendMessage(reply));
+                    } catch (RuntimeException ignored) {
+                    }
+                }
+            });
+        } catch (RejectedExecutionException e) {
+            warn(id, "cannot read info; file retained", e);
+            sender.sendMessage(args[1] + ": 保存ファイルを読み込めません（ログを確認してください）。");
+        }
         return true;
     }
 
