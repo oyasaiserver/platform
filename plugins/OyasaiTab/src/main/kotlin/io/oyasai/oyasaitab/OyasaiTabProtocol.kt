@@ -32,7 +32,7 @@ object OyasaiTabNetworkCountCodec {
   private const val TYPE = 0x80
 
   fun encode(count: Int): ByteArray {
-    require(count >= 0) { "OyasaiTab network count must be non-negative." }
+    require(count >= 0) { "OyasaiTab network count out of range: $count" }
     val bytes = ByteArrayOutputStream()
     DataOutputStream(bytes).use { out ->
       out.writeByte(TYPE)
@@ -45,7 +45,7 @@ object OyasaiTabNetworkCountCodec {
     require(bytes.size == 5) { "Invalid OyasaiTab network count length." }
     return DataInputStream(ByteArrayInputStream(bytes)).use { input ->
       require(input.readUnsignedByte() == TYPE) { "Unsupported OyasaiTab message type." }
-      input.readInt().also { require(it >= 0) { "OyasaiTab network count must be non-negative." } }
+      input.readInt().also { require(it >= 0) { "OyasaiTab network count out of range: $it" } }
     }
   }
 }
@@ -53,8 +53,15 @@ object OyasaiTabNetworkCountCodec {
 object OyasaiTabSnapshotCodec {
   private const val VERSION = 2
   private const val MAX_PLAYERS = 1000
+  private const val MAX_SERVER_NAME_LENGTH = 64
+  private const val MAX_PLAYER_NAME_LENGTH = 512
 
   fun encode(snapshot: OyasaiTabSnapshot): ByteArray {
+    require(
+        snapshot.serverName.isNotBlank() && snapshot.serverName.length <= MAX_SERVER_NAME_LENGTH
+    ) {
+      "Invalid OyasaiTab snapshot serverName."
+    }
     require(snapshot.players.size <= MAX_PLAYERS) { "OyasaiTab snapshot has too many players." }
     val bytes = ByteArrayOutputStream()
     DataOutputStream(bytes).use { out ->
@@ -62,6 +69,14 @@ object OyasaiTabSnapshotCodec {
       out.writeUTF(snapshot.serverName)
       out.writeShort(snapshot.players.size)
       snapshot.players.forEach { player ->
+        require(player.nameLegacy.length <= MAX_PLAYER_NAME_LENGTH) {
+          "OyasaiTab player nameLegacy is too long."
+        }
+        require(
+            player.serverName.isNotBlank() && player.serverName.length <= MAX_SERVER_NAME_LENGTH
+        ) {
+          "Invalid OyasaiTab player serverName."
+        }
         out.writeLong(player.uuid.mostSignificantBits)
         out.writeLong(player.uuid.leastSignificantBits)
         out.writeUTF(player.nameLegacy)
@@ -76,17 +91,32 @@ object OyasaiTabSnapshotCodec {
       DataInputStream(ByteArrayInputStream(bytes)).use { input ->
         require(input.readUnsignedByte() == VERSION) { "Unsupported OyasaiTab snapshot version." }
         val serverName = input.readUTF()
+        require(serverName.isNotBlank() && serverName.length <= MAX_SERVER_NAME_LENGTH) {
+          "Invalid OyasaiTab snapshot serverName."
+        }
         val count = input.readUnsignedShort()
         require(count <= MAX_PLAYERS) { "OyasaiTab snapshot has too many players." }
         val players =
             List(count) {
+              val uuid = UUID(input.readLong(), input.readLong())
+              val nameLegacy = input.readUTF()
+              require(nameLegacy.length <= MAX_PLAYER_NAME_LENGTH) {
+                "OyasaiTab player nameLegacy is too long."
+              }
+              val playerServerName = input.readUTF()
+              require(
+                  playerServerName.isNotBlank() && playerServerName.length <= MAX_SERVER_NAME_LENGTH
+              ) {
+                "Invalid OyasaiTab player serverName."
+              }
               OyasaiTabPlayerSnapshot(
-                  uuid = UUID(input.readLong(), input.readLong()),
-                  nameLegacy = input.readUTF(),
-                  serverName = input.readUTF(),
+                  uuid = uuid,
+                  nameLegacy = nameLegacy,
+                  serverName = playerServerName,
                   ping = input.readInt().coerceAtLeast(0),
               )
             }
+        require(input.available() == 0) { "Trailing bytes in OyasaiTab snapshot." }
         OyasaiTabSnapshot(serverName, players)
       }
 }
