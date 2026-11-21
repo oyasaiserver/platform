@@ -88,6 +88,7 @@ class EntityPose : JavaPlugin() {
   }
 
   override fun onDisable() {
+    AirBlock.cleanupAll()
     logger.info("EntityPose disabled")
   }
 }

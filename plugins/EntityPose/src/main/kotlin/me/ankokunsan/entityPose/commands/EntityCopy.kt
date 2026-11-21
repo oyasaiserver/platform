@@ -33,7 +33,8 @@ class EntityCopy : CommandExecutor {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    val player = sender as Player
+    val player = sender as? Player ?: return true
+    if (!player.hasPermission("entitypose_arrange")) return true
     val uuid = player.uniqueId
     val targets = activeselection[uuid]?.filter { it.isValid }
 
@@ -94,7 +95,7 @@ class EntityCopy : CommandExecutor {
               isItemLocked = container.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE),
               hasGravity = entity.hasGravity(),
               hasBasePlate = armorStands?.hasBasePlate() ?: true,
-              isInvisible = armorStands?.isInvisible == true,
+              isInvisible = (entity as? LivingEntity)?.isInvisible == true,
               isSmall = armorStands?.isSmall ?: false,
               scale = (entity as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0,
               isTamed = (entity as? Tameable)?.isTamed ?: false,
