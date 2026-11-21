@@ -723,24 +723,29 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
     a.bar?.removePlayer(p.player)
     p.player.scoreboard = p.board
     if (useLobby && a.config.yaml.getString("teleportto") == "LOBBY") {
-      val lobby = readYaml(File(folder, "lobby.yml"))
-      val world =
-          lobby.getString("lobby.world")?.let(Bukkit::getWorld)
-              ?: error("Lobby world is unavailable")
-      val v = vector(lobby, "lobby.vector")
-      val y = readYaml(store.file(p.player))
-      y.set(
-          "location",
-          Location(
-              world,
-              v.x,
-              v.y,
-              v.z,
-              lobby.getDouble("lobby.yaw").toFloat(),
-              lobby.getDouble("lobby.pitch").toFloat(),
-          ),
-      )
-      saveYaml(store.file(p.player), y)
+      try {
+        val lobby = readYaml(File(folder, "lobby.yml"))
+        val world =
+            lobby.getString("lobby.world")?.let(Bukkit::getWorld)
+                ?: error("Lobby world is unavailable")
+        val v = vector(lobby, "lobby.vector")
+        val y = readYaml(store.file(p.player))
+        y.set(
+            "location",
+            Location(
+                world,
+                v.x,
+                v.y,
+                v.z,
+                lobby.getDouble("lobby.yaw").toFloat(),
+                lobby.getDouble("lobby.pitch").toFloat(),
+            ),
+        )
+        saveYaml(store.file(p.player), y)
+      } catch (e: Exception) {
+        recover(p.player)
+        throw e
+      }
     }
     recover(p.player)
   }
@@ -748,8 +753,11 @@ class TntrunModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecuto
   private fun safelyLeave(p: RunMember, useLobby: Boolean = true) {
     runCatching { leave(p, useLobby) }
         .onFailure {
-          plugin.logger.warning("TNTRun leave recovery is pending")
-          if (p.player.isOnline) p.player.kickPlayer("TNTRun の復元が未完了です。管理者に連絡してください。")
+          recover(p.player)
+          if (store.pending(p.player)) {
+            plugin.logger.warning("TNTRun leave recovery is pending")
+            if (p.player.isOnline) p.player.kickPlayer("TNTRun の復元が未完了です。管理者に連絡してください。")
+          }
         }
   }
 

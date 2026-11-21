@@ -1002,12 +1002,32 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
           plugin.logger.log(Level.SEVERE, "PvP quit recovery failed; journal retained", it)
         }
     if (member != null && players.remove(e.player.uniqueId) != null) {
-      member.arena.members.remove(e.player.uniqueId)
-      val wasFighter = member.arena.rules.fighters[e.player.uniqueId.toString()] != null
-      member.arena.rules.fighters[e.player.uniqueId.toString()]?.active = false
-      isolated(member.arena) {
-        if (member.arena.phase == "running" && wasFighter)
-            member.arena.rules.winners()?.let { finish(member.arena, it) }
+      val arena = member.arena
+      arena.members.remove(e.player.uniqueId)
+      if (arena.phase in setOf("waiting", "countdown") || e.player.uniqueId !in arena.played) {
+        runCatching { economy?.refund(member.charge) }
+            .onFailure {
+              plugin.logger.log(Level.SEVERE, "PvP quit refund failed; journal retained", it)
+            }
+      }
+      runCatching {
+        val destination =
+            arena.config
+                .text("tp.exit", "old")
+                .takeUnless { it == "old" }
+                ?.let { arena.config.spawns[it]?.location() }
+        if (destination != null && store.pending(e.player)) {
+          val file = store.file(e.player)
+          val y = YamlConfiguration().also { it.load(file) }
+          y.set("location", destination)
+          saveYaml(file, y)
+        }
+      }
+      val wasFighter = arena.rules.fighters[e.player.uniqueId.toString()] != null
+      arena.rules.fighters[e.player.uniqueId.toString()]?.active = false
+      isolated(arena) {
+        if (arena.phase == "countdown" && !canStart(arena)) arena.phase = "waiting"
+        if (arena.phase == "running" && wasFighter) arena.rules.winners()?.let { finish(arena, it) }
       }
     }
   }
