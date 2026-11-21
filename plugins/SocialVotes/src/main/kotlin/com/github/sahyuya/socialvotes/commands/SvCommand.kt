@@ -40,6 +40,10 @@ class SvCommand : CommandExecutor {
           return true
         }
         val groupName = args[1]
+        if (groupName.isBlank() || groupName.contains('.')) {
+          NotifyUtil.error(sender, "グループ名に「.」は使用できません。")
+          return true
+        }
         if (dm.groupByName.containsKey(groupName)) {
           NotifyUtil.error(sender, "既にそのグループは存在します。")
           return true
@@ -194,6 +198,7 @@ class SvCommand : CommandExecutor {
         }
         group.signIds.toList().forEach { dm.removeSignById(it) }
         dm.groupByName.remove(args[1])
+        dm.playerVotes.remove(args[1])
         dm.save()
 
         val message = SVLOGO + "${sender.name}§eがグループ§6${args[1]}§eと所属SV看板を消去しました。"

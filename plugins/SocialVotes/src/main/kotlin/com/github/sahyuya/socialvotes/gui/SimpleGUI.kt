@@ -104,7 +104,14 @@ object SimpleGUI {
     )
 
     // 制作者削除
-    inv.setItem(14, createGuiItem(Material.STRUCTURE_VOID, "§c制作者削除", listOf("§7mcid をチャット入力")))
+    inv.setItem(
+        14,
+        createGuiItem(
+            Material.STRUCTURE_VOID,
+            "§c制作者削除",
+            if (canCreatorEdit) listOf("§7mcid をチャット入力") else listOf("§c制作者のみ操作可能"),
+        ),
+    )
 
     // 自分の個別投票リセット
     inv.setItem(15, createGuiItem(Material.REDSTONE, "§c個別投票リセット", listOf("§7この看板への自分の投票数を0に戻す")))
@@ -215,11 +222,18 @@ object SimpleGUI {
           // 個別票をゼロに
           map[uuid] = 0
           dm.playerVotesPerSign[sign.id] = map
-          // グループ所属時 → グループ票も減らす
+          // グループ所属時 → 他看板の投票数を下回らないようにグループ票を減らす
           sign.group?.let { gName ->
             val gmap = dm.playerVotes[gName] ?: mutableMapOf()
             val usedGroup = gmap.getOrDefault(uuid, 0)
-            gmap[uuid] = (usedGroup - used).coerceAtLeast(0)
+            val group = dm.groupByName[gName]
+            val actualRemaining =
+                group
+                    ?.signIds
+                    ?.filter { it != sign.id }
+                    ?.sumOf { sid -> (dm.playerVotesPerSign[sid]?.get(uuid) ?: 0).coerceAtLeast(0) }
+                    ?: 0
+            gmap[uuid] = maxOf(actualRemaining, (usedGroup - used).coerceAtLeast(0))
             dm.playerVotes[gName] = gmap
           }
         }

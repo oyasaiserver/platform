@@ -52,7 +52,7 @@ class DataManager(private val plugin: Plugin) {
     val sSec = yaml.getConfigurationSection("signs")
     sSec?.getKeys(false)?.forEach { idStr ->
       val sec = sSec.getConfigurationSection(idStr) ?: return@forEach
-      val id = idStr.toInt()
+      val id = idStr.toIntOrNull() ?: return@forEach
       val creators =
           sec.getStringList("creators")
               .mapNotNull { runCatching { UUID.fromString(it) }.getOrNull() }
@@ -94,11 +94,13 @@ class DataManager(private val plugin: Plugin) {
     val gSec = yaml.getConfigurationSection("groups")
     gSec?.getKeys(false)?.forEach { name ->
       val sec = gSec.getConfigurationSection(name) ?: return@forEach
+      val ownerStr = sec.getString("owner") ?: return@forEach
+      val owner = runCatching { UUID.fromString(ownerStr) }.getOrNull() ?: return@forEach
       val group =
           SVGroup(
               name = name,
               signIds = sec.getIntegerList("signIds").toMutableList(),
-              owner = UUID.fromString(sec.getString("owner")),
+              owner = owner,
               maxVotesPerPlayer = sec.getInt("maxVotesPerPlayer", 1),
               showVotesGroup = sec.getBoolean("showVotesGroup", true),
               sortMode = sec.getString("sortMode", "id")!!,
@@ -113,17 +115,23 @@ class DataManager(private val plugin: Plugin) {
     pvSec?.getKeys(false)?.forEach { group ->
       val map = mutableMapOf<UUID, Int>()
       val sub = pvSec.getConfigurationSection(group) ?: return@forEach
-      sub.getKeys(false).forEach { uuidStr -> map[UUID.fromString(uuidStr)] = sub.getInt(uuidStr) }
+      sub.getKeys(false).forEach { uuidStr ->
+        val uuid = runCatching { UUID.fromString(uuidStr) }.getOrNull() ?: return@forEach
+        map[uuid] = sub.getInt(uuidStr)
+      }
       playerVotes[group] = map
     }
 
     // -------- playerVotesPerSign --------
     val ppsSec = yaml.getConfigurationSection("playerVotesPerSign")
     ppsSec?.getKeys(false)?.forEach { idStr ->
-      val id = idStr.toInt()
+      val id = idStr.toIntOrNull() ?: return@forEach
       val map = mutableMapOf<UUID, Int>()
       val sub = ppsSec.getConfigurationSection(idStr) ?: return@forEach
-      sub.getKeys(false).forEach { uuidStr -> map[UUID.fromString(uuidStr)] = sub.getInt(uuidStr) }
+      sub.getKeys(false).forEach { uuidStr ->
+        val uuid = runCatching { UUID.fromString(uuidStr) }.getOrNull() ?: return@forEach
+        map[uuid] = sub.getInt(uuidStr)
+      }
       playerVotesPerSign[id] = map
     }
   }
@@ -247,12 +255,34 @@ class DataManager(private val plugin: Plugin) {
           it.blockZ == sign.z
     }
     // ===== グループ紐付け解除 =====
-    sign.group?.let { gName -> groupByName[gName]?.signIds?.remove(id) }
+    val oldGroup = sign.group
+    oldGroup?.let { gName -> groupByName[gName]?.signIds?.remove(id) }
     // ===== 投票データ削除 =====
     playerVotesPerSign.remove(id)
     // ===== メインデータ削除 =====
     signById.remove(id)
+    oldGroup?.let { recalculateGroupPlayerVotes(it) }
     save()
+  }
+
+  fun recalculateGroupPlayerVotes(groupName: String) {
+    val group = groupByName[groupName] ?: return
+    val totals = mutableMapOf<UUID, Int>()
+    for (sid in group.signIds) {
+      val perSign = playerVotesPerSign[sid] ?: continue
+      for ((uuid, count) in perSign) {
+        if (count > 0) {
+          totals[uuid] = (totals[uuid] ?: 0) + count
+        }
+      }
+    }
+    val existing = playerVotes[groupName]
+    if (existing != null) {
+      for (uuid in existing.keys) {
+        totals.putIfAbsent(uuid, 0)
+      }
+    }
+    playerVotes[groupName] = totals
   }
 
   fun updateSignLocation(id: Int, newLoc: Location) {
@@ -278,8 +308,16 @@ class DataManager(private val plugin: Plugin) {
   }
 
   fun getSignAt(loc: Location): SVSign? {
-    val id = locationToId[loc] ?: return null
-    return signById[id]
+    val id = locationToId[loc]
+    if (id != null) return signById[id]
+    val worldName = loc.world?.name ?: return null
+    val found =
+        signById.values.firstOrNull {
+          it.world == worldName && it.x == loc.blockX && it.y == loc.blockY && it.z == loc.blockZ
+        } ?: return null
+    locationToId[Location(loc.world, found.x.toDouble(), found.y.toDouble(), found.z.toDouble())] =
+        found.id
+    return found
   }
 
   fun writeSignIdToBlock(sign: Sign, id: Int) {
