@@ -1,5 +1,6 @@
 package com.baakun.dynamicprofile.promotion.commands.syokaku
 
+import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.promotion.utils.DateTimeUtils
 import com.baakun.dynamicprofile.promotion.utils.PermsUtils
 import com.baakun.dynamicprofile.promotion.utils.PlayerUtils
@@ -21,6 +22,14 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object SeePlayerInfo : CommandExecutor {
+  private fun resolvePromoterName(promotedBy: String): String {
+    val uuid = runCatching { UUID.fromString(promotedBy) }.getOrNull()
+    if (uuid != null) {
+      return Bukkit.getOfflinePlayer(uuid).name ?: promotedBy
+    }
+    return promotedBy.ifBlank { "Unknown" }
+  }
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
@@ -122,131 +131,138 @@ object SeePlayerInfo : CommandExecutor {
                     return@Runnable
                   }
 
-                  sender.sendMessage("§e${playerName}さんの昇格履歴:")
-                  if (history.records.isEmpty()) {
-                    sender.sendMessage(" - 昇格履歴がありません。")
-                  } else {
-                    val record = history.records.sortedByDescending { it.date }.get(page)
+                  Bukkit.getScheduler()
+                      .runTask(
+                          plugin,
+                          Runnable {
+                            sender.sendMessage("§e${playerName}さんの昇格履歴:")
+                            if (history.records.isEmpty()) {
+                              sender.sendMessage(" - 昇格履歴がありません。")
+                            } else {
+                              val record = history.records.sortedByDescending { it.date }.get(page)
 
-                    // type 昇格・降格
-                    // date 昇格日：
-                    // previousRank -> newRank
-                    // note　備考
-                    // promotedBy　昇格者：
-                    // isForced　特例昇格：
-                    // lastBuildID　最後の建築ID
-                    // builds　建築数
-                    // lastLv　昇格時点のレベル
-                    // lastExp　昇格時点の経験値
-                    // << (r/n) >>　ページ切り替え(1ページ1件)、クリック可
-
-                    val message =
-                        Component.text(
-                                "===============${page + 1}/${history.records.size}============="
-                            )
-                            .appendNewline()
-                            .append(Component.text(" - 日付: ${record.date}"))
-                            .appendNewline()
-                            .append(Component.text(" - 種類: ${record.type}"))
-                            .appendNewline()
-                            .append(
-                                Component.text(
-                                    " - ランク: ${record.previousRank} -> ${record.newRank}"
-                                )
-                            )
-                            .appendNewline()
-                            .append(Component.text(" - 備考: ${record.note}"))
-                            .appendNewline()
-                            .append(
-                                Component.text(
-                                    " - 昇格者: ${Bukkit.getOfflinePlayer(UUID.fromString(record.promotedBy)).name}"
-                                )
-                            )
-                            .appendNewline()
-                            .append(
-                                Component.text(" - 特例昇格: ${if (record.isForced) "はい" else "いいえ"}")
-                            )
-                            .appendNewline()
-                            .append(Component.text(" - プレイ時間: ${record.playedSec / 3600}時間"))
-                            .appendNewline()
-                            .append(
-                                Component.text(" - 最後の建築ID: ${record.lastBuildID}")
-                                    .clickEvent(ClickEvent.runCommand("sltp ${record.lastBuildID}"))
-                            )
-                            .appendNewline()
-                            .append(Component.text(" - 建築数: ${record.builds}"))
-                            .appendNewline()
-                            .append(Component.text(" - 昇格時点のレベル: ${record.lastLv}"))
-                            .appendNewline()
-                            .append(Component.text(" - 昇格時点の経験値: ${record.lastExp}"))
-                            .appendNewline()
-                            .append(
-                                Component.text("<<================")
-                                    .hoverEvent(HoverEvent.showText(Component.text("クリックして前のページ")))
-                                    .clickEvent(
-                                        ClickEvent.runCommand(
-                                            "syokaku seeplayerinfo ${playerName} ${page}"
-                                        )
-                                    )
-                            )
-                            //
-                            // .append(Component.text("<<<<<<<<<<<<<<<").clickEvent(ClickEvent.runCommand("syokaku
-                            // ${playerName} ${if(page+1<history.records.size) page+1 else page}")))
-                            // ページを戻る
-                            .append(
-                                Component.text("================>>")
-                                    .hoverEvent(HoverEvent.showText(Component.text("クリックして次のページ")))
-                                    .clickEvent(
-                                        ClickEvent.runCommand(
-                                            "syokaku seeplayerinfo ${playerName} ${page + 2}"
-                                        )
-                                    )
-                            )
-                    sender.sendMessage(message)
-                  }
+                              val message =
+                                  Component.text(
+                                          "===============${page + 1}/${history.records.size}============="
+                                      )
+                                      .appendNewline()
+                                      .append(Component.text(" - 日付: ${record.date}"))
+                                      .appendNewline()
+                                      .append(Component.text(" - 種類: ${record.type}"))
+                                      .appendNewline()
+                                      .append(
+                                          Component.text(
+                                              " - ランク: ${record.previousRank} -> ${record.newRank}"
+                                          )
+                                      )
+                                      .appendNewline()
+                                      .append(Component.text(" - 備考: ${record.note}"))
+                                      .appendNewline()
+                                      .append(
+                                          Component.text(
+                                              " - 昇格者: ${resolvePromoterName(record.promotedBy)}"
+                                          )
+                                      )
+                                      .appendNewline()
+                                      .append(
+                                          Component.text(
+                                              " - 特例昇格: ${if (record.isForced) "はい" else "いいえ"}"
+                                          )
+                                      )
+                                      .appendNewline()
+                                      .append(
+                                          Component.text(" - プレイ時間: ${record.playedSec / 3600}時間")
+                                      )
+                                      .appendNewline()
+                                      .append(
+                                          Component.text(" - 最後の建築ID: ${record.lastBuildID}")
+                                              .clickEvent(
+                                                  ClickEvent.runCommand(
+                                                      "sltp ${record.lastBuildID}"
+                                                  )
+                                              )
+                                      )
+                                      .appendNewline()
+                                      .append(Component.text(" - 建築数: ${record.builds}"))
+                                      .appendNewline()
+                                      .append(Component.text(" - 昇格時点のレベル: ${record.lastLv}"))
+                                      .appendNewline()
+                                      .append(Component.text(" - 昇格時点の経験値: ${record.lastExp}"))
+                                      .appendNewline()
+                                      .append(
+                                          Component.text("<<================")
+                                              .hoverEvent(
+                                                  HoverEvent.showText(Component.text("クリックして前のページ"))
+                                              )
+                                              .clickEvent(
+                                                  ClickEvent.runCommand(
+                                                      "syokaku seeplayerinfo ${playerName} ${page}"
+                                                  )
+                                              )
+                                      )
+                                      .append(
+                                          Component.text("================>>")
+                                              .hoverEvent(
+                                                  HoverEvent.showText(Component.text("クリックして次のページ"))
+                                              )
+                                              .clickEvent(
+                                                  ClickEvent.runCommand(
+                                                      "syokaku seeplayerinfo ${playerName} ${page + 2}"
+                                                  )
+                                              )
+                                      )
+                              sender.sendMessage(message)
+                            }
+                          },
+                      )
                 } else if (args[1] == "gui" && sender is Player) {
                   // GUIで一覧表示
-                  val inventory = Bukkit.createInventory(sender, 54, "${playerName}さんの昇格履歴")
-                  history.records
-                      .sortedByDescending { it.date }
-                      .forEach {
-                          (
-                              type,
-                              newRank,
-                              previousRank,
-                              promotedBy,
-                              isForced,
-                              date,
-                              note,
-                              playedSec,
-                              lastBuildID,
-                              builds,
-                              lastLv,
-                              lastExp) ->
-                        val item = ItemStack(Material.OAK_SIGN)
-                        val meta = item.itemMeta
-                        meta?.setDisplayName("§a${previousRank} -> ${newRank}")
-                        val lore = mutableListOf<Component>()
-                        lore.add(Component.text("§e日付: §f${date}"))
-                        lore.add(Component.text("§e種類: §f${type}"))
-                        lore.add(
-                            Component.text(
-                                "§e昇格者: §f${Bukkit.getOfflinePlayer(UUID.fromString(promotedBy)).name}"
-                            )
-                        )
-                        lore.add(Component.text("§e備考: §f${note}"))
-                        lore.add(Component.text("§e特例昇格: §f${if (isForced) "はい" else "いいえ"}"))
-                        lore.add(Component.text("§eプレイ時間: §f${playedSec / 3600}時間"))
-                        lore.add(Component.text("§e最後の建築ID: §f${lastBuildID}"))
-                        lore.add(Component.text("§e建築数: §f${builds}"))
-                        lore.add(Component.text("§e昇格時点のレベル: §f${lastLv}"))
-                        lore.add(Component.text("§e昇格時点の経験値: §f${lastExp}"))
-                        meta?.lore(lore)
-                        item.itemMeta = meta
-                        inventory.addItem(item)
-                      }
                   Bukkit.getScheduler()
-                      .runTask(plugin, Runnable { sender.openInventory(inventory) })
+                      .runTask(
+                          plugin,
+                          Runnable {
+                            val inventory = GuiInventory.createInventory(6, "${playerName}さんの昇格履歴")
+                            history.records
+                                .sortedByDescending { it.date }
+                                .forEach {
+                                    (
+                                        type,
+                                        newRank,
+                                        previousRank,
+                                        promotedBy,
+                                        isForced,
+                                        date,
+                                        note,
+                                        playedSec,
+                                        lastBuildID,
+                                        builds,
+                                        lastLv,
+                                        lastExp) ->
+                                  val item = ItemStack(Material.OAK_SIGN)
+                                  val meta = item.itemMeta
+                                  meta?.setDisplayName("§a${previousRank} -> ${newRank}")
+                                  val lore = mutableListOf<Component>()
+                                  lore.add(Component.text("§e日付: §f${date}"))
+                                  lore.add(Component.text("§e種類: §f${type}"))
+                                  lore.add(
+                                      Component.text("§e昇格者: §f${resolvePromoterName(promotedBy)}")
+                                  )
+                                  lore.add(Component.text("§e備考: §f${note}"))
+                                  lore.add(
+                                      Component.text("§e特例昇格: §f${if (isForced) "はい" else "いいえ"}")
+                                  )
+                                  lore.add(Component.text("§eプレイ時間: §f${playedSec / 3600}時間"))
+                                  lore.add(Component.text("§e最後の建築ID: §f${lastBuildID}"))
+                                  lore.add(Component.text("§e建築数: §f${builds}"))
+                                  lore.add(Component.text("§e昇格時点のレベル: §f${lastLv}"))
+                                  lore.add(Component.text("§e昇格時点の経験値: §f${lastExp}"))
+                                  meta?.lore(lore)
+                                  item.itemMeta = meta
+                                  inventory.addItem(item)
+                                }
+                            sender.openInventory(inventory)
+                          },
+                      )
                 }
               }
             },

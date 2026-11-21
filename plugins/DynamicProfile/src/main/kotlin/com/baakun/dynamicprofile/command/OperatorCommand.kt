@@ -167,7 +167,7 @@ object OperatorCommand : CommandExecutor {
             sender.sendMessage("このコマンドはプレイヤーから実行してください。")
             return true
           }
-          if (args[1] == "kakutei") {
+          if (args.getOrNull(1) == "kakutei") {
             Bukkit.getScheduler()
                 .runTaskAsynchronously(
                     plugin,
@@ -255,7 +255,12 @@ object OperatorCommand : CommandExecutor {
           }
         }
         "receiveStatus" -> {
-          when (args[1]) {
+          val targetLv = args.getOrNull(1)
+          if (targetLv == null) {
+            sender.sendMessage(Component.text("使用法: /dpmanager receiveStatus <*|レベル>"))
+            return true
+          }
+          when (targetLv) {
             "*" -> {
               for (key in rewardReceiveStatus.getKeys(false)) {
                 rewardReceiveStatus.set(key, mutableListOf<String>())
@@ -263,25 +268,35 @@ object OperatorCommand : CommandExecutor {
               }
             }
             else -> {
-              rewardReceiveStatus.set(args[1], mutableListOf<String>())
-              sender.sendMessage(Component.text("レベル ${args[1]} の報酬の受け取り状況をリセットしました。"))
+              rewardReceiveStatus.set(targetLv, mutableListOf<String>())
+              sender.sendMessage(Component.text("レベル $targetLv の報酬の受け取り状況をリセットしました。"))
             }
           }
           rewardReceiveStatus.save()
         }
         "required" -> {
-          plugin.config.set("basicRequired", args[1].toInt())
+          val req = args.getOrNull(1)?.toIntOrNull()
+          if (req == null || req < 1) {
+            sender.sendMessage(Component.text("基本経験値は1以上の整数で指定してください"))
+            return true
+          }
+          plugin.config.set("basicRequired", req)
           plugin.saveConfig()
-          sender.sendMessage(Component.text("レベルアップに必要な基本経験値を ${args[1]} に設定しました"))
+          sender.sendMessage(Component.text("レベルアップに必要な基本経験値を $req に設定しました"))
         }
         "noticeLvs" -> {
+          val lv = args.getOrNull(1)?.toIntOrNull()
+          if (lv == null) {
+            sender.sendMessage(Component.text("レベルを整数で指定してください"))
+            return true
+          }
           val lvs = plugin.config.getIntegerList("noticeLvs")
-          if (lvs.contains(args[1].toInt())) {
-            lvs.remove(args[1].toInt())
-            sender.sendMessage(Component.text("レベル ${args[1]} を、サーバー内に通知するレベルから削除しました"))
+          if (lvs.contains(lv)) {
+            lvs.remove(lv)
+            sender.sendMessage(Component.text("レベル $lv を、サーバー内に通知するレベルから削除しました"))
           } else {
-            lvs.add(args[1].toInt())
-            sender.sendMessage(Component.text("レベル ${args[1]} を、サーバー内に通知するレベルに追加しました"))
+            lvs.add(lv)
+            sender.sendMessage(Component.text("レベル $lv を、サーバー内に通知するレベルに追加しました"))
           }
           plugin.config.set("noticeLvs", lvs)
           plugin.saveConfig()
@@ -309,7 +324,13 @@ object OperatorCommand : CommandExecutor {
           sender.sendMessage(Component.text("報酬用チェストを設定しました"))
         }
         "beh" -> {
-          when (args[1]) {
+          val behKey = args.getOrNull(1)
+          val amount = args.getOrNull(2)?.toIntOrNull()
+          if (behKey == null || amount == null) {
+            sender.sendMessage(Component.text("使用法: /dpmanager beh <動作> <経験値(整数)>"))
+            return true
+          }
+          when (behKey) {
             "Move",
             "Vehicle",
             "Fly",
@@ -318,10 +339,12 @@ object OperatorCommand : CommandExecutor {
             "Vote",
             "Like",
             "ReceiveLike",
-            "Join" -> {
-              plugin.config.set(args[1], args[2].toInt())
+            "Join",
+            "Chat",
+            "PlayTime" -> {
+              plugin.config.set(behKey, amount)
               plugin.saveConfig()
-              sender.sendMessage(Component.text("${args[1]} をした際に得られる経験値を、${args[2]}に設定しました"))
+              sender.sendMessage(Component.text("$behKey をした際に得られる経験値を、${amount}に設定しました"))
             }
           }
         }
@@ -363,20 +386,39 @@ object OperatorCommand : CommandExecutor {
               TitleGui.showPlayerTitlesGui(player, targetPlayerName)
             }
             "give" -> {
-              sender.sendMessage(
-                  giveTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
-              )
+              val targetName = args.getOrNull(2)
+              val titleId = args.getOrNull(3)?.toIntOrNull()
+              if (targetName == null || titleId == null) {
+                sender.sendMessage("使用法: /dpmanager title give <プレイヤー名> <称号ID>")
+                return true
+              }
+              sender.sendMessage(giveTitle(Bukkit.getOfflinePlayer(targetName).uniqueId, titleId))
             }
             "add" -> {
-              sender.sendMessage(createNewTitle(args[2], args[3].toInt()))
+              val titleName = args.getOrNull(2)
+              val rarity = args.getOrNull(3)?.toIntOrNull()
+              if (titleName == null || rarity == null) {
+                sender.sendMessage("使用法: /dpmanager title add <称号名> <優先度(整数)>")
+                return true
+              }
+              sender.sendMessage(createNewTitle(titleName, rarity))
             }
             "remove" -> {
-              sender.sendMessage(removeTitle(Integer.parseInt(args[2])))
+              val titleId = args.getOrNull(2)?.toIntOrNull()
+              if (titleId == null) {
+                sender.sendMessage("使用法: /dpmanager title remove <称号ID>")
+                return true
+              }
+              sender.sendMessage(removeTitle(titleId))
             }
             "deprive" -> {
-              sender.sendMessage(
-                  deTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
-              )
+              val targetName = args.getOrNull(2)
+              val titleId = args.getOrNull(3)?.toIntOrNull()
+              if (targetName == null || titleId == null) {
+                sender.sendMessage("使用法: /dpmanager title deprive <プレイヤー名> <称号ID>")
+                return true
+              }
+              sender.sendMessage(deTitle(Bukkit.getOfflinePlayer(targetName).uniqueId, titleId))
             }
             "reload" -> {
               saveTitles()
@@ -384,42 +426,91 @@ object OperatorCommand : CommandExecutor {
               sender.sendMessage("リロードしました")
             }
             "edit" -> {
-              val title = allTitles.get(Integer.parseInt(args[2]))
+              val titleId = args.getOrNull(2)?.toIntOrNull()
+              val newName = args.getOrNull(3)
+              if (titleId == null || newName == null) {
+                sender.sendMessage("使用法: /dpmanager title edit <称号ID> <新しい称号名>")
+                return true
+              }
+              val title = allTitles.get(titleId)
               if (title != null) {
-                title.title = args[3]
+                title.title = newName
+                saveTitles()
+                sender.sendMessage("称号名を更新しました")
+              } else {
+                sender.sendMessage("称号が見つかりません")
               }
             }
             "editDesc" -> {
-
-              val title = allTitles.get(Integer.parseInt(args[2]))
+              val titleId = args.getOrNull(2)?.toIntOrNull()
+              if (titleId == null || args.size < 4) {
+                sender.sendMessage("使用法: /dpmanager title editDesc <称号ID> <説明文...>")
+                return true
+              }
+              val title = allTitles.get(titleId)
               if (title != null) {
-                val descList = args.toMutableList()
-                descList.removeAt(0)
-                descList.removeAt(0)
-                descList.removeAt(0)
+                val descList = args.drop(3).toMutableList()
                 title.description = descList
+                saveTitles()
                 sender.sendMessage("称号の説明を更新しました")
               } else {
                 sender.sendMessage("称号が見つかりません")
               }
             }
             "get" -> {
-              val title = getTitleFromId(Integer.parseInt(args[2]))
+              val titleId = args.getOrNull(2)?.toIntOrNull()
+              if (titleId == null) {
+                sender.sendMessage("使用法: /dpmanager title get <称号ID>")
+                return true
+              }
+              val title = getTitleFromId(titleId)
               sender.sendMessage(title.title)
             }
           }
         }
         "setCount" -> {
-          val stats = getStats(UUID.fromString(args[1]))
-          stats.set(BehType.valueOf(args[2]), Integer.parseInt(args[3]))
+          if (args.size < 4) {
+            sender.sendMessage("使用法: /dpmanager setCount <UUID> <BehType> <回数>")
+            return true
+          }
+          val uuid = runCatching { UUID.fromString(args[1]) }.getOrNull()
+          if (uuid == null) {
+            sender.sendMessage("無効なUUIDです: ${args[1]}")
+            return true
+          }
+          val behType =
+              runCatching { BehType.valueOf(args[2]) }
+                  .getOrElse { runCatching { BehType.valueOf(args[2].uppercase()) }.getOrNull() }
+          if (behType == null) {
+            sender.sendMessage("無効な動作タイプです: ${args[2]}")
+            return true
+          }
+          val count = args[3].toIntOrNull()
+          if (count == null) {
+            sender.sendMessage("回数は整数で指定してください: ${args[3]}")
+            return true
+          }
+          val stats = getStats(uuid)
+          stats.set(behType, count)
+          if (plugin.statsReady) saveStats(uuid)
         }
         "repair" -> {
-          val uuid = UUID.fromString(args[1])
+          val rawUuid = args.getOrNull(1)
+          val uuid = rawUuid?.let { runCatching { UUID.fromString(it) }.getOrNull() }
+          if (uuid == null) {
+            sender.sendMessage("有効なUUIDを指定してください")
+            return true
+          }
+          val recoverFile = File(plugin.dataFolder, "recoverfiles/${uuid}.json")
+          if (!recoverFile.exists()) {
+            sender.sendMessage("復旧ファイルが見つかりません: ${recoverFile.name}")
+            return true
+          }
           val currentStats = getStats(uuid)
-          val recoverFile = File(plugin.dataFolder.absolutePath + "/recoverfiles/${uuid}.json")
           val recoverStats: Stats =
               gson.fromJson(recoverFile.readText(StandardCharsets.UTF_8), Stats::class.java)
           currentStats.addAllCounts(recoverStats)
+          if (plugin.statsReady) saveStats(uuid)
         }
         "recommendInterval" -> {
           if (args.size == 1) {

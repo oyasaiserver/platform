@@ -1,5 +1,6 @@
 package com.baakun.dynamicprofile.command
 
+import com.baakun.dynamicprofile.util.Tools
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.datas.Data
 import org.bukkit.command.Command
@@ -54,6 +55,7 @@ object RecommendCommand : CommandExecutor {
               return true
             }
         stats.recommends[slot - 1] = id
+        runCatching { if (Tools.plugin.statsReady) Tools.saveStats(sender.uniqueId) }
         sender.sendMessage("スロット$slot にID $id を登録しました。")
       }
       "remove" -> {
@@ -67,7 +69,19 @@ object RecommendCommand : CommandExecutor {
           return true
         }
         stats.recommends[slot - 1] = Int.MIN_VALUE
+        runCatching { if (Tools.plugin.statsReady) Tools.saveStats(sender.uniqueId) }
         sender.sendMessage("スロット$slot を空にしました。")
+      }
+      "list" -> {
+        for (i in 0..4) {
+          val recId = stats.recommends[i] ?: Int.MIN_VALUE
+          if (recId == Int.MIN_VALUE) {
+            sender.sendMessage("スロット${i + 1}: 未設定")
+          } else {
+            val title = Data.getSLData(recId)?.title ?: "不明"
+            sender.sendMessage("スロット${i + 1}: ID $recId ($title)")
+          }
+        }
       }
       else -> sender.sendMessage("/dpsuki <add|remove> <スロット番号> [建築ID]")
     }

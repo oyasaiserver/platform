@@ -36,11 +36,10 @@ object GiftItem : Listener {
 
   @EventHandler
   fun getCloseEvent(e: InventoryCloseEvent) {
-    if (!giftInventory.contains(e.view.topInventory)) return
     val giftInv = e.view.topInventory
+    val toPlayer = giftInventory.remove(giftInv) ?: return
     if (giftInv.isEmpty) return
 
-    val toPlayer = giftInventory[giftInv] ?: return
     if (!toPlayer.isOnline) {
       e.player.sendMessage("&c相手がオフラインです！".color())
       returnItems(e.player, giftInv)
@@ -93,14 +92,15 @@ object GiftItem : Listener {
   }
 
   private fun recordGifts(from: HumanEntity, to: Player, shulkerBoxMeta: BlockStateMeta) {
-    val world =
-        Tools.plugin.config.getString("giftRecordWorld", "lifeworld")?.let { Bukkit.getWorld(it) }
+    val worldName =
+        Tools.plugin.config.getString("giftRecordWorld", "lifeworld")?.takeIf { it.isNotBlank() }
+            ?: return
+    val world = Bukkit.getWorld(worldName) ?: return
     val locs = Tools.plugin.config.getDoubleList("giftRecordWorldChestXYZ")
-    //        val shulkerBoxItem = ItemStack((if (from.gameMode == GameMode.CREATIVE||from.gameMode
-    // == GameMode.SPECTATOR) Material.WHITE_SHULKER_BOX else Material.SHULKER_BOX))
+    if (locs.size < 3) return
     val shulkerBoxItem = ItemStack(Material.SHULKER_BOX)
     val dbLoc = Location(world, locs[0], locs[1], locs[2])
-    val db: Chest = dbLoc.block.state as Chest
+    val db = dbLoc.block.state as? Chest ?: return
     shulkerBoxItem.itemMeta = shulkerBoxMeta
     shulkerBoxItem.addUnsafeEnchantment(Enchantment.MENDING, 1)
     shulkerBoxItem.addText(

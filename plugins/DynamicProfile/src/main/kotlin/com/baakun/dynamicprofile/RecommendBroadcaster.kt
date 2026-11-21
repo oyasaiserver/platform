@@ -24,14 +24,15 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
 
   fun startAndReturnTask(intervalTicks: Long): BukkitRunnable {
     // configからspecialFrameIntervalを取得
-    specialFrameInterval = plugin.config.getInt("specialFrameInterval", 3)
+    specialFrameInterval = plugin.config.getInt("specialFrameInterval", 3).coerceAtLeast(1)
     val task =
         object : BukkitRunnable() {
           override fun run() {
             broadcastRandomRecommend()
           }
         }
-    task.runTaskTimer(plugin, intervalTicks, intervalTicks)
+    val safeTicks = intervalTicks.coerceAtLeast(1L)
+    task.runTaskTimer(plugin, safeTicks, safeTicks)
     return task
   }
 
@@ -44,8 +45,9 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
             .getRegistration(net.luckperms.api.LuckPerms::class.java)
             ?.provider
 
+    val interval = specialFrameInterval.coerceAtLeast(1)
     val (targetPlayers, cache) = // targetPlayers: おススメ設定済み　かつ　枠に合致するプレイヤーのリスト
-        when (frameIndex % specialFrameInterval) {
+        when (frameIndex % interval) {
           0 -> { // 特別枠
             val filtered =
                 onlinePlayers.filter { player ->
@@ -87,7 +89,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
             filtered to normalCache
           }
         }
-    frameIndex = (frameIndex + 1) % specialFrameInterval
+    frameIndex = (frameIndex + 1) % interval
     if (targetPlayers.isEmpty()) return
     val mode: RecommendMode =
         when (Tools.plugin.config.getInt("RecommendBroadcastMode", 0)) {

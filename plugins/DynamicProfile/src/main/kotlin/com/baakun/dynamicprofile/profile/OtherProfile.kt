@@ -22,33 +22,52 @@ object OtherProfile {
   val EMPTY = Integer.MIN_VALUE
 
   fun display(sender: Player, target: String) {
-    val ofpNullable = Bukkit.getOfflinePlayerIfCached(target)
+    val ofpNullable = Bukkit.getPlayerExact(target) ?: Bukkit.getOfflinePlayerIfCached(target)
     if (ofpNullable == null) {
-      val ofp = Bukkit.getOfflinePlayer(target)
-      Bukkit.getLogger().info("Creating a unknown player...: $target")
-
-      val name = ofp.name ?: "Null"
-      var guiTitle = name
-      if (!ofp.hasPlayedBefore()) guiTitle = "$name （何だこのおっさん！？）"
-      val inventory = GuiInventory.createInventory(6, guiTitle)
-      sender.openInventory(inventory)
-      Thread { displayFunc(sender, ofp, inventory) }.start()
+      Bukkit.getScheduler()
+          .runTaskAsynchronously(
+              Tools.plugin,
+              Runnable {
+                val ofp = Bukkit.getOfflinePlayer(target)
+                Bukkit.getLogger().info("Creating a unknown player...: $target")
+                Bukkit.getScheduler()
+                    .runTask(
+                        Tools.plugin,
+                        Runnable {
+                          if (!sender.isOnline) return@Runnable
+                          val name = ofp.name?.takeIf { it.isNotBlank() } ?: target
+                          var guiTitle = name
+                          if (!ofp.hasPlayedBefore()) guiTitle = "$name （何だこのおっさん！？）"
+                          val inventory = GuiInventory.createInventory(6, guiTitle)
+                          sender.openInventory(inventory)
+                          displayFunc(sender, ofp, inventory, name)
+                        },
+                    )
+              },
+          )
     } else {
-      val name = ofpNullable.name ?: "Null"
+      val name = ofpNullable.name?.takeIf { it.isNotBlank() } ?: target
       var guiTitle = name
-      if (!ofpNullable.hasPlayedBefore()) guiTitle = "$name （何だこのおっさん！？）"
+      if (!ofpNullable.hasPlayedBefore() && !ofpNullable.isOnline) {
+        guiTitle = "$name （何だこのおっさん！？）"
+      }
       val inventory = GuiInventory.createInventory(6, guiTitle)
       sender.openInventory(inventory)
-      displayFunc(sender, ofpNullable, inventory)
+      displayFunc(sender, ofpNullable, inventory, name)
     }
   }
 
-  private fun displayFunc(sender: Player, ofp: OfflinePlayer, inventory: Inventory) {
+  private fun displayFunc(
+      sender: Player,
+      ofp: OfflinePlayer,
+      inventory: Inventory,
+      targetName: String = ofp.name?.takeIf { it.isNotBlank() } ?: "Unknown",
+  ) {
     addBlackStandGlass(
         inventory,
         arrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 18, 27, 36, 45, 53),
     )
-    commonFunc(inventory, sender, ofp.name ?: "Null")
+    commonFunc(inventory, sender, targetName)
 
     val statsData = getStats(ofp.uniqueId)
 
@@ -60,7 +79,7 @@ object OtherProfile {
         soundPlayer = sender,
     )
 
-    addMenuItems(inventory, sender, ofp.name ?: "null", ofp)
+    addMenuItems(inventory, sender, targetName, ofp)
 
     sender.updateInventory()
   }
@@ -71,7 +90,7 @@ object OtherProfile {
       target: String,
       ofp: OfflinePlayer,
   ) {
-    val statsData = getStats(Bukkit.getOfflinePlayer(target).uniqueId)
+    val statsData = getStats(ofp.uniqueId)
 
     for (i in 0..4) {
       val recommend = statsData.recommends[i] ?: EMPTY
