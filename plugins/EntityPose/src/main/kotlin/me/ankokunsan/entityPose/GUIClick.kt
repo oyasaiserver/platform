@@ -15,6 +15,7 @@ import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.WOLF_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.ZAHYO_KEY
+import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
 import org.bukkit.Sound
@@ -32,29 +33,75 @@ import org.bukkit.entity.Wolf
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.persistence.PersistentDataType
 
 class GUIClick : Listener {
-  @EventHandler
-  fun onSettingClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3エンティティの設定変更") return
+  private fun validateGuiClick(
+      event: InventoryClickEvent,
+      expectedType: EntityPoseGuiType,
+  ): Pair<Player, EntityPoseGuiHolder>? {
+    val holder = event.view.topInventory.holder as? EntityPoseGuiHolder ?: return null
+    if (holder.type != expectedType) return null
     event.isCancelled = true
 
-    val player = event.whoClicked as? Player ?: return
+    val player = event.whoClicked as? Player ?: return null
+    if (!player.hasPermission("entitypose_arrange")) {
+      player.closeInventory()
+      return null
+    }
+    if (
+        event.action == InventoryAction.COLLECT_TO_CURSOR ||
+            event.isShiftClick ||
+            event.clickedInventory != event.view.topInventory
+    ) {
+      return null
+    }
+    return player to holder
+  }
 
-    val result =
-        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
-          it != player
-        }
-    val target = result?.hitEntity ?: return // いなければ終了
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    if (event.view.topInventory.holder is EntityPoseGuiHolder) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler
+  fun onSettingClick(event: InventoryClickEvent) {
+    val (player, holder) = validateGuiClick(event, EntityPoseGuiType.SETTING) ?: return
+
+    val target =
+        (holder.targetEntityId?.let { Bukkit.getEntity(it) }
+            ?: player.world
+                .rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
+                  it !is Player
+                }
+                ?.hitEntity) ?: return
+    if (!target.isValid || target is Player) return
+    if (target.world != player.world || target.location.distanceSquared(player.location) > 36.0) {
+      player.closeInventory()
+      return
+    }
+    if (target is LivingEntity && target.hasAI()) return
     val livingEntity = target as? LivingEntity
 
     val slot = event.rawSlot
+    if (slot !in setOf(0, 1, 2, 3, 5, 6, 7, 8)) return
+    if (
+        slot != 8 &&
+            target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+    ) {
+      player.sendMessage("§6[EntityPose] §cこのエンティティはロックされています")
+      return
+    }
+
     when (slot) {
       0 -> {
         val container = target.persistentDataContainer
-        if (target.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)) {
+        if (container.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)) {
           container.remove(EntityPose.INVINCIBLE)
         } else {
           container.set(EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
@@ -71,14 +118,16 @@ class GUIClick : Listener {
         if (target is ArmorStand) target.setBasePlate(!target.hasBasePlate())
       }
       3 -> {
-        val container = target.persistentDataContainer
-        if (target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)) {
-          container.remove(EntityPose.ITEMLOCK)
-        } else {
-          container.set(EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
+        if (target is ArmorStand) {
+          val container = target.persistentDataContainer
+          if (container.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)) {
+            container.remove(EntityPose.ITEMLOCK)
+          } else {
+            container.set(EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
+          }
         }
       }
-      5 -> livingEntity?.isInvisible = !livingEntity.isInvisible
+      5 -> livingEntity?.let { it.isInvisible = !it.isInvisible }
       6 -> {
         val attribute = livingEntity?.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
@@ -95,7 +144,7 @@ class GUIClick : Listener {
       }
       8 -> {
         val container = target.persistentDataContainer
-        if (target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)) {
+        if (container.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)) {
           container.remove(EntityPose.ARRANGELOCK)
         } else {
           container.set(EntityPose.ARRANGELOCK, PersistentDataType.BYTE, 1.toByte())
@@ -103,35 +152,66 @@ class GUIClick : Listener {
       }
     }
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
-    // 再描画の際も、今見つけたtargetを渡す
     ChooseGUi.openSettingGUI(player, target)
   }
 
   @EventHandler
   fun onALLSettingClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3範囲選択済みエンティティの設定変更") return
-    event.isCancelled = true
+    val (player, holder) = validateGuiClick(event, EntityPoseGuiType.ALL_SETTING) ?: return
 
-    val player = event.whoClicked as? Player ?: return
+    val selected = activeselection[player.uniqueId] ?: return
+    val targets =
+        selected.filter { it.isValid && it !is Player && (it as? LivingEntity)?.hasAI() != true }
+    if (targets.isEmpty()) {
+      player.closeInventory()
+      return
+    }
+    val targetId = holder.targetEntityId
+    if (targetId != null) {
+      if (targets.none { it.uniqueId == targetId }) return
+    } else {
+      val result =
+          player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
+            it !is Player
+          }
+      val hit = result?.hitEntity ?: return
+      if (hit !in targets) return
+    }
 
-    val result =
-        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
-          it != player
-        }
-    val target = result?.hitEntity ?: return
-    val selected = activeselection[player.uniqueId]
-    if (selected != null && selected.contains(target)) {
-      val targets = selected.filter { it.isValid }
+    val slot = event.rawSlot
+    if (slot !in setOf(0, 1, 2, 3, 5, 6, 7, 8)) return
 
-      val slot = event.rawSlot
-      val armor = targets.filterIsInstance<ArmorStand>()
+    if (slot == 8) {
+      val allarrange =
+          targets.all {
+            it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+          }
+      targets.forEach {
+        if (allarrange) it.persistentDataContainer.remove(EntityPose.ARRANGELOCK)
+        else
+            it.persistentDataContainer.set(
+                EntityPose.ARRANGELOCK,
+                PersistentDataType.BYTE,
+                1.toByte(),
+            )
+      }
+    } else {
+      val editableTargets =
+          targets.filter {
+            !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+          }
+      if (editableTargets.isEmpty()) {
+        player.sendMessage("§6[EntityPose] §c選択中のエンティティはすべてロックされています")
+        return
+      }
+      val armor = editableTargets.filterIsInstance<ArmorStand>()
       when (slot) {
         0 -> {
           val allInvincible =
-              targets.all {
+              editableTargets.all {
                 it.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)
               }
-          targets.forEach {
+          editableTargets.forEach {
             if (allInvincible) it.persistentDataContainer.remove(EntityPose.INVINCIBLE)
             else
                 it.persistentDataContainer.set(
@@ -142,41 +222,44 @@ class GUIClick : Listener {
           }
         }
         1 -> {
-          val allgravity = armor.all { it.hasGravity() }
-          val nextState = !allgravity
-          armor.forEach { it.setGravity(nextState) }
-        }
-        2 -> {
-          val allbaseplate = armor.all { it.hasBasePlate() }
-          val nextState = !allbaseplate
-          armor.forEach { it.setBasePlate(nextState) }
-        }
-        3 -> {
-          val allItemlock =
-              targets.all {
-                it.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
-              }
-          targets.forEach {
-            if (allItemlock) it.persistentDataContainer.remove(EntityPose.ITEMLOCK)
-            else
-                it.persistentDataContainer.set(
-                    EntityPose.ITEMLOCK,
-                    PersistentDataType.BYTE,
-                    1.toByte(),
-                )
+          if (targets.all { it is ArmorStand }) {
+            val allgravity = armor.all { it.hasGravity() }
+            val nextState = !allgravity
+            armor.forEach { it.setGravity(nextState) }
           }
         }
-        5 -> {
-          val allInvisible = targets.all { (it as? LivingEntity)?.isInvisible == true }
-          val nextState = !allInvisible
-          targets.forEach { entity ->
-            if (entity is LivingEntity) {
-              entity.isInvisible = nextState
+        2 -> {
+          if (targets.all { it is ArmorStand }) {
+            val allbaseplate = armor.all { it.hasBasePlate() }
+            val nextState = !allbaseplate
+            armor.forEach { it.setBasePlate(nextState) }
+          }
+        }
+        3 -> {
+          if (targets.all { it is ArmorStand }) {
+            val allItemlock =
+                armor.all {
+                  it.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
+                }
+            armor.forEach {
+              if (allItemlock) it.persistentDataContainer.remove(EntityPose.ITEMLOCK)
+              else
+                  it.persistentDataContainer.set(
+                      EntityPose.ITEMLOCK,
+                      PersistentDataType.BYTE,
+                      1.toByte(),
+                  )
             }
           }
         }
+        5 -> {
+          val livingTargets = editableTargets.filterIsInstance<LivingEntity>()
+          val allInvisible = livingTargets.isNotEmpty() && livingTargets.all { it.isInvisible }
+          val nextState = !allInvisible
+          livingTargets.forEach { entity -> entity.isInvisible = nextState }
+        }
         6 -> {
-          targets.forEach { entity ->
+          editableTargets.forEach { entity ->
             (entity as? LivingEntity)?.getAttribute(Attribute.SCALE)?.let { attribute ->
               val newScale = (attribute.baseValue + 0.1).coerceAtMost(3.0)
               val roundedScale = round(newScale * 10) / 10.0
@@ -185,7 +268,7 @@ class GUIClick : Listener {
           }
         }
         7 -> {
-          targets.forEach { entity ->
+          editableTargets.forEach { entity ->
             (entity as? LivingEntity)?.getAttribute(Attribute.SCALE)?.let { attribute ->
               val newScale = (attribute.baseValue - 0.1).coerceAtLeast(0.3)
               val roundedScale = round(newScale * 10) / 10.0
@@ -193,25 +276,10 @@ class GUIClick : Listener {
             }
           }
         }
-        8 -> {
-          val allarrange =
-              targets.all {
-                it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
-              }
-          targets.forEach {
-            if (allarrange) it.persistentDataContainer.remove(EntityPose.ARRANGELOCK)
-            else
-                it.persistentDataContainer.set(
-                    EntityPose.ARRANGELOCK,
-                    PersistentDataType.BYTE,
-                    1.toByte(),
-                )
-          }
-        }
       }
-      player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
-      ChooseGUi.openAllSettingGUI(player, targets)
     }
+    player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
+    ChooseGUi.openAllSettingGUI(player, targets, holder.targetEntityId)
   }
 
   @EventHandler
@@ -225,10 +293,7 @@ class GUIClick : Listener {
 
   @EventHandler
   fun onwolfClick(event: InventoryClickEvent) {
-    val player = event.whoClicked as? Player ?: return
-    if (!event.view.title.contains("オオカミ選択")) return
-
-    event.isCancelled = true
+    val (player, _) = validateGuiClick(event, EntityPoseGuiType.WOLF) ?: return
     val item = event.currentItem ?: return
     if (!item.hasItemMeta()) return
     player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
@@ -265,10 +330,7 @@ class GUIClick : Listener {
 
   @EventHandler
   fun oncatClick(event: InventoryClickEvent) {
-    val player = event.whoClicked as? Player ?: return
-    if (!event.view.title.contains("ネコ選択")) return
-
-    event.isCancelled = true
+    val (player, _) = validateGuiClick(event, EntityPoseGuiType.CAT) ?: return
 
     val item = event.currentItem ?: return
     if (!item.hasItemMeta()) return
@@ -302,16 +364,13 @@ class GUIClick : Listener {
         cat.setBaby()
         cat.ageLock = true // 大人にならないように固定
       }
-      player.closeInventory()
     }
+    player.closeInventory()
   }
 
   @EventHandler
   fun onrabbitClick(event: InventoryClickEvent) {
-    val player = event.whoClicked as? Player ?: return
-    if (event.view.title != "§3ウサギ選択") return
-
-    event.isCancelled = true
+    val (player, _) = validateGuiClick(event, EntityPoseGuiType.RABBIT) ?: return
 
     val item = event.currentItem ?: return
     if (!item.hasItemMeta()) return
@@ -340,10 +399,7 @@ class GUIClick : Listener {
 
   @EventHandler
   fun onparrotClick(event: InventoryClickEvent) {
-    val player = event.whoClicked as? Player ?: return
-    if (event.view.title != "§3オウム選択") return
-
-    event.isCancelled = true
+    val (player, _) = validateGuiClick(event, EntityPoseGuiType.PARROT) ?: return
 
     val item = event.currentItem ?: return
     if (!item.hasItemMeta()) return
@@ -367,10 +423,7 @@ class GUIClick : Listener {
 
   @EventHandler
   fun onhorseClick(event: InventoryClickEvent) {
-    val player = event.whoClicked as? Player ?: return
-    if (event.view.title != "§3馬選択") return
-
-    event.isCancelled = true
+    val (player, _) = validateGuiClick(event, EntityPoseGuiType.HORSE_COLOR) ?: return
 
     val item = event.currentItem ?: return
     if (!item.hasItemMeta()) return
@@ -385,10 +438,7 @@ class GUIClick : Listener {
 
   @EventHandler
   fun onHorseStyleClick(event: InventoryClickEvent) {
-    val player = event.whoClicked as? Player ?: return
-    if (event.view.title != "§3馬模様選択") return
-
-    event.isCancelled = true
+    val (player, _) = validateGuiClick(event, EntityPoseGuiType.HORSE_STYLE) ?: return
 
     val item = event.currentItem ?: return
     if (!item.hasItemMeta()) return
@@ -434,10 +484,7 @@ class GUIClick : Listener {
 
   @EventHandler
   fun onKakudoClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3角度の刻みを選択") return
-    event.isCancelled = true
-
-    val player = event.whoClicked as? Player ?: return
+    val (player, _) = validateGuiClick(event, EntityPoseGuiType.KAKUDO) ?: return
     val item = event.currentItem ?: return
 
     val value =
@@ -451,10 +498,7 @@ class GUIClick : Listener {
 
   @EventHandler
   fun onStepClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3一回あたりに動く座標の大きさを選択") return
-    event.isCancelled = true
-
-    val player = event.whoClicked as? Player ?: return
+    val (player, _) = validateGuiClick(event, EntityPoseGuiType.ZAHYO) ?: return
     val item = event.currentItem ?: return
     val value1 =
         item.itemMeta?.persistentDataContainer?.get(ZAHYO_KEY, PersistentDataType.DOUBLE) ?: return

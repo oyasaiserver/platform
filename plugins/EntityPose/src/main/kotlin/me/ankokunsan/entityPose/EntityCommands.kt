@@ -190,7 +190,7 @@ class EntityCommands : CommandExecutor, TabCompleter {
     val selected = activeselection[player.uniqueId]
     if (selected != null && selected.contains(target)) {
       val targets = selected.filter { it.isValid }
-      ChooseGUi.openAllSettingGUI(player, targets)
+      ChooseGUi.openAllSettingGUI(player, targets, target.uniqueId)
     } else {
       ChooseGUi.openSettingGUI(player, target)
     }
@@ -220,7 +220,7 @@ class EntityCommands : CommandExecutor, TabCompleter {
       return
     }
     val scale = args[1].toDoubleOrNull()
-    if (scale == null) {
+    if (scale == null || !scale.isFinite()) {
       player.sendMessage("§6[EntityPose] §c数字を入力してください")
       return
     }
@@ -228,7 +228,16 @@ class EntityCommands : CommandExecutor, TabCompleter {
     val roundedScale = round(limitedScale * 10) / 10.0
     val selected = activeselection[player.uniqueId]
     if (selected != null && selected.contains(target)) {
-      val targets = selected.filter { it.isValid }
+      val targets =
+          selected.filter {
+            it.isValid &&
+                it !is Player &&
+                !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+          }
+      if (targets.isEmpty()) {
+        player.sendMessage("§6[EntityPose] §c選択中のエンティティはすべてロックされています")
+        return
+      }
       targets.forEach { entity ->
         (entity as? LivingEntity)?.getAttribute(Attribute.SCALE)?.let { attribute ->
           attribute.baseValue = roundedScale
@@ -236,6 +245,10 @@ class EntityCommands : CommandExecutor, TabCompleter {
       }
       player.sendMessage("§6[EntityPose] §a範囲選択されているエンティティのスケールを $roundedScale に設定しました")
     } else {
+      if (target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)) {
+        player.sendMessage("§6[EntityPose] §cこのエンティティはロックされています")
+        return
+      }
       val attribute = livingEntity.getAttribute(Attribute.SCALE)
       if (attribute != null) {
         attribute.baseValue = roundedScale
@@ -251,7 +264,7 @@ class EntityCommands : CommandExecutor, TabCompleter {
       return
     }
     val value = args[1].toDoubleOrNull()
-    if (value != null) {
+    if (value != null && value.isFinite()) {
       val limitedValue = value.coerceIn(0.5, 90.0)
       EntityClick.currentStep[player.uniqueId] = limitedValue
       player.sendMessage("§6[EntityPose] §aエンティティの角度の刻みを${limitedValue}度に設定しました")
@@ -267,7 +280,7 @@ class EntityCommands : CommandExecutor, TabCompleter {
       return
     }
     val value1 = args[1].toDoubleOrNull()
-    if (value1 != null) {
+    if (value1 != null && value1.isFinite()) {
       val limitedValue1 = value1.coerceIn(0.01, 2.0)
       EntityClick.currentZah[player.uniqueId] = limitedValue1
       player.sendMessage("§6[EntityPose] §aエンティティの一回あたりに動く座標の大きさを${limitedValue1}マスに設定しました")
@@ -278,12 +291,18 @@ class EntityCommands : CommandExecutor, TabCompleter {
 
   private fun entityCut(player: Player) {
     val uuid = player.uniqueId
-    val targets = activeselection[uuid]?.filter { it.isValid }
+    val selected = activeselection[uuid]
 
-    if (targets == null) {
+    if (selected == null) {
       player.sendMessage("§6[EntityPose] §c範囲選択されているエンティティがいません")
       return
     }
+    val targets =
+        selected.filter {
+          it.isValid &&
+              it !is Player &&
+              !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+        }
     targets.forEach { entity -> if (entity.isValid) entity.remove() }
     activeselection.remove(uuid)
     selection.remove(uuid)

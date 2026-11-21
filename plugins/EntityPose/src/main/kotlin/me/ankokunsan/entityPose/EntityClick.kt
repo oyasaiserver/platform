@@ -3,6 +3,7 @@ package me.ankokunsan.entityPose
 import java.util.UUID
 import kotlin.collections.filter
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
+import me.ankokunsan.entityPose.EntityCopyClick.Companion.clipboard
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.selection
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.DEATH_KEY
@@ -29,9 +30,11 @@ import org.bukkit.entity.Sittable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.inventory.CraftItemEvent
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerDropItemEvent
@@ -198,7 +201,7 @@ class EntityClick : Listener {
     val selected = activeselection[player.uniqueId]
     if (selected != null && selected.contains(target)) {
       val targets = selected.filter { it.isValid }
-      ChooseGUi.openAllSettingGUI(player, targets)
+      ChooseGUi.openAllSettingGUI(player, targets, target.uniqueId)
     } else {
       ChooseGUi.openSettingGUI(player, target)
       return
@@ -221,10 +224,23 @@ class EntityClick : Listener {
 
   @EventHandler
   fun onGuiClick(event: InventoryClickEvent) {
-    val player = event.whoClicked as? Player ?: return
-    if (event.view.title != "§3エンティティスポーン") return
-
+    val holder = event.view.topInventory.holder as? EntityPoseGuiHolder ?: return
+    if (holder.type != EntityPoseGuiType.SPAWN) return
     event.isCancelled = true
+
+    val player = event.whoClicked as? Player ?: return
+    if (!player.hasPermission("entitypose_arrange")) {
+      player.closeInventory()
+      return
+    }
+    if (
+        event.action == InventoryAction.COLLECT_TO_CURSOR ||
+            event.isShiftClick ||
+            event.clickedInventory != event.view.topInventory
+    ) {
+      return
+    }
+
     val item = event.currentItem ?: return
     if (!item.hasItemMeta()) return
     player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
@@ -261,11 +277,14 @@ class EntityClick : Listener {
             item.itemMeta?.persistentDataContainer?.get(SIZE_KEY, PersistentDataType.STRING) ==
                 "MINI"
         val title = if (isMini) "§3子オオカミ選択" else "§3オオカミ選択"
+        val wolfHolder = EntityPoseGuiHolder(EntityPoseGuiType.WOLF)
         val inv1 =
-            Bukkit.createInventory(
-                player, // holder（nullでもOK）
-                9,
-                title,
+            wolfHolder.bind(
+                Bukkit.createInventory(
+                    wolfHolder,
+                    9,
+                    title,
+                )
             )
 
         fillVariantItems(
@@ -330,11 +349,14 @@ class EntityClick : Listener {
             item.itemMeta?.persistentDataContainer?.get(SIZE_KEY, PersistentDataType.STRING) ==
                 "MINI"
         val title1 = if (isMini) "§3子ネコ選択" else "§3ネコ選択"
+        val catHolder = EntityPoseGuiHolder(EntityPoseGuiType.CAT)
         val inv2 =
-            Bukkit.createInventory(
-                player, // holder（nullでもOK）
-                18,
-                title1,
+            catHolder.bind(
+                Bukkit.createInventory(
+                    catHolder,
+                    18,
+                    title1,
+                )
             )
 
         fillVariantItems(
@@ -405,12 +427,14 @@ class EntityClick : Listener {
       }
 
       "RABBIT" -> {
-        event.isCancelled = true
+        val rabbitHolder = EntityPoseGuiHolder(EntityPoseGuiType.RABBIT)
         val inv3 =
-            Bukkit.createInventory(
-                player, // holder（nullでもOK）
-                9,
-                "§3ウサギ選択",
+            rabbitHolder.bind(
+                Bukkit.createInventory(
+                    rabbitHolder,
+                    9,
+                    "§3ウサギ選択",
+                )
             )
         fillVariantItems(
             inv3,
@@ -451,12 +475,14 @@ class EntityClick : Listener {
         player.openInventory(inv3)
       }
       "PARROT" -> {
-        event.isCancelled
+        val parrotHolder = EntityPoseGuiHolder(EntityPoseGuiType.PARROT)
         val inv4 =
-            Bukkit.createInventory(
-                player, // holder（nullでもOK）
-                9,
-                "§3オウム選択",
+            parrotHolder.bind(
+                Bukkit.createInventory(
+                    parrotHolder,
+                    9,
+                    "§3オウム選択",
+                )
             )
         fillVariantItems(
             inv4,
@@ -495,12 +521,14 @@ class EntityClick : Listener {
         player.openInventory(inv4)
       }
       "HORSE" -> {
-        event.isCancelled
+        val horseHolder = EntityPoseGuiHolder(EntityPoseGuiType.HORSE_COLOR)
         val inv4 =
-            Bukkit.createInventory(
-                player, // holder（nullでもOK）
-                9,
-                "§3馬選択",
+            horseHolder.bind(
+                Bukkit.createInventory(
+                    horseHolder,
+                    9,
+                    "§3馬選択",
+                )
             )
         fillVariantItems(
             inv4,
@@ -825,14 +853,22 @@ class EntityClick : Listener {
     currentStep.remove(uuid)
     currentZah.remove(uuid)
     FollowEntity.stop(event.player)
+    AirBlock.cleanup(uuid)
 
-    if (selection.containsKey(uuid)) {
-      stopHighlight(uuid)
-      selection.remove(uuid)
-      activeselection.remove(uuid)
-    }
+    stopHighlight(uuid)
+    selection.remove(uuid)
+    activeselection.remove(uuid)
+    clipboard.remove(uuid)
     selectedPart.keys.removeIf { it.first == uuid }
     selectPart.keys.removeIf { it.first == uuid }
+  }
+
+  @EventHandler
+  fun onScaffoldBreak(event: BlockBreakEvent) {
+    if (event.block.hasMetadata("EntityHojo")) {
+      event.isDropItems = false
+      event.block.removeMetadata("EntityHojo", EntityPose.INSTANCE)
+    }
   }
 
   @EventHandler
