@@ -23,7 +23,7 @@ final class WarehouseInput implements Listener {
         for (var l : WarehouseContainers.locations(event.getInventory())) {
             var wh = manager.linkedAt(l);
             if (wh == null) continue;
-            if (!wh.isMember(player.getUniqueId())) return;
+            if (!manager.canAutoInput(wh, player.getUniqueId())) return;
             if (busy(wh)) { player.sendMessage("この倉庫は処理中です。投入品は残ります。終了後に開閉してください。"); return; }
             try { manager.pruneLinks(player, wh, l.getWorld()); }
             catch (java.io.IOException error) {
@@ -31,7 +31,14 @@ final class WarehouseInput implements Listener {
                 player.sendMessage("リンクの保存に失敗したため、投入を中断しました。"); return;
             }
             var link = wh.links().stream().filter(v -> v.blocks().contains(WarehouseContainers.position(l))).findFirst().orElse(null);
-            if (link != null) start(player, wh, link);
+            if (link != null) {
+                var store = WarehouseContainers.linked(l.getWorld(), link);
+                if (store == null || store.parts.stream().anyMatch(part ->
+                        !WarehouseContainers.canWarehouseControl(plugin.getServer(), player, wh.owner(), part.current()))) {
+                    return;
+                }
+                start(player, wh, link);
+            }
             return;
         }
     }
@@ -67,7 +74,9 @@ final class WarehouseInput implements Listener {
             var source = world == null ? null : WarehouseContainers.linked(world, link);
             if (source == null) return true;
             for (int n = 0; n < Math.max(1, plugin.getConfig().getInt("warehouse.stacks-per-tick", 32)) && part < source.parts.size(); n++) {
-                var inventory = source.parts.get(part).inventory();
+                var currentPart = source.parts.get(part);
+                if (!WarehouseContainers.canWarehouseControl(plugin.getServer(), null, wh.owner(), currentPart.current())) return true;
+                var inventory = currentPart.inventory();
                 if (inventory == null) return true;
                 if (slot < inventory.getSize()) moved += plugin.index().store(wh, inventory, slot++);
                 if (slot == inventory.getSize()) { part++; slot = 0; }
