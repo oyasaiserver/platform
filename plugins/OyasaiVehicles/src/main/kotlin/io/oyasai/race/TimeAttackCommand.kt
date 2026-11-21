@@ -13,11 +13,16 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
 
 // timeattack <circuit>                        -> show best times
 // timeattack <circuit> start <maxSectors>
 // timeattack <circuit> sector <index>
 // timeattack <circuit> lap|goal <maxSectors>
+
+private const val MAX_NANO_OF_DAY = 86_399_999_999_999L
 
 data class TimeData(
     val cost: Int,
@@ -49,12 +54,12 @@ data class TimeData(
       val newNanoLong = time.toNanoOfDay()
       var sectorNanoLong = newNanoLong - oldNanoLong
       if (sectorNanoLong < 0L) {
-        sectorNanoLong = newNanoLong + (86399999999999L - oldNanoLong)
+        sectorNanoLong = newNanoLong + (MAX_NANO_OF_DAY - oldNanoLong)
       }
 
       this.sectorTimes.add(time)
       this.timeNanoLong.add(sectorNanoLong)
-      return LocalTime.ofNanoOfDay(sectorNanoLong)
+      return LocalTime.ofNanoOfDay(sectorNanoLong.coerceIn(0L, MAX_NANO_OF_DAY))
     }
   }
 
@@ -67,7 +72,8 @@ data class TimeData(
       return Pair(null, null)
     } else {
       val first = this.sector(this.sectorTimes.size)
-      val total = LocalTime.ofNanoOfDay(this.timeNanoLong.sum())
+      val totalNanos = this.timeNanoLong.sum().coerceIn(0L, MAX_NANO_OF_DAY)
+      val total = LocalTime.ofNanoOfDay(totalNanos)
       this.finishSwitch = true
       return Pair(first, total)
     }
@@ -118,10 +124,12 @@ object YamlData {
   }
 
   fun getUserYaml(circuit: String, uuid: UUID): CustomYaml {
+    require(TimeAttackCommand.isValidCircuitName(circuit)) { "Invalid circuit name: $circuit" }
     return yamlList.getOrPut(Pair(uuid, circuit)) { CustomYaml("$dataFolder$circuit/$uuid.yml") }
   }
 
   fun setTimeData(circuit: String, uuid: UUID, data: TimeData): Boolean {
+    if (!TimeAttackCommand.isValidCircuitName(circuit)) return false
     val yaml = getUserYaml(circuit, uuid)
     val cp = TimeAttackCommand.costRateConvert(data.cost)
     val bestTime = getCircuitTAData(yaml, cp)
@@ -139,13 +147,14 @@ object YamlData {
   }
 
   fun sendBestTimes(player: Player, circuit: String) {
+    if (!TimeAttackCommand.isValidCircuitName(circuit)) return
     val yaml = getUserYaml(circuit, player.uniqueId)
 
     for (cp in cpList) {
       val bestTime = getCircuitTAData(yaml, cp)
       if (bestTime.isNotEmpty()) {
         val day = getCircuitTABestDay(yaml, cp)
-        val totalTime = bestTime.sum()
+        val totalTime = bestTime.sum().coerceIn(0L, MAX_NANO_OF_DAY)
 
         player.sendMessage(color("[TA] &9$circuit&7:&r$cp ベストタイム [$day]"))
         player.sendMessage(
@@ -158,8 +167,21 @@ object YamlData {
   }
 }
 
-object TimeAttackCommand : CommandExecutor {
+object TimeAttackCommand : CommandExecutor, Listener {
+  private val SAFE_CIRCUIT_NAME = Regex("^[A-Za-z0-9_-]+$")
   private val taData = mutableMapOf<Pair<Player, String>, TimeData>()
+
+  fun isValidCircuitName(circuit: String): Boolean =
+      circuit.isNotBlank() && !circuit.contains("..") && SAFE_CIRCUIT_NAME.matches(circuit)
+
+  @EventHandler
+  fun onPlayerQuit(event: PlayerQuitEvent) {
+    clearPlayerData(event.player)
+  }
+
+  fun clearPlayerData(player: Player) {
+    taData.keys.removeIf { it.first == player || it.first.uniqueId == player.uniqueId }
+  }
 
   override fun onCommand(
       sender: CommandSender,
@@ -168,6 +190,7 @@ object TimeAttackCommand : CommandExecutor {
       args: Array<out String>,
   ): Boolean {
     if (command.name != "timeattack") return false
+    if (args.isEmpty() || !isValidCircuitName(args[0])) return false
 
     if (args.size == 1) {
       if (sender is Player) {
