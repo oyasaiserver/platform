@@ -11,9 +11,11 @@ class ProtectEditListener : Listener {
   fun onSignEdit(e: PlayerSignOpenEvent) {
 
     // SV看板かどうかを判定
+    val dm = SocialVotes.dataManager
     val loc = e.sign.location
-    val sv = SocialVotes.dataManager.locationToId[loc]
-    if (sv != null) {
+    val sv = dm.getSignAt(loc)
+    val signId = dm.readSignIdFromBlock(e.sign)
+    if (sv != null || (signId != null && dm.signById.containsKey(signId))) {
       // 編集画面を開かせない
       e.isCancelled = true
     }

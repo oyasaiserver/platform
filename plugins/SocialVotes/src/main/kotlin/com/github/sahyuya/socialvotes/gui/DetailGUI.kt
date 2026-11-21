@@ -106,13 +106,21 @@ object DetailGUI {
     val dm = SocialVotes.dataManager
     val sign = dm.signById[signId] ?: return
     val group = sign.group?.let { dm.groupByName[it] }
+    if (slot == 0) {
+      SimpleGUI.open(p, sign)
+      return
+    }
+    if (!p.isOp && (group == null || group.owner != p.uniqueId)) {
+      NotifyUtil.error(p, "§c権限がありません。")
+      p.closeInventory()
+      return
+    }
     // OP向け全体表示(不正防止)
     val targets = mutableSetOf<Player>()
     targets.addAll(Bukkit.getOnlinePlayers().filter { it.isOp })
     targets.add(p)
 
     when (slot) {
-      0 -> SimpleGUI.open(p, sign)
       18 -> ResultGUI.open(p, sign)
 
       4 -> {
@@ -131,6 +139,7 @@ object DetailGUI {
         // グループ公開状態を反転
         val newState = !group.showVotesGroup
         group.showVotesGroup = newState
+        sign.showVotes = newState
         // 所属する全看板へ同期
         for (sid in group.signIds) {
           val s = dm.signById[sid] ?: continue
@@ -140,7 +149,7 @@ object DetailGUI {
         SignDisplayUtil.updateGroup(group)
         open(p, sign)
         p.sendMessage("§aグループの得票公開を切り替えました。")
-        if (sign.showVotes) NotifyUtil.toggleOn(p) else NotifyUtil.toggleOff(p)
+        if (newState) NotifyUtil.toggleOn(p) else NotifyUtil.toggleOff(p)
       }
 
       3 -> startChat(p, signId, ChatInput.Action.SET_SIGN_MAX, "最大投票数を入力してください。（数字以外=変更なし）")
@@ -174,9 +183,17 @@ object DetailGUI {
         // ③ 各プレイヤーのグループ票も減算
         sign.group?.let { gName ->
           val gmap = dm.playerVotes[gName] ?: mutableMapOf()
+          val grp = dm.groupByName[gName]
           perSignMap.forEach { (uuid, count) ->
             if (count > 0) {
-              gmap[uuid] = (gmap.getOrDefault(uuid, 0) - count).coerceAtLeast(0)
+              val actualRemaining =
+                  grp?.signIds
+                      ?.filter { it != sign.id }
+                      ?.sumOf { sid ->
+                        (dm.playerVotesPerSign[sid]?.get(uuid) ?: 0).coerceAtLeast(0)
+                      } ?: 0
+              gmap[uuid] =
+                  maxOf(actualRemaining, (gmap.getOrDefault(uuid, 0) - count).coerceAtLeast(0))
             }
           }
           dm.playerVotes[gName] = gmap
@@ -222,12 +239,13 @@ object DetailGUI {
         val message = SVLOGO + "${p.name}§eが§6「${sign.name}」(ID:${sign.id})§eを消去しました。"
         NotifyUtil.notifyPlayers(targets, message)
         // 所属SV看板が0になったら自動通知
-        dm.notifyIfAutoDelete(groupName.toString())
+        groupName?.let { dm.notifyIfAutoDelete(it) }
       }
       26 -> {
         if (group == null) return
         group.signIds.toList().forEach { dm.removeSignById(it) }
         dm.groupByName.remove(group.name)
+        dm.playerVotes.remove(group.name)
         dm.save()
         p.closeInventory()
         val message = SVLOGO + "${p.name}§eがグループ§6${group.name}§eと所属SV看板を消去しました。"
