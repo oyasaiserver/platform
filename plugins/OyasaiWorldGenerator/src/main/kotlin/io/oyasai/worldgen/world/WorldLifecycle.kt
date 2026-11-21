@@ -265,12 +265,28 @@ class WorldLifecycle(
     val moved =
         player.teleport(Location(world, 0.5, entry.spawnY.toDouble(), 0.5)) && player.world == world
     if (moved) {
-      player.gameMode = entry.gameMode
-      player.allowFlight = entry.allowFlight
-      if (!entry.allowFlight) player.isFlying = false
+      applyWorldRules(player)
     }
     player.sendMessage(if (moved) "[OWG] ${entry.name} に移動しました" else "[OWG] 移動に失敗しました")
     return moved
+  }
+
+  fun applyWorldRules(player: Player) {
+    val entry = currentConfig.worlds[player.world.name]
+    if (entry != null) {
+      player.gameMode = entry.gameMode
+      player.allowFlight = entry.allowFlight
+      if (!entry.allowFlight) player.isFlying = false
+    } else if (normalWorlds != null) {
+      normalWorlds.enforceFlight(player)
+    } else if (
+        player.gameMode != org.bukkit.GameMode.CREATIVE &&
+            player.gameMode != org.bukkit.GameMode.SPECTATOR &&
+            player.allowFlight
+    ) {
+      if (player.isFlying) player.isFlying = false
+      player.allowFlight = false
+    }
   }
 
   fun statusLines(): List<String> {

@@ -62,18 +62,22 @@ class OwgCommand(private val lifecycle: WorldLifecycle) : CommandExecutor, TabCo
       alias: String,
       args: Array<out String>,
   ): List<String> {
+    val isAdmin = sender.hasPermission("oyasai.owg.admin")
     val candidates =
         when (args.size) {
-          1 -> listOf("status", "tp", "load", "create", "unload", "check")
+          1 ->
+              if (isAdmin) listOf("status", "tp", "load", "create", "unload", "check")
+              else listOf("status", "tp")
           2 ->
               if (
                   args[0].equals("tp", true) ||
-                      args[0].equals("load", true) ||
-                      args[0].equals("unload", true)
+                      (isAdmin && (args[0].equals("load", true) || args[0].equals("unload", true)))
               )
                   lifecycle.configSnapshot().worlds.keys.toList()
               else emptyList()
-          3 -> if (args[0].equals("create", true)) listOf("void-end", "flat") else emptyList()
+          3 ->
+              if (isAdmin && args[0].equals("create", true)) listOf("void-end", "flat")
+              else emptyList()
           else -> emptyList()
         }
     val prefix = args.lastOrNull()?.lowercase().orEmpty()
