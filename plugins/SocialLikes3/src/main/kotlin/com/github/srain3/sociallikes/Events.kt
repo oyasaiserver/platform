@@ -36,6 +36,7 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.HangingSign
 import org.bukkit.block.Sign
+import org.bukkit.block.data.type.WallHangingSign
 import org.bukkit.block.data.type.WallSign
 import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
@@ -45,14 +46,19 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.event.block.BlockExplodeEvent
+import org.bukkit.event.block.BlockFadeEvent
 import org.bukkit.event.block.BlockPistonExtendEvent
 import org.bukkit.event.block.BlockPistonRetractEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.block.LeavesDecayEvent
 import org.bukkit.event.block.SignChangeEvent
+import org.bukkit.event.entity.EntityChangeBlockEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BlockStateMeta
@@ -271,6 +277,7 @@ object Events : Listener {
     if (isSLSign(block)) {
       // クリックイベントをキャンセルし、埋め込まれたIDからSLDataを取得する。取得できない場合何もしない
       e.isCancelled = true
+      if (e.hand != EquipmentSlot.HAND) return
       if (!Data.loading) {
         // ファイルのロードが終わっていない場合の処理
         e.player.sendMessage(Tools.socialLikesLOGO + " &e現在ロード作業中です、しばらくお待ち下さい。".color())
@@ -291,7 +298,12 @@ object Events : Listener {
       data.resolveWorld()
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
-          updateSLSign(data, block, e.player.uniqueId)
+          if (data.owner != e.player.uniqueId && !e.player.isOp) {
+            e.player.sendMessage(Tools.socialLikesLOGO + "&c他人のLike看板はアップデートできません。".color())
+            SLUpdate.switch[e.player.uniqueId] = false
+            return
+          }
+          updateSLSign(data, block, e.player.uniqueId, e.player.isOp)
           e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
           SLUpdate.switch[e.player.uniqueId] = false
         }
@@ -390,6 +402,7 @@ object Events : Listener {
       // 旧Like看板の場合
       // クリックイベントをキャンセルし、埋め込まれたIDからSLDataを取得する。取得できない場合何もしない
       e.isCancelled = true
+      if (e.hand != EquipmentSlot.HAND) return
 
       if (!Data.loading) {
         // ファイルのロードが終わっていない場合の処理
@@ -413,7 +426,12 @@ object Events : Listener {
       // SLUpdateモードなら処理を行う、それ以外はreturn
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
-          updateLegacySLSign(data, block, e.player.uniqueId)
+          if (data.owner != e.player.uniqueId && !e.player.isOp) {
+            e.player.sendMessage(Tools.socialLikesLOGO + "&c他人のLike看板はアップデートできません。".color())
+            SLUpdate.switch[e.player.uniqueId] = false
+            return
+          }
+          updateLegacySLSign(data, block, e.player.uniqueId, e.player.isOp)
           e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
           SLUpdate.switch[e.player.uniqueId] = false
         } else {
@@ -563,23 +581,48 @@ object Events : Listener {
         .runTaskLater(plugin, 20L)
   }
 
-  /** SocialLikesの看板が壊れないようにする */
   @EventHandler
+  fun quitEvent(e: PlayerQuitEvent) {
+    SLUpdate.switch.remove(e.player.uniqueId)
+  }
+
+  /** SocialLikesの看板が壊れないようにする */
+  @EventHandler(ignoreCancelled = true)
   fun brakeSign(e: BlockBreakEvent) {
     protectSignAndSupport(e.block, e)
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
+  fun blockBurn(e: BlockBurnEvent) {
+    protectSignAndSupport(e.block, e)
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun leavesDecay(e: LeavesDecayEvent) {
+    protectSignAndSupport(e.block, e)
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun blockFade(e: BlockFadeEvent) {
+    protectSignAndSupport(e.block, e)
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun entityChangeBlock(e: EntityChangeBlockEvent) {
+    protectSignAndSupport(e.block, e)
+  }
+
+  @EventHandler(ignoreCancelled = true)
   fun entityExplode(e: EntityExplodeEvent) {
     e.blockList().forEach { protectSignAndSupport(it, e) }
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun blockExplode(e: BlockExplodeEvent) {
     e.blockList().forEach { protectSignAndSupport(it, e) }
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun pistonExtend(e: BlockPistonExtendEvent) {
     e.blocks.forEach {
       protectSignAndSupport(it, e)
@@ -587,7 +630,7 @@ object Events : Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun pistonRetract(e: BlockPistonRetractEvent) {
     e.blocks.forEach {
       protectSignAndSupport(it, e)
@@ -600,24 +643,40 @@ object Events : Listener {
     if (block is Sign) {
       // 直接看板を破壊した場合
       checkSLSign(block, e)
-      return
-    } else {
-      // 看板以外を破壊した場合
-      val upBlock = block.block.getRelative(BlockFace.UP).state
-      val downBlock = block.block.getRelative(BlockFace.DOWN).state
-      if (upBlock is Sign && upBlock.blockData !is WallSign) {
-        checkSLSign(upBlock, e)
-      } else if (downBlock is HangingSign) {
-        checkSLSign(downBlock as Sign, e)
-      } else {
-        for (face in listOf(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST)) {
-          val block2 = block.block.getRelative(face).state
-          val blockData = block2.blockData
-          if (blockData is WallSign) {
-            if (blockData.facing.name == face.name) {
-              checkSLSign(block2 as Sign, e)
+      if (e.isCancelled) return
+    }
+    // 看板を支えているブロックを破壊した場合
+    val upBlock = target.getRelative(BlockFace.UP).state
+    if (upBlock is Sign && upBlock.blockData !is WallSign && upBlock !is HangingSign) {
+      checkSLSign(upBlock, e)
+      if (e.isCancelled) return
+    }
+    val downBlock = target.getRelative(BlockFace.DOWN).state
+    if (downBlock is HangingSign && downBlock.blockData !is WallHangingSign) {
+      checkSLSign(downBlock as Sign, e)
+      if (e.isCancelled) return
+    }
+    for (face in listOf(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST)) {
+      val block2 = target.getRelative(face).state
+      if (block2 !is Sign) continue
+      val blockData = block2.blockData
+      if (blockData is WallSign) {
+        if (blockData.facing.name == face.name) {
+          checkSLSign(block2, e)
+          if (e.isCancelled) return
+        }
+      } else if (blockData is WallHangingSign) {
+        val attached =
+            when (blockData.facing) {
+              BlockFace.NORTH,
+              BlockFace.SOUTH -> face == BlockFace.EAST || face == BlockFace.WEST
+              BlockFace.EAST,
+              BlockFace.WEST -> face == BlockFace.NORTH || face == BlockFace.SOUTH
+              else -> true
             }
-          }
+        if (attached) {
+          checkSLSign(block2, e)
+          if (e.isCancelled) return
         }
       }
     }
@@ -650,10 +709,11 @@ object Events : Listener {
   private val sl3Regex = Regex(""""sociallikes3:sociallikes_id":[0-9]+""")
   private val signRegex = Regex("""SIGN""")
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun slSignPlaceEvent(e: BlockPlaceEvent) {
     // if (!e.player.server.pluginManager.isPluginEnabled("Geyser-Spigot")) return
     // if (!Geyser.api().isBedrockPlayer(e.player.uniqueId)) return
+    if (!e.canBuild()) return
     if (!signRegex.containsMatchIn(e.itemInHand.type.name.uppercase())) return
     val meta = e.itemInHand.itemMeta ?: return
     val sourceSign = (meta as? BlockStateMeta)?.blockState as? Sign
@@ -670,13 +730,27 @@ object Events : Listener {
             ?: meta.persistentDataContainer.get(idGenerationKey, PersistentDataType.INTEGER)
     val id =
         if (itemGeneration == CURRENT_ID_GENERATION) rawId else SLDatabase.resolveMigratedId(rawId)
-    val slData = Data.getSLData(id) ?: return
+    val slData =
+        Data.getSLData(id)
+            ?: run {
+              e.player.sendMessage(Tools.socialLikesLOGO + " &cID:${id}は存在しません".color())
+              e.isCancelled = true
+              return
+            }
+    if (slData.owner != e.player.uniqueId && !e.player.isOp) {
+      e.player.sendMessage(Tools.socialLikesLOGO + " &c他人のLike看板は設置できません。".color())
+      e.isCancelled = true
+      return
+    }
     val sourceSignForRestore = sourceSign.takeIf { sourceSignId != null }
 
-    if (e.blockPlaced.state !is Sign) return
+    val placedBlock = e.blockPlaced
+    val placedType = placedBlock.type
+    if (placedBlock.state !is Sign) return
     object : BukkitRunnable() {
           override fun run() {
-            val sign = e.blockPlaced.state as? Sign ?: return
+            if (e.isCancelled || !e.canBuild() || placedBlock.type != placedType) return
+            val sign = placedBlock.state as? Sign ?: return
             beSignTask(sign, slData, sourceSignForRestore)
           }
         }

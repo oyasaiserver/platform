@@ -10,6 +10,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 object VacantTeleport : CommandExecutor {
+  const val MAX_RADIUS = 64
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
@@ -32,9 +34,17 @@ object VacantTeleport : CommandExecutor {
     val biome = if (checkBiomeString(args[0])) args[0] else null
     val radius =
         intArg(sender, if (biome != null) args.getOrNull(1) else args[0], 8) ?: return false
+    if (radius !in 1..MAX_RADIUS) {
+      sender.sendMessage((Tools.socialLikesLOGO + "&e半径は1〜${MAX_RADIUS}の範囲で指定してください。").color())
+      return true
+    }
     val maxCount =
         intArg(sender, if (biome != null) args.getOrNull(2) else args.getOrNull(1), radius / 3)
             ?: return false
+    if (maxCount < 0) {
+      sender.sendMessage((Tools.socialLikesLOGO + "&e上限数は0以上で指定してください。").color())
+      return true
+    }
     Data.vacantTPTask(sender, radius, maxCount, biome)
     return true
   }

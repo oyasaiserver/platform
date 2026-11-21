@@ -28,7 +28,11 @@ object SLMenu {
         }
       }
     }
+    gui.setOnBottomClick { it.isCancelled = true }
+    gui.setOnGlobalClick { it.isCancelled = true }
     gui.setOnTopDrag { it.isCancelled = true }
+    gui.setOnBottomDrag { it.isCancelled = true }
+    gui.setOnGlobalDrag { it.isCancelled = true }
 
     val paneUp = StaticPane(9, 1)
     val paneDown = StaticPane(9, 1)

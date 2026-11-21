@@ -78,7 +78,11 @@ fun Gui.cancelClickWithSound() {
       player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
     }
   }
+  setOnBottomClick { it.isCancelled = true }
+  setOnGlobalClick { it.isCancelled = true }
   setOnTopDrag { it.isCancelled = true }
+  setOnBottomDrag { it.isCancelled = true }
+  setOnGlobalDrag { it.isCancelled = true }
 }
 
 fun buildSignItem(slData: SLData, idKey: NamespacedKey, creator: String?): ItemStack {
