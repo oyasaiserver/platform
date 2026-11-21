@@ -18,6 +18,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.MapMeta
@@ -60,7 +61,10 @@ object PlayerClickEvent : Listener {
     if (entityList.isEmpty()) return
 
     val frame = (entityList.first() ?: return) as ItemFrame
-    if (!ToolBox.canModify(frame, event.player)) return
+    if (!ToolBox.canModify(frame, event.player)) {
+      event.isCancelled = true
+      return
+    }
     if (frame.item.type != Material.FILLED_MAP) return
     if (frame.facing != clickFace) {
       if (frame.facing != clickFace.oppositeFace) {
@@ -670,5 +674,10 @@ object PlayerClickEvent : Listener {
 
   fun setBrushSize(uuid: UUID, size: Int) {
     userBrushSize[uuid] = size
+  }
+
+  @EventHandler
+  fun onPlayerQuit(event: PlayerQuitEvent) {
+    userBrushSize.remove(event.player.uniqueId)
   }
 }
