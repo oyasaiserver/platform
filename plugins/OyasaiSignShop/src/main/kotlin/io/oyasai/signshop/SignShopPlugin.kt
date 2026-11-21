@@ -4,13 +4,17 @@ import com.griefcraft.lwc.LWCPlugin
 import io.oyasai.economy.api.EconomyResult
 import io.oyasai.economy.api.OyasaiEconomyApi
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
 import org.bukkit.block.Chest
 import org.bukkit.block.Container
 import org.bukkit.block.Sign
+import org.bukkit.block.data.Directional
+import org.bukkit.block.data.FaceAttachable
 import org.bukkit.block.data.Powerable
 import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
@@ -21,28 +25,40 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.event.block.BlockExplodeEvent
+import org.bukkit.event.block.BlockFadeEvent
+import org.bukkit.event.block.BlockFromToEvent
 import org.bukkit.event.block.BlockPistonExtendEvent
 import org.bukkit.event.block.BlockPistonRetractEvent
+import org.bukkit.event.block.LeavesDecayEvent
+import org.bukkit.event.entity.EntityChangeBlockEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
+import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.event.world.WorldLoadEvent
 import org.bukkit.inventory.DoubleChestInventory
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.Inventory
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.scheduler.BukkitTask
 
 class SignShopPlugin : JavaPlugin(), Listener {
   private lateinit var store: ShopStore
   private val selected = mutableMapOf<UUID, LinkedHashSet<Point>>()
   private val boxes = mutableMapOf<Point, MutableSet<Shop>>()
+  private val devices = mutableMapOf<Point, MutableSet<Shop>>()
   private val signs = mutableMapOf<Point, Shop>()
   private val signSupports = mutableSetOf<Point>()
+  private val deviceSupports = mutableSetOf<Point>()
   private val active = mutableSetOf<Shop>()
   private val activeBoxes = mutableSetOf<Point>()
+  private val activeDevices = mutableSetOf<Point>()
+  private val activePlayers = mutableSetOf<UUID>()
+  private val deviceTasks = mutableMapOf<Point, BukkitTask>()
   private var dbHealthy = true
 
   override fun onEnable() {
@@ -86,13 +102,32 @@ class SignShopPlugin : JavaPlugin(), Listener {
   }
 
   override fun onDisable() {
+    deviceTasks.forEach { (point, task) ->
+      task.cancel()
+      runCatching {
+        val lever = block(point)
+        if (lever?.type == Material.LEVER) {
+          val data = lever.blockData as? Powerable
+          if (data?.isPowered == true) {
+            data.isPowered = false
+            lever.blockData = data
+          }
+        }
+      }
+    }
+    deviceTasks.clear()
+    activeDevices.clear()
+    activePlayers.clear()
+    selected.clear()
     if (::store.isInitialized) store.close()
   }
 
   private fun reindex() {
     boxes.clear()
+    devices.clear()
     signs.clear()
     signSupports.clear()
+    deviceSupports.clear()
     store.shops.values.forEach { shop ->
       shop.sign?.let { signPoint ->
         if (signs.containsKey(signPoint)) {
@@ -102,6 +137,10 @@ class SignShopPlugin : JavaPlugin(), Listener {
         rememberSupport(signPoint)
       }
       shop.containers.forEach { boxes.getOrPut(it) { mutableSetOf() }.add(shop) }
+      shop.devices.forEach { devicePoint ->
+        devices.getOrPut(devicePoint) { mutableSetOf() }.add(shop)
+        rememberDeviceSupport(devicePoint)
+      }
     }
   }
 
@@ -112,29 +151,95 @@ class SignShopPlugin : JavaPlugin(), Listener {
 
   @EventHandler
   fun chunkLoad(event: ChunkLoadEvent) {
-    signs.keys
-        .filter {
-          it.world == event.world.name && it.x shr 4 == event.chunk.x && it.z shr 4 == event.chunk.z
-        }
-        .forEach {
-          rememberSupport(it)
-          signs[it]?.let(::refreshSign)
-        }
+    val worldName = event.world.name
+    val cx = event.chunk.x
+    val cz = event.chunk.z
+    val toRefresh = linkedSetOf<Shop>()
+    signs.forEach { (pt, shop) ->
+      if (pt.world == worldName && pt.x shr 4 == cx && pt.z shr 4 == cz) {
+        rememberSupport(pt)
+        toRefresh.add(shop)
+      }
+    }
+    boxes.forEach { (pt, linked) ->
+      if (pt.world == worldName && pt.x shr 4 == cx && pt.z shr 4 == cz) {
+        toRefresh.addAll(linked)
+      }
+    }
+    devices.forEach { (pt, linked) ->
+      if (pt.world == worldName && pt.x shr 4 == cx && pt.z shr 4 == cz) {
+        rememberDeviceSupport(pt)
+        toRefresh.addAll(linked)
+      }
+    }
+    toRefresh.forEach { shop ->
+      runCatching { refreshSign(shop) }.onFailure { logger.warning("店 ${shop.key} の表示更新に失敗しました") }
+    }
+  }
+
+  @EventHandler
+  fun quit(event: PlayerQuitEvent) {
+    selected.remove(event.player.uniqueId)
   }
 
   private fun rememberSupport(signPoint: Point) {
     val signBlock = block(signPoint)?.takeIf { it.state is Sign } ?: return
-    val support =
-        if (signBlock.type.name.contains("WALL")) {
-          (signBlock.blockData as? org.bukkit.block.data.Directional)
-              ?.facing
-              ?.oppositeFace
-              ?.let(signBlock::getRelative)
-        } else signBlock.getRelative(org.bukkit.block.BlockFace.DOWN)
-    support?.let { signSupports.add(point(it)) }
+    val name = signBlock.type.name
+    when {
+      name.contains("WALL_HANGING") -> {
+        val facing = (signBlock.blockData as? Directional)?.facing ?: return
+        val sideFaces =
+            when (facing) {
+              BlockFace.NORTH,
+              BlockFace.SOUTH -> listOf(BlockFace.EAST, BlockFace.WEST)
+              BlockFace.EAST,
+              BlockFace.WEST -> listOf(BlockFace.NORTH, BlockFace.SOUTH)
+              else -> emptyList()
+            }
+        sideFaces
+            .map(signBlock::getRelative)
+            .filter { !it.type.isAir }
+            .forEach { signSupports.add(point(it)) }
+      }
+      name.contains("HANGING") -> {
+        signSupports.add(point(signBlock.getRelative(BlockFace.UP)))
+      }
+      name.contains("WALL") -> {
+        (signBlock.blockData as? Directional)
+            ?.facing
+            ?.oppositeFace
+            ?.let(signBlock::getRelative)
+            ?.let { signSupports.add(point(it)) }
+      }
+      else -> {
+        signSupports.add(point(signBlock.getRelative(BlockFace.DOWN)))
+      }
+    }
+  }
+
+  private fun rememberDeviceSupport(devicePoint: Point) {
+    val leverBlock = block(devicePoint)?.takeIf { it.type == Material.LEVER } ?: return
+    val data = leverBlock.blockData
+    val supportFace =
+        when ((data as? FaceAttachable)?.attachedFace) {
+          FaceAttachable.AttachedFace.FLOOR -> BlockFace.DOWN
+          FaceAttachable.AttachedFace.CEILING -> BlockFace.UP
+          FaceAttachable.AttachedFace.WALL -> (data as? Directional)?.facing?.oppositeFace
+          null -> null
+        }
+    supportFace?.let(leverBlock::getRelative)?.let { deviceSupports.add(point(it)) }
   }
 
   private fun point(block: Block) = Point(block.world.name, block.x, block.y, block.z)
+
+  private fun shopKey(signPoint: Point): String {
+    val raw = signPoint.toString()
+    return if ('.' in signPoint.world) {
+      raw.replace("%", "%25").replace(".", "%2E")
+    } else {
+      raw
+    }
+  }
 
   private fun safeContainer(block: Block): Boolean =
       block.type in setOf(Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL) ||
@@ -172,7 +277,8 @@ class SignShopPlugin : JavaPlugin(), Listener {
               else ->
                   shop.devices.isNotEmpty() &&
                       shop.devices.all { p ->
-                        (block(p)?.blockData as? Powerable)?.isPowered == false
+                        p !in activeDevices &&
+                            (block(p)?.blockData as? Powerable)?.isPowered == false
                       }
             }
     val front = sign.getSide(Side.FRONT)
@@ -192,6 +298,9 @@ class SignShopPlugin : JavaPlugin(), Listener {
 
   private fun allowed(player: Player, point: Point) =
       admin(player) || boxes[point].orEmpty().all { it.owner == player.uniqueId }
+
+  private fun allowedDevice(player: Player, point: Point) =
+      admin(player) || devices[point].orEmpty().all { it.owner == player.uniqueId }
 
   private fun lwc(player: Player, block: Block): Boolean {
     val plugin = Bukkit.getPluginManager().getPlugin("LWC") as? LWCPlugin ?: return false
@@ -213,19 +322,33 @@ class SignShopPlugin : JavaPlugin(), Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun interact(event: PlayerInteractEvent) {
-    if (event.hand != EquipmentSlot.HAND) return
     val target = event.clickedBlock ?: return
     val player = event.player
     val location = point(target)
-    if (
-        event.action == Action.RIGHT_CLICK_BLOCK &&
-            boxes.containsKey(location) &&
-            !allowed(player, location)
-    ) {
-      event.isCancelled = true
-      player.sendMessage("この店のチェストは店主だけが開けます")
-      return
+    if (event.action == Action.RIGHT_CLICK_BLOCK) {
+      if (boxes.containsKey(location) && (!allowed(player, location) || location in activeBoxes)) {
+        event.isCancelled = true
+        if (event.hand == EquipmentSlot.HAND) {
+          player.sendMessage(
+              if (location in activeBoxes) "この店のチェストは現在取引中です" else "この店のチェストは店主だけが開けます"
+          )
+        }
+        return
+      }
+      if (
+          devices.containsKey(location) &&
+              (location in activeDevices || !allowedDevice(player, location))
+      ) {
+        event.isCancelled = true
+        if (event.hand == EquipmentSlot.HAND) {
+          player.sendMessage(
+              if (location in activeDevices) "このレバーは現在動作中です" else "この店のレバーは看板から操作してください"
+          )
+        }
+        return
+      }
     }
+    if (event.hand != EquipmentSlot.HAND) return
     if (
         event.action == Action.LEFT_CLICK_BLOCK &&
             player.inventory.itemInMainHand.type == Material.REDSTONE
@@ -286,7 +409,13 @@ class SignShopPlugin : JavaPlugin(), Listener {
           shop.haltReason != null -> "停止中: ${shop.haltReason}"
           items == null -> "見本を読めません"
           type == "Device" ->
-              if (shop.devices.all { (block(it)?.blockData as? Powerable)?.isPowered == false })
+              if (
+                  shop.devices.isNotEmpty() &&
+                      shop.devices.all {
+                        it !in activeDevices &&
+                            (block(it)?.blockData as? Powerable)?.isPowered == false
+                      }
+              )
                   "取引可能"
               else "レバーを使えません"
           else -> {
@@ -348,13 +477,20 @@ class SignShopPlugin : JavaPlugin(), Listener {
       return
     }
     val containers = blocks.filter { it.state is Container }
-    val devices = blocks.filter { it.type == Material.LEVER }
+    val leverBlocks = blocks.filter { it.type == Material.LEVER }
     if (
-        kind == "Device" && devices.isEmpty() ||
+        kind == "Device" && leverBlocks.isEmpty() ||
             kind != "Device" && containers.isEmpty() ||
-            blocks.size != containers.size + devices.size
+            blocks.size != containers.size + leverBlocks.size
     ) {
       player.sendMessage("箱またはレバーの選択が正しくありません")
+      return
+    }
+    if (
+        containers.any { !allowed(player, point(it)) } ||
+            leverBlocks.any { !allowedDevice(player, point(it)) }
+    ) {
+      player.sendMessage("他の店主の箱やレバーは登録できません")
       return
     }
     if (containers.any { !safeContainer(it) }) {
@@ -377,12 +513,12 @@ class SignShopPlugin : JavaPlugin(), Listener {
       record["owner"] = old?.record?.get("owner") ?: player.uniqueId.toString()
       record["sign"] = point(signBlock).toString()
       record["containables"] = containers.map { point(it).toString() }
-      record["activatables"] = devices.map { point(it).toString() }
+      record["activatables"] = leverBlocks.map { point(it).toString() }
       record["items"] = sample.map(::encodeItem)
       val next =
           Shop(
               old?.section ?: "sellers",
-              old?.key ?: point(signBlock).toString().replace(".", ""),
+              old?.key ?: shopKey(point(signBlock)),
               record,
               null,
           )
@@ -434,6 +570,7 @@ class SignShopPlugin : JavaPlugin(), Listener {
     }
     val yen = price(sign)
     val points = shop.containers
+    val devicePoints = if (type == "Device") shop.devices else emptyList()
     if (
         !dbHealthy ||
             shop.haltReason != null ||
@@ -442,7 +579,9 @@ class SignShopPlugin : JavaPlugin(), Listener {
             shop.sign != point(sign.block) ||
             denyUse(type, player.isOp, player::hasPermission) ||
             active.contains(shop) ||
-            points.any { activeBoxes.contains(it) }
+            activePlayers.contains(player.uniqueId) ||
+            points.any { activeBoxes.contains(it) } ||
+            devicePoints.any { activeDevices.contains(it) }
     ) {
       player.sendMessage("この店は現在利用できません")
       return
@@ -485,11 +624,11 @@ class SignShopPlugin : JavaPlugin(), Listener {
         points.mapNotNull { block(it)?.state as? Container }.map { it.inventory }.distinct()
     val stock: () -> StockResult
     if (type == "Device") {
-      val levers = shop.devices.mapNotNull { block(it) }
+      val initialLevers = devicePoints.mapNotNull { block(it) }
       if (
-          levers.size != shop.devices.size ||
-              levers.isEmpty() ||
-              levers.any {
+          initialLevers.size != devicePoints.size ||
+              initialLevers.isEmpty() ||
+              initialLevers.any {
                 it.type != Material.LEVER || (it.blockData as? Powerable)?.isPowered != false
               }
       ) {
@@ -497,44 +636,63 @@ class SignShopPlugin : JavaPlugin(), Listener {
         return
       }
       stock = {
-        val powered = mutableListOf<Block>()
-        try {
-          levers.forEach { lever ->
-            val data = lever.blockData as Powerable
-            data.isPowered = true
-            lever.blockData = data
-            powered.add(lever)
-            server.scheduler.runTaskLater(
-                this,
-                Runnable {
-                  if (lever.type == Material.LEVER) {
-                    val later = lever.blockData as? Powerable
-                    if (later?.isPowered == true) {
-                      later.isPowered = false
-                      lever.blockData = later
-                      refreshSign(shop)
-                    }
-                  }
-                },
-                200L,
-            )
-          }
-          StockResult.OK
-        } catch (_: Exception) {
-          var restored = true
-          powered.asReversed().forEach { lever ->
-            try {
-              if (lever.type != Material.LEVER) restored = false
-              else {
-                val data = lever.blockData as Powerable
-                data.isPowered = false
-                lever.blockData = data
-              }
-            } catch (_: Exception) {
-              restored = false
+        val currentLevers = devicePoints.mapNotNull { pt -> block(pt)?.let { pt to it } }
+        if (
+            currentLevers.size != devicePoints.size ||
+                currentLevers.any { (_, lever) ->
+                  lever.type != Material.LEVER ||
+                      (lever.blockData as? Powerable)?.isPowered != false
+                }
+        ) {
+          StockResult.RESTORED
+        } else {
+          val powered = mutableListOf<Pair<Point, Block>>()
+          try {
+            currentLevers.forEach { (pt, lever) ->
+              val data = lever.blockData as Powerable
+              data.isPowered = true
+              lever.blockData = data
+              powered.add(pt to lever)
+              deviceTasks.remove(pt)?.cancel()
+              activeDevices.add(pt)
+              deviceTasks[pt] =
+                  server.scheduler.runTaskLater(
+                      this,
+                      Runnable {
+                        deviceTasks.remove(pt)
+                        activeDevices.remove(pt)
+                        val loaded = block(pt)
+                        if (loaded?.type == Material.LEVER) {
+                          val later = loaded.blockData as? Powerable
+                          if (later?.isPowered == true) {
+                            later.isPowered = false
+                            loaded.blockData = later
+                          }
+                        }
+                        refreshSign(shop)
+                      },
+                      200L,
+                  )
             }
+            StockResult.OK
+          } catch (_: Exception) {
+            var restored = true
+            powered.asReversed().forEach { (pt, lever) ->
+              deviceTasks.remove(pt)?.cancel()
+              activeDevices.remove(pt)
+              try {
+                if (lever.type != Material.LEVER) restored = false
+                else {
+                  val data = lever.blockData as Powerable
+                  data.isPowered = false
+                  lever.blockData = data
+                }
+              } catch (_: Exception) {
+                restored = false
+              }
+            }
+            if (restored) StockResult.RESTORED_HALT else StockResult.UNKNOWN
           }
-          if (restored) StockResult.RESTORED_HALT else StockResult.UNKNOWN
         }
       }
     } else {
@@ -552,7 +710,20 @@ class SignShopPlugin : JavaPlugin(), Listener {
         reject("在庫または空き容量が足りません")
         return
       }
-      stock = plan::apply
+      stock = {
+        if (!player.isOnline) {
+          StockResult.RESTORED
+        } else if (
+            (type == "Buy" || type == "Sell") &&
+                points.any { pt ->
+                  block(pt)?.let { it.state is Container && safeContainer(it) } != true
+                }
+        ) {
+          StockResult.RESTORED
+        } else {
+          plan.apply()
+        }
+      }
     }
     val payer = if (type == "Sell") owner else player.uniqueId
     if (yen > 0 && type != "iSell" && (economy?.balance("yen", payer) ?: -1L) < yen) {
@@ -561,69 +732,106 @@ class SignShopPlugin : JavaPlugin(), Listener {
     }
     active.add(shop)
     activeBoxes.addAll(points)
+    activePlayers.add(player.uniqueId)
+    activeDevices.addAll(devicePoints)
+    fun releaseLocks() {
+      active.remove(shop)
+      activeBoxes.removeAll(points.toSet())
+      activePlayers.remove(player.uniqueId)
+      devicePoints.forEach { pt -> if (!deviceTasks.containsKey(pt)) activeDevices.remove(pt) }
+    }
+    var handoff = false
     try {
-      val result =
-          Trade(
-                  object : TradeJournal {
-                    override fun begin() =
-                        store.begin(shop, type, player.uniqueId.toString(), owner.toString(), yen)
+      AsyncTrade(
+              object : TradeJournal {
+                override fun begin() =
+                    store.begin(shop, type, player.uniqueId.toString(), owner.toString(), yen)
 
-                    override fun finish(id: Long, status: String, detail: String, halt: String?) {
-                      try {
-                        store.finish(shop, id, status, detail, halt)
-                      } catch (e: Exception) {
-                        dbHealthy = false
-                        throw e
-                      }
+                override fun finish(id: Long, status: String, detail: String, halt: String?) {
+                  try {
+                    store.finish(shop, id, status, detail, halt)
+                  } catch (e: Exception) {
+                    dbHealthy = false
+                    throw e
+                  }
+                }
+
+                override fun halt(id: Long, reason: String) {
+                  this@SignShopPlugin.halt(shop, "取引 $id: $reason")
+                }
+              },
+              object : AsyncTradeFunds {
+                override fun withdraw(account: String, yen: Long, onResult: (MoneyResult) -> Unit) =
+                    moneyAsync(economy!!, account, yen, false, onResult)
+
+                override fun deposit(account: String, yen: Long, onResult: (MoneyResult) -> Unit) =
+                    moneyAsync(economy!!, account, yen, true, onResult)
+              },
+              stock,
+          )
+          .execute(type, player.uniqueId.toString(), owner.toString(), yen) { result ->
+            try {
+              if (player.isOnline) {
+                player.sendMessage(
+                    when (result) {
+                      TradeResult.SUCCESS -> "取引が完了しました"
+                      TradeResult.FAILED -> "取引できませんでした。取り消し済みです"
+                      TradeResult.HALTED -> "取引結果の確認が必要です。運営に連絡してください"
                     }
-
-                    override fun halt(id: Long, reason: String) {
-                      this@SignShopPlugin.halt(shop, "取引 $id: $reason")
-                    }
-                  },
-                  object : TradeFunds {
-                    override fun withdraw(account: String, yen: Long) =
-                        money(economy!!, account, yen, false)
-
-                    override fun deposit(account: String, yen: Long) =
-                        money(economy!!, account, yen, true)
-                  },
-                  stock,
-              )
-              .execute(type, player.uniqueId.toString(), owner.toString(), yen)
-      player.sendMessage(
-          when (result) {
-            TradeResult.SUCCESS -> "取引が完了しました"
-            TradeResult.FAILED -> "取引できませんでした。取り消し済みです"
-            TradeResult.HALTED -> "取引結果の確認が必要です。運営に連絡してください"
+                )
+              }
+              refreshSign(shop)
+            } finally {
+              releaseLocks()
+            }
           }
-      )
-      refreshSign(shop)
+      handoff = true
     } catch (e: Exception) {
       dbHealthy = false
       halt(shop, "取引記録の保存に失敗しました")
-      player.sendMessage("取引を開始できませんでした")
+      if (player.isOnline) player.sendMessage("取引を開始できませんでした")
     } finally {
-      active.remove(shop)
-      activeBoxes.removeAll(points.toSet())
+      if (!handoff) releaseLocks()
     }
   }
 
-  private fun money(
+  private fun moneyAsync(
       economy: OyasaiEconomyApi,
       account: String,
       yen: Long,
       deposit: Boolean,
-  ): MoneyResult =
-      try {
-        val target = Bukkit.getOfflinePlayer(UUID.fromString(account))
-        val response =
-            if (deposit) economy.deposit("yen", target.uniqueId, yen)
-            else economy.withdraw("yen", target.uniqueId, yen)
-        if (!response.accepted) MoneyResult.FAILED else moneyResult(response.completion.join(), yen)
-      } catch (_: Exception) {
-        MoneyResult.UNKNOWN
+      onResult: (MoneyResult) -> Unit,
+  ) {
+    val uuid =
+        try {
+          UUID.fromString(account)
+        } catch (_: Exception) {
+          onResult(MoneyResult.UNKNOWN)
+          return
+        }
+    val response =
+        try {
+          if (deposit) economy.deposit("yen", uuid, yen) else economy.withdraw("yen", uuid, yen)
+        } catch (_: Exception) {
+          onResult(MoneyResult.UNKNOWN)
+          return
+        }
+    if (!response.accepted) {
+      onResult(MoneyResult.FAILED)
+      return
+    }
+    val future = response.completion.copy().orTimeout(15L, TimeUnit.SECONDS)
+    future.whenComplete { result, error ->
+      val mapped =
+          if (error != null || result == null) MoneyResult.UNKNOWN else moneyResult(result, yen)
+      val deliver = Runnable { onResult(mapped) }
+      if (server.isPrimaryThread || !isEnabled) {
+        deliver.run()
+      } else {
+        server.scheduler.runTask(this, deliver)
       }
+    }
+  }
 
   private fun halt(shop: Shop, reason: String): Boolean {
     shop.haltReason = reason
@@ -653,40 +861,72 @@ class SignShopPlugin : JavaPlugin(), Listener {
   }
 
   private fun linkedShops(block: Block): Set<Shop> {
-    val points = (block.state as? Chest)?.inventory?.let(::protected).orEmpty() + point(block)
-    return points.flatMap { boxes[it].orEmpty() }.toSet()
+    val pt = point(block)
+    val points = (block.state as? Chest)?.inventory?.let(::protected).orEmpty() + pt
+    return (points.flatMap { boxes[it].orEmpty() } + devices[pt].orEmpty()).toSet()
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun open(event: InventoryOpenEvent) {
     val player = event.player as? Player ?: return
-    if (protected(event.inventory).any { boxes.containsKey(it) && !allowed(player, it) })
+    if (
+        protected(event.inventory).any {
+          boxes.containsKey(it) && (!allowed(player, it) || it in activeBoxes)
+        }
+    )
         event.isCancelled = true
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun click(event: InventoryClickEvent) {
     val player = event.whoClicked as? Player ?: return
-    if (protected(event.view.topInventory).any { boxes.containsKey(it) && !allowed(player, it) })
+    if (
+        protected(event.view.topInventory).any {
+          boxes.containsKey(it) && (!allowed(player, it) || it in activeBoxes)
+        }
+    )
         event.isCancelled = true
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun drag(event: InventoryDragEvent) {
     val player = event.whoClicked as? Player ?: return
-    if (protected(event.view.topInventory).any { boxes.containsKey(it) && !allowed(player, it) })
+    if (
+        protected(event.view.topInventory).any {
+          boxes.containsKey(it) && (!allowed(player, it) || it in activeBoxes)
+        }
+    )
         event.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun moveItem(event: InventoryMoveItemEvent) {
+    if (
+        protected(event.source).any { boxes.containsKey(it) || it in activeBoxes } ||
+            protected(event.destination).any { boxes.containsKey(it) || it in activeBoxes }
+    ) {
+      event.isCancelled = true
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun breakBlock(event: BlockBreakEvent) {
     val point = point(event.block)
     val linked = linkedShops(event.block)
-    if (point in signSupports) {
+    if (point in signSupports || point in deviceSupports) {
       event.isCancelled = true
       return
     }
     val shop = signs[point]
+    if (
+        (shop != null && shop in active) ||
+            point in activeBoxes ||
+            point in activeDevices ||
+            linked.any { it in active }
+    ) {
+      event.isCancelled = true
+      return
+    }
     if (
         shop != null &&
             (!admin(event.player) && shop.owner != event.player.uniqueId ||
@@ -709,36 +949,61 @@ class SignShopPlugin : JavaPlugin(), Listener {
       event.isCancelled = true
       return
     }
-    if (linked.isNotEmpty())
-        linked.forEach { shop -> if (!halt(shop, "リンク箱が破壊されました")) event.isCancelled = true }
+    if (linked.isNotEmpty()) {
+      val reason = if (devices.containsKey(point)) "リンクレバーが破壊されました" else "リンク箱が破壊されました"
+      linked.forEach { linkedShop -> if (!halt(linkedShop, reason)) event.isCancelled = true }
+    }
   }
 
   private fun protectedBlock(block: Block) =
       point(block).let {
-        it in signSupports || signs.containsKey(it) || linkedShops(block).isNotEmpty()
+        it in signSupports ||
+            it in deviceSupports ||
+            signs.containsKey(it) ||
+            linkedShops(block).isNotEmpty()
       }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun burn(event: BlockBurnEvent) {
     if (protectedBlock(event.block)) event.isCancelled = true
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun fade(event: BlockFadeEvent) {
+    if (protectedBlock(event.block)) event.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun leavesDecay(event: LeavesDecayEvent) {
+    if (protectedBlock(event.block)) event.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun liquidFlow(event: BlockFromToEvent) {
+    if (protectedBlock(event.toBlock)) event.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun entityChangeBlock(event: EntityChangeBlockEvent) {
+    if (protectedBlock(event.block)) event.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun explode(event: BlockExplodeEvent) {
     event.blockList().removeIf(::protectedBlock)
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun explodeEntity(event: EntityExplodeEvent) {
     event.blockList().removeIf(::protectedBlock)
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun piston(event: BlockPistonExtendEvent) {
     if (event.blocks.any(::protectedBlock)) event.isCancelled = true
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun piston(event: BlockPistonRetractEvent) {
     if (event.blocks.any(::protectedBlock)) event.isCancelled = true
   }
