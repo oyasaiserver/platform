@@ -57,6 +57,11 @@ class OyasaiVotifierPlugin : JavaPlugin() {
   }
 
   private fun receive(vote: Vote, protocol: VoteProtocol) {
+    val username = vote.getUsername() ?: ""
+    if (!username.matches(MINECRAFT_USERNAME)) {
+      logger.warning("Rejected vote for unsafe username '$username'")
+      return
+    }
     when (protocol) {
       VoteProtocol.V1 -> v1Votes.incrementAndGet()
       VoteProtocol.V2 -> v2Votes.incrementAndGet()
@@ -88,7 +93,7 @@ class OyasaiVotifierPlugin : JavaPlugin() {
             sender.sendMessage("§cVotifier is not accepting votes: $reason")
             return true
           }
-          if (args.isEmpty()) return false
+          if (args.isEmpty() || !args[0].matches(MINECRAFT_USERNAME)) return false
           val protocol =
               when (args.getOrElse(2) { "v2" }.lowercase()) {
                 "v1" -> VoteProtocol.V1

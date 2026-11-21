@@ -46,11 +46,11 @@ internal class VoteRewards(
       return
     }
     val player = resolveVoter(vote)
-    deliver(player, vote, config.individual.pick(nextInt), progress)
     val party = config.party
     val partyVote = recordPartyVote(progress, party.votesNeeded)
     progress = partyVote.nextProgress
     save()
+    deliver(player, vote, config.individual.pick(nextInt), partyVote.recordedProgress)
     config.messages
         .voteBroadcastChat(vote.username, partyVote.recordedProgress, party.votesNeeded)
         ?.let(broadcast)
