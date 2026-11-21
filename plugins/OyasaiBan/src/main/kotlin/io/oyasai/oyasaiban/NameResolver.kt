@@ -15,7 +15,7 @@ class NameResolver(
     private val proxy: ProxyServer,
     private val database: PunishmentDatabase,
     private val logger: Logger,
-) {
+) : AutoCloseable {
   private val http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build()
 
   fun resolve(target: String): CompletableFuture<UUID?> {
@@ -80,6 +80,10 @@ class NameResolver(
           logger.warn("Mojang name lookup failed for {}: {}", name, it.message)
           null
         }
+  }
+
+  override fun close() {
+    http.close()
   }
 
   companion object {
