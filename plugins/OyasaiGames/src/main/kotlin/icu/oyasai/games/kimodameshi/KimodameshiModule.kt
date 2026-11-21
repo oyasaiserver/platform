@@ -309,7 +309,11 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
       if (!p.isOnline) return@later
       clearItems(p)
       for (slot in 0..40) p.inventory.setItem(slot, data.getItemStack("slot.$slot"))
-      p.health = data.getDouble("health")
+      val maxHealth =
+          p.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH)?.value?.takeIf { it > 0.0 }
+              ?: 20.0
+      val savedHealth = data.getDouble("health", maxHealth).takeIf { it.isFinite() } ?: maxHealth
+      p.health = savedHealth.coerceIn(0.0, maxHealth)
       p.foodLevel = data.getInt("food")
       setTotalExperience(p, data.getInt("experience"))
       for (attribute in
@@ -608,7 +612,8 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
           return true
         }
         if (args.size < 4) return false
-        val coordinates = args.take(3).map { it.toDoubleOrNull() ?: return false }
+        val coordinates =
+            args.take(3).map { it.toDoubleOrNull()?.takeIf { d -> d.isFinite() } ?: return false }
         mechanics.checkMission(
             coordinates[0],
             coordinates[1],
@@ -647,7 +652,7 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
       "editpoints" -> {
         if (args.size != 4) return false
         val t = requiredPlayer(1) ?: return true
-        val amount = args[3].toDoubleOrNull() ?: return false
+        val amount = args[3].toDoubleOrNull()?.takeIf { it.isFinite() } ?: return false
         val id = t.uniqueId
         store.setName(id, t.name)
         val type = args[2]
@@ -671,6 +676,7 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
                 return true
               }
             }
+        if (!next.isFinite()) return false
         when (type.lowercase()) {
           "discovery" -> discovery[id] = next
           "kill" -> kills[id] = next

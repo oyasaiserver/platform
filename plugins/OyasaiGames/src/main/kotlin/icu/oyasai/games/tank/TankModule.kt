@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -251,6 +252,17 @@ class TankModule(private val plugin: OyasaiGamesPlugin) : Listener, CommandExecu
         event.hotbarButton >= 0 && isControl(event.whoClicked.inventory.getItem(event.hotbarButton))
     )
         event.isCancelled = true
+  }
+
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    if (
+        isControl(event.oldCursor) ||
+            isControl(event.cursor) ||
+            event.newItems.values.any(::isControl)
+    ) {
+      event.isCancelled = true
+    }
   }
 
   @EventHandler

@@ -784,6 +784,7 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
       )
       reward(killer.player.uniqueId, event, if (final) "final-kill" else "kill")
     }
+    removeEnderPearls(match, p.player)
     p.player.closeInventory()
     p.player.inventory.clear()
     p.player.setItemOnCursor(null)
@@ -865,6 +866,7 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
     val match = p.match
     p.recovering = true
     try {
+      removeEnderPearls(match, p.player)
       if (
           !store.restore(
               p.player,
@@ -885,6 +887,33 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
     } finally {
       p.recovering = false
     }
+  }
+
+  private fun removeEnderPearls(match: BwMatch, player: Player) {
+    val playerId = player.uniqueId.toString()
+    match.entities.toList().forEach { entityId ->
+      val entity = Bukkit.getEntity(entityId)
+      if (
+          entity is EnderPearl &&
+              ((entity.shooter as? Player)?.uniqueId == player.uniqueId ||
+                  entity.persistentDataContainer.get(ownerKey, PersistentDataType.STRING) ==
+                      playerId)
+      ) {
+        entity.remove()
+        match.entities.remove(entityId)
+      }
+    }
+    listOfNotNull(player.world, Bukkit.getWorld(match.config.world))
+        .distinct()
+        .flatMap { it.getEntitiesByClass(EnderPearl::class.java) }
+        .filter {
+          (it.shooter as? Player)?.uniqueId == player.uniqueId ||
+              it.persistentDataContainer.get(ownerKey, PersistentDataType.STRING) == playerId
+        }
+        .forEach {
+          it.remove()
+          match.entities.remove(it.uniqueId)
+        }
   }
 
   private fun reset(match: BwMatch) {
@@ -1196,6 +1225,18 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
         BedWarsShopCatalog.load(source) { plugin.logger.warning(it) }
       }
 
+  private fun nearStore(p: BwMember, upgrades: Boolean, name: String): Boolean {
+    val playerLoc = p.player.location
+    return p.match.config.stores.any { store ->
+      val matchesType =
+          store.shop == name ||
+              (if (upgrades) store.shop == "upgradeShop.yml" else store.shop != "upgradeShop.yml")
+      if (!matchesType) return@any false
+      val loc = store.point.location()
+      loc.world == playerLoc.world && loc.distanceSquared(playerLoc) <= 36.0
+    }
+  }
+
   private fun openShop(
       player: Player,
       upgrades: Boolean,
@@ -1203,11 +1244,12 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
   ) {
     val p = members[player.uniqueId] ?: error("試合に参加してください")
     check(combatReady(p)) { "今は購入できません" }
+    check(nearStore(p, upgrades, name)) { "ショップの近くでのみ利用できます" }
     p.match.shop!!.open(
         player,
         catalog(name),
         team(p.match, p.team).color,
-        { members[player.uniqueId] === p && combatReady(p) },
+        { members[player.uniqueId] === p && combatReady(p) && nearStore(p, upgrades, name) },
         { _, entry -> buyUpgrade(p, entry) },
         { _, _ -> applyUpgrades(p) },
         upgrades,
@@ -1654,7 +1696,15 @@ class BedWarsModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecut
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun teleport(event: PlayerTeleportEvent) {
-    val p = members[event.player.uniqueId] ?: return
+    val p = members[event.player.uniqueId]
+    if (p == null) {
+      if (
+          event.cause == PlayerTeleportEvent.TeleportCause.ENDER_PEARL && arenaAt(event.to) != null
+      ) {
+        event.isCancelled = true
+      }
+      return
+    }
     if (p.recovering || event.cause == PlayerTeleportEvent.TeleportCause.PLUGIN) return
     if (!combatReady(p) || !p.match.config.contains(event.to)) event.isCancelled = true
   }

@@ -7,12 +7,15 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.inventory.PrepareAnvilEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitTask
 
 /** Toys.sk の線香花火と自決用ナイフ。着火中のプレイヤーだけを毎 tick 処理する。 */
@@ -20,6 +23,8 @@ class ToysModule(private val plugin: OyasaiGamesPlugin) : Listener {
   private val burning = mutableMapOf<UUID, Int>()
   private var task: BukkitTask? = null
   private val legacy = LegacyComponentSerializer.legacySection()
+  private val toyKey = NamespacedKey(plugin, "oyasai_toy")
+  private val anvilRenamedKey = NamespacedKey(plugin, "anvil_renamed")
 
   fun enable() {
     plugin.server.pluginManager.registerEvents(this, plugin)
@@ -33,6 +38,25 @@ class ToysModule(private val plugin: OyasaiGamesPlugin) : Listener {
   }
 
   @EventHandler
+  fun onPrepareAnvil(event: PrepareAnvilEvent) {
+    val result = event.result ?: return
+    val first = event.inventory.firstItem
+    val firstName = first?.let(::itemName) ?: ""
+    val resultName = itemName(result)
+    if (resultName == firstName) return
+    val meta = result.itemMeta ?: return
+    val hasToyTag = meta.persistentDataContainer.has(toyKey, PersistentDataType.STRING)
+    val stripped = ChatColor.stripColor(resultName) ?: resultName
+    if (!hasToyTag && (stripped.contains("自決用ナイフ") || stripped.contains("線香花火"))) {
+      event.result = null
+      return
+    }
+    meta.persistentDataContainer.set(anvilRenamedKey, PersistentDataType.BYTE, 1.toByte())
+    result.itemMeta = meta
+    event.result = result
+  }
+
+  @EventHandler
   fun onRightClick(event: PlayerInteractEvent) {
     if (
         event.hand != EquipmentSlot.HAND ||
@@ -42,10 +66,10 @@ class ToysModule(private val plugin: OyasaiGamesPlugin) : Listener {
     val player = event.player
     val item = player.inventory.itemInMainHand
     val name = itemName(item)
-    if (item.type == Material.IRON_SWORD && name == "§c自決用ナイフ") {
+    if (validKnife(item)) {
       player.health = 0.0
     }
-    if (item.type == Material.TIPPED_ARROW && validFirework(item) && player.uniqueId !in burning) {
+    if (validFirework(item) && player.uniqueId !in burning) {
       burning[player.uniqueId] = 200
       player.sendMessage(legacy.deserialize("§c${name}に火をつけました！"))
     }
@@ -98,7 +122,20 @@ class ToysModule(private val plugin: OyasaiGamesPlugin) : Listener {
 
   private fun uncoloredName(item: ItemStack): String = ChatColor.stripColor(itemName(item)) ?: ""
 
-  private fun validFirework(item: ItemStack): Boolean =
-      uncoloredName(item).contains("線香花火") &&
-          item.itemMeta?.lore()?.any { legacy.serialize(it) == "§8クリックで着火" } == true
+  private fun validKnife(item: ItemStack): Boolean {
+    if (item.type != Material.IRON_SWORD) return false
+    val meta = item.itemMeta ?: return false
+    if (meta.persistentDataContainer.has(anvilRenamedKey, PersistentDataType.BYTE)) return false
+    val pdcType = meta.persistentDataContainer.get(toyKey, PersistentDataType.STRING)
+    return pdcType == "suicide_knife" || itemName(item) == "§c自決用ナイフ"
+  }
+
+  private fun validFirework(item: ItemStack): Boolean {
+    if (item.type != Material.TIPPED_ARROW) return false
+    val meta = item.itemMeta ?: return false
+    if (meta.persistentDataContainer.has(anvilRenamedKey, PersistentDataType.BYTE)) return false
+    val pdcType = meta.persistentDataContainer.get(toyKey, PersistentDataType.STRING)
+    val hasLore = meta.lore()?.any { legacy.serialize(it) == "§8クリックで着火" } == true
+    return fireworkPhase(uncoloredName(item), 1) != null && (pdcType == "firework" || hasLore)
+  }
 }
