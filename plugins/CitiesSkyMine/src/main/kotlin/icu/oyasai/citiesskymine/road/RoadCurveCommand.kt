@@ -141,6 +141,36 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
   private fun handleBuild(player: Player, session: RoadSession) {
     if (!requireWaypoints(player, session, 2)) return
+    if (session.waypoints.any { it.world != player.world }) {
+      MessageUtil.error(player, "[RC] 現在のワールドと異なる通過点が含まれています。/rc reset してください。")
+      return
+    }
+    if (!validateSettingsForBuild(player, session.settings)) return
+
+    val maxBlocks =
+        plugin.config.getLong(
+            "limits.max-blocks-road",
+            plugin.config.getLong("limits.max-blocks-csm", 2_000_000L),
+        )
+    val cHW = (session.settings.centerLineWidth + 1) / 2
+    val totalHW =
+        cHW +
+            session.settings.laneWidth +
+            session.settings.outerLineWidth +
+            session.settings.sidewalkWidth
+    if (totalHW <= 0) {
+      MessageUtil.error(player, "[RC] 道路幅が0です。車道・白線・歩道のいずれかを1以上に設定してください。")
+      return
+    }
+    val totalWaypointLength = totalWaypointDistance(session.waypoints)
+    val roadWidth = totalHW.toLong() * 2L + 1L
+    if (
+        !totalWaypointLength.isFinite() ||
+            (maxBlocks > 0L && totalWaypointLength * roadWidth > maxBlocks.toDouble() * 2.0)
+    ) {
+      MessageUtil.error(player, "[RC] 道路の生成規模が上限 ($maxBlocks ブロック) を超えています。")
+      return
+    }
 
     // 設定変更後(dirty)またはキャッシュ未生成の場合は再計算
     val path =
@@ -168,7 +198,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
           try {
             val result =
                 CsmEditSession.run(world, player, plugin.logger) { editSession ->
-                  RoadBuilder.buildInto(editSession, buildPath, buildSettings)
+                  RoadBuilder.buildInto(editSession, buildPath, buildSettings, maxBlocks)
                   true
                 }
             plugin.server.scheduler.runTask(
@@ -302,30 +332,55 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
           MessageUtil.success(player, "[RC] 半径: ${s.radius} ブロック")
         }
         "transition" -> {
-          s.transitionLength = value.toDouble()
+          val transition = value.toDouble()
+          if (!transition.isFinite() || transition < 0.0 || transition > MAX_TRANSITION) {
+            MessageUtil.error(player, "緩和曲線長は 0 以上 $MAX_TRANSITION 以下の有限値で指定してください。")
+            return false
+          }
+          s.transitionLength = transition
           MessageUtil.success(player, "[RC] 緩和曲線長: ${s.transitionLength} ブロック")
         }
         "lane" -> {
-          s.laneWidth = value.toInt()
+          val lane = value.toInt()
+          if (lane !in 0..MAX_LANE_WIDTH) {
+            MessageUtil.error(player, "車道幅は 0 から $MAX_LANE_WIDTH の整数で指定してください。")
+            return false
+          }
+          s.laneWidth = lane
           MessageUtil.success(player, "[RC] 車道幅: ${s.laneWidth} ブロック")
         }
         "centerline" -> {
-          s.centerLineWidth = value.toInt()
+          val centerLine = value.toInt()
+          if (centerLine !in 0..MAX_LINE_WIDTH) {
+            MessageUtil.error(player, "中央白線幅は 0 から $MAX_LINE_WIDTH の整数で指定してください。")
+            return false
+          }
+          s.centerLineWidth = centerLine
           MessageUtil.success(player, "[RC] 中央白線幅: ${s.centerLineWidth} ブロック")
         }
         "outerline" -> {
-          s.outerLineWidth = value.toInt()
+          val outerLine = value.toInt()
+          if (outerLine !in 0..MAX_LINE_WIDTH) {
+            MessageUtil.error(player, "外縁白線幅は 0 から $MAX_LINE_WIDTH の整数で指定してください。")
+            return false
+          }
+          s.outerLineWidth = outerLine
           MessageUtil.success(player, "[RC] 外縁白線幅: ${s.outerLineWidth} ブロック")
         }
         "sidewalk" -> {
-          s.sidewalkWidth = value.toInt()
+          val sidewalk = value.toInt()
+          if (sidewalk !in 0..MAX_SIDEWALK_WIDTH) {
+            MessageUtil.error(player, "歩道幅は 0 から $MAX_SIDEWALK_WIDTH の整数で指定してください。")
+            return false
+          }
+          s.sidewalkWidth = sidewalk
           MessageUtil.success(player, "[RC] 歩道幅: ${s.sidewalkWidth} ブロック")
         }
         "roadmat" -> {
           val mat =
-              Material.matchMaterial(value)
+              Material.matchMaterial(value)?.takeIf { it.isBlock && !it.isAir }
                   ?: run {
-                    MessageUtil.error(player, "不明な素材: $value")
+                    MessageUtil.error(player, "不明または配置できない素材: $value")
                     return false
                   }
           s.roadMaterial = mat
@@ -333,9 +388,9 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
         }
         "sidewalkmat" -> {
           val mat =
-              Material.matchMaterial(value)
+              Material.matchMaterial(value)?.takeIf { it.isBlock && !it.isAir }
                   ?: run {
-                    MessageUtil.error(player, "不明な素材: $value")
+                    MessageUtil.error(player, "不明または配置できない素材: $value")
                     return false
                   }
           s.sidewalkMaterial = mat
@@ -343,9 +398,9 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
         }
         "linemat" -> {
           val mat =
-              Material.matchMaterial(value)
+              Material.matchMaterial(value)?.takeIf { it.isBlock && !it.isAir }
                   ?: run {
-                    MessageUtil.error(player, "不明な素材: $value")
+                    MessageUtil.error(player, "不明または配置できない素材: $value")
                     return false
                   }
           s.lineMaterial = mat
@@ -420,6 +475,41 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     return false
   }
 
+  private fun validateSettingsForBuild(player: Player, s: RoadSettings): Boolean {
+    if (
+        !s.radius.isFinite() ||
+            s.radius <= 0.0 ||
+            s.radius > 1000.0 ||
+            !s.transitionLength.isFinite() ||
+            s.transitionLength < 0.0 ||
+            s.transitionLength > MAX_TRANSITION ||
+            s.laneWidth !in 0..MAX_LANE_WIDTH ||
+            s.centerLineWidth !in 0..MAX_LINE_WIDTH ||
+            s.outerLineWidth !in 0..MAX_LINE_WIDTH ||
+            s.sidewalkWidth !in 0..MAX_SIDEWALK_WIDTH ||
+            !s.roadMaterial.isBlock ||
+            s.roadMaterial.isAir ||
+            !s.sidewalkMaterial.isBlock ||
+            s.sidewalkMaterial.isAir ||
+            !s.lineMaterial.isBlock ||
+            s.lineMaterial.isAir
+    ) {
+      MessageUtil.error(player, "[RC] 道路設定に無効な値があります。/rc set で再設定してください。")
+      return false
+    }
+    return true
+  }
+
+  private fun totalWaypointDistance(waypoints: List<org.bukkit.Location>): Double {
+    var total = 0.0
+    for (i in 0 until waypoints.size - 1) {
+      val a = waypoints[i]
+      val b = waypoints[i + 1]
+      total += kotlin.math.hypot(b.x - a.x, b.z - a.z)
+    }
+    return total
+  }
+
   private fun sendHelp(player: Player) {
     MessageUtil.header(player, "RoadCurve ヘルプ")
     MessageUtil.send(player, "<white>Bone</white><gray> を持ってブロック右クリック → 通過点追加（2点目から自動プレビュー）</gray>")
@@ -448,6 +538,10 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   }
 
   companion object {
+    private const val MAX_TRANSITION = 500.0
+    private const val MAX_LANE_WIDTH = 64
+    private const val MAX_LINE_WIDTH = 32
+    private const val MAX_SIDEWALK_WIDTH = 64
     private val SUBCOMMANDS =
         listOf("help", "reset", "build", "smoothline", "set", "status", "debugline", "version")
     private val SET_PARAMS =

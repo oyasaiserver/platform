@@ -59,20 +59,21 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   private fun doSchem(player: Player, args: Array<out String>) {
     val sub = args.getOrNull(1)?.lowercase() ?: "full"
 
-    // Resolve schematic file: 3rd arg as absolute path, else data folder
-    val fileArg = args.getOrNull(3)
-    val schemFile =
-        if (fileArg != null) {
-          File(fileArg)
-        } else {
-          File(plugin.dataFolder, "fasard.schem")
-        }
+    val schemFile = resolveSchemFile(player, args.getOrNull(3)) ?: return
 
-    if (!schemFile.exists()) {
-      MessageUtil.error(player, "ファイルが見つかりません: ${schemFile.absolutePath}")
+    if (!schemFile.isFile) {
+      MessageUtil.error(player, "ファイルが見つかりません: ${schemFile.name}")
       MessageUtil.send(
           player,
-          "<gray>${plugin.dataFolder.absolutePath}/fasard.schem に配置してください</gray>",
+          "<gray>plugins/${plugin.name}/fasard.schem に配置してください</gray>",
+      )
+      return
+    }
+    val maxFileBytes = plugin.config.getLong("limits.max-schematic-file-bytes", 10L * 1024L * 1024L)
+    if (maxFileBytes > 0 && schemFile.length() > maxFileBytes) {
+      MessageUtil.error(
+          player,
+          "スキマティックファイルが上限 ($maxFileBytes bytes) を超えています: ${schemFile.length()}",
       )
       return
     }
@@ -109,6 +110,41 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     if (result.changed) {
       sendUndoResult(player, result.undoRecorded, "生成")
     }
+  }
+
+  private fun resolveSchemFile(player: Player, fileArg: String?): File? {
+    val baseDir = plugin.dataFolder.canonicalFile
+    val basePath = baseDir.toPath()
+    if (fileArg == null) {
+      return File(baseDir, "fasard.schem")
+    }
+    if (
+        fileArg.isBlank() ||
+            fileArg.contains("..") ||
+            fileArg.contains('/') ||
+            fileArg.contains('\\') ||
+            fileArg.contains(':') ||
+            File(fileArg).isAbsolute ||
+            !SCHEM_FILE_NAME.matches(fileArg)
+    ) {
+      MessageUtil.error(
+          player,
+          "無効なファイル名です。プラグインフォルダ直下の .schem / .schematic ファイル名のみ指定できます。",
+      )
+      return null
+    }
+    val canonical =
+        try {
+          File(baseDir, fileArg).canonicalFile
+        } catch (_: Exception) {
+          MessageUtil.error(player, "ファイルパスを解決できません。")
+          return null
+        }
+    if (!canonical.toPath().startsWith(basePath)) {
+      MessageUtil.error(player, "許可されていないファイルパスです。")
+      return null
+    }
+    return canonical
   }
 
   private fun sendUndoResult(player: Player, undoRecorded: Boolean, label: String) {
@@ -180,5 +216,9 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
           }
       else -> emptyList()
     }
+  }
+
+  companion object {
+    private val SCHEM_FILE_NAME = Regex("[A-Za-z0-9][A-Za-z0-9_.-]{0,127}\\.(?i:schem|schematic)")
   }
 }

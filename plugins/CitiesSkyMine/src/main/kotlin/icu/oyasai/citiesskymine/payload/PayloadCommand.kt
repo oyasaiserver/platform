@@ -466,11 +466,31 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
   }
 
-  private fun countSourceBlocks(columns: List<Column>): Long =
-      columns.sumOf { it.height.toLong() + 1L }
+  private fun countSourceBlocks(columns: List<Column>): Long {
+    var total = 0L
+    for (column in columns) {
+      total =
+          try {
+            Math.addExact(total, column.height.toLong() + 1L)
+          } catch (_: ArithmeticException) {
+            return Long.MAX_VALUE
+          }
+    }
+    return total
+  }
 
-  private fun countPlacementBlocks(columns: List<PlacementColumn>): Long =
-      columns.sumOf { it.height.toLong() + 1L }
+  private fun countPlacementBlocks(columns: List<PlacementColumn>): Long {
+    var total = 0L
+    for (column in columns) {
+      total =
+          try {
+            Math.addExact(total, column.height.toLong() + 1L)
+          } catch (_: ArithmeticException) {
+            return Long.MAX_VALUE
+          }
+    }
+    return total
+  }
 
   private fun hollowPlacementColumns(columns: List<Column>): List<PlacementColumn> {
     if (columns.isEmpty()) return emptyList()
@@ -935,12 +955,33 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   private fun decodeColumns(payload: String, forceBase64: Boolean, maxColumns: Int): List<Column> {
     val compressed = decodePayload(payload, forceBase64)
-    val data = InflaterInputStream(ByteArrayInputStream(compressed)).use { it.readBytes() }
+    if (compressed.size > MAX_COMPRESSED_BYTES) {
+      throw IllegalArgumentException("圧縮 payload サイズが上限 ($MAX_COMPRESSED_BYTES bytes) を超えています")
+    }
+    val data = readInflatedBytes(compressed, MAX_DECOMPRESSED_BYTES)
     val reader = ByteReader(data)
     return when (val magic = reader.readMagic()) {
       "CMC" -> decodeCmcColumns(reader, maxColumns)
       "CMB" -> decodeCmbBoxes(reader, maxColumns)
       else -> throw IllegalArgumentException("$magic v1 payload には対応していません")
+    }
+  }
+
+  private fun readInflatedBytes(compressed: ByteArray, maxBytes: Int): ByteArray {
+    InflaterInputStream(ByteArrayInputStream(compressed)).use { input ->
+      val out = java.io.ByteArrayOutputStream()
+      val buffer = ByteArray(8192)
+      var total = 0
+      while (true) {
+        val read = input.read(buffer)
+        if (read < 0) break
+        total += read
+        if (total > maxBytes) {
+          throw IllegalArgumentException("展開後の payload サイズが上限 ($maxBytes bytes) を超えています")
+        }
+        out.write(buffer, 0, read)
+      }
+      return out.toByteArray()
     }
   }
 
@@ -960,6 +1001,11 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       z += reader.readZigZagInt()
       y += reader.readZigZagInt()
       val height = reader.readVarInt().toIntChecked("height")
+      try {
+        Math.addExact(y, height)
+      } catch (_: ArithmeticException) {
+        throw IllegalArgumentException("柱の高さが範囲外です")
+      }
       columns.add(Column(x, z, y, height))
     }
     reader.expectEnd()
@@ -970,6 +1016,9 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     reader.readVarInt() // scale x1000. 現状は配置時に使わない。
 
     val boxCount = reader.readVarInt().toIntChecked("box count")
+    if (maxColumns > 0 && boxCount > maxColumns) {
+      throw IllegalArgumentException("CMB box 数が上限 ($maxColumns) を超えています: $boxCount")
+    }
     val columns = ArrayList<Column>()
     var x = 0
     var z = 0
@@ -983,6 +1032,11 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val height = reader.readVarInt().toIntChecked("box height")
       if (width <= 0 || depth <= 0) {
         throw IllegalArgumentException("box width/depth が0以下です")
+      }
+      try {
+        Math.addExact(y, height)
+      } catch (_: ArithmeticException) {
+        throw IllegalArgumentException("box height が範囲外です")
       }
 
       val nextSize = columns.size.toLong() + width.toLong() * depth.toLong()
@@ -1021,8 +1075,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val expectedLength =
         body.substring(0, sep).toIntOrNull()
             ?: throw IllegalArgumentException("Base997 length が無効です")
-    if (expectedLength < 0) {
-      throw IllegalArgumentException("Base997 length が負数です")
+    if (expectedLength < 0 || expectedLength > MAX_COMPRESSED_BYTES) {
+      throw IllegalArgumentException("Base997 length が範囲外です: $expectedLength")
     }
 
     val digits = body.substring(sep + 1)
@@ -1148,6 +1202,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     const val MAX_SPLIT_PARTS = 512
     const val MAX_SPLIT_PAYLOAD_CHARS = 200_000
     const val SPLIT_PAYLOAD_TTL_MILLIS = 10 * 60 * 1000L
+    const val MAX_COMPRESSED_BYTES = 1 * 1024 * 1024
+    const val MAX_DECOMPRESSED_BYTES = 16 * 1024 * 1024
   }
 
   private class ByteReader(private val data: ByteArray) {

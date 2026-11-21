@@ -144,19 +144,39 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
     try {
       when (param.lowercase()) {
         "arms" -> {
-          session.arms = value.toInt().coerceIn(3, 6)
+          val v = value.toInt()
+          if (v !in 3..6) {
+            player.sendMessage("§c腕数は 3 から 6 の整数で指定してください。")
+            return false
+          }
+          session.arms = v
           player.sendMessage("§a[RI] 腕数: §f${session.arms}")
         }
         "armlength" -> {
-          session.armLength = value.toInt().coerceAtLeast(2)
+          val v = value.toInt()
+          if (v !in 2..256) {
+            player.sendMessage("§c腕の長さは 2 から 256 の整数で指定してください。")
+            return false
+          }
+          session.armLength = v
           player.sendMessage("§a[RI] 腕の長さ: §f${session.armLength} ブロック")
         }
         "cornerradius" -> {
-          session.cornerRadius = value.toInt().coerceAtLeast(0)
+          val v = value.toInt()
+          if (v !in 0..128) {
+            player.sendMessage("§cコーナー半径は 0 から 128 の整数で指定してください。")
+            return false
+          }
+          session.cornerRadius = v
           player.sendMessage("§a[RI] コーナー半径: §f${session.cornerRadius} ブロック")
         }
         "rotation" -> {
-          session.rotationDeg = value.toDouble()
+          val v = value.toDouble()
+          if (!v.isFinite()) {
+            player.sendMessage("§c回転は有限値で指定してください。")
+            return false
+          }
+          session.rotationDeg = v
           player.sendMessage("§a[RI] 回転: §f${session.rotationDeg}°")
         }
         else -> {
@@ -180,6 +200,36 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
             }
     val roadSettings = plugin.getSession(player).settings.copy()
     val buildSession = snapshot(session)
+    if (
+        buildSession.arms !in 3..6 ||
+            buildSession.armLength !in 2..256 ||
+            buildSession.cornerRadius !in 0..128 ||
+            !buildSession.rotationDeg.isFinite() ||
+            roadSettings.laneWidth !in 0..64 ||
+            roadSettings.centerLineWidth !in 0..32 ||
+            roadSettings.outerLineWidth !in 0..32 ||
+            roadSettings.sidewalkWidth !in 0..64
+    ) {
+      player.sendMessage("§c[RI] 交差点または道路の設定値が範囲外です。/ri set・/rc set で再設定してください。")
+      return
+    }
+    val cHW = (roadSettings.centerLineWidth + 1) / 2
+    val totalHW =
+        cHW + roadSettings.laneWidth + roadSettings.outerLineWidth + roadSettings.sidewalkWidth
+    val maxR = totalHW.toLong() + buildSession.cornerRadius.toLong()
+    val estimatedBlocks =
+        buildSession.arms.toLong() *
+            buildSession.armLength.toLong() *
+            (totalHW.toLong() * 2L + 1L) + (maxR * 2L + 1L) * (maxR * 2L + 1L)
+    val maxBlocks =
+        plugin.config.getLong(
+            "limits.max-blocks-road",
+            plugin.config.getLong("limits.max-blocks-csm", 2_000_000L),
+        )
+    if (maxBlocks > 0L && estimatedBlocks > maxBlocks) {
+      player.sendMessage("§c[RI] 生成ブロック数が上限 ($maxBlocks) を超えています: $estimatedBlocks")
+      return
+    }
     player.sendMessage("§a[RI] 交差点を生成中…")
     val world = player.world
     val buildCenter = center.clone()

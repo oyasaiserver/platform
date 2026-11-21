@@ -179,7 +179,8 @@ object SchematicFacadeGenerator {
   }
 
   private fun load(file: File, player: Player): Clipboard? {
-    cache?.let { (k, c) -> if (k == file.absolutePath) return c }
+    val cacheKey = file.canonicalPath
+    cache?.let { (k, c) -> if (k == cacheKey) return c }
     val fmt =
         ClipboardFormats.findByFile(file)
             ?: run {
@@ -188,7 +189,7 @@ object SchematicFacadeGenerator {
             }
     return try {
       val c = FileInputStream(file).use { fmt.getReader(it).read() }
-      cache = Pair(file.absolutePath, c)
+      cache = Pair(cacheKey, c)
       player.sendMessage("§7スキマティック読み込み: ${file.name}")
       c
     } catch (e: Exception) {
