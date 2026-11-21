@@ -87,15 +87,29 @@ class DirectState : JavaPlugin(), Listener {
           logger.info("CoreProtect is not installed or enabled; block change logging is disabled.")
           null
         }
+    val canEditLocation: (Player, org.bukkit.Location) -> Boolean = { player, location ->
+      !server.pluginManager.isPluginEnabled("WorldGuard") ||
+          WorldGuardUpdates.canBuild(player, location)
+    }
     val history =
         EditHistory(
             server,
             restoreBlocks = { player, snapshots -> edits.restore(player, snapshots) },
+            canEditEntity = canEditLocation,
+            restoreBlocksWithExpected = { player, snapshots, expected ->
+              edits.restore(player, snapshots, expected)
+            },
         )
     edits =
-        BlockEditService(this, updateMode, blockChangeLog, history) {
-          playerSettings.get(it.uniqueId).editSound
-        }
+        BlockEditService(
+            this,
+            updateMode,
+            blockChangeLog,
+            history,
+            { playerSettings.get(it.uniqueId).editSound },
+            ignoredBlockPdcKeys,
+            canEditLocation,
+        )
 
     val interactions =
         EditInteractionListener(
@@ -107,10 +121,7 @@ class DirectState : JavaPlugin(), Listener {
             handEditor,
             blockReplacement,
             ignoredBlockPdcKeys,
-            canEditEntity = { player, location ->
-              !server.pluginManager.isPluginEnabled("WorldGuard") ||
-                  WorldGuardUpdates.canBuild(player, location)
-            },
+            canEditEntity = canEditLocation,
             history = history,
             afterEntityEdit = updateMode::afterEntityEdit,
         )
