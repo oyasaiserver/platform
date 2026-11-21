@@ -27,6 +27,7 @@ class OyasaiVehicles : JavaPlugin() {
 
     registerListener(VehicleGarageService)
     registerListener(MileagePoint)
+    registerListener(TimeAttackCommand)
     registerListener(io.oyasai.toolbox.OyasaiMenuListener)
 
     VehicleGarageService.enableFix()

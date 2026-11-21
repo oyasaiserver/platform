@@ -181,7 +181,7 @@ object BuilderItemSupport {
     var total = 0
     for (i in stats.indices) {
       val base = baseValues.getOrElse(i) { 0 }
-      total += (stats[i] - base)
+      total += (stats[i] - base).coerceAtLeast(0)
     }
     return total
   }
@@ -220,8 +220,12 @@ object BuilderItemSupport {
 
     if (!changed) return false
 
-    val nowCost = currentCost(item) ?: 0
-    newLore.add("Cost: ${nowCost + delta}")
+    val previousCost = (currentCost(item) ?: 0).coerceAtLeast(0)
+    meta.legacyLore = newLore
+    item.itemMeta = meta
+    val recalculatedCost = currentCost(item)
+    val updatedCost = (recalculatedCost ?: (previousCost + delta)).coerceAtLeast(0)
+    newLore.add("Cost: $updatedCost")
     meta.legacyLore = newLore
     item.itemMeta = meta
     return true

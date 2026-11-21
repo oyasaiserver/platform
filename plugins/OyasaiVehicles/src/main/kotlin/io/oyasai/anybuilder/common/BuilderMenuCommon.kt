@@ -181,6 +181,13 @@ object BuilderMenuSupport {
 
   fun setupVehicleSelectionMenu(gui: OyasaiMenu, spec: VehicleSelectionMenuSpec) {
     gui.setGlobalClickAction { event -> event.isCancelled = true }
+    gui.setGlobalDragAction { event -> event.isCancelled = true }
+    gui.setOnClose { event ->
+      val uuid = event.player.uniqueId
+      spec.selectedItemMap.remove(uuid)
+      spec.maxCostMap.remove(uuid)
+      spec.eventVehicleMap?.remove(uuid)
+    }
 
     val promptItem =
         ItemStack(Material.BLACK_STAINED_GLASS_PANE).addText(spec.promptText, emptyList()).allHide()
@@ -191,6 +198,7 @@ object BuilderMenuSupport {
     }
 
     gui.setOnBottomClick { event ->
+      event.isCancelled = true
       val item = event.currentItem ?: return@setOnBottomClick
       if (!spec.itemChecker(item)) return@setOnBottomClick
 
@@ -324,7 +332,7 @@ object BuilderMenuSupport {
         val eventVehicle = isEventVehicle(player.uniqueId)
 
         repeat(count) {
-          val currentCost = getCurrentCost(currentItem) ?: 0
+          val currentCost = (getCurrentCost(currentItem) ?: 0).coerceAtLeast(0)
           val limit = getCostLimit(player.uniqueId)
           if (currentCost >= limit) {
             failed = true

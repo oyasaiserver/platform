@@ -19,6 +19,12 @@ object CarBuilder2GUI {
   private val maxCostList: MutableMap<UUID, Int> = LinkedHashMap()
   private val eventCarList: MutableMap<UUID, Boolean> = LinkedHashMap()
 
+  fun clearPlayerState(uuid: UUID) {
+    clickItem.remove(uuid)
+    maxCostList.remove(uuid)
+    eventCarList.remove(uuid)
+  }
+
   fun menu(): OyasaiMenu {
     return BuilderMenuSupport.createRootMenu(
         title = "CarBuilder2",
