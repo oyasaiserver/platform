@@ -105,6 +105,10 @@ object RedBullFeature : Listener {
 
   /** メニューの /redbull 用。アイテムを使わず、必要な場合だけポイントで一日券を購入する。 */
   fun activateFromCommand(player: Player) {
+    if (isFlightRestrictedWorld(player)) {
+      player.sendMessage("§cこのワールドでは fly を使用できません。")
+      return
+    }
     when (activateTicket(player)) {
       ActivationResult.ACTIVATED -> {
         refreshItems(player)
@@ -154,6 +158,23 @@ object RedBullFeature : Listener {
   @EventHandler
   fun onWorldChange(event: PlayerChangedWorldEvent) {
     val player = event.player
+    if (isFlightRestrictedWorld(player)) {
+      Bukkit.getScheduler()
+          .runTask(
+              plugin,
+              Runnable {
+                if (
+                    isFlightRestrictedWorld(player) &&
+                        player.gameMode != GameMode.CREATIVE &&
+                        player.gameMode != GameMode.SPECTATOR
+                ) {
+                  player.isFlying = false
+                  player.allowFlight = false
+                }
+              },
+          )
+      return
+    }
     if (hasActiveTicket(player)) {
       Bukkit.getScheduler().runTask(plugin, Runnable { enableFlight(player) })
     }
@@ -163,6 +184,11 @@ object RedBullFeature : Listener {
   fun onConsume(event: PlayerItemConsumeEvent) {
     if (!isRedBull(event.item)) return
     val player = event.player
+    if (isFlightRestrictedWorld(player)) {
+      event.isCancelled = true
+      player.sendMessage("§cこのワールドでは Red Bull を使用できません。")
+      return
+    }
     if (hasActiveTicket(player) || hasPermanentFly(player)) {
       event.isCancelled = true
       if (hasActiveTicket(player) && !attachTicket(player)) return
@@ -285,8 +311,18 @@ object RedBullFeature : Listener {
         (!activeTickets.containsKey(player.uniqueId) && player.hasPermission(FLY_PERMISSION))
   }
 
+  private fun isFlightRestrictedWorld(player: Player): Boolean =
+      player.world.name.equals("pvp", ignoreCase = true)
+
   private fun enableFlight(player: Player) {
     if (player.gameMode == GameMode.SPECTATOR) return
+    if (isFlightRestrictedWorld(player)) {
+      if (player.gameMode != GameMode.CREATIVE) {
+        player.isFlying = false
+        player.allowFlight = false
+      }
+      return
+    }
     player.allowFlight = true
     player.isFlying = true
   }

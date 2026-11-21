@@ -35,7 +35,12 @@ class SchematicFeature(private val plugin: Main) : CommandExecutor {
       args: Array<out String>,
   ): Boolean {
     if (args.getOrNull(0)?.lowercase() != "load" || args.size < 2) return false
-    val id = SchematicStore.idOf(args[1])
+    val rawInput = args[1]
+    val id = SchematicStore.idOf(rawInput)
+    if (rawInput.contains("..") || rawInput.contains('\\') || !SchematicStore.isValidId(id)) {
+      sender.sendMessage(Component.text("[${command.name}] ダウンロードに失敗しました: 不正な schematic ID です"))
+      return true
+    }
     plugin.server.scheduler.runTaskAsynchronously(
         plugin,
         Runnable {

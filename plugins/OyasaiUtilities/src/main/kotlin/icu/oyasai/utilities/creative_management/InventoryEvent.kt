@@ -53,7 +53,7 @@ object InventoryEvent : Listener {
     if (e.newGameMode == e.getPlayer().gameMode) return
     val p = e.getPlayer()
     if (!p.hasPermission("cm.bypass")) {
-      val im = mem[p.uniqueId.toString()] ?: InventoryManager(p)
+      val im = mem.getOrPut(p.uniqueId.toString()) { InventoryManager(p) }
 
       val gmFrom: GameMode = p.gameMode
       val gmTo: GameMode = e.newGameMode
@@ -78,14 +78,18 @@ object InventoryEvent : Listener {
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
   fun onQuit(e: PlayerQuitEvent) {
     val p = e.getPlayer()
-    val im = mem[p.uniqueId.toString()] ?: InventoryManager(p)
+    val im = mem.remove(p.uniqueId.toString()) ?: InventoryManager(p)
     im.saveInventory(p.gameMode)
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
   fun onKicked(e: PlayerKickEvent) {
     val p = e.getPlayer()
-    val im = mem[p.uniqueId.toString()] ?: InventoryManager(p)
+    val im = mem.remove(p.uniqueId.toString()) ?: InventoryManager(p)
     im.saveInventory(p.gameMode)
+  }
+
+  fun clearCache() {
+    mem.clear()
   }
 }
