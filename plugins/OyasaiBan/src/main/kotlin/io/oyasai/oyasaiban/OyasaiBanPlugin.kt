@@ -2,6 +2,7 @@ package io.oyasai.oyasaiban
 
 import com.google.inject.Inject
 import com.velocitypowered.api.event.EventTask
+import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.event.ResultedEvent
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.LoginEvent
@@ -82,9 +83,12 @@ constructor(
             }
       }
 
-  @Subscribe
+  @Subscribe(order = PostOrder.LAST)
   fun onServerPreConnect(event: ServerPreConnectEvent) {
-    val serverName = event.originalServer.serverInfo.name
+    val currentResult = event.result
+    if (currentResult != null && !currentResult.isAllowed) return
+    val targetServer = currentResult?.server?.orElse(null) ?: event.originalServer
+    val serverName = targetServer.serverInfo.name
     val grantedPermissions =
         ServerAccess.requiredPermissions(serverName)
             .filter { event.player.hasPermission(it) }
@@ -102,7 +106,12 @@ constructor(
   }
 
   @Subscribe
-  fun onProxyShutdown(event: ProxyShutdownEvent): EventTask = EventTask.async { database.close() }
+  fun onProxyShutdown(event: ProxyShutdownEvent): EventTask =
+      EventTask.async {
+        if (::notifier.isInitialized) runCatching { notifier.close() }
+        if (::nameResolver.isInitialized) runCatching { nameResolver.close() }
+        database.close()
+      }
 
   internal fun afterBan(record: PunishmentRecord, duration: String, notificationReason: String) {
     proxy.getPlayer(record.uuid).ifPresent { it.disconnect(denial(record)) }
@@ -116,7 +125,9 @@ constructor(
   /** 設定を読み直し、webhook が設定されているかを返す（URL そのものは返さない）。 */
   internal fun reloadConfig(): Boolean {
     val url = OyasaiBanConfig.load(dataDirectory, javaClass.classLoader).webhookBanUrl
+    val previous = if (::notifier.isInitialized) notifier else null
     notifier = DiscordNotifier(url, logger)
+    previous?.let { runCatching { it.close() } }
     return url.isNotBlank()
   }
 

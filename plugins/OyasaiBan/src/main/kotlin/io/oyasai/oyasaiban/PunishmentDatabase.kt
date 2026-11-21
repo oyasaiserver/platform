@@ -57,6 +57,10 @@ class PunishmentDatabase(databasePath: Path) {
         }
   }
 
+  fun findSeenName(uuid: UUID): CompletableFuture<String?> = submit { connection ->
+    findSeenName(connection, uuid)
+  }
+
   fun createBan(record: PunishmentRecord): CompletableFuture<CreateBanResult> =
       submit { connection ->
         transaction(connection) {
@@ -65,7 +69,12 @@ class PunishmentDatabase(databasePath: Path) {
               return@transaction CreateBanResult.AlreadyBanned
           insertActive(connection, record)
           insertHistory(connection, record)
-          upsertSeen(connection, record.uuid, record.name, record.start)
+          if (
+              !record.name.startsWith("uuid:", ignoreCase = true) &&
+                  !record.name.equals(record.uuid.toString(), ignoreCase = true)
+          ) {
+            upsertSeen(connection, record.uuid, record.name, record.start)
+          }
           CreateBanResult.Created
         }
       }
@@ -239,6 +248,12 @@ class PunishmentDatabase(databasePath: Path) {
     if (record.end == null) setNull(7, Types.BIGINT) else setLong(7, record.end)
     return this
   }
+
+  private fun findSeenName(connection: Connection, uuid: UUID): String? =
+      connection.prepareStatement("SELECT name FROM seen_names WHERE uuid = ?").use { statement ->
+        statement.setString(1, uuid.toString())
+        statement.executeQuery().use { result -> if (result.next()) result.getString(1) else null }
+      }
 
   private fun upsertSeen(
       connection: Connection,

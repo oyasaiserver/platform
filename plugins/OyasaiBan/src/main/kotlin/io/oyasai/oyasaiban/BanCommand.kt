@@ -84,17 +84,32 @@ class BanCommand(
             source.reply("§cプレイヤー '${args[0]}' のUUIDを解決できませんでした。")
             java.util.concurrent.CompletableFuture.completedFuture(null)
           } else {
-            val record =
-                PunishmentRecord(
-                    uuid = uuid,
-                    name = args[0],
-                    type = if (end == null) PunishmentType.BAN else PunishmentType.TEMP_BAN,
-                    reason = parsed.reason,
-                    operator = (source as? Player)?.username ?: "CONSOLE",
-                    start = now,
-                    end = end,
-                )
-            plugin.database.createBan(record).thenApply { result -> record to result }
+            val targetArg = args[0]
+            val isUuidTarget = targetArg.startsWith("uuid:", ignoreCase = true)
+            val resolvedNameFuture =
+                plugin.proxy.getPlayer(uuid).orElse(null)?.username?.let {
+                  java.util.concurrent.CompletableFuture.completedFuture(it)
+                }
+                    ?: if (isUuidTarget) {
+                      plugin.database.findSeenName(uuid).thenApply { seen ->
+                        seen ?: uuid.toString()
+                      }
+                    } else {
+                      java.util.concurrent.CompletableFuture.completedFuture(targetArg)
+                    }
+            resolvedNameFuture.thenCompose { targetName ->
+              val record =
+                  PunishmentRecord(
+                      uuid = uuid,
+                      name = targetName,
+                      type = if (end == null) PunishmentType.BAN else PunishmentType.TEMP_BAN,
+                      reason = parsed.reason,
+                      operator = (source as? Player)?.username ?: "CONSOLE",
+                      start = now,
+                      end = end,
+                  )
+              plugin.database.createBan(record).thenApply { result -> record to result }
+            }
           }
         }
         .whenComplete { outcome, error ->
