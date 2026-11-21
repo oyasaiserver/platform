@@ -1,6 +1,7 @@
 package icu.oyasai.citiesskymine.debugstick
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.util.BuildProtection
 import org.bukkit.FluidCollisionMode
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -28,6 +29,9 @@ class DebugStickService(private val plugin: Main, private val memoryStore: Debug
 
   fun cycle(player: Player): DebugStickResult {
     val block = targetBlock(player) ?: return DebugStickResult.Error("対象ブロックが見つかりません。")
+    if (!BuildProtection.canBuild(player, block.location, plugin.logger)) {
+      return DebugStickResult.Error("この場所のブロックを変更する権限がありません。")
+    }
     val properties = propertyAccess.properties(block.blockData)
     if (properties.isEmpty()) {
       return DebugStickResult.Error("${block.type.key.key} には変更可能な状態がありません。")

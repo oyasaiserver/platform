@@ -12,7 +12,12 @@ import org.bukkit.block.data.type.Stairs
 object RoadBuilder {
 
   /** 既存の EditSession に道路ブロックを追加する。 交差点の腕など、複数パスを同一セッションで扱う場合に使用する。 */
-  internal fun buildInto(editSession: EditSession, path: List<PathPoint>, settings: RoadSettings) {
+  internal fun buildInto(
+      editSession: EditSession,
+      path: List<PathPoint>,
+      settings: RoadSettings,
+      maxBlocks: Long = -1L,
+  ) {
     val placed = HashSet<Triple<Int, Int, Int>>()
     val occupancy = HashMap<BlockPos, OffsetZone>()
     val hasLane = settings.laneWidth > 0
@@ -21,15 +26,31 @@ object RoadBuilder {
     val lW = settings.laneWidth
     val olW = settings.outerLineWidth
     val swW = settings.sidewalkWidth
+    val blockLimit = if (maxBlocks > 0L) maxBlocks else Long.MAX_VALUE
 
     val offsetSlots = buildOffsetSlots(cHW, lW, olW, swW)
     val lineSlots = offsetSlots.filter { it.zone.isLine() }
     val otherSlots = offsetSlots.filterNot { it.zone.isLine() }
 
     val tracedBySlot = HashMap<OffsetSlot, TraceResult>()
+    var tracedTotal = 0L
+    val traceSoftCap =
+        if (maxBlocks > 0L) {
+          try {
+            Math.multiplyExact(maxBlocks, 8L)
+          } catch (_: ArithmeticException) {
+            Long.MAX_VALUE
+          }
+        } else {
+          Long.MAX_VALUE
+        }
     for (slot in offsetSlots) {
       val trace =
           traceBlocksForOffset(path, slot.offset, avoidRightAngleCorners = slot.zone.isLine())
+      tracedTotal += trace.blocks.size.toLong()
+      if (tracedTotal > traceSoftCap) {
+        throw IllegalStateException("生成ブロック数が上限 ($maxBlocks) を超えています。")
+      }
       tracedBySlot[slot] = trace
     }
 
@@ -39,7 +60,7 @@ object RoadBuilder {
     for (slot in lineSlots) {
       val trace = tracedBySlot[slot] ?: continue
       for (block in trace.blocks) {
-        placeBlockIfNeeded(slot, block, settings, editSession, placed, occupancy)
+        placeBlockIfNeeded(slot, block, settings, editSession, placed, occupancy, blockLimit)
       }
       if (trace.removedCorners.isNotEmpty()) {
         pendingCornerFill += CornerFillRequest(slot, trace.removedCorners)
@@ -50,7 +71,7 @@ object RoadBuilder {
     for (slot in otherSlots) {
       val trace = tracedBySlot[slot] ?: continue
       for (block in trace.blocks) {
-        placeBlockIfNeeded(slot, block, settings, editSession, placed, occupancy)
+        placeBlockIfNeeded(slot, block, settings, editSession, placed, occupancy, blockLimit)
       }
     }
 
@@ -63,6 +84,7 @@ object RoadBuilder {
         editSession,
         placed,
         occupancy,
+        blockLimit,
     )
   }
 
@@ -158,6 +180,7 @@ object RoadBuilder {
       editSession: EditSession,
       placed: MutableSet<Triple<Int, Int, Int>>,
       occupancy: MutableMap<BlockPos, OffsetZone>,
+      blockLimit: Long,
   ) {
     if (pending.isEmpty()) return
     for (request in pending) {
@@ -166,7 +189,16 @@ object RoadBuilder {
             findNearestZoneForCorner(corner.pos, occupancy, request.slot.zone)
                 ?: fallbackFillerZone(request.slot.zone, hasLane, hasSidewalk)
                 ?: continue
-        placeFillerBlock(zone, corner.pos, corner.heading, settings, editSession, placed, occupancy)
+        placeFillerBlock(
+            zone,
+            corner.pos,
+            corner.heading,
+            settings,
+            editSession,
+            placed,
+            occupancy,
+            blockLimit,
+        )
       }
     }
   }
@@ -219,9 +251,14 @@ object RoadBuilder {
       editSession: EditSession,
       placed: MutableSet<Triple<Int, Int, Int>>,
       occupancy: MutableMap<BlockPos, OffsetZone>,
+      blockLimit: Long,
   ) {
     val key = Triple(pos.x, pos.y, pos.z)
-    if (!placed.add(key)) return
+    if (key in placed) return
+    if (placed.size.toLong() >= blockLimit) {
+      throw IllegalStateException("生成ブロック数が上限 ($blockLimit) を超えています。")
+    }
+    placed.add(key)
 
     val blockData = zone.material(settings).createBlockData()
     if (blockData is Stairs) {
@@ -242,10 +279,15 @@ object RoadBuilder {
       editSession: EditSession,
       placed: MutableSet<Triple<Int, Int, Int>>,
       occupancy: MutableMap<BlockPos, OffsetZone>,
+      blockLimit: Long,
   ) {
     val (x, y, z) = tracedBlock.pos
     val key = Triple(x, y, z)
-    if (!placed.add(key)) return
+    if (key in placed) return
+    if (placed.size.toLong() >= blockLimit) {
+      throw IllegalStateException("生成ブロック数が上限 ($blockLimit) を超えています。")
+    }
+    placed.add(key)
 
     val material = resolveMaterial(slot, settings)
     val blockData = material.createBlockData()
