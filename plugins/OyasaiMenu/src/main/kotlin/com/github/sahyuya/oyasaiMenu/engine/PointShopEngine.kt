@@ -12,11 +12,14 @@ import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.makeItem
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
@@ -33,6 +36,10 @@ import org.bukkit.inventory.ItemStack
 class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
 
   fun openShop(player: Player, categoryId: String, page: Int = 0) {
+    if (player.gameMode == GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではポイントショップを使用できません。"))
+      return
+    }
     if (!TokenCurrencyManager.isAvailable) {
       player.sendMessage(c("&cポイントショップには OyasaiEconomy が必要です。"))
       return
@@ -164,10 +171,17 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
     val player = event.whoClicked as? Player ?: return
     val state = (event.view.topInventory.holder as? PointShopHolder)?.state ?: return
     if (event.clickedInventory == player.inventory) {
-      if (event.isShiftClick) event.isCancelled = true
+      if (event.isShiftClick || event.action == InventoryAction.COLLECT_TO_CURSOR) {
+        event.isCancelled = true
+      }
       return
     }
     event.isCancelled = true
+    if (player.gameMode == GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではポイントショップを使用できません。"))
+      player.closeInventory()
+      return
+    }
     if (CooldownManager.isClickOnCooldown(player.uniqueId)) return
     val slot = event.rawSlot
     val category = plugin.pointShopLoader.getCategory(state.categoryId) ?: return
@@ -193,28 +207,52 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val top = event.view.topInventory
+    if (top.holder !is PointShopHolder) return
+    if (event.rawSlots.any { it < top.size }) {
+      event.isCancelled = true
+    }
+  }
+
   private fun handlePurchase(
       player: Player,
       item: PointShopItem,
       state: PlayerPointShopState,
       category: PointShopCategory,
   ) {
+    if (player.gameMode == GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではポイントショップを使用できません。"))
+      return
+    }
     val err = if (item.cost > 0) TokenCurrencyManager.removeTokens(player, item.cost) else null
     if (err != null) {
       player.sendMessage(c(err))
       return
     }
 
+    val wasOnline = player.isOnline
     if (item.closeOnPurchase) {
       Bukkit.getScheduler()
           .runTaskLater(
               plugin,
               Runnable {
+                if (wasOnline && !player.isOnline) {
+                  if (item.cost > 0) TokenCurrencyManager.refundTokens(player, item.cost)
+                  return@Runnable
+                }
                 player.closeInventory()
                 Bukkit.getScheduler()
                     .runTaskLater(
                         plugin,
-                        Runnable { executePurchaseCommands(player, item) },
+                        Runnable {
+                          if (wasOnline && !player.isOnline) {
+                            if (item.cost > 0) TokenCurrencyManager.refundTokens(player, item.cost)
+                            return@Runnable
+                          }
+                          executePurchaseCommands(player, item)
+                        },
                         1L,
                     )
               },
