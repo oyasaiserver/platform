@@ -19,6 +19,7 @@ class NotePlayListener(
   fun onQuit(event: PlayerQuitEvent) {
     sessionManager.stopDynamic(event.player.uniqueId)
     sessionManager.stopLiveCircuit(event.player.uniqueId)
+    sessionManager.clearPreferredCircuitQuantization(event.player.uniqueId)
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
