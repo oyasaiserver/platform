@@ -20,7 +20,7 @@ class RecommendTabCompleter : TabCompleter {
       2 ->
           when (args[0]) {
             "add",
-            "remove" -> (0..4).map { it.toString() }.filter { it.startsWith(args[1]) }
+            "remove" -> (1..5).map { it.toString() }.filter { it.startsWith(args[1]) }
             else -> null
           }
       3 ->

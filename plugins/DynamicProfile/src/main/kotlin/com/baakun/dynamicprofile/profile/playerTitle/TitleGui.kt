@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack
 
 object TitleGui {
 
-  private const val PAGE_SIZE = 45
+  private const val PAGE_SIZE = 36
   private const val ITEMS_START_SLOT = 9
   private const val PREV_BUTTON_SLOT = 45
   private const val NEXT_BUTTON_SLOT = 53
@@ -75,7 +75,8 @@ object TitleGui {
   }
 
   /** 総ページ数 */
-  private fun calculateTotalPages(totalItems: Int): Int = (totalItems + PAGE_SIZE - 1) / PAGE_SIZE
+  private fun calculateTotalPages(totalItems: Int): Int =
+      maxOf(1, (totalItems + PAGE_SIZE - 1) / PAGE_SIZE)
 
   /** 称号の所有者リスト */
   fun showTitleOwnersGui(player: Player, titleId: Int) {

@@ -35,11 +35,11 @@ object Calculator {
   fun calculateLv(exp: Int): Int {
     var remainExp = exp
     var level = 0
-    val ref = plugin.config.getInt("basicRequired", 2000)
+    val ref = plugin.config.getInt("basicRequired", 2000).coerceAtLeast(1)
+    val maxReq = plugin.config.getInt("maxRequired", 70000).coerceAtLeast(1)
     while (true) {
       var hikuExp = ((level + 4) * ref)
-      if (hikuExp > plugin.config.getInt("maxRequired", 70000))
-          hikuExp = plugin.config.getInt("maxRequired", 70000)
+      if (hikuExp > maxReq || hikuExp <= 0) hikuExp = maxReq
       if (remainExp - hikuExp >= 0) {
         remainExp -= hikuExp
         level += 1
@@ -64,10 +64,11 @@ object Calculator {
 
   fun getExpFromLevel(maxLevel: Int): Int {
     var exp = 0
+    val ref = plugin.config.getInt("basicRequired", 2000).coerceAtLeast(1)
+    val maxReq = plugin.config.getInt("maxRequired", 70000).coerceAtLeast(1)
     for (i in 0..<maxLevel) {
-      var additional = (i + 4) * plugin.config.getInt("basicRequired", 2000)
-      if (additional > plugin.config.getInt("maxRequired", 70000))
-          additional = plugin.config.getInt("maxRequired", 70000)
+      var additional = (i + 4) * ref
+      if (additional > maxReq || additional <= 0) additional = maxReq
       exp += additional
     }
     return exp

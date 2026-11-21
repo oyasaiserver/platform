@@ -48,24 +48,29 @@ object SendEmbedMessage {
             .toString()
 
     val client = WebhookClient.withUrl(url_promotion)
-    val emb =
-        WebhookEmbedBuilder()
-            .setColor(color)
-            .setTitle(WebhookEmbed.EmbedTitle(title, null))
-            .setDescription("対象: ${targetName}")
-            .addField(WebhookEmbed.EmbedField(true, "元のランク", prevRank.name))
-            .addField(WebhookEmbed.EmbedField(true, "新しいランク", newRank.name))
-            .addField(WebhookEmbed.EmbedField(false, "備考", record.note))
-            .addField(WebhookEmbed.EmbedField(false, "情報", info))
-            .setThumbnailUrl("https://vzge.me/bust/${targetName}?y=-40")
-            .setFooter(
-                WebhookEmbed.EmbedFooter(
-                    "Promoted by ${promoterName}・業務ありがとう",
-                    "https://vzge.me/bust/${promoterName}?${rotate}",
-                )
-            )
-            .build()
-    val message = WebhookMessageBuilder().addEmbeds(emb).build()
-    client.send(message)
+    try {
+      val emb =
+          WebhookEmbedBuilder()
+              .setColor(color)
+              .setTitle(WebhookEmbed.EmbedTitle(title, null))
+              .setDescription("対象: ${targetName}")
+              .addField(WebhookEmbed.EmbedField(true, "元のランク", prevRank.name))
+              .addField(WebhookEmbed.EmbedField(true, "新しいランク", newRank.name))
+              .addField(WebhookEmbed.EmbedField(false, "備考", record.note))
+              .addField(WebhookEmbed.EmbedField(false, "情報", info))
+              .setThumbnailUrl("https://vzge.me/bust/${targetName}?y=-40")
+              .setFooter(
+                  WebhookEmbed.EmbedFooter(
+                      "Promoted by ${promoterName}・業務ありがとう",
+                      "https://vzge.me/bust/${promoterName}?${rotate}",
+                  )
+              )
+              .build()
+      val message = WebhookMessageBuilder().addEmbeds(emb).build()
+      client.send(message).whenComplete { _, _ -> runCatching { client.close() } }
+    } catch (e: Throwable) {
+      runCatching { client.close() }
+      throw e
+    }
   }
 }

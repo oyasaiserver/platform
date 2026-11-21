@@ -50,9 +50,22 @@ object GuiInventory : Listener {
   /** Inventory閉じた時に判定用キャッシュから消す用 */
   @EventHandler
   fun inventoryCloseEvent(e: InventoryCloseEvent) {
+    val top = e.view.topInventory
     // invListに存在しないインベントリのイベントの場合return
-    if (!invList.contains(e.view.topInventory)) return
+    if (!invList.remove(top)) return
     // Tools.plugin.logger.info("debug: invListにあるInventoryのCloseEvent発生")
-    invList.remove(e.view.topInventory)
+    runCatching {
+          Bukkit.getScheduler()
+              .runTaskLater(
+                  Tools.plugin,
+                  Runnable {
+                    if (!invList.contains(top)) {
+                      GuiItem.cleanupInventory(top)
+                    }
+                  },
+                  2L,
+              )
+        }
+        .onFailure { GuiItem.cleanupInventory(top) }
   }
 }
