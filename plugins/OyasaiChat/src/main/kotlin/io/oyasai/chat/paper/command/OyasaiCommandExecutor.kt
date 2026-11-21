@@ -196,8 +196,21 @@ class OyasaiCommandExecutor(
         "pm" ->
             if (args.size == 1) {
               val partial = args[0]
-              (Bukkit.getOnlinePlayers().map(Player::getName) +
-                      plugin.runtime.presence.names(partial))
+              val hiddenLocalNames =
+                  if (sender is Player)
+                      Bukkit.getOnlinePlayers()
+                          .filter { !sender.canSee(it) }
+                          .map { it.name.lowercase() }
+                          .toSet()
+                  else emptySet()
+              val visibleLocalNames =
+                  Bukkit.getOnlinePlayers()
+                      .filter { sender !is Player || sender.canSee(it) }
+                      .map(Player::getName)
+              (visibleLocalNames +
+                      plugin.runtime.presence.names(partial).filter {
+                        it.lowercase() !in hiddenLocalNames
+                      })
                   .distinct()
                   .filter { it.lowercase().startsWith(partial.lowercase()) }
                   .sorted()

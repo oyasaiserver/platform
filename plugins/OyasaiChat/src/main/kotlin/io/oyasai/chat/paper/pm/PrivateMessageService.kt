@@ -93,7 +93,17 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       source.sendMessage(chat.formatter.info("Private message mode disabled."))
       return true
     }
-    val local = plugin.server.onlinePlayers.firstOrNull { it.name.equals(input, true) }
+    val localCandidate = plugin.server.onlinePlayers.firstOrNull { it.name.equals(input, true) }
+    if (localCandidate != null && !source.canSee(localCandidate)) {
+      source.sendMessage(
+          chat.formatter.error(
+              if (chat.config.network.deliveryEnabled) "That player is offline."
+              else "That player is not online on this server."
+          )
+      )
+      return false
+    }
+    val local = localCandidate
     if (local != null) {
       val targetState = chat.state(local)
       if (!targetState.privateMessagesEnabled) {
@@ -245,9 +255,20 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       source.sendMessage(chat.formatter.error("Message must not be empty."))
       return false
     }
-    val local =
+    val localCandidate =
         targetId?.let(plugin.server::getPlayer)
             ?: plugin.server.onlinePlayers.firstOrNull { it.name.equals(targetInput, true) }
+    if (localCandidate != null && !source.canSee(localCandidate)) {
+      stopConversation(source)
+      source.sendMessage(
+          chat.formatter.error(
+              if (chat.config.network.deliveryEnabled) "That player is offline."
+              else "That player is not online on this server."
+          )
+      )
+      return false
+    }
+    val local = localCandidate
     if (local != null) {
       val targetState = chat.state(local)
       if (!targetState.privateMessagesEnabled) {
