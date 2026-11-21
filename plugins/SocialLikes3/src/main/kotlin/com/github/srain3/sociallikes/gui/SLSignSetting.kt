@@ -23,7 +23,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
-import org.bukkit.block.BlockFace
 import org.bukkit.block.Sign
 import org.bukkit.block.data.Directional
 import org.bukkit.block.data.Rotatable
@@ -42,6 +41,14 @@ object SLSignSetting {
   val sltpSignKey = NamespacedKey(plugin, "SocialLikes_TPsign")
   val sltpSignUUIDKey = NamespacedKey(plugin, "SocialLikes_TPsign_owner")
 
+  private data class SignWoodSpec(
+      val woodName: String,
+      val displayName: String,
+      val loreName: String,
+      val x: Int,
+      val y: Int,
+  )
+
   private data class SignMaterialOption(
       val itemMaterial: Material,
       val woodName: String,
@@ -53,20 +60,31 @@ object SLSignSetting {
 
   private val signMaterialOptions =
       listOf(
-          SignMaterialOption(Material.OAK_SIGN, "OAK", "オーク", "オーク", 0, 0),
-          SignMaterialOption(Material.SPRUCE_SIGN, "SPRUCE", "トウヒ", "トウヒ", 1, 0),
-          SignMaterialOption(Material.BIRCH_SIGN, "BIRCH", "シラカバ", "シラカバ", 2, 0),
-          SignMaterialOption(Material.JUNGLE_SIGN, "JUNGLE", "ジャングル", "ジャングル", 3, 0),
-          SignMaterialOption(Material.ACACIA_SIGN, "ACACIA", "アカシア", "アカシア", 4, 0),
-          SignMaterialOption(Material.DARK_OAK_SIGN, "DARK_OAK", "ダークオーク", "ダークオーク", 5, 0),
-          SignMaterialOption(Material.MANGROVE_SIGN, "MANGROVE", "マングローブ", "マングローブ", 0, 1),
-          SignMaterialOption(Material.CHERRY_SIGN, "CHERRY", "サクラ", "サクラ", 1, 1),
-          SignMaterialOption(Material.BAMBOO_SIGN, "BAMBOO", "竹", "竹", 2, 1),
-          SignMaterialOption(Material.PALE_OAK_SIGN, "PALE_OAK", "ペールオーク", "ペールオーク", 3, 1),
-          SignMaterialOption(Material.CRIMSON_SIGN, "CRIMSON", "真紅", "真紅", 4, 1),
-          SignMaterialOption(Material.WARPED_SIGN, "WARPED", "歪んだ", "歪んだ木材", 5, 1),
-          SignMaterialOption(Material.POPLAR_SIGN, "POPLAR", "ポプラ", "ポプラ", 6, 0),
-      )
+              SignWoodSpec("OAK", "オーク", "オーク", 0, 0),
+              SignWoodSpec("SPRUCE", "トウヒ", "トウヒ", 1, 0),
+              SignWoodSpec("BIRCH", "シラカバ", "シラカバ", 2, 0),
+              SignWoodSpec("JUNGLE", "ジャングル", "ジャングル", 3, 0),
+              SignWoodSpec("ACACIA", "アカシア", "アカシア", 4, 0),
+              SignWoodSpec("DARK_OAK", "ダークオーク", "ダークオーク", 5, 0),
+              SignWoodSpec("MANGROVE", "マングローブ", "マングローブ", 0, 1),
+              SignWoodSpec("CHERRY", "サクラ", "サクラ", 1, 1),
+              SignWoodSpec("BAMBOO", "竹", "竹", 2, 1),
+              SignWoodSpec("PALE_OAK", "ペールオーク", "ペールオーク", 3, 1),
+              SignWoodSpec("CRIMSON", "真紅", "真紅", 4, 1),
+              SignWoodSpec("WARPED", "歪んだ", "歪んだ木材", 5, 1),
+          )
+          .mapNotNull { spec ->
+            val itemMaterial =
+                Material.matchMaterial("${spec.woodName}_SIGN") ?: return@mapNotNull null
+            SignMaterialOption(
+                itemMaterial = itemMaterial,
+                woodName = spec.woodName,
+                displayName = spec.displayName,
+                loreName = spec.loreName,
+                x = spec.x,
+                y = spec.y,
+            )
+          }
 
   private fun shapeSuffix(material: Material): String {
     val name = material.name
@@ -80,16 +98,18 @@ object SLSignSetting {
     }
   }
 
-  private fun materialForCurrentShape(currentMaterial: Material, woodName: String): Material =
-      Material.valueOf("$woodName${shapeSuffix(currentMaterial)}")
+  private fun materialForCurrentShape(currentMaterial: Material, woodName: String): Material? =
+      Material.matchMaterial("$woodName${shapeSuffix(currentMaterial)}")
 
   private fun asItemSignMaterial(material: Material): Material {
     val name = material.name
     return when {
       name.endsWith("_WALL_HANGING_SIGN") ->
-          Material.valueOf(name.replace("_WALL_HANGING_SIGN", "_HANGING_SIGN"))
+          Material.matchMaterial(name.replace("_WALL_HANGING_SIGN", "_HANGING_SIGN"))
+              ?: Material.OAK_HANGING_SIGN
       name.endsWith("_HANGING_SIGN") -> material
-      name.endsWith("_WALL_SIGN") -> Material.valueOf(name.replace("_WALL_SIGN", "_SIGN"))
+      name.endsWith("_WALL_SIGN") ->
+          Material.matchMaterial(name.replace("_WALL_SIGN", "_SIGN")) ?: Material.OAK_SIGN
       name.endsWith("_SIGN") -> material
       else -> Material.OAK_SIGN
     }
@@ -212,9 +232,19 @@ object SLSignSetting {
                     )
             ) {
               val player = it.whoClicked as Player
+              if (player.uniqueId != slData.owner && !player.isOp) {
+                player.closeInventory()
+                return@GuiItem
+              }
+              val targetMaterial =
+                  materialForCurrentShape(sign.type, option.woodName)
+                      ?: run {
+                        player.closeInventory()
+                        return@GuiItem
+                      }
               changeSignType(
                   sign,
-                  materialForCurrentShape(sign.type, option.woodName),
+                  targetMaterial,
                   slData,
                   player,
               )
@@ -232,8 +262,13 @@ object SLSignSetting {
                   .allFlag()
                   .addText("&aタイトルを変更する", mutableListOf("&7看板のタイトルを変えれます"))
           ) {
+            val player = it.whoClicked as Player
+            if (player.uniqueId != slData.owner && !player.isOp) {
+              player.closeInventory()
+              return@GuiItem
+            }
             it.whoClicked.closeInventory()
-            titleChangeAnvilInput(sign, slData, (it.whoClicked as Player))
+            titleChangeAnvilInput(sign, slData, player)
           },
           7,
           0,
@@ -247,8 +282,13 @@ object SLSignSetting {
                       mutableListOf("&7位置を変更するためのSL看板を入手します", "&7Shift押しながらクリックすると吊り看板になります"),
                   )
           ) {
+            val player = it.whoClicked as Player
+            if (player.uniqueId != slData.owner && !player.isOp) {
+              player.closeInventory()
+              return@GuiItem
+            }
             it.whoClicked.closeInventory()
-            (it.whoClicked as Player).performCommand(
+            player.performCommand(
                 "slsignget ${slData.id} ${if (it.isShiftClick){"hanging"}else{""}}"
             )
           },
@@ -261,6 +301,11 @@ object SLSignSetting {
                   .allFlag()
                   .addText("&c看板を消去する", mutableListOf("&7Like看板を消去できます"))
           ) {
+            val player = it.whoClicked as Player
+            if (player.uniqueId != slData.owner && !player.isOp) {
+              player.closeInventory()
+              return@GuiItem
+            }
             it.whoClicked.closeInventory()
             SLSignDel.createGUI(sign, slData).show(it.whoClicked)
           },
@@ -276,13 +321,14 @@ object SLSignSetting {
   }
 
   private fun changeSignType(sign: Sign, newMaterial: Material, slData: SLData, player: Player) {
+    if (!newMaterial.isBlock) return
     val fL = sign.getSide(Side.FRONT).lines.toList()
     val bL = sign.getSide(Side.BACK).lines.toList()
 
     val signData = sign.blockData
     val rotation =
         if (signData is Rotatable) {
-          signData.rotation.name
+          signData.rotation
         } else {
           null
         }
@@ -298,11 +344,11 @@ object SLSignSetting {
     sign.update(true)
 
     val data = sign.blockData
-    if (data is Rotatable) {
-      data.rotation = BlockFace.valueOf(rotation!!)
+    if (data is Rotatable && rotation != null) {
+      data.rotation = rotation
     }
-    if (data is Directional) {
-      data.facing = face!!
+    if (data is Directional && face != null) {
+      data.facing = face
     }
     sign.blockData = data
     sign.update(true)

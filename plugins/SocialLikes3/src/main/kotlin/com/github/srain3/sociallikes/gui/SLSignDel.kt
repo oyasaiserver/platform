@@ -37,6 +37,10 @@ object SLSignDel {
         )
 
     buttonY.setAction {
+      if (it.whoClicked.uniqueId != slData.owner && !it.whoClicked.isOp) {
+        it.whoClicked.closeInventory()
+        return@setAction
+      }
       Data.changeUserLikesInt(slData.owner, -slData.likes.count())
       Data.delID(slData, it.whoClicked.uniqueId)
       sign.block.blockData = Material.AIR.createBlockData()

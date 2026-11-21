@@ -27,7 +27,7 @@ object VacantTeleportTAB : TabCompleter {
       return biomeList
     }
     if (args.size <= 1) {
-      val regex = Regex(args[0])
+      val regex = Regex(Regex.escape(args[0]), RegexOption.IGNORE_CASE)
       return biomeList.filter { regex.containsMatchIn(it) }.toMutableList()
     }
     return mutableListOf()
