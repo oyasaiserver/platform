@@ -30,10 +30,6 @@ class ShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
               sender.sendMessage("§cゲーム内から実行してください。")
               return false
             }
-    if (player.gameMode == org.bukkit.GameMode.CREATIVE) {
-      player.sendMessage(c("&cクリエイティブモードではショップを使用できません。"))
-      return false
-    }
     if (args.isEmpty()) {
       plugin.popupMenuEngine.open(player, "shopindex")
       return true
@@ -49,6 +45,10 @@ class ShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
           plugin.pointShopLoader.getAllCategories().keys.first(),
       )
       return true
+    }
+    if (player.gameMode == org.bukkit.GameMode.CREATIVE) {
+      player.sendMessage(c("&cクリエイティブモードではショップを使用できません。"))
+      return false
     }
     val resolved = shortcuts[input] ?: input
     val category =
