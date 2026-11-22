@@ -124,7 +124,28 @@ object Tools {
     return oldSlSignRegex.containsMatchIn(unColorFrontL0)
   }
 
-  fun updateSLSign(currentSLData: SLData, block: BlockState, actorUuid: UUID? = null) {
+  internal fun canModifySLSign(
+      currentSLData: SLData,
+      actorUuid: UUID?,
+      isOp: Boolean = false,
+  ): Boolean {
+    if (isOp) return true
+    if (actorUuid == null) return false
+    if (currentSLData.owner == actorUuid) return true
+    return runCatching {
+          Bukkit.getPlayer(actorUuid)?.isOp == true || Bukkit.getOfflinePlayer(actorUuid).isOp
+        }
+        .getOrDefault(false)
+  }
+
+  @JvmOverloads
+  fun updateSLSign(
+      currentSLData: SLData,
+      block: BlockState,
+      actorUuid: UUID? = null,
+      isOp: Boolean = false,
+  ) {
+    if (!canModifySLSign(currentSLData, actorUuid, isOp)) return
     moveAndSaveSign(currentSLData, block, actorUuid)
     // Discordへ反映
     SLDiscord.changeSLDataToMsg(currentSLData)
@@ -174,8 +195,15 @@ object Tools {
     }
   }
 
-  fun updateLegacySLSign(currentSLData: SLData, block: BlockState, actorUuid: UUID? = null) {
+  @JvmOverloads
+  fun updateLegacySLSign(
+      currentSLData: SLData,
+      block: BlockState,
+      actorUuid: UUID? = null,
+      isOp: Boolean = false,
+  ) {
     if (block !is Sign) return
+    if (!canModifySLSign(currentSLData, actorUuid, isOp)) return
     var id =
         block
             .getSide(Side.FRONT)

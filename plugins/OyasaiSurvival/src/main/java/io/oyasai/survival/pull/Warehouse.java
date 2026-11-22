@@ -46,6 +46,8 @@ record Warehouse(UUID id, String name, UUID world, UUID owner, Set<UUID> members
 
     boolean isMember(UUID player) { return owner.equals(player) || members.contains(player) || members.contains(EVERYONE); }
 
+    boolean isExplicitMember(UUID player) { return owner.equals(player) || members.contains(player); }
+
     boolean contains(Location location) {
         return world.equals(location.getWorld().getUID()) && contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }

@@ -18,7 +18,9 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
@@ -51,7 +53,9 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     val player = event.whoClicked as? Player ?: return
     val state = (event.view.topInventory.holder as? MenuHolder)?.state ?: return
     if (event.clickedInventory == player.inventory) {
-      if (event.isShiftClick) event.isCancelled = true
+      if (event.isShiftClick || event.action == InventoryAction.COLLECT_TO_CURSOR) {
+        event.isCancelled = true
+      }
       return
     }
     event.isCancelled = true
@@ -64,6 +68,15 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     if (itemDef.icon.isAir) return
     if (!PlayerAccess.hasRequirement(player, itemDef.permission)) return
     plugin.actionEngine.executeActions(player, itemDef.actions, state)
+  }
+
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val top = event.view.topInventory
+    if (top.holder !is MenuHolder) return
+    if (event.rawSlots.any { it < top.size }) {
+      event.isCancelled = true
+    }
   }
 
   private fun buildInventory(

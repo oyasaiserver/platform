@@ -54,9 +54,17 @@ internal class ProtectionStore(private val plugin: JavaPlugin) {
                   ignoredTypes++
                   continue
                 }
+                val world =
+                    requireNotNull(rows.getString("world")?.takeIf { it.isNotBlank() }) {
+                      "保護データの world が不正です: id=${rows.getInt("id")}"
+                    }
+                val ownerRaw =
+                    requireNotNull(rows.getString("owner")?.takeIf { it.isNotBlank() }) {
+                      "保護データの owner が不正です: id=${rows.getInt("id")}"
+                    }
                 val key =
                     BlockKey(
-                        rows.getString("world"),
+                        world,
                         rows.getInt("x"),
                         rows.getInt("y"),
                         rows.getInt("z"),
@@ -65,7 +73,7 @@ internal class ProtectionStore(private val plugin: JavaPlugin) {
                     Protection.read(
                         rows.getInt("id"),
                         key,
-                        UUID.fromString(rows.getString("owner")),
+                        UUID.fromString(ownerRaw.trim()),
                         type,
                         rows.getString("data") ?: "",
                     )
@@ -144,6 +152,28 @@ internal class ProtectionStore(private val plugin: JavaPlugin) {
       }
     }
     cache.remove(protection.key)
+  }
+
+  fun relocate(protection: Protection, newKey: BlockKey) {
+    val oldKey = protection.key
+    if (oldKey == newKey) return
+    write(wait = true) {
+      connection
+          .prepareStatement(
+              "UPDATE lwc_protections SET world = ?, x = ?, y = ?, z = ? WHERE id = ?"
+          )
+          .use { statement ->
+            statement.setString(1, newKey.world)
+            statement.setInt(2, newKey.x)
+            statement.setInt(3, newKey.y)
+            statement.setInt(4, newKey.z)
+            statement.setInt(5, protection.id)
+            statement.executeUpdate()
+          }
+    }
+    cache.remove(oldKey)
+    protection.key = newKey
+    cache[newKey] = protection
   }
 
   fun update(protection: Protection) {

@@ -27,6 +27,7 @@ final class WarehouseManager implements Listener {
     private final SurvivalPull plugin;
     final Map<UUID, Warehouse> warehouses = new LinkedHashMap<>();
     private final Map<UUID, Location[]> selections = new HashMap<>();
+    private final Map<UUID, java.util.Set<UUID>> unconsentedMembers = new HashMap<>();
     private final WarehouseInput input;
 
     WarehouseManager(SurvivalPull plugin) {
@@ -36,13 +37,25 @@ final class WarehouseManager implements Listener {
 
     WarehouseInput input() { return input; }
 
+    void markConsented(Warehouse wh, UUID player) {
+        var set = unconsentedMembers.get(wh.id());
+        if (set != null) set.remove(player);
+    }
+
+    boolean canAutoInput(Warehouse wh, UUID player) {
+        if (!wh.isExplicitMember(player)) return false;
+        if (wh.owner().equals(player)) return true;
+        var set = unconsentedMembers.get(wh.id());
+        return set == null || !set.contains(player);
+    }
+
     Warehouse at(Location location) {
         return warehouses.values().stream().filter(w -> w.contains(location)).findFirst().orElse(null);
     }
 
     Warehouse scope(Player player) {
         Warehouse wh = at(player.getLocation());
-        return wh != null && wh.isMember(player.getUniqueId()) ? wh : null;
+        return wh != null && wh.isExplicitMember(player.getUniqueId()) ? wh : null;
     }
 
     /** /pull 用: 範囲の外でも、どの軸も range マス以内に使える倉庫があれば、いちばん近いものを選ぶ。 */
@@ -140,6 +153,10 @@ final class WarehouseManager implements Listener {
     }
 
     void validateNew(Warehouse wh) {
+        validateNew(wh, null);
+    }
+
+    void validateNew(Warehouse wh, Player actor) {
         var others = warehouses.values().stream().filter(w -> !w.id().equals(wh.id())).toList();
         if (others.stream().anyMatch(w -> w.name().equalsIgnoreCase(wh.name())))
             throw new IllegalArgumentException("その倉庫名は使用済みです。");
@@ -153,6 +170,9 @@ final class WarehouseManager implements Listener {
             throw new IllegalArgumentException("リンクされた投入口を含む範囲は登録できません。先にリンクを外してください。");
         if (others.stream().anyMatch(w -> w.overlaps(wh)))
             throw new IllegalArgumentException("既存の倉庫と範囲が重なっています。");
+        Player effectiveActor = actor != null ? actor
+                : (plugin.getServer() == null ? null : plugin.getServer().getPlayer(wh.owner()));
+        WarehouseContainers.validateRegionContainers(plugin.getServer(), effectiveActor, wh);
     }
 
     boolean command(CommandSender sender, String[] args) {
@@ -192,6 +212,8 @@ final class WarehouseManager implements Listener {
                 var state = block.getState(false);
                 if (!WarehouseContainers.linkable(state))
                     throw new IllegalArgumentException("5マス以内のチェスト・トラップチェスト・樽を見てください。");
+                if (!WarehouseContainers.canWarehouseControl(plugin.getServer(), player, wh.owner(), (Container) state))
+                    throw new IllegalArgumentException("他人が保護している容器はリンクできません。");
                 var positions = WarehouseContainers.linkedBlocks((Container) state);
                 if (positions.stream().anyMatch(p -> warehouses.values().stream().anyMatch(w -> w.world().equals(wh.world()) && w.contains(p.x(), p.y(), p.z()))))
                     throw new IllegalArgumentException("投入口は倉庫の外に置いてください");
@@ -211,6 +233,7 @@ final class WarehouseManager implements Listener {
                     throw new IllegalArgumentException("容器の両側のチャンクをロードしてからリンクしてください。");
                 wh.links().add(link);
                 try { save(); } catch (IOException error) { wh.links().remove(link); throw error; }
+                markConsented(wh, player.getUniqueId());
 
                 player.sendMessage("投入口をリンクしました: " + wh.name());
             } else if (action.equals("unlink") && args.length == 1) {
@@ -232,7 +255,7 @@ final class WarehouseManager implements Listener {
                 Location[] corners = selections.get(player.getUniqueId());
                 if (corners == null || corners[0] == null || corners[1] == null) throw new IllegalArgumentException("先に /wh pos1 と /wh pos2 を指定してください。");
                 Warehouse wh = Warehouse.create(args[1], player.getUniqueId(), corners[0], corners[1]);
-                validateNew(wh);
+                validateNew(wh, player);
                 warehouses.put(wh.id(), wh);
                 try { save(); } catch (IOException error) { warehouses.remove(wh.id()); throw error; }
 
@@ -245,7 +268,7 @@ final class WarehouseManager implements Listener {
                 if (corners == null || corners[0] == null || corners[1] == null)
                     throw new IllegalArgumentException("先に /wh pos1 と /wh pos2 を指定してください。");
                 Warehouse updated = old.resized(corners[0], corners[1]);
-                validateNew(updated);
+                validateNew(updated, player);
                 replace(old, updated);
                 player.sendMessage("倉庫の範囲を変更しました: " + updated.name());
             } else if (action.equals("rename") && args.length == 3) {
@@ -302,7 +325,13 @@ final class WarehouseManager implements Listener {
                 UUID uuid = everyone ? Warehouse.EVERYONE : plugin.getServer().getOfflinePlayer(args[3]).getUniqueId();
                 if (uuid.equals(wh.owner())) throw new IllegalArgumentException("持ち主は常にメンバーです。");
                 boolean wasMember = wh.members().contains(uuid);
-                if (args[1].equalsIgnoreCase("add")) wh.members().add(uuid); else wh.members().remove(uuid);
+                if (args[1].equalsIgnoreCase("add")) {
+                    wh.members().add(uuid);
+                    if (!everyone) unconsentedMembers.computeIfAbsent(wh.id(), ignored -> new java.util.HashSet<>()).add(uuid);
+                } else {
+                    wh.members().remove(uuid);
+                    markConsented(wh, uuid);
+                }
                 try { save(); } catch (IOException error) {
                     if (wasMember) wh.members().add(uuid); else wh.members().remove(uuid);
                     throw error;
@@ -348,7 +377,8 @@ final class WarehouseManager implements Listener {
     }
 
     private static void requireLinkMember(Player player, Warehouse wh) {
-        if (!wh.isMember(player.getUniqueId())) throw new IllegalArgumentException("倉庫のメンバーだけがリンクを変更できます。");
+        if (!wh.isExplicitMember(player.getUniqueId()))
+            throw new IllegalArgumentException("倉庫のメンバーだけがリンクを変更できます。");
     }
 
     private static int coordinate(String value, int base) {

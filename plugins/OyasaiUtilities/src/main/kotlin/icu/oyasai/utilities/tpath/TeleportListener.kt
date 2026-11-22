@@ -3,10 +3,11 @@ package icu.oyasai.utilities.tpath
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 
 object TeleportListener : Listener {
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun onTeleport(e: PlayerTeleportEvent) {
     val p = e.player
     if (TeleportManager.shouldIgnore(p)) return
@@ -17,5 +18,10 @@ object TeleportListener : Listener {
   fun onDeath(e: PlayerDeathEvent) {
     val p = e.entity
     TeleportManager.record(p, p.location)
+  }
+
+  @EventHandler
+  fun onQuit(e: PlayerQuitEvent) {
+    TeleportManager.clear(e.player)
   }
 }

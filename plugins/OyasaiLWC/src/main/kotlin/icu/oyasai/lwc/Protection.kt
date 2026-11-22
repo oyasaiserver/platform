@@ -18,7 +18,7 @@ internal data class BlockKey(val world: String, val x: Int, val y: Int, val z: I
 
 internal class Protection(
     var id: Int,
-    val key: BlockKey,
+    var key: BlockKey,
     val owner: UUID,
     val type: Int,
     private val data: JsonObject,
@@ -28,23 +28,31 @@ internal class Protection(
         data
             .getAsJsonArray("rights")
             ?.mapNotNull { entry ->
-              val item = entry.asJsonObject
-              if (item.get("type")?.asInt != 1 || item.get("rights")?.asInt != 1) null
-              else runCatching { UUID.fromString(item.get("name").asString) }.getOrNull()
+              val item = entry.takeIf { it.isJsonObject }?.asJsonObject ?: return@mapNotNull null
+              if (item.get("type").asIntOrNull() != 1 || item.get("rights").asIntOrNull() != 1) null
+              else
+                  item.get("name").asStringOrNull()?.let {
+                    runCatching { UUID.fromString(it) }.getOrNull()
+                  }
             }
             ?.toSet() ?: emptySet()
 
   val hopper: Boolean
-    get() = data.getAsJsonArray("flags")?.any { it.asJsonObject.get("id")?.asInt == 5 } == true
+    get() =
+        data.getAsJsonArray("flags")?.any {
+          it.takeIf { e -> e.isJsonObject }?.asJsonObject?.get("id").asIntOrNull() == 5
+        } == true
 
   fun setShared(player: UUID, enabled: Boolean) {
     val rights = data.getAsJsonArray("rights") ?: JsonArray().also { data.add("rights", it) }
     val kept =
         JsonArray().also { result ->
           rights.forEach { entry ->
+            val obj = entry.takeIf { it.isJsonObject }?.asJsonObject
             if (
-                entry.asJsonObject.get("name")?.asString != player.toString() ||
-                    entry.asJsonObject.get("type")?.asInt != 1
+                obj == null ||
+                    obj.get("name").asStringOrNull() != player.toString() ||
+                    obj.get("type").asIntOrNull() != 1
             )
                 result.add(entry)
           }
@@ -65,7 +73,10 @@ internal class Protection(
     val flags = data.getAsJsonArray("flags") ?: JsonArray()
     val kept =
         JsonArray().also { result ->
-          flags.forEach { if (it.asJsonObject.get("id")?.asInt != 5) result.add(it) }
+          flags.forEach {
+            val obj = it.takeIf { e -> e.isJsonObject }?.asJsonObject
+            if (obj?.get("id").asIntOrNull() != 5) result.add(it)
+          }
         }
     if (enabled) kept.add(JsonObject().apply { addProperty("id", 5) })
     data.add("flags", kept)
@@ -178,3 +189,25 @@ internal fun chestOtherOffset(type: Chest.Type, facing: BlockFace): Pair<Int, In
 
 internal fun remainingSeconds(until: Long, now: Long): Int =
     ((until - now + 999) / 1000).toInt().coerceAtLeast(0)
+
+internal fun isLecternBookInsert(block: Block, itemType: Material?): Boolean {
+  if (block.type != Material.LECTERN) return false
+  val lecternData = block.blockData as? org.bukkit.block.data.type.Lectern
+  if (lecternData != null) return !lecternData.hasBook()
+  return itemType == Material.WRITABLE_BOOK || itemType == Material.WRITTEN_BOOK
+}
+
+internal fun isCopperChestModify(blockType: Material, itemType: Material?): Boolean {
+  val blockName = blockType.name
+  if (blockName != "COPPER_CHEST" && !blockName.endsWith("_COPPER_CHEST")) return false
+  val itemName = itemType?.name ?: return false
+  return itemName == "HONEYCOMB" || itemName.endsWith("_AXE")
+}
+
+private fun com.google.gson.JsonElement?.asStringOrNull(): String? =
+    if (this != null && isJsonPrimitive && asJsonPrimitive.isString) asString else null
+
+private fun com.google.gson.JsonElement?.asIntOrNull(): Int? =
+    if (this != null && isJsonPrimitive && asJsonPrimitive.isNumber)
+        runCatching { asInt }.getOrNull()
+    else null

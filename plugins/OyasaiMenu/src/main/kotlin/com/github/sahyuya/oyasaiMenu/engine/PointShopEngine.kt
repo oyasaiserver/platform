@@ -16,7 +16,9 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
@@ -164,7 +166,9 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
     val player = event.whoClicked as? Player ?: return
     val state = (event.view.topInventory.holder as? PointShopHolder)?.state ?: return
     if (event.clickedInventory == player.inventory) {
-      if (event.isShiftClick) event.isCancelled = true
+      if (event.isShiftClick || event.action == InventoryAction.COLLECT_TO_CURSOR) {
+        event.isCancelled = true
+      }
       return
     }
     event.isCancelled = true
@@ -193,6 +197,15 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val top = event.view.topInventory
+    if (top.holder !is PointShopHolder) return
+    if (event.rawSlots.any { it < top.size }) {
+      event.isCancelled = true
+    }
+  }
+
   private fun handlePurchase(
       player: Player,
       item: PointShopItem,
@@ -205,16 +218,27 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
 
+    val wasOnline = player.isOnline
     if (item.closeOnPurchase) {
       Bukkit.getScheduler()
           .runTaskLater(
               plugin,
               Runnable {
+                if (wasOnline && !player.isOnline) {
+                  if (item.cost > 0) TokenCurrencyManager.refundTokens(player, item.cost)
+                  return@Runnable
+                }
                 player.closeInventory()
                 Bukkit.getScheduler()
                     .runTaskLater(
                         plugin,
-                        Runnable { executePurchaseCommands(player, item) },
+                        Runnable {
+                          if (wasOnline && !player.isOnline) {
+                            if (item.cost > 0) TokenCurrencyManager.refundTokens(player, item.cost)
+                            return@Runnable
+                          }
+                          executePurchaseCommands(player, item)
+                        },
                         1L,
                     )
               },

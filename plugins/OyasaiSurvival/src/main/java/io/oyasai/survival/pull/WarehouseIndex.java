@@ -170,6 +170,7 @@ final class WarehouseIndex {
         var current = world.getBlockAt(p.x(), p.y(), p.z()).getState(false);
         if (!WarehouseContainers.eligible(current)) return;
         var c = (Container) current;
+        if (!WarehouseContainers.canWarehouseControl(plugin.getServer(), null, s.warehouse.owner(), c)) return;
         if (!s.warehouse.contains(p.x(), p.y(), p.z()) && WarehouseContainers.linkedBlocks(c).stream()
                 .noneMatch(q -> s.warehouse.contains(q.x(), q.y(), q.z()))) return;
         var inventory = SurvivalPull.containerInventory(c);
@@ -254,7 +255,13 @@ final class WarehouseIndex {
     }
     private Inventory checked(State state, Slot slot) {
         if (state.editing.containsKey(slot.entry.part.position())) return null;
-        var inv = slot.entry.part.inventory();
+        var current = slot.entry.part.current();
+        if (current != null && !WarehouseContainers.canWarehouseControl(plugin.getServer(), null, state.warehouse.owner(), current)) {
+            var p = slot.entry.part.position();
+            refresh(new Location(slot.entry.part.world(), p.x(), p.y(), p.z()));
+            return null;
+        }
+        var inv = current == null ? null : SurvivalPull.containerInventory(current);
         if (inv != null && !inv.getViewers().isEmpty()) return null;
         var actual = inv == null || slot.number >= inv.getSize() ? null : inv.getItem(slot.number);
         boolean empty = actual == null || actual.isEmpty() || actual.getAmount() <= 0;

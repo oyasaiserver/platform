@@ -46,7 +46,7 @@ object AircraftBuilderEvents : VehicleEventListenerBase() {
 
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   fun playerRightClickEvent(event: PlayerInteractEvent) {
-    val item = event.item?.clone() ?: return
+    val item = event.item?.clone()?.apply { amount = 1 } ?: return
     handleVehicleItemRightClickWithPermission(
         event = event,
         canRide = { it.canRideAircraftBuilder() },
@@ -65,7 +65,10 @@ object AircraftBuilderEvents : VehicleEventListenerBase() {
             AircraftBuilderSpawn.spawn(spawnLoc, vehicleItem, owner, owner, baseData, yaw)
           }
         },
-        consumeItem = { clickEvent, _ -> clickEvent.player.inventory.itemInMainHand.amount = 0 },
+        consumeItem = { clickEvent, _ ->
+          val handItem = clickEvent.player.inventory.itemInMainHand
+          handItem.amount = (handItem.amount - 1).coerceAtLeast(0)
+        },
     )
   }
 

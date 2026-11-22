@@ -1,5 +1,6 @@
 package me.ankokunsan.entityPose
 
+import java.util.UUID
 import me.ankokunsan.entityPose.EntityPose.Companion.GUI_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.HORSE_COLOR_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.HORSE_STYLE_KEY
@@ -17,17 +18,50 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Tameable
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
 
+enum class EntityPoseGuiType {
+  SPAWN,
+  SETTING,
+  ALL_SETTING,
+  WOLF,
+  CAT,
+  RABBIT,
+  PARROT,
+  HORSE_COLOR,
+  HORSE_STYLE,
+  KAKUDO,
+  ZAHYO,
+}
+
+class EntityPoseGuiHolder(
+    val type: EntityPoseGuiType,
+    val targetEntityId: UUID? = null,
+) : InventoryHolder {
+  private lateinit var inv: Inventory
+
+  fun bind(inventory: Inventory): Inventory {
+    this.inv = inventory
+    return inventory
+  }
+
+  override fun getInventory(): Inventory = inv
+}
+
 object ChooseGUi {
   fun openSpawnGUI(player: Player) {
+    val holder = EntityPoseGuiHolder(EntityPoseGuiType.SPAWN)
     val inv =
-        Bukkit.createInventory(
-            player,
-            18,
-            "§3エンティティスポーン",
+        holder.bind(
+            Bukkit.createInventory(
+                holder,
+                18,
+                "§3エンティティスポーン",
+            )
         )
     val sarmorStandItem = ItemStack(Material.ARMOR_STAND)
     sarmorStandItem.itemMeta =
@@ -87,7 +121,7 @@ object ChooseGUi {
         }
     val parItem = ItemStack(Material.PARROT_SPAWN_EGG)
     parItem.itemMeta =
-        rabItem.itemMeta!!.apply {
+        parItem.itemMeta!!.apply {
           setDisplayName("${ChatColor.GREEN}オウム")
           persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "PARROT")
         }
@@ -122,7 +156,8 @@ object ChooseGUi {
   }
 
   fun openKakudoGUI(player: Player) {
-    val inv = Bukkit.createInventory(null, 9, "§3角度の刻みを選択")
+    val holder = EntityPoseGuiHolder(EntityPoseGuiType.KAKUDO)
+    val inv = holder.bind(Bukkit.createInventory(holder, 9, "§3角度の刻みを選択"))
     val kakudos =
         listOf(
             "§b1度ずつ" to 1.0,
@@ -152,7 +187,8 @@ object ChooseGUi {
   }
 
   fun openZahyoGUI(player: Player) {
-    val inv = Bukkit.createInventory(null, 9, "§3一回あたりに動く座標の大きさを選択")
+    val holder = EntityPoseGuiHolder(EntityPoseGuiType.ZAHYO)
+    val inv = holder.bind(Bukkit.createInventory(holder, 9, "§3一回あたりに動く座標の大きさを選択"))
     val zahyos =
         listOf(
             "§b0.1マスずつ" to 0.1, // Double型にする
@@ -180,7 +216,8 @@ object ChooseGUi {
   }
 
   fun openSettingGUI(player: Player, target: Entity) {
-    val invs = Bukkit.createInventory(null, 9, "§3エンティティの設定変更")
+    val holder = EntityPoseGuiHolder(EntityPoseGuiType.SETTING, target.uniqueId)
+    val invs = holder.bind(Bukkit.createInventory(holder, 9, "§3エンティティの設定変更"))
     val living = target as? LivingEntity
 
     val damageItem =
@@ -275,8 +312,9 @@ object ChooseGUi {
     player.openInventory(invs)
   }
 
-  fun openAllSettingGUI(player: Player, targets: List<Entity>) {
-    val invs = Bukkit.createInventory(null, 9, "§3範囲選択済みエンティティの設定変更")
+  fun openAllSettingGUI(player: Player, targets: List<Entity>, targetEntityId: UUID? = null) {
+    val holder = EntityPoseGuiHolder(EntityPoseGuiType.ALL_SETTING, targetEntityId)
+    val invs = holder.bind(Bukkit.createInventory(holder, 9, "§3範囲選択済みエンティティの設定変更"))
 
     val damageItem =
         ItemStack(Material.DIAMOND_SWORD).apply {
@@ -385,7 +423,8 @@ object ChooseGUi {
   }
 
   fun openHorseStyleGUI(player: Player, selectedColor: String) {
-    val invs = Bukkit.createInventory(player, 9, "§3馬模様選択")
+    val holder = EntityPoseGuiHolder(EntityPoseGuiType.HORSE_STYLE)
+    val invs = holder.bind(Bukkit.createInventory(holder, 9, "§3馬模様選択"))
 
     val styles =
         listOf(

@@ -3,12 +3,13 @@ package io.oyasai.oyasaitab
 import com.baakun.dynamicprofile.model.Calculator
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.economy.api.OyasaiEconomyApi
+import java.math.BigInteger
 import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 import java.util.UUID
-import java.util.zip.CRC32
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
@@ -103,6 +104,7 @@ private class FullOyasaiTabRuntime(
   private val legacy = LegacyComponentSerializer.legacyAmpersand()
   private val network = PaperTabSnapshotBridge(plugin, config)
   private val lastPlayerListNames = mutableMapOf<UUID, String>()
+  private val teamNameOwners = mutableMapOf<String, String>()
   private var task: BukkitTask? = null
   private var networkPlayerCount: Int? = null
   private var networkPlayerCountReceivedAt = 0L
@@ -126,6 +128,7 @@ private class FullOyasaiTabRuntime(
     Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin, OYASAI_TAB_CHANNEL, this)
     HandlerList.unregisterAll(this)
     lastPlayerListNames.clear()
+    teamNameOwners.clear()
     scoreboard.getObjective(PING_OBJECTIVE)?.let {
       if (it.displaySlot == DisplaySlot.PLAYER_LIST) scoreboard.clearSlot(DisplaySlot.PLAYER_LIST)
       it.unregister()
@@ -142,8 +145,9 @@ private class FullOyasaiTabRuntime(
 
   override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
     if (channel != OYASAI_TAB_CHANNEL) return
+    if (!player.isOnline) return
     val count = runCatching { OyasaiTabNetworkCountCodec.decode(message) }.getOrNull() ?: return
-    networkPlayerCount = count
+    networkPlayerCount = count.coerceAtLeast(Bukkit.getOnlinePlayers().size)
     networkPlayerCountReceivedAt = System.nanoTime()
   }
 
@@ -283,18 +287,35 @@ private class FullOyasaiTabRuntime(
   private fun cleanupEmptyOwnTeams() {
     scoreboard.teams
         .filter { ownsTeam(it.name) && it.entries.isEmpty() }
-        .forEach { it.unregister() }
+        .forEach {
+          teamNameOwners.remove(it.name)
+          it.unregister()
+        }
   }
 
   private fun unregisterIfEmptyOwnTeam(team: Team) {
-    if (ownsTeam(team.name) && team.entries.isEmpty()) team.unregister()
+    if (ownsTeam(team.name) && team.entries.isEmpty()) {
+      teamNameOwners.remove(team.name)
+      team.unregister()
+    }
   }
 
+  // チーム名は旧クライアント互換のため 16 文字以内（既定の接頭辞 10 文字 + ハッシュ 6 文字）に収める。
+  // 短いハッシュは衝突し得るので、別内容と同名になった場合はソルトを変えて重複しない名前を割り当てる。
   private fun ownTeamName(group: String, prefix: String, suffix: String): String {
-    val crc = CRC32()
-    crc.update("$group|$prefix|$suffix".toByteArray(StandardCharsets.UTF_8))
-    val hash = crc.value.toString(36).padStart(6, '0').takeLast(6)
-    return "${config.teamPrefix}$hash"
+    val key = "${group.length}:$group|${prefix.length}:$prefix|${suffix.length}:$suffix"
+    val hashLength = (TEAM_NAME_MAX_LENGTH - config.teamPrefix.length).coerceIn(6, 13)
+    var salt = 0
+    while (true) {
+      val digest =
+          MessageDigest.getInstance("SHA-256")
+              .digest("$salt#$key".toByteArray(StandardCharsets.UTF_8))
+      val hash = BigInteger(1, digest.copyOf(8)).toString(36).padStart(13, '0').takeLast(hashLength)
+      val name = "${config.teamPrefix}$hash"
+      val owner = teamNameOwners.getOrPut(name) { key }
+      if (owner == key) return name
+      salt++
+    }
   }
 
   private fun ownsTeam(name: String): Boolean = name.startsWith(config.teamPrefix)
@@ -302,6 +323,7 @@ private class FullOyasaiTabRuntime(
   companion object {
     private const val PING_OBJECTIVE = "oyasaitab_ping"
     private const val PING_TITLE = "TAB"
+    private const val TEAM_NAME_MAX_LENGTH = 16
   }
 }
 

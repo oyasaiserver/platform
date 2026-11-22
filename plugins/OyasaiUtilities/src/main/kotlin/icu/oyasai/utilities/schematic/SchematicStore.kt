@@ -7,8 +7,17 @@ import java.nio.file.StandardCopyOption
 
 internal object SchematicStore {
   const val MAX_BYTES = 32L * 1024 * 1024
+  private val SAFE_ID_REGEX = Regex("^[A-Za-z0-9_-]+$")
 
-  fun idOf(input: String): String = input.substringAfterLast("/")
+  fun idOf(input: String): String =
+      input.trim().substringBefore("?").substringBefore("#").substringAfterLast("/")
+
+  fun isValidId(id: String): Boolean =
+      id.isNotEmpty() &&
+          !id.contains("..") &&
+          !id.contains('/') &&
+          !id.contains('\\') &&
+          SAFE_ID_REGEX.matches(id)
 
   fun save(
       directory: File,
@@ -17,6 +26,16 @@ internal object SchematicStore {
       deadlineNanos: Long,
       nanoTime: () -> Long = System::nanoTime,
   ): File {
+    require(isValidId(id)) { "不正な schematic ID です" }
+    val baseCanonical = directory.canonicalFile
+    val destination = File(directory, "$id.schem")
+    val destCanonical = destination.canonicalFile
+    require(
+        destCanonical.parentFile == baseCanonical &&
+            destCanonical.path.startsWith(baseCanonical.path + File.separator)
+    ) {
+      "保存先パスがディレクトリ外を指しています"
+    }
     val temporary = Files.createTempFile(directory.toPath(), "download-", ".part")
     try {
       Files.newOutputStream(temporary).use { output ->
@@ -31,7 +50,6 @@ internal object SchematicStore {
           output.write(buffer, 0, count)
         }
       }
-      val destination = File(directory, "$id.schem")
       Files.move(
           temporary,
           destination.toPath(),

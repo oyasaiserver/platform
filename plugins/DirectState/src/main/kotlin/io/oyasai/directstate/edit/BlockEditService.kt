@@ -8,7 +8,10 @@ import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockState
+import org.bukkit.block.BrushableBlock
+import org.bukkit.block.Campfire
 import org.bukkit.block.Container
+import org.bukkit.block.EntityBlockStorage
 import org.bukkit.block.TileState
 import org.bukkit.block.data.BlockData
 import org.bukkit.block.data.type.Fence
@@ -17,6 +20,7 @@ import org.bukkit.block.data.type.Slab
 import org.bukkit.block.data.type.Stairs
 import org.bukkit.block.data.type.Wall
 import org.bukkit.entity.Player
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.plugin.java.JavaPlugin
 
 /** どのブロックを、どの状態へ変更するかを表す一件の編集要求。 */
@@ -33,6 +37,8 @@ internal class BlockEditService(
     private val blockChangeLog: BlockChangeLog?,
     private val history: EditHistory? = null,
     private val editSound: (Player) -> Boolean = { true },
+    private val ignoredBlockPdcKeys: Set<NamespacedKey> = emptySet(),
+    private val canEditBlock: (Player, Location) -> Boolean = { _, _ -> true },
 ) {
   private var tickCount = 0L
   // 同じプレイヤーが同じ座標へ続けて行った変更を、一件のログにまとめるための保留表。
@@ -69,9 +75,11 @@ internal class BlockEditService(
         requested
             .distinctBy { edit -> edit.block.location }
             .filter { edit ->
-              edit.block.blockData.asString != edit.data.asString ||
-                  edit.blockEntityPresent?.let { it != BlockEntityAccess.hasBody(edit.block) } ==
-                      true
+              !isIgnoredBlock(edit.block) &&
+                  (edit.block.blockData.asString != edit.data.asString ||
+                      edit.blockEntityPresent?.let {
+                        it != BlockEntityAccess.hasBody(edit.block)
+                      } == true)
             }
     if (edits.isEmpty()) return
     val snapshots = if (remember && history != null) edits.map { snapshot(it.block) } else null
@@ -121,12 +129,46 @@ internal class BlockEditService(
     player.sendActionBar(Component.text(describe(edits.first().data)))
   }
 
+  private fun isItemHolder(state: BlockState): Boolean =
+      state is Container || state is InventoryHolder || state is Campfire || state is BrushableBlock
+
+  private fun isProtectedTileState(state: BlockState): Boolean =
+      isItemHolder(state) || state is EntityBlockStorage<*>
+
+  private fun isIgnoredBlock(block: Block): Boolean {
+    if (ignoredBlockPdcKeys.isEmpty()) return false
+    val state = block.state
+    return state is TileState && ignoredBlockPdcKeys.any { state.persistentDataContainer.has(it) }
+  }
+
+  private fun isSpawnProtected(player: Player, location: Location): Boolean {
+    val world = location.world ?: return false
+    val server = plugin.server
+    if (player.isOp || server.operators.isEmpty() || world != server.worlds.firstOrNull()) {
+      return false
+    }
+    val spawn = world.spawnLocation ?: return false
+    val radius = server.spawnRadius
+    return radius > 0 &&
+        kotlin.math.max(
+            kotlin.math.abs(location.blockX - spawn.blockX),
+            kotlin.math.abs(location.blockZ - spawn.blockZ),
+        ) <= radius
+  }
+
+  private fun canModifyAt(player: Player, location: Location): Boolean =
+      !isSpawnProtected(player, location) && canEditBlock(player, location)
+
   private fun snapshot(block: Block): BlockSnapshot {
     val body =
         if (block.type in setOf(Material.BELL, Material.ENCHANTING_TABLE, Material.CREAKING_HEART))
             BlockEntityAccess.hasBody(block)
         else null
-    val tile = if (body == false) null else (block.state as? TileState)?.copy()
+    val currentState = block.state
+    val itemHolder = isItemHolder(currentState)
+    val tile =
+        if (body == false || isProtectedTileState(currentState)) null
+        else (currentState as? TileState)?.copy()
     return BlockSnapshot(
         block.world.uid,
         block.x,
@@ -136,18 +178,42 @@ internal class BlockEditService(
         body,
         updateMode.captureState(block),
         tile,
+        itemHolder,
     )
   }
 
   /** 同じ編集経路で更新抑制・ログを扱い、復元自体を新しい履歴にはしない。 */
-  fun restore(player: Player, snapshots: List<BlockSnapshot>): Boolean {
-    val available =
-        snapshots.mapNotNull { state ->
-          val world = plugin.server.getWorld(state.world) ?: return@mapNotNull null
-          if (state.y !in world.minHeight until world.maxHeight) return@mapNotNull null
-          world.getChunkAt(state.x shr 4, state.z shr 4)
-          world.getBlockAt(state.x, state.y, state.z) to state
-        }
+  fun restore(
+      player: Player,
+      snapshots: List<BlockSnapshot>,
+      expected: List<BlockSnapshot>? = null,
+  ): Boolean {
+    if (snapshots.isEmpty()) return false
+    val available = mutableListOf<Pair<Block, BlockSnapshot>>()
+    for (index in snapshots.indices) {
+      val state = snapshots[index]
+      val expectedState = expected?.getOrNull(index)
+      val world = plugin.server.getWorld(state.world) ?: return false
+      if (state.y !in world.minHeight until world.maxHeight) return false
+      val blockLoc = Location(world, state.x.toDouble(), state.y.toDouble(), state.z.toDouble())
+      if (!world.worldBorder.isInside(blockLoc.clone().add(0.5, 0.5, 0.5))) return false
+      if (!canModifyAt(player, blockLoc)) return false
+      world.getChunkAt(state.x shr 4, state.z shr 4)
+      val block = world.getBlockAt(state.x, state.y, state.z)
+      if (isIgnoredBlock(block)) return false
+      val currentState = block.state
+      // コンテナ等の内容物破壊・消失および破壊済みコンテナの無償再生成を防ぐ。
+      if (isItemHolder(currentState) && block.type != state.data.material) return false
+      if (state.itemHolder && block.type != state.data.material) return false
+      if (
+          expectedState != null &&
+              player.gameMode != GameMode.CREATIVE &&
+              block.type != expectedState.data.material
+      ) {
+        return false
+      }
+      available += block to state
+    }
     if (available.isEmpty()) return false
     val blocks = available.map { it.first }
     flush()
@@ -155,17 +221,18 @@ internal class BlockEditService(
     val before = blocks.map { it.state }
     available.forEach { (block, state) ->
       pendingCandles.remove(block)
-      // アイテム入れるために空にしとく
-      (block.state as? Container)?.let { container ->
-        container.snapshotInventory.clear()
-        check(container.update(false, false)) { "Could not clear container at ${block.location}" }
-      }
+      val materialChanged = block.type != state.data.material
       if (state.body == null) block.setBlockData(state.data.clone(), false)
       else BlockEntityAccess.setBody(block, state.data.clone(), state.body)
-      if (state.tile != null)
-          check(state.tile.copy(block.location).update(true, false)) {
-            "Could not restore block entity at ${block.location}"
-          }
+      if (
+          state.tile != null &&
+              !isProtectedTileState(state.tile) &&
+              (materialChanged || state.body == true)
+      ) {
+        check(state.tile.copy(block.location).update(true, false)) {
+          "Could not restore block entity at ${block.location}"
+        }
+      }
       updateMode.restoreState(block, state.updates)
     }
     blocks.forEachIndexed { index, block ->

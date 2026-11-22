@@ -8,6 +8,7 @@ import com.sk89q.worldedit.math.BlockVector3
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
 import icu.oyasai.citiesskymine.shared.ArgSuggest
+import icu.oyasai.citiesskymine.util.BuildProtection
 import icu.oyasai.citiesskymine.util.CuboidBounds
 import icu.oyasai.citiesskymine.util.HorizontalUnit
 import icu.oyasai.citiesskymine.util.MessageUtil
@@ -190,8 +191,10 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     for (placement in skulls) {
       val applied =
           runCatching {
-                val state =
-                    player.world.getBlockAt(placement.x, placement.y, placement.z).state as? Skull
+                val block = player.world.getBlockAt(placement.x, placement.y, placement.z)
+                if (!BuildProtection.canBuild(player, block.location, plugin.logger))
+                    return@runCatching false
+                val state = block.state as? Skull
                 if (state == null) false
                 else {
                   state.setPlayerProfile(placement.profile)
@@ -425,12 +428,21 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       seed: Long,
       random: Random,
   ) {
+    val planned =
+        figures.map { figure ->
+          figure to
+              Location(player.world, figure.x + 0.5, y.toDouble(), figure.z + 0.5, figure.yaw, 0f)
+        }
+    if (
+        planned.any { (_, location) -> !BuildProtection.canBuild(player, location, plugin.logger) }
+    ) {
+      MessageUtil.error(player, "保護された領域が含まれているため、マネキンを生成できません。")
+      return
+    }
     val profiles = heads.profiles()
-    val spawned = ArrayList<Mannequin>(figures.size)
+    val spawned = ArrayList<Mannequin>(planned.size)
     try {
-      for (figure in figures) {
-        val location =
-            Location(player.world, figure.x + 0.5, y.toDouble(), figure.z + 0.5, figure.yaw, 0f)
+      for ((figure, location) in planned) {
         val profile = profiles.randomOrNull(random)?.let(ResolvableProfile::resolvableProfile)
         spawned +=
             player.world.spawn(location, Mannequin::class.java) { mannequin ->
@@ -472,6 +484,7 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             bounds.maxZ + 1.0,
         )
     var removed = 0
+    var skippedProtected = 0
     try {
       for (entity in player.world.getNearbyEntities(box)) {
         if (
@@ -486,6 +499,10 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                 location.blockZ !in bounds.minZ..bounds.maxZ
         )
             continue
+        if (!BuildProtection.canBuild(player, location, plugin.logger)) {
+          skippedProtected++
+          continue
+        }
         entity.remove()
         removed++
       }
@@ -494,6 +511,9 @@ class CrowdCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       return
     }
     MessageUtil.success(player, "選択範囲内の群衆マネキンを $removed 体削除しました。")
+    if (skippedProtected > 0) {
+      MessageUtil.warn(player, "保護領域内のマネキン $skippedProtected 体は権限がないためスキップしました。")
+    }
   }
 
   private fun footData(material: Material): BlockData =

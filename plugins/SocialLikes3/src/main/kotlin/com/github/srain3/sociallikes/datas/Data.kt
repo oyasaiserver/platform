@@ -724,11 +724,14 @@ object Data {
     return intArrayOf(minCX, maxCX, minCZ, maxCZ)
   }
 
+  private const val MAX_VACANT_TP_RADIUS = 64
+  private val activeVacantTpPlayers = ConcurrentHashMap.newKeySet<UUID>()
+
   @Suppress("UnstableApiUsage", "removal")
   fun vacantTPTask(player: Player, radius: Int, maxCount: Int, biomeStr: String?) {
     val loc = player.location.clone()
     val data = slNearData[loc.world.name]?.toMap() ?: return
-    val biome = biomeStr?.let { Biome.valueOf(it) }
+    val biome = biomeStr?.let { runCatching { Biome.valueOf(it) }.getOrNull() }
 
     val chunkRange =
         getBorderChunkRange(loc)
@@ -740,9 +743,18 @@ object Data {
     val maxCX = chunkRange[1]
     val minCZ = chunkRange[2]
     val maxCZ = chunkRange[3]
+    if (minCX > maxCX || minCZ > maxCZ) {
+      player.sendMessage(Tools.socialLikesLOGO + "&eコンフィグのWorldBorder範囲が不正です。".color())
+      return
+    }
 
-    val r = if (radius > 0) radius else 1
-    val c = if (maxCount >= 0) maxCount else 0
+    if (!activeVacantTpPlayers.add(player.uniqueId)) {
+      player.sendMessage(Tools.socialLikesLOGO + "&e現在空き地を検索中です。しばらくお待ちください。".color())
+      return
+    }
+
+    val r = radius.coerceIn(1, MAX_VACANT_TP_RADIUS)
+    val c = maxCount.coerceAtLeast(0)
 
     player.sendMessage(Tools.socialLikesLOGO + "&f空き地を探しています...".color())
 
@@ -851,6 +863,8 @@ object Data {
           } catch (e: Exception) {
             if (e is InterruptedException) Thread.currentThread().interrupt()
             reportVacantTpFailure(player, e)
+          } finally {
+            activeVacantTpPlayers.remove(player.uniqueId)
           }
         }
         .start()

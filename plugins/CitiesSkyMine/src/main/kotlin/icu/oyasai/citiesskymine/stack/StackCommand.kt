@@ -47,14 +47,44 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       return true
     }
 
-    val estimatedBlocks = region.volume * parsed.times.toLong()
     val maxBlocks =
         plugin.config.getLong(
             "limits.max-blocks-stack",
             plugin.config.getLong("limits.max-blocks-csm", 2_000_000L),
         )
+    val volume =
+        try {
+          Math.multiplyExact(
+              Math.multiplyExact(region.width.toLong(), region.height.toLong()),
+              region.length.toLong(),
+          )
+        } catch (_: ArithmeticException) {
+          MessageUtil.error(sender, "選択範囲が大きすぎます。")
+          return true
+        }
+    val estimatedBlocks =
+        try {
+          Math.multiplyExact(volume, parsed.times.toLong())
+        } catch (_: ArithmeticException) {
+          MessageUtil.error(sender, "複製ブロック数が上限 ($maxBlocks) を超えています。")
+          return true
+        }
     if (maxBlocks > 0 && estimatedBlocks > maxBlocks) {
       MessageUtil.error(sender, "複製ブロック数が上限 ($maxBlocks) を超えています: $estimatedBlocks")
+      return true
+    }
+    try {
+      val totalDx = Math.multiplyExact(offset.x, parsed.times)
+      val totalDy = Math.multiplyExact(offset.y, parsed.times)
+      val totalDz = Math.multiplyExact(offset.z, parsed.times)
+      Math.addExact(region.pos1.x(), totalDx)
+      Math.addExact(region.pos1.y(), totalDy)
+      Math.addExact(region.pos1.z(), totalDz)
+      Math.addExact(region.pos2.x(), totalDx)
+      Math.addExact(region.pos2.y(), totalDy)
+      Math.addExact(region.pos2.z(), totalDz)
+    } catch (_: ArithmeticException) {
+      MessageUtil.error(sender, "複製先の座標が範囲外です。")
       return true
     }
 
@@ -125,7 +155,13 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       MessageUtil.error(sender, "回数を指定してください。例: /csm stack forward up 5")
       return null
     }
-    val times = args[timesIndex].toInt().coerceAtLeast(1)
+    val maxTimes =
+        plugin.config.getInt("limits.max-stack-times", DEFAULT_MAX_STACK_TIMES).coerceAtLeast(1)
+    val times = args[timesIndex].toIntOrNull()
+    if (times == null || times !in 1..maxTimes) {
+      MessageUtil.error(sender, "回数は 1 から $maxTimes の整数で指定してください。")
+      return null
+    }
     val skipIds = args.drop(timesIndex + 1).mapNotNull { normalizeSkipId(it) }.toSet()
     return ParsedStackArgs(directions, times, skipIds)
   }
@@ -143,34 +179,38 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     var y = 0
     var z = 0
 
-    for (raw in directions) {
-      val (token, extra) =
-          parseDirectionToken(raw) ?: throw IllegalArgumentException("不明な方向です: $raw")
-      // extra > 0: use the number as absolute offset; extra == 0: use region size
-      when (token) {
-        DirectionToken.FORWARD -> {
-          val mag = if (extra > 0) extra else horizontalMagnitude(region, forward)
-          x += forward.x * mag
-          z += forward.z * mag
+    try {
+      for (raw in directions) {
+        val (token, extra) =
+            parseDirectionToken(raw) ?: throw IllegalArgumentException("不明な方向です: $raw")
+        // extra > 0: use the number as absolute offset; extra == 0: use region size
+        when (token) {
+          DirectionToken.FORWARD -> {
+            val mag = if (extra > 0) extra else horizontalMagnitude(region, forward)
+            x = Math.addExact(x, Math.multiplyExact(forward.x, mag))
+            z = Math.addExact(z, Math.multiplyExact(forward.z, mag))
+          }
+          DirectionToken.BACK -> {
+            val mag = if (extra > 0) extra else horizontalMagnitude(region, forward)
+            x = Math.subtractExact(x, Math.multiplyExact(forward.x, mag))
+            z = Math.subtractExact(z, Math.multiplyExact(forward.z, mag))
+          }
+          DirectionToken.LEFT -> {
+            val mag = if (extra > 0) extra else horizontalMagnitude(region, left)
+            x = Math.addExact(x, Math.multiplyExact(left.x, mag))
+            z = Math.addExact(z, Math.multiplyExact(left.z, mag))
+          }
+          DirectionToken.RIGHT -> {
+            val mag = if (extra > 0) extra else horizontalMagnitude(region, right)
+            x = Math.addExact(x, Math.multiplyExact(right.x, mag))
+            z = Math.addExact(z, Math.multiplyExact(right.z, mag))
+          }
+          DirectionToken.UP -> y = Math.addExact(y, if (extra > 0) extra else region.height)
+          DirectionToken.DOWN -> y = Math.subtractExact(y, if (extra > 0) extra else region.height)
         }
-        DirectionToken.BACK -> {
-          val mag = if (extra > 0) extra else horizontalMagnitude(region, forward)
-          x -= forward.x * mag
-          z -= forward.z * mag
-        }
-        DirectionToken.LEFT -> {
-          val mag = if (extra > 0) extra else horizontalMagnitude(region, left)
-          x += left.x * mag
-          z += left.z * mag
-        }
-        DirectionToken.RIGHT -> {
-          val mag = if (extra > 0) extra else horizontalMagnitude(region, right)
-          x += right.x * mag
-          z += right.z * mag
-        }
-        DirectionToken.UP -> y += if (extra > 0) extra else region.height
-        DirectionToken.DOWN -> y -= if (extra > 0) extra else region.height
       }
+    } catch (_: ArithmeticException) {
+      throw IllegalArgumentException("移動量が大きすぎます。")
     }
     return StackOffset(x, y, z, facing)
   }
@@ -302,6 +342,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   }
 
   companion object {
+    private const val DEFAULT_MAX_STACK_TIMES = 1000
     private val DIRECTION_SUGGESTIONS =
         listOf("forward", "back", "left", "right", "up", "down", "f", "b", "l", "r", "u", "d")
   }

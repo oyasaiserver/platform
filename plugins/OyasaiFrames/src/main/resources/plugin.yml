@@ -32,6 +32,7 @@ commands:
   getdye:
     usage: /getdye
     description: Dye Box を開く
+    permission: "painttools.command.painttools.dye"
   toumeigakubuti:
     aliases: ["toumei", "invisibleframe"]
     description: "Frame transparency"

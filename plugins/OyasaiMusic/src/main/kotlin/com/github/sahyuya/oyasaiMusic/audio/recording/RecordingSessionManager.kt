@@ -69,6 +69,16 @@ class RecordingSessionManager {
   fun preferredCircuitQuantization(playerUuid: UUID): Int? =
       preferredCircuitQuantizationMs[playerUuid]
 
+  fun clearPreferredCircuitQuantization(playerUuid: UUID) {
+    preferredCircuitQuantizationMs.remove(playerUuid)
+  }
+
+  fun clearPlayer(playerUuid: UUID) {
+    dynamicSessions.remove(playerUuid)
+    liveCircuitSessions.remove(playerUuid)
+    preferredCircuitQuantizationMs.remove(playerUuid)
+  }
+
   fun hasAnySession(): Boolean = dynamicSessions.isNotEmpty() || liveCircuitSessions.isNotEmpty()
 
   fun activeDynamicSessions(): Collection<DynamicRecordingSession> = dynamicSessions.values

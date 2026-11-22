@@ -6,11 +6,12 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryCreativeEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BundleMeta
 
 /** NBTでitemを持ち込むのを禁止する */
 object NotNBTEvent : Listener {
-  private val nbtItemsRegex = Regex("""items?:""")
-  private val nbtEMFRegex = Regex("""evenmorefish:""")
+  private val nbtItemsRegex = Regex("""items?:|bundle_contents|charged_projectiles""")
+  private val nbtEMFRegex = Regex("""evenmorefish:""", RegexOption.IGNORE_CASE)
 
   /** クリエインベントリのイベント */
   @EventHandler(priority = EventPriority.HIGH)
@@ -18,11 +19,14 @@ object NotNBTEvent : Listener {
     if (event.isCancelled) return
     if (event.whoClicked.isOp) return
     val meta = event.cursor.itemMeta ?: return
+    val rawMeta = meta.asString.lowercase()
+    val hasBundleItems = (meta as? BundleMeta)?.hasItems() == true
 
-    // nbtに「item(s):」タグが存在する場合デフォのアイテムにする処理
+    // nbtに「item(s):」タグやバンドル中身・EvenMoreFishタグが存在する場合デフォのアイテムにする処理
     if (
-        nbtItemsRegex.containsMatchIn(meta.asString.lowercase()) ||
-            nbtEMFRegex.containsMatchIn(meta.asString)
+        hasBundleItems ||
+            nbtItemsRegex.containsMatchIn(rawMeta) ||
+            nbtEMFRegex.containsMatchIn(rawMeta)
     ) {
       event.cursor.itemMeta = ItemStack(event.cursor.type).itemMeta
     }

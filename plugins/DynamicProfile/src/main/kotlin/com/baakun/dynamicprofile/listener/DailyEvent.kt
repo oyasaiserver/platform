@@ -50,7 +50,7 @@ object DailyEvent : Listener {
         } catch (_: Exception) {
           LocalDateTime.MIN
         }
-    val daysDifference = ChronoUnit.DAYS.between(now, otherDate)
+    val daysDifference = ChronoUnit.DAYS.between(otherDate.toLocalDate(), now.toLocalDate())
     if (daysDifference != 0L || userStats.join == 0) {
       userStats.lastLogin = now.toString()
       userStats.addCount(BehType.JOIN)

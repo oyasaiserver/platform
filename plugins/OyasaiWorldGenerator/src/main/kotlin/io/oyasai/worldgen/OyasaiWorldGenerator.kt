@@ -55,7 +55,10 @@ class OyasaiWorldGenerator : JavaPlugin() {
         normalWorlds = null
       }
       try {
-        portals = Portals(this)
+        portals =
+            Portals(this) { player ->
+              lifecycle?.applyWorldRules(player) ?: normalWorlds?.enforceFlight(player)
+            }
         portals.initialize()
         server.pluginManager.registerEvents(portals, this)
       } catch (throwable: Throwable) {

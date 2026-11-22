@@ -33,6 +33,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.hanging.HangingBreakEvent
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -489,8 +490,9 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
     return (this as OyasaiFrames).lockOwner(frame)
   }
 
-  private fun canBuild(player: Player, at: Location): Boolean {
-    if (!server.pluginManager.isPluginEnabled("WorldGuard")) return true
+  internal open fun canBuild(player: Player, at: Location): Boolean {
+    if (!runCatching { server.pluginManager.isPluginEnabled("WorldGuard") }.getOrDefault(false))
+        return true
     val local = WorldGuardPlugin.inst().wrapPlayer(player)
     val world = BukkitAdapter.adapt(at.world)
     val platform = WorldGuard.getInstance().platform
@@ -630,6 +632,13 @@ open class ImageOnMap : JavaPlugin(), Listener, TabExecutor {
 
   @EventHandler(priority = EventPriority.LOWEST)
   fun protectDamage(e: EntityDamageByEntityEvent) {
+    val frame = e.entity as? ItemFrame ?: return
+    if (managed(frame)) e.isCancelled = true
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  fun protectAnyDamage(e: EntityDamageEvent) {
+    if (e is EntityDamageByEntityEvent) return
     val frame = e.entity as? ItemFrame ?: return
     if (managed(frame)) e.isCancelled = true
   }

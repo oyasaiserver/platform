@@ -57,6 +57,7 @@ object OreReappears : Listener {
   fun onDisable() {
     Task.cancel()
     breakBlockList.forEach { data -> data.reappearBlock() }
+    breakBlockList.clear()
   }
 
   /** コンフィグリロード */

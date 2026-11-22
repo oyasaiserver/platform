@@ -56,6 +56,11 @@ object SurveySubCommand {
           return
         }
         val survey = SurveyManager.surveys.find { it.id == progress.surveyId } ?: return
+        if (!SurveyManager.isSurveyOpen(survey)) {
+          SurveyManager.cancelProgress(sender.uniqueId)
+          sender.msg("<red>このアンケートは現在実施されていません。</red>")
+          return
+        }
         SurveyManager.showQuestion(sender, survey, progress.currentQuestionIndex)
       }
       "answer" -> {

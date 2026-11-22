@@ -69,7 +69,9 @@ fun ChatService.who(sender: CommandSender, player: Player?, input: String): Bool
   val members =
       plugin.server.onlinePlayers
           .filter { online ->
-            canUse(online, channel) && channel.id in state(online).joinedChannels
+            (player == null || player.canSee(online)) &&
+                canUse(online, channel) &&
+                channel.id in state(online).joinedChannels
           }
           .map { it.name }
           .sorted()

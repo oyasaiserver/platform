@@ -1,6 +1,9 @@
 package io.oyasai.milepoint
 
+import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderGUI
+import io.oyasai.anybuilder.carbuilder2.CarBuilder2GUI
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2SmokeGUI
+import io.oyasai.race.TimeAttackCommand
 import io.oyasai.toolbox.CustomYaml
 import io.oyasai.toolbox.Tools
 import java.util.*
@@ -51,6 +54,9 @@ object MileagePoint : Listener {
 
   private fun saveAndRemovePlayerData(player: Player) {
     val uuid = player.uniqueId
+    TimeAttackCommand.clearPlayerData(player)
+    CarBuilder2GUI.clearPlayerState(uuid)
+    AircraftBuilderGUI.clearPlayerState(uuid)
     dataList[uuid]?.let { data ->
       MileageTracker.settlePlayer(player)
       CarBuilder2SmokeGUI.quitPlayerColorList(uuid)
@@ -75,6 +81,7 @@ object MileagePoint : Listener {
   fun getUserPoint(uuid: UUID): Int = dataList[uuid]?.mile ?: -1
 
   fun payment(uuid: UUID, point: Int): Boolean {
+    if (point < 0) return false
     if (!checkPoint(uuid, point)) return false
     dataList[uuid]?.let {
       it.mile -= point

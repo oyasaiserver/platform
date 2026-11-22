@@ -26,8 +26,11 @@ class OyasaiFrames : ImageOnMap() {
           frame.persistentDataContainer.get(ownerKey, PersistentDataType.STRING),
       )
 
-  fun canModify(frame: ItemFrame, player: Player): Boolean =
-      mayModify(lockOwner(frame), player.uniqueId, player.isOp)
+  fun canModify(frame: ItemFrame, player: Player): Boolean {
+    val owner = lockOwner(frame)
+    val allowed = if (owner == null && !player.isOp) canBuild(player, frame.location) else true
+    return mayModify(owner, player.uniqueId, player.isOp, allowed)
+  }
 
   fun locker(): GakubuchiLockerPlugin? = lockerFeature
 
@@ -101,5 +104,9 @@ internal val PAINT_ID_KEY = NamespacedKey("painttools", "id")
 internal fun frameOwner(dbOwner: UUID?, pdcOwner: String?): UUID? =
     dbOwner ?: pdcOwner?.let { runCatching { UUID.fromString(it) }.getOrNull() }
 
-internal fun mayModify(owner: UUID?, player: UUID, isOp: Boolean): Boolean =
-    owner == null || owner == player || isOp
+internal fun mayModify(
+    owner: UUID?,
+    player: UUID,
+    isOp: Boolean,
+    canBuild: Boolean = true,
+): Boolean = isOp || if (owner != null) owner == player else canBuild

@@ -34,7 +34,8 @@ object SLUpdate : CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): List<String> =
-      if (args.size == 1) listOf("region").filter { it.startsWith(args[0]) } else emptyList()
+      if (args.size == 1 && sender.isOp) listOf("region").filter { it.startsWith(args[0]) }
+      else emptyList()
 
   val switch = mutableMapOf<UUID, Boolean>()
 
@@ -47,6 +48,10 @@ object SLUpdate : CommandExecutor, TabCompleter {
     if (command.name != "slupdate") return false
     if (sender !is Player) return false
     if (args.isNotEmpty() && args[0] == "region") {
+      if (!sender.isOp) {
+        sender.sendMessage((Tools.socialLikesLOGO + " &cこのコマンドを実行する権限がありません。").color())
+        return true
+      }
       updateAllInRegion(sender)
       return true
     }
@@ -99,6 +104,10 @@ object SLUpdate : CommandExecutor, TabCompleter {
   }
 
   fun updateAllInRegion(player: Player) {
+    if (!player.isOp) {
+      player.sendMessage((Tools.socialLikesLOGO + " &cこのコマンドを実行する権限がありません。").color())
+      return
+    }
     val we = WorldEdit.getInstance()
     if (we == null) {
       player.sendMessage("WorldEdit読み込み失敗")
@@ -132,7 +141,11 @@ object SLUpdate : CommandExecutor, TabCompleter {
       var susp = false
       if (isSLSign(block)) {
         val data = Data.getSLData(id)
-        if (data != null) updateSLSign(data, block, player.uniqueId) else susp = true
+        if (data != null && (data.owner == player.uniqueId || player.isOp)) {
+          updateSLSign(data, block, player.uniqueId, player.isOp)
+        } else {
+          susp = true
+        }
       } else if (isLegacySLSign(block)) {
         id =
             block
@@ -145,7 +158,11 @@ object SLUpdate : CommandExecutor, TabCompleter {
                 ?.toIntOrNull(16) ?: Integer.MIN_VALUE
         id = SLDatabase.resolveMigratedId(-id)
         val data = Data.getSLData(id)
-        if (data != null) updateLegacySLSign(data, block, player.uniqueId) else susp = true
+        if (data != null && (data.owner == player.uniqueId || player.isOp)) {
+          updateLegacySLSign(data, block, player.uniqueId, player.isOp)
+        } else {
+          susp = true
+        }
       } else return@forEach
       val result =
           if (!susp) Component.text("アップデートしました！ ").color(TextColor.color(0x55FF55))

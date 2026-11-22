@@ -7,6 +7,7 @@ import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseData
 import io.oyasai.anybuilder.common.command.BuilderCommandRouter
 import io.oyasai.canRideAircraftBuilder
 import io.oyasai.canUseAircraftBuilder
+import io.oyasai.hasOyasaiAdminPermission
 import java.util.Locale
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -201,6 +202,12 @@ private fun handleAircraftBuilderSpawn(
       val target = Bukkit.getPlayer(args[2])
       if (sender is Player) {
         if (!sender.canRideAircraftBuilder()) {
+          sender.sendMessage(AircraftBuilder_PERMISSION_DENIED)
+          return
+        }
+        val isTargetingSelf =
+            target?.uniqueId == sender.uniqueId || args[2].equals(sender.name, ignoreCase = true)
+        if (!isTargetingSelf && !sender.hasOyasaiAdminPermission()) {
           sender.sendMessage(AircraftBuilder_PERMISSION_DENIED)
           return
         }

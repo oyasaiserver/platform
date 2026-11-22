@@ -21,9 +21,12 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.event.block.BlockExplodeEvent
+import org.bukkit.event.block.BlockPhysicsEvent
 import org.bukkit.event.block.BlockPistonExtendEvent
 import org.bukkit.event.block.BlockPistonRetractEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.block.BlockRedstoneEvent
+import org.bukkit.event.entity.EntityChangeBlockEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
@@ -32,6 +35,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTakeLecternBookEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
@@ -45,6 +49,7 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
 
   private val pending = mutableMapOf<UUID, Pending>()
   private val auto = mutableMapOf<UUID, Long>()
+  private val suppressOffHand = mutableSetOf<UUID>()
 
   override fun onEnable() {
     try {
@@ -138,8 +143,19 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
     if (!event.action.isRightClick) return
     val block = event.clickedBlock ?: return
     val player = event.player
+    if (event.hand == EquipmentSlot.OFF_HAND) {
+      if (suppressOffHand.remove(player.uniqueId) || pending.containsKey(player.uniqueId)) {
+        event.isCancelled = true
+        return
+      }
+    } else {
+      suppressOffHand.remove(player.uniqueId)
+    }
     val request = pending.remove(player.uniqueId)
     if (request != null) {
+      if (event.hand != EquipmentSlot.OFF_HAND) {
+        suppressOffHand.add(player.uniqueId)
+      }
       event.isCancelled = true
       if (request.expires < System.currentTimeMillis()) {
         player.sendMessage("操作の有効時間が切れました")
@@ -149,18 +165,27 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
       return
     }
     val protection = protection(block) ?: return
+    val heldType =
+        event.item?.type
+            ?: runCatching {
+                  when (event.hand) {
+                    EquipmentSlot.OFF_HAND -> player.inventory.itemInOffHand.type
+                    else -> player.inventory.itemInMainHand.type
+                  }
+                }
+                .getOrNull()
     if (protection.type == 2 && !canUse(player, protection)) {
       event.isCancelled = true
       player.sendMessage("このブロックは保護されています")
     } else if (
         protection.type == 6 &&
-            block.type.name.let {
+            (block.type.name.let {
               it == "COMPOSTER" ||
                   it == "DECORATED_POT" ||
                   it.endsWith("_SHELF") ||
                   it == "CRAFTER" ||
                   isManual(block.type)
-            }
+            } || isLecternBookInsert(block, heldType) || isCopperChestModify(block.type, heldType))
     ) {
       event.isCancelled = true
     }
@@ -239,23 +264,87 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
     }
   }
 
+  private fun dependentProtections(block: Block): List<Protection> =
+      runCatching {
+            val result = mutableListOf<Protection>()
+            block.getRelative(0, 1, 0)?.let { up ->
+              val upName = up.type.name
+              if (
+                  upName.endsWith("_DOOR") ||
+                      (upName.endsWith("_SIGN") &&
+                          !upName.endsWith("_WALL_SIGN") &&
+                          !upName.endsWith("_HANGING_SIGN")) ||
+                      (upName.endsWith("_BANNER") && !upName.endsWith("_WALL_BANNER"))
+              ) {
+                protection(up)?.let { result += it }
+              }
+            }
+            block.getRelative(0, -1, 0)?.let { down ->
+              val downName = down.type.name
+              if (downName.endsWith("_HANGING_SIGN") && !downName.endsWith("_WALL_HANGING_SIGN")) {
+                protection(down)?.let { result += it }
+              }
+            }
+            val horizontal =
+                listOf(
+                    org.bukkit.block.BlockFace.NORTH to (0 to -1),
+                    org.bukkit.block.BlockFace.SOUTH to (0 to 1),
+                    org.bukkit.block.BlockFace.EAST to (1 to 0),
+                    org.bukkit.block.BlockFace.WEST to (-1 to 0),
+                )
+            for ((face, offset) in horizontal) {
+              val side = block.getRelative(offset.first, 0, offset.second) ?: continue
+              val sideName = side.type.name
+              if (sideName.endsWith("_WALL_SIGN") || sideName.endsWith("_WALL_BANNER")) {
+                val facing = (side.blockData as? org.bukkit.block.data.Directional)?.facing
+                if (facing == null || facing == face) {
+                  protection(side)?.let { result += it }
+                }
+              } else if (sideName.endsWith("_WALL_HANGING_SIGN")) {
+                val facing = (side.blockData as? org.bukkit.block.data.Directional)?.facing
+                if (facing == null || (facing != face && facing != face.oppositeFace)) {
+                  protection(side)?.let { result += it }
+                }
+              }
+            }
+            result.distinct()
+          }
+          .getOrDefault(emptyList())
+
+  private fun isProtectedOrSupporting(block: Block): Boolean =
+      protection(block) != null || dependentProtections(block).isNotEmpty()
+
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun onBreak(event: BlockBreakEvent) {
-    val protection = protection(event.block) ?: return
-    if (!canManage(event.player, protection)) {
+    val protection = protection(event.block)
+    if (protection != null) {
+      if (!canManage(event.player, protection)) {
+        event.isCancelled = true
+        event.player.sendMessage("持ち主か管理者だけが壊せます")
+      }
+      return
+    }
+    if (dependentProtections(event.block).isNotEmpty()) {
       event.isCancelled = true
-      event.player.sendMessage("持ち主か管理者だけが壊せます")
+      event.player.sendMessage("保護されたブロックを支えているため壊せません")
     }
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onBreakAccepted(event: BlockBreakEvent) {
     val protection = protection(event.block) ?: return
-    if (
-        canManage(event.player, protection) &&
-            (protection.key == BlockKey.of(event.block) || event.block.type.name.endsWith("_DOOR"))
-    )
-        store.remove(protection)
+    if (!canManage(event.player, protection)) return
+    val brokenKey = BlockKey.of(event.block)
+    if (event.block.type.name.endsWith("_DOOR")) {
+      store.remove(protection)
+      return
+    }
+    val remainingKey = relatedKeys(event.block).firstOrNull { it != brokenKey }
+    if (remainingKey == null) {
+      store.remove(protection)
+    } else if (protection.key == brokenKey && store.get(remainingKey) == null) {
+      store.relocate(protection, remainingKey)
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -341,37 +430,70 @@ class LwcPlugin : LWCPlugin(), Listener, CommandExecutor {
 
   @EventHandler(ignoreCancelled = true)
   fun onBlockExplode(event: BlockExplodeEvent) {
-    event.blockList().removeIf { protection(it) != null }
+    event.blockList().removeIf { isProtectedOrSupporting(it) }
   }
 
   @EventHandler(ignoreCancelled = true)
   fun onEntityExplode(event: EntityExplodeEvent) {
-    event.blockList().removeIf { protection(it) != null }
+    event.blockList().removeIf { isProtectedOrSupporting(it) }
   }
 
   @EventHandler(ignoreCancelled = true)
   fun onPistonExtend(event: BlockPistonExtendEvent) {
     if (
-        protection(event.block.getRelative(event.direction)) != null ||
-            event.blocks.any { protection(it) != null }
+        isProtectedOrSupporting(event.block.getRelative(event.direction)) ||
+            event.blocks.any { isProtectedOrSupporting(it) }
     )
         event.isCancelled = true
   }
 
   @EventHandler(ignoreCancelled = true)
   fun onPistonRetract(event: BlockPistonRetractEvent) {
-    if (event.blocks.any { protection(it) != null }) event.isCancelled = true
+    if (event.blocks.any { isProtectedOrSupporting(it) }) event.isCancelled = true
   }
 
   @EventHandler(ignoreCancelled = true)
   fun onBurn(event: BlockBurnEvent) {
-    if (protection(event.block) != null) event.isCancelled = true
+    if (isProtectedOrSupporting(event.block)) event.isCancelled = true
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onEntityChangeBlock(event: EntityChangeBlockEvent) {
+    if (isProtectedOrSupporting(event.block)) event.isCancelled = true
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onPhysics(event: BlockPhysicsEvent) {
+    val block = event.block
+    if (protection(block) == null || !isManual(block.type)) return
+    val name = block.type.name
+    if (
+        name.endsWith("_SIGN") ||
+            name.endsWith("_WALL_SIGN") ||
+            name.endsWith("_BANNER") ||
+            name.endsWith("_WALL_BANNER")
+    ) {
+      event.isCancelled = true
+    } else if (name.endsWith("_DOOR")) {
+      val below = runCatching { block.getRelative(0, -1, 0) }.getOrNull()
+      if (below != null && !below.type.name.endsWith("_DOOR") && !below.type.isSolid) {
+        event.isCancelled = true
+      }
+    }
+  }
+
+  @EventHandler
+  fun onRedstone(event: BlockRedstoneEvent) {
+    if (protection(event.block) != null && isManual(event.block.type)) {
+      event.newCurrent = event.oldCurrent
+    }
   }
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
     auto.remove(event.player.uniqueId)
     pending.remove(event.player.uniqueId)
+    suppressOffHand.remove(event.player.uniqueId)
   }
 
   @EventHandler

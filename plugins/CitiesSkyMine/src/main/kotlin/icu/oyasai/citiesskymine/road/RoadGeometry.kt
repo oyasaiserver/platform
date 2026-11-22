@@ -14,6 +14,12 @@ object RoadGeometry {
   fun computePath(waypoints: List<Location>, settings: RoadSettings): List<PathPoint> {
     if (!settings.radius.isFinite() || settings.radius <= 0 || settings.radius > 1000.0)
         return emptyList()
+    if (
+        !settings.transitionLength.isFinite() ||
+            settings.transitionLength < 0.0 ||
+            settings.transitionLength > 500.0
+    )
+        return emptyList()
     if (waypoints.size < 2) return emptyList()
     if (waypoints.size == 2) {
       val a = waypoints[0]

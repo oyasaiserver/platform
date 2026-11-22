@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
@@ -154,9 +155,23 @@ class Guidance(private val plugin: Main) : CommandExecutor, Listener {
   }
 
   @EventHandler(ignoreCancelled = true)
+  fun onSignChange(event: SignChangeEvent) {
+    val firstLine =
+        event.line(0)?.let { PlainTextComponentSerializer.plainText().serialize(it) } ?: ""
+    val existingSign = event.block.state as? Sign
+    val isGuidanceSign =
+        firstLine.trim() == "[案内完了]" || (existingSign != null && line(existingSign, 0) == "[案内完了]")
+    if (!isGuidanceSign) return
+    if (event.player.isOp || event.player.hasPermission("group.admin")) return
+    event.isCancelled = true
+    event.player.sendMessage("§cこの看板を設置・編集する権限がありません")
+  }
+
+  @EventHandler(ignoreCancelled = true)
   fun onBreak(event: BlockBreakEvent) {
     val sign = event.block.state as? Sign ?: return
-    if (line(sign, 0) != "[案内完了]" || event.player.hasPermission("group.admin")) return
+    if (line(sign, 0) != "[案内完了]" || event.player.isOp || event.player.hasPermission("group.admin"))
+        return
     event.isCancelled = true
     event.player.sendMessage("§cこの看板は保護されています")
   }

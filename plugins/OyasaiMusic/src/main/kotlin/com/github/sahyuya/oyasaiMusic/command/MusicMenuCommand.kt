@@ -2,6 +2,7 @@ package com.github.sahyuya.oyasaiMusic.command
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.gui.MainMenuScreen
+import com.github.sahyuya.oyasaiMusic.gui.SongAccess
 import com.github.sahyuya.oyasaiMusic.gui.SongDetailScreen
 import com.github.sahyuya.oyasaiMusic.util.BedrockUtil
 import org.bukkit.Bukkit
@@ -37,6 +38,13 @@ class MusicMenuCommand(private val plugin: OyasaiMusic) : CommandExecutor, TabCo
           }
       "open" ->
           withSong(player, args.getOrNull(1)) { song ->
+            if (
+                !player.hasPermission("oyasaimusic.admin") &&
+                    !SongAccess.canListen(plugin, player, song)
+            ) {
+              player.sendMessage("§cこの楽曲を開く権限がありません。限定品はレコードの所持が必要です。")
+              return@withSong
+            }
             plugin.menuManager.open(
                 player,
                 SongDetailScreen(plugin, plugin.menuManager, player, song),

@@ -170,7 +170,10 @@ internal class UpdateMode(
     val other =
         block.getRelative(if (data.part == Bed.Part.FOOT) data.facing else data.facing.oppositeFace)
     return other.takeIf {
-      (it.blockData as? Bed)?.let { otherData -> otherData.part != data.part } == true
+      it.type == block.type &&
+          (it.blockData as? Bed)?.let { otherData ->
+            otherData.facing == data.facing && otherData.part != data.part
+          } == true
     }
   }
 
@@ -203,12 +206,21 @@ internal class UpdateMode(
   fun breakBlock(event: BlockBreakEvent) {
     beforeEdit(event.player, listOf(event.block))
     if (!enabled(event.player)) return
+    if (event.player.gameMode != GameMode.CREATIVE) return
     val counterpart = bedCounterpart(event.block) ?: return
+    event.isDropItems = false
     val saved = counterpart.blockData.clone()
     plugin.server.scheduler.runTask(
         plugin,
         Runnable {
-          if (loaded(counterpart) && counterpart.type.isAir) write(event.player, counterpart, saved)
+          if (
+              event.player.isOnline &&
+                  event.player.gameMode == GameMode.CREATIVE &&
+                  loaded(counterpart) &&
+                  counterpart.type.isAir
+          ) {
+            write(event.player, counterpart, saved)
+          }
         },
     )
   }

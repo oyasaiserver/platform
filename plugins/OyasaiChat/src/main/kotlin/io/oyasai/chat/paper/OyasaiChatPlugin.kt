@@ -478,6 +478,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     init {
       description = "Send to or select the OyasaiChat channel for /$label"
       usageMessage = "/$label [message]"
+      permission = runtime.config.channels.findShortcut(label)?.permission
     }
 
     override fun execute(

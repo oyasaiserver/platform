@@ -8,7 +8,6 @@ import com.baakun.dynamicprofile.profile.playerSelect.PlayerSelect
 import com.baakun.dynamicprofile.util.Tools
 import com.baakun.dynamicprofile.util.Tools.addText
 import com.baakun.dynamicprofile.util.Tools.allFlag
-import kotlin.concurrent.thread
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -45,62 +44,71 @@ object DProfileCmd : CommandExecutor {
 
   /** 右下の黒いガラスを埋める */
   fun addBlackStandGlass(inv: Inventory, except: Array<Int>) {
-    thread {
-      val grayStandGlassPane = ItemStack(Material.GRAY_STAINED_GLASS_PANE)
-      grayStandGlassPane.addText(" ", mutableListOf()).allFlag()
-      for (i in 0..53) {
-        if (except.contains(i)) continue
-        inv.setItem(i, grayStandGlassPane.clone())
-      }
+    val grayStandGlassPane = ItemStack(Material.GRAY_STAINED_GLASS_PANE)
+    grayStandGlassPane.addText(" ", mutableListOf()).allFlag()
+    for (i in 0..53) {
+      if (except.contains(i)) continue
+      inv.setItem(i, grayStandGlassPane.clone())
+    }
+  }
+
+  private fun applyBorderGlass(inv: Inventory, pane: ItemStack) {
+    for (x in 1..8) {
+      inv.setItem(x, pane.clone())
+    }
+    for (y in 1..5) {
+      inv.setItem(9 * y, pane.clone())
     }
   }
 
   /** 共通の処理（自、他プレイヤープロフィールGUI） */
   fun commonFunc(inv: Inventory, viewer: Player, target: String) {
-    thread { // Threadを使わないと、サーバーが固まる可能性があると表示され処理が止まる
-      var standGlassPane = ItemStack(Material.LIME_STAINED_GLASS_PANE)
-      standGlassPane.addText(" ", mutableListOf()).allFlag()
-      DynamicProfile.provider?.provider?.let { perms ->
-        val user = perms.userManager.loadUser(Bukkit.getOfflinePlayer(target).uniqueId).join()
+    val defaultGlassPane =
+        ItemStack(Material.LIME_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+    applyBorderGlass(inv, defaultGlassPane)
+
+    DynamicProfile.provider?.provider?.let { perms ->
+      val targetUuid =
+          Bukkit.getPlayerExact(target)?.uniqueId
+              ?: Bukkit.getOfflinePlayerIfCached(target)?.uniqueId
+              ?: Bukkit.getOfflinePlayer(target).uniqueId
+      perms.userManager.loadUser(targetUuid).thenAccept { user ->
         val permissions =
             user.cachedData.getPermissionData(
                 perms.contextManager.getQueryOptions(user).orElseGet {
                   perms.contextManager.staticQueryOptions
                 }
             )
+        var material = Material.LIME_STAINED_GLASS_PANE
         if (permissions.checkPermission("group.chukyu").asBoolean())
-            standGlassPane =
-                ItemStack(Material.GREEN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            material = Material.GREEN_STAINED_GLASS_PANE
         if (permissions.checkPermission("group.jokyu").asBoolean())
-            standGlassPane =
-                ItemStack(Material.CYAN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            material = Material.CYAN_STAINED_GLASS_PANE
         if (permissions.checkPermission("group.builder").asBoolean())
-            standGlassPane =
-                ItemStack(Material.PURPLE_STAINED_GLASS_PANE)
-                    .addText(" ", mutableListOf())
-                    .allFlag()
+            material = Material.PURPLE_STAINED_GLASS_PANE
         if (permissions.checkPermission("group.takumi").asBoolean())
-            standGlassPane =
-                ItemStack(Material.RED_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            material = Material.RED_STAINED_GLASS_PANE
         if (permissions.checkPermission("group.blue").asBoolean())
-            standGlassPane =
-                ItemStack(Material.BLUE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            material = Material.BLUE_STAINED_GLASS_PANE
         if (permissions.checkPermission("group.white").asBoolean())
-            standGlassPane =
-                ItemStack(Material.WHITE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
-      }
+            material = Material.WHITE_STAINED_GLASS_PANE
 
-      for (x in 1..8) {
-        inv.setItem(x, standGlassPane.clone())
-      }
-      for (y in 1..5) {
-        inv.setItem(9 * y, standGlassPane.clone())
+        val applyTask = Runnable {
+          val standGlassPane = ItemStack(material).addText(" ", mutableListOf()).allFlag()
+          applyBorderGlass(inv, standGlassPane)
+        }
+        val server = runCatching { Bukkit.getServer() }.getOrNull()
+        val pluginInstance = runCatching { Tools.plugin }.getOrNull()
+        if (server != null && !server.isPrimaryThread && pluginInstance != null) {
+          server.scheduler.runTask(pluginInstance, applyTask)
+        } else {
+          applyTask.run()
+        }
       }
     }
 
     // プレイヤー選択画面を開く
-    val headPlayer =
-        Bukkit.getOnlinePlayers().toList().get((0..Bukkit.getOnlinePlayers().size - 1).random())
+    val headPlayer = Bukkit.getOnlinePlayers().randomOrNull() ?: viewer
     val selectPlayer = Tools.getPlayerHead(headPlayer.uniqueId)
     selectPlayer
         .addText(

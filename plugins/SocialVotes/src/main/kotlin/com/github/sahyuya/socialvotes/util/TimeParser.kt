@@ -29,7 +29,7 @@ object TimeParser {
     var minute: Int? = null
 
     for (m in TOKEN_REGEX.findAll(trimmed)) {
-      val value = m.groupValues[1].toInt()
+      val value = m.groupValues[1].toIntOrNull() ?: return null
       when (m.groupValues[2]) {
         "y" -> year = value
         "M" -> month = value

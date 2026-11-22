@@ -10,7 +10,9 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
@@ -25,7 +27,9 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
   }
 
   private fun buildInventory(): Inventory {
-    val inv = Bukkit.createInventory(AdminMenuHolder(), 54, comp("&b⚙ 管理者メニュー"))
+    val holder = AdminMenuHolder()
+    val inv = Bukkit.createInventory(holder, 54, comp("&b⚙ 管理者メニュー"))
+    holder.attach(inv)
     inv.setItem(
         10,
         makeItem(Material.EMERALD, "&aリロード", listOf("&7全 YAML を再読み込みします", "", "&eクリックで実行")),
@@ -73,13 +77,20 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
 
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent) {
-    event.inventory.holder as? AdminMenuHolder ?: return
+    event.view.topInventory.holder as? AdminMenuHolder ?: return
     val player = event.whoClicked as? Player ?: return
     if (event.clickedInventory == player.inventory) {
-      if (event.isShiftClick) event.isCancelled = true
+      if (event.isShiftClick || event.action == InventoryAction.COLLECT_TO_CURSOR) {
+        event.isCancelled = true
+      }
       return
     }
     event.isCancelled = true
+    if (!player.hasPermission("oyasaimenu.admin")) {
+      player.sendMessage(c("&c管理者権限がありません。"))
+      player.closeInventory()
+      return
+    }
     if (CooldownManager.isClickOnCooldown(player.uniqueId)) return
     when (event.rawSlot) {
       10 -> {
@@ -108,7 +119,22 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  @EventHandler
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val top = event.view.topInventory
+    if (top.holder !is AdminMenuHolder) return
+    if (event.rawSlots.any { it < top.size }) {
+      event.isCancelled = true
+    }
+  }
+
   private class AdminMenuHolder : InventoryHolder {
-    override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
+    private lateinit var holderInventory: Inventory
+
+    fun attach(inventory: Inventory) {
+      holderInventory = inventory
+    }
+
+    override fun getInventory(): Inventory = holderInventory
   }
 }

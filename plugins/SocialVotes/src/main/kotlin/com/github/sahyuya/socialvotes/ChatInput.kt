@@ -62,6 +62,8 @@ object ChatInput : Listener {
       return
     }
     val group = sign.group?.let { dm.groupByName[it] }
+    val isCreatorOrOp = p.isOp || sign.creators.contains(p.uniqueId)
+    val isGroupOwnerOrOp = p.isOp || (group != null && group.owner == p.uniqueId)
 
     when (state.action) {
 
@@ -69,6 +71,10 @@ object ChatInput : Listener {
       看板名変更
       --------------------- */
       Action.RENAME_SIGN -> {
+        if (!isCreatorOrOp) {
+          NotifyUtil.error(p, "§c制作者またはOPのみ操作できます。")
+          return
+        }
         if (msg.isBlank()) {
           NotifyUtil.success(p, "§c変更をキャンセルしました。")
           return
@@ -89,6 +95,10 @@ object ChatInput : Listener {
       制作者名変更
       --------------------- */
       Action.SET_CREATOR_DISPLAY -> {
+        if (!isCreatorOrOp) {
+          NotifyUtil.error(p, "§c制作者またはOPのみ操作できます。")
+          return
+        }
         sign.creatorDisplayName = msg.ifBlank { null }
 
         dm.save()
@@ -107,20 +117,23 @@ object ChatInput : Listener {
       作者追加
       --------------------- */
       Action.ADD_CREATOR -> {
+        if (!isCreatorOrOp) {
+          NotifyUtil.error(p, "§c制作者またはOPのみ操作できます。")
+          return
+        }
 
         if (msg.isBlank()) {
           NotifyUtil.success(p, "§7変更は行われませんでした。")
           return
         }
 
-        // プレイヤー名 → UUID 解決
-        val target = Bukkit.getOfflinePlayer(msg)
-        val uuid = target.uniqueId
-
-        if (target.name == null) {
+        // プレイヤー名 → UUID 解決（メインスレッドでのブロッキングHTTP通信を避ける）
+        val target = Bukkit.getPlayerExact(msg) ?: Bukkit.getOfflinePlayerIfCached(msg)
+        if (target == null || target.name == null) {
           NotifyUtil.error(p, "§cプレイヤー $msg は存在しません。")
           return
         }
+        val uuid = target.uniqueId
 
         if (sign.creators.contains(uuid)) {
           NotifyUtil.error(p, "§e${target.name} は既に投票対象に含まれています。")
@@ -144,10 +157,19 @@ object ChatInput : Listener {
       作者削除
       --------------------- */
       Action.REMOVE_CREATOR -> {
-        val target = Bukkit.getOfflinePlayer(msg)
-        val uuid = target.uniqueId
+        if (!isCreatorOrOp) {
+          NotifyUtil.error(p, "§c制作者またはOPのみ操作できます。")
+          return
+        }
+        val target =
+            Bukkit.getPlayerExact(msg)
+                ?: Bukkit.getOfflinePlayerIfCached(msg)
+                ?: sign.creators
+                    .map { Bukkit.getOfflinePlayer(it) }
+                    .firstOrNull { it.name?.equals(msg, ignoreCase = true) == true }
+        val uuid = target?.uniqueId
 
-        if (!sign.creators.contains(uuid)) {
+        if (uuid == null || !sign.creators.contains(uuid)) {
           NotifyUtil.error(p, "§cそのプレイヤーは制作者ではありません。")
           return
         }
@@ -165,7 +187,7 @@ object ChatInput : Listener {
                 SocialVotes.instance,
                 Runnable {
                   SignDisplayUtil.updateSingle(sign)
-                  NotifyUtil.success(p, "§a${target.name} を制作者から削除しました。")
+                  NotifyUtil.success(p, "§a${target.name ?: msg} を制作者から削除しました。")
                 },
             )
       }
@@ -174,6 +196,10 @@ object ChatInput : Listener {
       看板単体 最大投票数
       --------------------- */
       Action.SET_SIGN_MAX -> {
+        if (!isGroupOwnerOrOp) {
+          NotifyUtil.error(p, "§c権限がありません。")
+          return
+        }
         val v = msg.toIntOrNull()
         if (v == null || v <= 0) {
           NotifyUtil.success(p, "§7変更は行われませんでした。")
@@ -210,6 +236,10 @@ object ChatInput : Listener {
           cancel(p.uniqueId)
           return
         }
+        if (!p.isOp && group.owner != p.uniqueId) {
+          NotifyUtil.error(p, "§c権限がありません。")
+          return
+        }
         val v = msg.toIntOrNull()
         if (v == null || v <= 0) {
           NotifyUtil.success(p, "§7変更は行われませんでした。")
@@ -238,12 +268,21 @@ object ChatInput : Listener {
       グループ　投票開始時刻
       --------------------- */
       Action.SET_START_TIME -> {
+        if (!isGroupOwnerOrOp) {
+          NotifyUtil.error(p, "§c権限がありません。")
+          return
+        }
         if (msg.isBlank()) return
         group ?: return
         if (msg == "0") {
           group.startTime = null
         } else {
-          group.startTime = TimeParser.parse(msg) ?: return
+          group.startTime =
+              TimeParser.parse(msg)
+                  ?: run {
+                    NotifyUtil.error(p, "§c時刻の形式が正しくありません。")
+                    return
+                  }
         }
         dm.save()
         Bukkit.getScheduler()
@@ -260,12 +299,21 @@ object ChatInput : Listener {
       グループ　投票終了時刻
       --------------------- */
       Action.SET_END_TIME -> {
+        if (!isGroupOwnerOrOp) {
+          NotifyUtil.error(p, "§c権限がありません。")
+          return
+        }
         if (msg.isBlank()) return
         group ?: return
         if (msg == "0") {
           group.endTime = null
         } else {
-          group.endTime = TimeParser.parse(msg) ?: return
+          group.endTime =
+              TimeParser.parse(msg)
+                  ?: run {
+                    NotifyUtil.error(p, "§c時刻の形式が正しくありません。")
+                    return
+                  }
         }
         dm.save()
         Bukkit.getScheduler()

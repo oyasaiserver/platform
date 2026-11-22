@@ -109,7 +109,7 @@ object BulletinCommandExecutor : CommandExecutor, TabCompleter {
         list.add("gui")
         list.add("reload")
       }
-      list.addAll(SurveyManager.surveys.filter { it.enabled }.map { it.id })
+      list.addAll(SurveyManager.surveys.filter { SurveyManager.isSurveyOpen(it) }.map { it.id })
       return list.filter { it.startsWith(args[0], true) }
     }
 
@@ -140,7 +140,7 @@ object BulletinCommandExecutor : CommandExecutor, TabCompleter {
                 if (sender.hasPermission("oyasai.admin")) {
                   SurveyManager.surveys.map { it.id }
                 } else {
-                  SurveyManager.surveys.filter { it.enabled }.map { it.id }
+                  SurveyManager.surveys.filter { SurveyManager.isSurveyOpen(it) }.map { it.id }
                 }
             list.addAll(surveyIds)
             return list.filter { it.startsWith(args[1], true) }

@@ -3,6 +3,7 @@ package me.ankokunsan.entityPose.commands
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.clipboard
 import me.ankokunsan.entityPose.EntityPose
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
 import org.bukkit.attribute.Attribute
@@ -67,13 +68,16 @@ class EntityPaste : CommandExecutor {
       label: String,
       args: Array<out String>,
   ): Boolean {
-    val player = sender as Player
+    val player = sender as? Player ?: return true
+    if (!player.hasPermission("entitypose_arrange")) return true
     val uuid = player.uniqueId
     val snapshot1 = clipboard[uuid]
     if (snapshot1 == null) {
       player.sendMessage("§6[EntityPose] §cクリップボードが空です。先にコピーしてください")
       return true
     }
+    val allowEquipmentPaste = player.gameMode == GameMode.CREATIVE
+    var skippedEquipment = false
     player.sendMessage("§6[EntityPose] §a${snapshot1.size}体のエンティティを貼り付けます")
     val loc = player.location.block.location
     val world = player.world
@@ -91,10 +95,11 @@ class EntityPaste : CommandExecutor {
           setAI(false)
           container.set(EntityPose.DEATH_KEY, PersistentDataType.BYTE, 1.toByte())
           isSilent = true
+          isInvisible = data.isInvisible
           this.getAttribute(Attribute.SCALE)?.baseValue = data.scale
           if (data.hanten) {
             customName = "Dinnerbone"
-            isCustomNameVisible = true
+            isCustomNameVisible = false
             val board = Bukkit.getScoreboardManager()!!.mainScoreboard
             val team = board.getTeam("animal_things_hide_name")
             team?.addEntry(this.uniqueId.toString())
@@ -109,10 +114,23 @@ class EntityPaste : CommandExecutor {
             container.set(EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
           }
 
-          data.equipment.forEach { (slot, item) -> this.equipment?.setItem(slot, item) }
+          if (data.equipment.isNotEmpty()) {
+            if (allowEquipmentPaste) {
+              data.equipment.forEach { (slot, item) ->
+                this.equipment?.setItem(slot, item?.clone())
+              }
+            } else {
+              skippedEquipment = true
+            }
+          }
           applyVariant(this, data.variant, data.style)
           if (this is Ageable) {
-            if (data.isMini) setBaby() else setAdult()
+            if (data.isMini) {
+              setBaby()
+              ageLock = true
+            } else {
+              setAdult()
+            }
           }
           if (this is Sittable) {
             this.isSitting = data.isSitting
@@ -120,7 +138,6 @@ class EntityPaste : CommandExecutor {
 
           if (this is ArmorStand) {
             setBasePlate(data.hasBasePlate)
-            isInvisible = data.isInvisible
             isSmall = data.isSmall
             setArms(data.hasArms)
 
@@ -136,6 +153,9 @@ class EntityPaste : CommandExecutor {
           }
         }
       }
+    }
+    if (skippedEquipment) {
+      player.sendMessage("§6[EntityPose] §eクリエイティブ以外では装備アイテムの複製はスキップされました")
     }
     player.sendMessage("§6[EntityPose] §a貼り付けが完了しました！")
     return true

@@ -7,8 +7,10 @@ class BulletinTaskRegistry {
   private val tasks = mutableListOf<BukkitTask>()
 
   /** Adds a task to the registry. */
-  fun register(task: BukkitTask) {
-    tasks.add(task)
+  fun register(task: BukkitTask?) {
+    if (task != null) {
+      tasks.add(task)
+    }
   }
 
   /** Cancels all registered tasks and clears the registry. */

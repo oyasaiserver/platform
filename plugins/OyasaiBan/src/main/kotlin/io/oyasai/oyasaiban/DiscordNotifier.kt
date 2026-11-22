@@ -10,7 +10,7 @@ import org.slf4j.Logger
 class DiscordNotifier(
     private val webhookUrl: String,
     private val logger: Logger,
-) {
+) : AutoCloseable {
   private val http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build()
 
   fun sendBan(
@@ -23,9 +23,12 @@ class DiscordNotifier(
       logger.warn("BAN webhook URL is not set.")
       return
     }
+    val avatarTarget =
+        if (targetName.startsWith("uuid:", ignoreCase = true)) targetName.substringAfter(':')
+        else targetName
     val payload =
         """
-        {"embeds":[{"color":16711680,"thumbnail":{"url":"https://vzge.me/bust/${targetName.json()}?y=-40"},"title":"プレイヤーがBANされました","description":"対象: ${targetName.json()}","fields":[{"inline":true,"name":"執行","value":"${operator.json()}"},{"inline":true,"name":"期間","value":"${duration.json()}"},{"inline":false,"name":"理由","value":"${reason.json()}"}]}]}
+        {"embeds":[{"color":16711680,"thumbnail":{"url":"https://vzge.me/bust/${avatarTarget.json()}?y=-40"},"title":"プレイヤーがBANされました","description":"対象: ${targetName.json()}","fields":[{"inline":true,"name":"執行","value":"${operator.json()}"},{"inline":true,"name":"期間","value":"${duration.json()}"},{"inline":false,"name":"理由","value":"${reason.json()}"}]}]}
         """
             .trimIndent()
     val request =
@@ -63,5 +66,9 @@ class DiscordNotifier(
         else -> if (char.code < 0x20) append("\\u%04x".format(char.code)) else append(char)
       }
     }
+  }
+
+  override fun close() {
+    http.close()
   }
 }

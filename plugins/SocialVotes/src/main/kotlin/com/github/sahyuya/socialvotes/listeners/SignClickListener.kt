@@ -16,7 +16,9 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
 
 class SignClickListener : Listener {
@@ -107,6 +109,7 @@ class SignClickListener : Listener {
 
       sign.group = null
       group.signIds.remove(sign.id)
+      dm.recalculateGroupPlayerVotes(groupName)
       dm.save()
 
       NotifyUtil.success(p, "「${sign.name}」(ID:${sign.id}) をグループから除外しました。")
@@ -219,33 +222,50 @@ class SignClickListener : Listener {
   // ==================================================
   // GUI / Chat
   // ==================================================
+  private val guiTitles =
+      setOf(
+          SVLOGOSHORT + "簡易GUI",
+          SVLOGOSHORT + "詳細設定GUI",
+          SVLOGOSHORT + "投票結果",
+          SVLOGOSHORT + "投票者一覧",
+      )
+
   @EventHandler
   fun onInventoryClick(e: InventoryClickEvent) {
     val p = e.whoClicked as? Player ?: return
     val top = e.view.topInventory
+    val title = e.view.title
+    if (title !in guiTitles) return
 
-    when (e.view.title) {
-      SVLOGOSHORT + "簡易GUI" -> {
-        if (e.rawSlot < top.size) {
-          e.isCancelled = true
-          SimpleGUI.onClick(p, e.rawSlot)
-        }
-      }
-      SVLOGOSHORT + "詳細設定GUI" -> {
-        if (e.rawSlot < top.size) {
-          e.isCancelled = true
-          DetailGUI.onClick(p, e.rawSlot)
-        }
-      }
-      SVLOGOSHORT + "投票結果" -> {
-        e.isCancelled = true
-        ResultGUI.onClick(p, e.rawSlot)
-      }
-      SVLOGOSHORT + "投票者一覧" -> {
-        e.isCancelled = true
-        VoterListGUI.onClick(p, e.rawSlot)
-      }
+    e.isCancelled = true
+    if (e.rawSlot !in 0 until top.size) return
+
+    when (title) {
+      SVLOGOSHORT + "簡易GUI" -> SimpleGUI.onClick(p, e.rawSlot)
+      SVLOGOSHORT + "詳細設定GUI" -> DetailGUI.onClick(p, e.rawSlot)
+      SVLOGOSHORT + "投票結果" -> ResultGUI.onClick(p, e.rawSlot)
+      SVLOGOSHORT + "投票者一覧" -> VoterListGUI.onClick(p, e.rawSlot)
     }
+  }
+
+  @EventHandler
+  fun onInventoryDrag(e: InventoryDragEvent) {
+    if (e.view.title in guiTitles) {
+      e.isCancelled = true
+    }
+  }
+
+  @EventHandler
+  fun onQuit(e: PlayerQuitEvent) {
+    val uuid = e.player.uniqueId
+    AddModeManager.cancel(uuid)
+    RemoveModeManager.cancel(uuid)
+    UpdateModeManager.cancel(uuid)
+    com.github.sahyuya.socialvotes.ChatInput.cancel(uuid)
+    SimpleGUI.forget(uuid)
+    DetailGUI.forget(uuid)
+    ResultGUI.forget(uuid)
+    VoterListGUI.forget(uuid)
   }
 
   private fun cancelAllModesIfActive(p: Player, notify: Boolean = true) {

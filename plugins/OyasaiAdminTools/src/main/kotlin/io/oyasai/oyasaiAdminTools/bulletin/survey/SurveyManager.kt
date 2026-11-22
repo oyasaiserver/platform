@@ -42,11 +42,15 @@ object SurveyManager {
     plugin.db.saveSurveys(surveys)
   }
 
+  fun isSurveyOpen(survey: Survey, now: Long = System.currentTimeMillis()): Boolean {
+    return survey.enabled && (survey.expiresAt == null || survey.expiresAt > now)
+  }
+
   fun startAll() {
     val now = System.currentTimeMillis()
 
     surveys
-        .filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }
+        .filter { isSurveyOpen(it, now) }
         .forEach { survey ->
           val task =
               BulletinTimerHandler.startTimer(
@@ -74,10 +78,11 @@ object SurveyManager {
   }
 
   fun startLastAvailableSurvey(player: Player) {
+    val now = System.currentTimeMillis()
     val recentIds = surveyBroadcastHistory.reversed().distinct()
     for (id in recentIds) {
       val survey = surveys.find { it.id == id } ?: continue
-      if (!survey.enabled) continue
+      if (!isSurveyOpen(survey, now)) continue
 
       val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
       if (responseCount >= survey.maxResponses) continue
@@ -108,6 +113,10 @@ object SurveyManager {
 
   fun getProgress(uuid: UUID): SurveyProgress? = playerProgress[uuid]
 
+  fun cancelProgress(uuid: UUID) {
+    playerProgress.remove(uuid)
+  }
+
   fun startSurvey(player: Player, surveyId: String) {
     val survey =
         surveys.find { it.id == surveyId }
@@ -115,6 +124,11 @@ object SurveyManager {
               player.sendMessage("<red>アンケートが見つかりません。</red>".mm())
               return
             }
+
+    if (!isSurveyOpen(survey)) {
+      player.sendMessage("<red>このアンケートは現在実施されていません。</red>".mm())
+      return
+    }
 
     val hasAccess =
         survey.targetGroups.isEmpty() ||
@@ -127,6 +141,10 @@ object SurveyManager {
   }
 
   private fun proceedToStartSurvey(player: Player, survey: Survey) {
+    if (!isSurveyOpen(survey)) {
+      player.sendMessage("<red>このアンケートは現在実施されていません。</red>".mm())
+      return
+    }
     val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
     if (responseCount >= survey.maxResponses) {
       player.sendMessage("<red>このアンケートは既に上限回数（${survey.maxResponses}回）回答済みです。</red>".mm())
@@ -144,6 +162,11 @@ object SurveyManager {
   }
 
   fun showQuestion(player: Player, survey: Survey, index: Int) {
+    if (!isSurveyOpen(survey)) {
+      playerProgress.remove(player.uniqueId)
+      player.sendMessage("<red>このアンケートは現在実施されていません。</red>".mm())
+      return
+    }
     if (index >= survey.questions.size) {
       finishSurvey(player, survey)
       return
@@ -186,11 +209,13 @@ object SurveyManager {
       }
       QuestionType.WRITE_IN_BOOK -> {
         val hasBook =
-            player.inventory.contents.filterNotNull().any {
-              it.itemMeta
-                  ?.persistentDataContainer
-                  ?.has(surveyBookKey, org.bukkit.persistence.PersistentDataType.BYTE) == true
-            }
+            (player.inventory.contents.filterNotNull() +
+                    listOf(player.inventory.itemInOffHand, player.itemOnCursor))
+                .any {
+                  it.itemMeta
+                      ?.persistentDataContainer
+                      ?.has(surveyBookKey, org.bukkit.persistence.PersistentDataType.BYTE) == true
+                }
 
         if (hasBook) {
           player.sendMessage("<yellow>既にアンケート回答用の本を持っています。インベントリを確認してください。</yellow>".mm())
@@ -257,8 +282,27 @@ object SurveyManager {
     }
 
     val survey = surveys.find { it.id == progress.surveyId } ?: return
+    if (!isSurveyOpen(survey)) {
+      playerProgress.remove(player.uniqueId)
+      player.sendMessage("<red>このアンケートは現在実施されていません。</red>".mm())
+      return
+    }
 
+    val question = survey.questions.getOrNull(questionIndex) ?: return
     val cleanAnswer = plainSerializer.serialize(miniMessage.deserialize(answer))
+
+    if (
+        question.type == QuestionType.CLICK_TO_ANSWER || question.type == QuestionType.CHAT_CHOICE
+    ) {
+      val validOption =
+          question.options.any { opt ->
+            opt == answer || plainSerializer.serialize(miniMessage.deserialize(opt)) == cleanAnswer
+          }
+      if (!validOption) {
+        player.sendMessage("<red>無効な選択肢です。</red>".mm())
+        return
+      }
+    }
 
     progress.answers.add(cleanAnswer)
     showQuestion(player, survey, progress.currentQuestionIndex + 1)
@@ -267,6 +311,11 @@ object SurveyManager {
   fun handleNumericAnswer(player: Player, index1Based: Int) {
     val progress = playerProgress[player.uniqueId] ?: return
     val survey = surveys.find { it.id == progress.surveyId } ?: return
+    if (!isSurveyOpen(survey)) {
+      playerProgress.remove(player.uniqueId)
+      player.sendMessage("<red>このアンケートは現在実施されていません。</red>".mm())
+      return
+    }
     val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
 
     if (
@@ -284,6 +333,11 @@ object SurveyManager {
   fun handleTextAnswer(player: Player, text: String) {
     val progress = playerProgress[player.uniqueId] ?: return
     val survey = surveys.find { it.id == progress.surveyId } ?: return
+    if (!isSurveyOpen(survey)) {
+      playerProgress.remove(player.uniqueId)
+      player.sendMessage("<red>このアンケートは現在実施されていません。</red>".mm())
+      return
+    }
     val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
 
     if (question.type == QuestionType.WRITE_IN_BOOK) {
@@ -294,6 +348,11 @@ object SurveyManager {
   }
 
   private fun finishSurvey(player: Player, survey: Survey) {
+    if (!isSurveyOpen(survey)) {
+      playerProgress.remove(player.uniqueId)
+      player.sendMessage("<red>このアンケートは現在実施されていません。</red>".mm())
+      return
+    }
     val progress = playerProgress.remove(player.uniqueId) ?: return
 
     val currentCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)

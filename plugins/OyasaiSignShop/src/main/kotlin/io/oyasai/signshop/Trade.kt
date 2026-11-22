@@ -121,3 +121,136 @@ internal class Trade(
         MoneyResult.UNKNOWN
       }
 }
+
+internal interface AsyncTradeFunds {
+  fun withdraw(account: String, yen: Long, onResult: (MoneyResult) -> Unit)
+
+  fun deposit(account: String, yen: Long, onResult: (MoneyResult) -> Unit)
+}
+
+/**
+ * Non-blocking equivalent of [Trade] that awaits asynchronous economy completions via callbacks.
+ */
+internal class AsyncTrade(
+    private val journal: TradeJournal,
+    private val funds: AsyncTradeFunds,
+    private val stock: () -> StockResult,
+) {
+  fun execute(
+      kind: String,
+      buyer: String,
+      owner: String,
+      yen: Long,
+      onComplete: (TradeResult) -> Unit,
+  ) {
+    val legs =
+        when (kind) {
+          "Buy",
+          "Device" -> listOf(Leg(buyer, false), Leg(owner, true))
+          "Sell" -> listOf(Leg(owner, false), Leg(buyer, true))
+          "iBuy" -> listOf(Leg(buyer, false))
+          "iSell" -> listOf(Leg(buyer, true))
+          else -> error("不明な店の種類")
+        }
+    val id = journal.begin()
+    val completed = mutableListOf<Leg>()
+
+    fun stop(reason: String, compensationFailed: Boolean = false) {
+      journal.halt(id, reason)
+      if (compensationFailed) {
+        runCatching { journal.finish(id, "compensation_failed", reason, reason) }
+      }
+      onComplete(TradeResult.HALTED)
+    }
+
+    fun compensate(detail: String, haltAfter: Boolean = false) {
+      val toReverse = completed.asReversed()
+      fun reverseAt(index: Int) {
+        if (index >= toReverse.size) {
+          val outcome =
+              try {
+                journal.finish(
+                    id,
+                    if (completed.isEmpty()) "failed" else "compensated",
+                    detail,
+                    if (haltAfter) detail else null,
+                )
+                if (haltAfter) {
+                  journal.halt(id, detail)
+                  TradeResult.HALTED
+                } else TradeResult.FAILED
+              } catch (_: Exception) {
+                journal.halt(id, "終状態の保存失敗")
+                TradeResult.HALTED
+              }
+          onComplete(outcome)
+          return
+        }
+        val leg = toReverse[index].copy(deposit = !toReverse[index].deposit)
+        callFund(leg, yen) { res ->
+          if (res != MoneyResult.OK) {
+            stop("取り消し失敗: $detail", true)
+          } else {
+            reverseAt(index + 1)
+          }
+        }
+      }
+      reverseAt(0)
+    }
+
+    fun runStock() {
+      try {
+        when (stock()) {
+          StockResult.OK -> {
+            try {
+              journal.finish(id, "success", "取引完了")
+              onComplete(TradeResult.SUCCESS)
+            } catch (_: Exception) {
+              stop("終状態の保存失敗")
+            }
+          }
+          StockResult.RESTORED -> compensate("品物移動失敗・スロット復元済み")
+          StockResult.RESTORED_HALT -> compensate("レバーの外部作用を要確認", true)
+          StockResult.UNKNOWN -> stop("品物の復元結果不明")
+        }
+      } catch (e: Exception) {
+        stop("取引例外: ${e.javaClass.simpleName}")
+      }
+    }
+
+    fun runLeg(index: Int) {
+      if (yen <= 0 || index >= legs.size) {
+        runStock()
+        return
+      }
+      val leg = legs[index]
+      callFund(leg, yen) { res ->
+        when (res) {
+          MoneyResult.OK -> {
+            completed.add(leg)
+            runLeg(index + 1)
+          }
+          MoneyResult.FAILED -> compensate("入出金失敗")
+          MoneyResult.UNKNOWN -> stop("入出金結果不明")
+        }
+      }
+    }
+
+    try {
+      runLeg(0)
+    } catch (e: Exception) {
+      stop("取引例外: ${e.javaClass.simpleName}")
+    }
+  }
+
+  private fun callFund(leg: Leg, yen: Long, onResult: (MoneyResult) -> Unit) {
+    try {
+      if (leg.deposit) funds.deposit(leg.account, yen, onResult)
+      else funds.withdraw(leg.account, yen, onResult)
+    } catch (_: Exception) {
+      onResult(MoneyResult.UNKNOWN)
+    }
+  }
+
+  private data class Leg(val account: String, val deposit: Boolean)
+}

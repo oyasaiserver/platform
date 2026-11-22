@@ -499,7 +499,8 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
         )
   }
 
-  @EventHandler fun onTeleport(event: PlayerTeleportEvent) = stop(event.player, false)
+  @EventHandler(ignoreCancelled = true)
+  fun onTeleport(event: PlayerTeleportEvent) = stop(event.player, false)
 
   @EventHandler fun onWorldChange(event: PlayerChangedWorldEvent) = stop(event.player, false)
 
@@ -507,9 +508,10 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
 
   @EventHandler fun onDeath(event: PlayerDeathEvent) = stop(event.entity, false)
 
-  @EventHandler fun onGameMode(event: PlayerGameModeChangeEvent) = stop(event.player, true)
+  @EventHandler(ignoreCancelled = true)
+  fun onGameMode(event: PlayerGameModeChangeEvent) = stop(event.player, true)
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun onFlight(event: PlayerToggleFlightEvent) {
     if (event.isFlying) stop(event.player, true)
   }

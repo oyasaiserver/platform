@@ -13,7 +13,15 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.enchantment.EnchantItemEvent
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent
 import org.bukkit.event.inventory.CraftItemEvent
+import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryDragEvent
+import org.bukkit.event.inventory.InventoryMoveItemEvent
+import org.bukkit.event.inventory.InventoryType
+import org.bukkit.event.inventory.PrepareAnvilEvent
+import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -50,9 +58,27 @@ class MenuItem(
       return true
     }
     if (args.isNotEmpty()) return false
+    if (hasMenuItem(sender)) {
+      sender.sendMessage(" §8► §cYou already have the menu item!")
+      return true
+    }
     giveItem(sender, copyItem(item))
     sender.sendMessage(" §8► §aYou have received menu item!")
     return true
+  }
+
+  internal fun hasMenuItem(player: Player): Boolean {
+    val template = item
+    val inv = runCatching { player.inventory }.getOrNull() ?: return false
+    val contents = runCatching { inv.contents }.getOrNull()
+    if (contents?.any { it != null && matches(it, template) } == true) return true
+    val offhand = runCatching { inv.itemInOffHand }.getOrNull()
+    if (offhand != null && matches(offhand, template)) return true
+    val cursor = runCatching { player.itemOnCursor }.getOrNull()
+    if (cursor != null && matches(cursor, template)) return true
+    val enderContents = runCatching { player.enderChest.contents }.getOrNull()
+    if (enderContents?.any { it != null && matches(it, template) } == true) return true
+    return false
   }
 
   @EventHandler
@@ -61,13 +87,24 @@ class MenuItem(
   }
 
   internal fun giveOnFirstJoin(player: Player) {
-    if (!player.hasPlayedBefore()) giveItem(player, copyItem(item))
+    if (!player.hasPlayedBefore() && !hasMenuItem(player)) giveItem(player, copyItem(item))
   }
 
   @EventHandler
   fun onRightClick(event: PlayerInteractEvent) {
     if (event.action != Action.RIGHT_CLICK_AIR && event.action != Action.RIGHT_CLICK_BLOCK) return
-    if (activate(event.player)) event.isCancelled = true
+    if (activate(event.player)) {
+      event.isCancelled = true
+      return
+    }
+    val eventItem = event.item
+    val offhand = runCatching { event.player.inventory.itemInOffHand }.getOrNull()
+    if (
+        (eventItem != null && matches(eventItem, item)) ||
+            (offhand != null && matches(offhand, item))
+    ) {
+      event.isCancelled = true
+    }
   }
 
   @EventHandler
@@ -103,6 +140,72 @@ class MenuItem(
     }
   }
 
+  @EventHandler
+  fun onPrepareCraft(event: PrepareItemCraftEvent) {
+    if (event.inventory.matrix.any { it != null && matches(it, item) }) {
+      event.inventory.result = null
+    }
+  }
+
+  @EventHandler
+  fun onPrepareAnvil(event: PrepareAnvilEvent) {
+    if (event.inventory.contents.any { it != null && matches(it, item) }) {
+      event.result = null
+    }
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onPrepareEnchant(event: PrepareItemEnchantEvent) {
+    if (matches(event.item, item)) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onEnchant(event: EnchantItemEvent) {
+    if (matches(event.item, item)) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onInventoryMoveItem(event: InventoryMoveItemEvent) {
+    if (matches(event.item, item)) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onInventoryClick(event: InventoryClickEvent) {
+    val topType = event.view.topInventory.type
+    if (topType !in restrictedInventoryTypes) return
+    val current = event.currentItem
+    val cursor = event.cursor
+    val hotbar =
+        if (event.hotbarButton >= 0) event.whoClicked.inventory.getItem(event.hotbarButton)
+        else null
+    val involvesMenuBook =
+        (current != null && matches(current, item)) ||
+            matches(cursor, item) ||
+            (hotbar != null && matches(hotbar, item)) ||
+            event.view.topInventory.contents.any { it != null && matches(it, item) }
+    if (involvesMenuBook) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val top = event.view.topInventory
+    if (top.type !in restrictedInventoryTypes) return
+    val oldCursor = event.oldCursor
+    if (matches(oldCursor, item) || event.newItems.values.any { matches(it, item) }) {
+      if (event.rawSlots.any { it < top.size }) {
+        event.isCancelled = true
+      }
+    }
+  }
+
   internal fun cancelCraft(
       contents: Array<out ItemStack?>,
       sendMessage: (String) -> Unit,
@@ -116,6 +219,21 @@ class MenuItem(
   private fun giveItem(player: Player, stack: ItemStack) {
     player.inventory.addItem(stack).values.forEach {
       player.world.dropItemNaturally(player.location, it)
+    }
+  }
+
+  companion object {
+    private val restrictedInventoryTypes: Set<InventoryType> by lazy {
+      setOf(
+          InventoryType.ANVIL,
+          InventoryType.ENCHANTING,
+          InventoryType.LECTERN,
+          InventoryType.CHISELED_BOOKSHELF,
+          InventoryType.CRAFTER,
+          InventoryType.GRINDSTONE,
+          InventoryType.CARTOGRAPHY,
+          InventoryType.SMITHING,
+      )
     }
   }
 }

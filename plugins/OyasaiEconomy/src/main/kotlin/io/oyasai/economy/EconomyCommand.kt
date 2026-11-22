@@ -197,9 +197,21 @@ internal class EconomyCommand(
               "oyasaieconomy.$currency.${if (verb in listOf("balance", "pay", "top")) verb else "admin"}"
           ) && verb.startsWith(args[0], true)
         }
-    val verb = shortcut ?: args.firstOrNull()
+    val verb = shortcut ?: args.firstOrNull()?.lowercase()
     val index = if (shortcut == null) 2 else 1
-    if (args.size == index && verb in listOf("balance", "pay", "give", "take", "set", "reset"))
+    val canCompleteTarget =
+        when (verb) {
+          "balance" ->
+              sender.hasPermission("oyasaieconomy.$currency.balance") &&
+                  sender.hasPermission("oyasaieconomy.$currency.balance.others")
+          "pay" -> sender.hasPermission("oyasaieconomy.$currency.pay")
+          "give",
+          "take",
+          "set",
+          "reset" -> sender.hasPermission("oyasaieconomy.$currency.admin")
+          else -> false
+        }
+    if (args.size == index && canCompleteTarget)
         return owner.database.ledgers
             .getValue(currency)
             .snapshot()
