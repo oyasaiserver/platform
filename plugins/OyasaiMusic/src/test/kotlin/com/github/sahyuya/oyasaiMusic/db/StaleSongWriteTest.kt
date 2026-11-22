@@ -16,6 +16,27 @@ class StaleSongWriteTest {
   @TempDir lateinit var directory: Path
 
   @Test
+  fun `playlist creation respects the per-owner capacity and frees space on deletion`() {
+    val db = DatabaseManager(directory.resolve("music.db").toFile())
+    db.connect()
+    try {
+      val owner = UUID.randomUUID()
+      val playlists = PlaylistRepository(db)
+      val ids = List(198) { assertNotNull(playlists.create(owner, "playlist $it")) }
+
+      assertNull(playlists.create(owner, "over capacity"))
+      assertEquals(ids, playlists.listByOwner(owner).map { it.id })
+      assertNotNull(playlists.create(UUID.randomUUID(), "another owner"))
+
+      playlists.delete(ids.first())
+      assertNotNull(playlists.create(owner, "replacement"))
+      assertEquals(198, playlists.listByOwner(owner).size)
+    } finally {
+      db.close()
+    }
+  }
+
+  @Test
   fun `deleted songs and reused IDs do not receive stale writes`() {
     val db = DatabaseManager(directory.resolve("music.db").toFile())
     db.connect()
@@ -26,7 +47,7 @@ class StaleSongWriteTest {
       val social = SocialRepository(db)
       val preferences = PlaybackPreferenceRepository(db)
       val playlists = PlaylistRepository(db)
-      val playlist = playlists.create(listener, "test")
+      val playlist = assertNotNull(playlists.create(listener, "test"))
       val id = songs.insertDraft(owner, "original", 120, "MUSIC_DISC_13", 0, "original.bin")
       val identity = assertNotNull(songs.findById(id)).recordIdentity
       fun registerView(identity: String) =

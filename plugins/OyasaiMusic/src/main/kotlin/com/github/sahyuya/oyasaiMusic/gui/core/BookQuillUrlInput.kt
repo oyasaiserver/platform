@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.server.PluginDisableEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitTask
@@ -48,7 +47,6 @@ object BookQuillUrlInput {
   fun open(
       plugin: Plugin,
       player: Player,
-      guideText: String = "参考URLを1ページ目に入力して「完了」を押してください。",
       onSubmit: (String) -> Unit,
   ) {
     installListenerOnce(plugin)
@@ -71,15 +69,15 @@ object BookQuillUrlInput {
         )
     val book = ItemStack(Material.WRITABLE_BOOK)
     book.editMeta { meta ->
-      (meta as BookMeta).addPage(guideText)
       meta.persistentDataContainer.set(key, PersistentDataType.STRING, session.token)
     }
     pending[player.uniqueId] = session
+    player.closeInventory()
     player.inventory.setItem(bookSlot, book)
     player.inventory.heldItemSlot = bookSlot
     player.updateInventory()
     ensureSweep(plugin)
-    player.sendMessage("§a本を右クリックして開き、URLを入力後「完了」を押してください。")
+    player.sendMessage("§a本を右クリックして開き、1ページ目に参考URLを入力後「完了」を押してください。")
   }
 
   /** Only inspect players actually awaiting input; stop polling when no requests remain. */
@@ -133,8 +131,6 @@ object BookQuillUrlInput {
             session.completing = true
             val text =
                 if (event.newBookMeta.pageCount > 0) event.newBookMeta.getPage(1).trim() else ""
-            removeBook(player, session.token)
-            player.inventory.heldItemSlot = session.previousHeldSlot
             Bukkit.getScheduler()
                 .runTask(
                     plugin,
@@ -145,8 +141,10 @@ object BookQuillUrlInput {
                         pending.remove(player.uniqueId)
                         if (!player.isOnline) return@Runnable
                         removeBook(player, session.token)
+                        player.inventory.heldItemSlot = session.previousHeldSlot
                         player.updateInventory()
                         if (text.isNotEmpty()) session.onSubmit(text)
+                        else player.sendMessage("§e参考URLが空のため、変更しませんでした。")
                       }
                     },
                 )

@@ -2,6 +2,7 @@ package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.AddSongResult
+import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.Companion.MAX_PLAYLISTS
 import com.github.sahyuya.oyasaiMusic.model.Playlist
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -24,10 +25,21 @@ class FavoritesPlaylistsScreen(
     // サヒュヤ氏の指示: 5×8フル(40スロット)、slot1(左上)から詰めて表示する。
     val SLOTS: List<Int> = ContentGrid.SLOTS
     private const val FAVORITES_INDEX = 1 // SLOTS[0] は常に「お気に入り」固定
-    val MAX_PLAYLISTS: Int = SLOTS.size - FAVORITES_INDEX - 1
+    private const val FIXED_SLOTS = 2
   }
 
   private var playlists: List<Playlist> = emptyList()
+  private var favoriteCount = -1
+  private var page = 0
+  private val canCreate: Boolean
+    get() = playlists.size < MAX_PLAYLISTS
+
+  private val createIndex: Int
+    get() = FIXED_SLOTS + playlists.size
+
+  private val lastPage
+    get() = (createIndex - if (canCreate) 0 else 1) / SLOTS.size
+
   private var pendingDeletePlaylistId: Long? = null
 
   init {
@@ -50,7 +62,9 @@ class FavoritesPlaylistsScreen(
                       Runnable {
                         if (!viewer.isOnline) return@Runnable
                         playlists = list
-                        render(favoriteCount)
+                        this.favoriteCount = favoriteCount
+                        page = page.coerceAtMost(lastPage)
+                        render()
                         // Anvil入力等を経由してGUIが一旦閉じられていた場合のみ、別画面へ遷移していなければ再表示する。
                         if (
                             reopen &&
@@ -65,7 +79,7 @@ class FavoritesPlaylistsScreen(
         )
   }
 
-  private fun render(favoriteCount: Int = -1) {
+  private fun render() {
     val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
     GuiChrome.render(
         inventory,
@@ -76,31 +90,29 @@ class FavoritesPlaylistsScreen(
         plugin = plugin,
         actionModeCategory = ActionModeCategory.PLAYLIST_LIST,
     )
-    SLOTS.forEach { inventory.setItem(it, null) }
-
-    inventory.setItem(
-        SLOTS[0],
-        GuiItemBuilder(Material.RED_BUNDLE)
-            .name(Component.text("ストレージ", NamedTextColor.RED))
-            .lore(Component.text("レコード専用・最大20ページ", NamedTextColor.GRAY))
-            .build(),
-    )
-    inventory.setItem(SLOTS[FAVORITES_INDEX], favoritesIcon(favoriteCount))
-
-    playlists.forEachIndexed { i, playlist ->
-      val slotIndex = FAVORITES_INDEX + 1 + i
-      if (slotIndex < SLOTS.size) inventory.setItem(SLOTS[slotIndex], playlistIcon(playlist))
-    }
-
-    val createIndex = FAVORITES_INDEX + 1 + playlists.size
-    if (createIndex < SLOTS.size && playlists.size < MAX_PLAYLISTS) {
+    SLOTS.forEachIndexed { index, slot ->
+      val globalIndex = page * SLOTS.size + index
       inventory.setItem(
-          SLOTS[createIndex],
-          GuiItemBuilder(Material.WRITABLE_BOOK)
-              .name(Component.text("+ 新規プレイリスト作成", NamedTextColor.GREEN))
-              .build(),
+          slot,
+          when {
+            globalIndex == 0 ->
+                GuiItemBuilder(Material.RED_BUNDLE)
+                    .name(Component.text("ストレージ", NamedTextColor.RED))
+                    .lore(Component.text("レコード専用・最大20ページ", NamedTextColor.GRAY))
+                    .build()
+            globalIndex == FAVORITES_INDEX -> favoritesIcon(favoriteCount)
+            globalIndex < createIndex -> playlistIcon(playlists[globalIndex - FIXED_SLOTS])
+            globalIndex == createIndex && canCreate ->
+                GuiItemBuilder(Material.WRITABLE_BOOK)
+                    .name(Component.text("+ 新規プレイリスト作成", NamedTextColor.GREEN))
+                    .build()
+            else -> null
+          },
       )
     }
+
+    if (page == 0) inventory.setItem(ControllerSlots.PAGE_PREV, null)
+    if (page == lastPage) inventory.setItem(ControllerSlots.PAGE_NEXT, null)
   }
 
   private fun favoritesIcon(favoriteCount: Int) =
@@ -139,6 +151,15 @@ class FavoritesPlaylistsScreen(
 
   override fun onClick(event: InventoryClickEvent) {
     val slot = event.rawSlot
+    if (slot == ControllerSlots.PAGE_PREV || slot == ControllerSlots.PAGE_NEXT) {
+      val nextPage = page + if (slot == ControllerSlots.PAGE_NEXT) 1 else -1
+      if (nextPage in 0..lastPage) {
+        page = nextPage
+        pendingDeletePlaylistId = null
+        render()
+      }
+      return
+    }
     if (
         NavTabRouter.handle(
             slot,
@@ -152,8 +173,9 @@ class FavoritesPlaylistsScreen(
         return
     if (plugin.playbackController.handleControllerClick(slot, viewer)) return
 
-    val index = SLOTS.indexOf(slot)
-    if (index == -1) return
+    val slotIndex = SLOTS.indexOf(slot)
+    if (slotIndex == -1) return
+    val index = page * SLOTS.size + slotIndex
 
     if (index == 0) {
       menuManager.open(viewer, RecordStorageScreen(plugin, menuManager, viewer))
@@ -165,10 +187,10 @@ class FavoritesPlaylistsScreen(
       return
     }
 
-    val playlistIndex = index - FAVORITES_INDEX - 1
+    val playlistIndex = index - FIXED_SLOTS
     val playlist = playlists.getOrNull(playlistIndex)
     if (playlist == null) {
-      if (index == FAVORITES_INDEX + 1 + playlists.size) createPlaylist()
+      if (index == createIndex && canCreate) createPlaylist()
       return
     }
     if (playlist.id != pendingDeletePlaylistId) pendingDeletePlaylistId = null
@@ -188,32 +210,20 @@ class FavoritesPlaylistsScreen(
   }
 
   private fun createPlaylist() {
-    if (playlists.size >= MAX_PLAYLISTS) {
-      GuiFeedback.invalid(viewer, "プレイリストは最大${MAX_PLAYLISTS}個まで作成できます")
-      return
-    }
     AnvilTextInputSession.open(plugin, viewer, Component.text("新しいプレイリスト名")) { name ->
       Bukkit.getScheduler()
           .runTaskAsynchronously(
               plugin,
               Runnable {
-                if (plugin.playlistRepository.listByOwner(viewer.uniqueId).size >= MAX_PLAYLISTS) {
-                  Bukkit.getScheduler()
-                      .runTask(
-                          plugin,
-                          Runnable {
-                            viewer.sendMessage("§cプレイリストは最大${MAX_PLAYLISTS}個まで作成できます。")
-                            reload(reopen = true)
-                          },
-                      )
-                  return@Runnable
-                }
-                plugin.playlistRepository.create(viewer.uniqueId, name)
+                val created = plugin.playlistRepository.create(viewer.uniqueId, name) != null
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
                         Runnable {
-                          viewer.sendMessage("§aプレイリスト「$name」を作成しました。")
+                          viewer.sendMessage(
+                              if (created) "§aプレイリスト「$name」を作成しました。"
+                              else "§cプレイリストは最大${MAX_PLAYLISTS}個まで作成できます。"
+                          )
                           reload(reopen = true)
                         },
                     )
@@ -296,10 +306,11 @@ class FavoritesPlaylistsScreen(
                     .runTaskAsynchronously(
                         plugin,
                         Runnable {
-                          if (
-                              plugin.playlistRepository.listByOwner(target.uniqueId).size >=
-                                  MAX_PLAYLISTS
-                          ) {
+                          val songs =
+                              plugin.playlistRepository.listSongs(requireNotNull(playlist.id))
+                          val newPlaylistId =
+                              plugin.playlistRepository.create(target.uniqueId, playlist.name)
+                          if (newPlaylistId == null) {
                             Bukkit.getScheduler()
                                 .runTask(
                                     plugin,
@@ -312,10 +323,6 @@ class FavoritesPlaylistsScreen(
                                 )
                             return@Runnable
                           }
-                          val songs =
-                              plugin.playlistRepository.listSongs(requireNotNull(playlist.id))
-                          val newPlaylistId =
-                              plugin.playlistRepository.create(target.uniqueId, playlist.name)
                           val copied =
                               songs.count { song ->
                                 song.id?.let {
