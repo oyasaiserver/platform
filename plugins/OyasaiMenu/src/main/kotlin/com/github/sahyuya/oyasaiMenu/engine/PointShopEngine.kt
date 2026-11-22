@@ -12,7 +12,6 @@ import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.makeItem
 import org.bukkit.Bukkit
-import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -36,10 +35,6 @@ import org.bukkit.inventory.ItemStack
 class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
 
   fun openShop(player: Player, categoryId: String, page: Int = 0) {
-    if (player.gameMode == GameMode.CREATIVE) {
-      player.sendMessage(c("&cクリエイティブモードではポイントショップを使用できません。"))
-      return
-    }
     if (!TokenCurrencyManager.isAvailable) {
       player.sendMessage(c("&cポイントショップには OyasaiEconomy が必要です。"))
       return
@@ -177,11 +172,6 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
     event.isCancelled = true
-    if (player.gameMode == GameMode.CREATIVE) {
-      player.sendMessage(c("&cクリエイティブモードではポイントショップを使用できません。"))
-      player.closeInventory()
-      return
-    }
     if (CooldownManager.isClickOnCooldown(player.uniqueId)) return
     val slot = event.rawSlot
     val category = plugin.pointShopLoader.getCategory(state.categoryId) ?: return
@@ -222,10 +212,6 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       state: PlayerPointShopState,
       category: PointShopCategory,
   ) {
-    if (player.gameMode == GameMode.CREATIVE) {
-      player.sendMessage(c("&cクリエイティブモードではポイントショップを使用できません。"))
-      return
-    }
     val err = if (item.cost > 0) TokenCurrencyManager.removeTokens(player, item.cost) else null
     if (err != null) {
       player.sendMessage(c(err))
