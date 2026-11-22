@@ -17,18 +17,25 @@ import java.util.UUID
  */
 class PlaylistRepository(private val db: DatabaseManager) {
 
-  fun create(ownerUuid: UUID, name: String): Long =
+  companion object {
+    const val MAX_PLAYLISTS = 5 * 40 - 2
+  }
+
+  fun create(ownerUuid: UUID, name: String): Long? =
       db.transaction { conn ->
         conn
             .prepareStatement(
-                "INSERT INTO playlists (owner_uuid, name, created_at) VALUES (?, ?, ?)",
+                "INSERT INTO playlists (owner_uuid, name, created_at) SELECT ?, ?, ? " +
+                    "WHERE (SELECT COUNT(*) FROM playlists WHERE owner_uuid = ?) < ?",
                 Statement.RETURN_GENERATED_KEYS,
             )
             .use { ps ->
               ps.setBytes(1, UuidUtil.toBytes(ownerUuid))
               ps.setString(2, name)
               ps.setLong(3, System.currentTimeMillis() / 1000)
-              ps.executeUpdate()
+              ps.setBytes(4, UuidUtil.toBytes(ownerUuid))
+              ps.setInt(5, MAX_PLAYLISTS)
+              if (ps.executeUpdate() == 0) return@transaction null
               ps.generatedKeys.use { keys ->
                 if (keys.next()) keys.getLong(1) else error("プレイリストIDの採番に失敗しました")
               }
@@ -57,7 +64,7 @@ class PlaylistRepository(private val db: DatabaseManager) {
         conn
             .prepareStatement(
                 "SELECT p.*, (SELECT COUNT(*) FROM playlist_songs ps WHERE ps.playlist_id = p.id) AS song_count " +
-                    "FROM playlists p WHERE p.owner_uuid = ? ORDER BY p.created_at ASC"
+                    "FROM playlists p WHERE p.owner_uuid = ? ORDER BY p.created_at ASC, p.id ASC"
             )
             .use { ps ->
               ps.setBytes(1, UuidUtil.toBytes(ownerUuid))

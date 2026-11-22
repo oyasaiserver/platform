@@ -350,7 +350,15 @@ class SongSettingsScreen(
             ActionMode.TERTIARY -> startCircuitReplacement()
             ActionMode.QUATERNARY -> reloadFromClipboard(grid = false)
           }
-      urlSlot -> editUrl()
+      urlSlot ->
+          Bukkit.getScheduler()
+              .runTask(
+                  plugin,
+                  Runnable {
+                    if (viewer.isOnline && viewer.openInventory.topInventory === inventory)
+                        editUrl()
+                  },
+              )
       publishSlot ->
           when (resolveAction(event)) {
             ActionMode.PRIMARY -> togglePublish(false)
