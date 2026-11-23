@@ -179,8 +179,10 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
         env: envs({
           MEMORY: this.isMaster
-            ? // On-prem has 64GB
-              "28G"
+            ? // On-prem has 64GB. ZGC heaps count as shared memory and can
+              // only go to swap, so keep the on-prem heap total (main 26 +
+              // survival 4 + axiom 6 + velocity 4 + lobby 2) at 42G or less.
+              "26G"
             : // GitHub Action runners have 16G
               "10G",
           RCON_PASSWORD: randoms.rconPassword.result,
@@ -247,7 +249,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         networksAdvanced: [network],
         env: envs({
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
-          MEMORY: this.isMaster ? "8G" : "1G",
+          MEMORY: this.isMaster ? "6G" : "1G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
           RCON_PASSWORD: randoms.rconPassword.result,
         }),
@@ -275,7 +277,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         networksAdvanced: [network],
         env: envs({
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
-          MEMORY: this.isMaster ? "8G" : "1G",
+          MEMORY: this.isMaster ? "4G" : "1G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
           RCON_PASSWORD: randoms.rconPassword.result,
         }),
