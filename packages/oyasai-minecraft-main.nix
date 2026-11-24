@@ -75,6 +75,7 @@ oyasaiPurpur rec {
     socialvotes
     viaversion
     worldguard
+    zombies
     # keep-sorted end
   ];
 }
