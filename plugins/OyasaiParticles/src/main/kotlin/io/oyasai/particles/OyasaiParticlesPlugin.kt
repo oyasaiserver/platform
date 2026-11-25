@@ -50,7 +50,14 @@ class OyasaiParticlesPlugin : JavaPlugin() {
     val pm = server.pluginManager
     pm.registerEvents(ItemProtectionListener(itemFactory), this)
     pm.registerEvents(
-        WandAndItemUseListener(itemFactory, selectionManager, areaService, limitValidator),
+        WandAndItemUseListener(
+            itemFactory,
+            selectionManager,
+            areaService,
+            limitValidator,
+            visualizer,
+            guiManager,
+        ),
         this,
     )
     pm.registerEvents(PlayerStateListener(renderEngine, visualizer, selectionManager), this)

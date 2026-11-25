@@ -1,5 +1,7 @@
 package io.oyasai.particles.listener
 
+import io.oyasai.particles.engine.AreaVisualizer
+import io.oyasai.particles.gui.AreaGuiManager
 import io.oyasai.particles.item.ParticleItemFactory
 import io.oyasai.particles.model.ShapeMode
 import io.oyasai.particles.selection.AreaLimitValidator
@@ -22,22 +24,40 @@ class WandAndItemUseListener(
     private val selectionManager: SelectionManager,
     private val areaService: AreaService,
     private val limitValidator: AreaLimitValidator,
+    private val visualizer: AreaVisualizer,
+    private val guiManager: AreaGuiManager,
 ) : Listener {
 
   @EventHandler(priority = EventPriority.NORMAL)
   fun onInteract(event: PlayerInteractEvent) {
-    val item = event.item ?: return
-    val isWand = itemFactory.isWand(item)
-    val effectConfig = if (isWand) null else itemFactory.parseEffectItem(item)
-    if (!isWand && effectConfig == null) return
+    val player = event.player
+    val item = event.item
+    val isWand = item != null && itemFactory.isWand(item)
+    val effectConfig = if (item != null && !isWand) itemFactory.parseEffectItem(item) else null
 
     // オフハンドの二重発火を抑止する
     if (event.hand != EquipmentSlot.HAND) {
-      event.isCancelled = true
+      if (isWand || effectConfig != null) {
+        event.isCancelled = true
+      }
       return
     }
 
-    val player = event.player
+    // 可視化中に中心の白いパーティクルを狙って Shift + 右クリックで直接設定GUIを開く
+    if (
+        player.isSneaking &&
+            (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK)
+    ) {
+      val targetArea = visualizer.findTargetedAreaCenter(player)
+      if (targetArea != null) {
+        event.isCancelled = true
+        guiManager.openEditor(player, targetArea)
+        return
+      }
+    }
+
+    if (item == null || (!isWand && effectConfig == null)) return
+
     event.isCancelled = true
 
     if (isWand) {

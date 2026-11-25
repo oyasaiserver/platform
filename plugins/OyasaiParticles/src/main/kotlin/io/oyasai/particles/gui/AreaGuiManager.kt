@@ -45,6 +45,9 @@ class AreaGuiManager(
     const val SLOT_BACK = 29
     const val SLOT_RECLAIM = 31
     const val SLOT_DELETE = 33
+
+    const val OPTION_SIZE = 36
+    const val SLOT_OPTION_BACK = 31
   }
 
   fun openList(player: Player, showAll: Boolean = false, page: Int = 0) {
@@ -171,40 +174,52 @@ class AreaGuiManager(
 
     when (slot) {
       SLOT_PARTICLE -> {
-        resetConfirmFlags(holder)
-        val next = if (isRightClick) ParticlePreset.NONE else area.effect.particle.next()
-        val updated =
-            areaService.updateArea(area.id, player.uniqueId, player.name) {
-              it.copy(effect = it.effect.copy(particle = next))
-            } ?: return
-        renderEditorInventory(inv, holder, updated)
+        if (isRightClick) {
+          resetConfirmFlags(holder)
+          val updated =
+              areaService.updateArea(area.id, player.uniqueId, player.name) {
+                it.copy(effect = it.effect.copy(particle = ParticlePreset.NONE))
+              } ?: return
+          renderEditorInventory(inv, holder, updated)
+        } else {
+          openOptionSelector(player, area, EffectSelectionCategory.PARTICLE, holder.returnShowAll)
+        }
       }
       SLOT_WEATHER -> {
-        resetConfirmFlags(holder)
-        val next = if (isRightClick) PseudoWeather.NONE else area.effect.weather.next()
-        val updated =
-            areaService.updateArea(area.id, player.uniqueId, player.name) {
-              it.copy(effect = it.effect.copy(weather = next))
-            } ?: return
-        renderEditorInventory(inv, holder, updated)
+        if (isRightClick) {
+          resetConfirmFlags(holder)
+          val updated =
+              areaService.updateArea(area.id, player.uniqueId, player.name) {
+                it.copy(effect = it.effect.copy(weather = PseudoWeather.NONE))
+              } ?: return
+          renderEditorInventory(inv, holder, updated)
+        } else {
+          openOptionSelector(player, area, EffectSelectionCategory.WEATHER, holder.returnShowAll)
+        }
       }
       SLOT_TIME -> {
-        resetConfirmFlags(holder)
-        val next = if (isRightClick) TimePreset.DEFAULT else area.effect.time.next()
-        val updated =
-            areaService.updateArea(area.id, player.uniqueId, player.name) {
-              it.copy(effect = it.effect.copy(time = next))
-            } ?: return
-        renderEditorInventory(inv, holder, updated)
+        if (isRightClick) {
+          resetConfirmFlags(holder)
+          val updated =
+              areaService.updateArea(area.id, player.uniqueId, player.name) {
+                it.copy(effect = it.effect.copy(time = TimePreset.DEFAULT))
+              } ?: return
+          renderEditorInventory(inv, holder, updated)
+        } else {
+          openOptionSelector(player, area, EffectSelectionCategory.TIME, holder.returnShowAll)
+        }
       }
       SLOT_SOUND -> {
-        resetConfirmFlags(holder)
-        val next = if (isRightClick) AmbientSoundPreset.NONE else area.effect.sound.next()
-        val updated =
-            areaService.updateArea(area.id, player.uniqueId, player.name) {
-              it.copy(effect = it.effect.copy(sound = next))
-            } ?: return
-        renderEditorInventory(inv, holder, updated)
+        if (isRightClick) {
+          resetConfirmFlags(holder)
+          val updated =
+              areaService.updateArea(area.id, player.uniqueId, player.name) {
+                it.copy(effect = it.effect.copy(sound = AmbientSoundPreset.NONE))
+              } ?: return
+          renderEditorInventory(inv, holder, updated)
+        } else {
+          openOptionSelector(player, area, EffectSelectionCategory.SOUND, holder.returnShowAll)
+        }
       }
       SLOT_DENSITY -> {
         resetConfirmFlags(holder)
@@ -327,7 +342,7 @@ class AreaGuiManager(
         createButton(
             area.effect.particle.resolveIconMaterial(),
             "パーティクル: ${area.effect.particle.displayName}",
-            listOf("左クリック: 次の種類へ", "右クリック: なしに戻す"),
+            listOf("左クリック: 一覧から選ぶ", "右クリック: なしに戻す"),
             NamedTextColor.LIGHT_PURPLE,
         ),
     )
@@ -336,7 +351,7 @@ class AreaGuiManager(
         createButton(
             area.effect.weather.resolveIconMaterial(),
             "疑似天候: ${area.effect.weather.displayName}",
-            listOf("左クリック: 次の天候へ", "右クリック: なしに戻す", "※砂漠でも雨や雪が降ります"),
+            listOf("左クリック: 一覧から選ぶ", "右クリック: なしに戻す", "※砂漠でも雨や雪が降ります"),
             NamedTextColor.AQUA,
         ),
     )
@@ -345,7 +360,7 @@ class AreaGuiManager(
         createButton(
             area.effect.time.resolveIconMaterial(),
             "個人時間: ${area.effect.time.displayName}",
-            listOf("左クリック: 次の時間帯へ", "右クリック: ワールド準拠に戻す"),
+            listOf("左クリック: 一覧から選ぶ", "右クリック: ワールド準拠に戻す"),
             NamedTextColor.YELLOW,
         ),
     )
@@ -354,7 +369,7 @@ class AreaGuiManager(
         createButton(
             area.effect.sound.resolveIconMaterial(),
             "環境音: ${area.effect.sound.displayName}",
-            listOf("左クリック: 次の環境音へ", "右クリック: なしに戻す"),
+            listOf("左クリック: 一覧から選ぶ", "右クリック: なしに戻す"),
             NamedTextColor.GREEN,
         ),
     )
@@ -419,6 +434,160 @@ class AreaGuiManager(
           )
         },
     )
+  }
+
+  fun openOptionSelector(
+      player: Player,
+      area: ParticleArea,
+      category: EffectSelectionCategory,
+      returnShowAll: Boolean = false,
+  ) {
+    val holder =
+        AreaOptionSelectHolder(
+            areaId = area.id,
+            category = category,
+            returnShowAll = returnShowAll,
+        )
+    val inv =
+        Bukkit.createInventory(
+            holder,
+            OPTION_SIZE,
+            Component.text("${category.title}: ${area.name}", NamedTextColor.DARK_AQUA),
+        )
+    holder.backingInventory = inv
+
+    val bg = createButton(Material.BLACK_STAINED_GLASS_PANE, " ", emptyList(), NamedTextColor.GRAY)
+    for (slot in 27 until OPTION_SIZE) {
+      inv.setItem(slot, bg)
+    }
+    inv.setItem(
+        SLOT_OPTION_BACK,
+        createButton(Material.ARROW, "設定画面へ戻る", listOf("変更せずに戻ります"), NamedTextColor.WHITE),
+    )
+
+    when (category) {
+      EffectSelectionCategory.PARTICLE -> {
+        ParticlePreset.entries.forEachIndexed { idx, preset ->
+          if (idx >= 27) return@forEachIndexed
+          val selected = area.effect.particle == preset
+          holder.slotOptionKeys[idx] = preset.name
+          inv.setItem(
+              idx,
+              createSelectableButton(
+                  preset.resolveIconMaterial(),
+                  preset.displayName,
+                  selected,
+                  NamedTextColor.LIGHT_PURPLE,
+              ),
+          )
+        }
+      }
+      EffectSelectionCategory.WEATHER -> {
+        PseudoWeather.entries.forEachIndexed { idx, preset ->
+          if (idx >= 27) return@forEachIndexed
+          val selected = area.effect.weather == preset
+          holder.slotOptionKeys[idx] = preset.name
+          inv.setItem(
+              idx,
+              createSelectableButton(
+                  preset.resolveIconMaterial(),
+                  preset.displayName,
+                  selected,
+                  NamedTextColor.AQUA,
+              ),
+          )
+        }
+      }
+      EffectSelectionCategory.TIME -> {
+        TimePreset.entries.forEachIndexed { idx, preset ->
+          if (idx >= 27) return@forEachIndexed
+          val selected = area.effect.time == preset
+          holder.slotOptionKeys[idx] = preset.name
+          inv.setItem(
+              idx,
+              createSelectableButton(
+                  preset.resolveIconMaterial(),
+                  preset.displayName,
+                  selected,
+                  NamedTextColor.YELLOW,
+              ),
+          )
+        }
+      }
+      EffectSelectionCategory.SOUND -> {
+        AmbientSoundPreset.entries.forEachIndexed { idx, preset ->
+          if (idx >= 27) return@forEachIndexed
+          val selected = area.effect.sound == preset
+          holder.slotOptionKeys[idx] = preset.name
+          inv.setItem(
+              idx,
+              createSelectableButton(
+                  preset.resolveIconMaterial(),
+                  preset.displayName,
+                  selected,
+                  NamedTextColor.GREEN,
+              ),
+          )
+        }
+      }
+    }
+
+    player.openInventory(inv)
+  }
+
+  fun handleOptionSelectClick(player: Player, holder: AreaOptionSelectHolder, slot: Int) {
+    val area = areaService.findById(holder.areaId)
+    if (area == null) {
+      player.closeInventory()
+      player.sendMessage(Component.text("対象のエリアは既に存在しません。", NamedTextColor.RED))
+      return
+    }
+    if (!canEdit(player, area)) {
+      player.closeInventory()
+      player.sendMessage(Component.text("このエリアを編集する権限がありません。", NamedTextColor.RED))
+      return
+    }
+
+    if (slot == SLOT_OPTION_BACK) {
+      openEditor(player, area, holder.returnShowAll)
+      return
+    }
+
+    val key = holder.slotOptionKeys[slot] ?: return
+    val updated =
+        areaService.updateArea(area.id, player.uniqueId, player.name) { current ->
+          when (holder.category) {
+            EffectSelectionCategory.PARTICLE ->
+                current.copy(effect = current.effect.copy(particle = ParticlePreset.fromKey(key)))
+            EffectSelectionCategory.WEATHER ->
+                current.copy(effect = current.effect.copy(weather = PseudoWeather.fromKey(key)))
+            EffectSelectionCategory.TIME ->
+                current.copy(effect = current.effect.copy(time = TimePreset.fromKey(key)))
+            EffectSelectionCategory.SOUND ->
+                current.copy(effect = current.effect.copy(sound = AmbientSoundPreset.fromKey(key)))
+          }
+        } ?: return
+
+    openEditor(player, updated, holder.returnShowAll)
+  }
+
+  private fun createSelectableButton(
+      material: Material,
+      label: String,
+      selected: Boolean,
+      color: NamedTextColor,
+  ): ItemStack {
+    val title = if (selected) "▶ $label (選択中)" else label
+    val lore = if (selected) listOf("現在選択されている項目です") else listOf("クリックでこの項目を選択")
+    val item = createButton(material, title, lore, if (selected) NamedTextColor.GREEN else color)
+    if (selected) {
+      val meta = item.itemMeta
+      if (meta != null) {
+        meta.setEnchantmentGlintOverride(true)
+        item.itemMeta = meta
+      }
+    }
+    return item
   }
 
   private fun buildAreaSummaryItem(area: ParticleArea): ItemStack {

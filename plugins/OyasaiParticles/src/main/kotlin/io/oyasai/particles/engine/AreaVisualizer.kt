@@ -2,6 +2,7 @@ package io.oyasai.particles.engine
 
 import io.oyasai.particles.item.ParticleItemFactory
 import io.oyasai.particles.model.AreaShape
+import io.oyasai.particles.model.ParticleArea
 import io.oyasai.particles.selection.SelectionManager
 import io.oyasai.particles.service.AreaService
 import java.util.UUID
@@ -45,6 +46,49 @@ class AreaVisualizer(
     toggledPlayers.remove(playerUuid)
   }
 
+  fun isVisualizing(player: Player): Boolean {
+    val holdingWand =
+        itemFactory.isWand(player.inventory.itemInMainHand) ||
+            itemFactory.isWand(player.inventory.itemInOffHand)
+    return holdingWand || toggledPlayers.contains(player.uniqueId)
+  }
+
+  /** プレイヤーの視線先にある編集可能エリアの中心マーカー（白いパーティクル）を判定して返す。 */
+  fun findTargetedAreaCenter(
+      player: Player,
+      maxDistance: Double = 10.0,
+      hitRadius: Double = 1.6,
+  ): ParticleArea? {
+    if (!isVisualizing(player)) return null
+    val world = player.world
+    val eye = player.eyeLocation
+    val dir = eye.direction.clone().normalize()
+    val isAdmin = player.hasPermission("oyasaiparticles.admin")
+
+    var bestArea: ParticleArea? = null
+    var bestAlong = Double.MAX_VALUE
+
+    for (area in areaService.areasInWorld(world.name)) {
+      if (!isAdmin && area.ownerUuid != player.uniqueId) continue
+      val (cx, cy, cz) = area.shape.center()
+      val vx = cx - eye.x
+      val vy = cy - eye.y
+      val vz = cz - eye.z
+      val along = vx * dir.x + vy * dir.y + vz * dir.z
+      if (along < 0.0 || along > maxDistance) continue
+
+      val px = eye.x + dir.x * along
+      val py = eye.y + dir.y * along
+      val pz = eye.z + dir.z * along
+      val perpSq = (cx - px) * (cx - px) + (cy - py) * (cy - py) + (cz - pz) * (cz - pz)
+      if (perpSq <= hitRadius * hitRadius && along < bestAlong) {
+        bestAlong = along
+        bestArea = area
+      }
+    }
+    return bestArea
+  }
+
   fun tick() {
     val dustParticle = runCatching { Particle.DUST }.getOrNull() ?: return
     val centerMarker = runCatching { Particle.END_ROD }.getOrNull()
@@ -53,10 +97,7 @@ class AreaVisualizer(
     val otherAreaDust = Particle.DustOptions(Color.YELLOW, 1.05f)
 
     for (player in Bukkit.getOnlinePlayers()) {
-      val holdingWand =
-          itemFactory.isWand(player.inventory.itemInMainHand) ||
-              itemFactory.isWand(player.inventory.itemInOffHand)
-      if (!holdingWand && !toggledPlayers.contains(player.uniqueId)) {
+      if (!isVisualizing(player)) {
         continue
       }
 

@@ -3,6 +3,7 @@ package io.oyasai.particles.listener
 import io.oyasai.particles.gui.AreaEditorHolder
 import io.oyasai.particles.gui.AreaGuiManager
 import io.oyasai.particles.gui.AreaListHolder
+import io.oyasai.particles.gui.AreaOptionSelectHolder
 import io.oyasai.particles.gui.ParticleGuiHolder
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -37,6 +38,7 @@ class GuiListener(
       is AreaListHolder -> guiManager.handleListClick(player, holder, rawSlot)
       is AreaEditorHolder ->
           guiManager.handleEditorClick(player, holder, topInv, rawSlot, event.isRightClick)
+      is AreaOptionSelectHolder -> guiManager.handleOptionSelectClick(player, holder, rawSlot)
     }
   }
 
@@ -44,7 +46,9 @@ class GuiListener(
   fun onInventoryDrag(event: InventoryDragEvent) {
     val holder = event.view.topInventory.holder as? ParticleGuiHolder ?: return
     // 専用GUI表示中のドラッグ操作は全面キャンセルする
-    if (holder is AreaListHolder || holder is AreaEditorHolder) {
+    if (
+        holder is AreaListHolder || holder is AreaEditorHolder || holder is AreaOptionSelectHolder
+    ) {
       event.isCancelled = true
     }
   }

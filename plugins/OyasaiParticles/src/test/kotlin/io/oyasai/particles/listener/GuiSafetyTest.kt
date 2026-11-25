@@ -3,6 +3,8 @@ package io.oyasai.particles.listener
 import io.oyasai.particles.gui.AreaEditorHolder
 import io.oyasai.particles.gui.AreaGuiManager
 import io.oyasai.particles.gui.AreaListHolder
+import io.oyasai.particles.gui.AreaOptionSelectHolder
+import io.oyasai.particles.gui.EffectSelectionCategory
 import kotlin.test.Test
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -92,5 +94,31 @@ class GuiSafetyTest {
         )
     listener.onInventoryClick(clickEvent)
     kotlin.test.assertFalse(clickEvent.isCancelled)
+  }
+
+  @Test
+  fun `cancels inventory drag on option selector gui`() {
+    val guiManager = Mockito.mock(AreaGuiManager::class.java)
+    val listener = GuiListener(guiManager)
+    val holder =
+        AreaOptionSelectHolder(areaId = "sample", category = EffectSelectionCategory.PARTICLE)
+    val topInventory = Mockito.mock(Inventory::class.java)
+    Mockito.`when`(topInventory.holder).thenReturn(holder)
+
+    val view = Mockito.mock(InventoryView::class.java)
+    Mockito.`when`(view.topInventory).thenReturn(topInventory)
+    val player = Mockito.mock(Player::class.java)
+    Mockito.`when`(view.player).thenReturn(player)
+
+    val dragEvent =
+        InventoryDragEvent(
+            view,
+            null,
+            Mockito.mock(org.bukkit.inventory.ItemStack::class.java),
+            false,
+            emptyMap(),
+        )
+    listener.onInventoryDrag(dragEvent)
+    kotlin.test.assertTrue(dragEvent.isCancelled)
   }
 }
