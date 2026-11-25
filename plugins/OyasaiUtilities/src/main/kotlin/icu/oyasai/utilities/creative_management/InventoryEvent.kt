@@ -16,10 +16,13 @@ import org.bukkit.event.player.PlayerKickEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
 object InventoryEvent : Listener {
+  internal lateinit var protection: icu.oyasai.utilities.api.MinigameInventoryProtection
+
   private val mem = mutableMapOf<String, InventoryManager>()
 
   @EventHandler
   fun joinPlayer(e: PlayerJoinEvent) {
+    if (protection.isProtected(e.player.uniqueId)) return
     var forceGameMode = false
 
     try {
@@ -45,6 +48,7 @@ object InventoryEvent : Listener {
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun gameModeChange(e: PlayerGameModeChangeEvent) {
+    if (protection.isProtected(e.player.uniqueId)) return
     try {
       if (e.getPlayer().openInventory.type != InventoryType.CRAFTING) e.getPlayer().closeInventory()
     } catch (_: Error) {
@@ -52,6 +56,7 @@ object InventoryEvent : Listener {
     }
     if (e.newGameMode == e.getPlayer().gameMode) return
     val p = e.getPlayer()
+    if (protection.isProtected(p.uniqueId)) return
     if (!p.hasPermission("cm.bypass")) {
       val im = mem.getOrPut(p.uniqueId.toString()) { InventoryManager(p) }
 
@@ -68,6 +73,7 @@ object InventoryEvent : Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onGMChangeRemoveEffects(e: PlayerGameModeChangeEvent) {
     val p = e.getPlayer()
+    if (protection.isProtected(p.uniqueId)) return
     if (!p.hasPermission("cm.bypass")) {
       for (effect in p.activePotionEffects) {
         p.removePotionEffect(effect.type)
@@ -78,15 +84,26 @@ object InventoryEvent : Listener {
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
   fun onQuit(e: PlayerQuitEvent) {
     val p = e.getPlayer()
-    val im = mem.remove(p.uniqueId.toString()) ?: InventoryManager(p)
+    val cached = mem.remove(p.uniqueId.toString())
+    if (protection.isProtected(p.uniqueId)) return
+    val im = cached ?: InventoryManager(p)
     im.saveInventory(p.gameMode)
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
   fun onKicked(e: PlayerKickEvent) {
     val p = e.getPlayer()
-    val im = mem.remove(p.uniqueId.toString()) ?: InventoryManager(p)
+    val cached = mem.remove(p.uniqueId.toString())
+    if (protection.isProtected(p.uniqueId)) return
+    val im = cached ?: InventoryManager(p)
     im.saveInventory(p.gameMode)
+  }
+
+  internal fun persistRestored(player: org.bukkit.entity.Player) {
+    mem.remove(player.uniqueId.toString())
+    val manager = InventoryManager(player)
+    manager.saveInventory(player.gameMode)
+    mem[player.uniqueId.toString()] = manager
   }
 
   fun clearCache() {

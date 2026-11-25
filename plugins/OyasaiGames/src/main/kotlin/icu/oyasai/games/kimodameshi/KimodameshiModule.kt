@@ -1,6 +1,7 @@
 package icu.oyasai.games.kimodameshi
 
 import icu.oyasai.games.OyasaiGamesPlugin
+import icu.oyasai.games.inventory.InventoryProtection
 import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -31,6 +32,7 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
   private val recovery = linkedMapOf<UUID, YamlConfiguration>()
   private val restoring = mutableSetOf<UUID>()
   private var state = "waiting"
+  private var inventoryCheckpointed = false
   private var timer = 0
   private var pending = 0
   private var failed = false
@@ -44,6 +46,7 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
         plugin.logger,
     )
     store.recoveries().forEach { (id, text) ->
+      InventoryProtection.acquire(id, "kimodameshi")
       recovery[id] = YamlConfiguration().apply { loadFromString(text) }
     }
     mechanics = KimodameshiMechanics(this)
@@ -52,8 +55,8 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
     joined["hunter"] = mutableListOf()
     joined["spectator"] = mutableListOf()
     loadRuntime()
-    // 元 on load と同じく準備・終了の待機中は再開せず、退避を復元へ回す。
-    if (state == "preparing" || state == "ending") state = "waiting"
+    // Legacy runs have no proof that game items reached player data before a crash.
+    state = recoveredKimodameshiState(state, inventoryCheckpointed)
     if (!active())
         recovery.forEach { (id, data) ->
           if (!data.getBoolean("pending")) {
@@ -97,6 +100,7 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
     val text = store.runtime() ?: return
     val data = YamlConfiguration().apply { loadFromString(text) }
     state = data.getString("state", "waiting")!!
+    inventoryCheckpointed = data.getBoolean("inventory-checkpointed")
     timer = data.getInt("timer")
     pending = data.getInt("preparation_pending")
     failed = data.getBoolean("preparation_failed")
@@ -122,6 +126,7 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
   private fun persistRuntime() {
     val data = YamlConfiguration()
     data.set("state", state)
+    data.set("inventory-checkpointed", inventoryCheckpointed)
     data.set("timer", timer)
     data.set("preparation_pending", pending)
     data.set("preparation_failed", failed)
@@ -206,9 +211,11 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
     val id = p.uniqueId
     store.setName(id, p.name)
     if (recovery.containsKey(id)) return false
+    InventoryProtection.checkAvailable(id, "kimodameshi")
     p.closeInventory()
     val data = YamlConfiguration()
     data.set("gamemode", p.gameMode.name)
+    data.set("held-slot", p.inventory.heldItemSlot)
     data.set("health", p.health)
     data.set("food", p.foodLevel)
     data.set("experience", totalExperience(p.level, p.exp))
@@ -217,17 +224,29 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
     }
     recovery[id] = data
     persist(id)
+    InventoryProtection.acquire(id, "kimodameshi")
     return true
   }
 
   private fun prepare(p: Player, role: String) {
-    if (!p.isOnline || !snapshot(p)) {
+    try {
+      if (!p.isOnline || !snapshot(p)) {
+        failed = true
+        pending--
+        return
+      }
+      clearItems(p)
+      p.gameMode = if (role == "spectator") GameMode.SPECTATOR else GameMode.ADVENTURE
+    } catch (e: Exception) {
       failed = true
       pending--
+      plugin.logger.log(
+          java.util.logging.Level.SEVERE,
+          "Kimodameshi snapshot/protection failed for ${p.name}",
+          e,
+      )
       return
     }
-    clearItems(p)
-    p.gameMode = if (role == "spectator") GameMode.SPECTATOR else GameMode.ADVENTURE
     later(1) {
       if (state != "preparing") return@later
       try {
@@ -301,49 +320,75 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
     val id = p.uniqueId
     val data = recovery[id] ?: return
     if (!data.getBoolean("pending") || !p.isOnline || !restoring.add(id)) return
-    console("effect clear ${p.name}")
-    clearItems(p)
-    p.gameMode = GameMode.valueOf(data.getString("gamemode")!!)
+    try {
+      InventoryProtection.acquire(id, "kimodameshi")
+      console("effect clear ${p.name}")
+      clearItems(p)
+      val originalMode = GameMode.valueOf(data.getString("gamemode")!!)
+      p.gameMode = originalMode
+      check(p.gameMode == originalMode) { "Recovery game mode was cancelled" }
+    } catch (e: Exception) {
+      restoring.remove(id)
+      recoveryFailed(p, e)
+      return
+    }
     later(1) {
       restoring.remove(id)
       if (!p.isOnline) return@later
-      clearItems(p)
-      for (slot in 0..40) p.inventory.setItem(slot, data.getItemStack("slot.$slot"))
-      val maxHealth =
-          p.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH)?.value?.takeIf { it > 0.0 }
-              ?: 20.0
-      val savedHealth = data.getDouble("health", maxHealth).takeIf { it.isFinite() } ?: maxHealth
-      p.health = savedHealth.coerceIn(0.0, maxHealth)
-      p.foodLevel = data.getInt("food")
-      setTotalExperience(p, data.getInt("experience"))
-      for (attribute in
-          listOf("movement_speed", "entity_interaction_range", "block_interaction_range")) console(
-          "attribute ${p.name} minecraft:$attribute base reset"
-      )
-      nameShown(p)
-      p.performCommand("ch g")
-      p.performCommand("leave 2")
-      p.performCommand("leave 3")
-      if (Bukkit.getWorld("flat") != null) p.teleport(lobby())
-      val earned = data.getDouble("earned")
-      val reward = data.getDouble("reward")
-      // 元スクリプトにも実アイテム配布はない。表示と一度限りの完了処理を保持。
-      if (reward > 0 && !data.getBoolean("reward_given")) {
-        data.set("reward_given", true)
-        persist(id)
+      try {
+        clearItems(p)
+        restoreKimodameshiInventory(p.inventory, data)
+        val maxHealth =
+            p.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH)?.value?.takeIf { it > 0.0 }
+                ?: 20.0
+        val savedHealth = data.getDouble("health", maxHealth).takeIf { it.isFinite() } ?: maxHealth
+        p.health = savedHealth.coerceIn(0.0, maxHealth)
+        p.foodLevel = data.getInt("food")
+        setTotalExperience(p, data.getInt("experience"))
+        for (attribute in
+            listOf(
+                "movement_speed",
+                "entity_interaction_range",
+                "block_interaction_range",
+            )) console("attribute ${p.name} minecraft:$attribute base reset")
+        nameShown(p)
+        p.performCommand("ch g")
+        p.performCommand("leave 2")
+        p.performCommand("leave 3")
+        if (Bukkit.getWorld("flat") != null) p.teleport(lobby())
+        val earned = data.getDouble("earned")
+        val reward = data.getDouble("reward")
+        // 元スクリプトにも実アイテム配布はない。表示と一度限りの完了処理を保持。
+        if (reward > 0 && !data.getBoolean("reward_given")) {
+          data.set("reward_given", true)
+          persist(id)
+        }
+        p.sendMessage("§e==============================")
+        p.sendMessage("§b 今回の獲得イベントポイント: ${number(earned)}")
+        if (reward > 0) p.sendMessage("§a 獲得報酬 (狐火): ${number(reward)} 個")
+        p.sendMessage("§6 現在の総イベントポイント: ${number(store.points(id))}")
+        p.sendMessage("§e==============================")
+        teams.remove(id)
+        participants.remove(id)
+        mechanics.clear(id)
+        persistRuntime()
+        p.saveData()
+        InventoryProtection.release(p, "kimodameshi")
+        store.deleteRecovery(id)
+        recovery.remove(id)
+      } catch (e: Exception) {
+        recoveryFailed(p, e)
       }
-      p.sendMessage("§e==============================")
-      p.sendMessage("§b 今回の獲得イベントポイント: ${number(earned)}")
-      if (reward > 0) p.sendMessage("§a 獲得報酬 (狐火): ${number(reward)} 個")
-      p.sendMessage("§6 現在の総イベントポイント: ${number(store.points(id))}")
-      p.sendMessage("§e==============================")
-      recovery.remove(id)
-      store.deleteRecovery(id)
-      teams.remove(id)
-      participants.remove(id)
-      mechanics.clear(id)
-      persistRuntime()
     }
+  }
+
+  private fun recoveryFailed(p: Player, e: Exception) {
+    plugin.logger.log(
+        java.util.logging.Level.SEVERE,
+        "Kimodameshi recovery failed; journal and protection retained",
+        e,
+    )
+    if (p.isOnline) p.kickPlayer("肝試しの持ち物の復元が未完了です。管理者に連絡してください。")
   }
 
   @EventHandler
@@ -417,7 +462,9 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
       sender.sendMessage("§c現在の状態は $state です。開始処理は実行できません。")
       return
     }
+    (joined.values.flatten()).forEach { InventoryProtection.checkAvailable(it, "kimodameshi") }
     state = "preparing"
+    inventoryCheckpointed = false
     val validation = validate()
     if (validation != "ok") {
       state = "waiting"
@@ -461,7 +508,21 @@ class KimodameshiModule(val plugin: OyasaiGamesPlugin) : Listener, CommandExecut
       } else {
         timer = 900
         state = "grace"
-        players().filter { team(it) == "runner" }.forEach { giveMission(it, "none") }
+        try {
+          players().forEach {
+            if (team(it) == "runner") giveMission(it, "none")
+            it.saveData()
+          }
+          inventoryCheckpointed = true
+        } catch (failure: Exception) {
+          plugin.logger.log(
+              java.util.logging.Level.SEVERE,
+              "Kimodameshi game inventory checkpoint failed",
+              failure,
+          )
+          endGame("preparation_failed", false)
+          return
+        }
         updateScoreboard()
         control(1242, true)
         broadcast("§a[ゲームスタート]")
