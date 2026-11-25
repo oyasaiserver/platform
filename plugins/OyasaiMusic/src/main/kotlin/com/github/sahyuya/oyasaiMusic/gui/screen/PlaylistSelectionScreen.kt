@@ -2,6 +2,7 @@ package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.AddSongResult
+import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository.Companion.MAX_PLAYLISTS
 import com.github.sahyuya.oyasaiMusic.db.SocialRepository.FavoriteResult
 import com.github.sahyuya.oyasaiMusic.model.Playlist
 import com.github.sahyuya.oyasaiMusic.model.Song
@@ -32,6 +33,11 @@ class PlaylistSelectionScreen(
 
   private var playlists: List<Playlist> = emptyList()
   private var page = 0
+  private val canCreate
+    get() = playlists.size < MAX_PLAYLISTS
+
+  private val lastPage
+    get() = (playlists.size + if (canCreate) 1 else 0) / PAGE_SIZE
 
   init {
     if (!targetSong.released) {
@@ -53,6 +59,7 @@ class PlaylistSelectionScreen(
                       plugin,
                       Runnable {
                         playlists = list
+                        page = page.coerceAtMost(lastPage)
                         render()
                       },
                   )
@@ -76,6 +83,7 @@ class PlaylistSelectionScreen(
       inventory.setItem(slot, selectionItem(globalIndex))
     }
     if (page == 0) inventory.setItem(ControllerSlots.PAGE_PREV, GuiChrome.backControllerButton())
+    if (page == lastPage) inventory.setItem(ControllerSlots.PAGE_NEXT, null)
   }
 
   private fun selectionItem(globalIndex: Int): org.bukkit.inventory.ItemStack? =
@@ -92,7 +100,7 @@ class PlaylistSelectionScreen(
                   .lore(Component.text("${playlist.songCount} 曲", NamedTextColor.GRAY))
                   .build()
             }
-        globalIndex == playlists.size + 1 ->
+        globalIndex == playlists.size + 1 && canCreate ->
             GuiItemBuilder(Material.WRITABLE_BOOK)
                 .name(Component.text("+ 新規プレイリストを作成して追加", NamedTextColor.GREEN))
                 .build()
@@ -113,7 +121,7 @@ class PlaylistSelectionScreen(
       return
     }
     if (slot == ControllerSlots.PAGE_NEXT) {
-      if ((page + 1) * PAGE_SIZE < playlists.size + 2) {
+      if (page < lastPage) {
         page++
         render()
       }
@@ -134,7 +142,7 @@ class PlaylistSelectionScreen(
     val playlist = playlists.getOrNull(playlistIndex)
     if (playlist != null) {
       addToPlaylist(playlist)
-    } else if (index == playlists.size + 1) {
+    } else if (index == playlists.size + 1 && canCreate) {
       createPlaylistAndAdd()
     }
   }
@@ -210,22 +218,25 @@ class PlaylistSelectionScreen(
                 val playlistId = plugin.playlistRepository.create(viewer.uniqueId, name)
                 val songId = targetSong.id
                 val result =
-                    songId?.let {
-                      plugin.playlistRepository.addSong(
-                          playlistId,
-                          viewer.uniqueId,
-                          it,
-                          targetSong.recordIdentity,
-                      )
-                    }
+                    if (playlistId != null && songId != null)
+                        plugin.playlistRepository.addSong(
+                            playlistId,
+                            viewer.uniqueId,
+                            songId,
+                            targetSong.recordIdentity,
+                        )
+                    else null
                 Bukkit.getScheduler()
                     .runTask(
                         plugin,
                         Runnable {
                           viewer.sendMessage(
-                              if (result == AddSongResult.ADDED)
-                                  "§aプレイリスト「$name」を作成し、「${targetSong.title}」を追加しました。"
-                              else "§eプレイリスト「$name」を作成しました。楽曲が変更・削除されたため追加できませんでした。"
+                              when {
+                                playlistId == null -> "§cプレイリストは最大${MAX_PLAYLISTS}個まで作成できます。"
+                                result == AddSongResult.ADDED ->
+                                    "§aプレイリスト「$name」を作成し、「${targetSong.title}」を追加しました。"
+                                else -> "§eプレイリスト「$name」を作成しました。楽曲が変更・削除されたため追加できませんでした。"
+                              }
                           )
                           menuManager.openPrevious(viewer)
                         },
