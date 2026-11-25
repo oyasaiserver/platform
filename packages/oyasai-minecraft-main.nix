@@ -61,6 +61,7 @@ oyasaiPurpur rec {
     oyasailwc
     oyasaimenu
     oyasaimusic
+    oyasaiparticles
     oyasaipets
     oyasaisignshop
     oyasaitab
