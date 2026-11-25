@@ -20,6 +20,7 @@ import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
+import org.bukkit.WeatherType
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
 
@@ -35,6 +36,7 @@ class ParticleRenderEngine(
       config.getDouble("render.player-render-radius", 24.0).coerceIn(6.0, 48.0)
 
   private val appliedTimePlayers = ConcurrentHashMap<UUID, Long>()
+  private val appliedWeatherPlayers = ConcurrentHashMap.newKeySet<UUID>()
   private val soundNextTick = ConcurrentHashMap<UUID, Long>()
   private val thunderNextTick = ConcurrentHashMap<UUID, Long>()
   private val activeWeatherSoundKeys = ConcurrentHashMap<UUID, String>()
@@ -63,6 +65,11 @@ class ParticleRenderEngine(
       if (insideAreas.isEmpty()) {
         resetPlayerState(player)
         continue
+      }
+
+      // ワールド側の雨・雷雨に左右されないよう、エリア内では個人のバニラ天気を晴れに固定する
+      if (appliedWeatherPlayers.add(uuid) || player.playerWeather != WeatherType.CLEAR) {
+        player.setPlayerWeather(WeatherType.CLEAR)
       }
 
       // 個人時間：最初に見つかった時間指定付きエリア（新しいもの優先）を適用
@@ -104,6 +111,7 @@ class ParticleRenderEngine(
 
   fun resetPlayerState(player: Player) {
     resetPlayerTimeIfApplied(player)
+    resetPlayerWeatherIfApplied(player)
     stopPlayerSoundsIfActive(player)
   }
 
@@ -122,6 +130,12 @@ class ParticleRenderEngine(
   private fun resetPlayerTimeIfApplied(player: Player) {
     if (appliedTimePlayers.remove(player.uniqueId) != null) {
       player.resetPlayerTime()
+    }
+  }
+
+  private fun resetPlayerWeatherIfApplied(player: Player) {
+    if (appliedWeatherPlayers.remove(player.uniqueId)) {
+      player.resetPlayerWeather()
     }
   }
 
