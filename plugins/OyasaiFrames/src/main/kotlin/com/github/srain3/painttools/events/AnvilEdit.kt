@@ -22,6 +22,8 @@ object AnvilEdit : Listener {
 
       AnvilGUI.Builder().apply {
         itemLeft(paperItem)
+        // Purpur 26.3 applies the first rename only if the result slot already has an item.
+        itemOutput(paperItem)
         onClick { slot, stateSnapshot ->
           if (slot != AnvilGUI.Slot.OUTPUT) {
             return@onClick listOf()
