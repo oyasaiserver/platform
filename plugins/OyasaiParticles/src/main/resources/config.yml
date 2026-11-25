@@ -1,0 +1,16 @@
+limits:
+  max-areas-per-player: 10
+  max-box-side: 64
+  max-box-volume: 65536
+  max-cylinder-radius: 32
+  max-cylinder-height: 64
+
+render:
+  tick-interval: 4
+  visualize-tick-interval: 10
+  max-particles-per-player-per-tick: 80
+  player-render-radius: 24.0
+  visualize-range: 48.0
+
+history:
+  max-entries: 500

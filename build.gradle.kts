@@ -62,6 +62,7 @@ val kotlinRelocationTargets =
         "OyasaiFrames" to "icu.oyasai.frames.libs.kotlin",
         "OyasaiGames" to "icu.oyasai.games.libs.kotlin",
         "OyasaiMusic" to "com.oyasai.music.libs.kotlin",
+        "OyasaiParticles" to "io.oyasai.particles.libs.kotlin",
         "OyasaiVehicles" to "io.oyasai.vehicles.libs.kotlin",
         "OyasaiWorldGenerator" to "io.oyasai.worldgen.libs.kotlin",
         "SocialVotes" to "com.github.sahyuya.socialvotes.libs.kotlin",
