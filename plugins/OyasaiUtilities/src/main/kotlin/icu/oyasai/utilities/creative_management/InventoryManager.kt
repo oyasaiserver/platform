@@ -18,7 +18,7 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder
 /** Inventory manager class. */
 class InventoryManager(private val p: Player) {
   private val file = File(plugin.dataFolder, "CreativeManagement/data/" + p.uniqueId + ".yml")
-  private val cm = YamlConfiguration.loadConfiguration(file)
+  private val cm = YamlConfiguration().also { if (file.exists()) it.load(file) }
 
   fun hasContent(): Boolean {
     return !cm.getKeys(false).isEmpty()
@@ -80,7 +80,7 @@ class InventoryManager(private val p: Player) {
     val encoded = this.playerInventoryToBase64(p.inventory)
     cm.set("$gameMode.content", encoded[0])
     cm.set("$gameMode.armor", encoded[1])
-    cm.save(file)
+    durableInventoryWrite(file, cm.saveToString().toByteArray(Charsets.UTF_8))
   }
 
   /**

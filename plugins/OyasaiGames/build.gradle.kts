@@ -1,6 +1,8 @@
 version = "1.0.0"
 
 dependencies {
+  compileOnly(project(":plugins:OyasaiUtilities"))
+  testImplementation(project(":plugins:OyasaiUtilities"))
   compileOnly(project(":plugins:OyasaiEconomy"))
   compileOnly(libs.purpur.api)
   compileOnly(libs.fawe.bukkit)
@@ -16,7 +18,7 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().con
   from("LICENSE-TNTRUN.txt") { into("META-INF/licenses") }
 }
 
-tasks.test { dependsOn(":plugins:OyasaiEconomy:shadowJar") }
+tasks.test { dependsOn(":plugins:OyasaiEconomy:shadowJar", ":plugins:OyasaiUtilities:shadowJar") }
 
 // Do not embed build timestamps in distributions.
 tasks.withType<AbstractArchiveTask>().configureEach {

@@ -1,10 +1,12 @@
 package icu.oyasai.games.pvp
 
+import icu.oyasai.games.inventory.InventoryProtection
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.Base64
+import java.util.UUID
 import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
 import org.bukkit.configuration.file.YamlConfiguration
@@ -49,6 +51,16 @@ internal fun requireExclusiveSnapshot(directory: File, fileName: String) {
 }
 
 internal class PlayerStore(private val directory: File) {
+  private val owner = directory.parentFile.name
+  private val restoring = mutableSetOf<UUID>()
+
+  init {
+    directory
+        .listFiles()
+        ?.filter { it.extension == "yml" }
+        ?.forEach { InventoryProtection.acquire(UUID.fromString(it.nameWithoutExtension), owner) }
+  }
+
   fun file(player: Player) = File(directory, "${player.uniqueId}.yml")
 
   fun pending(player: Player) = file(player).exists()
@@ -56,6 +68,7 @@ internal class PlayerStore(private val directory: File) {
   fun capture(player: Player) {
     check(!pending(player)) { "Previous inventory recovery is pending" }
     requireExclusiveSnapshot(directory, file(player).name)
+    InventoryProtection.checkAvailable(player.uniqueId, owner)
     check(player.itemOnCursor.type.isAir) { "Please empty the cursor first" }
     player.closeInventory()
     val y = YamlConfiguration()
@@ -84,52 +97,67 @@ internal class PlayerStore(private val directory: File) {
     y.set("collidable", player.isCollidable)
     y.set("held-slot", player.inventory.heldItemSlot)
     saveYaml(file(player), y)
+    InventoryProtection.acquire(player.uniqueId, owner)
   }
 
   fun restore(player: Player, destination: org.bukkit.Location? = null): Boolean {
     if (!pending(player)) return true
-    if (player.isDead) return false
-    recoverSavedState(file(player)) { y ->
-      // Decode and validate everything before replacing any inventory slots.
-      val inventory =
-          (y.getList("inventory") ?: error("Recovery inventory is missing"))
-              .map {
-                if (it == null) null
-                else ItemStack.deserializeBytes(Base64.getDecoder().decode(it as String))
-              }
-              .toTypedArray()
-      check(inventory.size == player.inventory.contents.size) { "Recovery inventory size mismatch" }
-      val location =
-          destination ?: y.getLocation("location") ?: error("Recovery world is unavailable")
-      val mode = GameMode.valueOf(y.getString("mode") ?: error("Recovery mode is missing"))
-      val effects = (y.getList("effects") ?: emptyList<Any>()).map { it as PotionEffect }
-      player.closeInventory()
-      check(player.teleport(location)) { "Recovery teleport was cancelled" }
-      player.setItemOnCursor(null)
-      player.inventory.contents = inventory
-      y.getLocation("compass-target")?.let { player.compassTarget = it }
-      player.getAttribute(Attribute.MAX_HEALTH)!!.baseValue = y.getDouble("max-health")
-      player.gameMode = mode
-      player.foodLevel = y.getInt("food")
-      player.saturation = y.getDouble("saturation").toFloat()
-      player.exhaustion = y.getDouble("exhaustion").toFloat()
-      player.totalExperience = y.getInt("total-exp")
-      player.level = y.getInt("level")
-      player.exp = y.getDouble("exp").toFloat()
-      player.activePotionEffects.forEach { player.removePotionEffect(it.type) }
-      player.addPotionEffects(effects)
-      player.health =
-          y.getDouble("health").coerceIn(0.01, player.getAttribute(Attribute.MAX_HEALTH)!!.value)
-      player.allowFlight = y.getBoolean("flight")
-      player.isFlying = y.getBoolean("flying")
-      player.fireTicks = y.getInt("fire")
-      player.fallDistance = y.getDouble("fall").toFloat()
-      player.isCollidable = y.getBoolean("collidable")
-      player.inventory.heldItemSlot = y.getInt("held-slot")
-      // Persist vanilla player data before removing the recovery journal. A crash before
-      // deletion repeats a replacement restore, never adds items a second time.
-      player.saveData()
+    if (player.isDead || !restoring.add(player.uniqueId)) return false
+    try {
+      recoverSavedState(file(player)) { y ->
+        // Decode and validate everything before replacing any inventory slots.
+        val inventory =
+            (y.getList("inventory") ?: error("Recovery inventory is missing"))
+                .map {
+                  if (it == null) null
+                  else ItemStack.deserializeBytes(Base64.getDecoder().decode(it as String))
+                }
+                .toTypedArray()
+        check(inventory.size == player.inventory.contents.size) {
+          "Recovery inventory size mismatch"
+        }
+        val location =
+            destination ?: y.getLocation("location") ?: error("Recovery world is unavailable")
+        val mode = GameMode.valueOf(y.getString("mode") ?: error("Recovery mode is missing"))
+        val effects = (y.getList("effects") ?: emptyList<Any>()).map { it as PotionEffect }
+        InventoryProtection.acquire(player.uniqueId, owner)
+        player.closeInventory()
+        check(player.teleport(location)) { "Recovery teleport was cancelled" }
+        player.setItemOnCursor(null)
+        player.gameMode = mode
+        check(player.gameMode == mode) { "Recovery game mode was cancelled" }
+        player.inventory.contents = inventory
+        y.getLocation("compass-target")?.let { player.compassTarget = it }
+        player.getAttribute(Attribute.MAX_HEALTH)!!.baseValue = y.getDouble("max-health")
+        player.foodLevel = y.getInt("food")
+        player.saturation = y.getDouble("saturation").toFloat()
+        player.exhaustion = y.getDouble("exhaustion").toFloat()
+        player.totalExperience = y.getInt("total-exp")
+        player.level = y.getInt("level")
+        player.exp = y.getDouble("exp").toFloat()
+        player.activePotionEffects.forEach { player.removePotionEffect(it.type) }
+        player.addPotionEffects(effects)
+        player.health =
+            y.getDouble("health").coerceIn(0.01, player.getAttribute(Attribute.MAX_HEALTH)!!.value)
+        player.allowFlight = y.getBoolean("flight")
+        player.isFlying = y.getBoolean("flying")
+        player.fireTicks = y.getInt("fire")
+        player.fallDistance = y.getDouble("fall").toFloat()
+        player.isCollidable = y.getBoolean("collidable")
+        player.inventory.heldItemSlot = y.getInt("held-slot")
+        // Persist vanilla player data before removing the recovery journal. A crash before
+        // deletion repeats a replacement restore, never adds items a second time.
+        player.saveData()
+        InventoryProtection.release(player, owner)
+      }
+      return true
+    } catch (failure: Exception) {
+      // A pending snapshot must not be replayed after the player trades restored items.
+      runCatching { if (player.isOnline) player.kickPlayer("ミニゲームの持ち物の復元が未完了です。管理者に連絡してください。") }
+          .onFailure { failure.addSuppressed(it) }
+      throw failure
+    } finally {
+      restoring.remove(player.uniqueId)
     }
-    return true
   }
 }

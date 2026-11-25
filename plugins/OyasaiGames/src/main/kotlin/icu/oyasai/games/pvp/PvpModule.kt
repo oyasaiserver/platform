@@ -238,7 +238,7 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
   }
 
   private fun recover(player: Player) {
-    if (!store.pending(player)) return
+    if (players.containsKey(player.uniqueId) || !store.pending(player)) return
     try {
       if (store.restore(player)) player.sendMessage("PvP の持ち物と状態を復元しました。")
     } catch (e: Exception) {
@@ -1150,6 +1150,8 @@ class PvpModule(private val plugin: OyasaiGamesPlugin) : Listener, TabExecutor {
         .runTask(
             plugin,
             Runnable {
+              // A leave or a new participation invalidates this respawn callback.
+              if (players[e.player.uniqueId] !== p) return@Runnable
               if (p == null) recover(e.player)
               else
                   isolated(p.arena) {

@@ -193,3 +193,19 @@ PlayerState と Teleport の旧 Essentials userdata、Teleport の Warps / Jail 
 ## 2026-10-25 経済APIの統合
 
 経済連携は `io.oyasai.economy.api.OyasaiEconomyApi` を ServicesManager から取得する。金額はLongで、通貨IDを引数に渡す。円とトークンに別のAPIサービスは使わない。参照は既存口座だけを扱い、APIによる口座の自動作成はない。詳細は [OyasaiEconomy](../oyasai-economy/PROJECT.md) を参照。
+
+## ミニゲームとのインベントリ隔離連携（2026-11-25）
+
+`creative_management/MinigameProtection.kt` が Bukkit ServicesManager に Java API `icu.oyasai.utilities.api.MinigameInventoryProtection` を登録する。呼出元が開始前の持ち物を永続退避し、`checkAvailable(UUID, owner)` → 退避の保存 → `acquire(UUID, owner)` の順で保護を開始する。全操作はメインスレッドで行う。同じ所有者による再取得は冪等、他ゲームとの重複は拒否する。
+
+保護中は CreativeManagement のモード別持ち物の保存・読込とモード変更による効果解除を止める。退出・キック・再接続にも適用し、保護記録は再起動を越えて保持する。クリエ由来アイテムの取得・容器操作など、他の制限を一括免除する API ではない。ゲーム側が元のモード・持ち物を復元した後に `release(Player, owner)` を呼ぶ。プレイヤーデータと現在モードの持ち物の保存を完了してから保護を解除し、最後に呼出元の退避を削除する。保存失敗時は保護・退避を残して復旧する。モード別保存は一時ファイルからの原子的な置換を使用する。
+
+### Zombies の暫定互換処理と廃止方針
+
+**Zombies は将来 OyasaiGames に合流させ、上記 API による通常の連携へ移行する。現在の割り込み方式は望ましい設計ではなく、それまでの暫定措置とする。** ゲーム内部の情報へのリフレクション、コマンド実行の割り込み、終了監視は `creative_management/ZombiesCompatibility.kt` に隔離し、統合後にまとめて撤去する。ゲーム側 JAR は変更しない。
+
+実際の Zombies コマンド実行器を囲み、直接入力だけでなく GUI・別プラグインの `performCommand` / `dispatchCommand`・コンソール経由の join/rejoin/forcejoin も、元持ち物を永続退避してから呼ぶ。元の権限・引数処理・結果・タブ補完を維持する。ゲームモード変更イベントも補助として監視する。任意の外部コードによる、コマンドを通さず同じモードのまま参加させる直接メソッド呼出しは保証対象外。
+
+所属・オフライン復元待ち・モード切替タスクを調べ、全て解消してから開始前の持ち物とモードを上書き復元する。ゲーム内の待機ロビー・観戦・切断中は保護を継続する。退出後の復元待ちではアイテム移動・取得・ドロップ・使用・通常コマンドを止め、死亡時のドロップも抑えて二重取得を防ぐ。Utilities の停止時は Zombies が有効なうちにネイティブの shutdown を先に実行し、停止後の遅延タスク登録による例外を避ける。退避・保護は次回接続での復元まで保持する。内部構造を確認できない版は Zombies を無効化し、推測で保護を解除しない。復元失敗時は退避を残して対象者を切断する。
+
+初期対応は registry の Zombies 0.1.0-SNAPSHOT（`arenaManager`、`pendingOfflineRestores`、`gameModeSwitchCoordinator.tasks.operationIds()`）を対象とする。更新時は互換性の再確認が必要。Utilities と Games は同時更新し、API と起動順を含む変更のためサーバー再起動で反映する。
