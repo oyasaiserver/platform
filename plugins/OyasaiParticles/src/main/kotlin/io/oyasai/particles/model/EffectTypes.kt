@@ -105,9 +105,9 @@ enum class AmbientSoundPreset(
     val iconMaterialKey: String,
 ) {
   NONE("なし", null, false, 100, 0f, 1f, "BARRIER"),
-  RAIN("雨音", "weather.rain", false, 40, 0.35f, 1.0f, "BLUE_DYE"),
+  RAIN("雨音", "weather.rain", false, 16, 0.16f, 1.0f, "BLUE_DYE"),
   THUNDER_OCCASIONAL("定期的な雷鳴", null, true, 160, 0.7f, 0.95f, "GUNPOWDER"),
-  RAIN_AND_THUNDER("雨音 + 定期的な雷鳴", "weather.rain", true, 40, 0.35f, 1.0f, "PRISMARINE_CRYSTALS"),
+  RAIN_AND_THUNDER("雨音 + 定期的な雷鳴", "weather.rain", true, 16, 0.16f, 1.0f, "PRISMARINE_CRYSTALS"),
   CAVE("洞窟の環境音", "ambient.cave", false, 180, 0.45f, 1.0f, "ECHO_SHARD"),
   CRIMSON_FOREST(
       "真紅の森の環境音",

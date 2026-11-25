@@ -12,6 +12,9 @@ import io.oyasai.particles.service.AreaService
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
+import net.kyori.adventure.key.Key
+import net.kyori.adventure.sound.Sound as AdventureSound
+import net.kyori.adventure.sound.SoundStop
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Particle
@@ -34,7 +37,7 @@ class ParticleRenderEngine(
   private val appliedTimePlayers = ConcurrentHashMap<UUID, Long>()
   private val soundNextTick = ConcurrentHashMap<UUID, Long>()
   private val thunderNextTick = ConcurrentHashMap<UUID, Long>()
-  private val activeWeatherSounds = ConcurrentHashMap<UUID, Sound>()
+  private val activeWeatherSoundKeys = ConcurrentHashMap<UUID, String>()
   private var tickCounter: Long = 0L
 
   fun tick() {
@@ -123,30 +126,34 @@ class ParticleRenderEngine(
   }
 
   private fun stopPlayerSoundsIfActive(player: Player) {
-    val activeSound = activeWeatherSounds.remove(player.uniqueId)
-    if (activeSound != null) {
-      player.stopSound(activeSound, SoundCategory.AMBIENT)
+    val activeKey = activeWeatherSoundKeys.remove(player.uniqueId)
+    soundNextTick.remove(player.uniqueId)
+    if (activeKey != null) {
+      player.stopSound(SoundStop.named(Key.key("minecraft", activeKey)))
     }
   }
 
   private fun processAmbientSound(player: Player, preset: AmbientSoundPreset) {
     val uuid = player.uniqueId
-    val mainSound = preset.resolveSound()
-    if (mainSound != null) {
-      val prevSound = activeWeatherSounds[uuid]
-      if (prevSound != null && prevSound != mainSound) {
-        player.stopSound(prevSound, SoundCategory.AMBIENT)
+    val soundKey = preset.soundKey
+    if (soundKey != null) {
+      val prevKey = activeWeatherSoundKeys[uuid]
+      if (prevKey != null && prevKey != soundKey) {
+        player.stopSound(SoundStop.named(Key.key("minecraft", prevKey)))
+        soundNextTick.remove(uuid)
       }
       val nextAt = soundNextTick[uuid] ?: 0L
       if (tickCounter >= nextAt) {
-        player.playSound(
-            player.location,
-            mainSound,
-            SoundCategory.AMBIENT,
-            preset.volume,
-            preset.pitch,
-        )
-        activeWeatherSounds[uuid] = mainSound
+        val advSound =
+            AdventureSound.sound(
+                Key.key("minecraft", soundKey),
+                AdventureSound.Source.AMBIENT,
+                preset.volume,
+                preset.pitch,
+            )
+        // プレイヤー自身に追従させて、歩いても距離減衰で音がブツ切りにならないようにする
+        player.playSound(advSound, AdventureSound.Emitter.self())
+        activeWeatherSoundKeys[uuid] = soundKey
         soundNextTick[uuid] = tickCounter + (preset.intervalTicks / tickInterval).coerceAtLeast(1L)
       }
     } else {
