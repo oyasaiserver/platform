@@ -38,10 +38,11 @@ internal class DirectStateCommand(
               10 -> Permissions.has(player, Permissions.HAND)
               12 -> Permissions.has(player, Permissions.UPDATE)
               14,
-              16 -> false
+              16 -> Permissions.has(player, Permissions.REPLACE)
               22 ->
                   Permissions.has(player, Permissions.HAND) ||
-                      Permissions.has(player, Permissions.UPDATE)
+                      Permissions.has(player, Permissions.UPDATE) ||
+                      Permissions.has(player, Permissions.REPLACE)
               else -> false
             }
           },
@@ -133,7 +134,17 @@ internal class DirectStateCommand(
       "toggle" -> toggleItemlessModes(sender)
       "update" -> setUpdateMode(sender, commandArgs.firstOrNull(), argumentCount)
       "hand" -> setHandMode(sender, commandArgs.firstOrNull(), argumentCount)
-      "replace" -> sender.sendMessage("置換モードは現在無効化されています。")
+      "replace" ->
+          when {
+            commandArgs.isEmpty() ->
+                writeReplacementMode(
+                    sender,
+                    !playerSettings.get(sender.uniqueId).replacementEnabled,
+                )
+            commandArgs.first().equals("type", true) || commandArgs.first().equals("tp", true) ->
+                setTypeReplacementMode(sender, commandArgs.getOrNull(1), argumentCount)
+            else -> setReplacementMode(sender, commandArgs.firstOrNull(), argumentCount)
+          }
       "stick" -> handleTool(sender, commandArgs, ToolItems.Kind.HAND)
       "sstick" -> handleTool(sender, commandArgs, ToolItems.Kind.SIMPLE)
       "hstick" -> handleTool(sender, commandArgs, ToolItems.Kind.HOLD)
@@ -219,7 +230,8 @@ internal class DirectStateCommand(
     return when {
       alias == "dsh" && args.size == 1 -> matches(args[0], "on", "off", "toggle")
       alias == "dsu" && args.size == 1 -> matches(args[0], "on", "off", "toggle")
-      alias == "dsr" -> emptyList()
+      alias == "dsr" && args.size == 1 -> matches(args[0], "on", "off", "toggle", "tp")
+      alias == "dsr" && args.size == 2 && args[0].equals("tp", true) -> completeTypeMode(args[1])
       args.size == 1 ->
           matches(
               args[0],
@@ -232,6 +244,7 @@ internal class DirectStateCommand(
               "hstick",
               "hand",
               "update",
+              "replace",
               "undo",
               "redo",
           )
@@ -292,7 +305,10 @@ internal class DirectStateCommand(
 
   /** Replace設定を保存し、Type設定を含む現在状態を表示する。 */
   private fun writeReplacementMode(player: Player, enabled: Boolean) {
-    playerSettings.update(player.uniqueId) { it.replacementEnabled = enabled }
+    playerSettings.update(player.uniqueId) {
+      it.replacementEnabled = enabled
+      it.playerName = player.name
+    }
     showReplacementStatus(player)
   }
 
@@ -313,7 +329,10 @@ internal class DirectStateCommand(
 
   /** Type Replaceの方式を保存し、Replace全体の状態を表示する。 */
   private fun writeTypeReplacementMode(player: Player, mode: TypeReplaceMode) {
-    playerSettings.update(player.uniqueId) { it.typeReplacementMode = mode }
+    playerSettings.update(player.uniqueId) {
+      it.typeReplacementMode = mode
+      it.playerName = player.name
+    }
     showReplacementStatus(player)
   }
 

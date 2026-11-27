@@ -256,8 +256,19 @@ internal class EditInteractionListener(
         bothHandsEmpty
   }
 
-  /** 手持ちブロックによる置換は現在無効化されている。 */
-  private fun wantsDirectReplacement(event: PlayerInteractEvent): Boolean = false
+  /** 手持ちブロックによる置換を選ぶ条件。編集棒は置換用ブロックとして扱わない。 */
+  private fun wantsDirectReplacement(event: PlayerInteractEvent): Boolean {
+    val item = event.item ?: return false
+    val configured = playerSettings.get(event.player.uniqueId)
+    return configured.replacementEnabled &&
+        !configured.itemlessModesDisabled &&
+        !event.player.isSneaking &&
+        event.action == Action.RIGHT_CLICK_BLOCK &&
+        !tools.isTool(item) &&
+        item.type.isBlock &&
+        !item.type.isAir &&
+        event.clickedBlock != null
+  }
 
   /** イベントのクリック位置をブロック内座標へ直し、選ばれたEditorを一つだけ実行する。 振り分け後に共通のray traceとロック確認を行うため、各モードで判定がずれない。 */
   private fun editTarget(

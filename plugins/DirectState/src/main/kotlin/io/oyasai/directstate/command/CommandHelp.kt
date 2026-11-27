@@ -29,6 +29,8 @@ internal object CommandHelp {
       }
       2 -> {
         sender.sendMessage(helpLine("/dsu", "更新抑制モード"))
+        sender.sendMessage(helpLine("/dsr", "ブロック置換モード"))
+        sender.sendMessage(helpLine("/dsr type", "素材置換モード"))
       }
       3 -> {
         sender.sendMessage(helpLine("/ds stick", "Hand編集棒"))

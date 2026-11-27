@@ -146,6 +146,7 @@ internal class SettingsMenu(
       Page.SETTINGS -> {
         menu.setItem(10, link(Material.PLAYER_HEAD, "Hand設定"))
         menu.setItem(12, link(Material.REDSTONE_TORCH, "Update設定"))
+        menu.setItem(14, link(Material.GRASS_BLOCK, "Replace設定"))
         menu.setItem(16, link(Material.COMPARATOR, "General設定"))
       }
       Page.HAND -> {
