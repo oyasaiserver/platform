@@ -331,7 +331,13 @@ internal class UpdateMode(
                   if (data.half == Bisected.Half.BOTTOM) BlockFace.UP else BlockFace.DOWN
               )
           val otherData = other.blockData
-          if (other.type == block.type && otherData is Door && otherData.half != data.half) {
+          if (
+              other.type == block.type &&
+                  otherData is Door &&
+                  otherData.half != data.half &&
+                  otherData.facing == data.facing &&
+                  otherData.hinge == data.hinge
+          ) {
             otherData.isOpen = data.isOpen
             parts += other to otherData
           }

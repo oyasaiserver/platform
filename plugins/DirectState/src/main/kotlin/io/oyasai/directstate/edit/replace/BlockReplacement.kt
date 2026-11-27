@@ -92,7 +92,11 @@ internal class BlockReplacement(private val types: TypeReplacement) {
     val otherData = other.blockData
     val isOtherHalf =
         when {
-          data is Door && otherData is Door -> otherData.half != data.half
+          data is Door && otherData is Door ->
+              otherData.material == data.material &&
+                  otherData.half != data.half &&
+                  otherData.facing == data.facing &&
+                  otherData.hinge == data.hinge
           data is Bed && otherData is Bed -> otherData.part != data.part
           else -> false
         }
