@@ -79,6 +79,7 @@ class DirectState : JavaPlugin(), Listener {
             ::applyEdit,
             forcePlacementSetting = { playerSettings.get(it.uniqueId).forcePlacement },
             keepStateSetting = { playerSettings.get(it.uniqueId).keepState },
+            adjustmentDivisor = { playerSettings.get(it.uniqueId).adjustmentDivisor },
         )
     val blockChangeLog =
         if (server.pluginManager.isPluginEnabled("CoreProtect")) {

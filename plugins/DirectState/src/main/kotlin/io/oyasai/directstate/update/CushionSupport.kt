@@ -28,6 +28,7 @@ internal class CushionSupport(
     private val plugin: JavaPlugin,
     private val enabled: (Player) -> Boolean,
     private val applyItem: (Player, Cushion, ItemStack) -> Unit = CushionItemData::apply,
+    private val adjustmentDivisor: (Player) -> Int = { 8 },
 ) : Listener {
   private val key = NamespacedKey.fromString("directstate:keep_cushion")!!
 
@@ -87,9 +88,12 @@ internal class CushionSupport(
     val hand = event.hand ?: return
     val original = player.inventory.getItem(hand).clone()
     if (!original.isSimilar(event.item) || original.amount < 1) return
+    val divisor = adjustmentDivisor(player)
     val location =
         target.location.clone().add(0.5, 0.0, 0.5).apply {
-          y = if (event.blockFace.modY != 0) point.y else Math.round(point.y * 8).toDouble() / 8
+          y =
+              if (event.blockFace.modY != 0) point.y
+              else Math.round(point.y * divisor).toDouble() / divisor
           if (event.blockFace == BlockFace.DOWN) {
             val clicked = event.clickedBlock!!
             val bottomOrFull =
@@ -110,13 +114,7 @@ internal class CushionSupport(
       cushion.setRotation(location.yaw, 0f)
       applyItem(player, cushion, original)
       val box = cushion.boundingBox
-      if (
-          box.maxY > target.world.maxHeight ||
-              target.world.getNearbyEntities(box).any {
-                it is Cushion && it.boundingBox.overlaps(box)
-              }
-      )
-          return
+      if (box.maxY > target.world.maxHeight) return
       val place = EntityPlaceEvent(cushion, player, event.clickedBlock!!, event.blockFace, hand)
       plugin.server.pluginManager.callEvent(place)
       if (place.isCancelled || cushion.isDead) return

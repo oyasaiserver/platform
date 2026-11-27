@@ -147,7 +147,7 @@ internal class ForcePlacement(
             material == Material.SEAGRASS ||
             onCushion ||
             forcedHangingSign ||
-            (signMaterial && clicked.isReplaceable)
+            (clicked.isReplaceable && !clicked.isLiquid && !clicked.type.isAir)
     if (!needsForcedPlacement && state.isSupported(target)) return false
 
     event.isCancelled = true
@@ -222,10 +222,11 @@ internal class ForcePlacement(
   private fun allowed(player: Player) =
       player.gameMode == GameMode.SURVIVAL || player.gameMode == GameMode.CREATIVE
 
-  /** 看板は花などの置換可能ブロックを置き換えず、クリック面の隣へ配置する。 */
+  /** 強制配置時は草・ツタ・花などの置換可能ブロックを置き換えず、クリック面の隣へ配置する。 */
   private fun placementTarget(clicked: Block, material: Material, face: BlockFace): Block =
       if (
-          material.name.endsWith("_SIGN") ||
+          (clicked.isReplaceable && !clicked.isLiquid && !clicked.type.isAir) ||
+              material.name.endsWith("_SIGN") ||
               !PlacementGeometry.replaceClicked(clicked.isReplaceable, clicked.type == material)
       )
           clicked.getRelative(face)

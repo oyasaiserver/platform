@@ -43,6 +43,7 @@ internal class UpdateMode(
     private val naturalLocks: NaturalUpdateLock = NaturalUpdateLock(plugin),
     private val forcePlacementSetting: (Player) -> Boolean = { true },
     private val keepStateSetting: (Player) -> Boolean = { true },
+    private val adjustmentDivisor: (Player) -> Int = { 8 },
 ) : Listener {
   /** UpdateGuardのキーに使う、ワールドとブロック座標。 */
   private data class Position(val world: UUID, val x: Int, val y: Int, val z: Int)
@@ -63,7 +64,8 @@ internal class UpdateMode(
   private val buttons = mutableMapOf<Position, ButtonReset>()
   private var tick = 0L
   private val hangings = HangingSupport(::enabled, ::keepingEnabled, isTool)
-  private val cushions = CushionSupport(plugin, ::keepingEnabled)
+  private val cushions =
+      CushionSupport(plugin, ::keepingEnabled, adjustmentDivisor = adjustmentDivisor)
   private val forcePlacement =
       ForcePlacement(
           plugin,
