@@ -118,11 +118,22 @@ internal class ForcePlacement(
             !material.name.endsWith("_WALL_HANGING_SIGN") &&
             faceIsFloorOrCeiling(event.blockFace)
     val face = event.blockFace
+    val protectClicked =
+        !onCushion && clicked.isReplaceable && !clicked.isLiquid && !clicked.type.isAir
     val target =
         if (onCushion) clicked.getRelative(face) else placementTarget(clicked, material, face)
-    if (!withinBounds(player, target) || !target.isReplaceable) return false
+    fun abort(): Boolean {
+      if (protectClicked) {
+        event.isCancelled = true
+        return true
+      }
+      return false
+    }
+    if (!withinBounds(player, target) || !target.isReplaceable) return abort()
+    if (protectClicked && target.type == clicked.type && target.blockData is Bisected)
+        return abort()
     val point =
-        event.interactionPoint?.toVector()?.subtract(target.location.toVector()) ?: return false
+        event.interactionPoint?.toVector()?.subtract(target.location.toVector()) ?: return abort()
     val state =
         placementState(
             material,
@@ -132,10 +143,10 @@ internal class ForcePlacement(
             player.eyeLocation.direction,
             point,
             target,
-        ) ?: return false
+        ) ?: return abort()
     val parts = parts(target, state)
     if (parts.any { !withinBounds(player, it.block) || !it.block.isReplaceable || collides(it) })
-        return false
+        return abort()
     // BlockCanBuildEventの前に失敗する例 (ボタン/フック) はここに到達する。
     // 上半分はまだ配置されていない下半分に依存するため、根元の支持だけを調べる。
     // Kelpは特殊例で、アイテム配置は水ブロックを置き換えるが、配置前の支持確認では
@@ -147,7 +158,7 @@ internal class ForcePlacement(
             material == Material.SEAGRASS ||
             onCushion ||
             forcedHangingSign ||
-            (clicked.isReplaceable && !clicked.isLiquid && !clicked.type.isAir)
+            protectClicked
     if (!needsForcedPlacement && state.isSupported(target)) return false
 
     event.isCancelled = true
