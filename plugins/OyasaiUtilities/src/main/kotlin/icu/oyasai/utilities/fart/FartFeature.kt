@@ -14,6 +14,7 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Entity
+import org.bukkit.entity.Interaction
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -84,7 +85,8 @@ object FartFeature : Listener, CommandExecutor, TabCompleter {
   fun isOn(id: UUID): Boolean = id in modes
 
   fun staysOnHead(p: Player, vehicle: Entity? = p.vehicle): Boolean =
-      modes[p.uniqueId] == Mode.STAY && vehicle is Player
+      modes[p.uniqueId] == Mode.STAY &&
+          (vehicle is Player || (vehicle is Interaction && vehicle.vehicle is Player))
 
   fun lifted(vy: Double): Double = min(vy + LIFT, MAX_UP)
 

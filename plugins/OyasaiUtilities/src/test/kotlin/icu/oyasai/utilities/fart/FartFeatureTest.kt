@@ -9,6 +9,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import org.bukkit.entity.Entity
+import org.bukkit.entity.Interaction
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDismountEvent
 
@@ -34,9 +35,11 @@ class FartFeatureTest {
     FartFeature.toggle(rider.uniqueId, Mode.STAY)
     try {
       assertNull(rider.vehicle)
-      val event = EntityDismountEvent(rider, carrier)
-      FartFeature.onDismount(event)
-      assertTrue(event.isCancelled)
+      for (vehicle in listOf(carrier, entity<Interaction>(vehicle = carrier))) {
+        val event = EntityDismountEvent(rider, vehicle)
+        FartFeature.onDismount(event)
+        assertTrue(event.isCancelled)
+      }
     } finally {
       FartFeature.toggle(rider.uniqueId)
     }
@@ -75,6 +78,9 @@ class FartFeatureTest {
     FartFeature.toggle(id, Mode.STAY)
     try {
       assertTrue(FartFeature.staysOnHead(entity<Player>(id, vehicle = carrier)))
+      val seat = entity<Interaction>(vehicle = carrier)
+      assertTrue(FartFeature.staysOnHead(entity<Player>(id, vehicle = seat)))
+      assertFalse(FartFeature.staysOnHead(entity<Player>(id, vehicle = entity<Interaction>())))
       assertFalse(FartFeature.staysOnHead(entity<Player>(id)))
       assertFalse(FartFeature.staysOnHead(entity<Player>(id, vehicle = entity<Entity>())))
     } finally {

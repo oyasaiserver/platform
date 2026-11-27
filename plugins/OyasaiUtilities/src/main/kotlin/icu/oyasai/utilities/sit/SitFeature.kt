@@ -24,6 +24,7 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Interaction
 import org.bukkit.entity.Mannequin
 import org.bukkit.entity.Player
 import org.bukkit.entity.Pose
@@ -49,6 +50,19 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
+import org.bukkit.util.BoundingBox
+
+internal fun footSupportBox(at: Location, scale: Double): BoundingBox {
+  val halfWidth = 0.3 * scale
+  return BoundingBox(
+      at.x - halfWidth,
+      at.y - 0.05,
+      at.z - halfWidth,
+      at.x + halfWidth,
+      at.y,
+      at.z + halfWidth,
+  )
+}
 
 class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, TabCompleter {
   private enum class Mode {
@@ -75,7 +89,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   // サーバーが落ちても、再参加のときに透明化を元へ戻す。
   private val hiddenKey = NamespacedKey(plugin, "sit_hidden_was_invisible")
   private val states = mutableMapOf<UUID, State>()
-  private val playerRides = mutableMapOf<UUID, UUID>()
+  private val playerRides = mutableMapOf<UUID, PlayerSitRules.Ride>()
   private var playerMode = PlayerSitMode.RANK
   private val off = mutableSetOf<UUID>()
   private var store: SitStore? = null
@@ -242,6 +256,11 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
           it.setCanTick(false)
           it.persistentDataContainer.set(seatKey, PersistentDataType.BYTE, 1)
         }
+    if (!stand.isValid) {
+      stand.remove()
+      player.sendMessage("今はできません。")
+      return false
+    }
     if (!stand.addPassenger(player)) {
       stand.remove()
       player.sendMessage("座れませんでした。")
@@ -282,6 +301,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
               it.setPose(pose, true)
               if (mode == Mode.SPIN) it.isRiptiding = true
             }
+        check(mannequin.isValid) { "Mannequin spawn was rejected" }
       } catch (failure: Exception) {
         mannequin?.remove()
         stand.removePassenger(player)
@@ -351,11 +371,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   }
 
   private fun releasePlayerRides(id: UUID) {
-    PlayerSitRules.detach(playerRides, id).forEach { (riderId, carrierId) ->
-      val rider = Bukkit.getPlayer(riderId) ?: return@forEach
-      Bukkit.getPlayer(carrierId)?.showEntity(plugin, rider)
-      rider.vehicle?.takeIf { it.uniqueId == carrierId }?.removePassenger(rider)
-    }
+    PlayerSitRules.detach(playerRides, id).forEach { it.seat.remove() }
   }
 
   private fun primaryGroup(player: Player): String? {
@@ -389,14 +405,10 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
         PlayerSitRules.top(rider.uniqueId, clicked.uniqueId) { id ->
           val carrier = Bukkit.getEntity(id) as? Player
           if (
-              carrier == null ||
-                  !carrier.isOnline ||
-                  carrier.isDead ||
-                  carrier.world != rider.world ||
-                  carrier.passengers.any { it !is Player }
+              carrier == null || !carrier.isOnline || carrier.isDead || carrier.world != rider.world
           )
               null
-          else carrier.passengers.map { it.uniqueId }
+          else PlayerSitRules.playerPassengers(carrier.passengers, seatKey)
         } ?: return
     val target = Bukkit.getPlayer(topId) ?: return
     if (playerMode == PlayerSitMode.RANK) {
@@ -411,14 +423,24 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
         return
       }
     }
-    if (target.addPassenger(rider)) {
-      playerRides[rider.uniqueId] = target.uniqueId
-      // 乗った人の当たり判定は下の人の目の高さにかかり、下の人の照準を奪う。
-      // 下の人の画面からだけ消して、ブロックの設置や操作をできるようにする。
-      target.hideEntity(plugin, rider)
-      event.isCancelled = true
-      rider.sendActionBar(Component.text("スニークで戻る"))
+    val riderScale = rider.getAttribute(Attribute.SCALE)?.value ?: 1.0
+    val carrierScale = target.getAttribute(Attribute.SCALE)?.value ?: 1.0
+    val seat =
+        target.world.spawn(target.location, Interaction::class.java) {
+          it.interactionWidth = 0f
+          it.interactionHeight = PlayerSitRules.interactionHeight(riderScale, carrierScale)
+          it.isInvulnerable = true
+          it.isPersistent = false
+          it.isResponsive = false
+          it.persistentDataContainer.set(seatKey, PersistentDataType.BYTE, 1)
+        }
+    if (!seat.isValid || !target.addPassenger(seat) || !seat.addPassenger(rider) || !seat.isValid) {
+      seat.remove()
+      return
     }
+    playerRides[rider.uniqueId] = PlayerSitRules.Ride(target.uniqueId, seat)
+    event.isCancelled = true
+    rider.sendActionBar(Component.text("スニークで戻る"))
   }
 
   @EventHandler
@@ -473,7 +495,7 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   @EventHandler(ignoreCancelled = true)
   fun onDismount(event: EntityDismountEvent) {
     val player = event.entity as? Player ?: return
-    if (playerRides[player.uniqueId] == event.dismounted.uniqueId) {
+    if (playerRides[player.uniqueId]?.seat == event.dismounted) {
       releasePlayerRides(player.uniqueId)
       return
     }
@@ -598,16 +620,18 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
   }
 
   private fun sweep() {
-    playerRides.toMap().forEach { (id, carrierId) ->
+    playerRides.toMap().forEach { (id, ride) ->
       val rider = Bukkit.getPlayer(id)
-      val carrier = Bukkit.getPlayer(carrierId)
+      val carrier = Bukkit.getPlayer(ride.carrierId)
       if (
           rider == null ||
               carrier == null ||
               rider.isDead ||
               carrier.isDead ||
               rider.world != carrier.world ||
-              rider.vehicle != carrier
+              !ride.seat.isValid ||
+              rider.vehicle != ride.seat ||
+              ride.seat.vehicle != carrier
       )
           releasePlayerRides(id)
     }
@@ -631,9 +655,15 @@ class SitFeature(private val plugin: JavaPlugin) : Listener, CommandExecutor, Ta
         stop(player, true)
         return@forEach
       }
-      val support = state.support ?: state.standAt?.clone()?.add(0.0, -0.01, 0.0)?.block
-      if (support != null && (if (state.clicked) !seatBlock(support) else support.isPassable))
-          stop(player, true)
+      val supported =
+          if (state.clicked) {
+            state.support?.let { seatBlock(it) } == true
+          } else {
+            val at = state.standAt ?: return@forEach
+            val scale = player.getAttribute(Attribute.SCALE)?.value ?: 1.0
+            player.world.hasCollisionsIn(footSupportBox(at, scale))
+          }
+      if (!supported) stop(player, true)
     }
   }
 
