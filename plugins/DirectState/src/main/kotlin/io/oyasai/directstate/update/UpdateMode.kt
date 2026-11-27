@@ -44,6 +44,7 @@ internal class UpdateMode(
     private val forcePlacementSetting: (Player) -> Boolean = { true },
     private val keepStateSetting: (Player) -> Boolean = { true },
     private val adjustmentDivisor: (Player) -> Int = { 8 },
+    private val embedCushionInNonFullBlock: (Player) -> Boolean = { false },
 ) : Listener {
   /** UpdateGuardのキーに使う、ワールドとブロック座標。 */
   private data class Position(val world: UUID, val x: Int, val y: Int, val z: Int)
@@ -72,6 +73,7 @@ internal class UpdateMode(
           placeCushion = cushions::place,
           enabled = ::forcePlacementEnabled,
           protectPlacement = ::protectPlacement,
+          embedCushionInNonFullBlock = embedCushionInNonFullBlock,
       )
 
   init {

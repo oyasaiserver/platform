@@ -168,6 +168,13 @@ internal class SettingsMenu(
             configured.keepState,
             "日照センサー・クッションなど",
         )
+        boolean(
+            14,
+            Material.WHITE_CUSHION,
+            "フルブロック以外でクッションを埋める",
+            configured.embedCushionInNonFullBlock,
+            "フルブロック以外をクリック時、同じ位置に設置",
+        )
       }
       Page.REPLACE -> menu.setItem(13, link(Material.RED_STAINED_GLASS_PANE, "何もありません"))
       Page.GENERAL -> boolean(10, Material.NOTE_BLOCK, "編集音", configured.editSound)
@@ -248,6 +255,7 @@ internal class SettingsMenu(
           when (slot) {
             10 -> save(player) { it.forcePlacement = !it.forcePlacement }
             12 -> save(player) { it.keepState = !it.keepState }
+            14 -> save(player) { it.embedCushionInNonFullBlock = !it.embedCushionInNonFullBlock }
             else -> return
           }
       Page.GENERAL -> if (slot == 10) save(player) { it.editSound = !it.editSound } else return

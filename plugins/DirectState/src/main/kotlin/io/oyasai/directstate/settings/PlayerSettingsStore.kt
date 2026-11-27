@@ -44,6 +44,7 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
             "adjustment_divisor" to "INTEGER NOT NULL DEFAULT 8",
             "force_placement" to "INTEGER NOT NULL DEFAULT 1",
             "keep_state" to "INTEGER NOT NULL DEFAULT 1",
+            "embed_cushion_in_non_full_block" to "INTEGER NOT NULL DEFAULT 0",
             "edit_sound" to "INTEGER NOT NULL DEFAULT 1",
             "player_name" to "TEXT",
         )
@@ -63,7 +64,7 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
     connection
         .prepareStatement(
             "SELECT uuid, hand_enabled, update_enabled, replacement_enabled, type_replacement_mode, " +
-                "itemless_modes_disabled, inverse_cushion_on_shift, adjustment_divisor, force_placement, keep_state, edit_sound, player_name " +
+                "itemless_modes_disabled, inverse_cushion_on_shift, adjustment_divisor, force_placement, keep_state, embed_cushion_in_non_full_block, edit_sound, player_name " +
                 "FROM player_settings"
         )
         .use { statement ->
@@ -88,6 +89,8 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
                               ?: 8,
                       forcePlacement = rows.getInt("force_placement") != 0,
                       keepState = rows.getInt("keep_state") != 0,
+                      embedCushionInNonFullBlock =
+                          rows.getInt("embed_cushion_in_non_full_block") != 0,
                       editSound = rows.getInt("edit_sound") != 0,
                       playerName = rows.getString("player_name"),
                   )
@@ -131,8 +134,8 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
         .prepareStatement(
             """
             INSERT INTO player_settings
-                (uuid, hand_enabled, update_enabled, replacement_enabled, type_replacement_mode, itemless_modes_disabled, inverse_cushion_on_shift, adjustment_divisor, force_placement, keep_state, edit_sound, player_name)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (uuid, hand_enabled, update_enabled, replacement_enabled, type_replacement_mode, itemless_modes_disabled, inverse_cushion_on_shift, adjustment_divisor, force_placement, keep_state, embed_cushion_in_non_full_block, edit_sound, player_name)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(uuid) DO UPDATE SET
                 hand_enabled = excluded.hand_enabled,
                 update_enabled = excluded.update_enabled,
@@ -143,6 +146,7 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
                 adjustment_divisor = excluded.adjustment_divisor,
                 force_placement = excluded.force_placement,
                 keep_state = excluded.keep_state,
+                embed_cushion_in_non_full_block = excluded.embed_cushion_in_non_full_block,
                 edit_sound = excluded.edit_sound,
                 player_name = excluded.player_name
             """
@@ -159,8 +163,9 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
           statement.setInt(8, settings.adjustmentDivisor)
           statement.setInt(9, if (settings.forcePlacement) 1 else 0)
           statement.setInt(10, if (settings.keepState) 1 else 0)
-          statement.setInt(11, if (settings.editSound) 1 else 0)
-          statement.setString(12, settings.playerName)
+          statement.setInt(11, if (settings.embedCushionInNonFullBlock) 1 else 0)
+          statement.setInt(12, if (settings.editSound) 1 else 0)
+          statement.setString(13, settings.playerName)
           statement.executeUpdate()
         }
   }

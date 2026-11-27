@@ -80,6 +80,9 @@ class DirectState : JavaPlugin(), Listener {
             forcePlacementSetting = { playerSettings.get(it.uniqueId).forcePlacement },
             keepStateSetting = { playerSettings.get(it.uniqueId).keepState },
             adjustmentDivisor = { playerSettings.get(it.uniqueId).adjustmentDivisor },
+            embedCushionInNonFullBlock = {
+              playerSettings.get(it.uniqueId).embedCushionInNonFullBlock
+            },
         )
     val blockChangeLog =
         if (server.pluginManager.isPluginEnabled("CoreProtect")) {

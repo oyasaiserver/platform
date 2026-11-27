@@ -33,6 +33,7 @@ internal class ForcePlacement(
     private val applyItem: (Player, Block, ItemStack) -> Unit = BlockEntityAccess::applyItem,
     private val placeCushion: ((PlayerInteractEvent, Block, Boolean) -> Unit)? = null,
     private val enabled: (Player) -> Boolean = { false },
+    private val embedCushionInNonFullBlock: (Player) -> Boolean = { false },
     private val protectPlacement: (Player, Map<Block, BlockData>) -> Unit,
 ) : Listener {
   /** 複数ブロック配置を構成する、一つの座標と配置後状態。 */
@@ -99,7 +100,12 @@ internal class ForcePlacement(
       if (!onCushion && VanillaInteraction.consumesClick(event)) return false
       val point = event.interactionPoint ?: return false
       if (point.blockY !in clicked.world.minHeight until clicked.world.maxHeight) return false
-      val offset = if (!onCushion && clicked.isReplaceable) BlockFace.SELF else event.blockFace
+      val embed =
+          !onCushion &&
+              embedCushionInNonFullBlock(player) &&
+              !clicked.collisionShape.boundingBoxes.any { it.volume == 1.0 }
+      val offset =
+          if (!onCushion && (clicked.isReplaceable || embed)) BlockFace.SELF else event.blockFace
       val target =
           clicked.world.getBlockAt(clicked.x + offset.modX, point.blockY, clicked.z + offset.modZ)
       if (!withinBounds(player, clicked) || !withinBounds(player, target)) return false

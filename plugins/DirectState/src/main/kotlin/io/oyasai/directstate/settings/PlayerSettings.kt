@@ -13,6 +13,7 @@ internal data class PlayerSettings(
     var adjustmentDivisor: Int = 8,
     var forcePlacement: Boolean = true,
     var keepState: Boolean = true,
+    var embedCushionInNonFullBlock: Boolean = false,
     var editSound: Boolean = true,
     var playerName: String? = null,
 )
