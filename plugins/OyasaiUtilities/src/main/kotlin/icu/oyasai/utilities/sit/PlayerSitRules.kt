@@ -1,6 +1,11 @@
 package icu.oyasai.utilities.sit
 
 import java.util.UUID
+import org.bukkit.NamespacedKey
+import org.bukkit.entity.Entity
+import org.bukkit.entity.Interaction
+import org.bukkit.entity.Player
+import org.bukkit.persistence.PersistentDataType
 
 internal enum class PlayerSitMode {
   RANK,
@@ -12,6 +17,25 @@ internal enum class PlayerSitMode {
 }
 
 internal object PlayerSitRules {
+  data class Ride(val carrierId: UUID, val seat: Interaction)
+
+  fun interactionHeight(riderScale: Double, carrierScale: Double): Float =
+      (maxOf(0.0, 0.6 * riderScale - 0.18 * carrierScale) + 0.08).toFloat()
+
+  fun playerPassengers(passengers: List<Entity>, seatKey: NamespacedKey): List<UUID>? =
+      passengers.map { passenger ->
+        when (passenger) {
+          is Player -> passenger.uniqueId
+          is Interaction -> {
+            if (!passenger.persistentDataContainer.has(seatKey, PersistentDataType.BYTE))
+                return null
+            val rider = passenger.passengers.singleOrNull() as? Player ?: return null
+            rider.uniqueId
+          }
+          else -> return null
+        }
+      }
+
   val rankOrder =
       listOf(
           "white",
@@ -34,16 +58,16 @@ internal object PlayerSitRules {
 
   // Detach only this rider and riders above them, never their carrier or unrelated stacks.
   // Return top-first edges after removing all tracking, so event callbacks cannot re-enter them.
-  fun detach(rides: MutableMap<UUID, UUID>, id: UUID): List<Pair<UUID, UUID>> {
+  fun detach(rides: MutableMap<UUID, Ride>, id: UUID): List<Ride> {
     val affected = mutableListOf<UUID>()
     val visited = mutableSetOf<UUID>()
     fun collect(current: UUID) {
       if (!visited.add(current)) return
       affected.add(current)
-      rides.filterValues { it == current }.keys.forEach { collect(it) }
+      rides.filterValues { it.carrierId == current }.keys.forEach { collect(it) }
     }
     collect(id)
-    return affected.asReversed().mapNotNull { rider -> rides.remove(rider)?.let { rider to it } }
+    return affected.asReversed().mapNotNull { rides.remove(it) }
   }
 
   // Walk the actual passenger graph, including passengers mounted by other plugins.
