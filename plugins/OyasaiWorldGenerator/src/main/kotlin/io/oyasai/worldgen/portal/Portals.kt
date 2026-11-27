@@ -103,10 +103,7 @@ internal fun parsePortals(source: File): PortalImport {
   return PortalImport(parsed, skipped, unsupportedActions)
 }
 
-class Portals(
-    private val plugin: JavaPlugin,
-    private val onArrival: (Player) -> Unit = {},
-) : Listener {
+class Portals(private val plugin: JavaPlugin) : Listener {
   private val file = File(plugin.dataFolder, "portals.yml")
   private val entries = linkedMapOf<String, Portal>()
   private var yaml = YamlConfiguration().apply { options().pathSeparator('\u0000') }
@@ -275,10 +272,8 @@ class Portals(
     if (dismount) player.leaveVehicle()
     if (player.teleport(destination)) {
       lastUse[id] = now
-      val targetPortal = at(destination)
-      if (targetPortal != null) arrival[id] = targetPortal.name else arrival.remove(id)
+      arrival[id] = at(destination)?.name ?: ""
       player.fallDistance = 0f
-      onArrival(player)
     }
   }
 
@@ -291,7 +286,7 @@ class Portals(
       val x = (target.minX + target.maxX + 1) / 2.0
       val z = (target.minZ + target.maxZ + 1) / 2.0
       val y =
-          (maxOf(target.minY, world.minHeight)..minOf(target.maxY, world.maxHeight - 1))
+          (maxOf(target.minY, world.minHeight) until minOf(target.maxY, world.maxHeight - 1))
               .firstOrNull { safe(world, x, it.toDouble(), z) } ?: target.minY
       if (target.safeTeleport && !safe(world, x, y.toDouble(), z)) return null
       val yaw =

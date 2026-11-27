@@ -42,12 +42,11 @@ data class OwgConfig(
     val validationErrors: List<String>,
 ) {
   companion object {
-    private val SAFE_WORLD_NAME = Regex("[A-Za-z0-9_-]+")
+    private val SAFE_WORLD_NAME = Regex("[A-Za-z0-9_.-]+")
 
     fun empty(): OwgConfig = OwgConfig(emptyMap(), true, false, emptySet(), emptyList())
 
-    fun isSafeWorldName(worldName: String): Boolean =
-        worldName != "." && worldName != ".." && SAFE_WORLD_NAME.matches(worldName)
+    fun isSafeWorldName(worldName: String): Boolean = SAFE_WORLD_NAME.matches(worldName)
 
     fun defaultWorld(worldName: String, kind: OwgWorldKind): OwgWorldConfig =
         OwgWorldConfig(
