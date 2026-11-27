@@ -30,13 +30,15 @@ internal class HandEditor(private val shapeEditor: ShapeEditor) {
       hit: Vector,
       face: BlockFace?,
       blockEntityPresent: Boolean = true,
+      reverse: Boolean = false,
   ): Result? {
-    if (shapeEditor.supports(original)) return Result(shapeEditor.toggle(original, hit, face))
+    if (shapeEditor.supports(original))
+        return Result(shapeEditor.toggle(original, hit, face, reverse))
     val data = original.clone()
-    val blockEdit = BlockStateEditor.edit(data, face, hit, blockEntityPresent)
+    val blockEdit = BlockStateEditor.edit(data, face, hit, blockEntityPresent, reverse)
     if (blockEdit != null) return blockEdit
-    if (CommonStateEditor.edit(data)) return Result(data)
-    val material = HandMaterials.switchMaterial(original.material.name) ?: return null
+    if (CommonStateEditor.edit(data, reverse)) return Result(data)
+    val material = HandMaterials.switchMaterial(original.material.name, reverse) ?: return null
     return Result(data, material)
   }
 }

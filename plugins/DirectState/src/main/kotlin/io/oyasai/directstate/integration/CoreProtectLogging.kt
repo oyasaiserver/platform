@@ -30,8 +30,13 @@ private constructor(
     val block = location.block
     val hiddenBody =
         block.blockData.takeIf {
-          (it.material == Material.BELL || it.material == Material.ENCHANTING_TABLE) &&
-              !BlockEntityAccess.hasBody(block)
+          it.material in
+              setOf(
+                  Material.BELL,
+                  Material.ENCHANTING_TABLE,
+                  Material.BREWING_STAND,
+                  Material.CREAKING_HEART,
+              ) && !BlockEntityAccess.hasBody(block)
         }
     try {
       if (!coreProtect.isEnabled || !api.isEnabled) {

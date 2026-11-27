@@ -27,17 +27,21 @@ internal class DirectStateCommand(
   private val menu =
       SettingsMenu(
           { playerSettings.get(it.uniqueId) },
-          { player, change -> playerSettings.update(player.uniqueId, change) },
+          { player, change ->
+            playerSettings.update(player.uniqueId) {
+              change(it)
+              it.playerName = player.name
+            }
+          },
           { player, slot ->
             when (slot) {
               10 -> Permissions.has(player, Permissions.HAND)
               12 -> Permissions.has(player, Permissions.UPDATE)
               14,
-              16 -> Permissions.has(player, Permissions.REPLACE)
+              16 -> false
               22 ->
-                  Permissions.has(player, Permissions.HAND) &&
-                      Permissions.has(player, Permissions.UPDATE) &&
-                      Permissions.has(player, Permissions.REPLACE)
+                  Permissions.has(player, Permissions.HAND) ||
+                      Permissions.has(player, Permissions.UPDATE)
               else -> false
             }
           },
@@ -84,21 +88,36 @@ internal class DirectStateCommand(
           "dsu" -> "update"
           else -> args.firstOrNull()?.lowercase()?.let { if (it == "tgl") "toggle" else it }
         }
-    val permission =
+    if (sender !is Player) {
+      sender.sendMessage("権限がありません。")
+      return true
+    }
+    val hasPermission =
         when (operation) {
-          "hand" -> Permissions.HAND
-          "replace" -> Permissions.REPLACE
-          "update" -> Permissions.UPDATE
-          "stick",
-          "sstick",
-          "hstick" -> Permissions.GET_TOOL
-          null,
-          "gui",
-          "undo",
-          "redo" -> null
-          else -> Permissions.ALL
+          "toggle" ->
+              Permissions.has(sender, Permissions.HAND) ||
+                  Permissions.has(sender, Permissions.UPDATE) ||
+                  Permissions.has(sender, Permissions.REPLACE)
+          else -> {
+            val permission =
+                when (operation) {
+                  "hand" -> Permissions.HAND
+                  "replace" -> Permissions.REPLACE
+                  "update" -> Permissions.UPDATE
+                  "stick",
+                  "sstick",
+                  "hstick" -> Permissions.GET_TOOL
+                  null,
+                  "gui",
+                  "help",
+                  "undo",
+                  "redo" -> null
+                  else -> Permissions.ALL
+                }
+            permission == null || Permissions.has(sender, permission)
+          }
         }
-    if (sender !is Player || permission != null && !Permissions.has(sender, permission)) {
+    if (!hasPermission) {
       sender.sendMessage("権限がありません。")
       return true
     }
@@ -114,17 +133,7 @@ internal class DirectStateCommand(
       "toggle" -> toggleItemlessModes(sender)
       "update" -> setUpdateMode(sender, commandArgs.firstOrNull(), argumentCount)
       "hand" -> setHandMode(sender, commandArgs.firstOrNull(), argumentCount)
-      "replace" ->
-          when {
-            commandArgs.isEmpty() ->
-                writeReplacementMode(
-                    sender,
-                    !playerSettings.get(sender.uniqueId).replacementEnabled,
-                )
-            commandArgs.first().equals("type", true) || commandArgs.first().equals("tp", true) ->
-                setTypeReplacementMode(sender, commandArgs.getOrNull(1), argumentCount)
-            else -> setReplacementMode(sender, commandArgs.firstOrNull(), argumentCount)
-          }
+      "replace" -> sender.sendMessage("置換モードは現在無効化されています。")
       "stick" -> handleTool(sender, commandArgs, ToolItems.Kind.HAND)
       "sstick" -> handleTool(sender, commandArgs, ToolItems.Kind.SIMPLE)
       "hstick" -> handleTool(sender, commandArgs, ToolItems.Kind.HOLD)
@@ -210,8 +219,7 @@ internal class DirectStateCommand(
     return when {
       alias == "dsh" && args.size == 1 -> matches(args[0], "on", "off", "toggle")
       alias == "dsu" && args.size == 1 -> matches(args[0], "on", "off", "toggle")
-      alias == "dsr" && args.size == 1 -> matches(args[0], "on", "off", "toggle", "tp")
-      alias == "dsr" && args.size == 2 && args[0].equals("tp", true) -> completeTypeMode(args[1])
+      alias == "dsr" -> emptyList()
       args.size == 1 ->
           matches(
               args[0],
@@ -224,7 +232,6 @@ internal class DirectStateCommand(
               "hstick",
               "hand",
               "update",
-              "replace",
               "undo",
               "redo",
           )
@@ -255,7 +262,10 @@ internal class DirectStateCommand(
 
   /** Hand設定を保存し、変更後の状態をプレイヤーへ通知する。 */
   private fun writeHandMode(player: Player, enabled: Boolean) {
-    playerSettings.update(player.uniqueId) { it.handEnabled = enabled }
+    playerSettings.update(player.uniqueId) {
+      it.handEnabled = enabled
+      it.playerName = player.name
+    }
     player.sendMessage("Hand: ${if (enabled) "ON" else "OFF"}")
   }
 
@@ -273,7 +283,10 @@ internal class DirectStateCommand(
   /** Hand・Update・Replaceを個別設定を変えずにまとめて休止・再開する。 */
   private fun toggleItemlessModes(player: Player) {
     val disabled = !playerSettings.get(player.uniqueId).itemlessModesDisabled
-    playerSettings.update(player.uniqueId) { it.itemlessModesDisabled = disabled }
+    playerSettings.update(player.uniqueId) {
+      it.itemlessModesDisabled = disabled
+      it.playerName = player.name
+    }
     player.sendMessage(if (disabled) "DSを無効化しました。" else "DSを有効化しました。")
   }
 

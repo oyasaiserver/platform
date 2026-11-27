@@ -85,6 +85,11 @@ internal object BlockEntityAccess {
     level.blockTicks.clearArea(BoundingBox(BlockPos(block.x, block.y, block.z)))
   }
 
+  fun clearFluidTicks(block: Block) {
+    val level = (block.world as CraftWorld).handle
+    level.fluidTicks.clearArea(BoundingBox(BlockPos(block.x, block.y, block.z)))
+  }
+
   /** 固定操作が消す予約tickも、残り時間を含めて保存する。 */
   fun scheduledTicks(block: Block): List<SavedTick<net.minecraft.world.level.block.Block>> {
     val level = (block.world as CraftWorld).handle

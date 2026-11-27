@@ -21,16 +21,11 @@ internal data class BlockSnapshot(
     val body: Boolean?,
     val updates: UpdateMode.EditState,
     val tile: BlockState? = null,
-    val itemHolder: Boolean = false,
 )
 
 internal class EditHistory(
     private val server: Server,
     private val restoreBlocks: (Player, List<BlockSnapshot>) -> Boolean,
-    private val canEditEntity: (Player, Location) -> Boolean = { _, _ -> true },
-    private val restoreBlocksWithExpected:
-        ((Player, List<BlockSnapshot>, List<BlockSnapshot>) -> Boolean)? =
-        null,
 ) {
   private sealed interface Change {
     data class Blocks(val before: List<BlockSnapshot>, val after: List<BlockSnapshot>) : Change
@@ -116,58 +111,29 @@ internal class EditHistory(
     return Result(applied, skipped)
   }
 
-  private fun isSpawnProtected(player: Player, location: Location): Boolean {
-    val world = location.world ?: return false
-    if (player.isOp || server.operators.isEmpty() || world != server.worlds.firstOrNull()) {
-      return false
-    }
-    val spawn = world.spawnLocation ?: return false
-    val radius = server.spawnRadius
-    return radius > 0 &&
-        kotlin.math.max(
-            kotlin.math.abs(location.blockX - spawn.blockX),
-            kotlin.math.abs(location.blockZ - spawn.blockZ),
-        ) <= radius
-  }
-
-  private fun canModifyAt(player: Player, location: Location): Boolean =
-      !isSpawnProtected(player, location) && canEditEntity(player, location)
-
   private fun restore(player: Player, change: Change, redo: Boolean): Boolean =
       when (change) {
         is Change.Blocks -> {
-          val expected = if (redo) change.before else change.after
           val states = if (redo) change.after else change.before
-          if (restoreBlocksWithExpected != null) {
-            restoreBlocksWithExpected(player, states, expected)
-          } else {
-            restoreBlocks(player, states)
-          }
+          restoreBlocks(player, states)
         }
         is Change.Hanging -> {
-          val posLoc = change.position.location(server) ?: return false
-          if (!canModifyAt(player, posLoc)) return false
-          posLoc.world!!.getChunkAt(posLoc.blockX shr 4, posLoc.blockZ shr 4)
+          change.position.location(server)?.let {
+            it.world!!.getChunkAt(it.blockX shr 4, it.blockZ shr 4)
+          }
           val entity = server.getEntity(change.entity)
           entity != null &&
               entity.isValid &&
-              canModifyAt(player, entity.location) &&
               HangingEditor.restore(entity, if (redo) change.after else change.before)
         }
         is Change.CushionMove -> {
-          val beforeLoc = change.before.location(server) ?: return false
-          val afterLoc = change.after.location(server) ?: return false
-          if (!canModifyAt(player, beforeLoc) || !canModifyAt(player, afterLoc)) return false
           // 読込範囲外にあるクッションも、記録したチャンクを読み込んで探す。
-          for (loc in listOf(beforeLoc, afterLoc)) {
-            loc.world!!.getChunkAt(loc.blockX shr 4, loc.blockZ shr 4)
+          for (position in listOf(change.before, change.after)) position.location(server)?.let {
+            it.world!!.getChunkAt(it.blockX shr 4, it.blockZ shr 4)
           }
           val cushion = server.getEntity(change.entity) as? Cushion
-          val destination = if (redo) afterLoc else beforeLoc
-          cushion != null &&
-              cushion.isValid &&
-              canModifyAt(player, cushion.location) &&
-              cushion.teleport(destination)
+          val destination = (if (redo) change.after else change.before).location(server)
+          cushion != null && cushion.isValid && destination != null && cushion.teleport(destination)
         }
       }
 }

@@ -117,7 +117,29 @@ internal class UpdateMode(
     naturalLocks.forget(blocks)
     if (!keepingEnabled(player)) return
     blocks.forEach { setDaylightLocked(it, true) }
-    naturalLocks.freeze(blocks)
+    val targets = (blocks + adjacentCreakingHearts(blocks)).distinct()
+    naturalLocks.freeze(targets)
+  }
+
+  private fun adjacentCreakingHearts(blocks: List<Block>): List<Block> {
+    val faces =
+        arrayOf(
+            BlockFace.NORTH,
+            BlockFace.EAST,
+            BlockFace.SOUTH,
+            BlockFace.WEST,
+            BlockFace.UP,
+            BlockFace.DOWN,
+        )
+    return blocks.flatMap { root ->
+      faces.mapNotNull { face ->
+        if (root.y + face.modY !in root.world.minHeight until root.world.maxHeight)
+            return@mapNotNull null
+        if (!root.world.isChunkLoaded((root.x + face.modX) shr 4, (root.z + face.modZ) shr 4))
+            return@mapNotNull null
+        root.getRelative(face).takeIf { it.type == Material.CREAKING_HEART }
+      }
+    }
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -170,10 +192,7 @@ internal class UpdateMode(
     val other =
         block.getRelative(if (data.part == Bed.Part.FOOT) data.facing else data.facing.oppositeFace)
     return other.takeIf {
-      it.type == block.type &&
-          (it.blockData as? Bed)?.let { otherData ->
-            otherData.facing == data.facing && otherData.part != data.part
-          } == true
+      (it.blockData as? Bed)?.let { otherData -> otherData.part != data.part } == true
     }
   }
 
@@ -205,22 +224,17 @@ internal class UpdateMode(
   /** 破壊前に周囲を保護し、Update Mode中は消えたベッドの相方を次tickに戻す。 */
   fun breakBlock(event: BlockBreakEvent) {
     beforeEdit(event.player, listOf(event.block))
+    if (keepingEnabled(event.player)) {
+      val adjacentHearts = adjacentCreakingHearts(listOf(event.block)).filter { it != event.block }
+      if (adjacentHearts.isNotEmpty()) naturalLocks.freeze(adjacentHearts)
+    }
     if (!enabled(event.player)) return
-    if (event.player.gameMode != GameMode.CREATIVE) return
     val counterpart = bedCounterpart(event.block) ?: return
-    event.isDropItems = false
     val saved = counterpart.blockData.clone()
     plugin.server.scheduler.runTask(
         plugin,
         Runnable {
-          if (
-              event.player.isOnline &&
-                  event.player.gameMode == GameMode.CREATIVE &&
-                  loaded(counterpart) &&
-                  counterpart.type.isAir
-          ) {
-            write(event.player, counterpart, saved)
-          }
+          if (loaded(counterpart) && counterpart.type.isAir) write(event.player, counterpart, saved)
         },
     )
   }
@@ -328,20 +342,26 @@ internal class UpdateMode(
     }
   }
 
+  /** 周囲を保護し、通常のバケツ設置後に液体の初回更新を止める。 */
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  /** バケツで液体を置く前に周囲を保護する。 */
   fun bucketEmpty(event: PlayerBucketEmptyEvent) {
     beforeEdit(event.player, listOf(event.block))
+    if (keepingEnabled(event.player) && event.bucket != Material.POWDER_SNOW_BUCKET) {
+      naturalLocks.freezeFluidAfterPlacement(
+          event.block,
+          if (event.bucket == Material.LAVA_BUCKET) Material.LAVA else Material.WATER,
+      )
+    }
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   /** バケツで液体を取る前に周囲を保護する。 */
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun bucketFill(event: PlayerBucketFillEvent) {
     beforeEdit(event.player, listOf(event.block))
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 編集元または周辺から発生した物理更新を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun physics(event: BlockPhysicsEvent) {
     if (
         guard.active(position(event.block), tick) || guard.active(position(event.sourceBlock), tick)
@@ -349,36 +369,36 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード中ブロックの破壊イベントを止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun destroy(event: BlockDestroyEvent) {
     if (guard.active(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード中座標で砂・砂利等が落下ブロックへ変わるのを止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun falling(event: EntityChangeBlockEvent) {
     if (event.entity is FallingBlock && guard.active(position(event.block), tick))
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
   /** 周辺ブロックのレッドストーン出力を現在値に固定する。 */
+  @EventHandler(priority = EventPriority.HIGHEST)
   fun redstone(event: BlockRedstoneEvent) {
     // 同じBlockStateならサーバーが周囲への更新通知前に終了する。
     if (guard.neighbor(position(event.block), tick) || daylightLocked(event.block))
         event.newCurrent = event.oldCurrent
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード中ブロックから、またはガード中周辺への液体移動を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun flow(event: BlockFromToEvent) {
     if (guard.active(position(event.block), tick) || guard.neighbor(position(event.toBlock), tick))
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード範囲を動かすピストン伸長を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun piston(event: BlockPistonExtendEvent) {
     if (
         guard.active(position(event.block), tick) ||
@@ -387,8 +407,8 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード範囲を動かすピストン収縮を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun retract(event: BlockPistonRetractEvent) {
     if (
         guard.active(position(event.block), tick) ||
@@ -397,22 +417,22 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード中周辺のディスペンサー作動を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun dispense(event: BlockDispenseEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** Update Modeのプレイヤーまたはガード範囲が起こす振動を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun vibration(event: BlockReceiveGameEvent) {
     val player = event.entity as? Player
     if ((player != null && enabled(player)) || guard.active(position(event.block), tick))
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード範囲でブロックが燃え尽きるのを止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun burn(event: BlockBurnEvent) {
     if (
         guard.active(position(event.block), tick) ||
@@ -421,8 +441,8 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** プレイヤー着火は保護し、自然着火はガード範囲なら止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun ignite(event: BlockIgniteEvent) {
     val player = event.player
     if (player != null) {
@@ -435,45 +455,45 @@ internal class UpdateMode(
     }
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード元から周辺への延焼・成長を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun spread(event: BlockSpreadEvent) {
     if (guard.active(position(event.source), tick) || guard.neighbor(position(event.block), tick))
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 周辺座標でのブロック生成を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun form(event: BlockFormEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 周辺座標での融解・消滅を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun fade(event: BlockFadeEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 周辺座標での植物成長を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun grow(event: BlockGrowEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 周辺座標での葉の自然消滅を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun decay(event: LeavesDecayEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   /** プレイヤーの骨粉操作前に対象周辺を保護する。 */
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun fertilize(event: BlockFertilizeEvent) {
     event.player?.let { beforeEdit(it, listOf(event.block)) }
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** Update Modeのプレイヤーまたはガード範囲によるTNT着火を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun tnt(event: TNTPrimeEvent) {
     val player = event.primingEntity as? Player
     if (
@@ -484,8 +504,8 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 物理・閉塞による額縁等の破壊を、ガード範囲では止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun hanging(event: HangingBreakEvent) {
     if (
         event.cause != HangingBreakEvent.RemoveCause.PHYSICS &&

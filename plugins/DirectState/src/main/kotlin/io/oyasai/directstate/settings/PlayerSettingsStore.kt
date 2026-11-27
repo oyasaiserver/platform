@@ -13,6 +13,7 @@ import java.util.logging.Logger
 internal class PlayerSettingsStore(private val dataFolder: File, private val logger: Logger) {
   private val file = File(dataFolder, "users.db")
   private val users = mutableMapOf<UUID, PlayerSettings>()
+  private val persisted = mutableSetOf<UUID>()
   private lateinit var connection: Connection
 
   /** データベースを開き、現行形式の表を用意して全プレイヤー設定をメモリへ読む。 */
@@ -58,6 +59,7 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
           }
     }
     users.clear()
+    persisted.clear()
     connection
         .prepareStatement(
             "SELECT uuid, hand_enabled, update_enabled, replacement_enabled, type_replacement_mode, " +
@@ -69,6 +71,7 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
             while (rows.next()) {
               val uuid =
                   runCatching { UUID.fromString(rows.getString("uuid")) }.getOrNull() ?: continue
+              persisted += uuid
               users[uuid] =
                   PlayerSettings(
                       handEnabled = rows.getInt("hand_enabled") != 0,
@@ -78,7 +81,8 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
                           TypeReplaceMode.parse(rows.getString("type_replacement_mode"))
                               ?: TypeReplaceMode.OFF,
                       itemlessModesDisabled = rows.getInt("itemless_modes_disabled") != 0,
-                      inverseCushionOnShift = rows.getInt("inverse_cushion_on_shift") != 0,
+                      // DB列名は既存ユーザーのusers.db互換のためinverse_cushion_on_shiftを維持する。
+                      inverseRotateOnShift = rows.getInt("inverse_cushion_on_shift") != 0,
                       adjustmentDivisor =
                           rows.getInt("adjustment_divisor").takeIf { it in setOf(64, 32, 16, 8, 4) }
                               ?: 8,
@@ -96,7 +100,9 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
   fun get(uuid: UUID): PlayerSettings = users.getOrPut(uuid) { PlayerSettings() }
 
   fun recordName(uuid: UUID, name: String) {
-    if (get(uuid).playerName != name) update(uuid) { it.playerName = name }
+    if (uuid in persisted && users[uuid]?.playerName != name) {
+      update(uuid) { it.playerName = name }
+    }
   }
 
   /** 設定のコピーを保存してからメモリへ反映する。保存失敗時は現在値を保つ。 */
@@ -104,6 +110,7 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
     val changed = get(uuid).copy()
     change(changed)
     persist(uuid, changed)
+    persisted += uuid
     users[uuid] = changed
   }
 
@@ -148,7 +155,7 @@ internal class PlayerSettingsStore(private val dataFolder: File, private val log
           statement.setInt(4, if (settings.replacementEnabled) 1 else 0)
           statement.setString(5, settings.typeReplacementMode.name)
           statement.setInt(6, if (settings.itemlessModesDisabled) 1 else 0)
-          statement.setInt(7, if (settings.inverseCushionOnShift) 1 else 0)
+          statement.setInt(7, if (settings.inverseRotateOnShift) 1 else 0)
           statement.setInt(8, settings.adjustmentDivisor)
           statement.setInt(9, if (settings.forcePlacement) 1 else 0)
           statement.setInt(10, if (settings.keepState) 1 else 0)

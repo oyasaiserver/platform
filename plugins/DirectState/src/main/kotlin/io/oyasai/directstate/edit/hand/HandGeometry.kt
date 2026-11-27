@@ -265,18 +265,25 @@ internal object HandGeometry {
           BlockFace.SOUTH_WEST,
       )
 
-  /** Directionalが許可する向きだけを、固定順で次へ進める。 */
-  internal fun cycleFacing(data: Directional) {
-    val faces =
-        data.faces.toList().sortedBy { facingOrder.indexOf(it).takeIf { it >= 0 } ?: Int.MAX_VALUE }
-    if (faces.isEmpty()) return
-    data.facing = faces[(faces.indexOf(data.facing) + 1) % faces.size]
+  /** リスト内の現在値から順方向または逆方向へ1つ進めた要素を返す。 */
+  internal fun <T> cycle(items: List<T>, current: T, reverse: Boolean = false): T {
+    val index = items.indexOf(current)
+    val step = if (reverse) -1 else 1
+    val next = if (index < 0) 0 else (index + step).mod(items.size)
+    return items[next]
   }
 
-  /** Orientableが許可する軸だけを、固定順で次へ進める。 */
-  internal fun cycleAxis(data: Orientable) {
+  /** Directionalが許可する向きだけを、固定順で次または前へ進める。 */
+  internal fun cycleFacing(data: Directional, reverse: Boolean = false) {
+    val faces =
+        data.faces.toList().sortedBy { facingOrder.indexOf(it).takeIf { it >= 0 } ?: Int.MAX_VALUE }
+    if (faces.isNotEmpty()) data.facing = cycle(faces, data.facing, reverse)
+  }
+
+  /** Orientableが許可する軸だけを、固定順で次または前へ進める。 */
+  internal fun cycleAxis(data: Orientable, reverse: Boolean = false) {
     val axes = data.axes.toList().sortedBy { it.ordinal }
-    if (axes.isNotEmpty()) data.axis = axes[(axes.indexOf(data.axis) + 1) % axes.size]
+    if (axes.isNotEmpty()) data.axis = cycle(axes, data.axis, reverse)
   }
 
   /** 世界面を現在の向き基準のローカル部位へ正規化した結果。 */
@@ -327,10 +334,29 @@ internal object HandGeometry {
           BlockFace.NORTH_NORTH_WEST,
       )
 
-  /** Rotatableの16段階回転を一段進める。 */
-  internal fun cycleRotation(data: Rotatable) {
-    val current = compassFaces.indexOf(data.rotation)
-    data.rotation = compassFaces[(current + 1).mod(compassFaces.size)]
+  /** Rotatableの16段階回転を一段進める（reverse時は逆順）。 */
+  internal fun cycleRotation(data: Rotatable, reverse: Boolean = false) {
+    data.rotation = cycle(compassFaces, data.rotation, reverse)
+  }
+
+  /** 醸造台の3つの瓶スロット (0=東, 1=南西, 2=北西) から打点に最も近いものを返す。 */
+  internal fun brewingStandSlot(hit: Vector, face: BlockFace?): Int {
+    var dx = hit.x - 0.5
+    var dz = hit.z - 0.5
+    if (dx * dx + dz * dz < 1e-6 && face != null) {
+      dx = face.modX.toDouble()
+      dz = face.modZ.toDouble()
+    }
+    val directions =
+        listOf(
+            1.0 to 0.0,
+            -0.5 to kotlin.math.sqrt(3.0) / 2.0,
+            -0.5 to -kotlin.math.sqrt(3.0) / 2.0,
+        )
+    return directions.indices.maxBy { i ->
+      val (vx, vz) = directions[i]
+      dx * vx + dz * vz
+    }
   }
 
   /** ピストンヘッドの根元面中央をクリックしたか調べる。 */

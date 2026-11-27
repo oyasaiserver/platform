@@ -146,11 +146,16 @@ internal class SettingsMenu(
       Page.SETTINGS -> {
         menu.setItem(10, link(Material.PLAYER_HEAD, "Hand設定"))
         menu.setItem(12, link(Material.REDSTONE_TORCH, "Update設定"))
-        menu.setItem(14, link(Material.GRASS_BLOCK, "Replace設定"))
         menu.setItem(16, link(Material.COMPARATOR, "General設定"))
       }
       Page.HAND -> {
-        boolean(10, Material.LEVER, "Shiftで移動方向を反転", configured.inverseCushionOnShift, "クッションの移動方向")
+        boolean(
+            10,
+            Material.LEVER,
+            "Shiftで操作方向を反転",
+            configured.inverseRotateOnShift,
+            "クッション移動・回転・増減を反転",
+        )
         menu.setItem(12, link(Material.STICK, "調整単位: 1/${configured.adjustmentDivisor} block"))
       }
       Page.UPDATE -> {
@@ -231,7 +236,7 @@ internal class SettingsMenu(
       }
       Page.HAND ->
           when (slot) {
-            10 -> save(player) { it.inverseCushionOnShift = !it.inverseCushionOnShift }
+            10 -> save(player) { it.inverseRotateOnShift = !it.inverseRotateOnShift }
             12 -> {
               openPage(player, Page.UNIT)
               return
