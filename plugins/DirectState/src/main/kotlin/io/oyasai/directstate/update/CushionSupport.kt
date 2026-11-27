@@ -82,7 +82,7 @@ internal class CushionSupport(
   }
 
   /** ForcePlacementが通常操作・権限・配置先の境界を確認した後に呼ぶ。 */
-  fun place(event: PlayerInteractEvent, target: Block) {
+  fun place(event: PlayerInteractEvent, target: Block, onCushion: Boolean = false) {
     val point = event.interactionPoint ?: return
     val player = event.player
     val hand = event.hand ?: return
@@ -97,11 +97,12 @@ internal class CushionSupport(
           if (event.blockFace == BlockFace.DOWN) {
             val clicked = event.clickedBlock!!
             val bottomOrFull =
-                when (val data = clicked.blockData) {
-                  is Slab -> data.type != Slab.Type.TOP
-                  is Bisected -> data.half == Bisected.Half.BOTTOM
-                  else -> clicked.collisionShape.boundingBoxes.any { it.volume == 1.0 }
-                }
+                onCushion ||
+                    when (val data = clicked.blockData) {
+                      is Slab -> data.type != Slab.Type.TOP
+                      is Bisected -> data.half == Bisected.Half.BOTTOM
+                      else -> clicked.collisionShape.boundingBoxes.any { it.volume == 1.0 }
+                    }
             if (bottomOrFull) y -= 0.25 // クッションの厚みだけ下げ、上面をクリック位置に合わせる。
           }
           setDirection(player.facing.direction)

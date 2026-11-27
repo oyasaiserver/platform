@@ -31,7 +31,7 @@ internal class ForcePlacement(
     private val plugin: JavaPlugin,
     private val createBlockData: (Material) -> BlockData = { it.createBlockData() },
     private val applyItem: (Player, Block, ItemStack) -> Unit = BlockEntityAccess::applyItem,
-    private val placeCushion: ((PlayerInteractEvent, Block) -> Unit)? = null,
+    private val placeCushion: ((PlayerInteractEvent, Block, Boolean) -> Unit)? = null,
     private val enabled: (Player) -> Boolean = { false },
     private val protectPlacement: (Player, Map<Block, BlockData>) -> Unit,
 ) : Listener {
@@ -50,7 +50,7 @@ internal class ForcePlacement(
     val player = event.player
     if (!enabled(player) || !allowed(player)) return
     val item = player.inventory.getItem(event.hand)
-    if (placementMaterial(item) == null) return
+    if (placementMaterial(item) == null && !Tag.ITEMS_CUSHIONS.isTagged(item.type)) return
     val point = event.clickedPosition.clone().add(cushion.location.toVector())
     if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
     val eye = player.eyeLocation.toVector()
@@ -96,16 +96,16 @@ internal class ForcePlacement(
         return false
     if (Tag.ITEMS_CUSHIONS.isTagged(item.type)) {
       val place = placeCushion ?: return false
-      if (VanillaInteraction.consumesClick(event)) return false
+      if (!onCushion && VanillaInteraction.consumesClick(event)) return false
       val point = event.interactionPoint ?: return false
       if (point.blockY !in clicked.world.minHeight until clicked.world.maxHeight) return false
-      val offset = if (clicked.isReplaceable) BlockFace.SELF else event.blockFace
+      val offset = if (!onCushion && clicked.isReplaceable) BlockFace.SELF else event.blockFace
       val target =
           clicked.world.getBlockAt(clicked.x + offset.modX, point.blockY, clicked.z + offset.modZ)
       if (!withinBounds(player, clicked) || !withinBounds(player, target)) return false
       event.isCancelled = true
       handled[player.uniqueId] = HandledClick(Bukkit.getCurrentTick(), hand)
-      place(event, target)
+      place(event, target, onCushion)
       return true
     }
     // ボタンやチェストなどの通常の使用と配置の挙動を維持する。それらに向けてしゃがむと配置する。
