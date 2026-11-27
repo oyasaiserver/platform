@@ -45,12 +45,14 @@ internal class UpdateMode(
     private val keepStateSetting: (Player) -> Boolean = { true },
     private val adjustmentDivisor: (Player) -> Int = { 8 },
     private val embedCushionInNonFullBlock: (Player) -> Boolean = { false },
+    private val hasBody: (Block) -> Boolean = BlockEntityAccess::hasBody,
+    private val setBody: (Block, BlockData, Boolean) -> Unit = BlockEntityAccess::setBody,
 ) : Listener {
   /** UpdateGuardのキーに使う、ワールドとブロック座標。 */
   private data class Position(val world: UUID, val x: Int, val y: Int, val z: Int)
 
   /** 周辺更新で変わった場合に復元するブロックと状態。 */
-  private data class Saved(val block: Block, val data: BlockData)
+  private data class Saved(val block: Block, val data: BlockData, val bodyPresent: Boolean? = null)
 
   /** ボタンを戻すプレイヤー・元状態・押下後状態・実行tick。　押されたちょっと後にボタンを戻す。 */
   private data class ButtonReset(
@@ -208,6 +210,14 @@ internal class UpdateMode(
     }
   }
 
+  private val bodyManagedMaterials =
+      setOf(
+          Material.BELL,
+          Material.ENCHANTING_TABLE,
+          Material.BREWING_STAND,
+          Material.CREAKING_HEART,
+      )
+
   /** 編集元の周囲2ブロックを保存し、短時間の更新抑制対象として登録する。 */
   fun beforeEdit(player: Player, roots: List<Block>) {
     naturalLocks.forget(roots)
@@ -219,7 +229,10 @@ internal class UpdateMode(
       if (root.y + y !in root.world.minHeight until root.world.maxHeight) continue
       if (!root.world.isChunkLoaded((root.x + x) shr 4, (root.z + z) shr 4)) continue
       val block = root.getRelative(x, y, z)
-      if (!block.type.isAir) nearby[position(block)] = Saved(block, block.blockData.clone())
+      if (!block.type.isAir) {
+        val body = if (block.type in bodyManagedMaterials) hasBody(block) else null
+        nearby[position(block)] = Saved(block, block.blockData.clone(), body)
+      }
     }
     guard.mark(roots.map(::position).toSet(), nearby, tick)
   }
@@ -535,12 +548,12 @@ internal class UpdateMode(
     // バニラが物理イベントなしで行える、同材質の隣接ブロックの形状変更を修復する。
     // 空気を復活させたり別の材質に置き換えたりしない。ドロップの重複や編集の上書きにつながるため。
     for ((_, saved) in guard.snapshots(tick)) {
-      if (
-          loaded(saved.block) &&
-              saved.block.type == saved.data.material &&
-              saved.block.blockData.asString != saved.data.asString
-      ) {
-        saved.block.setBlockData(saved.data, false)
+      if (!loaded(saved.block) || saved.block.type != saved.data.material) continue
+      val dataChanged = saved.block.blockData.asString != saved.data.asString
+      val bodyRevived = saved.bodyPresent == false && hasBody(saved.block)
+      if (dataChanged || bodyRevived) {
+        if (saved.bodyPresent == false) setBody(saved.block, saved.data, false)
+        else saved.block.setBlockData(saved.data, false)
       }
     }
     val due = buttons.filterValues { it.at <= tick }.keys.toList()
