@@ -339,7 +339,7 @@ internal object HandGeometry {
     data.rotation = cycle(compassFaces, data.rotation, reverse)
   }
 
-  /** 醸造台の3つの瓶スロット (0=東, 1=南西, 2=北西) から打点に最も近いものを返す。 */
+  /** 醸造台の3つの瓶スロット (0=東, 1=北西, 2=南西) から打点に最も近いものを返す。 */
   internal fun brewingStandSlot(hit: Vector, face: BlockFace?): Int {
     var dx = hit.x - 0.5
     var dz = hit.z - 0.5
@@ -350,8 +350,8 @@ internal object HandGeometry {
     val directions =
         listOf(
             1.0 to 0.0,
-            -0.5 to kotlin.math.sqrt(3.0) / 2.0,
             -0.5 to -kotlin.math.sqrt(3.0) / 2.0,
+            -0.5 to kotlin.math.sqrt(3.0) / 2.0,
         )
     return directions.indices.maxBy { i ->
       val (vx, vz) = directions[i]
