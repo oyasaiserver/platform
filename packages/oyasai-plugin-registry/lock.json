@@ -34,8 +34,8 @@
   "fastasyncworldedit": {
     "paper": {
       "26.3": {
-        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/JOyEqKdC/FastAsyncWorldEdit-Paper-2.16.2.jar",
-        "hash": "sha256-p0IZ+mYMeCyXeeZ0CGfN45WiTROB3LpsT4Ai5OnD+H0="
+        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/lmHhJ4ZF/FastAsyncWorldEdit-Paper-2.16.3.jar",
+        "hash": "sha256-7owwoYv8CQnLcI9FptM8ZMPke0i1sQ2YZzmHssvcO84="
       }
     }
   },
@@ -53,8 +53,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.1/builds/1298/downloads/velocity",
-      "hash": "sha256-TKO3fQ9b/JBKXWpRajmzFkTeXnTS5EksrgrM+whTB9w="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.12.1/builds/1313/downloads/velocity",
+      "hash": "sha256-iEYx3oKnmNSIbG1sKra9P9uQMWPWF47Qno2mGMQ+vWU="
     }
   },
   "luckperms": {
@@ -96,8 +96,8 @@
   "viaversion": {
     "paper": {
       "26.3": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/OKm4Zi14/ViaVersion-5.12.3-SNAPSHOT.jar",
-        "hash": "sha256-XQ7hm0VLoUhKb4d+QCghGsOXvEW0Wx1Zmqu3oHAzlfw="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/Me2ctjQK/ViaVersion-5.12.4-SNAPSHOT.jar",
+        "hash": "sha256-djtQeg4mDJSmqujhzVB5LqTnhGimE0IN0aFumL0TjTo="
       }
     }
   },
