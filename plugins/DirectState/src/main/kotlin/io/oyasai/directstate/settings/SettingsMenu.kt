@@ -150,7 +150,13 @@ internal class SettingsMenu(
         menu.setItem(16, link(Material.COMPARATOR, "General設定"))
       }
       Page.HAND -> {
-        boolean(10, Material.LEVER, "Shiftで移動方向を反転", configured.inverseCushionOnShift, "クッションの移動方向")
+        boolean(
+            10,
+            Material.LEVER,
+            "Shiftで操作方向を反転",
+            configured.inverseRotateOnShift,
+            "クッション移動・回転・増減を反転",
+        )
         menu.setItem(12, link(Material.STICK, "調整単位: 1/${configured.adjustmentDivisor} block"))
       }
       Page.UPDATE -> {
@@ -161,6 +167,13 @@ internal class SettingsMenu(
             "特殊ブロックの状態保持",
             configured.keepState,
             "日照センサー・クッションなど",
+        )
+        boolean(
+            14,
+            Material.WHITE_CUSHION,
+            "フルブロック以外でクッションを埋める",
+            configured.embedCushionInNonFullBlock,
+            "フルブロック以外をクリック時、同じ位置に設置",
         )
       }
       Page.REPLACE -> menu.setItem(13, link(Material.RED_STAINED_GLASS_PANE, "何もありません"))
@@ -231,7 +244,7 @@ internal class SettingsMenu(
       }
       Page.HAND ->
           when (slot) {
-            10 -> save(player) { it.inverseCushionOnShift = !it.inverseCushionOnShift }
+            10 -> save(player) { it.inverseRotateOnShift = !it.inverseRotateOnShift }
             12 -> {
               openPage(player, Page.UNIT)
               return
@@ -242,6 +255,7 @@ internal class SettingsMenu(
           when (slot) {
             10 -> save(player) { it.forcePlacement = !it.forcePlacement }
             12 -> save(player) { it.keepState = !it.keepState }
+            14 -> save(player) { it.embedCushionInNonFullBlock = !it.embedCushionInNonFullBlock }
             else -> return
           }
       Page.GENERAL -> if (slot == 10) save(player) { it.editSound = !it.editSound } else return

@@ -13,6 +13,7 @@ import io.oyasai.directstate.edit.replace.TypeReplacement
 import io.oyasai.directstate.edit.shape.ShapeEditor
 import io.oyasai.directstate.integration.BlockEntityAccess
 import io.oyasai.directstate.integration.CoreProtectLogging
+import io.oyasai.directstate.integration.PrePacketHook
 import io.oyasai.directstate.integration.WorldGuardUpdates
 import io.oyasai.directstate.settings.PlayerSettingsStore
 import io.oyasai.directstate.update.PlayerUpdateRule
@@ -32,6 +33,7 @@ class DirectState : JavaPlugin(), Listener {
   private lateinit var holdEditor: HoldEditor
   private lateinit var edits: BlockEditService
   private lateinit var updateMode: UpdateMode
+  private lateinit var prePacketHook: PrePacketHook
   private var regionUpdateRule: PlayerUpdateRule = PlayerUpdateRule { false }
 
   /** WorldGuardのフラグはonEnableより前に登録する必要があるらしい */
@@ -79,6 +81,10 @@ class DirectState : JavaPlugin(), Listener {
             ::applyEdit,
             forcePlacementSetting = { playerSettings.get(it.uniqueId).forcePlacement },
             keepStateSetting = { playerSettings.get(it.uniqueId).keepState },
+            adjustmentDivisor = { playerSettings.get(it.uniqueId).adjustmentDivisor },
+            embedCushionInNonFullBlock = {
+              playerSettings.get(it.uniqueId).embedCushionInNonFullBlock
+            },
         )
     val blockChangeLog =
         if (server.pluginManager.isPluginEnabled("CoreProtect")) {
@@ -87,29 +93,15 @@ class DirectState : JavaPlugin(), Listener {
           logger.info("CoreProtect is not installed or enabled; block change logging is disabled.")
           null
         }
-    val canEditLocation: (Player, org.bukkit.Location) -> Boolean = { player, location ->
-      !server.pluginManager.isPluginEnabled("WorldGuard") ||
-          WorldGuardUpdates.canBuild(player, location)
-    }
     val history =
         EditHistory(
             server,
             restoreBlocks = { player, snapshots -> edits.restore(player, snapshots) },
-            canEditEntity = canEditLocation,
-            restoreBlocksWithExpected = { player, snapshots, expected ->
-              edits.restore(player, snapshots, expected)
-            },
         )
     edits =
-        BlockEditService(
-            this,
-            updateMode,
-            blockChangeLog,
-            history,
-            { playerSettings.get(it.uniqueId).editSound },
-            ignoredBlockPdcKeys,
-            canEditLocation,
-        )
+        BlockEditService(this, updateMode, blockChangeLog, history) {
+          playerSettings.get(it.uniqueId).editSound
+        }
 
     val interactions =
         EditInteractionListener(
@@ -121,13 +113,19 @@ class DirectState : JavaPlugin(), Listener {
             handEditor,
             blockReplacement,
             ignoredBlockPdcKeys,
-            canEditEntity = canEditLocation,
+            canEditEntity = { player, location ->
+              !server.pluginManager.isPluginEnabled("WorldGuard") ||
+                  WorldGuardUpdates.canBuild(player, location)
+            },
             history = history,
             afterEntityEdit = updateMode::afterEntityEdit,
         )
     // 同じ優先度のUpdate Modeより先に、通常の編集イベントを処理する。
     server.pluginManager.registerEvents(interactions, this)
     server.pluginManager.registerEvents(updateMode, this)
+    prePacketHook = PrePacketHook(this, updateMode::retainHiddenBody, updateMode::beforeEditSingle)
+    server.pluginManager.registerEvents(prePacketHook, this)
+    prePacketHook.injectAll()
     DirectStateCommand(this, playerSettings, updateMode, tools::create, tools::mark, history)
         .register()
 
@@ -151,6 +149,7 @@ class DirectState : JavaPlugin(), Listener {
     if (::edits.isInitialized) edits.flush()
     BlockEntityAccess.flush()
     if (::holdEditor.isInitialized) holdEditor.clear()
+    if (::prePacketHook.isInitialized) prePacketHook.close()
     if (::updateMode.isInitialized) updateMode.close()
     if (::playerSettings.isInitialized) playerSettings.close()
   }
@@ -163,7 +162,10 @@ class DirectState : JavaPlugin(), Listener {
 
   /** UpdateModeから通知された設定変更を永続化する。 */
   private fun writeUpdateMode(player: Player, enabled: Boolean) {
-    playerSettings.update(player.uniqueId) { it.updateEnabled = enabled }
+    playerSettings.update(player.uniqueId) {
+      it.updateEnabled = enabled
+      it.playerName = player.name
+    }
   }
 
   /** 各Editorの単一ブロック編集を、共通の適用サービスへ渡す。 */

@@ -4,6 +4,7 @@ import io.oyasai.directstate.edit.hand.HandEditor.Result
 import io.oyasai.directstate.edit.hand.HandGeometry.CrafterPart
 import io.oyasai.directstate.edit.hand.HandGeometry.LocalPart
 import io.oyasai.directstate.edit.hand.HandGeometry.crafterPart
+import io.oyasai.directstate.edit.hand.HandGeometry.cycle
 import io.oyasai.directstate.edit.hand.HandGeometry.cycleAxis
 import io.oyasai.directstate.edit.hand.HandGeometry.cycleFacing
 import io.oyasai.directstate.edit.hand.HandGeometry.cycleRotation
@@ -54,15 +55,26 @@ internal object BlockStateEditor {
   private class Rule(
       val id: String,
       val matches: (BlockData) -> Boolean,
-      val edit: (BlockData, BlockClick) -> Result?,
+      val edit: (BlockData, BlockClick, Boolean) -> Result?,
   )
 
   /** T型だけにmatchesとeditを呼び、登録箇所で型変換を書かなくて済むようにする。 */
   private inline fun <reified T : BlockData> rule(
       id: String,
       noinline matches: (T) -> Boolean = { true },
+      noinline edit: (T, BlockClick, Boolean) -> Result?,
+  ) =
+      Rule(
+          id,
+          { it is T && matches(it) },
+          { data, click, reverse -> edit(data as T, click, reverse) },
+      )
+
+  private inline fun <reified T : BlockData> rule(
+      id: String,
+      noinline matches: (T) -> Boolean = { true },
       noinline edit: (T, BlockClick) -> Result?,
-  ) = Rule(id, { it is T && matches(it) }, { data, click -> edit(data as T, click) })
+  ) = rule<T>(id, matches) { data, click, _ -> edit(data, click) }
 
   private val cauldrons =
       setOf("CAULDRON", "WATER_CAULDRON", "POWDER_SNOW_CAULDRON", "LAVA_CAULDRON")
@@ -204,11 +216,12 @@ internal object BlockStateEditor {
       face: BlockFace?,
       hit: Vector = Vector(0.5, 0.5, 0.5),
       blockEntityPresent: Boolean = true,
+      reverse: Boolean = false,
   ): Result? {
     val name = data.material.name
     val click = BlockClick(hit, face)
     val geometryRule = geometryRules.firstOrNull { it.matches(data) }
-    if (geometryRule != null) return geometryRule.edit(data, click)
+    if (geometryRule != null) return geometryRule.edit(data, click, reverse)
 
     if (name in setOf("SEAGRASS", "TALL_SEAGRASS") && face == BlockFace.UP) {
       return Result(data, if (name == "SEAGRASS") Material.TALL_SEAGRASS else Material.SEAGRASS)
@@ -222,23 +235,22 @@ internal object BlockStateEditor {
     when {
       data is Furnace -> {
         if (name in FURNACE_HOLE_MATERIALS) {
-          if (face == data.facing) data.isLit = !data.isLit else cycleFacing(data)
+          if (face == data.facing) data.isLit = !data.isLit else cycleFacing(data, reverse)
         } else if (click.isVertical) {
           data.isLit = !data.isLit
         } else {
-          cycleFacing(data)
+          cycleFacing(data, reverse)
         }
       }
       data is Barrel && name == "BARREL" -> {
-        if (face == data.facing) data.isOpen = !data.isOpen else cycleFacing(data)
+        if (face == data.facing) data.isOpen = !data.isOpen else cycleFacing(data, reverse)
       }
       data is BrewingStand && name == "BREWING_STAND" -> {
-        // 左の枠から反転し、空き枠に置けたら止める。3枠の全8通りを巡回する。
-        for (slot in 0..2) {
-          val occupied = data.hasBottle(slot)
-          data.setBottle(slot, !occupied)
-          if (!occupied) break
-        }
+        // クリック位置に最も近い瓶スロット (0=東, 1=南西, 2=北西) を切り替える。
+        // BlockEntityが残るとチャンク再読込後のserverTickで瓶表示がインベントリ基準へ戻るため本体を外す。
+        val slot = HandGeometry.brewingStandSlot(click.position, click.face)
+        data.setBottle(slot, !data.hasBottle(slot))
+        return Result(data, blockEntityPresent = false)
       }
       data is Farmland && name == "FARMLAND" -> {
         // 中間値も正規化し、乾湿の二値だけを切り替える。
@@ -251,48 +263,47 @@ internal object BlockStateEditor {
         data.setHasBook(!data.hasBook())
       }
       name == "KELP" || name == "KELP_PLANT" -> {
-        return Result(data, switchMaterial(name))
+        return Result(data, switchMaterial(name, reverse))
       }
       data is Bamboo && name == "BAMBOO" -> {
         // 竹の状態を、タケノコ -> 普通の竹 -> 毛が生えた竹の順で切り替える。
-        val leaves = Bamboo.Leaves.entries
-        data.leaves = leaves[(leaves.indexOf(data.leaves) + 1) % leaves.size]
+        data.leaves = cycle(Bamboo.Leaves.entries, data.leaves, reverse)
       }
       data is Cake && name == "CAKE" -> {
-        data.bites = next(data.bites, data.maximumBites)
+        data.bites = next(data.bites, data.maximumBites, reverse = reverse)
       }
       data is Lantern && name.endsWith("LANTERN") -> {
         data.isHanging = !data.isHanging
       }
       data is TurtleEgg && name == "TURTLE_EGG" -> {
-        data.eggs = next(data.eggs, data.maximumEggs, data.minimumEggs)
+        data.eggs = next(data.eggs, data.maximumEggs, data.minimumEggs, reverse)
       }
       data is Hatchable && name == "SNIFFER_EGG" -> {
-        data.hatch = next(data.hatch, data.maximumHatch)
+        data.hatch = next(data.hatch, data.maximumHatch, reverse = reverse)
       }
       name in PLAIN_BRUSHABLE_MATERIALS -> {
         val target = if (name == "SAND") Material.SUSPICIOUS_SAND else Material.SUSPICIOUS_GRAVEL
         val brushable = target.createBlockData() as Brushable
-        brushable.dusted = 0
+        brushable.dusted = if (reverse) brushable.maximumDusted else 0
         return Result(brushable, target)
       }
       data is Brushable && name in SUSPICIOUS_MATERIALS -> {
-        if (data.dusted >= data.maximumDusted) {
+        if ((reverse && data.dusted <= 0) || (!reverse && data.dusted >= data.maximumDusted)) {
           val target = if (name == "SUSPICIOUS_SAND") Material.SAND else Material.GRAVEL
           return Result(target.createBlockData(), target)
         }
-        data.dusted = next(data.dusted, data.maximumDusted)
+        data.dusted = next(data.dusted, data.maximumDusted, reverse = reverse)
       }
       name == "ICE" -> {
         val frosted = Material.FROSTED_ICE.createBlockData() as Ageable
-        frosted.age = 0
+        frosted.age = if (reverse) frosted.maximumAge else 0
         return Result(frosted, Material.FROSTED_ICE)
       }
       data is Ageable && name == "FROSTED_ICE" -> {
-        if (data.age >= data.maximumAge) {
+        if ((reverse && data.age <= 0) || (!reverse && data.age >= data.maximumAge)) {
           return Result(Material.ICE.createBlockData(), Material.ICE)
         }
-        data.age++
+        data.age = next(data.age, data.maximumAge, reverse = reverse)
       }
       data is Ageable && name == "CHORUS_FLOWER" -> {
         // chorus flower は通常のage cycleではなく、未開花/開花の2段階に正規化する。
@@ -307,32 +318,32 @@ internal object BlockStateEditor {
                 else -> data.maximumAge
               }
         } else {
-          data.age = next(data.age, data.maximumAge)
+          data.age = next(data.age, data.maximumAge, reverse = reverse)
         }
       }
       data is Ageable && name == "TORCHFLOWER_CROP" -> {
-        if (data.age >= data.maximumAge) {
+        if ((reverse && data.age <= 0) || (!reverse && data.age >= data.maximumAge)) {
           val flower = Material.TORCHFLOWER.createBlockData()
           return Result(flower, Material.TORCHFLOWER)
         }
-        data.age++
+        data.age = next(data.age, data.maximumAge, reverse = reverse)
       }
       name == "TORCHFLOWER" -> {
         val crop = Material.TORCHFLOWER_CROP.createBlockData() as Ageable
-        crop.age = 0
+        crop.age = if (reverse) crop.maximumAge else 0
         return Result(crop, Material.TORCHFLOWER_CROP)
       }
       data is Snow && name == "SNOW" -> {
-        data.layers = next(data.layers, data.maximumLayers, data.minimumLayers)
+        data.layers = next(data.layers, data.maximumLayers, data.minimumLayers, reverse)
       }
       data is Directional && isAnvilMaterial(name) -> {
         if (face == BlockFace.UP) {
-          return Result(data, nextAnvilMaterial(name))
+          return Result(data, nextAnvilMaterial(name, reverse))
         }
-        cycleFacing(data)
+        cycleFacing(data, reverse)
       }
       name in CORAL_FAN_MATERIALS ->
-          coralEdit(data, name, face)?.let {
+          coralEdit(data, name, face, reverse)?.let {
             return it
           }
       name in STEM_MATERIALS || name in ATTACHED_STEM_MATERIALS -> {
@@ -342,40 +353,38 @@ internal object BlockStateEditor {
               if (name in STEM_MATERIALS) attachedStemMaterial(name) else regularStemMaterial(name),
           )
         }
-        if (data is Directional) cycleFacing(data)
-        else if (data is Ageable) data.age = next(data.age, data.maximumAge)
+        if (data is Directional) cycleFacing(data, reverse)
+        else if (data is Ageable) data.age = next(data.age, data.maximumAge, reverse = reverse)
       }
       data is Rail -> {
         val shapes = data.shapes.toList().sortedBy { it.ordinal }
-        if (shapes.isNotEmpty()) data.shape = shapes[(shapes.indexOf(data.shape) + 1) % shapes.size]
+        if (shapes.isNotEmpty()) data.shape = cycle(shapes, data.shape, reverse)
       }
       data is Gate -> {
-        if (click.isVertical) data.isInWall = !data.isInWall else cycleFacing(data)
+        if (click.isVertical) data.isInWall = !data.isInWall else cycleFacing(data, reverse)
       }
       data is Rotatable && isRotatableMaterial(name) -> {
-        cycleRotation(data)
+        cycleRotation(data, reverse)
       }
       data is EndPortalFrame && name == "END_PORTAL_FRAME" -> {
-        if (click.isVertical) data.setEye(!data.hasEye()) else cycleFacing(data)
+        if (click.isVertical) data.setEye(!data.hasEye()) else cycleFacing(data, reverse)
       }
       data is Chest && name == "CHEST" -> {
-        cycleFacing(data)
+        cycleFacing(data, reverse)
       }
       data is Bell && name == "BELL" -> {
         if (face == BlockFace.UP) {
-          val attachments = Bell.Attachment.entries
-          data.attachment =
-              attachments[(attachments.indexOf(data.attachment) + 1) % attachments.size]
+          data.attachment = cycle(Bell.Attachment.entries, data.attachment, reverse)
           if (!blockEntityPresent) return Result(data, blockEntityPresent = false)
         } else if (face in horizontalFaces) {
           if (click.position.y >= 13.0 / 16.0) {
-            cycleFacing(data)
+            cycleFacing(data, reverse)
             if (!blockEntityPresent) return Result(data, blockEntityPresent = false)
           } else {
             return Result(data, blockEntityPresent = !blockEntityPresent)
           }
         } else {
-          cycleFacing(data)
+          cycleFacing(data, reverse)
         }
       }
       name == "ENCHANTING_TABLE" -> {
@@ -383,14 +392,14 @@ internal object BlockStateEditor {
       }
       data is Orientable && name in bambooBlocks -> {
         if (click.isVertical)
-            switchMaterial(name)?.let {
+            switchMaterial(name, reverse)?.let {
               return Result(data, it)
             }
-        else cycleAxis(data)
+        else cycleAxis(data, reverse)
       }
       data is Orientable && strippedCounterpart(name) != null -> {
         if (face == null || click.isFaceEdge(insetPixels = 4)) {
-          cycleAxis(data)
+          cycleAxis(data, reverse)
         } else {
           return Result(data, strippedCounterpart(name))
         }
@@ -406,19 +415,19 @@ internal object BlockStateEditor {
       }
       data is Directional && name in PUMPKIN_MATERIALS -> {
         when {
-          click.isVertical -> cycleFacing(data)
+          click.isVertical -> cycleFacing(data, reverse)
           face == data.facing -> {
             val target = if (name == "CARVED_PUMPKIN") Material.JACK_O_LANTERN else Material.PUMPKIN
             return Result(data, target)
           }
-          else -> cycleFacing(data)
+          else -> cycleFacing(data, reverse)
         }
       }
       data is Directional && isFacingMaterial(name) -> {
-        cycleFacing(data)
+        cycleFacing(data, reverse)
       }
       name in HandMaterials.materialSwitches ->
-          switchMaterial(name)?.let {
+          switchMaterial(name, reverse)?.let {
             return Result(data, it)
           }
       data is TripwireHook -> {
@@ -428,7 +437,7 @@ internal object BlockStateEditor {
           LocalPart.BACK,
           LocalPart.SIDE,
           LocalPart.TOP,
-          LocalPart.BOTTOM -> cycleFacing(data)
+          LocalPart.BOTTOM -> cycleFacing(data, reverse)
         }
       }
       data is Campfire -> {
@@ -438,14 +447,14 @@ internal object BlockStateEditor {
           LocalPart.BOTTOM -> data.isSignalFire = !data.isSignalFire
           LocalPart.FRONT,
           LocalPart.BACK,
-          LocalPart.SIDE -> cycleFacing(data)
+          LocalPart.SIDE -> cycleFacing(data, reverse)
         }
       }
       data is LightningRod -> {
         when (click.part(data.facing)) {
           LocalPart.SIDE,
           LocalPart.TOP,
-          LocalPart.BOTTOM -> cycleFacing(data)
+          LocalPart.BOTTOM -> cycleFacing(data, reverse)
           LocalPart.FRONT,
           LocalPart.BACK,
           null -> return null
@@ -460,18 +469,15 @@ internal object BlockStateEditor {
                 if (data.verticalDirection == BlockFace.UP) BlockFace.DOWN else BlockFace.UP
           }
           LocalPart.SIDE -> {
-            data.thickness =
-                dripstoneThicknessOrder[
-                    (dripstoneThicknessOrder.indexOf(data.thickness) + 1) %
-                        dripstoneThicknessOrder.size]
+            data.thickness = cycle(dripstoneThicknessOrder, data.thickness, reverse)
           }
           // TOP/BOTTOM: vertical-only domainでは到達不能 (上下は必ずFRONT/BACKのいずれか)。
           LocalPart.TOP,
           LocalPart.BOTTOM -> return null
         }
       }
-      data is Ladder -> cycleFacing(data)
-      data is Chain -> cycleAxis(data)
+      data is Ladder -> cycleFacing(data, reverse)
+      data is Chain -> cycleAxis(data, reverse)
       data is MangrovePropagule -> {
         // 上下面 → hanging toggle。他面・面なし → 汎用ageへ譲る (stageは対象外)。
         if (!isVerticalFace(face)) return null
@@ -483,13 +489,13 @@ internal object BlockStateEditor {
       }
       data is Vault -> {
         // 上下面 → facing rotate。他面・面なし → ominous toggle。vault_stateは対象外。
-        if (isVerticalFace(face)) cycleFacing(data) else data.isOminous = !data.isOminous
+        if (isVerticalFace(face)) cycleFacing(data, reverse) else data.isOminous = !data.isOminous
       }
       data is Bed -> {
         // ベッドはクリックされた1ブロックだけを独立した編集対象として扱う。
         if (face == null) return null
         if (isVerticalFace(face)) {
-          cycleFacing(data)
+          cycleFacing(data, reverse)
         } else {
           val facing = data.facing
           data.part = if (data.part == Bed.Part.FOOT) Bed.Part.HEAD else Bed.Part.FOOT
@@ -501,14 +507,14 @@ internal object BlockStateEditor {
         if (face == null) return null
         if (face == data.facing)
             data.honeyLevel = if (data.honeyLevel == 0) data.maximumHoneyLevel else 0
-        else cycleFacing(data)
+        else cycleFacing(data, reverse)
       }
       data is Candle -> {
         // 上面は本数、側面は点灯/消灯。側面の音はHandEditorのResultで伝える。
         when {
           face == BlockFace.UP -> {
             if (data.maximumCandles <= data.minimumCandles) return null
-            data.candles = next(data.candles, data.maximumCandles, data.minimumCandles)
+            data.candles = next(data.candles, data.maximumCandles, data.minimumCandles, reverse)
           }
           face != null -> data.isLit = !data.isLit
           else -> return null
@@ -523,7 +529,7 @@ internal object BlockStateEditor {
         if (data.material.name == "DRAGON_HEAD" && face in horizontalFaces) {
           data.isPowered = !data.isPowered
         } else {
-          cycleRotation(data)
+          cycleRotation(data, reverse)
         }
       }
       data is WallSkull -> {
@@ -531,7 +537,7 @@ internal object BlockStateEditor {
         if (data.material.name == "DRAGON_WALL_HEAD" && face in horizontalFaces) {
           data.isPowered = !data.isPowered
         } else {
-          cycleFacing(data)
+          cycleFacing(data, reverse)
         }
       }
       data is PotentSulfur -> {
@@ -545,29 +551,28 @@ internal object BlockStateEditor {
       }
       data is CreakingHeart -> {
         // 上下面 → axis cycle。他面 → state cycle (宣言順)。面なし → バニラに譲る。
-        // naturalは不変。
+        // naturalは不変。BlockEntityが残るとserverTickで状態が戻るため本体を外す。
         if (face == null) return null
-        if (isVerticalFace(face)) cycleAxis(data)
-        else {
-          val states = CreakingHeart.State.entries
-          data.creakingHeartState =
-              states[(states.indexOf(data.creakingHeartState) + 1) % states.size]
-        }
+        if (isVerticalFace(face)) cycleAxis(data, reverse)
+        else
+            data.creakingHeartState =
+                cycle(CreakingHeart.State.entries, data.creakingHeartState, reverse)
+        return Result(data, blockEntityPresent = false)
       }
       data is DriedGhast -> {
         // 上下面 → facing rotate。他面 → hydration cycle (0..max→0)。面なし → バニラに譲る。
         if (face == null) return null
-        if (isVerticalFace(face)) cycleFacing(data)
-        else data.hydration = next(data.hydration, data.maximumHydration)
+        if (isVerticalFace(face)) cycleFacing(data, reverse)
+        else data.hydration = next(data.hydration, data.maximumHydration, reverse = reverse)
       }
       data is RespawnAnchor -> {
         // 全面・面なし → charges cycle (0..max→0)。爆発条件に触れるため利用注意。
-        data.charges = next(data.charges, data.maximumCharges)
+        data.charges = next(data.charges, data.maximumCharges, reverse = reverse)
       }
       data is CalibratedSculkSensor -> {
         // 上下面 → facing rotate。他面 → phase toggle。面なし → バニラに譲る。
         if (face == null) return null
-        if (isVerticalFace(face)) cycleFacing(data) else toggleSensorPhase(data)
+        if (isVerticalFace(face)) cycleFacing(data, reverse) else toggleSensorPhase(data)
       }
       data is SculkSensor -> {
         // 全面・面なし → phase toggle (ACTIVE↔INACTIVE、COOLDOWN→ACTIVE)。
@@ -582,36 +587,40 @@ internal object BlockStateEditor {
         data.isCanSummon = !data.isCanSummon
       }
       data is SeaPickle -> {
-        data.pickles = next(data.pickles, data.maximumPickles, data.minimumPickles)
+        data.pickles = next(data.pickles, data.maximumPickles, data.minimumPickles, reverse)
       }
       data is ShelfMushroom -> {
-        if (face in horizontalFaces) cycleFacing(data)
-        else data.age = next(data.age, data.maximumAge)
+        if (face in horizontalFaces) cycleFacing(data, reverse)
+        else data.age = next(data.age, data.maximumAge, reverse = reverse)
       }
       data is FlowerBed -> {
-        if (face in horizontalFaces) cycleFacing(data)
+        if (face in horizontalFaces) cycleFacing(data, reverse)
         else
             data.flowerAmount =
-                next(data.flowerAmount, data.maximumFlowerAmount, data.minimumFlowerAmount)
+                next(data.flowerAmount, data.maximumFlowerAmount, data.minimumFlowerAmount, reverse)
       }
       data is LeafLitter -> {
-        if (face in horizontalFaces) cycleFacing(data)
+        if (face in horizontalFaces) cycleFacing(data, reverse)
         else
             data.segmentAmount =
-                next(data.segmentAmount, data.maximumSegmentAmount, data.minimumSegmentAmount)
+                next(
+                    data.segmentAmount,
+                    data.maximumSegmentAmount,
+                    data.minimumSegmentAmount,
+                    reverse,
+                )
       }
       data is BigDripleaf -> {
         if (face != null && !isVerticalFace(face)) {
-          val tilts = BigDripleaf.Tilt.entries
-          data.tilt = tilts[(tilts.indexOf(data.tilt) + 1) % tilts.size]
+          data.tilt = cycle(BigDripleaf.Tilt.entries, data.tilt, reverse)
         } else {
-          cycleFacing(data)
+          cycleFacing(data, reverse)
         }
       }
       data is HangingMoss -> data.isTip = !data.isTip
       data is Bisected && data.material.name in twoBlockPlantMaterials -> {
         if (data is Directional && face == BlockFace.UP) {
-          cycleFacing(data)
+          cycleFacing(data, reverse)
         } else {
           val wasBottom = data.half == Bisected.Half.BOTTOM
           data.half =
@@ -629,9 +638,9 @@ internal object BlockStateEditor {
           }
         }
       }
-      data is Dripleaf -> cycleFacing(data)
-      data is Grindstone -> cycleFacing(data)
-      data is Hopper -> cycleFacing(data)
+      data is Dripleaf -> cycleFacing(data, reverse)
+      data is Grindstone -> cycleFacing(data, reverse)
+      data is Hopper -> cycleFacing(data, reverse)
       data is MultipleFacing && data.material.name in mushroomFaceMaterials -> {
         // クリック面toggle (位置不問)。選択不能時は未対応。
         val target = selectClickedFace(face, data.allowedFaces) ?: return null
@@ -639,16 +648,20 @@ internal object BlockStateEditor {
       }
       data is Orientable -> {
         // 専用操作に該当しない原木・骨等のaxisを切り替える。
-        cycleAxis(data)
+        cycleAxis(data, reverse)
       }
       else -> return null
     }
     return Result(data)
   }
 
-  /** minimumからmaximumまで進め、maximumの次はminimumへ戻す。 */
-  private fun next(value: Int, maximum: Int, minimum: Int = 0): Int =
-      if (value >= maximum) minimum else value + 1
+  /** minimumからmaximumまで進め、端を超えたら反対端へ折り返す。 */
+  private fun next(value: Int, maximum: Int, minimum: Int = 0, reverse: Boolean = false): Int =
+      if (reverse) {
+        if (value <= minimum) maximum else value - 1
+      } else {
+        if (value >= maximum) minimum else value + 1
+      }
 
   /** 上下端ではhalf、それ以外では開閉 */
   private fun editDoor(data: Door, click: BlockClick): Result? {
@@ -691,17 +704,17 @@ internal object BlockStateEditor {
   }
 
   /** 上面内側なら内容物を巡回し、それ以外は通常の水量編集へ譲る。 */
-  private fun editCauldron(data: BlockData, click: BlockClick): Result? {
+  private fun editCauldron(data: BlockData, click: BlockClick, reverse: Boolean): Result? {
     val name = data.material.name
     if (click.isInsideTop(marginPixels = 2)) {
-      val target =
-          when (name) {
-            "CAULDRON" -> Material.WATER_CAULDRON
-            "WATER_CAULDRON" -> Material.POWDER_SNOW_CAULDRON
-            "POWDER_SNOW_CAULDRON" -> Material.LAVA_CAULDRON
-            else -> Material.CAULDRON
-          }
-      return Result(data, target)
+      val cauldrons =
+          listOf(
+              Material.CAULDRON,
+              Material.WATER_CAULDRON,
+              Material.POWDER_SNOW_CAULDRON,
+              Material.LAVA_CAULDRON,
+          )
+      return Result(data, cycle(cauldrons, data.material, reverse))
     }
     if (name == "CAULDRON") {
       return if (click.face in horizontalFaces) Result(data)
@@ -732,9 +745,13 @@ internal object BlockStateEditor {
   }
 
   /** 側面では向きを回し、Repeater上面中央ではlockを反転する。 */
-  private fun editRepeaterOrComparator(data: BlockData, click: BlockClick): Result? {
+  private fun editRepeaterOrComparator(
+      data: BlockData,
+      click: BlockClick,
+      reverse: Boolean,
+  ): Result? {
     if (click.face in horizontalFaces) {
-      cycleFacing(data as Directional)
+      cycleFacing(data as Directional, reverse)
       return Result(data)
     }
     if (data is Repeater && click.face == BlockFace.UP && !click.isFaceEdge(insetPixels = 4)) {
@@ -757,22 +774,22 @@ internal object BlockStateEditor {
   }
 
   /** ピストン先端側ではextendedを反転し、それ以外では向きを回す。 */
-  private fun editPiston(data: Piston, click: BlockClick): Result {
+  private fun editPiston(data: Piston, click: BlockClick, reverse: Boolean): Result {
     if (isPistonExtendedHit(click.position, click.face, data.facing))
         data.isExtended = !data.isExtended
-    else cycleFacing(data)
+    else cycleFacing(data, reverse)
     return Result(data)
   }
 
   /** ピストンヘッドの根元ではshortを反転し、それ以外では向きを回す。 */
-  private fun editPistonHead(data: PistonHead, click: BlockClick): Result {
+  private fun editPistonHead(data: PistonHead, click: BlockClick, reverse: Boolean): Result {
     if (isPistonHeadRootHit(click.position, click.face, data.facing)) data.isShort = !data.isShort
-    else cycleFacing(data)
+    else cycleFacing(data, reverse)
     return Result(data)
   }
 
   /** 頂点ではtriggered、上面ではcrafting、その他の面ではorientationを変更する。 */
-  private fun editCrafter(data: Crafter, click: BlockClick): Result? {
+  private fun editCrafter(data: Crafter, click: BlockClick, reverse: Boolean): Result? {
     if (isCrafterTriggerVertex(click.position, click.face, data.orientation)) {
       data.isTriggered = !data.isTriggered
       return Result(data)
@@ -782,9 +799,7 @@ internal object BlockStateEditor {
       CrafterPart.BACK,
       CrafterPart.SIDE,
       CrafterPart.BOTTOM -> {
-        val orientations = Orientation.entries
-        data.orientation =
-            orientations[(orientations.indexOf(data.orientation) + 1) % orientations.size]
+        data.orientation = cycle(Orientation.entries, data.orientation, reverse)
       }
       CrafterPart.TOP -> data.isCrafting = !data.isCrafting
       null -> return null
@@ -793,10 +808,10 @@ internal object BlockStateEditor {
   }
 
   /** 正面では6枠の本を切り替え、他面では本棚の向きを回す。 */
-  private fun editBookshelf(data: ChiseledBookshelf, click: BlockClick): Result? {
+  private fun editBookshelf(data: ChiseledBookshelf, click: BlockClick, reverse: Boolean): Result? {
     val clicked = click.face ?: return null
     if (clicked != data.facing) {
-      cycleFacing(data)
+      cycleFacing(data, reverse)
     } else {
       val slot = click.bookshelfSlot(data.facing) ?: return null
       data.setSlotOccupied(slot, !data.isSlotOccupied(slot))
@@ -805,7 +820,7 @@ internal object BlockStateEditor {
   }
 
   /** 打点から底面または側面を選び、最後の一部を消さない範囲で苔カーペットを編集する。 */
-  private fun editMossyCarpet(data: MossyCarpet, click: BlockClick): Result? {
+  private fun editMossyCarpet(data: MossyCarpet, click: BlockClick, reverse: Boolean): Result? {
     val clicked = click.face ?: return null
     val activeSides = horizontalFaces.count { data.getHeight(it) != Wall.Height.NONE }
     val activeParts = activeSides + if (data.isBottom) 1 else 0
@@ -818,15 +833,9 @@ internal object BlockStateEditor {
     /** 側面をNONE→LOW→TALL→NONEで巡回し、最後の一部は残す。 */
     fun cycleSide(target: BlockFace) {
       val current = runCatching { data.getHeight(target) }.getOrNull() ?: return
-      if (activeParts <= 1 && current == Wall.Height.TALL) return
-      data.setHeight(
-          target,
-          when (current) {
-            Wall.Height.NONE -> Wall.Height.LOW
-            Wall.Height.LOW -> Wall.Height.TALL
-            Wall.Height.TALL -> Wall.Height.NONE
-          },
-      )
+      val next = cycle(Wall.Height.entries, current, reverse)
+      if (activeParts <= 1 && next == Wall.Height.NONE) return
+      data.setHeight(target, next)
     }
 
     if (click.isVertical) {
@@ -855,7 +864,7 @@ internal object BlockStateEditor {
   }
 
   /** 上端では吊り方・材質を切り替え、それ以外では看板の向きを回す。 */
-  private fun editSign(data: BlockData, click: BlockClick): Result {
+  private fun editSign(data: BlockData, click: BlockClick, reverse: Boolean): Result {
     val name = data.material.name
     // 吊り看板は上面または側面上部で、壁付きと天井付きの材質を切り替える。
     val switchMaterial =
@@ -874,8 +883,8 @@ internal object BlockStateEditor {
       }
     }
     when (data) {
-      is Rotatable -> cycleRotation(data)
-      is Directional -> cycleFacing(data)
+      is Rotatable -> cycleRotation(data, reverse)
+      is Directional -> cycleFacing(data, reverse)
     }
     return Result(data)
   }
@@ -894,37 +903,41 @@ internal object BlockStateEditor {
   }
 
   /** 中央ではpower、外周では選ばれた方向の接続状態を巡回する。 */
-  private fun editRedstone(data: RedstoneWire, click: BlockClick): Result? {
+  private fun editRedstone(data: RedstoneWire, click: BlockClick, reverse: Boolean): Result? {
     if (isRedstonePowerCenterHit(click.position, click.face)) {
-      data.power = next(data.power, data.maximumPower)
+      data.power = next(data.power, data.maximumPower, reverse = reverse)
       return Result(data)
     }
     val target = click.relativeFace()?.takeIf { it in horizontalFaces } ?: return null
-    data.setFace(
-        target,
-        when (data.getFace(target)) {
-          RedstoneWire.Connection.NONE -> RedstoneWire.Connection.SIDE
-          RedstoneWire.Connection.SIDE -> RedstoneWire.Connection.UP
-          RedstoneWire.Connection.UP -> RedstoneWire.Connection.NONE
-        },
-    )
+    val connections =
+        listOf(
+            RedstoneWire.Connection.NONE,
+            RedstoneWire.Connection.SIDE,
+            RedstoneWire.Connection.UP,
+        )
+    data.setFace(target, cycle(connections, data.getFace(target), reverse))
     return Result(data)
   }
 
   /** 背面中央ではpoweredを反転し、それ以外では向きを回す。 */
-  private fun editObserver(data: Observer, click: BlockClick): Result {
+  private fun editObserver(data: Observer, click: BlockClick, reverse: Boolean): Result {
     if (click.face == data.facing.oppositeFace && click.isFaceCenter(radiusPixels = 2)) {
       data.isPowered = !data.isPowered
     } else {
-      cycleFacing(data)
+      cycleFacing(data, reverse)
     }
     return Result(data)
   }
 
   /** 上下面では床置き・壁付きを切り替え、壁付きを作るときはクリック面を向きにする。 */
-  private fun coralEdit(data: BlockData, name: String, face: BlockFace?): Result? {
+  private fun coralEdit(
+      data: BlockData,
+      name: String,
+      face: BlockFace?,
+      reverse: Boolean,
+  ): Result? {
     if (data is CoralWallFan && isVerticalFace(face)) {
-      cycleFacing(data)
+      cycleFacing(data, reverse)
       return Result(data)
     }
     val clickedFace = face?.takeIf { it in horizontalFaces }

@@ -9,10 +9,11 @@ internal data class PlayerSettings(
     var replacementEnabled: Boolean = false,
     var typeReplacementMode: TypeReplaceMode = TypeReplaceMode.OFF,
     var itemlessModesDisabled: Boolean = false,
-    var inverseCushionOnShift: Boolean = false,
+    var inverseRotateOnShift: Boolean = false,
     var adjustmentDivisor: Int = 8,
     var forcePlacement: Boolean = true,
     var keepState: Boolean = true,
+    var embedCushionInNonFullBlock: Boolean = false,
     var editSound: Boolean = true,
     var playerName: String? = null,
 )

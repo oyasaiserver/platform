@@ -27,7 +27,12 @@ internal class DirectStateCommand(
   private val menu =
       SettingsMenu(
           { playerSettings.get(it.uniqueId) },
-          { player, change -> playerSettings.update(player.uniqueId, change) },
+          { player, change ->
+            playerSettings.update(player.uniqueId) {
+              change(it)
+              it.playerName = player.name
+            }
+          },
           { player, slot ->
             when (slot) {
               10 -> Permissions.has(player, Permissions.HAND)
@@ -35,8 +40,8 @@ internal class DirectStateCommand(
               14,
               16 -> Permissions.has(player, Permissions.REPLACE)
               22 ->
-                  Permissions.has(player, Permissions.HAND) &&
-                      Permissions.has(player, Permissions.UPDATE) &&
+                  Permissions.has(player, Permissions.HAND) ||
+                      Permissions.has(player, Permissions.UPDATE) ||
                       Permissions.has(player, Permissions.REPLACE)
               else -> false
             }
@@ -84,21 +89,36 @@ internal class DirectStateCommand(
           "dsu" -> "update"
           else -> args.firstOrNull()?.lowercase()?.let { if (it == "tgl") "toggle" else it }
         }
-    val permission =
+    if (sender !is Player) {
+      sender.sendMessage("権限がありません。")
+      return true
+    }
+    val hasPermission =
         when (operation) {
-          "hand" -> Permissions.HAND
-          "replace" -> Permissions.REPLACE
-          "update" -> Permissions.UPDATE
-          "stick",
-          "sstick",
-          "hstick" -> Permissions.GET_TOOL
-          null,
-          "gui",
-          "undo",
-          "redo" -> null
-          else -> Permissions.ALL
+          "toggle" ->
+              Permissions.has(sender, Permissions.HAND) ||
+                  Permissions.has(sender, Permissions.UPDATE) ||
+                  Permissions.has(sender, Permissions.REPLACE)
+          else -> {
+            val permission =
+                when (operation) {
+                  "hand" -> Permissions.HAND
+                  "replace" -> Permissions.REPLACE
+                  "update" -> Permissions.UPDATE
+                  "stick",
+                  "sstick",
+                  "hstick" -> Permissions.GET_TOOL
+                  null,
+                  "gui",
+                  "help",
+                  "undo",
+                  "redo" -> null
+                  else -> Permissions.ALL
+                }
+            permission == null || Permissions.has(sender, permission)
+          }
         }
-    if (sender !is Player || permission != null && !Permissions.has(sender, permission)) {
+    if (!hasPermission) {
       sender.sendMessage("権限がありません。")
       return true
     }
@@ -255,7 +275,10 @@ internal class DirectStateCommand(
 
   /** Hand設定を保存し、変更後の状態をプレイヤーへ通知する。 */
   private fun writeHandMode(player: Player, enabled: Boolean) {
-    playerSettings.update(player.uniqueId) { it.handEnabled = enabled }
+    playerSettings.update(player.uniqueId) {
+      it.handEnabled = enabled
+      it.playerName = player.name
+    }
     player.sendMessage("Hand: ${if (enabled) "ON" else "OFF"}")
   }
 
@@ -273,13 +296,19 @@ internal class DirectStateCommand(
   /** Hand・Update・Replaceを個別設定を変えずにまとめて休止・再開する。 */
   private fun toggleItemlessModes(player: Player) {
     val disabled = !playerSettings.get(player.uniqueId).itemlessModesDisabled
-    playerSettings.update(player.uniqueId) { it.itemlessModesDisabled = disabled }
+    playerSettings.update(player.uniqueId) {
+      it.itemlessModesDisabled = disabled
+      it.playerName = player.name
+    }
     player.sendMessage(if (disabled) "DSを無効化しました。" else "DSを有効化しました。")
   }
 
   /** Replace設定を保存し、Type設定を含む現在状態を表示する。 */
   private fun writeReplacementMode(player: Player, enabled: Boolean) {
-    playerSettings.update(player.uniqueId) { it.replacementEnabled = enabled }
+    playerSettings.update(player.uniqueId) {
+      it.replacementEnabled = enabled
+      it.playerName = player.name
+    }
     showReplacementStatus(player)
   }
 
@@ -300,7 +329,10 @@ internal class DirectStateCommand(
 
   /** Type Replaceの方式を保存し、Replace全体の状態を表示する。 */
   private fun writeTypeReplacementMode(player: Player, mode: TypeReplaceMode) {
-    playerSettings.update(player.uniqueId) { it.typeReplacementMode = mode }
+    playerSettings.update(player.uniqueId) {
+      it.typeReplacementMode = mode
+      it.playerName = player.name
+    }
     showReplacementStatus(player)
   }
 

@@ -87,8 +87,12 @@ internal object HandMaterials {
           "PEARLESCENT_FROGLIGHT" to "OCHRE_FROGLIGHT",
       )
 
+  private val reverseMaterialSwitches: Map<String, String> =
+      materialSwitches.entries.associate { (from, to) -> to to from }
+
   /** Bukkit非依存の純粋な切替表引き。Materialへの変換が必要な場合はswitchMaterialを使う。 */
-  fun switchMaterialName(name: String): String? = materialSwitches[name]
+  fun switchMaterialName(name: String, reverse: Boolean = false): String? =
+      if (reverse) reverseMaterialSwitches[name] else materialSwitches[name]
 
   /** 共通level操作を許可する材質か調べる。 */
   fun isLevelMaterial(name: String): Boolean = name in levelMaterials
@@ -165,17 +169,17 @@ internal object HandMaterials {
   /** Materialを名前による材質切替へ渡す短縮入口。 */
   internal fun switchMaterial(material: Material): Material? = switchMaterial(material.name)
 
-  /** 金床を通常→欠け→破損→通常の順で切り替える。 */
-  internal fun nextAnvilMaterial(name: String): Material =
+  /** 金床を通常→欠け→破損→通常の順（reverse時は逆順）で切り替える。 */
+  internal fun nextAnvilMaterial(name: String, reverse: Boolean = false): Material =
       when (name) {
-        "ANVIL" -> Material.CHIPPED_ANVIL
-        "CHIPPED_ANVIL" -> Material.DAMAGED_ANVIL
-        else -> Material.ANVIL
+        "ANVIL" -> if (reverse) Material.DAMAGED_ANVIL else Material.CHIPPED_ANVIL
+        "CHIPPED_ANVIL" -> if (reverse) Material.ANVIL else Material.DAMAGED_ANVIL
+        else -> if (reverse) Material.CHIPPED_ANVIL else Material.ANVIL
       }
 
   /** 切替表の名前をBukkit Materialへ解決する。未定義ならnull。 */
-  internal fun switchMaterial(name: String): Material? =
-      HandMaterials.switchMaterialName(name)?.let(Material::matchMaterial)
+  internal fun switchMaterial(name: String, reverse: Boolean = false): Material? =
+      HandMaterials.switchMaterialName(name, reverse)?.let(Material::matchMaterial)
 
   /** 原木・木を皮付きと皮なしの相方へ変換する。対象外ならnull。 */
   internal fun strippedCounterpart(name: String): Material? {

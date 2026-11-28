@@ -135,7 +135,12 @@ internal class ShapeEditor(
   }
 
   /** 素手デバッグ棒用。右クリックした接続部分を切り替え、固体形状を巡回する。 */
-  fun toggle(original: BlockData, hit: Vector, face: BlockFace?): BlockData {
+  fun toggle(
+      original: BlockData,
+      hit: Vector,
+      face: BlockFace?,
+      reverse: Boolean = false,
+  ): BlockData {
     val data = original.clone()
     val clickFace = face?.name?.let { runCatching { ClickGeometry.Face.valueOf(it) }.getOrNull() }
     val local = ClickGeometry.local(hit.x, hit.y, hit.z, clickFace)
@@ -154,11 +159,14 @@ internal class ShapeEditor(
             max(abs(radial.x), abs(radial.z)) <= 0.25 &&
                 (face == BlockFace.UP || face == BlockFace.DOWN)
         if (sideTop || post) data.isUp = !data.isUp
-        else
-            data.setHeight(
-                side,
-                Wall.Height.entries[(data.getHeight(side).ordinal + 1) % Wall.Height.entries.size],
-            )
+        else {
+          val step = if (reverse) -1 else 1
+          data.setHeight(
+              side,
+              Wall.Height.entries[
+                      (data.getHeight(side).ordinal + step).mod(Wall.Height.entries.size)],
+          )
+        }
         return data
       }
     }

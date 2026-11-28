@@ -53,7 +53,7 @@ internal object HangingEditor {
         else -> false
       }
 
-  fun edit(entity: Entity, point: Vector, face: BlockFace): Entity? =
+  fun edit(entity: Entity, point: Vector, face: BlockFace, reverse: Boolean = false): Entity? =
       when (entity) {
         is ItemFrame -> {
           if (isBorder(entity, point, face)) {
@@ -67,8 +67,11 @@ internal object HangingEditor {
               RegistryAccess.registryAccess().getRegistry(RegistryKey.PAINTING_VARIANT).filter {
                 it.blockWidth == current.blockWidth && it.blockHeight == current.blockHeight
               }
+          val step = if (reverse) -1 else 1
           val next =
-              variants.getOrNull((variants.indexOf(current) + 1) % variants.size.coerceAtLeast(1))
+              variants.getOrNull(
+                  (variants.indexOf(current) + step).mod(variants.size.coerceAtLeast(1))
+              )
           if (next != null && next != current && entity.setArt(next, true)) entity else null
         }
         else -> null

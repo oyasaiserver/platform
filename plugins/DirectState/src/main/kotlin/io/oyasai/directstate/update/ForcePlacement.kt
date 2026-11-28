@@ -31,8 +31,9 @@ internal class ForcePlacement(
     private val plugin: JavaPlugin,
     private val createBlockData: (Material) -> BlockData = { it.createBlockData() },
     private val applyItem: (Player, Block, ItemStack) -> Unit = BlockEntityAccess::applyItem,
-    private val placeCushion: ((PlayerInteractEvent, Block) -> Unit)? = null,
+    private val placeCushion: ((PlayerInteractEvent, Block, Boolean) -> Unit)? = null,
     private val enabled: (Player) -> Boolean = { false },
+    private val embedCushionInNonFullBlock: (Player) -> Boolean = { false },
     private val protectPlacement: (Player, Map<Block, BlockData>) -> Unit,
 ) : Listener {
   /** 複数ブロック配置を構成する、一つの座標と配置後状態。 */
@@ -50,7 +51,7 @@ internal class ForcePlacement(
     val player = event.player
     if (!enabled(player) || !allowed(player)) return
     val item = player.inventory.getItem(event.hand)
-    if (placementMaterial(item) == null) return
+    if (placementMaterial(item) == null && !Tag.ITEMS_CUSHIONS.isTagged(item.type)) return
     val point = event.clickedPosition.clone().add(cushion.location.toVector())
     if (!point.x.isFinite() || !point.y.isFinite() || !point.z.isFinite()) return
     val eye = player.eyeLocation.toVector()
@@ -96,16 +97,21 @@ internal class ForcePlacement(
         return false
     if (Tag.ITEMS_CUSHIONS.isTagged(item.type)) {
       val place = placeCushion ?: return false
-      if (VanillaInteraction.consumesClick(event)) return false
+      if (!onCushion && VanillaInteraction.consumesClick(event)) return false
       val point = event.interactionPoint ?: return false
       if (point.blockY !in clicked.world.minHeight until clicked.world.maxHeight) return false
-      val offset = if (clicked.isReplaceable) BlockFace.SELF else event.blockFace
+      val embed =
+          !onCushion &&
+              embedCushionInNonFullBlock(player) &&
+              !clicked.collisionShape.boundingBoxes.any { it.volume == 1.0 }
+      val offset =
+          if (!onCushion && (clicked.isReplaceable || embed)) BlockFace.SELF else event.blockFace
       val target =
           clicked.world.getBlockAt(clicked.x + offset.modX, point.blockY, clicked.z + offset.modZ)
       if (!withinBounds(player, clicked) || !withinBounds(player, target)) return false
       event.isCancelled = true
       handled[player.uniqueId] = HandledClick(Bukkit.getCurrentTick(), hand)
-      place(event, target)
+      place(event, target, onCushion)
       return true
     }
     // ボタンやチェストなどの通常の使用と配置の挙動を維持する。それらに向けてしゃがむと配置する。
@@ -118,11 +124,22 @@ internal class ForcePlacement(
             !material.name.endsWith("_WALL_HANGING_SIGN") &&
             faceIsFloorOrCeiling(event.blockFace)
     val face = event.blockFace
+    val protectClicked =
+        !onCushion && clicked.isReplaceable && !clicked.isLiquid && !clicked.type.isAir
     val target =
         if (onCushion) clicked.getRelative(face) else placementTarget(clicked, material, face)
-    if (!withinBounds(player, target) || !target.isReplaceable) return false
+    fun abort(): Boolean {
+      if (protectClicked) {
+        event.isCancelled = true
+        return true
+      }
+      return false
+    }
+    if (!withinBounds(player, target) || !target.isReplaceable) return abort()
+    if (protectClicked && target.type == clicked.type && target.blockData is Bisected)
+        return abort()
     val point =
-        event.interactionPoint?.toVector()?.subtract(target.location.toVector()) ?: return false
+        event.interactionPoint?.toVector()?.subtract(target.location.toVector()) ?: return abort()
     val state =
         placementState(
             material,
@@ -132,10 +149,10 @@ internal class ForcePlacement(
             player.eyeLocation.direction,
             point,
             target,
-        ) ?: return false
+        ) ?: return abort()
     val parts = parts(target, state)
     if (parts.any { !withinBounds(player, it.block) || !it.block.isReplaceable || collides(it) })
-        return false
+        return abort()
     // BlockCanBuildEventの前に失敗する例 (ボタン/フック) はここに到達する。
     // 上半分はまだ配置されていない下半分に依存するため、根元の支持だけを調べる。
     // Kelpは特殊例で、アイテム配置は水ブロックを置き換えるが、配置前の支持確認では
@@ -147,7 +164,7 @@ internal class ForcePlacement(
             material == Material.SEAGRASS ||
             onCushion ||
             forcedHangingSign ||
-            (signMaterial && clicked.isReplaceable)
+            protectClicked
     if (!needsForcedPlacement && state.isSupported(target)) return false
 
     event.isCancelled = true
@@ -222,10 +239,11 @@ internal class ForcePlacement(
   private fun allowed(player: Player) =
       player.gameMode == GameMode.SURVIVAL || player.gameMode == GameMode.CREATIVE
 
-  /** 看板は花などの置換可能ブロックを置き換えず、クリック面の隣へ配置する。 */
+  /** 強制配置時は草・ツタ・花などの置換可能ブロックを置き換えず、クリック面の隣へ配置する。 */
   private fun placementTarget(clicked: Block, material: Material, face: BlockFace): Block =
       if (
-          material.name.endsWith("_SIGN") ||
+          (clicked.isReplaceable && !clicked.isLiquid && !clicked.type.isAir) ||
+              material.name.endsWith("_SIGN") ||
               !PlacementGeometry.replaceClicked(clicked.isReplaceable, clicked.type == material)
       )
           clicked.getRelative(face)

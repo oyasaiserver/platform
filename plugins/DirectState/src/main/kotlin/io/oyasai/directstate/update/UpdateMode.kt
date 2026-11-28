@@ -43,12 +43,16 @@ internal class UpdateMode(
     private val naturalLocks: NaturalUpdateLock = NaturalUpdateLock(plugin),
     private val forcePlacementSetting: (Player) -> Boolean = { true },
     private val keepStateSetting: (Player) -> Boolean = { true },
+    private val adjustmentDivisor: (Player) -> Int = { 8 },
+    private val embedCushionInNonFullBlock: (Player) -> Boolean = { false },
+    private val hasBody: (Block) -> Boolean = BlockEntityAccess::hasBody,
+    private val setBody: (Block, BlockData, Boolean) -> Unit = BlockEntityAccess::setBody,
 ) : Listener {
   /** UpdateGuardのキーに使う、ワールドとブロック座標。 */
   private data class Position(val world: UUID, val x: Int, val y: Int, val z: Int)
 
   /** 周辺更新で変わった場合に復元するブロックと状態。 */
-  private data class Saved(val block: Block, val data: BlockData)
+  private data class Saved(val block: Block, val data: BlockData, val bodyPresent: Boolean? = null)
 
   /** ボタンを戻すプレイヤー・元状態・押下後状態・実行tick。　押されたちょっと後にボタンを戻す。 */
   private data class ButtonReset(
@@ -63,13 +67,15 @@ internal class UpdateMode(
   private val buttons = mutableMapOf<Position, ButtonReset>()
   private var tick = 0L
   private val hangings = HangingSupport(::enabled, ::keepingEnabled, isTool)
-  private val cushions = CushionSupport(plugin, ::keepingEnabled)
+  private val cushions =
+      CushionSupport(plugin, ::keepingEnabled, adjustmentDivisor = adjustmentDivisor)
   private val forcePlacement =
       ForcePlacement(
           plugin,
           placeCushion = cushions::place,
           enabled = ::forcePlacementEnabled,
           protectPlacement = ::protectPlacement,
+          embedCushionInNonFullBlock = embedCushionInNonFullBlock,
       )
 
   init {
@@ -117,7 +123,29 @@ internal class UpdateMode(
     naturalLocks.forget(blocks)
     if (!keepingEnabled(player)) return
     blocks.forEach { setDaylightLocked(it, true) }
-    naturalLocks.freeze(blocks)
+    val targets = (blocks + adjacentCreakingHearts(blocks)).distinct()
+    naturalLocks.freeze(targets)
+  }
+
+  private fun adjacentCreakingHearts(blocks: List<Block>): List<Block> {
+    val faces =
+        arrayOf(
+            BlockFace.NORTH,
+            BlockFace.EAST,
+            BlockFace.SOUTH,
+            BlockFace.WEST,
+            BlockFace.UP,
+            BlockFace.DOWN,
+        )
+    return blocks.flatMap { root ->
+      faces.mapNotNull { face ->
+        if (root.y + face.modY !in root.world.minHeight until root.world.maxHeight)
+            return@mapNotNull null
+        if (!root.world.isChunkLoaded((root.x + face.modX) shr 4, (root.z + face.modZ) shr 4))
+            return@mapNotNull null
+        root.getRelative(face).takeIf { it.type == Material.CREAKING_HEART }
+      }
+    }
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -170,10 +198,7 @@ internal class UpdateMode(
     val other =
         block.getRelative(if (data.part == Bed.Part.FOOT) data.facing else data.facing.oppositeFace)
     return other.takeIf {
-      it.type == block.type &&
-          (it.blockData as? Bed)?.let { otherData ->
-            otherData.facing == data.facing && otherData.part != data.part
-          } == true
+      (it.blockData as? Bed)?.let { otherData -> otherData.part != data.part } == true
     }
   }
 
@@ -184,6 +209,14 @@ internal class UpdateMode(
       guard.retain(position(block), Saved(block, data.clone()), tick)
     }
   }
+
+  private val bodyManagedMaterials =
+      setOf(
+          Material.BELL,
+          Material.ENCHANTING_TABLE,
+          Material.BREWING_STAND,
+          Material.CREAKING_HEART,
+      )
 
   /** 編集元の周囲2ブロックを保存し、短時間の更新抑制対象として登録する。 */
   fun beforeEdit(player: Player, roots: List<Block>) {
@@ -196,31 +229,38 @@ internal class UpdateMode(
       if (root.y + y !in root.world.minHeight until root.world.maxHeight) continue
       if (!root.world.isChunkLoaded((root.x + x) shr 4, (root.z + z) shr 4)) continue
       val block = root.getRelative(x, y, z)
-      if (!block.type.isAir) nearby[position(block)] = Saved(block, block.blockData.clone())
+      if (!block.type.isAir) {
+        val body =
+            if (block.type in bodyManagedMaterials)
+                (guard.snapshots(tick)[position(block)]?.bodyPresent != false && hasBody(block))
+            else null
+        nearby[position(block)] = Saved(block, block.blockData.clone(), body)
+      }
     }
     guard.mark(roots.map(::position).toSet(), nearby, tick)
+  }
+
+  /** 他プラグインがNORMAL等でgetState()を呼ぶ前に、破壊前スナップショット(bodyPresent等)を確保する。 */
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  fun preBreak(event: BlockBreakEvent) {
+    beforeEdit(event.player, listOf(event.block))
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   /** 破壊前に周囲を保護し、Update Mode中は消えたベッドの相方を次tickに戻す。 */
   fun breakBlock(event: BlockBreakEvent) {
     beforeEdit(event.player, listOf(event.block))
+    if (keepingEnabled(event.player)) {
+      val adjacentHearts = adjacentCreakingHearts(listOf(event.block)).filter { it != event.block }
+      if (adjacentHearts.isNotEmpty()) naturalLocks.freeze(adjacentHearts)
+    }
     if (!enabled(event.player)) return
-    if (event.player.gameMode != GameMode.CREATIVE) return
     val counterpart = bedCounterpart(event.block) ?: return
-    event.isDropItems = false
     val saved = counterpart.blockData.clone()
     plugin.server.scheduler.runTask(
         plugin,
         Runnable {
-          if (
-              event.player.isOnline &&
-                  event.player.gameMode == GameMode.CREATIVE &&
-                  loaded(counterpart) &&
-                  counterpart.type.isAir
-          ) {
-            write(event.player, counterpart, saved)
-          }
+          if (loaded(counterpart) && counterpart.type.isAir) write(event.player, counterpart, saved)
         },
     )
   }
@@ -241,6 +281,23 @@ internal class UpdateMode(
   fun signOpen(event: PlayerOpenSignEvent) {
     if (event.cause == PlayerOpenSignEvent.Cause.PLACE && enabled(event.player))
         event.isCancelled = true
+  }
+
+  fun retainHiddenBody(player: Player, block: Block) {
+    if (!enabled(player) || block.type !in bodyManagedMaterials || hasBody(block)) return
+    guard.retain(position(block), Saved(block, block.blockData.clone(), bodyPresent = false), tick)
+  }
+
+  fun beforeEditSingle(player: Player, block: Block) {
+    beforeEdit(player, listOf(block))
+  }
+
+  /** 他プラグインがPlayerInteractEventでgetState()を呼ぶ前に、非表示BlockEntityの保護を登録する。 */
+  @EventHandler(priority = EventPriority.LOWEST)
+  fun preInteract(event: PlayerInteractEvent) {
+    if (event.action != Action.RIGHT_CLICK_BLOCK) return
+    val clicked = event.clickedBlock ?: return
+    retainHiddenBody(event.player, clicked)
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -315,7 +372,13 @@ internal class UpdateMode(
                   if (data.half == Bisected.Half.BOTTOM) BlockFace.UP else BlockFace.DOWN
               )
           val otherData = other.blockData
-          if (other.type == block.type && otherData is Door && otherData.half != data.half) {
+          if (
+              other.type == block.type &&
+                  otherData is Door &&
+                  otherData.half != data.half &&
+                  otherData.facing == data.facing &&
+                  otherData.hinge == data.hinge
+          ) {
             otherData.isOpen = data.isOpen
             parts += other to otherData
           }
@@ -323,25 +386,33 @@ internal class UpdateMode(
         parts.forEach { (part, state) -> write(player, part, state) }
       }
     } else {
-      // 例: クワ/斧の操作。通常の対象ブロック変更は維持する。
+      // 例: クワ/斧の操作や通常ブロック設置。非表示BlockEntityの保護は維持する。
+      val hidden = guard.snapshots(tick)[position(block)]?.takeIf { it.bodyPresent == false }
       beforeEdit(player, listOf(block))
+      if (hidden != null) guard.retain(position(block), hidden, tick)
     }
   }
 
+  /** 周囲を保護し、通常のバケツ設置後に液体の初回更新を止める。 */
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  /** バケツで液体を置く前に周囲を保護する。 */
   fun bucketEmpty(event: PlayerBucketEmptyEvent) {
     beforeEdit(event.player, listOf(event.block))
+    if (keepingEnabled(event.player) && event.bucket != Material.POWDER_SNOW_BUCKET) {
+      naturalLocks.freezeFluidAfterPlacement(
+          event.block,
+          if (event.bucket == Material.LAVA_BUCKET) Material.LAVA else Material.WATER,
+      )
+    }
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   /** バケツで液体を取る前に周囲を保護する。 */
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun bucketFill(event: PlayerBucketFillEvent) {
     beforeEdit(event.player, listOf(event.block))
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 編集元または周辺から発生した物理更新を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun physics(event: BlockPhysicsEvent) {
     if (
         guard.active(position(event.block), tick) || guard.active(position(event.sourceBlock), tick)
@@ -349,36 +420,36 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード中ブロックの破壊イベントを止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun destroy(event: BlockDestroyEvent) {
     if (guard.active(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード中座標で砂・砂利等が落下ブロックへ変わるのを止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun falling(event: EntityChangeBlockEvent) {
     if (event.entity is FallingBlock && guard.active(position(event.block), tick))
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
   /** 周辺ブロックのレッドストーン出力を現在値に固定する。 */
+  @EventHandler(priority = EventPriority.HIGHEST)
   fun redstone(event: BlockRedstoneEvent) {
     // 同じBlockStateならサーバーが周囲への更新通知前に終了する。
     if (guard.neighbor(position(event.block), tick) || daylightLocked(event.block))
         event.newCurrent = event.oldCurrent
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード中ブロックから、またはガード中周辺への液体移動を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun flow(event: BlockFromToEvent) {
     if (guard.active(position(event.block), tick) || guard.neighbor(position(event.toBlock), tick))
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード範囲を動かすピストン伸長を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun piston(event: BlockPistonExtendEvent) {
     if (
         guard.active(position(event.block), tick) ||
@@ -387,8 +458,8 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード範囲を動かすピストン収縮を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun retract(event: BlockPistonRetractEvent) {
     if (
         guard.active(position(event.block), tick) ||
@@ -397,22 +468,22 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード中周辺のディスペンサー作動を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun dispense(event: BlockDispenseEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** Update Modeのプレイヤーまたはガード範囲が起こす振動を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun vibration(event: BlockReceiveGameEvent) {
     val player = event.entity as? Player
     if ((player != null && enabled(player)) || guard.active(position(event.block), tick))
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード範囲でブロックが燃え尽きるのを止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun burn(event: BlockBurnEvent) {
     if (
         guard.active(position(event.block), tick) ||
@@ -421,8 +492,8 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** プレイヤー着火は保護し、自然着火はガード範囲なら止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun ignite(event: BlockIgniteEvent) {
     val player = event.player
     if (player != null) {
@@ -435,45 +506,45 @@ internal class UpdateMode(
     }
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** ガード元から周辺への延焼・成長を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun spread(event: BlockSpreadEvent) {
     if (guard.active(position(event.source), tick) || guard.neighbor(position(event.block), tick))
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 周辺座標でのブロック生成を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun form(event: BlockFormEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 周辺座標での融解・消滅を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun fade(event: BlockFadeEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 周辺座標での植物成長を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun grow(event: BlockGrowEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 周辺座標での葉の自然消滅を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun decay(event: LeavesDecayEvent) {
     if (guard.neighbor(position(event.block), tick)) event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   /** プレイヤーの骨粉操作前に対象周辺を保護する。 */
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun fertilize(event: BlockFertilizeEvent) {
     event.player?.let { beforeEdit(it, listOf(event.block)) }
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** Update Modeのプレイヤーまたはガード範囲によるTNT着火を止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun tnt(event: TNTPrimeEvent) {
     val player = event.primingEntity as? Player
     if (
@@ -484,8 +555,8 @@ internal class UpdateMode(
         event.isCancelled = true
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   /** 物理・閉塞による額縁等の破壊を、ガード範囲では止める。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun hanging(event: HangingBreakEvent) {
     if (
         event.cause != HangingBreakEvent.RemoveCause.PHYSICS &&
@@ -505,12 +576,12 @@ internal class UpdateMode(
     // バニラが物理イベントなしで行える、同材質の隣接ブロックの形状変更を修復する。
     // 空気を復活させたり別の材質に置き換えたりしない。ドロップの重複や編集の上書きにつながるため。
     for ((_, saved) in guard.snapshots(tick)) {
-      if (
-          loaded(saved.block) &&
-              saved.block.type == saved.data.material &&
-              saved.block.blockData.asString != saved.data.asString
-      ) {
-        saved.block.setBlockData(saved.data, false)
+      if (!loaded(saved.block) || saved.block.type != saved.data.material) continue
+      val dataChanged = saved.block.blockData.asString != saved.data.asString
+      val bodyRevived = saved.bodyPresent == false && hasBody(saved.block)
+      if (dataChanged || bodyRevived) {
+        if (saved.bodyPresent == false) setBody(saved.block, saved.data, false)
+        else saved.block.setBlockData(saved.data, false)
       }
     }
     val due = buttons.filterValues { it.at <= tick }.keys.toList()
