@@ -230,11 +230,20 @@ internal class UpdateMode(
       if (!root.world.isChunkLoaded((root.x + x) shr 4, (root.z + z) shr 4)) continue
       val block = root.getRelative(x, y, z)
       if (!block.type.isAir) {
-        val body = if (block.type in bodyManagedMaterials) hasBody(block) else null
+        val body =
+            if (block.type in bodyManagedMaterials)
+                (guard.snapshots(tick)[position(block)]?.bodyPresent != false && hasBody(block))
+            else null
         nearby[position(block)] = Saved(block, block.blockData.clone(), body)
       }
     }
     guard.mark(roots.map(::position).toSet(), nearby, tick)
+  }
+
+  /** 他プラグインがNORMAL等でgetState()を呼ぶ前に、破壊前スナップショット(bodyPresent等)を確保する。 */
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  fun preBreak(event: BlockBreakEvent) {
+    beforeEdit(event.player, listOf(event.block))
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -272,6 +281,23 @@ internal class UpdateMode(
   fun signOpen(event: PlayerOpenSignEvent) {
     if (event.cause == PlayerOpenSignEvent.Cause.PLACE && enabled(event.player))
         event.isCancelled = true
+  }
+
+  fun retainHiddenBody(player: Player, block: Block) {
+    if (!enabled(player) || block.type !in bodyManagedMaterials || hasBody(block)) return
+    guard.retain(position(block), Saved(block, block.blockData.clone(), bodyPresent = false), tick)
+  }
+
+  fun beforeEditSingle(player: Player, block: Block) {
+    beforeEdit(player, listOf(block))
+  }
+
+  /** 他プラグインがPlayerInteractEventでgetState()を呼ぶ前に、非表示BlockEntityの保護を登録する。 */
+  @EventHandler(priority = EventPriority.LOWEST)
+  fun preInteract(event: PlayerInteractEvent) {
+    if (event.action != Action.RIGHT_CLICK_BLOCK) return
+    val clicked = event.clickedBlock ?: return
+    retainHiddenBody(event.player, clicked)
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -360,8 +386,10 @@ internal class UpdateMode(
         parts.forEach { (part, state) -> write(player, part, state) }
       }
     } else {
-      // 例: クワ/斧の操作。通常の対象ブロック変更は維持する。
+      // 例: クワ/斧の操作や通常ブロック設置。非表示BlockEntityの保護は維持する。
+      val hidden = guard.snapshots(tick)[position(block)]?.takeIf { it.bodyPresent == false }
       beforeEdit(player, listOf(block))
+      if (hidden != null) guard.retain(position(block), hidden, tick)
     }
   }
 

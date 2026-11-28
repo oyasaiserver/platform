@@ -13,6 +13,7 @@ import io.oyasai.directstate.edit.replace.TypeReplacement
 import io.oyasai.directstate.edit.shape.ShapeEditor
 import io.oyasai.directstate.integration.BlockEntityAccess
 import io.oyasai.directstate.integration.CoreProtectLogging
+import io.oyasai.directstate.integration.PrePacketHook
 import io.oyasai.directstate.integration.WorldGuardUpdates
 import io.oyasai.directstate.settings.PlayerSettingsStore
 import io.oyasai.directstate.update.PlayerUpdateRule
@@ -32,6 +33,7 @@ class DirectState : JavaPlugin(), Listener {
   private lateinit var holdEditor: HoldEditor
   private lateinit var edits: BlockEditService
   private lateinit var updateMode: UpdateMode
+  private lateinit var prePacketHook: PrePacketHook
   private var regionUpdateRule: PlayerUpdateRule = PlayerUpdateRule { false }
 
   /** WorldGuardのフラグはonEnableより前に登録する必要があるらしい */
@@ -121,6 +123,9 @@ class DirectState : JavaPlugin(), Listener {
     // 同じ優先度のUpdate Modeより先に、通常の編集イベントを処理する。
     server.pluginManager.registerEvents(interactions, this)
     server.pluginManager.registerEvents(updateMode, this)
+    prePacketHook = PrePacketHook(this, updateMode::retainHiddenBody, updateMode::beforeEditSingle)
+    server.pluginManager.registerEvents(prePacketHook, this)
+    prePacketHook.injectAll()
     DirectStateCommand(this, playerSettings, updateMode, tools::create, tools::mark, history)
         .register()
 
@@ -144,6 +149,7 @@ class DirectState : JavaPlugin(), Listener {
     if (::edits.isInitialized) edits.flush()
     BlockEntityAccess.flush()
     if (::holdEditor.isInitialized) holdEditor.clear()
+    if (::prePacketHook.isInitialized) prePacketHook.close()
     if (::updateMode.isInitialized) updateMode.close()
     if (::playerSettings.isInitialized) playerSettings.close()
   }
