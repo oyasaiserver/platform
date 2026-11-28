@@ -13,6 +13,7 @@ import type { Construct } from "constructs";
 import { DAY_IN_SECONDS, mustEnv } from "../helpers.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
+import { CloudflareNixLruCache } from "@oyasaiserver/cdktf-bindings/modules/cloudflare-nix-lru-cache";
 
 type Props = {
   commonInfra: CommonInfra;
@@ -61,6 +62,12 @@ export class CommonInternal extends OyasaiTerraformStack {
           },
         },
       ],
+    });
+
+    // TODO: wip
+    new CloudflareNixLruCache(this, "cloudflare-nix-lru-cache", {
+      accountId: commonInfra.cloudflareAccountId,
+      cacheBucketName: "nix-lru-cache",
     });
 
     // Practically read-only because Cloudflare limits upload to 100MB for
