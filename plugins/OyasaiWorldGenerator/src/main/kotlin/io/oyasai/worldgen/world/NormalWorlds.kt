@@ -175,7 +175,7 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
       section.set("monster-spawn", entry.monsterSpawn)
       section.set("animal-spawn", entry.animalSpawn)
       section.set("spawn", entry.spawn)
-      section.set("alias", entry.alias.ifEmpty { null })
+      if (entry.alias.isNotEmpty()) section.set("alias", entry.alias)
       section.set("keep-spawn-in-memory", entry.keepSpawnInMemory)
       section.set("auto-load", entry.autoLoad)
     }
@@ -279,22 +279,15 @@ class NormalWorlds(private val plugin: JavaPlugin, private val heightConfig: () 
     world.players.forEach(::enforceFlight)
   }
 
-  fun enforceFlight(player: Player) {
-    val heightEntry = heightConfig().worlds[player.world.name]
-    if (heightEntry != null) {
-      player.gameMode = heightEntry.gameMode
-      player.allowFlight = heightEntry.allowFlight
-      if (!heightEntry.allowFlight && player.isFlying) player.isFlying = false
-      return
-    }
+  private fun enforceFlight(player: Player) {
     if (player.world.name in heightConfig().configuredWorldNames) return
-    val entry = worlds[player.world.name]
+    val entry = worlds[player.world.name] ?: return
     if (player.gameMode == GameMode.SPECTATOR) {
       player.allowFlight = true
       player.isFlying = true
       return
     }
-    if (entry != null && entry.allowFlight) {
+    if (entry.allowFlight) {
       if (player.gameMode == GameMode.CREATIVE) player.allowFlight = true
     } else if (player.gameMode != GameMode.CREATIVE && player.allowFlight) {
       if (player.isFlying) player.isFlying = false
