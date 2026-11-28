@@ -1,0 +1,43 @@
+name: OyasaiParticles
+version: "${version}"
+main: io.oyasai.particles.OyasaiParticlesPlugin
+api-version: "26.3"
+softdepend: [WorldGuard, FastAsyncWorldEdit, WorldEdit]
+authors: [QuQuLa89]
+description: 指定範囲のプレイヤー個人にパーティクル・疑似天候・個人時間・環境音を表示するプラグイン
+
+commands:
+  oyasaiparticles:
+    aliases: ["opart"]
+    description: OyasaiParticles の操作・設定・管理
+    usage: /opart <help|toggle|wand|shape|radius|height|visualize|create|list|edit|remove|give|history|rollback>
+
+permissions:
+  oyasaiparticles.use:
+    description: パーティクル等の個人表示トグルと基本利用
+    default: true
+  oyasaiparticles.wand:
+    description: ワンド取得・範囲選択・専用アイテム使用・自エリア編集と回収
+    default: true
+  oyasaiparticles.create:
+    description: コマンドによるパーティクルエリアの作成・編集
+    default: op
+  oyasaiparticles.give:
+    description: パーティクルアイテムの配布
+    default: op
+  oyasaiparticles.history:
+    description: 操作履歴の閲覧
+    default: op
+  oyasaiparticles.rollback:
+    description: 操作履歴からのロールバック
+    default: op
+  oyasaiparticles.admin:
+    description: 全エリアの編集・削除・回収・上限バイパス・履歴・ロールバック
+    default: op
+    children:
+      oyasaiparticles.use: true
+      oyasaiparticles.wand: true
+      oyasaiparticles.create: true
+      oyasaiparticles.give: true
+      oyasaiparticles.history: true
+      oyasaiparticles.rollback: true
